@@ -1,0 +1,24 @@
+{
+  "name": "pcsd-electron-app",
+  "version": "1.0.0",
+  "description": "PCSD APP",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "",
+  "keywords": [
+    "pcsd"
+  ],
+  "author": "PCSD IT UNIT",
+  "license": "",
+  "devDependencies": {
+    "electron": "^4.0.3"
+  },
+  "dependencies": {
+    "bootstrap": "^4.2.1",
+    "jquery": "^3.3.1",
+    "node-json-db": "^0.9.2",
+    "query-string": "^6.2.0"
+  }
+}
