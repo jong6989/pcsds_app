@@ -1,0 +1,18 @@
+
+<div ng-controller="transactions_controller" 
+  ng-init="set_page_title('Incoming Transactions');download_incoming(0);dataSelector = ''; download_applicant(); ">
+    
+  <div layout="row">
+
+    <md-button class="md-raised" ng-disabled="current_active_view == 'incoming_transactions'" 
+      ng-click="change_current_view('incoming_transactions')">Incoming Transactions</md-button>
+
+    <md-button class="md-raised" ng-disabled="current_active_view == 'my_transactions'" 
+      ng-click="change_current_view('my_transactions')">My Transactions</md-button>
+    
+  </div>
+
+    <md-divider class="m-t-20"></md-divider>
+    <div ng-include="current_page_view"></div>
+
+</div>

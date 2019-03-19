@@ -1,0 +1,81 @@
+<div class="p-t-20 p-l-10">
+    <h5 class="col-blue">{{application.name}}</h5>
+    <!-- <strong><small>Submitted By :</small> {{application.user_id}} </strong> <br> -->
+    <strong><small>Applicant :</small> {{application.data.application.applicant}} </strong> <br>
+    <strong><small>Contact :</small> {{application.data.application.contact}} </strong> <br>
+    <strong><small>Required Permit :</small> {{application.data.application.required_permit}} </strong> <br>
+    <strong><small>Attachments :</small></strong>
+    <ol ng-if="application.data.application.attachments.length > 0">
+        <li ng-repeat=" x in application.data.application.attachments"> <a download ng-href="{{ api_address +  x.url}}"> {{x.name}} </a> </li>
+    </ol>
+    <br>
+    <strong><small>Purpose :</small> 
+        <span ng-if="application.data.application.purpose.commercial">commercial</span> 
+        <span ng-if="application.data.application.purpose.research">research</span> 
+        <span ng-if="application.data.application.purpose.exhibit">exhibit</span> 
+        <span ng-if="application.data.application.purpose.other != null">{{application.data.application.purpose.other}}</span> 
+    </strong><br>
+    <strong><small>Place of Origin :</small> 
+        {{application.data.application.place_of_origin.barangay}}, {{application.data.application.place_of_origin.municipality}} </strong> <br>
+
+    <strong><small>Collertor or Supplier :</small> 
+        {{application.data.application.collector_or_supplier.name}},
+        {{application.data.application.collector_or_supplier.address}}
+    </strong> <br>
+    <strong><small>Specimen :</small></strong>
+    <ol ng-if="application.data.application.specimen.length > 0">
+        <li ng-repeat=" x in application.data.application.specimen"> 
+            {{x.species_qty}}{{x.species_unit}} of {{x.species_des}} {{x.species_name}} in {{x.species_boxes}} {{(x.species_boxes > 1)?'boxes':'box'}}
+        </li>
+    </ol>
+    <br>
+    <strong><small>Shipper :</small> {{application.data.application.shipper.name}}, {{application.data.application.shipper.address}} </strong> <br>
+    <br>
+    <strong><small>Recipient :</small> {{application.data.application.recipient.name}}, {{application.data.application.recipient.address}} </strong> <br>
+    <br>
+    <strong><small>Via :</small> 
+        <span ng-if="application.data.application.via.aircraft">aircraft</span> 
+        <span ng-if="application.data.application.via.vessel">vessel</span> 
+    </strong><br>
+    <strong><small>Place of Transaport :</small> {{application.data.application.place_of_transport}} </strong> <br>
+    <strong><small>Date of Transaport :</small> {{application.data.application.date_of_transport.split(' ')[0] | date}} </strong> <br>
+    
+    <!-- Received Stamp -->
+    <div ng-if="application.status > 0" ng-init="staff = application.data.received.staff">
+        <hr class="p-t-10">
+        Received by : {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
+        <br>
+        Date Received : {{application.data.received.date.split(' ')[0]}}
+    </div>
+
+    <!-- Rejected Stamp -->
+    <div ng-if="application.status == 2" ng-init="staff = application.data.rejected.staff">
+        <hr class="p-t-10">
+        Rejected by : {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
+        <br>
+        Remark : {{application.data.rejected.remark}}
+        <br>
+        Date Rejected : {{application.data.rejected.date.split(' ')[0]}}
+    </div>
+
+    <!-- Accepted Stamp -->
+    <div ng-if="application.status > 2" ng-init="staff = application.data.accepted.staff">
+        <hr class="p-t-10">
+        Accepted by : {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
+        <br>
+        Remark : {{application.data.accepted.remark}}
+        <br>
+        Date Accepted : {{application.data.accepted.date.split(' ')[0]}}
+    </div>
+
+    <!-- Approved Stamp -->
+    <div ng-if="application.status > 3" ng-init="staff = application.data.approved.staff">
+        <hr class="p-t-10">
+        Approved by : {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
+        <br>
+        Remark : {{application.data.approved.remark}}
+        <br>
+        Date Approved : {{application.data.accepted.date.split(' ')[0]}}
+    </div>
+
+</div>

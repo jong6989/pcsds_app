@@ -1,0 +1,177 @@
+
+<div ng-controller="user_management_controller" ng-init="set_page_title('USER Management');download_users()" >
+	<md-tabs md-dynamic-height md-border-bottom  md-selected="selectedIndex">
+	  <md-tab label="users">
+	    <md-content class="md-padding" style="height:{{get_window_height() - 200}}px">
+	    	<div ng-hide="is_single_user_selected">
+	    		
+
+		      <table ng-table="tbl_users" class="table" show-filter="false">
+		          <tr ng-repeat="x in $data | filter: search_user" ng-init="x.status = (x.status == 1)">
+		            <td sortable="'id'"> {{x.id}} </td>
+		            <td title="'Edit'" sortable="''"> <i class="fa fa-edit pointer md-primary" ng-click="open_selected_user(x)">Edit</i> </td>
+		            <td title="'Activate'" sortable="''"> 
+		            	<md-switch class="md-primary" ng-click="activate_user(x.id)" name="special" ng-model="x.status" required></md-switch> 
+		            </td>
+		            <td title="'ID NUmber'" sortable="'name'"> {{ x.id_number }} </td>
+		            <td title="'Fullname'" sortable="''"> {{ x.data.first_name }} {{ x.data.middle_name }} {{ x.data.last_name }} </td>
+		            <td title="'Phone Number'" sortable="''">  {{ x.data.phone_number }} </td>
+		            <td title="'User type'" sortable="''"> {{ getUserType(x.user_level) }} </td>
+		            <td title="'Designation'" sortable="''"> {{ x.data.designation }} </td>
+		          </tr>
+		      </table>
+
+
+
+	    	</div>
+
+	    	<div ng-show="is_single_user_selected">
+	    		<a ng-href class="pointer col-red" ng-click="is_single_user_selected = false"> <i class="fa fa-chevron-left"></i> Back</a>
+	    		<hr>
+	    		<form name="form_update_user" >
+
+						<div layout-gt-sm="row">
+						
+							<md-input-container class="md-block" flex-gt-sm>
+									<label>First name</label>
+									<input ng-model="selected_user.data.first_name" required>
+							</md-input-container>
+
+							<md-input-container class="md-block" flex-gt-sm>
+									<label>Middle Name</label>
+									<input ng-model="selected_user.data.middle_name">
+							</md-input-container>
+
+							<md-input-container class="md-block" flex-gt-sm>
+									<label>Last Name</label>
+									<input ng-model="selected_user.data.last_name" required>
+							</md-input-container>
+						</div>
+
+			        <div layout-gt-sm="row">
+								<md-input-container class="md-block" flex-gt-sm>
+										<label>User Type</label>
+										<md-select ng-model="selected_user.user_level" required>
+											<md-option ng-repeat="x in user_types" value="{{x.level}}">
+												{{x.name}}
+											</md-option>
+										</md-select>
+								</md-input-container>
+
+			        	<md-input-container class="md-block" flex-gt-sm>
+				            <label>Designation</label>
+				            <input ng-model="selected_user.data.designation" required>
+			        	</md-input-container>
+
+			        </div>
+
+			        <div layout-gt-sm="row">
+			        	
+			        	<md-input-container class="md-block" flex-gt-sm>
+				            <label>Phone Number</label>
+				            <input ng-model="selected_user.data.phone_number" min="11" >
+			        	</md-input-container>
+			        	
+			        	<md-input-container class="md-block" flex-gt-sm>
+				            <label>Email</label>
+				            <input ng-model="selected_user.data.email" type="email" >
+								</md-input-container>
+			        	
+			        	<md-input-container class="md-block" flex-gt-sm>
+				            <label>WP ID</label>
+				            <input ng-model="selected_user.data.wp_id" type="number" >
+								</md-input-container>
+								
+			        </div>
+
+			      	<md-button type="submit" ng-disabled="form_update_user.$invalid" ng-click="update_selected_user(selected_user)" class="md-raised md-block md-primary" >
+			           Update user
+			        </md-button>
+			      </form>
+	    	</div>
+		      	
+	    </md-content>
+	  </md-tab>
+	  <md-tab label="Add New user">
+	    <md-content class="md-padding">
+	      <!-- new user form -->
+	      <form name="form_new_user" ng-init=" new_user = {data : {}} " >
+
+			<div layout-gt-sm="row">
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>User Type</label>
+					<md-select ng-model="new_user.user_level" required>
+					  <md-option ng-repeat="x in user_types" value="{{x.level}}">
+					    {{x.name}}
+					  </md-option>
+					</md-select>
+				</md-input-container>
+
+	        	<md-input-container class="md-block" flex-gt-sm>
+		            <label>First name</label>
+		            <input ng-model="new_user.data.first_name" required>
+	        	</md-input-container>
+
+	        	<md-input-container class="md-block" flex-gt-sm>
+		            <label>Middle Name</label>
+		            <input ng-model="new_user.data.middle_name">
+	        	</md-input-container>
+
+	        	<md-input-container class="md-block" flex-gt-sm>
+		            <label>Last Name</label>
+		            <input ng-model="new_user.data.last_name" required>
+	        	</md-input-container>
+	        </div>
+
+	        <div layout-gt-sm="row">
+	        	<md-input-container class="md-block" flex-gt-sm>
+		            <label>Designation</label>
+		            <input ng-model="new_user.data.designation" >
+	        	</md-input-container>
+
+	        	<md-input-container class="md-block" flex-gt-sm>
+		            <label>ID Number</label>
+		            <input ng-model="new_user.id_number" required>
+	        	</md-input-container>
+
+	        	<md-input-container class="md-block" flex-gt-sm>
+		            <label>User Key</label>
+		            <input ng-model="new_user.user_key" name="pass1" min="6" type="password" required>
+		            <div class="hint col-red" ng-show="form_new_user.pass1.$dirty && new_user.user_key.length < 6">6 Minimum Characters</div>
+	        	</md-input-container>
+
+	        	<md-input-container class="md-block" flex-gt-sm>
+		            <label>Re-KEY</label>
+		            <input ng-model="re_password" min="6" type="password" name="password" required>
+		            <div class="hint col-red" ng-show="new_user.user_key !== re_password && form_new_user.user_key.$dirty">Password didn't match!</div>
+	        	</md-input-container>
+
+	        </div>
+
+	        <div layout-gt-sm="row">
+	        	
+	        	<md-input-container class="md-block" flex-gt-sm>
+		            <label>Phone Number</label>
+		            <input ng-model="new_user.data.phone_number" min="11" >
+	        	</md-input-container>
+			        	
+						<md-input-container class="md-block" flex-gt-sm>
+								<label>Email</label>
+								<input ng-model="new_user.data.email" type="email" >
+						</md-input-container>
+			        	
+						<md-input-container class="md-block" flex-gt-sm>
+								<label>WP ID</label>
+								<input ng-model="new_user.data.wp_id" type="number" >
+						</md-input-container>
+
+	        </div>
+
+	      	<md-button type="submit" ng-disabled="form_new_user.$invalid || new_user.user_key !== re_password" ng-click="add_new_user(new_user)" class="md-raised md-block md-primary" >
+	           Create user
+	        </md-button>
+	      </form>
+	    </md-content>
+	  </md-tab>
+	</md-tabs>
+</div>

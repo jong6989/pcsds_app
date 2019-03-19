@@ -1,0 +1,41 @@
+
+<div layout="row" ng-init="invalidate_my_transactions();">
+
+    <md-content flex="30" ng-style="{ height: (iframeHeight - 180) + 'px' }">
+        <md-list flex>
+            <md-list-item class="md-3-line" ng-repeat="x in my_transactions" ng-click="set_application(x)">
+                <div class="md-list-item-text" layout="column">
+                    <h3>{{ x.date.split(' ')[0] }}</h3>
+                    <h4>{{ x.name }}</h4>
+                    <p>{{ x.user.data.full_name }}</p>
+                </div>
+                <md-divider ></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-content>
+    
+    <md-content ng-if="application != undefined" flex ng-style="{ height: (iframeHeight - 180) + 'px' }">
+        <div ng-if="application.name == 'Application for Local Transport Permit'">
+            <div ng-include="'app/templates/application/ltp.html'"></div>
+        </div>
+        <md-divider class="m-t-20 m-b-10"></md-divider>
+        <md-progress-circular ng-show="application_loading" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+
+        <div ng-show="validate_user([99,5]) && application != ''">
+            <md-button ng-if="application.status == 1" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+            <md-button ng-if="application.status == 1" ng-disabled="application_loading" ng-click="acceptApplication(application,$event)">Accept</md-button>
+        </div>
+
+        <div ng-show="validate_user([99,7]) && application != ''">
+            <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+            <md-button ng-disabled="application_loading" ng-click="approveApplication(application,$event)">Approve</md-button>
+        </div>
+
+        <div ng-if="validate_user([99,8]) && application != ''">
+            <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+            <md-button ng-disabled="application_loading" ng-click="recommendApplication(application,$event)">Recommend</md-button>
+        </div>
+
+
+    </md-content>
+</div>

@@ -1,0 +1,77 @@
+<div ng-controller="document_management_controller" ng-init="set_page_title('Incomming Documents');loading_value = 0;is_loading = true;load_documents();" layout-gt-xs="column" layout-xs="column" >
+	<md-tabs flex md-dynamic-height md-border-bottom md-selected="selectedIndex" >
+        
+        <md-tab label="Add Document">
+          <md-content class="md-padding" style="height:{{get_window_height() - 110}}px">
+            
+            <form name="form_new_document" ng-init=" new_document = {data : {}}; " >
+  
+              <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>From </label>
+                    <input ng-model="new_document.doc_from" required>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Subject</label>
+                    <input ng-model="new_document.doc_subject" required>
+                </md-input-container>
+
+                <div flex-gt-xs>
+                    <strong>Correspondence Date</strong>
+                    <md-datepicker ng-model="new_document.doc_correspondence_date" md-placeholder="Enter date" md-open-on-focus required></md-datepicker>
+                </div>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Category</label>
+                    <md-select ng-model="new_document.doc_category" required>
+                        <md-option ng-repeat="x in categ as b track by x.id " value="{{x.title}}">
+                            {{x.title}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+              </div>
+
+              <div layout-gt-sm="row">
+
+              </div>
+  
+                <md-button type="submit" ng-disabled="form_new_document.$invalid" ng-click="add_new_document(new_document)" class="md-raised md-block md-primary" >
+                 Create Document
+              </md-button>
+              
+            </form>
+          </md-content>
+        </md-tab>
+
+        <md-tab label="My Documents">
+            <md-content class="md-padding" style="height:{{get_window_height() - 160}}px" ng-init="">
+                
+                <div ng-show="is_loading">
+                    Loading Documents
+                    <md-progress-linear md-mode="determinate" value="{{loading_value}}"></md-progress-linear>
+                </div>
+                
+                <div ng-hide="is_loading">
+                    <strong ng-click="reload_all_data()" class="col-red pointer">Reload All Data</strong>
+                    <table ng-table="tbl_documents" class="table" show-filter="true">
+                        <tr ng-repeat="x in $data" 
+                            ng-click="open_document(x)" class="pointer" ng-mouseover="update_single_doc(x)">
+                            <td title="'id'" filter="{id : 'number'}" sortable="'id'"> {{x.id}} </td>
+                            <td title="'Actions'" filter="{acts : 'number'}" sortable="'acts'"> {{x.acts}} </td>
+                            <td title="'Created At'" filter="{created_at : 'text'}" sortable="''"> {{ x.created_at.split(' ')[0] }} </td>
+                            <td title="'From'" filter="{doc_from: 'text'}" sortable="'doc_from'" > {{ x.doc_from }}  </td>
+                            <td title="'Subject'" filter="{doc_subject: 'text'}" sortable="'doc_subject'"> {{ x.doc_subject }} </td>
+                            <td title="'Correspondence Date'" filter="{doc_correspondence_date : 'text'}" sortable="'doc_correspondence_date'">  {{ x.doc_correspondence_date.split(' ')[0] }} </td>
+                            <td title="'Category'"  filter="{ doc_category : 'text'}" > {{ x.doc_category }}</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </md-content>
+        </md-tab>
+    </md-tabs>
+
+
+</div>
+

@@ -1,0 +1,76 @@
+
+<div layout="column">
+
+	<md-toolbar md-scroll-shrink ng-if="true" class="bg-teal"  >
+	    <div class="md-toolbar-tools">
+	        <md-button ng-click="toggleLeft()" hide-gt-md class="md-icon-button" aria-label="RightSide" >
+	          <i class="fa fa-bars"></i>
+	        </md-button>
+	        <h2 flex="" md-truncate="" class="">PCSD- {{page_title}}</h2>
+	        <md-button ng-click="toggleRight()" ng-hide="isOpenRight()" class="md-icon-button" aria-label="More">
+	          <i class="fa fa-ellipsis-v font-24"></i>
+	        </md-button>
+	    </div>
+	</md-toolbar>
+
+
+	<section layout="row" flex style="height:{{get_window_height() - 50 }}px;">
+
+	<md-sidenav layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4" >
+
+	  
+	  <md-content flex layout="column" >
+
+	    <div  layout="row" class="bg-teal" layout-padding="20">
+	      <div flex="30">
+						<img src="images/pcsdlogo.png" width="90%" height="auto" alt="pcsd">
+	      </div>
+	      <div flex="70" layout="column">
+	        <div class="font-16">{{ user.data.first_name }} {{ user.data.middle_name }} {{ user.data.last_name }}</div>
+	        <div class="font-14">{{ getUserType(user.user_level) }}</div>
+	        <i class="fa fa-gear" ng-click="toggleRight()"></i>
+	        <md-button ng-click="logout()" class="font-10 m-b--10 col-white" aria-label="Log-out">Log-out</md-button>
+	      </div>
+	    </div>
+	    
+	    <div flex="70" layout="column"  class="start" >
+				<md-button ng-repeat="x in menus" ng-click="change_page(x.url)" ng-class="{'col-teal': !isActive(x.url)}" ng-disabled="isActive(x.url)" aria-label="{{x.name}}">
+					<i class="fa {{x.icon}}"></i>
+					{{x.name}}
+				</md-button>
+
+
+
+	    </div>
+
+	  </md-content>
+
+	</md-sidenav>
+
+	<!-- main content -->
+	<div flex layout-padding class="bg-light-grey" >
+		<md-content md-whiteframe="3" layout-padding="20" layout="column" ng-style="{ height: (iframeHeight - 80) + 'px' }">
+			<div ng-include="content_page"></div>
+		</md-content>
+	</div>
+    
+	<!-- right side bar -->
+
+	<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right" >
+
+	    <md-toolbar md-scroll-shrink="" ng-if="true" >
+	        <div class="md-toolbar-tools bg-teal">
+	            <h2 flex="" md-truncate="" >Notifications</h2>
+	        </div>
+	    </md-toolbar>
+
+	    <md-content layout-padding="10" class="m-b-40 m-t-20">
+	    <p>No notification yet...</p>
+		</md-content>
+
+	</md-sidenav>
+
+	</section>
+
+
+</div>

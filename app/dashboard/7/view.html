@@ -1,0 +1,40 @@
+<div ng-init="set_page_title('Dashboard');" ng-controller="dashboard_7_controller" >
+
+    <div layout="row">
+        <div  flex="30">
+            <h4>My Transactions</h4>
+            <md-content ng-style="{ height: (iframeHeight - 145) + 'px' }">
+                <md-list flex>
+                    <md-list-item class="md-3-line" ng-repeat="x in my_transactions" ng-click="set_application(x)">
+                        <div class="md-list-item-text" layout="column">
+                            <h3>{{ x.date.split(' ')[0] }}</h3>
+                            <h4>{{ x.name }}</h4>
+                            <p>{{ x.user.data.full_name }}</p>
+                        </div>
+                        <md-divider ></md-divider>
+                    </md-list-item>
+                </md-list>
+            </md-content>
+        </div>
+        
+        <md-content ng-if="application != undefined" flex ng-style="{ height: (iframeHeight - 145) + 'px' }"
+            ng-controller="transactions_controller" ng-init="invalidate_my_transactions()">
+            <div ng-if="application.name == 'Application for Local Transport Permit'">
+                <div ng-include="'app/templates/application/ltp.html'"></div>
+            </div>
+            <md-divider class="m-t-20 m-b-10"></md-divider>
+            <md-progress-circular ng-show="application_loading" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+            
+            <div ng-show="validate_user([99,7])">
+                <md-button ng-if="application.status == 1" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+                <md-button ng-if="application.status == 1" ng-disabled="application_loading" ng-click="acceptApplication(application,$event)">Accept</md-button>
+            </div>
+            <hr>
+            <md-button ng-if="application.status == 1" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+                <md-button ng-if="application.status == 1" ng-disabled="application_loading" ng-click="acceptApplication(application,$event)">Accept</md-button>
+        </md-content>
+    </div>
+    
+
+    
+</div>

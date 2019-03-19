@@ -1,0 +1,86 @@
+
+<div ng-controller="document_management_controller" ng-init="selected_document = document(render_params.doc_id)" >
+    
+    <div >
+    
+        <md-toolbar md-scroll-shrink ng-if="true">
+            <div class="md-toolbar-tools bg-teal" >
+                <h3>
+                    <span>Document #{{selected_document.id}}</span>
+                </h3>
+            </div>
+        </md-toolbar>
+
+        <md-button class="md-accent md-fab md-fab-bottom-right" ng-click="open_window_view('app/pages/document_management/single/print_document.html',selected_document.id)">
+                <i class="fa fa-print"></i>
+        </md-button>
+
+        <md-content layout-padding="20" style="height:{{get_window_height() - 50}}px">
+            <!-- Document Content -->
+            <div> <strong class="col-grey">From : </strong> {{selected_document.doc_from}} </div>
+            <div><strong class="col-grey">Subject : </strong>{{selected_document.doc_subject}} </div>
+            <div> <strong class="col-grey">Correspondent Date : </strong>{{ selected_document.doc_correspondence_date.split(' ')[0] | date }}  </div>
+            <div> <strong class="col-grey">Control No. :</strong> {{selected_document.doc_control_number}}  </div>
+            <div> <strong class="col-grey">Category : </strong>{{selected_document.doc_category}}  </div>
+            <div> <span ng-if="selected_document.doc_published !== 0"><strong class="col-grey">Published : </strong>{{selected_document.doc_published.split(' ')[0] | date}}</span>   </div>
+            <div> <strong class="col-grey">Type : </strong>{{selected_document.doc_type}}  </div>
+            <div> <strong class="col-grey">Date Created : </strong>{{selected_document.created_at.split(' ')[0] | date}}  </div>
+            
+
+            <md-divider></md-divider>
+            <h5 class="col-grey">Actions :</h5>
+            <div>
+                <ol>
+                    <li ng-repeat="x in selected_document.meta " ng-init="by_id = x.wp_id; "> 
+                            From -> 
+                            <strong class="col-blue" ng-init="from = wp_user(by_id)">{{from.name}} : </strong>
+                            {{x.hint}}  -> 
+                            <cite ng-if="has_user(x)" class="col-pink"  ng-init="to = get_assignee_from_action(x)"> {{to.name}}  </cite>
+                            <cite class="col-grey" > {{x.name}}  </cite>
+                    </li>
+                </ol>
+            </div>
+            
+            <md-divider></md-divider>
+
+            <h5 class="col-grey">Attachments : </h5>
+            <div>
+                <ol>
+                    <li ng-repeat="x in selected_document.attachments | filter : {'deleted':'0'} " >
+                        
+                        <div ng-if="!file_exist('downloads/'+x.address)" ng-init="download_single_attachment(x)"></div>
+                        <div layout="row" layout-sm="column" layout-align="space-around" ng-show="is_downloading_attachment(x.id)">
+                            <md-progress-circular md-mode="indeterminate"  md-diameter="20px"></md-progress-circular>: {{x.file_path}} 
+                        </div>
+                        <div ng-if="!is_downloading_attachment(x.id)">
+                            <a href="downloads/{{x.address}}">Download File</a> : {{x.file_path}} :
+                            <md-button ng-hide="is_downloading_attachment(x.id)" ng-click="download_single_attachment(x)">Re-load File </md-button>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+            <md-divider>  </md-divider>
+            <h5 class="col-grey">Images : </h5> 
+            
+            <div ng-repeat="x in selected_document.images ">
+                
+                <div ng-if="file_exist('downloads/'+x.address)">
+                    <img ng-src="downloads/{{x.address}}" alt="{{x.address}}" width="100%">
+                    
+                    <md-button ng-hide="is_downloading_image(x.id)" ng-click="PrintImage('downloads/'+x.address)">Print Image</md-button>
+                    <md-button ng-hide="is_downloading_image(x.id)" ng-click="download_single_image(x)">Re-load Image </md-button>
+                </div>
+                <div ng-if="!file_exist('downloads/'+x.address)" ng-init="download_single_image(x)"></div>
+                <div layout="row" layout-sm="column" layout-align="space-around" ng-show="is_downloading_image(x.id)">
+                    <md-progress-circular md-mode="indeterminate"  md-diameter="20px"></md-progress-circular>
+                </div>
+            </div>
+        </md-content>
+
+        
+        
+        
+        
+    </div>
+</div>
