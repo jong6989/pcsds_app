@@ -49,7 +49,7 @@
     </div>
 
     <!-- Rejected Stamp -->
-    <div ng-if="application.status == 2" ng-init="staff = application.data.rejected.staff">
+    <div ng-if="application.data.rejected != undefined " ng-init="staff = application.data.rejected.staff">
         <hr class="p-t-10">
         Rejected by : {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
         <br>
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Accepted Stamp -->
-    <div ng-if="application.status > 2" ng-init="staff = application.data.accepted.staff">
+    <div ng-if="application.data.accepted != undefined " ng-init="staff = application.data.accepted.staff">
         <hr class="p-t-10">
         Accepted by : {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
         <br>
@@ -69,13 +69,33 @@
     </div>
 
     <!-- Approved Stamp -->
-    <div ng-if="application.status > 3" ng-init="staff = application.data.approved.staff">
+    <div ng-if="application.data.approved != undefined " ng-init="staff = application.data.approved.staff">
         <hr class="p-t-10">
         Approved by : {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
         <br>
         Remark : {{application.data.approved.remark}}
         <br>
         Date Approved : {{application.data.accepted.date.split(' ')[0]}}
+    </div>
+
+    <!-- Recommended Stamp -->
+    <div ng-if="application.data.recommended != undefined " ng-init="staff = application.data.recommended.staff">
+        <hr class="p-t-10">
+        Recommended by : {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
+        <br>
+        Remark : {{application.data.recommended.remark}}
+        <br>
+        Date recommended : {{application.data.accepted.date.split(' ')[0]}}
+    </div>
+
+    <!-- Acknowledged Stamp -->
+    <div ng-if="application.data.acknowledged != undefined " ng-init="staff = application.data.acknowledged.staff">
+        <hr class="p-t-10">
+        Acknowledged by : {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
+        <br>
+        Remark : {{application.data.acknowledged.remark}}
+        <br>
+        Date acknowledged : {{application.data.accepted.date.split(' ')[0]}}
     </div>
 
 </div>

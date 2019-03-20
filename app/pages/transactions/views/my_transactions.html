@@ -27,13 +27,36 @@
         </div>
 
         <div ng-show="validate_user([99,7]) && application != ''">
-            <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
-            <md-button ng-disabled="application_loading" ng-click="approveApplication(application,$event)">Approve</md-button>
+            <form name="approve_application_form" ng-init="certificate_of_inspection = {}">
+                <!-- certificate of inspection -->
+                <md-card >
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">Certificate of inspection</span>
+                            <span class="md-subhead">Digital form</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-content layout="row" layout-align="space-between">
+                        <md-input-container class="md-block">
+                            <label>Personnel</label>
+                            <input ng-model="certificate_of_inspection.personnel" required>
+                        </md-input-container>
+                    </md-card-content>
+                </md-card>
+                <!-- end of c-o-i -->
+                <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+                <md-button ng-disabled="application_loading || approve_application_form.$invalid " ng-click="approveApplication(application,$event)">Approve</md-button>
+            </form>
         </div>
 
         <div ng-if="validate_user([99,8]) && application != ''">
             <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
             <md-button ng-disabled="application_loading" ng-click="recommendApplication(application,$event)">Recommend</md-button>
+        </div>
+
+        <div ng-if="validate_user([99,4]) && application != ''">
+            <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+            <md-button ng-disabled="application_loading" ng-click="acknowledgeApplication(application,$event)">Acknowledge</md-button>
         </div>
 
 

@@ -12,7 +12,7 @@
         <td title="'Name'" > {{ x.name }} </td>
         <td title="'Status'" > 
           <strong ng-class=" {'col-green' : (x.status == 0), 'col-blue' : (x.status == 1), 'col-red' : (x.status == 2),
-                'col-teal' : (x.status == 3) } ">
+                'col-teal' : (x.status == 3),'col-brown' : (x.status == 4),'col-indigo' : (x.status == 5) } ">
             {{ getTransactionStatus(x.status) }}
           </strong> 
         </td>
@@ -23,34 +23,11 @@
   <div style="visibility: hidden">
     <div class="md-dialog-container" id="receiveSingleTransaction">
       <md-dialog layout-padding layout="column" layout-align="center center">
-
-        <div ng-hide="opened_single == {} " layout="column" layout-align="center center">
-            <h2>{{opened_single.name}}</h2>
-            <hr>
-            <strong class="col-grey">Date : </strong> {{ opened_single.date.split(' ')[0] }} 
-            <hr>
-            <strong class="col-grey">Applicant : </strong> {{ opened_single.user.data.full_name }} 
-            <hr>
-
-            <div ng-if="opened_single.status > 0" ng-init="staff = opened_single.data.received.staff; " >
-              <strong class="col-grey">Received by : </strong> {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
-              <br>
-              Receive Date : {{opened_single.data.received.date.split(' ')[0] | date}}
-              <hr>
-            </div>
-
-            <div ng-if="opened_single.status == 2 " ng-init="staff = opened_single.data.rejected.staff; ">
-              <strong class="col-grey">Rejected by : </strong> {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
-              <br>
-              Date of Rejection : {{opened_single.data.rejected.date.split(' ')[0] | date}}
-              <hr>
-            </div>
-
-            <div ng-if="opened_single.status == 3 " ng-init="staff = opened_single.data.accepted.staff; ">
-              <strong class="col-grey">Accepted by : </strong> {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
-              <br>
-              Accept Date : {{opened_single.data.rejected.date.split(' ')[0] | date}}
-              <hr>
+        <md-dialog-content>
+          <div class="md-dialog-content" ng-hide="application == {} "  layout="column" layout-align="center center">
+            <!-- LTP template -->
+            <div ng-show="application.name == 'Application for Local Transport Permit'">
+                <div ng-include="'app/templates/application/ltp.html'"></div>
             </div>
 
             <md-button ng-disabled="is_single_loading" ng-if="opened_single.status == 0" ng-click="receive_single(opened_single)" >Receive</md-button>
@@ -58,11 +35,12 @@
             <div ng-show="is_single_loading" layout="row" layout-sm="column" layout-align="space-around">
               <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
-        </div>
-        
-        <div ng-show=" opened_single == {} " layout="row" layout-sm="column" layout-align="space-around">
-          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-        </div>
+          </div>
+          <!-- loading -->
+          <div ng-show=" application == {} " layout="row" layout-sm="column" layout-align="space-around">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+          </div>
+        </md-dialog-content>
 
       </md-dialog>
     </div>

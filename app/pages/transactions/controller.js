@@ -31,7 +31,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
         $scope.current_active_view = p;
     }
 
-    if($scope.user.user_level == ('7' || '8') ){
+    if($scope.user.user_level == '7' || '8' || '4' ){
         $scope.change_current_view('my_transactions');
     }
 
@@ -48,16 +48,20 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
         $scope.user.user_level = parseInt($scope.user.user_level);
         var d = [];
         switch ($scope.user.user_level) {
-            case 99:
-            case 5:
-                d = TRANSACTION_DB.getData(incoming_string).filter(d => d.status > 0 && d.data.received.staff.id == $scope.user.id && d.status != 2 ).reverse();
+            case 4:
+                //executive director
+                d = TRANSACTION_DB.getData(incoming_string).filter(d => d.status == 5 ).reverse();
                 break;
-            case 99:
+            case 5:
+                //permitting staff
+                d = TRANSACTION_DB.getData(incoming_string).filter(d => (d.status > 0) && (d.data.received.staff.id == $scope.user.id) && (d.status != 2) ).reverse();
+                break;
             case 7:
+                // permitting chief
                 d = TRANSACTION_DB.getData(incoming_string).filter(d => d.status == 3 ).reverse();
                 break;
-            case 99:
             case 8:
+                //operations director
                 d = TRANSACTION_DB.getData(incoming_string).filter(d => d.status == 4 ).reverse();
                 break;
             default:
@@ -89,10 +93,10 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     }
 
     $scope.open_single = (x,ev)=>{
-        $scope.opened_single = {};
+        $scope.application = {};
         TRANSACTION_DB.getData(incoming_string).forEach(element => {
             if(element.id == x.id){
-                $scope.opened_single = element;
+                $scope.application = element;
                 $scope.showPrerenderedDialog(ev,'receiveSingleTransaction');
                 return;
             }
@@ -140,9 +144,9 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
         if(n==2)return "Declined";
         if(n==3)return "Proccesing";
         if(n==4)return "For Approval";
-        if(n==5)return "For Release";
-        if(n==6)return "Released";
-        if(n==7)return "For Pic-up";
+        if(n==5)return "For Acknowledgement";
+        if(n==6)return "Acknowledged, for releasing";
+        if(n==7)return "Released";
         if(n==8)return "Received by Applicant";
         if(n==9)return "Used";
         if(n==10)return "Expired";
@@ -267,7 +271,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
             .textContent('Comment')
             .placeholder('')
             .ariaLabel('Comment')
-            .initialValue('')
+            .initialValue('ok')
             .targetEvent(ev)
             .required(true)
             .ok('Accept and proceed to Approval')
@@ -306,7 +310,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
             .textContent('Comment')
             .placeholder('')
             .ariaLabel('Comment')
-            .initialValue('')
+            .initialValue('ok')
             .targetEvent(ev)
             .required(true)
             .ok('approve')
@@ -345,7 +349,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
             .textContent('Comment')
             .placeholder('')
             .ariaLabel('Comment')
-            .initialValue('')
+            .initialValue('ok')
             .targetEvent(ev)
             .required(true)
             .ok('recommend')
@@ -356,6 +360,45 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
             let q = { 
                 data : { 
                     action : "applicant/transaction/recommend",
+                    remark : result,
+                    id : x.id,
+                    user_id : $scope.user.id
+                },
+                callBack : (data)=>{
+                    $scope.application_loading = false;
+                    if(data.data.status == 1){
+                        $scope.application = "";
+                        $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
+                            $scope.invalidate_my_transactions();
+                        } );
+                    }else {
+                        $scope.toast(data.data.error + "  : " + data.data.hint);
+                    }
+                }
+            };
+            $utils.api(q);
+        }, function() {
+            // cancel
+        });
+    }
+
+    $scope.acknowledgeApplication = (x,ev)=>{
+        var confirm = $mdDialog.prompt()
+            .title('Acknowledge Permit Releasing')
+            .textContent('Comment')
+            .placeholder('')
+            .ariaLabel('Comment')
+            .initialValue('ok')
+            .targetEvent(ev)
+            .required(true)
+            .ok('acknowledged')
+            .cancel('Cancel');
+
+        $mdDialog.show(confirm).then(function(result) {
+            $scope.application_loading = true;
+            let q = { 
+                data : { 
+                    action : "applicant/transaction/acknowledge",
                     remark : result,
                     id : x.id,
                     user_id : $scope.user.id
