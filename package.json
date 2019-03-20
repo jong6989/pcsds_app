@@ -6,12 +6,15 @@
   "scripts": {
     "start": "electron ."
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jong6989/pcsds_app.git"
+  },
   "keywords": [
-    "pcsd"
+    "pcsd","pcsds","palawan wildlife","palawan council for sustainable development"
   ],
   "author": "PCSD IT UNIT",
-  "license": "",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^4.0.3"
   },
