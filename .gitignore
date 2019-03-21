@@ -63,3 +63,5 @@ typings/
 #online downloaded files
 DB/
 uploads/
+
+package-lock.json
