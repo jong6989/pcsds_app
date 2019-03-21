@@ -233,6 +233,14 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return moment().format("YYYY-MM-DD");
     };
 
+    $scope.to_year = function(d){
+      return $filter('date')(d, "yyyy");
+    }
+
+    $scope.to_month = function(d){
+      return $filter('date')(d, "MM");
+    }
+
     $scope.toast = function(t){
       $mdToast.show(
         $mdToast.simple()
