@@ -30,7 +30,7 @@
                 <div ng-include="'app/templates/application/ltp.html'"></div>
             </div>
 
-            <md-button ng-disabled="is_single_loading" ng-if="opened_single.status == 0" ng-click="receive_single(opened_single)" >Receive</md-button>
+            <md-button class="md-primary md-raised" ng-disabled="is_single_loading" ng-if="application.status == 0" ng-click="receive_single(application)" >Receive</md-button>
 
             <div ng-show="is_single_loading" layout="row" layout-sm="column" layout-align="space-around">
               <md-progress-circular md-mode="indeterminate"></md-progress-circular>

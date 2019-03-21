@@ -54,7 +54,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 break;
             case 5:
                 //permitting staff
-                d = TRANSACTION_DB.getData(incoming_string).filter(d => (d.status > 0) && (d.data.received.staff.id == $scope.user.id) && (d.status != 2) ).reverse();
+                d = TRANSACTION_DB.getData(incoming_string).filter(d => (d.status == 1) && (d.data.received.staff.id == $scope.user.id)  ).reverse();
                 break;
             case 7:
                 // permitting chief

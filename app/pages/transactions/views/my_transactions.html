@@ -27,7 +27,7 @@
         </div>
 
         <div ng-show="validate_user([99,7]) && application != ''">
-            <form name="approve_application_form" ng-init="certificate_of_inspection = {}">
+            <form name="approve_application_form" ng-init="certificate_of_inspection = {};payment_slip={}">
                 <!-- certificate of inspection -->
                 <md-card >
                     <md-card-title>
@@ -37,13 +37,66 @@
                         </md-card-title-text>
                     </md-card-title>
                     <md-card-content layout="row" layout-align="space-between">
-                        <md-input-container class="md-block">
-                            <label>Personnel</label>
-                            <input ng-model="certificate_of_inspection.personnel" required>
-                        </md-input-container>
+                        <div layout="column">
+                            <md-input-container class="md-block">
+                                <label>Personnel</label>
+                                <input ng-model="certificate_of_inspection.personnel" required>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label> Remark</label>
+                                <input ng-model="certificate_of_inspection.remark" required>
+                            </md-input-container>
+                        </div>
+                        <div>
+                            <md-input-container class="md-block">
+                                <label>Location</label>
+                                <input ng-model="certificate_of_inspection.location" required>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label> Latitude </label>
+                                <input ng-model="certificate_of_inspection.latitude" required>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label> Longitude</label>
+                                <input ng-model="certificate_of_inspection.longitude" required>
+                            </md-input-container>
+                        </div>
                     </md-card-content>
                 </md-card>
                 <!-- end of c-o-i -->
+                <!-- payment slip -->
+                <md-card >
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span class="md-headline">Payment Receipt</span>
+                                <span class="md-subhead">Digital copy</span>
+                            </md-card-title-text>
+                        </md-card-title>
+                        <md-card-content layout="row" layout-align="space-between">
+                            <div layout="column">
+                                <md-input-container class="md-block">
+                                    <label>OR Number</label>
+                                    <input ng-model="payment_slip.or_number" required>
+                                </md-input-container>
+                                <md-input-container class="md-block">
+                                    <label>Amount</label>
+                                    <input ng-model="payment_slip.amount" required>
+                                </md-input-container>
+                            </div>
+                            <div>
+                                <md-input-container class="md-block">
+                                    <label>Date issued</label>
+                                    <input ng-model="payment_slip.issued" required>
+                                </md-input-container>
+                                <md-input-container class="md-block">
+                                    <label>Issued By:</label>
+                                    <input ng-model="payment_slip.issued_by" required>
+                                </md-input-container>
+                            </div>
+                            
+                        </md-card-content>
+                    </md-card>
+                    <!-- end of payment slip -->
                 <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
                 <md-button ng-disabled="application_loading || approve_application_form.$invalid " ng-click="approveApplication(application,$event)">Approve</md-button>
             </form>
