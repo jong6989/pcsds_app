@@ -1,0 +1,88 @@
+{
+    "division" : [
+        {"name": "General Management and Supervision"},
+        {"name": "Advocacy, Communication and Education"},
+        {"name": "ECAN Monitoring and Evaluation System"},
+        {"name": "ECAN Zoning"},
+        {"name": "Knowledge and Research Management"},
+        {"name": "Resource Mobilization and Partnership Development"},
+        {"name": "Operation of Strategic Environmental Plan and Clearance"},
+        {"name": "Wildlife and Cave Management"}
+
+    ],
+
+    "Allotment_Class" : [
+        {"name": "Personal Services"},
+        {"name": "Maintenance and Other Operating Expenses"},
+        {"name": "Capital Overlay"}
+    ],
+
+
+
+    "PS" : [
+        {"name": "Basic Salary - Civilian"},
+        {"name": "PERA"},
+        {"name": "Representation Allowance (RA)"},
+        {"name": "Transportation Allowance (TA)"},
+        {"name": "Clothing/Uniform Allowance - Civilian"},
+        {"name": "Bonus - Civilian"},
+        {"name": "Cash Gift -Civilian"},
+        {"name": "Productivity Enhancement Incentive - Civilian"},
+        {"name": "Mid-Year Bonus - Civilian"},
+        {"name": "Retirement & Life Insurance Premiums"},
+        {"name": "Pag-IBIG - Civilian"},
+        {"name": "Philhealth - Civilian"},
+        {"name": "ECIP - Civilian"},
+        {"name": "Lump-sum forStep Increment - Length of Service"},
+        {"name": "Monetization"},
+        {"name": "PBB"},
+        {"name": "C N A"},
+        {"name": "Termina Leave Benefits"}
+
+    ],
+
+     "MOOE" : [
+        {"name": "Travelling Expenses - Local"},
+        {"name": "ICT Training Expenses"},
+        {"name": "Training Expenses"},
+        {"name": "ICT Office Supplies"},
+        {"name": "Office Supplies Expenses"},
+        {"name": "Accountable Forms Expenses"},
+        {"name": "Fuel, Oil and Lubricants Expenses"},
+        {"name": "Other Supplies and Materials Expenses"},
+        {"name": "Water Expense"},
+        {"name": "Electricity Expense"},
+        {"name": "Postage and Courier Services"},
+        {"name": "Mobile"},
+        {"name": "Landline"},
+        {"name": "Internet Subscription Expenses"},
+        {"name": "Cable, Satellite, Telegraph and Radio Expenses"},
+        {"name": "Other Professional Services"},
+        {"name": "Janitorial Services"},
+        {"name": "Security Services"},
+        {"name": "Other General Services - ICT Services"},
+        {"name": "Building"},
+        {"name": "Office Equipment"},
+        {"name": "Motor Vehicles"},
+        {"name": "Repair and Maintenance - Furnitures and Fixtures"},
+        {"name": "Taxes, Duties and Licenses"},
+        {"name": "Fidelity Bond Premiums"},
+        {"name": "Insurance Expense"},
+        {"name": "Advertising Expenses"},
+        {"name": "Printing and Publication Expenses"},
+        {"name": "Representation Expenses"},
+        {"name": "Transportation and Delivery Expenses"},
+        {"name": "Rents - Building and Structures"},
+        {"name": "Rents - Living Quarter"},
+        {"name": "Library and Other Reading Materials Subscription"},
+        {"name": "Other Maintenance and Other Operating Expeses"}
+     
+        
+    ],
+
+    "CO" : [
+        {"name": "Buliding", "data1":{"hello":"amount[i].data.BuildingBudget","name": "Buliding"}},
+        {"name": "Information and Communication Technology Equipment"},
+        {"name": "Motor Vehicles"}
+    ]
+}

@@ -1,0 +1,30 @@
+<form name= "form_jaobudgetcO" id="formreset" ng-init="jaoBCO = {data : {}}" >
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>Month</label>
+                    <input ng-model="jaoBCO.Month" maxlength="4" required>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>Buliding</label>
+                    <input type = "number" ng-model="jaoBCO.data.BuildingBudget" maxlength="4" required>
+            </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>Information and Communication Technology Equipment</label>
+                        <input type = "number" ng-model="jaoBCO.data.UICTEBudget" maxlength="4" required>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>Motor Vehicles</label>
+                        <input type = "number" ng-model="jaoBCO.data.MVBudget" maxlength="4" required>
+                </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                        <md-button type="submit"  ng-click="jaoBudgetCO_add(jaobudget,jaoBCO)" class="md-raised md-block md-primary" >
+                                Submit <!---ng-disabled="form_jaobudget.$invalid"--->
+                        </md-button>
+                </md-input-container>
+        </div>
+    </form>

@@ -1,0 +1,71 @@
+<form name= "form_jao" id="formreset" ng-init="jao = {data : {}}" >
+        {{jsondata.Allotment_Class}} <br><br> {{Division}}
+    <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+            <label>OBR No.</label>
+            <input ng-model="jao.ObrNo" required>
+        </md-input-container>
+
+        &nbsp &nbsp &nbsp 
+        <md-input-container class="md-block" flex-gt-sm>
+            <label>Name of creditors</label>
+            <input ng-model="jao.data.NameOfCreditors" required>
+        </md-input-container>  
+
+        &nbsp &nbsp &nbsp 
+        <md-input-container class="md-block" flex-gt-sm>
+            <label>LDDAP-ADA NO 101101</label>
+            <input ng-model="jao.data.LDDAP" required>
+        </md-input-container> 
+    </div>
+
+    <div layout-gt-sm="row">
+        <div flex-gt-s>
+            <label>Date Issued:</label>
+            <md-datepicker ng-model="jao.data.date" md-placeholder="Enter date" required></md-datepicker>
+            <br>
+            Date: {{wsup.data.date_issued | date:shortDate}}
+                    
+        </div>
+        &nbsp &nbsp &nbsp 
+        <md-input-container class="md-block" flex-gt-xs>
+                    <label>Division</label>
+                    <md-select ng-model= "jao.division" required>
+                        <md-option ng-repeat = "list in jsondata.division"  value = {{list.name}}> 
+                            {{list.name}} 
+                        </md-option>
+                        
+                    </md-select>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+            <label>Allotment Class</label>
+            <md-select ng-model= "jao.allotment"  required>
+                <md-option ng-repeat = "list in jsondata.Allotment_Class" ng-click = "type_EDis(list.name)" value = {{list.name}}> 
+                    {{list.name}} 
+                </md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+    <br><br>
+    
+    <div layout-gt-sm="row">
+        <md-input-container  class="md-block" flex-gt-xs >
+            <label>Type of Expenses</label>
+            
+            <md-select ng-model= "jao.expenses" ng-disabled="is_single_account_selected" required>
+                <md-option ng-repeat = " list in PST" value= {{list.data1}}>{{list.name}}</md-option>
+            </md-select>
+        </md-input-container>
+        
+        <md-input-container class="md-block" flex-gt-sm>
+            <label>Amount</label>
+            <input type = "number" ng-model="jao.data.amount" required>
+        </md-input-container>
+    
+    </div>
+</form>
+
+    <md-button type="submit"  ng-click="jao_add(jao)" class="md-raised md-block md-primary" >
+        Submit
+    </md-button>
+    <!-- ng-disabled="form_jao.$invalid" -->

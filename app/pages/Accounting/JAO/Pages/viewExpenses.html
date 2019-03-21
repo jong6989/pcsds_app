@@ -1,0 +1,44 @@
+<div layout-gt-sm="row" ng-init = "get_year();">
+        <br><br>
+    <md-input-container class="md-block" flex-gt-xs>
+        <label>Year</label>
+        <md-select  ng-model= "year"  required>
+            <md-option ng-repeat = "list in Accounting_Year" ng-click = "SData(list.Year_Date)" value = {{list.Year_Date}}> 
+                {{list.Year_Date}}    
+            </md-option>
+        </md-select>
+    </md-input-container>
+
+    <md-input-container class="md-block" flex-gt-xs>
+        <label>month</label>
+        <md-select  ng-model= "month"  ng-disabled="disabled1"  required>
+            <md-option ng-repeat = "list in Accounting_Month"  ng-click = "DData(list.Month_Date)" value = {{list.Month_Date}}> 
+                {{list.Month_Date}}    
+            </md-option>
+        </md-select>
+    </md-input-container>
+</div>
+    <br><br>
+<div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-xs>
+                <label>Division</label>
+                <md-select  ng-model= "jao.allotment"  ng-disabled="disabled2" required>
+                    <md-option ng-repeat = "list in Accounting_DIVISION" ng-click = "EData(list.DIVISION)" value = {{list.DIVISION}}> 
+                        {{list.DIVISION}}    
+                    </md-option>
+                </md-select>
+        </md-input-container>
+</div>
+&nbsp &nbsp
+<md-input-container class="md-block" flex-gt-xs>
+        <label>Allotment Class</label>
+        <md-select ng-model= "jao.division" ng-disabled="disabled3" required>
+            <md-option ng-repeat = "list in Accounting_AllotClass"  ng-click = "FData(list.AllotmentClass)" value = {{list.AllotmentClass}}> 
+                {{list.AllotmentClass}}    
+            </md-option>
+        </md-select>
+</md-input-container>
+<br><br>
+<md-button type="submit" ng-disabled="form_wsup.$invalid || wsup.user_key !== re_password" ng-click="open_selected_account()" class="md-raised md-block md-primary" >
+        Search
+</md-button>

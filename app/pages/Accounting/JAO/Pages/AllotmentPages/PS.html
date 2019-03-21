@@ -1,0 +1,128 @@
+<form name= "form_jaobudgetPS" id="formreset" ng-init="jaoBPS = {data : {}}" >
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>Month</label>
+                    <input ng-model="jaoBPS.Month" maxlength="4" required>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm></md-input-container>
+            <md-input-container class="md-block" flex-gt-sm></md-input-container>
+        </div>
+
+
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>Basic Salary - Civilian</label>
+                    <input type = "number" ng-model="jaoBPS.data.Basic_Salary_Civilian" maxlength="4" required>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>PERA</label>
+                    <input type = "number" ng-model="jaoBPS.data.PERA" maxlength="4" required>
+            </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>Representation Allowance (RA)</label>
+                        <input type = "number" ng-model="jaoBPS.data.Representation_Allowance" maxlength="4" required>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>Transportation Allowance (TA)</label>
+                        <input type = "number" ng-model="jaoBPS.data.Transportation_Allowance" maxlength="4" required>
+                </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>Clothing/Uniform Allowance - Civilian</label>
+                    <input type = "number" ng-model="jaoBPS.data.Uniform_Allowance_Civilian" maxlength="4" required>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>Bonus - Civilian</label>
+                    <input type = "number" ng-model="jaoBPS.data.Bonus_Civilian" maxlength="4" required>
+            </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>Cash Gift -Civilian</label>
+                    <input type = "number" ng-model="jaoBPS.data.Cash_Gift_Civilian" maxlength="4" required>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>Productivity Enhancement Incentive - Civilian</label>
+                    <input type = "number" ng-model="jaoBPS.data.Productivity_Enhancement_Incentive_Civilian" maxlength="4" required>
+            </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>Mid-Year Bonus - Civilian</label>
+                    <input type = "number" ng-model="jaoBPS.data.MidYear_Bonus_Civilian" maxlength="4" required>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>Retirement & Life Insurance Premiums</label>
+                    <input type = "number" ng-model="jaoBPS.data.Retirement" maxlength="4" required>
+            </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>Pag-IBIG - Civilian</label>
+                        <input type = "number" ng-model="jaoBPS.data.Pag_IBIG" maxlength="4" required>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>Philhealth - Civilian</label>
+                        <input type = "number" ng-model="jaoBPS.data.Philhealth" maxlength="4" required>
+                </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>ECIP - Civilian</label>
+                        <input type = "number" ng-model="jaoBPS.data.ECIP" maxlength="4" required>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>Lump-sum forStep Increment - Length of Service</label>
+                        <input type = "number" ng-model="jaoBPS.data.Lump_sum" maxlength="4" required>
+                </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>Monetization</label>
+                        <input type = "number" ng-model="jaoBPS.data.Monetization" maxlength="4" required>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>PBB</label>
+                        <input type = "number" ng-model="jaoBPS.data.PBB" maxlength="4" required>
+                </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>C N A</label>
+                        <input type = "number" ng-model="jaoBPS.data.CNA" maxlength="4" required>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                        <label>Terminal Leave Benefits</label>
+                        <input type = "number" ng-model="jaoBPS.data.Terminal" maxlength="4" required>
+                </md-input-container>
+        </div>
+
+        
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                    <md-button type="submit" ng-click="jaoBudgetPS_add(jaobudget,jaoBPS)" class="md-raised md-block md-primary" >
+                            Submit <!-- ng-disabled="form_jaobudget.$invalid"-->
+                    </md-button>
+            </md-input-container>
+        </div>
+</form>

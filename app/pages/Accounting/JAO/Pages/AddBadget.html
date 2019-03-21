@@ -1,0 +1,16 @@
+<div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-xs>
+                <label>Year</label>
+                <input ng-model="jaobudget.YearBudget" maxlength="4" required>
+        </md-input-container>
+        &nbsp &nbsp
+        <md-input-container class="md-block" flex-gt-xs>
+                <label>Division</label>
+                <md-select ng-model= "jaobudget.data.divisionBudget" required>
+                    <md-option ng-repeat = "list in jsondata.division"  value = {{list.name}}> 
+                        {{list.name}} 
+                    </md-option> 
+                </md-select>
+        </md-input-container>
+        
+</div>

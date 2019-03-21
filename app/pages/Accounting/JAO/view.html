@@ -1,0 +1,85 @@
+<div ng-init="set_page_title('JOURNAL ANALYSIS OF OBLIGATION'); get_jao(); trylang();" ng-controller="jao_controller">
+
+
+    <md-tabs md-dynamic-height md-border-bottom  md-selected="selectedIndex">
+
+        <!---ADD EXPENSES------------------------->
+        <md-tab label="ADD Expenses">
+            <md-content class="md-padding">
+                    <div ng-include="AddExpenses.url"></div>
+            </md-content>
+        </md-tab>
+
+        <!-- View  ------------------------------->
+        <md-tab label="View">
+            <md-content class="md-padding">
+                    <div ng-include="ViewExpenses.url"></div>
+            </md-content>
+        </md-tab>
+
+        <!-----ADD BUDGET------------------------->
+        <md-tab label="Add Budget">
+            <md-content class="md-padding" >
+
+                    <!-- <div ng-include="AddBudgets.url"></div> -->
+                    <form name= "form_jaobudget" id="formreset" ng-init="jaobudget = {data : {}}" >
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-xs>
+                                        <label>Year</label>
+                                        <input ng-model="jaobudget.YearBudget" maxlength="4" required>
+                                </md-input-container>
+                                &nbsp &nbsp
+                                <md-input-container class="md-block" flex-gt-xs>
+                                        <label>Division</label>
+                                        <md-select ng-model= "jaobudget.divisionBudget" required>
+                                            <md-option ng-repeat = "list in jsondata.division"  value = {{list.name}}> 
+                                                {{list.name}} 
+                                            </md-option> 
+                                        </md-select>
+                                </md-input-container>
+                            </div>
+                    </form>    
+                    <br>
+                    <div ng-cloak>
+                        <md-content>
+                            <md-tabs>
+                                <md-tab label="Personal Services"><!-------Personal Services------------>
+                                    <md-content class="md-padding">
+                                        <div ng-include="AB_Allot_PS.url"></div>
+                                    </md-content>
+                                </md-tab>
+
+                                <md-tab label="MOOE"><!-------MOOE------------>
+                                    <md-content class="md-padding">
+                                        <div ng-include="AB_Allot_MOOE.url"></div>
+                                    </md-content>
+                                </md-tab>
+
+                                <md-tab label="Capital Overlay"><!--------Capital Overlay-->
+                                    <md-content class="md-padding">
+                                        <div ng-include="AB_Allot_CO.url"></div>
+                                    </md-content>
+                                </md-tab>
+                            </md-tabs>
+                        </md-content>
+                    </div>
+            </md-content>   
+        </md-tab>
+
+        <!----Sample-->
+        <md-tab label="Sample">
+                <md-content class="md-padding" >
+                        <select ng-model="template" ng-options="t.name for t in templates">
+                            <option value="">(blank)</option>
+                        </select>
+                        url of the template: <code>{{template.url}}</code>
+                        <hr/>
+                        <div>
+                            <div ng-include="template.url"></div>
+                        </div>
+                </md-content>   
+        </md-tab>
+    </md-tabs>
+</div>
+
+ 

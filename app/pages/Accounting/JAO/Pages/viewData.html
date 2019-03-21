@@ -1,0 +1,17 @@
+<a ng-href class="pointer col-red" ng-click="ShowSearchExpenses()"> <i class="fa fa-chevron-left"></i> Back</a>
+    <br><br>
+    <label><b>Date:</b> </label> {{MonthData}} {{YearData}}
+    <br>
+    <label><b>Division: </b></label> {{DivisionData}}
+    <br>
+    <label><b>AllotmentClass:</b> </label> {{ACData}}  &nbsp &nbsp <a ng-href class="pointer col-blue" ng-click="view_budget()"> <i class="fa fa-money" aria-hidden="true"></i> View Budget</a>
+<table ng-table="JAO_List" class="table" show-filter="true">
+    <tr ng-repeat="x in $data" >
+        <td title="'Date'" filter="{ 'data.date': 'text'}" sortable="'data.date'"> {{x.data.date}} </td>
+        <td title="'OBR No.'" filter="{ ObrNo: 'text'}"  sortable="'ObrNo'"> {{x.ObrNo}} </td>
+        <td title="'NAME OF CREDITORS'" filter="{'data.NameOfCreditors': 'text'}" sortable="'data.NameOfCreditors'"> {{x.data.NameOfCreditors}} </td>
+        <td title="'LDDAP-ADA NO 101101'" filter="{ 'data.LDDAP': 'text'}" sortable="'data.LDDAP'"> {{x.data.LDDAP}} </td>
+        <td title="'Type_Expenses'" filter="{ Type_Expenses: 'text'}"  sortable="'Type_Expenses'"> {{x.Type_Expenses}} </td>
+        <td title="'Amount'" filter="{ 'data.amount': 'number'}" sortable="'data.amount'"> {{x.data.amount}} </td>
+    </tr>
+</table>
