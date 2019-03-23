@@ -393,7 +393,6 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.validate_user = (ars)=>{
       var r = false;
       ars.forEach(element => {
-        console.log($scope.user.user_level + " -- " + element + " --- " + ($scope.user.user_level == element) )
           if($scope.user.user_level == element) r = true;
       });
       return r;

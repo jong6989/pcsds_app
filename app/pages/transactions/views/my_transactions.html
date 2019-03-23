@@ -14,58 +14,53 @@
         </md-list>
     </md-content>
     
-    <md-content ng-if="application != undefined" flex ng-style="{ height: (iframeHeight - 180) + 'px' }">
-        <div ng-if="application.name == 'Application for Local Transport Permit'">
+    <md-content ng-if="application !== undefined" flex ng-style="{ height: (iframeHeight - 180) + 'px' }">
+        
+        <div ng-show="application.name == 'Application for Local Transport Permit'">
             <div ng-include="'app/templates/application/ltp.html'"></div>
         </div>
         <md-divider class="m-t-20 m-b-10"></md-divider>
-        <md-progress-circular ng-show="application_loading" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
-
-        <div ng-show="validate_user([99,5]) && application != ''">
-            <md-button ng-if="application.status == 1" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
-            <md-button ng-if="application.status == 1" ng-disabled="application_loading" ng-click="acceptApplication(application,$event)">Accept</md-button>
-        </div>
-
-        <div ng-show="validate_user([99,7]) && application != ''">
-            <form name="approve_application_form" ng-init="certificate_of_inspection = {};payment_slip={}">
-                <!-- certificate of inspection -->
-                <md-card >
-                    <md-card-title>
-                        <md-card-title-text>
-                            <span class="md-headline">Certificate of inspection</span>
-                            <span class="md-subhead">Digital form</span>
-                        </md-card-title-text>
-                    </md-card-title>
-                    <md-card-content layout="row" layout-align="space-between">
-                        <div layout="column">
-                            <md-input-container class="md-block">
-                                <label>Personnel</label>
-                                <input ng-model="certificate_of_inspection.personnel" required>
-                            </md-input-container>
-                            <md-input-container class="md-block">
-                                <label> Remark</label>
-                                <input ng-model="certificate_of_inspection.remark" required>
-                            </md-input-container>
-                        </div>
-                        <div>
-                            <md-input-container class="md-block">
-                                <label>Location</label>
-                                <input ng-model="certificate_of_inspection.location" required>
-                            </md-input-container>
-                            <md-input-container class="md-block">
-                                <label> Latitude </label>
-                                <input ng-model="certificate_of_inspection.latitude" required>
-                            </md-input-container>
-                            <md-input-container class="md-block">
-                                <label> Longitude</label>
-                                <input ng-model="certificate_of_inspection.longitude" required>
-                            </md-input-container>
-                        </div>
-                    </md-card-content>
-                </md-card>
-                <!-- end of c-o-i -->
-                <!-- payment slip -->
-                <md-card >
+        
+        <div ng-if="validate_user([99,5]) && application.status == 1 ">
+                <form name="approve_application_form" ng-init="application.certificate_of_inspection = {};application.payment_slip={}">
+                    <!-- certificate of inspection -->
+                    <md-card >
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span class="md-headline">Certificate of inspection</span>
+                                <span class="md-subhead">Digital form</span>
+                            </md-card-title-text>
+                        </md-card-title>
+                        <md-card-content layout="row" layout-align="space-between">
+                            <div flex layout="column">
+                                <md-input-container flex class="md-block">
+                                    <label>Personnel</label>
+                                    <input ng-model="application.certificate_of_inspection.personnel" required>
+                                </md-input-container>
+                                <md-input-container flex class="md-block">
+                                    <label>Remark</label>
+                                    <textarea ng-model="application.certificate_of_inspection.remark" md-maxlength="300" rows="3" md-select-on-focus></textarea>
+                                </md-input-container>
+                            </div>
+                            <div flex layout="column">
+                                <md-input-container flex class="md-block">
+                                    <label>Location</label>
+                                    <input ng-model="application.certificate_of_inspection.location" required>
+                                </md-input-container>
+                                <md-input-container flex class="md-block">
+                                    <label> Latitude </label>
+                                    <input ng-model="application.certificate_of_inspection.latitude" required>
+                                </md-input-container>
+                                <md-input-container flex class="md-block">
+                                    <label> Longitude</label>
+                                    <input ng-model="application.certificate_of_inspection.longitude" required>
+                                </md-input-container>
+                            </div>
+                        </md-card-content>
+                    </md-card>
+                    <!-- end of c-o-i -->
+                    <!-- payment slip -->
+                    <md-card >
                         <md-card-title>
                             <md-card-title-text>
                                 <span class="md-headline">Payment Receipt</span>
@@ -74,43 +69,49 @@
                         </md-card-title>
                         <md-card-content layout="row" layout-align="space-between">
                             <div layout="column">
-                                <md-input-container class="md-block">
+                                <md-input-container flex class="md-block">
                                     <label>OR Number</label>
-                                    <input ng-model="payment_slip.or_number" required>
+                                    <input ng-model="application.payment_slip.or_number" required>
                                 </md-input-container>
-                                <md-input-container class="md-block">
-                                    <label>Amount</label>
-                                    <input ng-model="payment_slip.amount" required>
+                                <md-input-container flex class="md-block">
+                                    <label>Ammount</label>
+                                    <input type="number" ng-model="application.payment_slip.amount" required>
                                 </md-input-container>
                             </div>
-                            <div>
-                                <md-input-container class="md-block">
-                                    <label>Date issued</label>
-                                    <input ng-model="payment_slip.issued" required>
-                                </md-input-container>
-                                <md-input-container class="md-block">
+                            <div  layout="column">
+                                <strong>on :</strong>
+                                <md-datepicker ng-model="date_issued" ng-change="application.payment_slip.issued = to_date(date_issued)" md-placeholder="Date issued" md-open-on-focus></md-datepicker>
+                                
+                                <md-input-container flex class="md-block">
                                     <label>Issued By:</label>
-                                    <input ng-model="payment_slip.issued_by" required>
+                                    <input ng-model="application.payment_slip.issued_by" required>
                                 </md-input-container>
                             </div>
                             
                         </md-card-content>
                     </md-card>
                     <!-- end of payment slip -->
-                <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
-                <md-button ng-disabled="application_loading || approve_application_form.$invalid " ng-click="approveApplication(application,$event)">Approve</md-button>
-            </form>
+                </form>
+            <md-button ng-if="application.status == 1" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+            <md-button ng-disabled="approve_application_form.$invalid || application_loading "  ng-click="acceptApplication(application,$event)">Accept</md-button>
         </div>
 
-        <div ng-if="validate_user([99,8]) && application != ''">
+        <div ng-show="validate_user([99,7]) && application.status == 3">
+            <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+            <md-button ng-click="approveApplication(application,$event)">Approve</md-button>
+        </div>
+
+        <div ng-if="validate_user([99,8]) && application.status == 4">
             <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
             <md-button ng-disabled="application_loading" ng-click="recommendApplication(application,$event)">Recommend</md-button>
         </div>
 
-        <div ng-if="validate_user([99,4]) && application != ''">
+        <div ng-if="validate_user([99,4]) && application.status == 5">
             <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
             <md-button ng-disabled="application_loading" ng-click="acknowledgeApplication(application,$event)">Acknowledge</md-button>
         </div>
+
+        <md-progress-circular ng-show="application_loading" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
 
 
     </md-content>

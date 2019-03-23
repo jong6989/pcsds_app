@@ -30,7 +30,10 @@
                 <div ng-include="'app/templates/application/ltp.html'"></div>
             </div>
 
-            <md-button class="md-primary md-raised" ng-disabled="is_single_loading" ng-if="application.status == 0" ng-click="receive_single(application)" >Receive</md-button>
+            <div ng-if="application.status == 0" ng-show="validate_user([5]) && application != ''">
+                <md-button class="md-warn md-raised" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+                <md-button class="md-primary md-raised" ng-disabled="is_single_loading" ng-if="application.status == 0" ng-click="receive_single(application)" >Receive</md-button>    
+            </div>
 
             <div ng-show="is_single_loading" layout="row" layout-sm="column" layout-align="space-around">
               <md-progress-circular md-mode="indeterminate"></md-progress-circular>

@@ -284,12 +284,14 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                     action : "applicant/transaction/accept",
                     remark : result,
                     id : x.id,
-                    user_id : $scope.user.id
+                    user_id : $scope.user.id,
+                    certificate_of_inspection : x.certificate_of_inspection,
+                    payment_slip : x.payment_slip
                 },
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = "";
+                        $scope.application = {};
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
@@ -328,7 +330,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = "";
+                        $scope.application = {};
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
@@ -367,7 +369,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = "";
+                        $scope.application = {};
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
@@ -406,7 +408,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = "";
+                        $scope.application = {};
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
