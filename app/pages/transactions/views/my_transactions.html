@@ -75,7 +75,7 @@
                                 </md-input-container>
                                 <md-input-container flex class="md-block">
                                     <label>Ammount</label>
-                                    <input type="number" ng-model="application.payment_slip.amount" required>
+                                    <input type="number" ng-model="application.payment_slip.ammount" required>
                                 </md-input-container>
                             </div>
                             <div  layout="column">
@@ -96,16 +96,19 @@
             <md-button ng-disabled="approve_application_form.$invalid || application_loading "  ng-click="acceptApplication(application,$event)">Accept</md-button>
         </div>
 
+        <!-- approval -->
         <div ng-show="validate_user([99,7]) && application.status == 3">
             <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
             <md-button ng-click="approveApplication(application,$event)">Approve</md-button>
         </div>
 
+        <!-- Recomendation -->
         <div ng-if="validate_user([99,8]) && application.status == 4">
             <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
             <md-button ng-disabled="application_loading" ng-click="recommendApplication(application,$event)">Recommend</md-button>
         </div>
 
+        <!-- Acknowledgement -->
         <div ng-if="validate_user([99,4]) && application.status == 5">
             <md-button ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
             <md-button ng-disabled="application_loading" ng-click="acknowledgeApplication(application,$event)">Acknowledge</md-button>

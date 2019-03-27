@@ -2,6 +2,7 @@
     <h5 class="col-blue">{{application.name}}</h5>
     <strong><small>Applicant :</small> {{application.data.application.applicant}} </strong> <br>
     <strong><small>Contact :</small> {{application.data.application.contact}} </strong> <br>
+    <strong><small>Required Permit Type :</small> {{application.data.application.required_permit_type}} </strong> <br>
     <strong><small>Required Permit :</small> {{application.data.application.required_permit}} </strong> <br>
     <strong><small>Attachments :</small></strong>
     <ol ng-if="application.data.application.attachments.length > 0">
@@ -36,8 +37,8 @@
         <span ng-if="application.data.application.via.aircraft">aircraft</span> 
         <span ng-if="application.data.application.via.vessel">vessel</span> 
     </strong><br>
-    <strong><small>Place of Transaport :</small> {{application.data.application.place_of_transport}} </strong> <br>
-    <strong><small>Date of Transaport :</small> {{application.data.application.date_of_transport.split(' ')[0] | date}} </strong> <br>
+    <strong><small>Place of Transport :</small> {{application.data.application.place_of_transport}} </strong> <br>
+    <strong><small>Date of Transport :</small> {{application.data.application.date_of_transport.split(' ')[0] | date}} </strong> <br>
     
     <!-- Received Stamp -->
     <div ng-if="application.status > 0" ng-init="staff = application.data.received.staff">
@@ -60,6 +61,63 @@
     <!-- Accepted Stamp -->
     <div ng-if="application.data.accepted != undefined " ng-init="staff = application.data.accepted.staff">
         <hr class="p-t-10">
+        
+        <md-card >
+            <md-card-title>
+                <md-card-title-text>
+                <span class="md-headline">Certificate of inspection</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+                <div flex layout="column">
+                    <div flex>
+                        <strong>Personnel : </strong> {{application.data.certificate_of_inspection.personnel}}
+                    </div>
+                    <div flex>
+                        <strong>Remark :</strong> {{application.data.certificate_of_inspection.remark}}
+                    </div>
+                </div>
+                <div flex layout="column">
+                    <div flex>
+                        <strong>Location : </strong> {{application.data.certificate_of_inspection.location}}
+                    </div>
+                    <div flex>
+                        <strong>Latitude : </strong> {{application.data.certificate_of_inspection.latitude}} 
+                    </div>
+                    <div flex>
+                        <strong>Longitude : </strong> {{application.data.certificate_of_inspection.longitude}}
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+
+        <md-card class="m-b-20">
+            <md-card-title>
+                <md-card-title-text>
+                <span class="md-headline">Payment Slip</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+                <div flex layout="column">
+                    <div flex>
+                        <strong>O.R Number : </strong> {{application.data.payment_slip.or_number}}
+                    </div>
+                    <div flex>
+                        <strong>Ammount :</strong> {{application.data.payment_slip.ammount}}
+                    </div>
+                </div>
+                <div flex layout="column">
+                    <div flex>
+                        <strong>Date Issued : </strong> {{application.data.payment_slip.issued}}
+                    </div>
+                    <div flex>
+                        <strong>Issued By : </strong> {{application.data.payment_slip.issued_by}}
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+
+
         Accepted by : {{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} 
         <br>
         Remark : {{application.data.accepted.remark}}

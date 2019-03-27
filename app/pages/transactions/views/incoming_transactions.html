@@ -2,6 +2,11 @@
     <md-radio-button value="" class="md-primary">All Transaction</md-radio-button>
     <md-radio-button value="0"> New </md-radio-button>
     <md-radio-button value="1"> Received </md-radio-button>
+    <md-radio-button value="2"> Rejected </md-radio-button>
+    <md-radio-button value="3"> Accepted </md-radio-button>
+    <md-radio-button value="4"> Approved </md-radio-button>
+    <md-radio-button value="5"> Recomended </md-radio-button>
+    <md-radio-button value="6"> Acknowledged </md-radio-button>
 </md-radio-group>
 
 <table ng-table="tbl_incoming" class="table" show-filter="true">
@@ -12,7 +17,7 @@
         <td title="'Name'" > {{ x.name }} </td>
         <td title="'Status'" > 
           <strong ng-class=" {'col-green' : (x.status == 0), 'col-blue' : (x.status == 1), 'col-red' : (x.status == 2),
-                'col-teal' : (x.status == 3),'col-brown' : (x.status == 4),'col-indigo' : (x.status == 5) } ">
+                'col-teal' : (x.status == 3),'col-brown' : (x.status == 4),'col-indigo' : (x.status == 5),'col-deep-orange' : (x.status == 6) } ">
             {{ getTransactionStatus(x.status) }}
           </strong> 
         </td>
@@ -30,7 +35,7 @@
                 <div ng-include="'app/templates/application/ltp.html'"></div>
             </div>
 
-            <div ng-if="application.status == 0" ng-show="validate_user([5]) && application != ''">
+            <div ng-if="application.status == 0" ng-show="validate_user([5]) && application !== ''">
                 <md-button class="md-warn md-raised" ng-click="rejectApplication(application,$event)" >Reject</md-button>
                 <md-button class="md-primary md-raised" ng-disabled="is_single_loading" ng-if="application.status == 0" ng-click="receive_single(application)" >Receive</md-button>    
             </div>
