@@ -1,0 +1,275 @@
+<div ng-controller="fuel_log_controller" ng-init="set_page_title('Receiving of Incomming Documents');get_documents();get_categories();get_images();get_ticket_data()" layout-gt-xs="column" layout-xs="column" >
+	<md-tabs flex md-dynamic-height md-border-bottom md-selected="selectedIndex" >
+        
+        <md-tab label="New Trip Ticket">
+          <md-content class="md-padding" style="height:{{get_window_height() - 160}}px">
+            
+            <form  name="form_new_ticket" ng-init=" new_ticket = {data : {}} " >
+  {{new_ticket}}
+              <div layout-gt-sm="row">
+                  <md-input-container class="md-block" flex-gt-sm>
+                      <label>Trip Ticket Number </label>
+                      <input  ng-model="new_ticket.ticket_number" required="">
+                  </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Vehicle Plate Number </label>
+                    <input ng-model="new_ticket.data.plate_number" required="">
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Driver</label>
+                    <input ng-model="new_ticket.data.driver_id" required="">
+                </md-input-container>
+
+                <div flex-gt-xs>
+                    <strong>Date</strong>
+                    <md-datepicker ng-model="new_ticket.data.travel_date" md-placeholder="Enter date" md-open-on-focus required=""></md-datepicker>
+                </div>
+
+              </div>
+
+              <div layout-gt-sm="row">
+                <div flex="grow">
+                  
+                  <h4 class="col-theme" ng-init="new_ticket.data.passengers = []" flex>
+                    Passengers: <md-button class="md-raised" ng-click="new_ticket.data.passengers.push({});">Add Passenger</md-button>
+                  </h4>
+
+                 
+                    <div ng-repeat="x in new_ticket.data.passengers" flex layout-gt-sm="row">
+                        <div flex-gt-sm="5"><br>
+                            <i class="fa fa-trash pointer col-red" ng-click="new_ticket.data.passengers.splice(new_ticket.data.passengers.indexOf(x),1);"> </i>
+                            {{$index + 1}}.
+                        </div>
+
+                        <md-input-container class="md-block" flex-gt-sm="20">
+                           <label>Name</label>
+                           <input  ng-model="new_ticket.data.passengers[new_ticket.data.passengers.indexOf(x)].Name" required="">
+                        </md-input-container>
+
+                        <md-input-container class="md-block" flex-gt-sm="20">
+                           <label>Division</label>
+                           <input  ng-model="new_ticket.data.passengers[new_ticket.data.passengers.indexOf(x)].Division" required="">
+                        </md-input-container>
+                        
+                    </div>
+                
+                </div>
+                
+
+
+                
+                
+              </div>
+
+              <div layout-gt-sm="row">
+                
+                <div flex="grow">
+                  
+                  <h4 class="col-theme" ng-init="new_ticket.data.places = []" flex>
+                    Places to Visit: <md-button class="md-raised" ng-click="new_ticket.data.places.push({});">Add Places</md-button>
+                  </h4>
+
+                  
+                    <div ng-repeat="x in new_ticket.data.places" flex layout-gt-sm="row">
+                        <div flex-gt-sm="5"><br>
+                            <i class="fa fa-trash pointer col-red" ng-click="new_ticket.data.places.splice(new_ticket.data.places.indexOf(x),1);"> </i>
+                            {{$index + 1}}.
+                        </div>
+
+                        <md-input-container class="md-block" flex-gt-sm="20">
+                           <label>Place Name</label>
+                           <input  ng-model="new_ticket.data.places[new_ticket.data.places.indexOf(x)].Name" required="">
+                        </md-input-container>
+
+                       
+                    </div>
+                
+                </div>
+                
+              </div>
+
+              <md-input-container class="md-block" flex-gt-sm>
+                <label>Purpose</label>
+                <input ng-model="new_ticket.data.purpose" required="">
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Approved By</label>
+              <input ng-model="new_ticket.data.approved_by" required="">
+          </md-input-container>
+              
+  
+               <md-button type="submit" ng-disabled="form_new_ticket.$invalid"  ng-click="ticket_add(new_ticket)  " class="md-raised md-block md-primary" >
+                 Save Ticket
+              </md-button>
+
+              <md-button type="submit"   ng-click="ticket_clear(); " class="md-raised md-block md-primary" >
+                Clear
+             </md-button>
+              
+            </form>
+          </md-content>
+          
+
+        </md-tab>
+
+        <md-tab label="Trip Tickets">
+          
+          <form name ="form_update_ticket">
+            <md-content class="md-padding" style="height:{{get_window_height() - 160}}px" ng-init="column_shown = 'from';search_doc ='';open_search_by_categ=undefined;is_search = false;">
+              
+              
+              <div ng-hide="update_trip_ticket_form"> <!------View-->
+                  
+               
+                <table ng-table="ticket_data" class="table" show-filter="true">
+                    <tr ng-repeat="x in $data" ng-click="null" >
+                        <td title="'Trip Ticket Number'" filter="{ 'trip_ticket_id': 'text'}" sortable="'trip_ticket_id'"> {{x.trip_ticket_id}} </td>
+                        <td title="'Date Encoded'" filter="{ 'date': 'text'}" sortable="'date'"> {{x.date}} </td>
+                        <td title="'Name'" filter="{ 'data.passengers.Name': 'text'}" sortable="'data.passengers'" > <div ng-repeat="a in x.data.passengers">{{a.Name}},</div>  </td>
+                        <td title="'Plate Number'" filter="{ 'data.plate_number': 'text'}" sortable="'date'"> {{x.data.plate_number}} </td>
+                        
+                        <td><div flex="20" >
+                          <md-button class="md-icon-button" ng-click="update_trip_ticket_data(x);">
+                               <md-icon ng-bind="'edit'" ></md-icon>
+                             </md-button>
+                            
+                       </div></td>
+                    </tr>
+                </table>
+                <br><br>
+                
+            </div>
+                <br>
+           <div ng-show="update_trip_ticket_form" layout="column"> 
+
+              <a ng-href class="pointer col-red" ng-click="update_trip_ticket_form = false;"> <i class="fa fa-chevron-left"></i> Back</a>
+        
+               {{new_ticket}} 
+                   
+                   <h1>Update Trip Ticket: {{trip_ticket_ID}}</h1>
+                   
+                   <!-- <md-input-container class="md-block" flex-gt-sm>
+                      <label>Trip Ticket Number {{new_ticket.trip_ticket_id}}</label>
+                      <input  ng-model="new_ticket.trip_ticket_id" placeholder="{{new_ticket.trip_ticket_id}}" required="">
+                  </md-input-container> -->
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Depart from Office(time)</label>
+                    <input type="time" ng-model="new_ticket.data.depart_time" ng-change="new_ticket.data.depart_time = to_time(new_ticket.data.depart_time)" required="">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Arrival to Office(time)</label>
+                    <input type="time"  ng-model="arrival_time" ng-change="new_ticket.data.arrival_time = to_time(arrival_time)" required="">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Balance in Tank</label>
+                    <input  ng-model="new_ticket.data.balance_in_tank" required="">
+                  </md-input-container>
+
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Fuel Issued </label>
+                    <input  ng-model="new_ticket.data.fuel_issued" required>
+                  </md-input-container>
+                  
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>END OF TRIP - Balance in Tank</label>
+                    <input  ng-model="new_ticket.data.balance_in_tank_end" required>
+                  </md-input-container>
+
+                  <!-- <md-input-container class="md-block" flex-gt-sm>
+                      <label>Motor Oil(Liters)</label>
+                      <input  ng-model="new_ticket.ticket_number">
+                  </md-input-container>
+                  <md-input-container class="md-block" flex-gt-sm>
+                      <label>Gear Oil(Liters)</label>
+                      <input  ng-model="new_ticket.ticket_number">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                      <label>Brake Fluid </label>
+                      <input  ng-model="new_ticket.ticket_number">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Lubricant, Wash Grease & spray </label>
+                    <input  ng-model="new_ticket.ticket_number">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Oil Clean Service</label>
+                    <input  ng-model="new_ticket.ticket_number">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Oil Filter Change</label>
+                    <input  ng-model="new_ticket.ticket_number">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                      <label>Speedomoter Reading END of TRIP</label>
+                      <input  ng-model="new_ticket.ticket_number">
+                    </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                      <label>Total Distance Traveled</label>
+                      <input  ng-model="new_ticket.ticket_number">
+                    </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                      <label>Total Distance Traveled</label>
+                      <input  ng-model="new_ticket.ticket_number">
+                    </md-input-container> -->
+
+                  <md-button type="submit" ng-disabled="form_update_ticket.$invalid"  ng-click="ticket_update(new_ticket)" class="md-raised md-block md-primary" >
+                    Save Ticket
+                 </md-button>
+            </div>
+
+            </md-content>
+
+          </form>
+        </md-tab>
+    </md-tabs>
+
+  <!-- Document Modal -->
+  <div style="visibility: hidden">
+      <div class="md-dialog-container" id="select_document_modal" > 
+          <md-dialog aria-label="Document #{{selected_document.id}}">
+              <md-toolbar class="bg-yellow col-grey">
+                  <div class="md-toolbar-tools m-t-10">
+                  <strong> Document #{{selected_document.id}} </strong>
+                  </div>
+              </md-toolbar>
+      
+              <md-dialog-content layout-padding="20" layout="column"  >
+                  <div>From : {{selected_document.doc_from}} </div>
+                  <div>Subject : {{selected_document.doc_subject}} </div>
+                  <div> Correspondent Date : {{ selected_document.doc_correspondence_date.split(' ')[0] | date }}  </div>
+                  <div> Control No. : {{selected_document.doc_control_number}}  </div>
+                  <div> Category : {{selected_document.doc_category}}  </div>
+                  <div> <span ng-if="selected_document.doc_published !== 0">Published : {{selected_document.doc_published.split(' ')[0] | date}}</span>   </div>
+                  <div> Type : {{selected_document.doc_type}}  </div>
+                  <div> Date Created : {{selected_document.created_at.split(' ')[0] | date}}  </div>
+              </md-dialog-content>
+      
+              <md-dialog-actions layout="row">
+                  <span flex></span>
+                  <md-button ng-click="close_dialog()">
+                  close
+                  </md-button>
+              </md-dialog-actions>
+          </md-dialog>
+      </div>
+  </div>
+  <!-- end modal -->
+
+
+</div>
+
