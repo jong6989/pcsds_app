@@ -145,11 +145,8 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
         if(n==3)return "Proccesing";
         if(n==4)return "For Approval";
         if(n==5)return "For Acknowledgement";
-        if(n==6)return "Acknowledged, for releasing";
-        if(n==7)return "Released";
-        if(n==8)return "Received by Applicant";
-        if(n==9)return "Used";
-        if(n==10)return "Expired";
+        if(n==6)return "Acknowledged, Permit Complete";
+        if(n==7)return "Used";
     };
 
     $scope.download_incoming = ()=>{

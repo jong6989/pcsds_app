@@ -29,6 +29,10 @@ myAppModule.controller('user_management_controller', function ($scope, $timeout,
     var data = USER_DB.getData(user_string);
     $scope.tbl_users =  new NgTableParams({sorting: { id: "desc" } }, { dataset: data });
   };
+
+  $scope.get_users_by_level = (lvl)=>{
+    return USER_DB.getData(user_string).filter(user => user.user_level == lvl );
+  };
  
   $scope.download_users = ()=>{
     $scope.invalidate_table();

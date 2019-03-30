@@ -11,6 +11,13 @@ var download = (uri, filename, callback)=>{
   });
 };
 
+var NOTIFICATION_DB = new JsonDB("DB/NOTIFICATIONS", true, false);
+const notif_string = "/notifications";
+try {
+  NOTIFICATION_DB.getData(notif_string + "[0]");
+} catch(error) {
+  NOTIFICATION_DB.push(notif_string,[]);
+};
 
 // const api_address = "https://brain.pcsd.gov.ph/api";
 const api_address = "http://localhost/pcsds_api";
@@ -103,7 +110,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     })
 
 
-.controller('AppCtrl', function ($scope,$window,$filter, $timeout, $mdSidenav, $log, $utils, $mdToast,$localStorage, $mdDialog,$location, Excel, NgTableParams) {
+.controller('AppCtrl', function ($scope,$window,$filter,$http, $timeout, $mdSidenav, $log, $utils, $mdToast,$localStorage, $mdDialog,$location, Excel, NgTableParams) {
     $scope.$localStorage = $localStorage;
     $scope.page_title = "";
     $scope.current_view = "";
@@ -277,6 +284,9 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       $localStorage.current_view = undefined;
       $localStorage.content_page = undefined;
       $localStorage.pcsd_app_user = undefined;
+      $scope.user = undefined;
+      //clear notifications
+      NOTIFICATION_DB.push(notif_string,[]);
     };
 
     $scope.set_page_title = function(t){
@@ -396,7 +406,52 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
           if($scope.user.user_level == element) r = true;
       });
       return r;
-    }
+    };
+
+    $scope.get_notifs = ()=>{
+        return NOTIFICATION_DB.getData(notif_string);
+    };
+
+    $scope.set_new_notif = ()=>{
+      $scope.new_notif = ($scope.user.data.received_notifs == undefined) ? ( ($scope.notifs == undefined)? 0 : $scope.notifs.length ) : $scope.notifs.length - $scope.user.data.received_notifs;
+    };
+
+    $scope.set_notif =()=>{
+        $scope.notifs = $scope.get_notifs();
+        $scope.set_new_notif();
+    };
+    $scope.load_notifs = ()=>{
+        if($scope.user != undefined){
+          var d = NOTIFICATION_DB.getData(notif_string);
+          var l = (d.length > 0)? d[d.length - 1].id : 0;
+          var current_length = d.length;
+          let q = { 
+              data : { 
+                  action : "database/notification/load",
+                  offset : current_length,
+                  last_id : l,
+                  user_id : $scope.user.id
+              },
+              callBack : function(data){
+                  if(data.data.status == 1){
+                      NOTIFICATION_DB.push(notif_string,data.data.data,false);
+                      $timeout($scope.set_notif,200);
+                  }
+                  $timeout($scope.load_notifs,3000);
+              }
+          };
+          $utils.api(q);
+        }
+    };
+
+    $scope.clear_notif = (n)=>{
+      if($scope.new_notif > 0){
+        $http.get(api_address + "?action=user/clear_notif&user_id=" + $scope.user.id + "&count=" + n ).then(function(data){
+          $scope.user = $localStorage.pcsd_app_user = data.data.data;
+          $scope.set_notif();
+        });
+      }
+    };
     
     
 })

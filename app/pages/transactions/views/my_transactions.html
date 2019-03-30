@@ -31,11 +31,15 @@
                                 <span class="md-subhead">Digital form</span>
                             </md-card-title-text>
                         </md-card-title>
-                        <md-card-content layout="row" layout-align="space-between">
-                            <div flex layout="column">
-                                <md-input-container flex class="md-block">
-                                    <label>Personnel</label>
-                                    <input ng-model="application.certificate_of_inspection.personnel" required>
+                        <md-card-content layout="row" layout-align="space-between" ng-controller="user_management_controller">
+                            <div flex layout="column" >
+                                <md-input-container class="md-block" flex-gt-sm>
+										<label>Personnel</label>
+										<md-select ng-model="application.certificate_of_inspection.personnel" required>
+											<md-option ng-repeat="x in get_users_by_level(6)" value="{{x.data.first_name}} {{x.data.last_name}}">
+												{{x.data.first_name}} {{x.data.last_name}}
+											</md-option>
+										</md-select>
                                 </md-input-container>
                                 <md-input-container flex class="md-block">
                                     <label>Remark</label>

@@ -41,14 +41,6 @@ myAppModule.controller('document_management_controller', function ($scope, $time
 
     $scope.document = (v)=>{
         return INCOMING_DB.getData(documents_string).filter(d => d.id == v )[0];
-        // let c = {};
-        // INCOMING_DB.getData(documents_string).forEach(element => {
-        //     if(element.id == v){
-        //         c = element;
-        //         return c;
-        //     } 
-        // });
-        // return c;
     }
 
     $scope.update_single_doc = (x)=>{

@@ -1,13 +1,19 @@
-<md-radio-group ng-model="dataSelector" ng-change="filter_incoming(dataSelector)" layout="row">
-    <md-radio-button value="" class="md-primary">All Transaction</md-radio-button>
-    <md-radio-button value="0"> New </md-radio-button>
-    <md-radio-button value="1"> Received </md-radio-button>
-    <md-radio-button value="2"> Rejected </md-radio-button>
-    <md-radio-button value="3"> Accepted </md-radio-button>
-    <md-radio-button value="4"> Approved </md-radio-button>
-    <md-radio-button value="5"> Recomended </md-radio-button>
-    <md-radio-button value="6"> Acknowledged </md-radio-button>
-</md-radio-group>
+
+
+<md-input-container class="md-block" flex-gt-sm="30">
+    <label>Filter</label>
+    <md-select ng-model="dataSelector" ng-change="filter_incoming(dataSelector)" >
+      <md-option value="">All Transaction</md-option>
+      <md-option value="0">New</md-option>
+      <md-option value="1">Received</md-option>
+      <md-option value="2">Rejected</md-option>
+      <md-option value="3">Accepted</md-option>
+      <md-option value="4">Approved</md-option>
+      <md-option value="5">Recomended</md-option>
+      <md-option value="6">Acknowledged</md-option>
+      <md-option value="7">Used</md-option>
+    </md-select>
+</md-input-container>
 
 <table ng-table="tbl_incoming" class="table" show-filter="true">
     <tr ng-repeat="x in $data track by $index " class="pointer" ng-click="open_single(x,$vent)" ng-mouseover="update_single(x)">

@@ -1,15 +1,19 @@
 
-<div layout="column">
+<div layout="column" ng-init="load_notifs();set_notif();">
 
 	<md-toolbar md-scroll-shrink ng-if="true" class="bg-teal"  >
 	    <div class="md-toolbar-tools">
 	        <md-button ng-click="toggleLeft()" hide-gt-md class="md-icon-button" aria-label="RightSide" >
 	          <i class="fa fa-bars"></i>
 	        </md-button>
-	        <h2 flex="" md-truncate="" class="">PCSD- {{page_title}}</h2>
-	        <md-button ng-click="toggleRight()" ng-hide="isOpenRight()" class="md-icon-button" aria-label="More">
-	          <i class="fa fa-ellipsis-v font-24"></i>
-	        </md-button>
+					<h2 flex="" md-truncate="" class="">PCSD- {{page_title}}</h2>
+	        <md-button ng-click="toggleRight();clear_notif(new_notif)" ng-hide="isOpenRight()" class="md-icon-button animated infinite " ng-class="{'swing' : (new_notif > 0) }" aria-label="Notifications and News">
+						<md-tooltip md-direction="left">Click to open News and Notificatons</md-tooltip>
+						<span class="font-10 col-red" style="position:absolute;left:15px;">
+							{{(notifs.length < 10)?'0':'';}}{{notifs.length}}
+						</span>
+						<i class="fa fa-bell font-24" ng-class="{'col-yellow' : (new_notif > 0) }"></i>
+					</md-button>
 	    </div>
 	</md-toolbar>
 
@@ -58,14 +62,24 @@
 
 	<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right" >
 
-	    <md-toolbar md-scroll-shrink="" ng-if="true" >
-	        <div class="md-toolbar-tools bg-teal">
-	            <h2 flex="" md-truncate="" >Notifications</h2>
-	        </div>
-	    </md-toolbar>
+		<md-toolbar md-scroll-shrink="" ng-if="true" >
+				<div class="md-toolbar-tools bg-teal">
+						<h2 flex="" md-truncate="" >Notifications</h2>
+				</div>
+		</md-toolbar>
 
-	    <md-content layout-padding="10" class="m-b-40 m-t-20">
-	    <p>No notification yet...</p>
+		<md-content layout-padding="10" class="" layout="row" ng-style="{ height: (iframeHeight - 80) + 'px' }">
+			<p ng-if="notifs.length == 0">No notification yet...</p>
+			<md-list >
+					<md-list-item ng-click="null" ng-repeat="x in notifs | orderBy : '-last_update' track by $index " layout="row">
+						<div>
+							<strong class="col-grey">{{ x.item_type }} #{{x.item_id}}</strong><br>
+							<cite class="font-12">{{x.last_update}}</cite>
+							<div class="font-13 col-teal">{{x.data.message}}</div>
+						</div>
+						<md-divider>  </md-divider>
+					</md-list-item>
+			</md-list>
 		</md-content>
 
 	</md-sidenav>
