@@ -1,0 +1,22 @@
+<div ng-controller="database_permit_controller">
+    <md-tabs ng-if="xlxs_data != undefined" md-dynamic-height md-border-bottom >
+        <md-tab ng-repeat="x in xlxs_data" label="{{x.name}}">
+          <md-content layout="column" class="md-padding" style="height:{{get_window_height() - 195}}px">
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th ng-repeat="(k,v) in x.data[0]" class="font-14"> {{ k }} </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="y in x.data">
+                            <td ng-repeat="(k,v) in y"  class="font-12"> {{ v }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </md-content>
+        </md-tab>
+    </md-tabs>
+</div>

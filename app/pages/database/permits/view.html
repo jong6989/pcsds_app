@@ -1,0 +1,37 @@
+<div ng-controller="database_permit_controller" ng-init="set_page_title('Permit Database'); xx = {}">
+
+    <md-card class="m-b-20">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Wildlife Special Use Permit</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-divider></md-divider>
+        <md-card-content>
+            <div
+                ng-change="upload_excel(excel_drop,'wsup')"
+                ngf-drop ng-model="excel_drop"
+                ngf-allow-dir="true"
+                multiple="false"
+                ngf-drag-over-class="'dragover'"
+                ngf-multiple="false">
+                    <div>Drag and drop EXCEL database</div>
+                    <div><md-progress-linear md-mode="indeterminate" ng-show="uploading_excel('wsup')"></md-progress-linear></div>
+                    <div>
+                        <md-button class=" md-raised" ngf-multiple="false" ngf-select="upload_excel($files,'wsup')">
+                            Select Excel
+                        </md-button>
+                    </div>
+            </div>
+            <div ng-if="wsup_data.length > 0">
+                {{wsup_data.length}} Sheets
+                <ol>
+                    <li ng-repeat="x in wsup_data">
+                        {{x.name}} - {{x.data.length}} items
+                    </li>
+                </ol>
+            </div>
+        </md-card-content>
+    </md-card>
+
+</div>

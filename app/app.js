@@ -145,8 +145,8 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.date_gap = function(a,b){
-      var a = moment(b);
-      return a.from(a);
+      var x = moment(b);
+      return x.from(a);
     };
 
     $scope.file_exist = (f)=>{
