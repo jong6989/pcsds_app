@@ -1,6 +1,11 @@
 <div class="p-t-20 p-l-10"> 
     <h5 class="col-blue">{{application.name}}</h5>
-    <strong><small>Applicant :</small> {{application.data.application.applicant}} </strong> <br>
+    <strong><small>Applicant :</small> {{application.data.application.applicant}} - 
+        <cite ng-controller="database_permit_controller" ng-init="q_res = search_from_db(application.data.application.applicant,'wsup')">
+            <md-tooltip ng-if="q_res.length == 0" md-direction="top">No matching data from WSUP Database</md-tooltip>
+            <span class="col-red" style="display:block">WSUP : {{q_res.length}}</span>
+        </cite> 
+    </strong> <br>
     <strong><small>Contact :</small> {{application.data.application.contact}} </strong> <br>
     <strong><small>Required Permit Type :</small> {{application.data.application.required_permit_type}} </strong> <br>
     <strong><small>Required Permit :</small> {{application.data.application.required_permit}} </strong> <br>

@@ -7,6 +7,7 @@ var path = require('path')
 var ipc = electron.ipcMain
 var remote = electron.remote
 var fs = require('fs')
+var XLSX = require('xlsx');
 
 let mainWindow
 
@@ -29,6 +30,30 @@ function createWindow () {
     w[0].openDevTools();
   })
 
+  ipc.on('save_workbook_as_excel',(event,d)=>{
+    var XTENSION = "xls|xlsx|xlsm|xlsb|xml|csv|txt|dif|sylk|slk|prn|ods|fods|htm|html".split("|")
+    var wb = XLSX.utils.book_new();
+        d.forEach(element => {
+            var fs = element.data.filter(d => d != null );
+            if(fs.length > 0){
+                let h = [];
+                for (const k in fs[0]) {
+                    h.push(k);
+                }
+                let s = XLSX.utils.json_to_sheet(fs,{ header: h });
+                XLSX.utils.book_append_sheet(wb, s, element.name);
+            }
+        });
+		var o = electron.dialog.showSaveDialog({
+			title: 'Save file as',
+			filters: [{
+				name: "Spreadsheets",
+				extensions: XTENSION
+			}]
+		});
+		XLSX.writeFile(wb, o);
+		electron.dialog.showMessageBox({ message: "Exported data to " + o, buttons: ["OK"] });
+  })
 
   var application_menu = [
     {

@@ -1,4 +1,4 @@
-<div ng-controller="database_permit_controller">
+<div ng-controller="database_permit_controller" ng-init="xlxs_data = initialize_data(render_params.data)">
     <md-tabs ng-if="xlxs_data != undefined" md-dynamic-height md-border-bottom >
         <md-tab ng-repeat="x in xlxs_data" label="{{x.name}}">
           <md-content layout="column" class="md-padding" style="height:{{get_window_height() - 195}}px">

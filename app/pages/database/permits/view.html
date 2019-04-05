@@ -19,25 +19,47 @@
                     <div><md-progress-linear md-mode="indeterminate" ng-show="uploading_excel('wsup')"></md-progress-linear></div>
                     <div>
                         <md-button class=" md-raised" ngf-multiple="false" ngf-select="upload_excel($files,'wsup')">
+                            <md-tooltip md-direction="top">CLick to select Excel File for WSUP database.</md-tooltip>
                             Select Excel
                         </md-button>
                     </div>
             </div>
             <div ng-if="wsup_data.length > 0">
-                {{wsup_data.length}} Sheets
+                {{wsup_data.length}} Sheets - 
+                <strong class="pointer col-blue" ng-click="open_database('wsup')">
+                    <md-tooltip md-direction="top">CLick to open database contents</md-tooltip>
+                    View</strong>
                 <ol>
                     <li ng-repeat="x in wsup_data">
                         {{x.name}} - {{x.data.length}} items
                     </li>
                 </ol>
-                <div ng-if="check_empty('wsup')">
-                    <div ng-show="is_loading">
-                        {{pointer}}/{{total_items}}
-                        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
-                    </div>
-                    <md-button ng-hide="is_loading" ng-disabled="is_loading" ng-click="save_database(wsup_data,'wsup')" class=" md-raised md-primary" >Save</md-button>
-                    <md-button ng-hide="is_loading" class=" md-raised md-warn" ng-click="cancel_excel('wsup')" >Cancel</md-button>
+                <div ng-show="is_loading">
+                    {{pointer}}/{{total_items}}
+                    <md-progress-linear md-mode="determinate" value="{{(pointer/total_items) * 100}}"></md-progress-linear>
                 </div>
+                <div ng-if="check_empty('wsup')">
+                    <md-button ng-hide="is_loading" ng-disabled="is_loading" ng-click="save_database(wsup_data,'wsup')" class=" md-raised md-primary" >
+                        <md-tooltip md-direction="top">Click to Save current Data from excel file</md-tooltip>
+                        Save
+                    </md-button>
+                    <md-button ng-hide="is_loading" class=" md-raised md-warn" ng-click="cancel_excel('wsup')" >
+                        <md-tooltip md-direction="top">Discards data and goes back to excel upload.</md-tooltip>
+                        Cancel
+                    </md-button>
+                </div>
+                <div ng-if="!check_empty('wsup')">
+                    <div><md-progress-linear md-mode="indeterminate" ng-show="is_deleting"></md-progress-linear></div>
+                    <md-button ng-disabled="is_loading" ng-click="export_database_to_excel(wsup_data,'wsup')" class=" md-raised md-primary" >
+                        <md-tooltip md-direction="top">Save as excel file.</md-tooltip>
+                        Export
+                    </md-button>
+                    <md-button ng-disabled="is_deleting || is_loading" class=" md-raised md-warn" ng-dblClick="delete_excel('wsup')" >
+                        <md-tooltip md-direction="top">Double click to DELETE local and online data. Delete Database</md-tooltip>
+                        Delete
+                    </md-button>
+                </div>
+
             </div>
         </md-card-content>
     </md-card>
