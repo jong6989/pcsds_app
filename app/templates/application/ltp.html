@@ -1,11 +1,24 @@
-<div class="p-t-20 p-l-10"> 
+<div class="p-t-20 p-l-10" ng-controller="database_permit_controller" ng-init="wsup = initialize_data('wsup');applicant_view=false;applicant_res=[];"> 
     <h5 class="col-blue">{{application.name}}</h5>
-    <strong><small>Applicant :</small> {{application.data.application.applicant}} - 
-        <cite ng-controller="database_permit_controller" ng-init="q_res = search_from_db(application.data.application.applicant,'wsup')">
-            <md-tooltip ng-if="q_res.length == 0" md-direction="top">No matching data from WSUP Database</md-tooltip>
-            <span class="col-red" style="display:block">WSUP : {{q_res.length}}</span>
-        </cite> 
-    </strong> <br>
+
+    
+    <strong><small>Applicant :</small> 
+        {{application.data.application.applicant}} 
+        <small ng-click="applicant_view = !applicant_view" class="col-red pointer"> : Search from WSUP </small>
+    </strong> 
+    <md-card ng-if="applicant_view">
+        <md-card-content>
+            <div ng-repeat="x in wsup">
+                <div ng-repeat="y in x ">
+                    <div ng-repeat="o in y | filter : application.data.application.applicant as f ">
+                        <strong ng-repeat="(z,v) in o"> <small>{{z}}</small> : {{v}} </strong>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+    <br>
     <strong><small>Contact :</small> {{application.data.application.contact}} </strong> <br>
     <strong><small>Required Permit Type :</small> {{application.data.application.required_permit_type}} </strong> <br>
     <strong><small>Required Permit :</small> {{application.data.application.required_permit}} </strong> <br>

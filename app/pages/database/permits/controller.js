@@ -112,7 +112,7 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
                 },
                 callBack : (data)=>{
                     if(data.data.status == 1){
-                        PERMITS_DB.push("/"+t+"["+sp+"]/data["+ip+"]",{uploaded:true});
+                        PERMITS_DB.push("/"+t+"["+sp+"]/data["+ip+"]/uploaded",true);
                     }
                     $scope.pointer = $scope.pointer + 1;
                     if($scope.total_items == $scope.pointer){

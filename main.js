@@ -34,7 +34,7 @@ function createWindow () {
     var XTENSION = "xls|xlsx|xlsm|xlsb|xml|csv|txt|dif|sylk|slk|prn|ods|fods|htm|html".split("|")
     var wb = XLSX.utils.book_new();
         d.forEach(element => {
-            var fs = element.data.filter(d => d != null );
+            var fs = element.data.filter(l => l != null );
             if(fs.length > 0){
                 let h = [];
                 for (const k in fs[0]) {
