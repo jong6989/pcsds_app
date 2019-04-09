@@ -162,7 +162,8 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.open_window_view = function(v,d){
-      var x = {data : d,view: v,last_view : $scope.current_view};
+      $localStorage.params = d;
+      var x = {view: v,last_view : $scope.current_view};
       window.open('index.html?'+ $.param(x), 'modal');
     };
 
@@ -398,6 +399,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     }else {
       $scope.render_params = queryString.parse(global.location.search) ;
       $scope.current_view = $scope.render_params.view;
+      $scope.render_params.data = $localStorage.params;
     }
 
     $scope.validate_user = (ars)=>{

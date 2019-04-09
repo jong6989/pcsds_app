@@ -26,9 +26,10 @@
             </div>
             <div ng-if="wsup_data.length > 0">
                 {{wsup_data.length}} Sheets - 
-                <strong class="pointer col-blue" ng-click="open_database('wsup')">
+                <strong ng-if="!check_empty('wsup')" class="pointer col-blue" ng-click="open_database('wsup')">
                     <md-tooltip md-direction="top">CLick to open database contents</md-tooltip>
-                    View</strong>
+                    View
+                </strong>
                 <ol>
                     <li ng-repeat="x in wsup_data">
                         {{x.name}} - {{x.data.length}} items
