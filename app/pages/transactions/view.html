@@ -1,18 +1,64 @@
 
-<div ng-controller="transactions_controller" 
-  ng-init="set_page_title('Incoming Transactions');download_incoming(0);dataSelector = ''; download_applicant(); ">
+<div ng-controller="transactions_controller"
+  ng-init="set_page_title('Incoming Transactions');download_incoming(0);dataSelector = ''; 
+  download_applicant(); ">
     
   <div layout="row">
 
-    <md-button class="md-raised" ng-disabled="current_active_view == 'incoming_transactions'" 
-      ng-click="change_current_view('incoming_transactions')">Incoming Transactions</md-button>
+    <div layout-xs="column" layout-gt-xs="row">
+        <md-button class="md-raised" ng-disabled="current_active_view == 'incoming_transactions'" 
+        ng-click="change_current_view('incoming_transactions')">
+        <md-tooltip md-direction="top">View Online Applications</md-tooltip>
+        Incoming Transactions</md-button>
+  
+      <md-button class="md-raised" ng-disabled="current_active_view == 'my_transactions'" 
+        ng-click="application = '';change_current_view('my_transactions')">
+        <md-tooltip md-direction="top">Assigned Transactions to you</md-tooltip>
+        My Transactions</md-button>
+    </div>
 
-    <md-button class="md-raised" ng-disabled="current_active_view == 'my_transactions'" 
-      ng-click="application = '';change_current_view('my_transactions')">My Transactions</md-button>
+    <!-- database shortcuts -->
+    <div ng-controller="database_permit_controller" style="position: absolute;right: 2%;">
+      <md-fab-speed-dial md-open="open_datasets" md-direction="down" class="md-fling" ng-init="open_datasets = false">
+        <md-fab-trigger ng-init="open_datasets = false">
+          <md-button aria-label="datasets menu" class="md-raised bg-teal col-white">
+            <md-tooltip md-direction="top">CLick to open Available Datasets</md-tooltip>
+            - - Datasets - -
+          </md-button>
+        </md-fab-trigger>
+
+        <md-fab-actions>
+          <md-button aria-label="WSUP" ng-if="!check_empty('wsup')" class="md-raised col-teal"  
+            ng-click="open_database('wsup')">
+            <md-tooltip md-direction="top">CLick to open WSUP database contents</md-tooltip>
+              <small>WSUP</small>
+          </md-button>
+
+          <md-button aria-label="SEP" ng-if="!check_empty('sep')" class="md-raised col-teal"  
+            ng-click="open_database('sep')">
+            <md-tooltip md-direction="top">CLick to open SEP database contents</md-tooltip>
+              <small>SEP</small>
+          </md-button>
+
+          <md-button aria-label="APPREHENSION" ng-if="!check_empty('apprehension')" class="md-raised col-teal"  
+            ng-click="open_database('apprehension')">
+            <md-tooltip md-direction="top">CLick to open APPREHENSION database contents</md-tooltip>
+              <small>APPREHENSION</small>
+          </md-button>
+          <md-button aria-label="ADMIN_CASES" ng-if="!check_empty('admin_cases')" class="md-raised col-teal"  
+            ng-click="open_database('admin_cases')">
+            <md-tooltip md-direction="top">CLick to open PAB Admin Cases database contents</md-tooltip>
+              <small>Admin Cases</small>
+          </md-button>
+
+        </md-fab-actions>
+      </md-fab-speed-dial>
+    </div>
     
+
   </div>
 
-    <md-divider class="m-t-20"></md-divider>
-    <div ng-include="current_page_view"></div>
+  <md-divider class="m-t-10 m-b-10"></md-divider>
+  <md-content ng-include="current_page_view" ng-style="{ height: (iframeHeight - 195) + 'px' }"></md-content>
 
 </div>

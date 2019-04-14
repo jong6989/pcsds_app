@@ -1,22 +1,43 @@
-<div ng-controller="database_permit_controller" ng-init="xlxs_data = initialize_data(render_params.data)">
-    <md-tabs ng-if="xlxs_data != undefined" md-dynamic-height md-border-bottom >
-        <md-tab ng-repeat="x in xlxs_data" label="{{x.name}}">
-          <md-content layout="column" >
-            <div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th ng-repeat="(k,v) in x.data[0]" class="font-14"> {{ k }} </th>
+
+<div ng-controller="database_permit_controller" layout="column" ng-style="{height:get_window_height()+'px'}"
+    ng-init="raw_xlxs_data = initialize_data(render_params.data);changed = true;filter_database='';">
+    
+    <md-toolbar class="bg-teal">
+        <div class="md-toolbar-tools">
+            <h2>Search : </h2>
+            <form name="search_database_form">
+                <input class="m-l-10" type="text" ng-model="qqqq" required>
+                <md-button ng-disabled="search_database_form.$invalid" type="submit" class="md-raised md-primary" ng-click="filter_database = qqqq">search</md-button>
+            </form>
+            <md-button ng-show="filter_database != ''" class="md-raised md-warn" ng-click="filter_database = '';qqqq='';">clear</md-button>
+        </div>
+    </md-toolbar>
+    <md-content flex layout-padding>
+        <div ng-hide="true" ng-repeat="q in raw_xlxs_data | filter : filter_database as xlxs_data"></div>
+        <md-tabs ng-if="xlxs_data != undefined" md-dynamic-height md-border-bottom ng-init="tbl_database = []">
+            <md-tab ng-repeat="x in xlxs_data" label="{{x.name}}">
+                <md-content layout="column" >
+                <div ng-init="tbl_database[$index] = ngTable(x.data);">
+
+                    <table ng-if="filter_database != ''" class="table">
+                        <tr ng-repeat="z in x.data | filter : filter_database | limitTo : 50" >
+                            <td ng-repeat="(k,v) in z" ><small>{{k}}</small>: <strong>{{ v }}</strong></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="y in x.data">
-                            <td ng-repeat="(k,v) in y"  class="font-12"> {{ v }} </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-          </md-content>
-        </md-tab>
-    </md-tabs>
+                    </table>
+
+                    <div ng-if="filter_database == ''">
+                        <table ng-table="tbl_database[$index]" class="table" show-filter="false">
+                            <tr ng-repeat="x in $data" >
+                                <td ng-repeat="(k,v) in x" > <small>{{k}}</small> : <strong>{{ v }}</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </md-content>
+
+    
 </div>

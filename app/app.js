@@ -298,6 +298,10 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return ($scope.active_page == path) ? true : false;
     }
 
+    $scope.set_selected_notif =(x)=>{
+      $scope.selected_notif = x;
+    }
+
     $scope.showPrerenderedDialog = function(ev,ID) {
       $mdDialog.show({
         contentElement: '#' + ID,

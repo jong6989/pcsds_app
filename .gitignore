@@ -65,3 +65,5 @@ DB/
 uploads/
 
 package-lock.json
+build/
+dist/

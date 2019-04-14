@@ -1,23 +1,28 @@
 <div class=" p-l-10" ng-controller="database_permit_controller" 
-    ng-init="wsup = initialize_data('wsup');applicant_view=false;applicant_res=[];"> 
+    ng-init="applicant_view=false;applicant_res=[];"> 
     <h5 class="col-blue">{{application.name}}</h5>
 
     
     <strong><small>Applicant :</small> 
-        {{application.data.application.applicant}} 
-        <small ng-click="applicant_view = !applicant_view" class="col-red pointer"> : Search from WSUP </small>
+        {{application.data.application.applicant}}  : 
+        <small ng-click="applicant_view = !applicant_view" class="col-red pointer">Search</small>
     </strong> 
     <md-card ng-if="applicant_view" ng-init="chop_name = application.data.application.applicant.split(' ')">
-        <md-card-content ng-init="search_wsup_results = []">
-            <div ng-repeat="x in wsup">
-                <div ng-repeat="y in x">
-                    <div ng-repeat="o in y | filter : chop_name[0] | filter : chop_name[2] as qqqq" ng-init="search_wsup_results.push(qqqq)">
-                        <strong ng-repeat="(z,v) in o" class="col-teal"> <small>{{z}}</small> : {{v}} </strong>
-                        <hr>
+        <md-card-content ng-init="search_db_results = []">
+
+            <div ng-show="search_db_results.length > 0" ng-repeat="permit_type in permit_types">
+                <div class="col-grey font-14" style="font-weight: bold;text-decoration: underline double;">{{permit_type.name}}</div>
+                <div ng-repeat="x in get_data_scope(permit_type.code)">
+                    <div ng-repeat="y in x">
+                        <div ng-repeat="o in y | filter : chop_name[0] | filter : chop_name[2] as qqqq" ng-init="search_db_results.push(qqqq)">
+                            <strong ng-repeat="(z,v) in o" class="col-teal"> <small>{{z}}</small> : {{v}} </strong>
+                            <hr>
+                        </div>
                     </div>
                 </div>
             </div>
-            <cite ng-if="search_wsup_results.length == 0" class="col-red">No results found...</cite>
+
+            <cite ng-if="search_db_results.length == 0" class="col-red">No results found...</cite>
         </md-card-content>
     </md-card>
     <br>

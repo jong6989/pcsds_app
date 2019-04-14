@@ -53,7 +53,7 @@
 
 	<!-- main content -->
 	<div flex layout-padding class="bg-light-grey" >
-		<md-content md-whiteframe="3" layout-padding="20" layout="column" ng-style="{ height: (iframeHeight - 80) + 'px' }">
+		<md-content md-whiteframe="3" layout-padding="20" layout="column" ng-style="{ height: (iframeHeight - 90) + 'px' }">
 			<div ng-include="content_page"></div>
 		</md-content>
 	</div>
@@ -68,11 +68,11 @@
 				</div>
 		</md-toolbar>
 
-		<md-content layout-padding="10" class="" layout="row" ng-style="{ height: (iframeHeight - 80) + 'px' }">
+		<md-content layout-padding="10" class="" layout="row" ng-style="{ height: (iframeHeight - 90) + 'px' }">
 			<p ng-if="notifs.length == 0">No notification yet...</p>
-			<md-list >
+			<md-list>
 					<md-list-item ng-repeat="x in notifs | orderBy : '-last_update' track by $index " 
-							ng-click="open_window_view('app/templates/single/notification.html',x)" layout="row">
+							ng-click="set_selected_notif(x);showPrerenderedDialog($event,'notif_dialog');" layout="row">
 						<div>
 							<strong class="col-grey">{{ x.item_type }} #{{x.item_id}}</strong><br>
 							<cite class="font-12">{{x.last_update}}</cite>
@@ -82,7 +82,7 @@
 					</md-list-item>
 			</md-list>
 		</md-content>
-
+		<div style="visibility: hidden" ng-include="'app/templates/modal/notification.html'"></div>
 	</md-sidenav>
 
 	</section>

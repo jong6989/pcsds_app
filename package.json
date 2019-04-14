@@ -6,6 +6,10 @@
   "scripts": {
     "start": "electron ."
   },
+  "build" :{
+    "appId" : "ph.gov.pcsd.brain",
+    "productName" : "brain-systems"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jong6989/pcsds_app.git"
@@ -19,7 +23,9 @@
   "author": "PCSD IT UNIT",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^4.0.3"
+    "electron": "^4.0.3",
+    "electron-packager": "^13.1.1",
+    "electron-wix-msi": "^2.1.1"
   },
   "dependencies": {
     "bootstrap": "^4.2.1",

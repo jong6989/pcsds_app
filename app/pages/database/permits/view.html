@@ -1,61 +1,61 @@
-<div ng-controller="database_permit_controller" ng-init="set_page_title('Permit Database'); xx = {}">
+<div ng-controller="database_permit_controller" ng-init="set_page_title('Datasets'); xx = {}">
 
-    <md-card class="m-b-20" ng-init="wsup_data = initialize_data('wsup')">
+    <md-card ng-repeat="permit_type in permit_types" class="m-b-20" >
         <md-card-title>
             <md-card-title-text>
-                <span class="md-title">Wildlife Special Use Permit</span>
+                <span class="md-title">{{permit_type.name}}</span>
             </md-card-title-text>
         </md-card-title>
         <md-divider></md-divider>
         <md-card-content>
-            <div ng-if="wsup_data.length == 0"
-                ng-change="upload_excel(excel_drop,'wsup')"
+            <div ng-if="get_data_scope(permit_type.code).length == 0"
+                ng-change="upload_excel(excel_drop,permit_type.code)"
                 ngf-drop ng-model="excel_drop"
                 ngf-allow-dir="true"
                 multiple="false"
                 ngf-drag-over-class="'dragover'"
                 ngf-multiple="false">
-                    <div>Drag and drop EXCEL database</div>
-                    <div><md-progress-linear md-mode="indeterminate" ng-show="uploading_excel('wsup')"></md-progress-linear></div>
+                    <div class="col-grey">Drag and drop Spreadsheet database</div>
+                    <div><md-progress-linear md-mode="indeterminate" ng-show="uploading_excel(permit_type.code)"></md-progress-linear></div>
                     <div>
-                        <md-button class=" md-raised" ngf-multiple="false" ngf-select="upload_excel($files,'wsup')">
-                            <md-tooltip md-direction="top">CLick to select Excel File for WSUP database.</md-tooltip>
-                            Select Excel
+                        <md-button class=" md-raised" ngf-multiple="false" ngf-select="upload_excel($files,permit_type.code)">
+                            <md-tooltip md-direction="top">CLick to select Spreadsheet File for WSUP database.</md-tooltip>
+                            Select Spreadsheet
                         </md-button>
                     </div>
             </div>
-            <div ng-if="wsup_data.length > 0">
-                {{wsup_data.length}} Sheets - 
-                <strong ng-if="!check_empty('wsup')" class="pointer col-blue" ng-click="open_database('wsup')">
-                    <md-tooltip md-direction="top">CLick to open database contents</md-tooltip>
+            <div ng-if="get_data_scope(permit_type.code).length > 0" class="animated">
+                {{get_data_scope(permit_type.code).length}} Sheets - 
+                <strong ng-if="!check_empty(permit_type.code)" class="pointer col-blue" ng-click="open_database(permit_type.code)">
+                    <md-tooltip md-direction="top">CLick to open WSUP database contents</md-tooltip>
                     View
                 </strong>
                 <ol>
-                    <li ng-repeat="x in wsup_data">
+                    <li ng-repeat="x in get_data_scope(permit_type.code)">
                         {{x.name}} - {{x.data.length}} items
                     </li>
                 </ol>
-                <div ng-show="is_loading">
+                <div ng-show="check_loading(permit_type.code)">
                     {{pointer}}/{{total_items}}
                     <md-progress-linear md-mode="determinate" value="{{(pointer/total_items) * 100}}"></md-progress-linear>
                 </div>
-                <div ng-if="check_empty('wsup')">
-                    <md-button ng-hide="is_loading" ng-disabled="is_loading" ng-click="save_database(wsup_data,'wsup')" class=" md-raised md-primary" >
-                        <md-tooltip md-direction="top">Click to Save current Data from excel file</md-tooltip>
+                <div ng-if="check_empty(permit_type.code)">
+                    <md-button ng-hide="check_loading(permit_type.code)" ng-disabled="check_loading(permit_type.code)" ng-click="save_database(get_data_scope(permit_type.code),permit_type.code)" class=" md-raised md-primary" >
+                        <md-tooltip md-direction="top">Click to Save current Data from Spreadsheet file</md-tooltip>
                         Save
                     </md-button>
-                    <md-button ng-hide="is_loading" class=" md-raised md-warn" ng-click="cancel_excel('wsup')" >
-                        <md-tooltip md-direction="top">Discards data and goes back to excel upload.</md-tooltip>
+                    <md-button ng-hide="check_loading(permit_type.code)" class=" md-raised md-warn" ng-click="cancel_excel(permit_type.code)" >
+                        <md-tooltip md-direction="top">Discards data and goes back to Spreadsheet upload.</md-tooltip>
                         Cancel
                     </md-button>
                 </div>
-                <div ng-if="!check_empty('wsup')">
-                    <div><md-progress-linear md-mode="indeterminate" ng-show="is_deleting"></md-progress-linear></div>
-                    <md-button ng-disabled="is_loading" ng-click="export_database_to_excel(wsup_data,'wsup')" class=" md-raised md-primary" >
-                        <md-tooltip md-direction="top">Save as excel file.</md-tooltip>
+                <div ng-if="!check_empty(permit_type.code)">
+                    <div><md-progress-linear md-mode="indeterminate" ng-show="check_deleting(permit_type.code)"></md-progress-linear></div>
+                    <md-button ng-disabled="check_loading(permit_type.code)" ng-click="export_database_to_excel(get_data_scope(permit_type.code),permit_type.code)" class=" md-raised bg-teal col-white" >
+                        <md-tooltip md-direction="top">Save as Spreadsheet file.</md-tooltip>
                         Export
                     </md-button>
-                    <md-button ng-disabled="is_deleting || is_loading" class=" md-raised md-warn" ng-dblClick="delete_excel('wsup')" >
+                    <md-button ng-disabled="check_deleting(permit_type.code) || check_loading(permit_type.code)" class=" md-raised md-warn" ng-dblClick="delete_excel(permit_type.code)" >
                         <md-tooltip md-direction="top">Double click to DELETE local and online data. Delete Database</md-tooltip>
                         Delete
                     </md-button>
@@ -64,5 +64,7 @@
             </div>
         </md-card-content>
     </md-card>
+
+
 
 </div>

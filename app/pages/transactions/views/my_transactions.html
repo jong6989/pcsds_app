@@ -1,7 +1,7 @@
 
 <div layout="row" ng-init="invalidate_my_transactions();">
 
-    <md-content flex="30" ng-style="{ height: (iframeHeight - 185) + 'px' }">
+    <md-content flex="30" ng-style="{ height: (iframeHeight - 195) + 'px' }">
         <md-list flex>
             <md-list-item class="md-3-line" ng-repeat="x in my_transactions" ng-click="set_application(x)">
                 <div class="md-list-item-text" layout="column">
@@ -14,7 +14,7 @@
         </md-list>
     </md-content>
     
-    <md-content ng-if="application !== undefined" flex ng-style="{ height: (iframeHeight - 185) + 'px' }">
+    <md-content ng-if="application !== undefined" flex ng-style="{ height: (iframeHeight - 195) + 'px' }">
         
         <div ng-show="application.name == 'Application for Local Transport Permit'">
             <div ng-include="'app/templates/application/ltp.html'"></div>
