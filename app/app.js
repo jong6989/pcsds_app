@@ -2,8 +2,8 @@
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
 const { ipcRenderer } = require('electron');
-var fs = require('fs'),
-    request = require('request');
+var fs = require('fs');
+var request = require('request');
 
 var download = (uri, filename, callback)=>{
   request.head(uri, function(err, res, body){
@@ -461,7 +461,4 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     
     
 })
-
-
-
 ;

@@ -6,9 +6,9 @@
   "scripts": {
     "start": "electron ."
   },
-  "build" :{
-    "appId" : "ph.gov.pcsd.brain",
-    "productName" : "brain-systems"
+  "build": {
+    "appId": "ph.gov.pcsd.brain",
+    "productName": "brain-systems"
   },
   "repository": {
     "type": "git",
@@ -25,10 +25,13 @@
   "devDependencies": {
     "electron": "^4.0.3",
     "electron-packager": "^13.1.1",
-    "electron-wix-msi": "^2.1.1"
+    "electron-wix-msi": "^2.1.1",
+    "gulp": "^4.0.0"
   },
   "dependencies": {
     "bootstrap": "^4.2.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-uglify": "^3.0.2",
     "jquery": "^3.3.1",
     "node-json-db": "^0.9.2",
     "query-string": "^6.2.0",
