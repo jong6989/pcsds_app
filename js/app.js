@@ -3,13 +3,13 @@ var JsonDB = require('node-json-db');
 const queryString = require('query-string');
 const { ipcRenderer } = require('electron');
 var fs = require('fs');
-// var request = require('request');
+var request = require('request');
 
-// var download = (uri, filename, callback)=>{
-//   request.head(uri, function(err, res, body){
-//     request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-//   });
-// };
+var download = (uri, filename, callback)=>{
+  request.head(uri, function(err, res, body){
+    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+  });
+};
 
 var NOTIFICATION_DB = new JsonDB("DB/NOTIFICATIONS", true, false);
 const notif_string = "/notifications";
@@ -19,8 +19,8 @@ try {
   NOTIFICATION_DB.push(notif_string,[]);
 };
 
-// const api_address = "https://brain.pcsd.gov.ph/api";
-const api_address = "http://localhost/pcsds_api";
+const api_address = "https://brain.pcsd.gov.ph/api";
+// const api_address = "http://localhost/pcsds_api";
 //initialize moment
 moment().format("YYYY-MM-DD h:mm:ss");
 

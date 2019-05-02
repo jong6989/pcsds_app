@@ -206,7 +206,7 @@ myAppModule.controller('document_management_controller', function ($scope, $time
     }
 
     $scope.download_single_image = function(img){
-        let loc = 'downloads/' + img.address;
+        let loc = './downloads/' + img.address;
         let loc_array = loc.split("/");
         
         for (let i = 0; i < (loc_array.length - 1); i++) {
@@ -227,7 +227,7 @@ myAppModule.controller('document_management_controller', function ($scope, $time
     };
 
     $scope.download_single_attachment = (f)=>{
-        let loc = 'downloads/' + f.address;
+        let loc = './downloads/' + f.address;
         let loc_array = loc.split("/");
         
         for (let i = 0; i < (loc_array.length - 1); i++) {

@@ -16,9 +16,9 @@
 </md-input-container>
 
 <table ng-table="tbl_incoming" class="table" show-filter="true">
-    <tr ng-repeat="x in $data track by $index " class="pointer" ng-click="open_single(x,$vent)" ng-mouseover="update_single(x)">
+    <tr ng-repeat="x in $data | orderBy : 'status' track by $index " class="pointer" ng-click="open_single(x,$vent)" ng-mouseover="update_single(x)">
         <td title="'id'" sortable="'id'"> {{x.id}} </td>
-        <td title="'Date'" filter="{date : 'text'}" > {{x.date.split(' ')[0]}} </td>
+        <td title="'Date'" filter="{date : 'text'}" sortable="'date'"> {{x.date.split(' ')[0]}} </td>
         <td title="'User'" filter="{'user.data.full_name' : 'text'}"> {{x.user.data.full_name}} </td>
         <td title="'Name'" > {{ x.name }} </td>
         <td title="'Status'" > 
@@ -36,9 +36,12 @@
       <md-dialog layout-padding layout="column" layout-align="center center">
         <md-dialog-content>
           <div class="md-dialog-content" ng-hide="application == {} "  layout="column" layout-align="center center">
-            <!-- LTP template -->
-            <div ng-show="application.name == 'Application for Local Transport Permit'">
-                <div ng-include="'app/templates/application/ltp.html'"></div>
+            
+            <!-- Templates -->
+            <div ng-repeat=" x in application_templates" ng-show="application.name == x.name">
+                <div ng-include="x.url"></div>
+                <hr>
+                <div ng-include="x.action"></div>
             </div>
 
             <div ng-if="application.status == 0" ng-show="validate_user([5]) && application !== ''">

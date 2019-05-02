@@ -123,6 +123,9 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildToggler('right');
 
+    $scope.download = (uri,fname)=>{
+      download(uri,fname,null)
+    }
 
     $scope.ngTable = function(d,c){
       if(c == undefined) c=10;

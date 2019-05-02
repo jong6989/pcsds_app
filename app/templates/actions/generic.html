@@ -1,0 +1,30 @@
+
+<strong><small>Attachments :</small></strong>
+<ol ng-if="application.data.application.attachments.length > 0">
+    <li ng-repeat=" x in application.data.application.attachments"> <a target="blank" ng-href="{{api_address + '/' +  x.url}}"> {{x.name}} </a> </li>
+</ol>
+<hr>
+<div ng-if="validate_user([99,5]) && application.status == 1 ">
+    <md-button class="md-raised md-warn" ng-if="application.status == 1" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+    <md-button class="md-raised md-primary" ng-disabled=" application_loading "  ng-click="acceptApplication(application,$event)">Accept</md-button>
+</div>
+
+<!-- approval -->
+<div ng-show="validate_user([99,7]) && application.status == 3">
+    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+    <md-button class="md-raised md-primary" ng-click="approveApplication(application,$event)">Approve</md-button>
+</div>
+
+<!-- Recomendation -->
+<div ng-if="validate_user([99,8]) && application.status == 4">
+    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-click="recommendApplication(application,$event)">Recommend</md-button>
+</div>
+
+<!-- Acknowledgement -->
+<div ng-if="validate_user([99,4]) && application.status == 5">
+    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
+    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-click="acknowledgeApplication(application,$event)">Acknowledge</md-button>
+</div>
+
+<md-progress-circular ng-show="application_loading" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>

@@ -1,6 +1,6 @@
 <div class=" p-l-10" ng-controller="database_permit_controller" 
     ng-init="applicant_view=false;applicant_res=[];"> 
-    <h5 class="col-blue">{{application.name}}</h5>
+    <h5 class="col-blue">ONLINE APPLICATION FOR LOCAL TRANSPORT PERMIT OF REEF-FISH-FOR-FOOD</h5>
 
     
     <strong><small>Applicant :</small> 
@@ -31,7 +31,7 @@
     <strong><small>Required Permit :</small> {{application.data.application.required_permit}} </strong> <br>
     <strong><small>Attachments :</small></strong>
     <ol ng-if="application.data.application.attachments.length > 0">
-        <li ng-repeat=" x in application.data.application.attachments"> <a download ng-href="{{ api_address +  x.url}}"> {{x.name}} </a> </li>
+        <li ng-repeat=" x in application.data.application.attachments" > <a target="blank" ng-href="{{api_address + '/' +  x.url}}"> {{x.name}} </a> </li>
     </ol>
     <br>
     <strong><small>Purpose :</small> 

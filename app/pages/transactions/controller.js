@@ -1,7 +1,7 @@
 'use strict';
 
 
-myAppModule.controller('transactions_controller', function ($scope, $timeout, $utils, $mdToast,$mdDialog,NgTableParams) {
+myAppModule.controller('transactions_controller', function ($scope, $timeout, $utils, $mdToast,$mdDialog,NgTableParams, $http) {
     
     var APPLICANT_DB = new JsonDB("DB/APPLICANTS", true, false);
     const applicant_string = "/applicants";
@@ -25,6 +25,11 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     $scope.current_active_view = "incoming_transactions";
     $scope.dataSelector = "";
     $scope.my_transactions = [];
+
+    //load json data
+    $http.get("./json/permitting/templates.json").then(function(data){
+        $scope.application_templates = data.data.data; 
+    });
 
     $scope.change_current_view = (p)=>{
         $scope.current_page_view = "app/pages/transactions/views/" + p + ".html";

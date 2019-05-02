@@ -1,0 +1,9 @@
+{
+    "data" : [
+        { "name" : "Application for Local Transport Permit RFF" , "url" : "app/templates/application/ltp_rff.html" , "action" : "app/templates/actions/ltp_rff.html" },
+        { "name" : "Application for Wildlife Special Use Permit RFF" , "url" : "app/templates/application/wsup_rff.html"  , "action" : "app/templates/actions/generic.html"},
+        { "name" : "Application for Wildlife Special Use Permit AO12" , "url" : "app/templates/application/wsup_ao12.html" , "action" : "app/templates/actions/generic.html" },
+        { "name" : "Application for Wildlife Collectors Permit" , "url" : "app/templates/application/wcp.html" , "action" : "app/templates/actions/generic.html" },
+        { "name" : "Application for Wildlife Farm Permit" , "url" : "app/templates/application/wfp.html" , "action" : "app/templates/actions/generic.html" }
+    ]
+}
