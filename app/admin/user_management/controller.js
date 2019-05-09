@@ -1,6 +1,6 @@
 'use strict';
 myAppModule.controller('user_management_controller', function ($scope, $timeout, $utils, $mdToast, NgTableParams) {
-  var USER_DB = new JsonDB("DB/USERS", true, false);
+  var USER_DB = new JsonDB("./DB/USERS", true, false);
   const user_string = "/users";
 
   try {

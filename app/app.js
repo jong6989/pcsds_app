@@ -11,7 +11,7 @@ var download = (uri, filename, callback)=>{
   });
 };
 
-var NOTIFICATION_DB = new JsonDB("DB/NOTIFICATIONS", true, false);
+var NOTIFICATION_DB = new JsonDB("./DB/NOTIFICATIONS", true, false);
 const notif_string = "/notifications";
 try {
   NOTIFICATION_DB.getData(notif_string + "[0]");
@@ -28,24 +28,52 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
 
 .factory("$utils",function($http, $mdToast,$timeout){
    var f = {};
-   f.api = function(q){
-      $timeout(()=>{
-        $http.get(api_address, {params: q.data} )
-            .then(function(data){
-              if(q.callBack!==undefined) q.callBack(data);
-            },function (data) {
-                  if(q.errorCallBack!==undefined){
-                    q.errorCallBack(data);
-                  }else {
-                    $mdToast.show(
-                      $mdToast.simple()
-                        .textContent("You are OFFLINE!")
-                        .hideDelay(4000)
-                    );
-                  } 
-              }
-            );
-      },50);
+   f.api = (q)=>{
+      // $timeout(()=>{
+      //   $http.get(api_address, {params: q.data} )
+      //       .then(function(data){
+      //         if(q.callBack!==undefined) q.callBack(data);
+      //       },function (data) {
+      //             if(q.errorCallBack!==undefined){
+      //               q.errorCallBack(data);
+      //             }else {
+      //               $mdToast.show(
+      //                 $mdToast.simple()
+      //                   .textContent("You are OFFLINE!")
+      //                   .hideDelay(4000)
+      //               );
+      //             } 
+      //         }
+      //       );
+      // },50);
+      request.post(api_address + "/?", {form:q.data,json: true},(err,httpResponse,data)=>{
+        if(httpResponse.statusCode == 200){
+          var j = data;
+          if(typeof j !== typeof {}){
+            // console.log("not json");
+            // console.log(data);
+            j = JSON.parse(data);
+          }
+          if(q.callBack!==undefined)q.callBack({data:j});
+        }else {
+          if(q.errorCallBack!==undefined){
+            if(err){
+              return q.errorCallBack(err);
+            }
+          }
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent("You are OFFLINE!")
+              .hideDelay(4000)
+          );
+        }
+      });
+    };
+    f.upload = (callback)=>{
+      var r = request.post(api_address + "/?", function optionalCallback(err, httpResponse, data) {
+        if(callback !== undefined) callback(JSON.parse(data),httpResponse.statusCode);   
+      });
+      return r.form();
     };
    return f;
 })

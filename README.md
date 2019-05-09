@@ -5,5 +5,6 @@ request : npm i request --save-dev
 install xlsx via npm : npm install xlsx
 install builder : npm install -g electron-builder
 install gulp : npm i gulf
+run gulp : gulp
 build app : build -w --dir
 build macos app : build -m --dir

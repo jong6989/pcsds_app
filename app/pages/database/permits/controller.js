@@ -9,7 +9,7 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
     var uploading_type = '';
     $scope.is_loading = false;
     $scope.is_deleting = {value : false,type:''};
-    var PERMITS_DB = new JsonDB("DB/PERMITS", true, false);
+    var PERMITS_DB = new JsonDB("./DB/PERMITS", true, false);
 
     $scope.permit_types = [
         {code:"wsup",name:"Wildlife Special Use Permit"},

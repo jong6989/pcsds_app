@@ -11,7 +11,7 @@ var download = (uri, filename, callback)=>{
   });
 };
 
-var NOTIFICATION_DB = new JsonDB("DB/NOTIFICATIONS", true, false);
+var NOTIFICATION_DB = new JsonDB("./DB/NOTIFICATIONS", true, false);
 const notif_string = "/notifications";
 try {
   NOTIFICATION_DB.getData(notif_string + "[0]");
@@ -19,8 +19,8 @@ try {
   NOTIFICATION_DB.push(notif_string,[]);
 };
 
-const api_address = "https://brain.pcsd.gov.ph/api";
-// const api_address = "http://localhost/pcsds_api";
+// const api_address = "https://brain.pcsd.gov.ph/api";
+const api_address = "http://localhost/pcsds_api";
 //initialize moment
 moment().format("YYYY-MM-DD h:mm:ss");
 
@@ -123,6 +123,9 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildToggler('right');
 
+    $scope.download = (uri,fname)=>{
+      download(uri,fname,null)
+    }
 
     $scope.ngTable = function(d,c){
       if(c == undefined) c=10;
@@ -473,7 +476,7 @@ myAppModule.controller('dashboard_controller', function ($scope, $timeout, $util
 });
 'use strict';
 myAppModule.controller('user_management_controller', function ($scope, $timeout, $utils, $mdToast, NgTableParams) {
-  var USER_DB = new JsonDB("DB/USERS", true, false);
+  var USER_DB = new JsonDB("./DB/USERS", true, false);
   const user_string = "/users";
 
   try {
@@ -596,7 +599,7 @@ myAppModule.controller('user_management_controller', function ($scope, $timeout,
 'use strict';
 
 myAppModule.controller('document_management_controller', function ($scope, $timeout, $utils, $mdDialog, $interval) {
-    var INCOMING_DB = new JsonDB("DB/INCOMING_DOCUMENTS", true, false);
+    var INCOMING_DB = new JsonDB("./DB/INCOMING_DOCUMENTS", true, false);
     const documents_string = "/documents";
     const categ_string = "/categories";
     const assignee_string = "/assignee";
@@ -801,7 +804,7 @@ myAppModule.controller('document_management_controller', function ($scope, $time
     }
 
     $scope.download_single_image = function(img){
-        let loc = 'downloads/' + img.address;
+        let loc = './downloads/' + img.address;
         let loc_array = loc.split("/");
         
         for (let i = 0; i < (loc_array.length - 1); i++) {
@@ -822,7 +825,7 @@ myAppModule.controller('document_management_controller', function ($scope, $time
     };
 
     $scope.download_single_attachment = (f)=>{
-        let loc = 'downloads/' + f.address;
+        let loc = './downloads/' + f.address;
         let loc_array = loc.split("/");
         
         for (let i = 0; i < (loc_array.length - 1); i++) {
@@ -955,11 +958,11 @@ myAppModule.controller('fuel_log_controller', function ($scope, $timeout, $utils
 'use strict';
 
 
-myAppModule.controller('transactions_controller', function ($scope, $timeout, $utils, $mdToast,$mdDialog,NgTableParams) {
+myAppModule.controller('transactions_controller', function ($scope, $timeout, $utils, $mdToast,$mdDialog,NgTableParams, $http) {
     
-    var APPLICANT_DB = new JsonDB("DB/APPLICANTS", true, false);
+    var APPLICANT_DB = new JsonDB("./DB/APPLICANTS", true, false);
     const applicant_string = "/applicants";
-    var TRANSACTION_DB = new JsonDB("DB/TRANSACTIONS", true, false);
+    var TRANSACTION_DB = new JsonDB("./DB/TRANSACTIONS", true, false);
     const incoming_string = "/incoming";
 
     try {
@@ -979,6 +982,11 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     $scope.current_active_view = "incoming_transactions";
     $scope.dataSelector = "";
     $scope.my_transactions = [];
+
+    //load json data
+    $http.get("./json/permitting/templates.json").then(function(data){
+        $scope.application_templates = data.data.data; 
+    });
 
     $scope.change_current_view = (p)=>{
         $scope.current_page_view = "app/pages/transactions/views/" + p + ".html";
@@ -1790,7 +1798,7 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
     var uploading_type = '';
     $scope.is_loading = false;
     $scope.is_deleting = {value : false,type:''};
-    var PERMITS_DB = new JsonDB("DB/PERMITS", true, false);
+    var PERMITS_DB = new JsonDB("./DB/PERMITS", true, false);
 
     $scope.permit_types = [
         {code:"wsup",name:"Wildlife Special Use Permit"},

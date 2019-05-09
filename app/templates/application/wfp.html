@@ -126,18 +126,14 @@
         <div ng-if="application.status > 0" ng-init="staff = application.data.received.staff">
             <hr class="p-t-10">
             Received by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
-            <br>
-            Date Received : <strong>{{application.data.received.date.split(' ')[0]}}</strong>
+            , on <strong>{{application.data.received.date.split(' ')[0]}}</strong>
         </div>
     
         <!-- Rejected Stamp -->
         <div ng-if="application.data.rejected != undefined " ng-init="staff = application.data.rejected.staff">
             <hr class="p-t-10">
             Rejected by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
-            <br>
-            Remark : <strong>{{application.data.rejected.remark}}</strong>
-            <br>
-            Date Rejected : <strong>{{application.data.rejected.date.split(' ')[0]}}</strong>
+            , on  <strong>{{application.data.rejected.date.split(' ')[0]}}</strong>
         </div>
     
         <!-- Accepted Stamp -->
@@ -146,40 +142,28 @@
             
     
             Accepted by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
-            <br>
-            Remark : <strong>{{application.data.accepted.remark}}</strong>
-            <br>
-            Date Accepted : <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
+            , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
         </div>
     
         <!-- Approved Stamp -->
         <div ng-if="application.data.approved != undefined " ng-init="staff = application.data.approved.staff">
             <hr class="p-t-10">
             Approved by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
-            <br>
-            Remark : <strong>{{application.data.approved.remark}}</strong>
-            <br>
-            Date Approved : <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
+            , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
         </div>
     
         <!-- Recommended Stamp -->
         <div ng-if="application.data.recommended != undefined " ng-init="staff = application.data.recommended.staff">
             <hr class="p-t-10">
             Recommended by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
-            <br>
-            Remark : <strong>{{application.data.recommended.remark}}</strong>
-            <br>
-            Date recommended : <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
+            , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
         </div>
     
         <!-- Acknowledged Stamp -->
         <div ng-if="application.data.acknowledged != undefined " ng-init="staff = application.data.acknowledged.staff">
             <hr class="p-t-10">
             Acknowledged by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
-            <br>
-            Remark : <strong>{{application.data.acknowledged.remark}}</strong>
-            <br>
-            Date acknowledged : <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
+            , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
             
         </div>
     

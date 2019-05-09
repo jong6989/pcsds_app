@@ -9,11 +9,13 @@
         <md-button class="md-raised" ng-disabled="current_active_view == 'incoming_transactions'" 
         ng-click="change_current_view('incoming_transactions')">
         <md-tooltip md-direction="top">View Online Applications</md-tooltip>
+        <i class="fa fa-sort-amount-asc"></i>
         Incoming Transactions</md-button>
   
       <md-button class="md-raised" ng-disabled="current_active_view == 'my_transactions'" 
         ng-click="application = '';change_current_view('my_transactions')">
         <md-tooltip md-direction="top">Assigned Transactions to you</md-tooltip>
+        <i class="fa fa-exchange"></i>
         My Transactions</md-button>
     </div>
 
@@ -23,7 +25,7 @@
         <md-fab-trigger ng-init="open_datasets = false">
           <md-button aria-label="datasets menu" class="md-raised bg-teal col-white">
             <md-tooltip md-direction="top">CLick to open Available Datasets</md-tooltip>
-            - - Datasets - -
+            <i class="fa fa-database m-r-10 m-l-5"></i>Datasets
           </md-button>
         </md-fab-trigger>
 

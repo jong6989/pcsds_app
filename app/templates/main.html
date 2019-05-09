@@ -32,6 +32,7 @@
 	      <div flex="70" layout="column">
 	        <div class="font-16">{{ user.data.first_name }} {{ user.data.middle_name }} {{ user.data.last_name }}</div>
 	        <div class="font-14">{{ getUserType(user.user_level) }}</div>
+	        <div class="font-18 bold">ID : {{ user.id_number }}</div>
 	        <i class="fa fa-gear" ng-click="toggleRight()"></i>
 	        <md-button ng-click="logout()" class="font-10 m-b--10 col-white" aria-label="Log-out">Log-out</md-button>
 	      </div>

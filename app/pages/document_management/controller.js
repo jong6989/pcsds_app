@@ -1,7 +1,7 @@
 'use strict';
 
 myAppModule.controller('document_management_controller', function ($scope, $timeout, $utils, $mdDialog, $interval) {
-    var INCOMING_DB = new JsonDB("DB/INCOMING_DOCUMENTS", true, false);
+    var INCOMING_DB = new JsonDB("./DB/INCOMING_DOCUMENTS", true, false);
     const documents_string = "/documents";
     const categ_string = "/categories";
     const assignee_string = "/assignee";
