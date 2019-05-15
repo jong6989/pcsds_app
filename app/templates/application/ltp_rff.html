@@ -67,23 +67,22 @@
     
     
     <!-- Received Stamp -->
-    <div ng-if="application.status > 0" ng-init="staff = application.data.received.staff">
+    <div ng-if="application.status > 0" >
             <hr class="p-t-10">
-            Received by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
+            Received by : <strong>{{ application.data.received.staff }}</strong> 
             , on  <strong>{{application.data.received.date.split(' ')[0]}}</strong>
         </div>
     
         <!-- Rejected Stamp -->
-        <div ng-if="application.data.rejected != undefined " ng-init="staff = application.data.rejected.staff">
+        <div ng-if="application.data.rejected != undefined " >
             <hr class="p-t-10">
-            Rejected by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
+            Rejected by : <strong>{{ application.data.rejected.staff }} </strong> 
             , on  <strong>{{application.data.rejected.date.split(' ')[0]}}</strong>
         </div>
     
         <!-- Accepted Stamp -->
-        <div ng-if="application.data.accepted != undefined " ng-init="staff = application.data.accepted.staff">
+        <div ng-if="application.data.accepted != undefined " >
             <hr class="p-t-10">
-            
             <md-card >
                 <md-card-title>
                     <md-card-title-text>
@@ -140,34 +139,34 @@
             </md-card>
     
     
-            Accepted by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
+            Accepted by : <strong>{{ application.data.accepted.staff }} </strong> 
             , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
         </div>
     
         <!-- Approved Stamp -->
-        <div ng-if="application.data.approved != undefined " ng-init="staff = application.data.approved.staff">
+        <div ng-if="application.data.approved != undefined " >
             <hr class="p-t-10">
-            Approved by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
+            Approved by : <strong>{{ application.data.approved.staff }} </strong> 
             , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
         </div>
     
         <!-- Recommended Stamp -->
-        <div ng-if="application.data.recommended != undefined " ng-init="staff = application.data.recommended.staff">
+        <div ng-if="application.data.recommended != undefined " >
             <hr class="p-t-10">
-            Recommended by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
+            Recommended by : <strong>{{ application.data.recommended.staff }} </strong> 
             , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
         </div>
     
         <!-- Acknowledged Stamp -->
-        <div ng-if="application.data.acknowledged != undefined " ng-init="staff = application.data.acknowledged.staff">
+        <div ng-if="application.data.acknowledged != undefined " >
             <hr class="p-t-10">
-            Acknowledged by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }} </strong>
+            Acknowledged by : <strong>{{ application.data.acknowledged.staff }} </strong>
             , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
         </div>
         <md-divider class="m-t-20 m-b-20"></md-divider>
 
         <!-- used stamp -->
-        <md-card class="m-b-20" ng-if="application.data.used != undefined" ng-init="staff = application.data.used.staff">
+        <md-card class="m-b-20" ng-if="application.data.used != undefined">
             <md-card-title>
                 <md-card-title-text>
                 <span class="md-headline">Permit Usage</span>
@@ -179,7 +178,7 @@
                         Date Used : <strong> {{application.data.used.date.split(' ')[0]}} </strong> 
                     </div>
                     <div flex>
-                        Processed by : <strong>{{ staff.data.first_name }} {{ staff.data.middle_name }} {{ staff.data.last_name }}</strong> 
+                        Processed by : <strong>{{ application.data.used.staff }} </strong> 
                     </div>
                     <div flex>
                         Remark : <strong>{{application.data.used.remark}}</strong> 

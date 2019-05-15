@@ -18,14 +18,31 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
         {code:"admin_cases",name:"PAB Admin Cases"}
                         ];
     $scope.permit_types.forEach(pt => {
-        try {
+        let zx = ()=>{
             if(pt.code=='wsup') $scope.wsup_data = PERMITS_DB.getData("/"+pt.code);
             if(pt.code=='sep') $scope.sep_data = PERMITS_DB.getData("/"+pt.code);
             if(pt.code=='apprehension') $scope.apprehension_data = PERMITS_DB.getData("/"+pt.code);
             if(pt.code=='admin_cases') $scope.admin_cases_data = PERMITS_DB.getData("/"+pt.code);
+        };
+        try {
+            zx();
         } catch(error) {
             PERMITS_DB.push("/"+pt.code,[]);
         };
+        //firebase
+        fire.db.datasets.get(pt.code,(z)=>{
+            if(z == undefined){
+                fire.db.datasets.set(pt.code,{data:[]});
+            }else {
+                PERMITS_DB.push("/"+pt.code,z.data);
+                zx();
+            }
+            //realtime updates
+            fire.db.datasets.when(pt.code,(c)=>{
+                PERMITS_DB.push("/"+pt.code,c.data);
+                zx();
+            });
+        });
     });
 
     $scope.get_data_scope = (t)=>{
@@ -87,28 +104,30 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
     }
     
     $scope.delete_excel = (t)=>{
-        $scope.is_deleting = {value : true,type:t};
-        let q = { 
-            data : { 
-                action : "database/permits/delete",
-                type : t,
-                user_id : $scope.user.id
-            },
-            callBack : (data)=>{
-                $scope.is_deleting = {value : false,type:''};
-                if(t=='wsup') {$scope.wsup_data.splice(0,$scope.wsup_data.length);}
-                if(t=='sep') {$scope.sep_data.splice(0,$scope.sep_data.length);}
-                if(t=='apprehension') {$scope.apprehension_data.splice(0,$scope.apprehension_data.length);}
-                if(t=='admin_cases') {$scope.admin_cases_data.splice(0,$scope.admin_cases_data.length);}
-                PERMITS_DB.push("/"+t,[]);
-                let toast = (data.data.status == 0)? data.data.error : data.data.data;
-                $scope.toast(toast);
-            },
-            errorCallBack : ()=>{
-                $scope.toast("Offline, internet connection is needed for this function.");
-            }
-        };
-        $utils.api(q);
+        fire.db.datasets.update(t,{data:[]});
+        if(t=='wsup') {$scope.wsup_data.splice(0,$scope.wsup_data.length);}
+        if(t=='sep') {$scope.sep_data.splice(0,$scope.sep_data.length);}
+        if(t=='apprehension') {$scope.apprehension_data.splice(0,$scope.apprehension_data.length);}
+        if(t=='admin_cases') {$scope.admin_cases_data.splice(0,$scope.admin_cases_data.length);}
+        PERMITS_DB.push("/"+t,[]);
+
+        // let q = { 
+        //     data : { 
+        //         action : "database/permits/delete",
+        //         type : t,
+        //         user_id : $scope.user.id
+        //     },
+        //     callBack : (data)=>{
+        //         $scope.is_deleting = {value : false,type:''};
+                
+        //         let toast = (data.data.status == 0)? data.data.error : data.data.data;
+        //         $scope.toast(toast);
+        //     },
+        //     errorCallBack : ()=>{
+        //         $scope.toast("Offline, internet connection is needed for this function.");
+        //     }
+        // };
+        // $utils.api(q);
     }
 
     $scope.cancel_excel = (t)=>{
@@ -132,6 +151,8 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
         // $scope.pointer = 0;
         $scope.toast("Data saved");
         PERMITS_DB.push("/"+t,d);
+        fire.db.datasets.update(t,{data:d});
+        
         // var u = (sp,ip)=>{
         //     let q = { 
         //         data : { 

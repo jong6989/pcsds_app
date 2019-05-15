@@ -6,7 +6,6 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     const applicant_string = "/applicants";
     var TRANSACTION_DB = new JsonDB("./DB/TRANSACTIONS", true, false);
     const incoming_string = "/incoming";
-    var CONVERSATION_DB = new JsonDB("./DB/CONVERSATION", true, false);
 
     try {
         TRANSACTION_DB.getData(incoming_string + "[0]");
@@ -25,7 +24,6 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     $scope.current_active_view = "incoming_transactions";
     $scope.dataSelector = "";
     $scope.my_transactions = [];
-    $scope.app_conversation = [];
     $scope.uploading_file = false;
 
     //load json data
@@ -47,59 +45,22 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
         $scope.tbl_incoming =  new NgTableParams({sorting: { id: "desc" } }, { dataset: data });
     };
 
-    $scope.download_tread = (id)=>{
-        let q = { 
-            data : { 
-                action : "applicant/transaction/tread/get",
-                id : id
-            },
-            callBack : (data)=>{
-                if(data.data.status == 1){
-                    CONVERSATION_DB.push(`/_${id}`,data.data.data);
-                    $scope.app_conversation = data.data.data;
-                }
-            }
-        };
-        $utils.api(q);
-    }
-
     $scope.set_application = (x)=>{
         $scope.application = x;
-        $scope.app_conversation = [];
-        $scope.download_tread(x.id);
+        if($scope.application.actions == undefined) $scope.application.actions = [];
+        let www = fire.db.transactions.when(x.id,(d)=>{
+            $scope.application = d;
+        })
     }
 
-    $scope.get_tread = (id)=>{
-        try {
-            $scope.app_conversation = CONVERSATION_DB.getData(`/_${id}`);
-        } catch (error) {
-            //empty
-        }
-    }
-
-    $scope.decode_b64 = (txt)=>{
-        return atob(txt);
-    }
-    // let xx = btoa("JONG");
-    // console.log(xx )
-    // console.log( atob(xx) )
-    $scope.add_tread = function(app_id,data,single){
-        if(single) $scope.is_loading = true;
-        let q = { 
-            data : { 
-                action : "applicant/transaction/tread/add",
-                user_id : $scope.user.id,
-                id : app_id,
-                message : data
-            },
-            callBack : (res)=>{
-                if(single) $scope.is_loading = false;
-                if(res.data.status == 1){
-                    $scope.download_tread(app_id);
-                }
-            }
-        };
-        $utils.api(q);
+    $scope.add_tread = function(app_id,data){
+        // add to firebase
+        $scope.application.actions.push({
+            staff: $scope.user.data.first_name + " " + $scope.user.data.last_name,
+            message : data,
+            date : $scope.date_now()
+        });
+        fire.db.transactions.update(`${app_id}`,{"actions":$scope.application.actions});
     };
 
     $scope.upload_attachments = (files,app_id)=>{
@@ -111,7 +72,6 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 if(code == 200){
                     if(files.length == (idx + 1) ){
                         let m = `<a href="${api_address}/${data.data}" target="blank" download>${f.name}</a>`;
-                        console.log(m);
                         $scope.add_tread(app_id,m);
                     }else {
                         upload_file(idx + 1);
@@ -128,7 +88,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     $scope.load_html = (text,i)=>{
         $timeout(
             ()=>{
-                $(".convo_"+i).html( atob(text) );
+                $(".convo_"+i).html( text );
             },50
         )
     }
@@ -195,6 +155,10 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     //$scope.filter_incoming($scope.dataSelector);
     $scope.db_changes = (DB,st,d,item,callBack)=>{
         let index = 0;
+        //firebase update
+        let z = d;
+        // delete(z["user"]);
+        fire.db.transactions.update(`${item.id}`,z);
         DB.getData(st).forEach(element => {
             if(element.id == item.id){
                 DB.push(st + "["+index+"]",d);
@@ -207,24 +171,38 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
         });
     }
 
+    // fire.db.transactions.when_all((d)=>{
+    //     console.log("firebase updated");
+    //     d.forEach(element => {
+    //         $scope.db_changes(TRANSACTION_DB,incoming_string,element,element,()=>{$scope.filter_incoming($scope.dataSelector);});
+    //     })
+    // }).where("status",">=","0");
+
+    fire.db.transactions.query.where("status",">=","0").onSnapshot(function(snapshot) {
+        snapshot.forEach(function(doc) {
+            let x = doc.data();
+            $scope.db_changes(TRANSACTION_DB,incoming_string,x,x,()=>{$scope.filter_incoming($scope.dataSelector);});
+        });
+    })
+
     $scope.update_single = (x)=>{
-        if($scope.update_queue == 0){
-            $scope.update_queue = 1;
-            let q = { 
-                data : { 
-                    action : "applicant/transaction/get",
-                    id : x.id,
-                    user_id : $scope.user.id
-                },
-                callBack : (data)=>{
-                    $scope.update_queue = 0;
-                    if(data.data.status == 1){
-                        $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{$scope.filter_incoming($scope.dataSelector);});
-                    }
-                }
-            };
-            $utils.api(q);
-        }
+        // if($scope.update_queue == 0){
+        //     $scope.update_queue = 1;
+        //     let q = { 
+        //         data : { 
+        //             action : "applicant/transaction/get",
+        //             id : x.id,
+        //             user_id : $scope.user.id
+        //         },
+        //         callBack : (data)=>{
+        //             $scope.update_queue = 0;
+        //             if(data.data.status == 1){
+        //                 $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{$scope.filter_incoming($scope.dataSelector);});
+        //             }
+        //         }
+        //     };
+        //     $utils.api(q);
+        // }
     }
 
     $scope.getTransactionStatus = (n)=>{
@@ -336,6 +314,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
+                        $scope.add_tread(x.id,result);
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
@@ -377,7 +356,8 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = {};
+                        $scope.add_tread(x.id,result);
+                        $scope.application = undefined;
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
@@ -416,7 +396,8 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = {};
+                        $scope.add_tread(x.id,result);
+                        $scope.application = undefined;
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
@@ -455,7 +436,8 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = {};
+                        $scope.add_tread(x.id,result);
+                        $scope.application = undefined;
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
@@ -494,7 +476,8 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = {};
+                        $scope.add_tread(x.id,result);
+                        $scope.application = undefined;
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
@@ -536,6 +519,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                        $scope.add_tread(x.id,result);
                         $scope.application = undefined;
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);

@@ -19,8 +19,8 @@ try {
   NOTIFICATION_DB.push(notif_string,[]);
 };
 
-// const api_address = "https://brain.pcsd.gov.ph/api";
-const api_address = "http://localhost/pcsds_api";
+const api_address = "https://brain.pcsd.gov.ph/api";
+// const api_address = "http://localhost/pcsds_api";
 //initialize moment
 moment().format("YYYY-MM-DD h:mm:ss");
 
@@ -28,24 +28,52 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
 
 .factory("$utils",function($http, $mdToast,$timeout){
    var f = {};
-   f.api = function(q){
-      $timeout(()=>{
-        $http.get(api_address, {params: q.data} )
-            .then(function(data){
-              if(q.callBack!==undefined) q.callBack(data);
-            },function (data) {
-                  if(q.errorCallBack!==undefined){
-                    q.errorCallBack(data);
-                  }else {
-                    $mdToast.show(
-                      $mdToast.simple()
-                        .textContent("You are OFFLINE!")
-                        .hideDelay(4000)
-                    );
-                  } 
-              }
-            );
-      },50);
+   f.api = (q)=>{
+      // $timeout(()=>{
+      //   $http.get(api_address, {params: q.data} )
+      //       .then(function(data){
+      //         if(q.callBack!==undefined) q.callBack(data);
+      //       },function (data) {
+      //             if(q.errorCallBack!==undefined){
+      //               q.errorCallBack(data);
+      //             }else {
+      //               $mdToast.show(
+      //                 $mdToast.simple()
+      //                   .textContent("You are OFFLINE!")
+      //                   .hideDelay(4000)
+      //               );
+      //             } 
+      //         }
+      //       );
+      // },50);
+      request.post(api_address + "/?", {form:q.data,json: true},(err,httpResponse,data)=>{
+        if(httpResponse.statusCode == 200){
+          var j = data;
+          if(typeof j !== typeof {}){
+            // console.log("not json");
+            // console.log(data);
+            j = JSON.parse(data);
+          }
+          if(q.callBack!==undefined)q.callBack({data:j});
+        }else {
+          if(q.errorCallBack!==undefined){
+            if(err){
+              return q.errorCallBack(err);
+            }
+          }
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent("You are OFFLINE!")
+              .hideDelay(4000)
+          );
+        }
+      });
+    };
+    f.upload = (callback)=>{
+      var r = request.post(api_address + "/?", function optionalCallback(err, httpResponse, data) {
+        if(callback !== undefined) callback(JSON.parse(data),httpResponse.statusCode);   
+      });
+      return r.form();
     };
    return f;
 })
@@ -957,13 +985,13 @@ myAppModule.controller('fuel_log_controller', function ($scope, $timeout, $utils
 });
 'use strict';
 
-
-myAppModule.controller('transactions_controller', function ($scope, $timeout, $utils, $mdToast,$mdDialog,NgTableParams, $http) {
+myAppModule.controller('transactions_controller', function ($scope, $timeout, $utils, Upload, $mdDialog, NgTableParams, $http) {
     
     var APPLICANT_DB = new JsonDB("./DB/APPLICANTS", true, false);
     const applicant_string = "/applicants";
     var TRANSACTION_DB = new JsonDB("./DB/TRANSACTIONS", true, false);
     const incoming_string = "/incoming";
+    var CONVERSATION_DB = new JsonDB("./DB/CONVERSATION", true, false);
 
     try {
         TRANSACTION_DB.getData(incoming_string + "[0]");
@@ -982,6 +1010,8 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     $scope.current_active_view = "incoming_transactions";
     $scope.dataSelector = "";
     $scope.my_transactions = [];
+    $scope.app_conversation = [];
+    $scope.uploading_file = false;
 
     //load json data
     $http.get("./json/permitting/templates.json").then(function(data){
@@ -1002,8 +1032,90 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
         $scope.tbl_incoming =  new NgTableParams({sorting: { id: "desc" } }, { dataset: data });
     };
 
+    $scope.download_tread = (id)=>{
+        let q = { 
+            data : { 
+                action : "applicant/transaction/tread/get",
+                id : id
+            },
+            callBack : (data)=>{
+                if(data.data.status == 1){
+                    CONVERSATION_DB.push(`/_${id}`,data.data.data);
+                    $scope.app_conversation = data.data.data;
+                }
+            }
+        };
+        $utils.api(q);
+    }
+
     $scope.set_application = (x)=>{
         $scope.application = x;
+        $scope.app_conversation = [];
+        $scope.download_tread(x.id);
+    }
+
+    $scope.get_tread = (id)=>{
+        try {
+            $scope.app_conversation = CONVERSATION_DB.getData(`/_${id}`);
+        } catch (error) {
+            //empty
+        }
+    }
+
+    $scope.decode_b64 = (txt)=>{
+        return atob(txt);
+    }
+    // let xx = btoa("JONG");
+    // console.log(xx )
+    // console.log( atob(xx) )
+    $scope.add_tread = function(app_id,data,single){
+        if(single) $scope.is_loading = true;
+        let q = { 
+            data : { 
+                action : "applicant/transaction/tread/add",
+                user_id : $scope.user.id,
+                id : app_id,
+                message : data
+            },
+            callBack : (res)=>{
+                if(single) $scope.is_loading = false;
+                if(res.data.status == 1){
+                    $scope.download_tread(app_id);
+                }
+            }
+        };
+        $utils.api(q);
+    };
+
+    $scope.upload_attachments = (files,app_id)=>{
+        var upload_file = (idx)=>{
+            $scope.uploading_file = true;
+            let f = files[idx];
+            var form = $utils.upload((data,code)=>{
+                $scope.uploading_file = false;
+                if(code == 200){
+                    if(files.length == (idx + 1) ){
+                        let m = `<a href="${api_address}/${data.data}" target="blank" download>${f.name}</a>`;
+                        console.log(m);
+                        $scope.add_tread(app_id,m);
+                    }else {
+                        upload_file(idx + 1);
+                    }
+                }
+            });
+            form.append('action', 'user/upload_file');
+            form.append('file',  fs.createReadStream(f.path), {filename: f.name});
+            form.append('user_id', $scope.user.id);
+        };
+        if(files.length > 0 ) upload_file(0);
+    };
+
+    $scope.load_html = (text,i)=>{
+        $timeout(
+            ()=>{
+                $(".convo_"+i).html( atob(text) );
+            },50
+        )
     }
 
     $scope.get_my_transactions = ()=>{
@@ -1016,7 +1128,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 break;
             case 5:
                 //permitting staff
-                d = TRANSACTION_DB.getData(incoming_string).filter(d => (d.status == 1) && (d.data.received.staff.id == $scope.user.id)  ).reverse();
+                d = TRANSACTION_DB.getData(incoming_string).filter(d => (d.status == 1)  ).reverse();
                 break;
             case 7:
                 // permitting chief
@@ -1371,6 +1483,45 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                    }else {
+                        $scope.toast(data.data.error + "  : " + data.data.hint);
+                    }
+                }
+            };
+            $utils.api(q);
+        }, function() {
+            // cancel
+        });
+    }
+
+    $scope.returnApplication = (x,ev)=>{
+        var confirm = $mdDialog.prompt()
+            .title('Return last process')
+            .textContent('Reason')
+            .placeholder('')
+            .ariaLabel('Reason')
+            .initialValue('')
+            .targetEvent(ev)
+            .required(true)
+            .ok('Return')
+            .cancel('Cancel');
+
+        $mdDialog.show(confirm).then(function(result) {
+            $scope.application_loading = true;
+            let q = { 
+                data : { 
+                    action : "applicant/transaction/return",
+                    remark : result,
+                    id : x.id,
+                    user_id : $scope.user.id
+                },
+                callBack : (data)=>{
+                    $scope.application_loading = false;
+                    if(data.data.status == 1){
+                        $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
+                            $scope.invalidate_my_transactions();
+                        } );
+                        $scope.application = undefined;
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }

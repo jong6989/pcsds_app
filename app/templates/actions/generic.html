@@ -15,7 +15,6 @@
     ngf-allow-dir="true"
     ngf-drag-over-class="'dragover'"
     multiple="true"
-    ng-init="get_tread(application.id)"
     >
 
     <md-card-title>
@@ -23,11 +22,11 @@
         <md-divider></md-divider>
     </md-card-title>
     <md-card-content>
-        <p ng-if="app_conversation.length > 0"  ng-repeat="x in app_conversation track by $index ">
+        <p ng-if="application.actions.length > 0"  ng-repeat="x in application.actions track by $index ">
             <strong class="m-l-20 col-grey"> {{x.staff}} : </strong>
             <span class="{{'convo_' + $index }}" ></span>
             <i ng-init="load_html(x.message,$index)"></i>
-            <cite class="m-l-20 font-9"> {{x.date.split(' ')[0] | date}} </cite>
+            <cite class="m-l-20 font-9"> {{x.date | date}} </cite>
             <hr>
         </p>
 
@@ -36,10 +35,7 @@
                 <div layout="row">
                     <textarea flex accept-charset="ISO-8859-1" ng-model="add_tread_message" rows="2" placeholder="my action/remark"></textarea>
                 </div>
-                <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
-                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                </div>
-                <md-button type="submit" ng-disabled="add_tread_message == undefined || is_loading" ng-click="add_tread(application.id,add_tread_message,true);add_tread_message = undefined ;" class="md-raised" >
+                <md-button type="submit" ng-disabled="add_tread_message == undefined || is_loading" ng-click="add_tread(application.id,add_tread_message);add_tread_message = undefined ;" class="md-raised" >
                     <cite class="font-12"> <i class="fa fa-send"></i> Send Action</cite>
                 </md-button>
             </form>

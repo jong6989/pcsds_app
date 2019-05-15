@@ -74,7 +74,7 @@
             <!-- end of payment slip -->
         </form>
     <md-button class="md-raised md-warn" ng-if="application.status == 1" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
-    <md-button class="md-raised md-primary" ng-disabled="approve_application_form.$invalid || application_loading "  ng-click="acceptApplication(application,$event)">Accept</md-button>
+    <md-button class="md-raised md-primary" ng-disabled="approve_application_form.$invalid || application_loading " ng-click="acceptApplication(application,$event)">Accept</md-button>
 </div>
 
 <!-- approval -->

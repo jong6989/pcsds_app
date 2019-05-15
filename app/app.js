@@ -19,48 +19,29 @@ try {
   NOTIFICATION_DB.push(notif_string,[]);
 };
 
-// const api_address = "https://brain.pcsd.gov.ph/api";
-const api_address = "http://localhost/pcsds_api";
+const api_address = "https://brain.pcsd.gov.ph/api";
+// const api_address = "http://localhost/pcsds_api";
 //initialize moment
 moment().format("YYYY-MM-DD h:mm:ss");
 
 var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessages','ngFileUpload','ngStorage','ngTable'])
 
-.factory("$utils",function($http, $mdToast,$timeout){
+.factory("$utils",function($mdToast){
    var f = {};
    f.api = (q)=>{
-      // $timeout(()=>{
-      //   $http.get(api_address, {params: q.data} )
-      //       .then(function(data){
-      //         if(q.callBack!==undefined) q.callBack(data);
-      //       },function (data) {
-      //             if(q.errorCallBack!==undefined){
-      //               q.errorCallBack(data);
-      //             }else {
-      //               $mdToast.show(
-      //                 $mdToast.simple()
-      //                   .textContent("You are OFFLINE!")
-      //                   .hideDelay(4000)
-      //               );
-      //             } 
-      //         }
-      //       );
-      // },50);
       request.post(api_address + "/?", {form:q.data,json: true},(err,httpResponse,data)=>{
+        if(q.errorCallBack!==undefined){
+          if(err){
+            return q.errorCallBack(err);
+          }
+        }
         if(httpResponse.statusCode == 200){
           var j = data;
           if(typeof j !== typeof {}){
-            // console.log("not json");
-            // console.log(data);
             j = JSON.parse(data);
           }
           if(q.callBack!==undefined)q.callBack({data:j});
         }else {
-          if(q.errorCallBack!==undefined){
-            if(err){
-              return q.errorCallBack(err);
-            }
-          }
           $mdToast.show(
             $mdToast.simple()
               .textContent("You are OFFLINE!")
