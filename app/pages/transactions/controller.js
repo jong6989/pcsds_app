@@ -55,6 +55,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
 
     $scope.add_tread = function(app_id,data){
         // add to firebase
+        if($scope.application.actions == undefined) $scope.application.actions = [];
         $scope.application.actions.push({
             staff: $scope.user.data.first_name + " " + $scope.user.data.last_name,
             message : data,
@@ -155,10 +156,6 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     //$scope.filter_incoming($scope.dataSelector);
     $scope.db_changes = (DB,st,d,item,callBack)=>{
         let index = 0;
-        //firebase update
-        let z = d;
-        // delete(z["user"]);
-        fire.db.transactions.update(`${item.id}`,z);
         DB.getData(st).forEach(element => {
             if(element.id == item.id){
                 DB.push(st + "["+index+"]",d);
@@ -171,38 +168,25 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
         });
     }
 
-    // fire.db.transactions.when_all((d)=>{
-    //     console.log("firebase updated");
-    //     d.forEach(element => {
-    //         $scope.db_changes(TRANSACTION_DB,incoming_string,element,element,()=>{$scope.filter_incoming($scope.dataSelector);});
-    //     })
-    // }).where("status",">=","0");
-
-    fire.db.transactions.query.where("status",">=","0").onSnapshot(function(snapshot) {
-        snapshot.forEach(function(doc) {
-            let x = doc.data();
-            $scope.db_changes(TRANSACTION_DB,incoming_string,x,x,()=>{$scope.filter_incoming($scope.dataSelector);});
-        });
-    })
 
     $scope.update_single = (x)=>{
-        // if($scope.update_queue == 0){
-        //     $scope.update_queue = 1;
-        //     let q = { 
-        //         data : { 
-        //             action : "applicant/transaction/get",
-        //             id : x.id,
-        //             user_id : $scope.user.id
-        //         },
-        //         callBack : (data)=>{
-        //             $scope.update_queue = 0;
-        //             if(data.data.status == 1){
-        //                 $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{$scope.filter_incoming($scope.dataSelector);});
-        //             }
-        //         }
-        //     };
-        //     $utils.api(q);
-        // }
+        if($scope.update_queue == 0){
+            $scope.update_queue = 1;
+            let q = { 
+                data : { 
+                    action : "applicant/transaction/get",
+                    id : x.id,
+                    user_id : $scope.user.id
+                },
+                callBack : (data)=>{
+                    $scope.update_queue = 0;
+                    if(data.data.status == 1){
+                        $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{$scope.filter_incoming($scope.dataSelector);});
+                    }
+                }
+            };
+            $utils.api(q);
+        }
     }
 
     $scope.getTransactionStatus = (n)=>{
@@ -237,6 +221,25 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 }else {
                     $timeout(()=>{ $scope.filter_incoming($scope.dataSelector); },100);
                     $scope.is_loading = false;
+                    
+                    TRANSACTION_DB.getData(incoming_string).forEach(element => {
+                        //firebase update
+                        let z = element;
+                        fire.db.transactions.get(`${z.id}`,(dd)=>{
+                            if(dd == undefined){
+                                fire.db.transactions.set(`${z.id}`,z);
+                                fire.db.transactions.when(z.id,(d)=>{
+                                    $scope.update_single(d);
+                                });
+                            }else {
+                                fire.db.transactions.when(z.id,(d)=>{
+                                    $scope.update_single(d);
+                                });
+                            }
+                        });
+                    });
+
+                    
                 }
             },
             errorCallBack : ()=>{
@@ -319,6 +322,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                             $scope.invalidate_my_transactions();
                         } );
                         $scope.application = undefined;
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -361,6 +365,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -401,6 +406,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -441,6 +447,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -481,6 +488,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -521,6 +529,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                         } );
                         $scope.add_tread(x.id,result);
                         $scope.application = undefined;
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }

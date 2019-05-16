@@ -8,3 +8,7 @@ install gulp : npm i gulf
 run gulp : gulp
 build app : build -w --dir
 build macos app : build -m --dir
+
+
+#packeger command
+electron-packager app --asar=true --platform=win32 --arch=ia32 --win32metadata.requested-execution-level=requireAdministrator --overwrite

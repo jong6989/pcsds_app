@@ -137,7 +137,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     }
 
     $scope.ngTable = function(d,c){
-      if(c == undefined) c=10;
+      if(c == undefined) c=100;
       return new NgTableParams({count:c}, { dataset: d});
     };
 

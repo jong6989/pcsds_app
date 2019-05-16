@@ -8,7 +8,18 @@
   },
   "build": {
     "appId": "ph.gov.pcsd.brain",
-    "productName": "brain-systems"
+    "productName": "brain-systems",
+    "win": {
+      "requestedExecutionLevel": "highestAvailable",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
+    }
   },
   "repository": {
     "type": "git",
@@ -34,6 +45,7 @@
     "gulp-uglify": "^3.0.2",
     "jquery": "^3.3.1",
     "node-json-db": "^0.9.2",
+    "popper.js": "^1.15.0",
     "query-string": "^6.2.0",
     "request": "^2.88.0",
     "xlsx": "^0.14.2"
