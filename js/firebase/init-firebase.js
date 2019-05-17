@@ -12,9 +12,9 @@ firebase.firestore().settings({
 	cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
 });
 
-firebase.firestore().enablePersistence()
+firebase.firestore().enablePersistence();
 
-var db_list = ["transactions","datasets"];
+var db_list = ["transactions","datasets","notifications","chats"];
 var fire = {};
 var db = firebase.firestore();
 

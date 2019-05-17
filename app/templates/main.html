@@ -6,7 +6,7 @@
 	        <md-button ng-click="toggleLeft()" hide-gt-md class="md-icon-button" aria-label="RightSide" >
 	          <i class="fa fa-bars"></i>
 	        </md-button>
-					<h2 flex="" md-truncate="" class="">PCSD- {{page_title}}</h2>
+					<h2 flex="" md-truncate="" class="">PCSDS- {{page_title}}</h2>
 	        <md-button ng-click="toggleRight();clear_notif(new_notif)" ng-hide="isOpenRight()" class="md-icon-button animated infinite " ng-class="{'swing' : (new_notif > 0) }" aria-label="Notifications and News">
 						<md-tooltip md-direction="left">Click to open News and Notificatons</md-tooltip>
 						<span class="font-10 col-red" style="position:absolute;left:15px;">
@@ -18,9 +18,9 @@
 	</md-toolbar>
 
 
-	<section layout="row" flex style="height:{{get_window_height() - 50 }}px;">
+	<section layout="row" flex style="height:{{get_window_height() }}px;">
 
-	<md-sidenav layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4" >
+	<md-sidenav layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-lg')" md-whiteframe="4" >
 
 	  
 	  <md-content flex layout="column" >
@@ -54,7 +54,7 @@
 
 	<!-- main content -->
 	<div flex layout-padding class="bg-light-grey" >
-		<md-content md-whiteframe="3" layout-padding="20" layout="column" ng-style="{ height: (iframeHeight - 90) + 'px' }">
+		<md-content md-whiteframe="3" layout-padding="20" layout="column" ng-style="{ height: (iframeHeight - 15) + 'px' }">
 			<div ng-include="content_page"></div>
 		</md-content>
 	</div>

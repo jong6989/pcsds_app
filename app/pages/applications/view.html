@@ -1,0 +1,145 @@
+<section layout-xs="column" layout-gt-xs="row" ng-controller="applications_controller" 
+    ng-init="set_page_title('Online Applications');load_db(0);active_btn = 'New';load_pending();">
+
+        <div layout="column" style="width:300px" class="p-r-10" ng-style="{ height: (iframeHeight - 48) + 'px' }">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="search_application_box"> <i class="fa fa-search"></i> </span>
+                </div>
+                <input class="form-control" ng-model="search_application" placeholder="Search Application" aria-label="Search Application" aria-describedby="search_application_box">
+            </div>
+            
+            <div layout="row" layout-align="center center" layout-padding>
+                <md-button class="md-icon-button" ng-class="{'md-raised': (active_btn == 'New')}" aria-label="New" ng-click="load_db(0);active_btn = 'New';">
+                    <md-tooltip md-direction="top">New</md-tooltip>
+                    <i class="fa fa-bolt col-green font-20"></i>
+                </md-button>
+
+                <md-button class="md-icon-button" aria-label="Received" ng-class="{'md-raised': (active_btn == 'Received')}" 
+                    ng-click="load_db(1);active_btn = 'Received';">
+                    <md-tooltip md-direction="top">Received</md-tooltip>
+                    <i class="fa fa-hand-rock-o col-yellow font-20"></i>
+                </md-button>
+
+                <md-button class="md-icon-button" aria-label="Approved" ng-class="{'md-raised': (active_btn == 'Approved')}" 
+                ng-click="load_db(3);active_btn = 'Approved';">
+                    <md-tooltip md-direction="top">Approved</md-tooltip>
+                    <i class="fa fa-check-square col-orange font-20"></i>
+                </md-button>
+
+                <md-button class="md-icon-button" aria-label="Recommend">
+                    <md-tooltip md-direction="top">Recommend</md-tooltip>
+                    <i class="fa fa-hand-peace-o col-blue font-20"></i>
+                </md-button>
+
+                <md-button class="md-icon-button" aria-label="Acknowledge">
+                    <md-tooltip md-direction="top">Acknowledge</md-tooltip>
+                    <i class="fa fa-paw col-teal font-20"></i>
+                </md-button>
+
+                <md-button class="md-icon-button" aria-label="Used">
+                    <md-tooltip md-direction="top">Used</md-tooltip>
+                    <i class="fa fa-signing font-20"></i>
+                </md-button>
+
+                <md-button class="md-icon-button" aria-label="Rejected" ng-class="{'md-raised': (active_btn == 'Rejected')}" ng-click="load_db(2);active_btn = 'Rejected';">
+                    <md-tooltip md-direction="top">Rejected</md-tooltip>
+                    <i class="fa fa-trash col-grey font-20"></i>
+                </md-button>
+
+            </div>
+
+            <h4 class="align-center" 
+                ng-class="{'col-green': (active_btn == 'New'),
+                            'col-yellow': (active_btn == 'Received'),
+                            'col-orange': (active_btn == 'Approved')
+                        }">
+                {{active_btn}} <small class="badge badge-info">{{application_list.length}}</small> 
+            </h4>
+            <md-content flex>
+                <md-list class="md-dense" >
+                    <md-list-item class="md-3-line" ng-repeat="x in application_list | orderBy:'-date' | filter : search_application track by $index" 
+                        ng-click="tabs.application = { title : 'Application',application : x};">
+                        <img ng-src="{{api_address}}/{{x.user.data.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
+                        <div class="md-list-item-text" layout="column">
+                            <h3>{{ x.name }}</h3>
+                            <h4>{{ x.user.data.full_name }}</h4>
+                            <p>{{x.date.split(' ')[0]}} 
+                                <i class="fa fa-circle" 
+                                ng-class="{'col-green': (x.status == '0'),
+                                'col-orange': (x.status == '3'),
+                                'col-yellow': (x.status == '1')}"></i> 
+                                #{{x.id}}
+                            </p>
+                        </div>
+                    </md-list-item>
+                    <hr>
+                </md-list>
+            </md-content>
+            <h4 class="md-title align-center bg-teal" layout-padding> My Pending </h4>
+            <md-content flex="25">
+                <md-list class="md-dense" >
+                    <md-list-item class="md-3-line" ng-repeat="x in pending_list | orderBy:'-date' track by $index" 
+                        ng-click="tabs.pending = { title : 'Pending',application : x};">
+                        <img ng-src="{{api_address}}/{{x.user.data.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
+                        <div class="md-list-item-text" layout="column">
+                            <h3>{{ x.name }}</h3>
+                            <h4>{{ x.user.data.full_name }}</h4>
+                            <p>{{x.date.split(' ')[0]}} </p>
+                        </div>
+                    </md-list-item>
+                    <hr>
+                </md-list>
+            </md-content>
+
+
+        </div>
+        <div flex layout-padding="20" class="" layout="row">
+            <md-card md-whiteframe="3" flex layout="row">
+                <md-card-content flex layout="row">
+                        <md-tabs flex md-selected="selectedTab" md-border-bottom md-autoselect md-swipe-content>
+                            <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : #{{tab.application.id}}">
+            
+                                <div ng-show="f == 'application' || f == 'pending'">
+                                    <div ng-hide="true"> {{application = tab.application}} </div>
+                                    <!-- Templates -->
+                                    <div ng-repeat=" x in application_templates" ng-show="application.name == x.name">
+                                        <div ng-include="x.url"></div>
+                                        <md-divider class="m-t-20 m-b-10"></md-divider>
+                                        <div ng-include="x.action"></div>
+                                    </div>
+                                </div>
+            
+                            </md-tab>
+                        </md-tabs>
+                </md-card-content>
+            </md-card>
+        </div>
+
+        <div layout="column" layout-align="center center">
+            <md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="toggleChatNav(1,'Personnal Chats')">
+                    <md-tooltip md-direction="left">Personnal Chats</md-tooltip>
+                <i class="fa fa-comments-o"></i>
+            </md-button>
+            <md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="toggleChatNav(2,'Group Chat')">
+                <md-tooltip md-direction="left">Group Chat</md-tooltip>
+                <i class="fa fa-users"></i>
+            </md-button>
+            <md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="toggleChatNav(3,'Client Chats')">
+                <md-tooltip md-direction="left">Client Chats</md-tooltip>
+                <i class="fa fa-commenting-o"></i>
+            </md-button>
+        </div>
+
+        <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="chats_nav">
+
+            <md-toolbar class="bg-teal">
+                <h1 class="md-toolbar-tools">{{chatNav.title}}</h1>
+            </md-toolbar>
+            <md-content layout-padding>
+                Nothing yet.... under development
+                <button ng-click="closeChatNav()">close</button>
+            </md-content>
+        
+        </md-sidenav>
+</section>

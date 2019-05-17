@@ -9,7 +9,7 @@
 <hr>
 
 <md-card
-    ng-if="current_active_view == 'my_transactions'"
+    ng-if="current_active_view == 'my_transactions' || version_2"
     ng-change="upload_attachments(file_drop)"
     ngf-drop ng-model="file_drop"
     ngf-allow-dir="true"
@@ -48,10 +48,27 @@
     </md-card-content>
 </md-card>
 
+<div ng-if="application.status == 0">
+        <md-button class="md-warn md-raised" ng-dblclick="rejectApplication(application,$event)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Reject
+        </md-button>
+        <md-button class="md-primary md-raised" ng-if="application.status == 0" ng-dblclick="receive_single(application)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Receive
+        </md-button>    
+    </div>
+    
 
 <div ng-if="validate_user([99,5]) && application.status == 1 ">
-    <md-button class="md-raised md-warn" ng-if="application.status == 1" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
-    <md-button class="md-raised md-primary" ng-disabled=" application_loading "  ng-click="acceptApplication(application,$event)">Accept</md-button>
+    <md-button class="md-raised md-warn" ng-if="application.status == 1" ng-disabled="application_loading" ng-dblclick="rejectApplication(application,$event)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Reject
+    </md-button>
+    <md-button class="md-raised md-primary" ng-disabled=" application_loading "  ng-dblclick="acceptApplication(application,$event)">
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Accept
+    </md-button>
 </div>
 
 <!-- approval -->

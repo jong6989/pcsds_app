@@ -1,3 +1,56 @@
+
+
+<md-card
+    ng-if="current_active_view == 'my_transactions' || version_2"
+    ng-change="upload_attachments(file_drop)"
+    ngf-drop ng-model="file_drop"
+    ngf-allow-dir="true"
+    ngf-drag-over-class="'dragover'"
+    multiple="true"
+    >
+
+    <md-card-title>
+        <h5>Actions</h5>
+        <md-divider></md-divider>
+    </md-card-title>
+    <md-card-content>
+        <p ng-if="application.actions.length > 0"  ng-repeat="x in application.actions track by $index ">
+            <strong class="m-l-20 col-grey"> {{x.staff}} : </strong>
+            <span class="{{'convo_' + $index }}" ></span>
+            <i ng-init="load_html(x.message,$index)"></i>
+            <cite class="m-l-20 font-9"> {{x.date | date}} </cite>
+            <hr>
+        </p>
+
+        <div>
+            <form name="form_add_tread">
+                <div layout="row">
+                    <textarea flex accept-charset="ISO-8859-1" ng-model="add_tread_message" rows="2" placeholder="my action/remark"></textarea>
+                </div>
+                <md-button type="submit" ng-disabled="add_tread_message == undefined || is_loading" ng-click="add_tread(application.id,add_tread_message);add_tread_message = undefined ;" class="md-raised" >
+                    <cite class="font-12"> <i class="fa fa-send"></i> Send Action</cite>
+                </md-button>
+            </form>
+            <md-progress-linear md-mode="indeterminate" ng-show="uploading_file"></md-progress-linear>
+            <md-button class="md-raised font-12"  ng-hide="uploading_file" ngf-select="upload_attachments($files,application.id)">
+                <cite class="font-10"> <i class="fa fa-upload"></i> upload attachments</cite>
+            </md-button>
+        </div>
+        
+    </md-card-content>
+</md-card>
+
+<div ng-if="application.status == 0">
+    <md-button class="md-warn md-raised" ng-dblclick="rejectApplication(application,$event)" >
+        <md-tooltip md-direction="top">Double click</md-tooltip>
+        Reject
+    </md-button>
+    <md-button class="md-primary md-raised" ng-if="application.status == 0" ng-dblclick="receive_single(application)" >
+        <md-tooltip md-direction="top">Double click</md-tooltip>
+        Receive
+    </md-button>    
+</div>
+
 <div ng-if="validate_user([99,5]) && application.status == 1 ">
         <form name="approve_application_form" ng-init="application.certificate_of_inspection = {};application.payment_slip={}">
             <!-- certificate of inspection -->
@@ -73,8 +126,14 @@
             </md-card>
             <!-- end of payment slip -->
         </form>
-    <md-button class="md-raised md-warn" ng-if="application.status == 1" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
-    <md-button class="md-raised md-primary" ng-disabled="approve_application_form.$invalid || application_loading " ng-click="acceptApplication(application,$event)">Accept</md-button>
+    <md-button class="md-raised md-warn" ng-if="application.status == 1" ng-disabled="application_loading" ng-dblclick="rejectApplication(application,$event)" >
+        <md-tooltip md-direction="top">Double click</md-tooltip>
+        Reject
+    </md-button>
+    <md-button class="md-raised md-primary" ng-disabled="approve_application_form.$invalid || application_loading " ng-dblclick="acceptApplication(application,$event,{'certificate_of_inspection':application.certificate_of_inspection,'payment_slip':application.payment_slip})">
+        <md-tooltip md-direction="top">Double click</md-tooltip>
+        Accept
+    </md-button>
 </div>
 
 <!-- approval -->
