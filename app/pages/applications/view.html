@@ -76,8 +76,8 @@
                             'col-yellow': (active_btn == 'Received'),
                             'col-orange': (active_btn == 'Approved'),
                             'col-pink': (active_btn == 'Accepted'),
-                            'col-blue': (active_btn == 'Recommend'),
-                            'col-teal': (active_btn == 'Acknowledge'),
+                            'col-blue': (active_btn == 'Recommended'),
+                            'col-teal': (active_btn == 'Acknowledged'),
                             'col-grey': (active_btn == 'Rejected')
                         }">
                 {{active_btn}} <small class="badge badge-info">{{application_list.length}}</small> 
@@ -85,7 +85,7 @@
             <md-content flex>
                 <md-list class="md-dense" >
                     <md-list-item class="md-3-line" ng-repeat="x in application_list | orderBy:'-date' | filter : search_application track by $index" 
-                        ng-click="tabs.application = { title : 'Application',application : x};">
+                        ng-click="open_application_tab(x)">
                         <img ng-src="{{api_address}}/{{x.user.data.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
                         <div class="md-list-item-text" layout="column">
                             <h3>{{ x.name }}</h3>
@@ -112,7 +112,7 @@
             <md-content flex="25" ng-class="{'bg-pink':(pending_list.length > 0)}">
                 <md-list class="md-dense" >
                     <md-list-item class="md-3-line" ng-repeat="x in pending_list | orderBy:'-date' track by $index" 
-                        ng-click="tabs.application = { title : 'Application',application : x};">
+                        ng-click="open_application_tab(x)">
                         <img ng-src="{{api_address}}/{{x.user.data.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
                         <div class="md-list-item-text" layout="column">
                             <h3 class="col-white">{{ x.name }}</h3>
@@ -137,7 +137,7 @@
                                     <div ng-repeat=" x in application_templates" ng-show="application.name == x.name">
                                         <div ng-include="x.url"></div>
                                         <md-divider class="m-t-20 m-b-10"></md-divider>
-                                        <p ng-hide="is_online">Please connect to the internet...</p>
+                                        <p ng-hide="is_online">No internet connection...</p>
                                         <div ng-include="x.action" ng-show="is_online"></div>
                                     </div>
                                 </div>
@@ -148,17 +148,18 @@
                                         Last active : {{date_gap(now(),tab.staff.last_seen)}}
                                     </h6>
                                     <md-content layout-padding ng-style="{ height: (iframeHeight - 370) + 'px' }">
-                                        <div ng-if="tab.tread.length > 0"  ng-repeat="x in tab.tread track by $index ">
-                                            <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{x.date | date}} </cite> </strong>
+                                        <div ng-if="tab.tread.length > 0"  ng-repeat="x in tab.tread | orderBy : '-date' track by $index " ng-init="passTime = date_gap(now(),x.date)">
+                                            <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{passTime}} </cite> </strong>
                                             <div class="m-l-40"><span class="{{'spc_' + $index }}" ></span></div>
                                             <i ng-init="load_html(x.message,$index,'spc_')"></i>
-                                            <i class="fa fa-trash col-red pointer" ng-dblclick="remove_spc(tab.staff,x)">
+                                            <i class="fa fa-trash col-red pointer" ng-dblclick="remove_spc(tab.staff,x)" ng-show="is_online">
                                                 <md-tooltip md-direction="top">Double Click to remove this message</md-tooltip>
                                             </i>
                                             <hr>
                                         </div>
                                     </md-content>
-                                    <div>
+                                    <p ng-hide="is_online">No internet connection...</p>
+                                    <div ng-show="is_online">
                                         <form name="form_add_tread_pc">
                                             <div layout="row">
                                                 <textarea flex accept-charset="ISO-8859-1" ng-model="pc_tread_message[''+tab.staff.id]" rows="3" placeholder="message"></textarea>

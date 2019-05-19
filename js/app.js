@@ -4,6 +4,8 @@ const queryString = require('query-string');
 const { ipcRenderer } = require('electron');
 var fs = require('fs');
 var request = require('request');
+const isOnline = require('is-online');
+var geolocation = require('geolocation');
 
 var download = (uri, filename, callback)=>{
   request.head(uri, function(err, res, body){
@@ -11,13 +13,13 @@ var download = (uri, filename, callback)=>{
   });
 };
 
-var NOTIFICATION_DB = new JsonDB("./DB/NOTIFICATIONS", true, false);
-const notif_string = "/notifications";
-try {
-  NOTIFICATION_DB.getData(notif_string + "[0]");
-} catch(error) {
-  NOTIFICATION_DB.push(notif_string,[]);
-};
+// var NOTIFICATION_DB = new JsonDB("./DB/NOTIFICATIONS", true, false);
+// const notif_string = "/notifications";
+// try {
+//   NOTIFICATION_DB.getData(notif_string + "[0]");
+// } catch(error) {
+//   NOTIFICATION_DB.push(notif_string,[]);
+// };
 
 const api_address = "https://brain.pcsd.gov.ph/api";
 // const api_address = "http://localhost/pcsds_api";
@@ -26,47 +28,30 @@ moment().format("YYYY-MM-DD h:mm:ss");
 
 var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessages','ngFileUpload','ngStorage','ngTable'])
 
-.factory("$utils",function($http, $mdToast,$timeout){
+.factory("$utils",function($mdToast){
    var f = {};
    f.api = (q)=>{
-      // $timeout(()=>{
-      //   $http.get(api_address, {params: q.data} )
-      //       .then(function(data){
-      //         if(q.callBack!==undefined) q.callBack(data);
-      //       },function (data) {
-      //             if(q.errorCallBack!==undefined){
-      //               q.errorCallBack(data);
-      //             }else {
-      //               $mdToast.show(
-      //                 $mdToast.simple()
-      //                   .textContent("You are OFFLINE!")
-      //                   .hideDelay(4000)
-      //               );
-      //             } 
-      //         }
-      //       );
-      // },50);
       request.post(api_address + "/?", {form:q.data,json: true},(err,httpResponse,data)=>{
-        if(httpResponse.statusCode == 200){
-          var j = data;
-          if(typeof j !== typeof {}){
-            // console.log("not json");
-            // console.log(data);
-            j = JSON.parse(data);
-          }
-          if(q.callBack!==undefined)q.callBack({data:j});
-        }else {
+        if(err){
           if(q.errorCallBack!==undefined){
-            if(err){
-              return q.errorCallBack(err);
-            }
+            return q.errorCallBack(err);
+          }else {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent("You are OFFLINE!")
+                .hideDelay(4000)
+            );
           }
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent("You are OFFLINE!")
-              .hideDelay(4000)
-          );
+        }else {
+          if(httpResponse.statusCode == 200){
+            var j = data;
+            if(typeof j !== typeof {}){
+              j = JSON.parse(data);
+            }
+            if(q.callBack!==undefined)q.callBack({data:j});
+          }
         }
+        
       });
     };
     f.upload = (callback)=>{
@@ -147,6 +132,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.active_menu = "";
     $scope.menus = [];
     $scope.api_address = api_address;
+    $scope.is_loading = false;
 
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildToggler('right');
@@ -156,7 +142,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     }
 
     $scope.ngTable = function(d,c){
-      if(c == undefined) c=10;
+      if(c == undefined) c=100;
       return new NgTableParams({count:c}, { dataset: d});
     };
 
@@ -289,6 +275,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.login_attempt = function(d){
+      $scope.is_loading = true;
       var q = { 
         data : { 
           action : "user/login",
@@ -296,6 +283,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
           key : d.key
         },
         callBack : function(data){
+          $scope.is_loading = false;
           if(data.data.status == 0){
             $scope.toast(data.data.error + "  : " + data.data.hint);
           }else {
@@ -318,7 +306,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       $localStorage.pcsd_app_user = undefined;
       $scope.user = undefined;
       //clear notifications
-      NOTIFICATION_DB.push(notif_string,[]);
+      // NOTIFICATION_DB.push(notif_string,[]);
     };
 
     $scope.set_page_title = function(t){
@@ -446,7 +434,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.get_notifs = ()=>{
-        return NOTIFICATION_DB.getData(notif_string);
+        // return NOTIFICATION_DB.getData(notif_string);
     };
 
     $scope.set_new_notif = ()=>{
@@ -458,36 +446,36 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
         $scope.set_new_notif();
     };
     $scope.load_notifs = ()=>{
-        if($scope.user != undefined){
-          var d = NOTIFICATION_DB.getData(notif_string);
-          var l = (d.length > 0)? d[d.length - 1].id : 0;
-          var current_length = d.length;
-          let q = { 
-              data : { 
-                  action : "database/notification/load",
-                  offset : current_length,
-                  last_id : l,
-                  user_id : $scope.user.id
-              },
-              callBack : function(data){
-                  if(data.data.status == 1){
-                      NOTIFICATION_DB.push(notif_string,data.data.data,false);
-                      $timeout($scope.set_notif,200);
-                  }
-                  $timeout($scope.load_notifs,3000);
-              }
-          };
-          $utils.api(q);
-        }
+        // if($scope.user != undefined){
+        //   var d = NOTIFICATION_DB.getData(notif_string);
+        //   var l = (d.length > 0)? d[d.length - 1].id : 0;
+        //   var current_length = d.length;
+        //   let q = { 
+        //       data : { 
+        //           action : "database/notification/load",
+        //           offset : current_length,
+        //           last_id : l,
+        //           user_id : $scope.user.id
+        //       },
+        //       callBack : function(data){
+        //           if(data.data.status == 1){
+        //               NOTIFICATION_DB.push(notif_string,data.data.data,false);
+        //               $timeout($scope.set_notif,200);
+        //           }
+        //           $timeout($scope.load_notifs,3000);
+        //       }
+        //   };
+        //   $utils.api(q);
+        // }
     };
 
     $scope.clear_notif = (n)=>{
-      if($scope.new_notif > 0){
-        $http.get(api_address + "?action=user/clear_notif&user_id=" + $scope.user.id + "&count=" + n ).then(function(data){
-          $scope.user = $localStorage.pcsd_app_user = data.data.data;
-          $scope.set_notif();
-        });
-      }
+      // if($scope.new_notif > 0){
+      //   $http.get(api_address + "?action=user/clear_notif&user_id=" + $scope.user.id + "&count=" + n ).then(function(data){
+      //     $scope.user = $localStorage.pcsd_app_user = data.data.data;
+      //     $scope.set_notif();
+      //   });
+      // }
     };
     
     
@@ -622,6 +610,361 @@ myAppModule.controller('user_management_controller', function ($scope, $timeout,
     $scope.selected_user = s;
     $scope.is_single_user_selected = true;
   };
+
+});
+'use strict';
+
+myAppModule.controller('applications_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $http) {
+    $scope.application_list = [];
+    $scope.pending_list = [];
+    $scope.staff_list = [];
+    $scope.api_address = api_address;
+    $scope.selectedTab = 0;
+    $scope.tabs = {};
+    $scope.chatNav = {};
+    $scope.add_tread_message = {};
+    $scope.pc_tread_message = {};
+    $scope.is_online = false;
+    let ti = 60 * 1000;
+    let th = 60 * ti;
+    let td = 24 * th;
+    let tm = 30 * td;
+    const online_laps = 30000;
+    var opc = {};
+
+    $scope.toggleChatNav = (n,title)=>{
+        $scope.chatNav.title = title;
+        $scope.chatNav.idx = n;
+        $mdSidenav('chats_nav')
+            .toggle();
+    };
+
+    $scope.isOpenChatNav = function(){
+        return $mdSidenav('chats_nav').isOpen();
+      };
+
+    $scope.closeChatNav = function () {
+        $mdSidenav('chats_nav').close()
+            .then(function () {
+                //
+            });
+    };
+
+    $scope.move_tab = (k)=>{
+        let n = 0;
+        for (const key in $scope.tabs) {
+            if (key == k) {
+                $scope.selectedTab = n;
+            }else {
+                n++;
+            }
+        }
+    };
+
+    $scope.now = ()=>{ return Date.now();}
+
+    $scope.calculate_if_online = (last_seen)=>{
+        let gap = Date.now() - last_seen;
+        return (gap <= online_laps + 10)? true : false;
+    };
+
+    fire.db.staffs.get($scope.user.id,(res)=>{
+        function iam_online(){
+            setInterval(()=>{
+                fire.db.staffs.update($scope.user.id,{"last_seen": Date.now()});
+            },online_laps);
+        }
+        if(res == undefined){
+            $scope.user.last_seen = Date.now();
+            fire.db.staffs.set($scope.user.id,$scope.user);
+            iam_online();
+        }else {
+            fire.db.staffs.update($scope.user.id,{"last_seen": Date.now()});
+            iam_online();
+        }
+    });
+
+    async function check_if_online(){
+        $scope.is_online = await isOnline();
+        $scope.$apply();
+    }
+    check_if_online();
+    setInterval(check_if_online,3000);
+
+    fire.db.staffs.when_all((list)=>{
+        $scope.staff_list = list;
+        list.forEach(e=>{
+            if($scope.tabs.personal_chat !== undefined){
+                if($scope.tabs.personal_chat.staff.id == e.id){
+                    $scope.tabs.personal_chat.staff = e;
+                }
+            }
+        })
+    });
+
+    $scope.open_application_tab = (x)=>{
+        $scope.tabs.application = { title : 'Application',application : x};
+        $scope.move_tab('application');
+    }
+
+    $scope.open_personal_chat = (staff)=>{
+        opc = null;
+        opc = fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).onSnapshot(function(doc) {
+            let tread = [];
+            if (!doc.exists) {
+                fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).set({tread:[]});
+            }else {
+                tread = doc.data();
+            }
+            $scope.tabs.personal_chat = { title : staff.data.first_name + ' ' + staff.data.last_name, staff : staff,tread:tread.tread};
+            $scope.move_tab('personal_chat');
+        });
+        $scope.closeChatNav();
+    };
+
+    //load json data
+    $http.get("./json/permitting/templates.json").then(function(data){
+        $scope.application_templates = data.data.data; 
+    });
+    
+    $scope.load_db = (status)=>{
+        let s = `${status}`;
+        fire.db.transactions.query.where("status", "==", s)
+        .onSnapshot(function(querySnapshot) {
+            var d = [];
+            querySnapshot.forEach(function(doc) {
+                let z = doc.data();
+                d.push(z);
+                for (const key in $scope.tabs) {
+                    if ($scope.tabs.hasOwnProperty(key) && key == 'application') {
+                        if($scope.tabs[key].application.id == z.id){
+                            $scope.tabs[key].application = z;
+                        }
+                    }
+                }
+            });
+            $scope.application_list = d;
+            $scope.$apply();
+        });
+    }
+
+    $scope.remove_spc = (staff,message)=>{
+        fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).update({"tread":firebase.firestore.FieldValue.arrayRemove(message)});
+        let i = 0;
+        $scope.tabs.personal_chat.tread.forEach(e=>{
+            if(e==message){
+                $scope.tabs.personal_chat.tread.splice(i,1);
+            }
+            i++;
+        });
+    };
+    
+    $scope.load_pending = ()=>{
+        fire.db.transactions.query.where("level", "==", `${$scope.user.user_level}`)
+        .onSnapshot(function(querySnapshot) {
+            delete($scope.tabs.pending);
+            var d = [];
+            querySnapshot.forEach(function(doc) {
+                d.push(doc.data());
+            });
+            $scope.pending_list = d;
+            $scope.$apply();
+        });
+    }
+
+    $scope.add_tread = function(app_id,data){
+        let t = {
+            staff: $scope.user.data.first_name + " " + $scope.user.data.last_name,
+            message : data,
+            date : Date.now()
+        };
+        fire.db.transactions.update(`${app_id}`,{"actions": firebase.firestore.FieldValue.arrayUnion(t) });
+        delete($scope.add_tread_message[`${app_id}`]);
+    };
+
+    $scope.pc_tread = (staff_id,message)=>{
+        let m = {message : message,date : Date.now(),staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name};
+        fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff_id}`).update({"tread": firebase.firestore.FieldValue.arrayUnion(m)});
+        delete($scope.pc_tread_message[`${staff_id}`])
+    }
+
+    $scope.upload_attachments = (files,app_id)=>{
+        var upload_file = (idx)=>{
+            $scope.uploading_file = true;
+            let f = files[idx];
+            var form = $utils.upload((data,code)=>{
+                $scope.uploading_file = false;
+                if(code == 200){
+                    if(files.length == (idx + 1) ){
+                        let m = `<a href="${api_address}/${data.data}" target="blank" download>${f.name}</a>`;
+                        if($scope.add_tread_message[`${app_id}`] == undefined) $scope.add_tread_message[`${app_id}`] = "";
+                        $scope.add_tread_message[`${app_id}`] += m + "<br>\n";
+                    }else {
+                        upload_file(idx + 1);
+                    }
+                }
+            });
+            form.append('action', 'user/upload_file');
+            form.append('file',  fs.createReadStream(f.path), {filename: f.name});
+            form.append('user_id', $scope.user.id);
+        };
+        if(files.length > 0 ) upload_file(0);
+    };
+
+    $scope.load_html = (text,i,c)=>{
+        $timeout(
+            ()=>{
+                $("."+c+i).html( text );
+            },50
+        )
+    }
+
+    function notify_applicant(applicant_id,application_id,message){
+        fire.db.notifications.get(`web_${applicant_id}`,(d)=>{
+            let notif = {
+                "transaction_id" : application_id,
+                "message" : message,
+                "status" : "0",
+                "date" : $scope.date_now()
+            };
+            if(d == undefined){
+                fire.db.notifications.set(`web_${applicant_id}`,{"applications" : [notif]})
+            }else {
+                fire.db.notifications.update(`web_${applicant_id}`,{"applications" : firebase.firestore.FieldValue.arrayUnion(notif)})
+            }
+        });
+    }
+    function clear_application_tabs(){
+        delete($scope.tabs.application);
+    }
+
+    $scope.receive_single = (application)=>{
+        fire.db.transactions.update(application.id,{
+            "level":"5",
+            "status":"1",
+            "data.received" : {
+                "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+                "date" : $scope.date_now(),
+                "staff_id" : $scope.user.id
+            }
+        });
+        notify_applicant(application.user.id,application.id,
+            "Your Application Was Received and being processed by : " 
+            + $scope.user.data.first_name + ' ' 
+            + $scope.user.data.last_name);
+        // fire.db.notifications.get(`web_${application.user.id}`,(d)=>{
+        //     let notif = {
+        //         "transaction_id" : application.id,
+        //         "message" : "Your Application Was Received and being processed by : " + $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+        //         "status" : "0",
+        //         "date" : $scope.date_now()
+        //     };
+        //     if(d == undefined){
+        //         fire.db.notifications.set(`web_${application.user.id}`,{"applications" : [notif]})
+        //     }else {
+        //         fire.db.notifications.update(`web_${application.user.id}`,{"applications" : firebase.firestore.FieldValue.arrayUnion(notif)})
+        //     }
+        // })
+        delete($scope.tabs.application);
+    }
+
+    $scope.rejectApplication = (application,ev)=>{
+        var confirm = $mdDialog.prompt()
+            .title('Rejecting Application')
+            .textContent('Reason')
+            .placeholder('')
+            .ariaLabel('Reason')
+            .initialValue('')
+            .targetEvent(ev)
+            .required(true)
+            .ok('Reject')
+            .cancel('Cancel');
+
+        $mdDialog.show(confirm).then(function(result) {
+            fire.db.transactions.update(application.id,{
+                "level":"-1",
+                "status":"2",
+                "data.rejected" : {
+                    "message" : result,
+                    "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+                    "date" : $scope.date_now(),
+                    "staff_id" : $scope.user.id
+                }
+            });
+            notify_applicant(application.user.id,application.id,"Your Application Was Rejected :  " + result);
+            clear_application_tabs();
+        }, function() {
+            // cancel
+        });
+    }
+
+    $scope.acceptApplication = (application,ev,extra)=>{
+        let u = {};
+        if(extra !== undefined) u = extra;
+        u["level"] = "7";
+        u["status"] = "3";
+        u["data.accepted"] = {
+            "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+            "date" : $scope.date_now(),
+            "staff_id" : $scope.user.id
+        };
+        
+        fire.db.transactions.update(application.id,u);
+        notify_applicant(application.user.id,application.id,"Your Application is on checking by the PCSD Permitting Chief ");
+        clear_application_tabs();
+    }
+
+    $scope.approveApplication = (application,ev,extra)=>{
+        let u = {};
+        if(extra !== undefined) u = extra;
+        u["level"] = "8";
+        u["status"] = "4";
+        u["data.approved"] = {
+            "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+            "date" : $scope.date_now(),
+            "staff_id" : $scope.user.id
+        };
+        
+        fire.db.transactions.update(application.id,u);
+        notify_applicant(application.user.id,application.id,"Your Application was Approved and now for recomendation.");
+        clear_application_tabs();
+    }
+
+    $scope.recommendApplication = (application,ev,extra)=>{
+        let u = {};
+        if(extra !== undefined) u = extra;
+        u["level"] = "4";
+        u["status"] = "5";
+        u["data.recommended"] = {
+            "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+            "date" : $scope.date_now(),
+            "staff_id" : $scope.user.id
+        };
+        
+        fire.db.transactions.update(application.id,u);
+        notify_applicant(application.user.id,application.id,"Your Application was recommended for releasing of permit, permit on process...");
+        clear_application_tabs();
+    }
+
+    $scope.acknowledgeApplication = (application,ev,extra)=>{
+        let u = {};
+        if(extra !== undefined) u = extra;
+        u["level"] = "-1";
+        u["status"] = "6";
+        u["data.acknowledged"] = {
+            "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+            "date" : $scope.date_now(),
+            "staff_id" : $scope.user.id
+        };
+        
+        //expiration
+        if(application.name == "Application for Local Transport Permit RFF")
+            u["expiration"] = $scope.to_date(Date.now() + tm);
+        
+        fire.db.transactions.update(application.id,u);
+        notify_applicant(application.user.id,application.id,"Your Permit was aknowledge by the PCSD Director and ready to use!");
+        clear_application_tabs();
+    }
 
 });
 'use strict';
@@ -991,7 +1334,6 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     const applicant_string = "/applicants";
     var TRANSACTION_DB = new JsonDB("./DB/TRANSACTIONS", true, false);
     const incoming_string = "/incoming";
-    var CONVERSATION_DB = new JsonDB("./DB/CONVERSATION", true, false);
 
     try {
         TRANSACTION_DB.getData(incoming_string + "[0]");
@@ -1010,7 +1352,6 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     $scope.current_active_view = "incoming_transactions";
     $scope.dataSelector = "";
     $scope.my_transactions = [];
-    $scope.app_conversation = [];
     $scope.uploading_file = false;
 
     //load json data
@@ -1032,59 +1373,23 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
         $scope.tbl_incoming =  new NgTableParams({sorting: { id: "desc" } }, { dataset: data });
     };
 
-    $scope.download_tread = (id)=>{
-        let q = { 
-            data : { 
-                action : "applicant/transaction/tread/get",
-                id : id
-            },
-            callBack : (data)=>{
-                if(data.data.status == 1){
-                    CONVERSATION_DB.push(`/_${id}`,data.data.data);
-                    $scope.app_conversation = data.data.data;
-                }
-            }
-        };
-        $utils.api(q);
-    }
-
     $scope.set_application = (x)=>{
         $scope.application = x;
-        $scope.app_conversation = [];
-        $scope.download_tread(x.id);
+        if($scope.application.actions == undefined) $scope.application.actions = [];
+        let www = fire.db.transactions.when(x.id,(d)=>{
+            $scope.application = d;
+        })
     }
 
-    $scope.get_tread = (id)=>{
-        try {
-            $scope.app_conversation = CONVERSATION_DB.getData(`/_${id}`);
-        } catch (error) {
-            //empty
-        }
-    }
-
-    $scope.decode_b64 = (txt)=>{
-        return atob(txt);
-    }
-    // let xx = btoa("JONG");
-    // console.log(xx )
-    // console.log( atob(xx) )
-    $scope.add_tread = function(app_id,data,single){
-        if(single) $scope.is_loading = true;
-        let q = { 
-            data : { 
-                action : "applicant/transaction/tread/add",
-                user_id : $scope.user.id,
-                id : app_id,
-                message : data
-            },
-            callBack : (res)=>{
-                if(single) $scope.is_loading = false;
-                if(res.data.status == 1){
-                    $scope.download_tread(app_id);
-                }
-            }
-        };
-        $utils.api(q);
+    $scope.add_tread = function(app_id,data){
+        // add to firebase
+        if($scope.application.actions == undefined) $scope.application.actions = [];
+        $scope.application.actions.push({
+            staff: $scope.user.data.first_name + " " + $scope.user.data.last_name,
+            message : data,
+            date : $scope.date_now()
+        });
+        fire.db.transactions.update(`${app_id}`,{"actions":$scope.application.actions});
     };
 
     $scope.upload_attachments = (files,app_id)=>{
@@ -1096,7 +1401,6 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 if(code == 200){
                     if(files.length == (idx + 1) ){
                         let m = `<a href="${api_address}/${data.data}" target="blank" download>${f.name}</a>`;
-                        console.log(m);
                         $scope.add_tread(app_id,m);
                     }else {
                         upload_file(idx + 1);
@@ -1113,7 +1417,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     $scope.load_html = (text,i)=>{
         $timeout(
             ()=>{
-                $(".convo_"+i).html( atob(text) );
+                $(".convo_"+i).html( text );
             },50
         )
     }
@@ -1192,6 +1496,7 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
         });
     }
 
+
     $scope.update_single = (x)=>{
         if($scope.update_queue == 0){
             $scope.update_queue = 1;
@@ -1244,6 +1549,25 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 }else {
                     $timeout(()=>{ $scope.filter_incoming($scope.dataSelector); },100);
                     $scope.is_loading = false;
+                    
+                    TRANSACTION_DB.getData(incoming_string).forEach(element => {
+                        //firebase update
+                        let z = element;
+                        fire.db.transactions.get(`${z.id}`,(dd)=>{
+                            if(dd == undefined){
+                                fire.db.transactions.set(`${z.id}`,z);
+                                fire.db.transactions.when(z.id,(d)=>{
+                                    $scope.update_single(d);
+                                });
+                            }else {
+                                fire.db.transactions.when(z.id,(d)=>{
+                                    $scope.update_single(d);
+                                });
+                            }
+                        });
+                    });
+
+                    
                 }
             },
             errorCallBack : ()=>{
@@ -1321,10 +1645,12 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
+                        $scope.add_tread(x.id,result);
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
                         $scope.application = undefined;
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -1362,10 +1688,12 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = {};
+                        $scope.add_tread(x.id,result);
+                        $scope.application = undefined;
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -1401,10 +1729,12 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = {};
+                        $scope.add_tread(x.id,result);
+                        $scope.application = undefined;
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -1440,10 +1770,12 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = {};
+                        $scope.add_tread(x.id,result);
+                        $scope.application = undefined;
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -1479,10 +1811,12 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                 callBack : (data)=>{
                     $scope.application_loading = false;
                     if(data.data.status == 1){
-                        $scope.application = {};
+                        $scope.add_tread(x.id,result);
+                        $scope.application = undefined;
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -1521,7 +1855,9 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
                         $scope.db_changes(TRANSACTION_DB,incoming_string,data.data.data,x,()=>{
                             $scope.invalidate_my_transactions();
                         } );
+                        $scope.add_tread(x.id,result);
                         $scope.application = undefined;
+                        fire.db.transactions.update(`${x.id}`,data.data.data);
                     }else {
                         $scope.toast(data.data.error + "  : " + data.data.hint);
                     }
@@ -1958,14 +2294,31 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
         {code:"admin_cases",name:"PAB Admin Cases"}
                         ];
     $scope.permit_types.forEach(pt => {
-        try {
+        let zx = ()=>{
             if(pt.code=='wsup') $scope.wsup_data = PERMITS_DB.getData("/"+pt.code);
             if(pt.code=='sep') $scope.sep_data = PERMITS_DB.getData("/"+pt.code);
             if(pt.code=='apprehension') $scope.apprehension_data = PERMITS_DB.getData("/"+pt.code);
             if(pt.code=='admin_cases') $scope.admin_cases_data = PERMITS_DB.getData("/"+pt.code);
+        };
+        try {
+            zx();
         } catch(error) {
             PERMITS_DB.push("/"+pt.code,[]);
         };
+        //firebase
+        fire.db.datasets.get(pt.code,(z)=>{
+            if(z == undefined){
+                fire.db.datasets.set(pt.code,{data:[]});
+            }else {
+                PERMITS_DB.push("/"+pt.code,z.data);
+                zx();
+            }
+            //realtime updates
+            fire.db.datasets.when(pt.code,(c)=>{
+                PERMITS_DB.push("/"+pt.code,c.data);
+                zx();
+            });
+        });
     });
 
     $scope.get_data_scope = (t)=>{
@@ -2027,28 +2380,30 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
     }
     
     $scope.delete_excel = (t)=>{
-        $scope.is_deleting = {value : true,type:t};
-        let q = { 
-            data : { 
-                action : "database/permits/delete",
-                type : t,
-                user_id : $scope.user.id
-            },
-            callBack : (data)=>{
-                $scope.is_deleting = {value : false,type:''};
-                if(t=='wsup') {$scope.wsup_data.splice(0,$scope.wsup_data.length);}
-                if(t=='sep') {$scope.sep_data.splice(0,$scope.sep_data.length);}
-                if(t=='apprehension') {$scope.apprehension_data.splice(0,$scope.apprehension_data.length);}
-                if(t=='admin_cases') {$scope.admin_cases_data.splice(0,$scope.admin_cases_data.length);}
-                PERMITS_DB.push("/"+t,[]);
-                let toast = (data.data.status == 0)? data.data.error : data.data.data;
-                $scope.toast(toast);
-            },
-            errorCallBack : ()=>{
-                $scope.toast("Offline, internet connection is needed for this function.");
-            }
-        };
-        $utils.api(q);
+        fire.db.datasets.update(t,{data:[]});
+        if(t=='wsup') {$scope.wsup_data.splice(0,$scope.wsup_data.length);}
+        if(t=='sep') {$scope.sep_data.splice(0,$scope.sep_data.length);}
+        if(t=='apprehension') {$scope.apprehension_data.splice(0,$scope.apprehension_data.length);}
+        if(t=='admin_cases') {$scope.admin_cases_data.splice(0,$scope.admin_cases_data.length);}
+        PERMITS_DB.push("/"+t,[]);
+
+        // let q = { 
+        //     data : { 
+        //         action : "database/permits/delete",
+        //         type : t,
+        //         user_id : $scope.user.id
+        //     },
+        //     callBack : (data)=>{
+        //         $scope.is_deleting = {value : false,type:''};
+                
+        //         let toast = (data.data.status == 0)? data.data.error : data.data.data;
+        //         $scope.toast(toast);
+        //     },
+        //     errorCallBack : ()=>{
+        //         $scope.toast("Offline, internet connection is needed for this function.");
+        //     }
+        // };
+        // $utils.api(q);
     }
 
     $scope.cancel_excel = (t)=>{
@@ -2072,6 +2427,8 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
         // $scope.pointer = 0;
         $scope.toast("Data saved");
         PERMITS_DB.push("/"+t,d);
+        fire.db.datasets.update(t,{data:d});
+        
         // var u = (sp,ip)=>{
         //     let q = { 
         //         data : { 

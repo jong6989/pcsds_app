@@ -28,7 +28,10 @@
 					</md-input-container>
 
 					<div layout="column" layout-align="center center">
-						<md-button type="submit" ng-disabled="form_login.$invalid" ng-click="login_attempt(login)" class="md-raised md-block md-primary" >
+						<div ng-show="is_loading" layout="row" layout-sm="column" layout-align="space-around">
+							<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+						</div>
+						<md-button ng-hide="is_loading" type="submit" ng-disabled="form_login.$invalid" ng-click="login_attempt(login)" class="md-raised md-block md-primary" >
 				           Login
 				        </md-button>
 					</div>

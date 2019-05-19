@@ -13,13 +13,13 @@ var download = (uri, filename, callback)=>{
   });
 };
 
-var NOTIFICATION_DB = new JsonDB("./DB/NOTIFICATIONS", true, false);
-const notif_string = "/notifications";
-try {
-  NOTIFICATION_DB.getData(notif_string + "[0]");
-} catch(error) {
-  NOTIFICATION_DB.push(notif_string,[]);
-};
+// var NOTIFICATION_DB = new JsonDB("./DB/NOTIFICATIONS", true, false);
+// const notif_string = "/notifications";
+// try {
+//   NOTIFICATION_DB.getData(notif_string + "[0]");
+// } catch(error) {
+//   NOTIFICATION_DB.push(notif_string,[]);
+// };
 
 const api_address = "https://brain.pcsd.gov.ph/api";
 // const api_address = "http://localhost/pcsds_api";
@@ -32,24 +32,26 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
    var f = {};
    f.api = (q)=>{
       request.post(api_address + "/?", {form:q.data,json: true},(err,httpResponse,data)=>{
-        if(q.errorCallBack!==undefined){
-          if(err){
+        if(err){
+          if(q.errorCallBack!==undefined){
             return q.errorCallBack(err);
+          }else {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent("You are OFFLINE!")
+                .hideDelay(4000)
+            );
           }
-        }
-        if(httpResponse.statusCode == 200){
-          var j = data;
-          if(typeof j !== typeof {}){
-            j = JSON.parse(data);
-          }
-          if(q.callBack!==undefined)q.callBack({data:j});
         }else {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent("You are OFFLINE!")
-              .hideDelay(4000)
-          );
+          if(httpResponse.statusCode == 200){
+            var j = data;
+            if(typeof j !== typeof {}){
+              j = JSON.parse(data);
+            }
+            if(q.callBack!==undefined)q.callBack({data:j});
+          }
         }
+        
       });
     };
     f.upload = (callback)=>{
@@ -130,6 +132,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.active_menu = "";
     $scope.menus = [];
     $scope.api_address = api_address;
+    $scope.is_loading = false;
 
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildToggler('right');
@@ -272,6 +275,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.login_attempt = function(d){
+      $scope.is_loading = true;
       var q = { 
         data : { 
           action : "user/login",
@@ -279,6 +283,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
           key : d.key
         },
         callBack : function(data){
+          $scope.is_loading = false;
           if(data.data.status == 0){
             $scope.toast(data.data.error + "  : " + data.data.hint);
           }else {
@@ -288,6 +293,11 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
             $scope.user = $localStorage.pcsd_app_user = data.data.data.user;
             $localStorage.pcsd_menus = $scope.menus = data.data.data.menus;
           }
+        },
+        errorCallBack : function(err){
+          $scope.is_loading = false;
+          console.log(err);
+          $scope.toast("Connection error...");
         }
       };
       $utils.api(q);
@@ -301,7 +311,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       $localStorage.pcsd_app_user = undefined;
       $scope.user = undefined;
       //clear notifications
-      NOTIFICATION_DB.push(notif_string,[]);
+      // NOTIFICATION_DB.push(notif_string,[]);
     };
 
     $scope.set_page_title = function(t){
@@ -429,7 +439,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.get_notifs = ()=>{
-        return NOTIFICATION_DB.getData(notif_string);
+        // return NOTIFICATION_DB.getData(notif_string);
     };
 
     $scope.set_new_notif = ()=>{
@@ -441,36 +451,36 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
         $scope.set_new_notif();
     };
     $scope.load_notifs = ()=>{
-        if($scope.user != undefined){
-          var d = NOTIFICATION_DB.getData(notif_string);
-          var l = (d.length > 0)? d[d.length - 1].id : 0;
-          var current_length = d.length;
-          let q = { 
-              data : { 
-                  action : "database/notification/load",
-                  offset : current_length,
-                  last_id : l,
-                  user_id : $scope.user.id
-              },
-              callBack : function(data){
-                  if(data.data.status == 1){
-                      NOTIFICATION_DB.push(notif_string,data.data.data,false);
-                      $timeout($scope.set_notif,200);
-                  }
-                  $timeout($scope.load_notifs,3000);
-              }
-          };
-          $utils.api(q);
-        }
+        // if($scope.user != undefined){
+        //   var d = NOTIFICATION_DB.getData(notif_string);
+        //   var l = (d.length > 0)? d[d.length - 1].id : 0;
+        //   var current_length = d.length;
+        //   let q = { 
+        //       data : { 
+        //           action : "database/notification/load",
+        //           offset : current_length,
+        //           last_id : l,
+        //           user_id : $scope.user.id
+        //       },
+        //       callBack : function(data){
+        //           if(data.data.status == 1){
+        //               NOTIFICATION_DB.push(notif_string,data.data.data,false);
+        //               $timeout($scope.set_notif,200);
+        //           }
+        //           $timeout($scope.load_notifs,3000);
+        //       }
+        //   };
+        //   $utils.api(q);
+        // }
     };
 
     $scope.clear_notif = (n)=>{
-      if($scope.new_notif > 0){
-        $http.get(api_address + "?action=user/clear_notif&user_id=" + $scope.user.id + "&count=" + n ).then(function(data){
-          $scope.user = $localStorage.pcsd_app_user = data.data.data;
-          $scope.set_notif();
-        });
-      }
+      // if($scope.new_notif > 0){
+      //   $http.get(api_address + "?action=user/clear_notif&user_id=" + $scope.user.id + "&count=" + n ).then(function(data){
+      //     $scope.user = $localStorage.pcsd_app_user = data.data.data;
+      //     $scope.set_notif();
+      //   });
+      // }
     };
     
     

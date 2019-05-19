@@ -36,6 +36,17 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             });
     };
 
+    $scope.move_tab = (k)=>{
+        let n = 0;
+        for (const key in $scope.tabs) {
+            if (key == k) {
+                $scope.selectedTab = n;
+            }else {
+                n++;
+            }
+        }
+    };
+
     $scope.now = ()=>{ return Date.now();}
 
     $scope.calculate_if_online = (last_seen)=>{
@@ -77,6 +88,11 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         })
     });
 
+    $scope.open_application_tab = (x)=>{
+        $scope.tabs.application = { title : 'Application',application : x};
+        $scope.move_tab('application');
+    }
+
     $scope.open_personal_chat = (staff)=>{
         opc = null;
         opc = fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).onSnapshot(function(doc) {
@@ -87,6 +103,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
                 tread = doc.data();
             }
             $scope.tabs.personal_chat = { title : staff.data.first_name + ' ' + staff.data.last_name, staff : staff,tread:tread.tread};
+            $scope.move_tab('personal_chat');
         });
         $scope.closeChatNav();
     };
@@ -118,7 +135,14 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     }
 
     $scope.remove_spc = (staff,message)=>{
-        // fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).update()
+        fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).update({"tread":firebase.firestore.FieldValue.arrayRemove(message)});
+        let i = 0;
+        $scope.tabs.personal_chat.tread.forEach(e=>{
+            if(e==message){
+                $scope.tabs.personal_chat.tread.splice(i,1);
+            }
+            i++;
+        });
     };
     
     $scope.load_pending = ()=>{
