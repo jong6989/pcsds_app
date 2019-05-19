@@ -1,15 +1,14 @@
 
 <strong><small>Attachments :</small></strong>
 <ol ng-if="application.data.application.attachments.length > 0">
-    <li ng-repeat=" x in application.data.application.attachments"> 
-        <a target="blank" ng-href="{{api_address + '/' +  x.url}}"> {{x.name}} </a> 
-        - <code class="font-9">{{api_address + '/' +  x.url}}</code> 
+    <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
+        <a target="blank" ng-href="{{api_address + '/' +  x.url}}" > {{x.name}} </a> |
+        <a target="blank" ng-href="{{api_address + '/' +  x.url}}" download> <strong>DOWNLOAD</strong> </a> 
     </li>
 </ol>
 <hr>
 
 <md-card
-    ng-if="current_active_view == 'my_transactions' || version_2"
     ng-change="upload_attachments(file_drop)"
     ngf-drop ng-model="file_drop"
     ngf-allow-dir="true"
@@ -22,20 +21,19 @@
         <md-divider></md-divider>
     </md-card-title>
     <md-card-content>
-        <p ng-if="application.actions.length > 0"  ng-repeat="x in application.actions track by $index ">
-            <strong class="m-l-20 col-grey"> {{x.staff}} : </strong>
-            <span class="{{'convo_' + $index }}" ></span>
-            <i ng-init="load_html(x.message,$index)"></i>
-            <cite class="m-l-20 font-9"> {{x.date | date}} </cite>
+        <div ng-if="application.actions.length > 0"  ng-repeat="x in application.actions track by $index ">
+            <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{x.date | date}} </cite> </strong>
+            <div class="m-l-40"><span class="{{'convo_' + $index }}" ></span></div>
+            <i ng-init="load_html(x.message,$index,'convo_')"></i>
             <hr>
-        </p>
+        </div>
 
         <div>
             <form name="form_add_tread">
                 <div layout="row">
-                    <textarea flex accept-charset="ISO-8859-1" ng-model="add_tread_message" rows="2" placeholder="my action/remark"></textarea>
+                    <textarea flex accept-charset="ISO-8859-1" ng-model="add_tread_message[''+application.id]" rows="2" placeholder="my action/remark"></textarea>
                 </div>
-                <md-button type="submit" ng-disabled="add_tread_message == undefined || is_loading" ng-click="add_tread(application.id,add_tread_message);add_tread_message = undefined ;" class="md-raised" >
+                <md-button type="submit" ng-disabled="add_tread_message[''+application.id] == undefined || is_loading" ng-click="add_tread(application.id,add_tread_message[''+application.id]);" class="md-raised" >
                     <cite class="font-12"> <i class="fa fa-send"></i> Send Action</cite>
                 </md-button>
             </form>
@@ -73,23 +71,41 @@
 
 <!-- approval -->
 <div ng-show="validate_user([99,7]) && application.status == 3">
-    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
-    <md-button class="md-raised " ng-disabled="application_loading" ng-click="returnApplication(application,$event)" >Return</md-button>
-    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-click="approveApplication(application,$event)">Approve</md-button>
+    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-dblclick="rejectApplication(application,$event)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Reject</md-button>
+    <md-button class="md-raised " ng-disabled="application_loading" ng-dblclick="returnApplication(application,$event)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Return</md-button>
+    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-dblclick="approveApplication(application,$event)">
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Approve</md-button>
 </div>
 
 <!-- Recomendation -->
 <div ng-if="validate_user([99,8]) && application.status == 4">
-    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" > <i class="fa fa-remove"></i> Reject</md-button>
-    <md-button class="md-raised " ng-disabled="application_loading" ng-click="returnApplication(application,$event)" > <i class="fa fa-mail-reply"></i> Return</md-button>
-    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-click="recommendApplication(application,$event)"> <i class="fa fa-mail-forward"></i> Recommend</md-button>
+    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-dblclick="rejectApplication(application,$event)" > 
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            <i class="fa fa-remove"></i> Reject</md-button>
+    <md-button class="md-raised " ng-disabled="application_loading" ng-dblclick="returnApplication(application,$event)" > 
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            <i class="fa fa-mail-reply"></i> Return</md-button>
+    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-dblclick="recommendApplication(application,$event)"> 
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            <i class="fa fa-mail-forward"></i> Recommend</md-button>
 </div>
 
 <!-- Acknowledgement -->
 <div ng-if="validate_user([99,4]) && application.status == 5">
-    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-click="rejectApplication(application,$event)" >Reject</md-button>
-    <md-button class="md-raised " ng-disabled="application_loading" ng-click="returnApplication(application,$event)" >Return</md-button>
-    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-click="acknowledgeApplication(application,$event)">Acknowledge</md-button>
+    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-dblclick="rejectApplication(application,$event)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Reject</md-button>
+    <md-button class="md-raised " ng-disabled="application_loading" ng-dblclick="returnApplication(application,$event)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Return</md-button>
+    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-dblclick="acknowledgeApplication(application,$event)">
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Acknowledge</md-button>
 </div>
 
 <md-progress-circular ng-show="application_loading" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>

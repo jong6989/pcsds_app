@@ -1,3 +1,14 @@
+<script>
+    // var map;
+    // function initMap() {
+    //     map = new google.maps.Map(document.getElementById('map'), {
+    //     center: {lat: 9.784568, lng: 118.7340907},
+    //     zoom: 9
+    //     });
+    // }
+</script>
+<!-- <div class="coordinate-map-view" id="map" style="height:300px"></div> -->
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJnCE34jNQ8mfQAcBt1zlGj5CJZwaOYfM&callback=initMap" async defer></script> -->
 <section layout-xs="column" layout-gt-xs="row" ng-controller="applications_controller" 
     ng-init="set_page_title('Online Applications');load_db(0);active_btn = 'New';load_pending();">
 
@@ -10,41 +21,52 @@
             </div>
             
             <div layout="row" layout-align="center center" layout-padding>
-                <md-button class="md-icon-button" ng-class="{'md-raised': (active_btn == 'New')}" aria-label="New" ng-click="load_db(0);active_btn = 'New';">
+                <md-button class="md-icon-button" aria-label="New" 
+                    ng-click="load_db(0);active_btn = 'New';">
                     <md-tooltip md-direction="top">New</md-tooltip>
-                    <i class="fa fa-bolt col-green font-20"></i>
+                    <i class="fa fa-bolt col-green font-18"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Received" ng-class="{'md-raised': (active_btn == 'Received')}" 
+                <md-button class="md-icon-button" aria-label="Received" 
                     ng-click="load_db(1);active_btn = 'Received';">
                     <md-tooltip md-direction="top">Received</md-tooltip>
-                    <i class="fa fa-hand-rock-o col-yellow font-20"></i>
+                    <i class="fa fa-hand-rock-o col-yellow font-18"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Approved" ng-class="{'md-raised': (active_btn == 'Approved')}" 
-                ng-click="load_db(3);active_btn = 'Approved';">
+                <md-button class="md-icon-button" aria-label="Accepted" 
+                ng-click="load_db(3);active_btn = 'Accepted';">
+                    <md-tooltip md-direction="top">Accepted</md-tooltip>
+                    <i class="fa fa-file-o col-pink font-18"></i>
+                </md-button>
+
+                <md-button class="md-icon-button" aria-label="Approved" 
+                ng-click="load_db(4);active_btn = 'Approved';">
                     <md-tooltip md-direction="top">Approved</md-tooltip>
-                    <i class="fa fa-check-square col-orange font-20"></i>
+                    <i class="fa fa-check-square col-orange font-18"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Recommend">
-                    <md-tooltip md-direction="top">Recommend</md-tooltip>
-                    <i class="fa fa-hand-peace-o col-blue font-20"></i>
+                <md-button class="md-icon-button" aria-label="Recommended" 
+                ng-click="load_db(5);active_btn = 'Recommended';">
+                    <md-tooltip md-direction="top">Recommended</md-tooltip>
+                    <i class="fa fa-heart col-blue font-18"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Acknowledge">
-                    <md-tooltip md-direction="top">Acknowledge</md-tooltip>
-                    <i class="fa fa-paw col-teal font-20"></i>
+                <md-button class="md-icon-button" aria-label="Acknowledged" 
+                ng-click="load_db(6);active_btn = 'Acknowledged';">
+                    <md-tooltip md-direction="top">Acknowledged</md-tooltip>
+                    <i class="fa fa-file-text col-teal font-16"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Used">
+                <md-button class="md-icon-button" aria-label="Used" 
+                ng-click="load_db(7);active_btn = 'Used';">
                     <md-tooltip md-direction="top">Used</md-tooltip>
-                    <i class="fa fa-signing font-20"></i>
+                    <i class="fa fa-signing font-18"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Rejected" ng-class="{'md-raised': (active_btn == 'Rejected')}" ng-click="load_db(2);active_btn = 'Rejected';">
+                <md-button class="md-icon-button" aria-label="Rejected" 
+                ng-click="load_db(2);active_btn = 'Rejected';">
                     <md-tooltip md-direction="top">Rejected</md-tooltip>
-                    <i class="fa fa-trash col-grey font-20"></i>
+                    <i class="fa fa-trash col-grey font-16"></i>
                 </md-button>
 
             </div>
@@ -52,7 +74,11 @@
             <h4 class="align-center" 
                 ng-class="{'col-green': (active_btn == 'New'),
                             'col-yellow': (active_btn == 'Received'),
-                            'col-orange': (active_btn == 'Approved')
+                            'col-orange': (active_btn == 'Approved'),
+                            'col-pink': (active_btn == 'Accepted'),
+                            'col-blue': (active_btn == 'Recommend'),
+                            'col-teal': (active_btn == 'Acknowledge'),
+                            'col-grey': (active_btn == 'Rejected')
                         }">
                 {{active_btn}} <small class="badge badge-info">{{application_list.length}}</small> 
             </h4>
@@ -67,49 +93,82 @@
                             <p>{{x.date.split(' ')[0]}} 
                                 <i class="fa fa-circle" 
                                 ng-class="{'col-green': (x.status == '0'),
-                                'col-orange': (x.status == '3'),
-                                'col-yellow': (x.status == '1')}"></i> 
+                                'col-orange': (x.status == '4'),
+                                'col-yellow': (x.status == '1'),
+                                'col-pink': (x.status == '3'),
+                                'col-blue': (x.status == '5'),
+                                'col-teal': (x.status == '6'),
+                                'col-grey': (x.status == '7')}"></i> 
                                 #{{x.id}}
                             </p>
-                        </div>
-                    </md-list-item>
-                    <hr>
-                </md-list>
-            </md-content>
-            <h4 class="md-title align-center bg-teal" layout-padding> My Pending </h4>
-            <md-content flex="25">
-                <md-list class="md-dense" >
-                    <md-list-item class="md-3-line" ng-repeat="x in pending_list | orderBy:'-date' track by $index" 
-                        ng-click="tabs.pending = { title : 'Pending',application : x};">
-                        <img ng-src="{{api_address}}/{{x.user.data.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
-                        <div class="md-list-item-text" layout="column">
-                            <h3>{{ x.name }}</h3>
-                            <h4>{{ x.user.data.full_name }}</h4>
-                            <p>{{x.date.split(' ')[0]}} </p>
+                            <md-divider></md-divider>
                         </div>
                     </md-list-item>
                     <hr>
                 </md-list>
             </md-content>
 
+            <h4 class="md-title align-center bg-grey" layout-padding> My Pending </h4>
+            <md-content flex="25" ng-class="{'bg-pink':(pending_list.length > 0)}">
+                <md-list class="md-dense" >
+                    <md-list-item class="md-3-line" ng-repeat="x in pending_list | orderBy:'-date' track by $index" 
+                        ng-click="tabs.application = { title : 'Application',application : x};">
+                        <img ng-src="{{api_address}}/{{x.user.data.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
+                        <div class="md-list-item-text" layout="column">
+                            <h3 class="col-white">{{ x.name }}</h3>
+                            <h4 class="col-white">{{ x.user.data.full_name }}</h4>
+                            <p class="col-white">{{x.date.split(' ')[0]}} </p>
+                        </div>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                </md-list>
+            </md-content>
 
         </div>
         <div flex layout-padding="20" class="" layout="row">
             <md-card md-whiteframe="3" flex layout="row">
                 <md-card-content flex layout="row">
                         <md-tabs flex md-selected="selectedTab" md-border-bottom md-autoselect md-swipe-content>
-                            <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : #{{tab.application.id}}">
-            
+                            <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : #{{tab.application.id || tab.staff.id_number}}">
+                                <!-- Application Documents -->
                                 <div ng-show="f == 'application' || f == 'pending'">
                                     <div ng-hide="true"> {{application = tab.application}} </div>
                                     <!-- Templates -->
                                     <div ng-repeat=" x in application_templates" ng-show="application.name == x.name">
                                         <div ng-include="x.url"></div>
                                         <md-divider class="m-t-20 m-b-10"></md-divider>
-                                        <div ng-include="x.action"></div>
+                                        <p ng-hide="is_online">Please connect to the internet...</p>
+                                        <div ng-include="x.action" ng-show="is_online"></div>
                                     </div>
                                 </div>
-            
+                                <!-- Personnal Chat -->
+                                <div ng-show="f == 'personal_chat'" >
+                                    <h6 class="md-title col-grey m-b-20 m-t-20">
+                                        <i class="fa fa-circle" ng-class="{'col-green': calculate_if_online(tab.staff.last_seen) }"></i> 
+                                        Last active : {{date_gap(now(),tab.staff.last_seen)}}
+                                    </h6>
+                                    <md-content layout-padding ng-style="{ height: (iframeHeight - 370) + 'px' }">
+                                        <div ng-if="tab.tread.length > 0"  ng-repeat="x in tab.tread track by $index ">
+                                            <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{x.date | date}} </cite> </strong>
+                                            <div class="m-l-40"><span class="{{'spc_' + $index }}" ></span></div>
+                                            <i ng-init="load_html(x.message,$index,'spc_')"></i>
+                                            <i class="fa fa-trash col-red pointer" ng-dblclick="remove_spc(tab.staff,x)">
+                                                <md-tooltip md-direction="top">Double Click to remove this message</md-tooltip>
+                                            </i>
+                                            <hr>
+                                        </div>
+                                    </md-content>
+                                    <div>
+                                        <form name="form_add_tread_pc">
+                                            <div layout="row">
+                                                <textarea flex accept-charset="ISO-8859-1" ng-model="pc_tread_message[''+tab.staff.id]" rows="3" placeholder="message"></textarea>
+                                            </div>
+                                            <md-button type="submit" ng-disabled="pc_tread_message[''+tab.staff.id] == undefined" ng-click="pc_tread(tab.staff.id,pc_tread_message[''+tab.staff.id])" class="md-raised" >
+                                                <cite class="font-12"> <i class="fa fa-send"></i> Send Message</cite>
+                                            </md-button>
+                                        </form>
+                                    </div>
+                                </div>
                             </md-tab>
                         </md-tabs>
                 </md-card-content>
@@ -137,8 +196,31 @@
                 <h1 class="md-toolbar-tools">{{chatNav.title}}</h1>
             </md-toolbar>
             <md-content layout-padding>
-                Nothing yet.... under development
-                <button ng-click="closeChatNav()">close</button>
+                <!-- Personal Chat -->
+                    <md-content flex ng-if="chatNav.idx == 1">
+                        <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="search_staff_box"> <i class="fa fa-search"></i> </span>
+                                </div>
+                                <input class="form-control" ng-model="search_staff" placeholder="Search Staff" aria-label="Search Staff" aria-describedby="search_staff_box">
+                            </div>
+                        <md-list class="md-dense" >
+                            <md-list-item class="md-3-line" ng-repeat="x in staff_list | orderBy:'-last_seen' | filter : search_staff track by $index" 
+                                ng-click="open_personal_chat(x)">
+                                <img ng-src="./images/user.png" class="md-avatar" alt="{{x.data.fist_name}}" />
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>{{ x.data.first_name }} {{ x.data.last_name }}</h3>
+                                    <h4>{{ getUserType(x.user_level) }}</h4>
+                                    <p>
+                                        <i class="fa fa-circle" ng-class="{'col-green': calculate_if_online(x.last_seen) }"></i> 
+                                        #{{x.id_number}}
+                                    </p>
+                                    <md-divider></md-divider>
+                                </div>
+                            </md-list-item>
+                            <hr>
+                        </md-list>
+                    </md-content>
             </md-content>
         
         </md-sidenav>

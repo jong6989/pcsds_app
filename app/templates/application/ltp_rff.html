@@ -29,10 +29,7 @@
     <strong><small>Contact :</small> {{application.data.application.contact}} </strong> <br>
     <strong><small>Required Permit Type :</small> {{application.data.application.required_permit_type}} </strong> <br>
     <strong><small>Required Permit :</small> {{application.data.application.required_permit}} </strong> <br>
-    <strong><small>Attachments :</small></strong>
-    <ol ng-if="application.data.application.attachments.length > 0">
-        <li ng-repeat=" x in application.data.application.attachments" > <a target="blank" ng-href="{{api_address + '/' +  x.url}}"> {{x.name}} </a> </li>
-    </ol>
+    
     <br>
     <strong><small>Purpose :</small> 
         <span ng-if="application.data.application.purpose.commercial">commercial</span> 

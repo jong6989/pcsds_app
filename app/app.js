@@ -4,6 +4,8 @@ const queryString = require('query-string');
 const { ipcRenderer } = require('electron');
 var fs = require('fs');
 var request = require('request');
+const isOnline = require('is-online');
+var geolocation = require('geolocation');
 
 var download = (uri, filename, callback)=>{
   request.head(uri, function(err, res, body){

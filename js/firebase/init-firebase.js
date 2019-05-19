@@ -14,7 +14,7 @@ firebase.firestore().settings({
 
 firebase.firestore().enablePersistence();
 
-var db_list = ["transactions","datasets","notifications","chats"];
+var db_list = ["transactions","datasets","notifications","chats","staffs"];
 var fire = {};
 var db = firebase.firestore();
 
