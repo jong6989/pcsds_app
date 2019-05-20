@@ -147,8 +147,8 @@
                                         <i class="fa fa-circle" ng-class="{'col-green': calculate_if_online(tab.staff.last_seen) }"></i> 
                                         Last active : {{date_gap(now(),tab.staff.last_seen)}}
                                     </h6>
-                                    <md-content layout-padding ng-style="{ height: (iframeHeight - 370) + 'px' }">
-                                        <div ng-if="tab.tread.length > 0"  ng-repeat="x in tab.tread | orderBy : '-date' track by $index " ng-init="passTime = date_gap(now(),x.date)">
+                                    <md-content id="spc_message_box" layout-padding ng-style="{ height: (iframeHeight - 370) + 'px' }">
+                                        <div ng-if="tab.tread.length > 0"  ng-repeat="x in tab.tread track by x.date " ng-init="passTime = date_gap(now(),x.date)">
                                             <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{passTime}} </cite> </strong>
                                             <div class="m-l-40"><span class="{{'spc_' + $index }}" ></span></div>
                                             <i ng-init="load_html(x.message,$index,'spc_')"></i>

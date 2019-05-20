@@ -7,7 +7,7 @@
 	    		
 
 		      <table ng-table="tbl_users" class="table" show-filter="false">
-		          <tr ng-repeat="x in $data | filter: search_user" ng-init="x.status = (x.status == 1)">
+		          <tr ng-repeat="x in $data | filter: search_user | orderBy:'-date'" ng-init="x.status = (x.status == 1)">
 		            <td sortable="'id'"> {{x.id}} </td>
 		            <td title="'Edit'" sortable="''"> <i class="fa fa-edit pointer md-primary" ng-click="open_selected_user(x)">Edit</i> </td>
 		            <td title="'Activate'" sortable="''"> 

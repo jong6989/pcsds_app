@@ -27,7 +27,7 @@ myAppModule.controller('user_management_controller', function ($scope, $timeout,
 
   $scope.invalidate_table = ()=>{
     var data = USER_DB.getData(user_string);
-    $scope.tbl_users =  new NgTableParams({sorting: { id: "desc" } }, { dataset: data });
+    $scope.tbl_users =  new NgTableParams({sorting: { id: "desc" }, count : 100 }, { dataset: data });
   };
 
   $scope.get_users_by_level = (lvl)=>{

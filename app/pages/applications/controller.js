@@ -17,6 +17,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     let tm = 30 * td;
     const online_laps = 30000;
     var opc = {};
+    
 
     $scope.toggleChatNav = (n,title)=>{
         $scope.chatNav.title = title;
@@ -93,6 +94,13 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         $scope.move_tab('application');
     }
 
+    function gotoBottom(id){
+        setTimeout(()=>{
+            var element = document.getElementById(id);
+            element.scrollTop = element.scrollHeight - 300;
+        },1500);
+     }
+
     $scope.open_personal_chat = (staff)=>{
         opc = null;
         opc = fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).onSnapshot(function(doc) {
@@ -100,10 +108,11 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             if (!doc.exists) {
                 fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).set({tread:[]});
             }else {
-                tread = doc.data();
+                tread = doc.data().tread;
             }
-            $scope.tabs.personal_chat = { title : staff.data.first_name + ' ' + staff.data.last_name, staff : staff,tread:tread.tread};
+            $scope.tabs.personal_chat = { title : staff.data.first_name + ' ' + staff.data.last_name, staff : staff,tread:tread};
             $scope.move_tab('personal_chat');
+            gotoBottom('spc_message_box');
         });
         $scope.closeChatNav();
     };
