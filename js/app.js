@@ -630,13 +630,15 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $scope.add_tread_message = {};
     $scope.pc_tread_message = {};
     $scope.is_online = false;
+    $scope.me = {};
+    $scope.my_chats = {personal : {},others:{}};
     let ti = 60 * 1000;
     let th = 60 * ti;
     let td = 24 * th;
     let tm = 30 * td;
     const online_laps = 30000;
     var opc = {};
-    
+    var staff_list_listener = {};
 
     $scope.toggleChatNav = (n,title)=>{
         $scope.chatNav.title = title;
@@ -697,15 +699,47 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     check_if_online();
     setInterval(check_if_online,3000);
 
+    //staffs
     fire.db.staffs.when_all((list)=>{
         $scope.staff_list = list;
-        list.forEach(e=>{
-            if($scope.tabs.personal_chat !== undefined){
-                if($scope.tabs.personal_chat.staff.id == e.id){
-                    $scope.tabs.personal_chat.staff = e;
+        list.forEach((e)=>{
+            //update self account
+            if(e.id == $scope.user.id) $scope.me = e;
+            //listne for chats
+            staff_list_listener[e.id] = fire.db.chats.query.where("member", "array-contains", ""+e.id).get()
+            .then(function(querySnapshot) {
+                let d = [];
+                querySnapshot.forEach(function (doc) {
+                    d.push({id:doc.id,data:doc.data()});
+                });
+                if(d.length == 0){
+                    //create chat room
+                    fire.db.chats.query.add({
+                        "member" : [`${$scope.user.id}`,`${e.id}`],
+                        "type" : "personal",
+                        "tread" : []
+                    });
                 }
+            });
+        });
+    });
+
+    //chats
+    fire.db.chats.query.where("member", "array-contains", ""+$scope.user.id)
+    .onSnapshot(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            let x = doc.data();
+            if(x.type == "personal"){
+                x.member.splice(x.member.indexOf(`${$scope.user.id}`),1);
+                $scope.my_chats.personal[x.member[0]] = {id:doc.id,data:x};
+                if($scope.tabs.personal_chat != undefined){
+                    if($scope.tabs.personal_chat.doc_id == doc.id) $scope.tabs.personal_chat.tread = x.tread;
+                }
+            }else {
+                $scope.my_chats.others[doc.id] = x;
             }
-        })
+        });
+        $scope.$apply();
     });
 
     $scope.open_application_tab = (x)=>{
@@ -721,18 +755,14 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
      }
 
     $scope.open_personal_chat = (staff)=>{
-        opc = null;
-        opc = fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).onSnapshot(function(doc) {
-            let tread = [];
-            if (!doc.exists) {
-                fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).set({tread:[]});
-            }else {
-                tread = doc.data().tread;
-            }
-            $scope.tabs.personal_chat = { title : staff.data.first_name + ' ' + staff.data.last_name, staff : staff,tread:tread};
+        if($scope.my_chats.personal[staff.id] != undefined){
+            $scope.tabs.personal_chat = { title : staff.data.first_name + ' ' + staff.data.last_name, staff : staff,
+                tread : $scope.my_chats.personal[staff.id].data.tread,
+                doc_id : $scope.my_chats.personal[staff.id].id
+            };
             $scope.move_tab('personal_chat');
             gotoBottom('spc_message_box');
-        });
+        }
         $scope.closeChatNav();
     };
 
@@ -797,9 +827,11 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     };
 
     $scope.pc_tread = (staff_id,message)=>{
-        let m = {message : message,date : Date.now(),staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name};
-        fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff_id}`).update({"tread": firebase.firestore.FieldValue.arrayUnion(m)});
-        delete($scope.pc_tread_message[`${staff_id}`])
+        if($scope.tabs.personal_chat.doc_id !== undefined){
+            let m = {message : message,date : Date.now(),staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name};
+            fire.db.chats.query.doc($scope.tabs.personal_chat.doc_id).update({"tread": firebase.firestore.FieldValue.arrayUnion(m)});
+            delete($scope.pc_tread_message[`${staff_id}`]);
+        }
     }
 
     $scope.upload_attachments = (files,app_id)=>{
