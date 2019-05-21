@@ -88,8 +88,8 @@
                         ng-click="open_application_tab(x)">
                         <img ng-src="{{api_address}}/{{x.user.data.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
                         <div class="md-list-item-text" layout="column">
-                            <h3>{{ x.name }}</h3>
-                            <h4>{{ x.user.data.full_name }}</h4>
+                            <h3>{{ x.user.data.full_name }}</h3>
+                            <h4>{{ x.name }}</h4>
                             <p>{{x.date.split(' ')[0]}} 
                                 <i class="fa fa-circle" 
                                 ng-class="{'col-green': (x.status == '0'),
@@ -115,9 +115,9 @@
                         ng-click="open_application_tab(x)">
                         <img ng-src="{{api_address}}/{{x.user.data.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
                         <div class="md-list-item-text" layout="column">
-                            <h3 class="col-white">{{ x.name }}</h3>
-                            <h4 class="col-white">{{ x.user.data.full_name }}</h4>
-                            <p class="col-white">{{x.date.split(' ')[0]}} </p>
+                            <h3 class="col-white">{{ x.user.data.full_name }}</h3>
+                            <h4 class="col-white">{{ x.name }}</h4>
+                            <p class="col-white">{{x.date.split(' ')[0]}} #{{x.id}} </p>
                         </div>
                         <md-divider></md-divider>
                     </md-list-item>

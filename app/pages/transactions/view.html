@@ -19,43 +19,7 @@
         My Transactions</md-button>
     </div>
 
-    <!-- database shortcuts -->
-    <div ng-controller="database_permit_controller" style="position: absolute;right: 2%;">
-      <md-fab-speed-dial md-open="open_datasets" md-direction="down" class="md-fling" ng-init="open_datasets = false">
-        <md-fab-trigger ng-init="open_datasets = false">
-          <md-button aria-label="datasets menu" class="md-raised bg-teal col-white">
-            <md-tooltip md-direction="top">CLick to open Available Datasets</md-tooltip>
-            <i class="fa fa-database m-r-10 m-l-5"></i>Datasets
-          </md-button>
-        </md-fab-trigger>
-
-        <md-fab-actions>
-          <md-button aria-label="WSUP" ng-if="!check_empty('wsup')" class="md-raised col-teal"  
-            ng-click="open_database('wsup')">
-            <md-tooltip md-direction="top">CLick to open WSUP database contents</md-tooltip>
-              <small>WSUP</small>
-          </md-button>
-
-          <md-button aria-label="SEP" ng-if="!check_empty('sep')" class="md-raised col-teal"  
-            ng-click="open_database('sep')">
-            <md-tooltip md-direction="top">CLick to open SEP database contents</md-tooltip>
-              <small>SEP</small>
-          </md-button>
-
-          <md-button aria-label="APPREHENSION" ng-if="!check_empty('apprehension')" class="md-raised col-teal"  
-            ng-click="open_database('apprehension')">
-            <md-tooltip md-direction="top">CLick to open APPREHENSION database contents</md-tooltip>
-              <small>APPREHENSION</small>
-          </md-button>
-          <md-button aria-label="ADMIN_CASES" ng-if="!check_empty('admin_cases')" class="md-raised col-teal"  
-            ng-click="open_database('admin_cases')">
-            <md-tooltip md-direction="top">CLick to open PAB Admin Cases database contents</md-tooltip>
-              <small>Admin Cases</small>
-          </md-button>
-
-        </md-fab-actions>
-      </md-fab-speed-dial>
-    </div>
+    
     
 
   </div>

@@ -1,0 +1,31 @@
+<md-dialog aria-label="Mango (Fruit)">
+        <form ng-cloak>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Create Sheet</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <i class="fa fa-cross col-red"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+        
+            <md-dialog-content layout-padding>
+            
+               <form name="createNewSheetForm">
+                    <md-input-container md-no-float class="md-block">
+                        <input ng-model="newSheetName" type="text" placeholder="Sheet Name">
+                    </md-input-container>
+                    <md-button class="md-raised md-primary" ng-disabled="createNewSheetForm.$invalid" ng-click="createSheet(newSheetName)">Create</md-button>
+               </form>
+    
+            </md-dialog-content>
+        
+            <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()">
+                Close
+            </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
