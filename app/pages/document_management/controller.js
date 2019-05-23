@@ -227,7 +227,7 @@ myAppModule.controller('document_management_controller', function ($scope, $time
     };
 
     $scope.download_single_attachment = (f)=>{
-        let loc = './downloads/' + f.address;
+        let loc = app.getPath('downloads') + f.address;
         let loc_array = loc.split("/");
         
         for (let i = 0; i < (loc_array.length - 1); i++) {
@@ -235,7 +235,7 @@ myAppModule.controller('document_management_controller', function ($scope, $time
             for (let v = 0; v < (i + 1); v++) {
                 folder += loc_array[v] + "/";
             }
-            let dir = "./" + folder;
+            let dir = folder;
             if(!fs.existsSync(dir))
                 fs.mkdirSync(dir);
         }

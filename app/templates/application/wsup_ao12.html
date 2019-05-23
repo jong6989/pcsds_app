@@ -109,52 +109,58 @@
         
     
     
-            <!-- Received Stamp -->
-            <div ng-if="application.status != 0" >
-                <hr class="p-t-10">
+    <!-- Received Stamp -->
+    <md-card ng-if="application.status != 0">
+            <md-card-content>
                 Received by : <strong>{{ application.data.received.staff }}</strong> 
                 , on <strong>{{application.data.received.date.split(' ')[0]}}</strong>
-            </div>
+            </md-card-content>
+        </md-card>
+        
     
-            <!-- Rejected Stamp -->
-            <div ng-if="application.data.rejected != undefined " >
-                <hr class="p-t-10">
+        <!-- Rejected Stamp -->
+        <md-card ng-if="application.data.rejected != undefined ">
+            <md-card-content>
                 Rejected by : <strong>{{ application.data.rejected.staff }} </strong> 
                 , on <strong>{{application.data.rejected.date.split(' ')[0]}}</strong>
-            </div>
+            </md-card-content>
+        </md-card>
+        
     
-            <!-- Accepted Stamp -->
-            <div ng-if="application.data.accepted != undefined " >
-                <hr class="p-t-10">
-                
-    
-                Accepted by : <strong>{{ application.data.accepted.staff }} </strong> 
+        <!-- Accepted Stamp -->
+        <md-card ng-if="application.data.accepted != undefined ">
+            <md-card-content>
+                Processed by : <strong>{{ application.data.accepted.staff }} </strong> 
                 , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
-            </div>
+            </md-card-content>
+        </md-card>
+        
     
-            <!-- Approved Stamp -->
-            <div ng-if="application.data.approved != undefined " >
-                <hr class="p-t-10">
-                Approved by : <strong>{{ application.data.approved.staff }} </strong> 
+        <!-- Approved Stamp -->
+        <md-card ng-if="application.data.approved != undefined ">
+            <md-card-content>
+                Reviewed by : <strong>{{ application.data.approved.staff }} </strong> 
                 , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
-            </div>
+            </md-card-content>
+        </md-card>
+        
     
-            <!-- Recommended Stamp -->
-            <div ng-if="application.data.recommended != undefined " >
-                <hr class="p-t-10">
+        <!-- Recommended Stamp -->
+        <md-card ng-if="application.data.recommended != undefined ">
+            <md-card-content>
                 Recommended by : <strong>{{ application.data.recommended.staff }} </strong> 
                 , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
-            </div>
+            </md-card-content>
+        </md-card>
+        
     
-            <!-- Acknowledged Stamp -->
-            <div ng-if="application.data.acknowledged != undefined " >
-                <hr class="p-t-10">
-                Acknowledged by : <strong>{{ application.data.acknowledged.staff }} </strong> 
+        <!-- Acknowledged Stamp -->
+        <md-card ng-if="application.data.acknowledged != undefined ">
+            <md-card-content>
+                Approved by : <strong>{{ application.data.acknowledged.staff }} </strong> 
                 , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
-                
-            </div>
-    
-    
+            </md-card-content>
+        </md-card>
         
     
     </div>

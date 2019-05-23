@@ -23,37 +23,37 @@
             <div layout="row" layout-align="center center" layout-padding>
                 <md-button class="md-icon-button" aria-label="New" 
                     ng-click="load_db(0);active_btn = 'New';">
-                    <md-tooltip md-direction="top">New</md-tooltip>
+                    <md-tooltip md-direction="top">NEW</md-tooltip>
                     <i class="fa fa-bolt col-green font-18"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Received" 
-                    ng-click="load_db(1);active_btn = 'Received';">
-                    <md-tooltip md-direction="top">Received</md-tooltip>
+                <md-button class="md-icon-button" aria-label="PROCESSING" 
+                    ng-click="load_db(1);active_btn = 'PROCESSING';">
+                    <md-tooltip md-direction="top">PROCESSING</md-tooltip>
                     <i class="fa fa-hand-rock-o col-yellow font-18"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Accepted" 
-                ng-click="load_db(3);active_btn = 'Accepted';">
-                    <md-tooltip md-direction="top">Accepted</md-tooltip>
+                <md-button class="md-icon-button" aria-label="REVIEWING" 
+                ng-click="load_db(3);active_btn = 'REVIEWING';">
+                    <md-tooltip md-direction="top">REVIEWING</md-tooltip>
                     <i class="fa fa-file-o col-pink font-18"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Approved" 
-                ng-click="load_db(4);active_btn = 'Approved';">
-                    <md-tooltip md-direction="top">Approved</md-tooltip>
+                <md-button class="md-icon-button" aria-label="RECOMMENDING" 
+                ng-click="load_db(4);active_btn = 'RECOMMENDING';">
+                    <md-tooltip md-direction="top">RECOMMENDING</md-tooltip>
                     <i class="fa fa-check-square col-orange font-18"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Recommended" 
-                ng-click="load_db(5);active_btn = 'Recommended';">
-                    <md-tooltip md-direction="top">Recommended</md-tooltip>
+                <md-button class="md-icon-button" aria-label="APPROVAL" 
+                ng-click="load_db(5);active_btn = 'APPROVAL';">
+                    <md-tooltip md-direction="top">APPROVAL</md-tooltip>
                     <i class="fa fa-heart col-blue font-18"></i>
                 </md-button>
 
-                <md-button class="md-icon-button" aria-label="Acknowledged" 
-                ng-click="load_db(6);active_btn = 'Acknowledged';">
-                    <md-tooltip md-direction="top">Acknowledged</md-tooltip>
+                <md-button class="md-icon-button" aria-label="RELEASING" 
+                ng-click="load_db(6);active_btn = 'RELEASING';">
+                    <md-tooltip md-direction="top">RELEASING</md-tooltip>
                     <i class="fa fa-file-text col-teal font-16"></i>
                 </md-button>
 
@@ -73,11 +73,11 @@
 
             <h4 class="align-center" 
                 ng-class="{'col-green': (active_btn == 'New'),
-                            'col-yellow': (active_btn == 'Received'),
-                            'col-orange': (active_btn == 'Approved'),
-                            'col-pink': (active_btn == 'Accepted'),
-                            'col-blue': (active_btn == 'Recommended'),
-                            'col-teal': (active_btn == 'Acknowledged'),
+                            'col-yellow': (active_btn == 'PROCESSING'),
+                            'col-orange': (active_btn == 'RECOMMENDING'),
+                            'col-pink': (active_btn == 'REVIEWING'),
+                            'col-blue': (active_btn == 'APPROVAL'),
+                            'col-teal': (active_btn == 'RELEASING'),
                             'col-grey': (active_btn == 'Rejected')
                         }">
                 {{active_btn}} <small class="badge badge-info">{{application_list.length}}</small> 
@@ -99,7 +99,7 @@
                                 'col-blue': (x.status == '5'),
                                 'col-teal': (x.status == '6'),
                                 'col-grey': (x.status == '7')}"></i> 
-                                #{{x.id}}
+                                #{{x.date}}
                             </p>
                             <md-divider></md-divider>
                         </div>

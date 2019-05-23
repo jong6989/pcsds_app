@@ -140,7 +140,7 @@
     <md-button class="md-raised md-primary" ng-disabled="approve_application_form.$invalid || application_loading " 
         ng-dblclick="acceptApplication(application,$event,{'data.certificate_of_inspection':application.certificate_of_inspection,'data.payment_slip':application.payment_slip})">
         <md-tooltip md-direction="top">Double click</md-tooltip>
-        Accept
+        Process
     </md-button>
 </div>
 
@@ -154,7 +154,7 @@
             Return</md-button>
     <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-dblclick="approveApplication(application,$event)">
             <md-tooltip md-direction="top">Double click</md-tooltip>
-            Approve</md-button>
+            Reviewed</md-button>
 </div>
 
 <!-- Recomendation -->
@@ -180,7 +180,7 @@
             Return</md-button>
     <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-dblclick="acknowledgeApplication(application,$event)">
             <md-tooltip md-direction="top">Double click</md-tooltip>
-            Acknowledge</md-button>
+            Approve</md-button>
 </div>
 
 <md-progress-circular ng-show="application_loading" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>

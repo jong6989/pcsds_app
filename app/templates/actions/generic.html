@@ -2,8 +2,8 @@
 <strong><small>Attachments :</small></strong>
 <ol ng-if="application.data.application.attachments.length > 0">
     <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
-        <a target="blank" ng-href="{{api_address + '/' +  x.url}}" > {{x.name}} </a> |
-        <a target="blank" ng-href="{{api_address + '/' +  x.url}}" download> <strong>DOWNLOAD</strong> </a> 
+        <a target="blank" ng-class="{'col-green':isFileExist}" ng-disabled="!isFileExist" ng-href="{{downloadFolder + '/' +  x.url}}" ng-init="download_attachment(api_address+'/', x.url)"> {{x.name}} </a> |
+        <a  ng-if="isFileExist" target="blank"  ng-disabled="!isFileExist" ng-href="{{downloadFolder + '/' +  x.url}}" download> Download </a>
     </li>
 </ol>
 <hr>
@@ -65,7 +65,7 @@
     </md-button>
     <md-button class="md-raised md-primary" ng-disabled=" application_loading "  ng-dblclick="acceptApplication(application,$event)">
             <md-tooltip md-direction="top">Double click</md-tooltip>
-            Accept
+            Process
     </md-button>
 </div>
 
@@ -79,7 +79,7 @@
             Return</md-button>
     <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-dblclick="approveApplication(application,$event)">
             <md-tooltip md-direction="top">Double click</md-tooltip>
-            Approve</md-button>
+            Reviewed</md-button>
 </div>
 
 <!-- Recomendation -->
@@ -105,7 +105,7 @@
             Return</md-button>
     <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-dblclick="acknowledgeApplication(application,$event)">
             <md-tooltip md-direction="top">Double click</md-tooltip>
-            Acknowledge</md-button>
+            Approve</md-button>
 </div>
 
 <md-progress-circular ng-show="application_loading" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>

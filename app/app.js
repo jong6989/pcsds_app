@@ -2,10 +2,24 @@
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
 const { ipcRenderer } = require('electron');
+const remote = require('electron').remote;
+const app = remote.app;
 var fs = require('fs');
 var request = require('request');
 const isOnline = require('is-online');
-var geolocation = require('geolocation');
+//twillio
+const accountSid = 'ACe4baaac94c303c32abb9c5804affe7d8';
+const authToken = '67efdbe7bf96924c2bf435b69df9530b';
+const smsClient = require('twilio')(accountSid, authToken);
+//mailer
+var nodemailer = require('nodemailer');
+nodemailer.SMTP = {
+  host: 'pcsd.gov.ph', // required
+  port: 465, // optional, defaults to 25 or 465
+  use_authentication: true, // optional, false by default
+  user: '_mainaccount@pcsd.gov.ph', // used only when use_authentication is true 
+  pass: '9I8tz7mCkrlF'  // used only when use_authentication is true
+}
 
 var download = (uri, filename, callback)=>{
   request.head(uri, function(err, res, body){
@@ -13,13 +27,26 @@ var download = (uri, filename, callback)=>{
   });
 };
 
-// var NOTIFICATION_DB = new JsonDB("./DB/NOTIFICATIONS", true, false);
-// const notif_string = "/notifications";
-// try {
-//   NOTIFICATION_DB.getData(notif_string + "[0]");
-// } catch(error) {
-//   NOTIFICATION_DB.push(notif_string,[]);
-// };
+function sendEmail(sendTo,mailSubject,mailHtml,mailBody){
+  nodemailer.send_mail(
+    // e-mail options
+    {
+        sender: 'info@pcsd.gov.ph',
+        to:sendTo,
+        subject:mailSubject,
+        html: mailHtml,
+        body:mailBody
+    },
+    // callback function
+    function(error, success){
+      console.log(success);
+      console.log(error);
+        console.log('Message ' + success ? 'sent' : 'failed');
+    }
+  );
+}
+
+// sendEmail('steve@pcsd.gov.ph',"test mail lang uli ",'<strong>test ko 2</strong>GG na',"ito ay <b>body lang 2</b>");
 
 const api_address = "https://brain.pcsd.gov.ph/api";
 // const api_address = "http://localhost/pcsds_api";
