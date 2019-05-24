@@ -1,17 +1,25 @@
 'use strict';
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
-const { ipcRenderer, app } = require('electron');
+const { ipcRenderer } = require('electron');
+const remote = require('electron').remote;
+const app = remote.app;
 var fs = require('fs');
 var request = require('request');
 const isOnline = require('is-online');
-var geolocation = require('geolocation');
 //twillio
-// const accountSid = 'ACe4baaac94c303c32abb9c5804affe7d8';
-var accountSid = 'ACe67543a4561cb8f737f817be8647e25e';
-// const authToken = '67efdbe7bf96924c2bf435b69df9530b';
-var authToken = 'd9c3a3323395bfe27e636b4a6401275a';
+const accountSid = 'ACe4baaac94c303c32abb9c5804affe7d8';
+const authToken = '67efdbe7bf96924c2bf435b69df9530b';
 const smsClient = require('twilio')(accountSid, authToken);
+//mailer
+var nodemailer = require('nodemailer');
+nodemailer.SMTP = {
+  host: 'pcsd.gov.ph', // required
+  port: 465, // optional, defaults to 25 or 465
+  use_authentication: true, // optional, false by default
+  user: '_mainaccount@pcsd.gov.ph', // used only when use_authentication is true 
+  pass: '9I8tz7mCkrlF'  // used only when use_authentication is true
+}
 
 var download = (uri, filename, callback)=>{
   request.head(uri, function(err, res, body){
@@ -19,6 +27,26 @@ var download = (uri, filename, callback)=>{
   });
 };
 
+function sendEmail(sendTo,mailSubject,mailHtml,mailBody){
+  nodemailer.send_mail(
+    // e-mail options
+    {
+        sender: 'info@pcsd.gov.ph',
+        to:sendTo,
+        subject:mailSubject,
+        html: mailHtml,
+        body:mailBody
+    },
+    // callback function
+    function(error, success){
+      console.log(success);
+      console.log(error);
+        console.log('Message ' + success ? 'sent' : 'failed');
+    }
+  );
+}
+
+// sendEmail('steve@pcsd.gov.ph',"test mail lang uli ",'<strong>test ko 2</strong>GG na',"ito ay <b>body lang 2</b>");
 
 const api_address = "https://brain.pcsd.gov.ph/api";
 // const api_address = "http://localhost/pcsds_api";
@@ -631,6 +659,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $scope.is_online = false;
     $scope.me = {};
     $scope.my_chats = {personal : {},others:{}};
+    $scope.downloadFolder = app.getPath('downloads') + '/brain_downloads/';
     let ti = 60 * 1000;
     let th = 60 * ti;
     let td = 24 * th;
@@ -656,36 +685,38 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             .create({
                 body: message,
                 from: '+18577633830',
-                to: '+639553469349'
+                to: number
             })
-            .then(message => console.log(message.sid));
+            .then(message => console.log(message.sid),error=>{
+                console.log(error)
+            });
         }else {
             $scope.toast("invalid mobile number");
         }
     }
 
-    $scope.download_attachment = (address)=>{
+    $scope.download_attachment = (server,address)=>{
         let loc = app.getPath('downloads') + "/brain_downloads/" + address;
         let loc_array = loc.split("/");
-
-        console.log(loc);
         
-        // for (let i = 0; i < (loc_array.length - 1); i++) {
-        //     let folder = "";
-        //     for (let v = 0; v < (i + 1); v++) {
-        //         folder += loc_array[v] + "/";
-        //     }
-        //     let dir = folder;
-        //     if(!fs.existsSync(dir))
-        //         fs.mkdirSync(dir);
-        // }
+        for (let i = 0; i < (loc_array.length - 1); i++) {
+            let folder = "";
+            for (let v = 0; v < (i + 1); v++) {
+                folder += loc_array[v] + "/";
+            }
+            let dir = folder;
+            if(!fs.existsSync(dir))
+                fs.mkdirSync(dir);
+        }
         
-        // $scope.attachment_download_queue[f.id] = true;
-        // download(online_server_folder + f.address, loc, function(){
-        //     delete $scope.attachment_download_queue[f.id];
-        //     $scope.$apply();
-        // });
+        download(server + address, loc, function(){
+            console.log("downloaded " + address);
+        });
     };
+
+    $scope.isFileExist = (address)=>{
+        return fs.existsSync(`${app.getPath('downloads')}/brain_downloads/${address}`);
+    }
 
     $scope.toggleChatNav = (n,title)=>{
         $scope.chatNav.title = title;
@@ -1091,8 +1122,8 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         
     }
 
-    $scope.returnApplication = (application,ev,lvl)=>{
-        fire.db.transactions.update(application.id,{"level":`${lvl}`});
+    $scope.returnApplication = (application,ev,lvl,stats)=>{
+        fire.db.transactions.update(application.id,{"level":`${lvl}`,"status":`${stats}`});
         clear_application_tabs();
     }
 

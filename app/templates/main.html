@@ -46,52 +46,7 @@
 								</md-menu>
 							</md-menu-bar>
 
-							<!-- datasets -->
-							<md-menu-bar ng-if="false" ng-controller="database_permit_controller" ng-show="validate_user([4,5,6,7,8])">
-									<md-menu>
-										<button aria-label="Datasets" ng-click="$mdMenu.open($event)" class="col-white">
-												<i class="fa fa-database m-r-10 m-l-5"></i>Datasets
-										</button>
-										<md-menu-content>
-											<md-menu-item ng-if="!check_empty('wsup')">
-												<md-menu>
-														<md-button aria-label="WSUP" 
-														ng-click="open_database('wsup')">
-															<small>WSUP</small>
-													</md-button>
-												</md-menu>
-											</md-menu-item>
-											<md-menu-item ng-if="!check_empty('sep')">
-													<md-menu>
-															<md-button aria-label="SEP" 
-																ng-click="open_database('sep')">
-																	<small>SEP</small>
-															</md-button>
-													</md-menu>
-											</md-menu-item>
-											<md-menu-item ng-if="!check_empty('apprehension')">
-													<md-menu>
-															<md-button aria-label="APPREHENSION" 
-																ng-click="open_database('apprehension')">
-																	<small>APPREHENSION</small>
-															</md-button>
-													</md-menu>
-											</md-menu-item>
-											<md-menu-item ng-if="!check_empty('admin_cases')" >
-													<md-menu>
-															<md-button aria-label="ADMIN_CASES" 
-																ng-click="open_database('admin_cases')">
-																	<small>Admin Cases</small>
-															</md-button>
-													</md-menu>
-											</md-menu-item>
-										</md-menu-content>
-									</md-menu>
-								</md-menu-bar>
-
-
-
-
+						
 	        <md-button ng-click="toggleRight();clear_notif(new_notif)" ng-hide="isOpenRight()" class="md-icon-button animated infinite " ng-class="{'swing' : (new_notif > 0) }" aria-label="Notifications and News">
 						<md-tooltip md-direction="left">Click to open News and Notificatons</md-tooltip>
 						<span class="font-10 col-red" style="position:absolute;left:15px;">

@@ -476,8 +476,8 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         
     }
 
-    $scope.returnApplication = (application,ev,lvl)=>{
-        fire.db.transactions.update(application.id,{"level":`${lvl}`});
+    $scope.returnApplication = (application,ev,lvl,stats)=>{
+        fire.db.transactions.update(application.id,{"level":`${lvl}`,"status":`${stats}`});
         clear_application_tabs();
     }
 

@@ -90,7 +90,7 @@
                         <div class="md-list-item-text" layout="column">
                             <h3>{{ x.user.data.full_name }}</h3>
                             <h4>{{ x.name }}</h4>
-                            <p>{{x.date.split(' ')[0]}} 
+                            <p>{{x.date | date}} 
                                 <i class="fa fa-circle" 
                                 ng-class="{'col-green': (x.status == '0'),
                                 'col-orange': (x.status == '4'),
@@ -117,7 +117,7 @@
                         <div class="md-list-item-text" layout="column">
                             <h3 class="col-white">{{ x.user.data.full_name }}</h3>
                             <h4 class="col-white">{{ x.name }}</h4>
-                            <p class="col-white">{{x.date.split(' ')[0]}} #{{x.id}} </p>
+                            <p class="col-white">{{x.date | date}}, #{{x.date}} </p>
                         </div>
                         <md-divider></md-divider>
                     </md-list-item>
@@ -189,6 +189,51 @@
                 <md-tooltip md-direction="left">Client Chats</md-tooltip>
                 <i class="fa fa-commenting-o"></i>
             </md-button>
+
+            <!-- datasets -->
+            <md-menu-bar ng-controller="database_permit_controller" ng-show="validate_user([4,5,6,7,8])">
+                <md-menu>
+                    <button aria-label="Datasets" ng-click="$mdMenu.open($event)" class="col-teal">
+                            <md-tooltip md-direction="left">Database Sets</md-tooltip>
+                            <i class="fa fa-database m-r-10 m-l-5"></i>Datasets
+                    </button>
+                    <md-menu-content>
+                        <md-menu-item ng-if="!check_empty('wsup')">
+                            <md-menu>
+                                    <md-button aria-label="WSUP" 
+                                    ng-click="open_database('wsup')">
+                                        <small>WSUP</small>
+                                </md-button>
+                            </md-menu>
+                        </md-menu-item>
+                        <md-menu-item ng-if="!check_empty('sep')">
+                                <md-menu>
+                                        <md-button aria-label="SEP" 
+                                            ng-click="open_database('sep')">
+                                                <small>SEP</small>
+                                        </md-button>
+                                </md-menu>
+                        </md-menu-item>
+                        <md-menu-item ng-if="!check_empty('apprehension')">
+                                <md-menu>
+                                        <md-button aria-label="APPREHENSION" 
+                                            ng-click="open_database('apprehension')">
+                                                <small>APPREHENSION</small>
+                                        </md-button>
+                                </md-menu>
+                        </md-menu-item>
+                        <md-menu-item ng-if="!check_empty('admin_cases')" >
+                                <md-menu>
+                                        <md-button aria-label="ADMIN_CASES" 
+                                            ng-click="open_database('admin_cases')">
+                                                <small>Admin Cases</small>
+                                        </md-button>
+                                </md-menu>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+                                
         </div>
 
         <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="chats_nav">
