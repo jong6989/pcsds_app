@@ -48,7 +48,7 @@
                 <md-button class="md-icon-button" aria-label="APPROVAL" 
                 ng-click="load_db(5);active_btn = 'APPROVAL';">
                     <md-tooltip md-direction="top">APPROVAL</md-tooltip>
-                    <i class="fa fa-heart col-blue font-18"></i>
+                    <i class="fa fa-thumbs-o-up col-blue font-18"></i>
                 </md-button>
 
                 <md-button class="md-icon-button" aria-label="RELEASING" 
@@ -66,7 +66,7 @@
                 <md-button class="md-icon-button" aria-label="Rejected" 
                 ng-click="load_db(2);active_btn = 'Rejected';">
                     <md-tooltip md-direction="top">Rejected</md-tooltip>
-                    <i class="fa fa-trash col-grey font-16"></i>
+                    <i class="fa fa-thumbs-o-down col-grey font-16"></i>
                 </md-button>
 
             </div>
@@ -129,17 +129,68 @@
             <md-card md-whiteframe="3" flex layout="row">
                 <md-card-content flex layout="row">
                         <md-tabs flex md-selected="selectedTab" md-border-bottom md-autoselect md-swipe-content>
-                            <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : #{{tab.application.id || tab.staff.id_number}}">
+                            <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : #{{tab.application.date || tab.staff.id_number || tab.date}}">
                                 <!-- Application Documents -->
                                 <div ng-show="f == 'application' || f == 'pending'">
                                     <div ng-hide="true"> {{application = tab.application}} </div>
                                     <!-- Templates -->
                                     <div ng-repeat=" x in application_templates" ng-show="application.name == x.name">
+                                        <div layout="row">
+                                            <div flex></div>
+                                            <md-button class="md-fab md-mini" aria-label="Print Document" ng-click="open_window_view(x.url,tab.application)">
+                                                <md-tooltip md-direction="left">Print this document</md-tooltip>
+                                                <i class="fa fa-print" ></i> 
+                                            </md-button>     
+                                        </div>
                                         <div ng-include="x.url"></div>
                                         <md-divider class="m-t-20 m-b-10"></md-divider>
                                         <p ng-hide="is_online">No internet connection...</p>
+                                        <div layout="row" ng-show="is_online">
+                                            <div flex></div>
+                                            <md-button class="md-fab md-mini" aria-label="Print Remarks" ng-click="open_window_view('app/templates/print/application_remarks.html',tab.application)">
+                                                <md-tooltip md-direction="left">Print remarks</md-tooltip>
+                                                <i class="fa fa-print" ></i> 
+                                            </md-button>     
+                                        </div>
                                         <div ng-include="x.action" ng-show="is_online"></div>
                                     </div>
+                                    <md-divider></md-divider>
+                                    <md-button class="md-primary" ng-click="removeTab('application')">
+                                        Close
+                                    </md-button>
+                                </div>
+
+                                <!-- Action Receipt -->
+                                <div ng-show="f == 'receipt'" layout="column" layout-align="center center">
+                                    
+                                    <md-card class="m-t-100">
+                                        <md-card-title>
+                                            <img src="./images/pcsdlogo.png" alt="pcsd" height="30px" class="m-r-5">
+                                            <h3 class="col-grey">Action Receipt</h3>
+                                            <div flex></div>
+                                            <md-button class="md-fab md-mini" aria-label="Print Document" ng-click="open_window_view('app/templates/print/action_receipt.html',tab)">
+                                                <md-tooltip md-direction="left">Print receipt</md-tooltip>
+                                                <i class="fa fa-print" ></i> 
+                                            </md-button>                    
+                                        </md-card-title>
+                                        <md-divider></md-divider>
+                                        <md-card-content>
+                                            <p>
+                                                {{tab.message}}
+                                            </p>
+                                            <p>
+                                                Date : {{tab.date | date}}
+                                            </p>
+                                        </md-card-content>
+                                        <md-divider></md-divider>
+                                        <md-card-action layout="row">
+                                            <div flex></div>
+                                            <md-button class="md-primary" ng-click="removeTab('receipt')">
+                                                Close
+                                            </md-button>
+
+                                        </md-card-action>
+                                    </md-card>
                                 </div>
                                 <!-- Personnal Chat -->
                                 <div ng-show="f == 'personal_chat'" >
@@ -169,6 +220,10 @@
                                             </md-button>
                                         </form>
                                     </div>
+                                    <md-divider></md-divider>
+                                    <md-button class="md-primary" ng-click="removeTab('personal_chat')">
+                                        Close
+                                    </md-button>
                                 </div>
                             </md-tab>
                         </md-tabs>
@@ -189,46 +244,42 @@
                 <md-tooltip md-direction="left">Client Chats</md-tooltip>
                 <i class="fa fa-commenting-o"></i>
             </md-button>
+            <md-button class="md-fab md-mini bg-teal" aria-label="Logs" ng-click="toggleChatNav(4,'Action Logs')">
+                <md-tooltip md-direction="left">Action Logs</md-tooltip>
+                <i class="fa fa-history"></i>
+            </md-button>
 
             <!-- datasets -->
             <md-menu-bar ng-controller="database_permit_controller" ng-show="validate_user([4,5,6,7,8])">
                 <md-menu>
-                    <button aria-label="Datasets" ng-click="$mdMenu.open($event)" class="col-teal">
-                            <md-tooltip md-direction="left">Database Sets</md-tooltip>
-                            <i class="fa fa-database m-r-10 m-l-5"></i>Datasets
-                    </button>
+                    <md-button class="md-fab md-mini bg-teal" aria-label="Datasets" ng-click="$mdMenu.open($event)">
+                        <md-tooltip md-direction="left">Database Sets</md-tooltip>
+                        <i class="fa fa-database"></i>
+                    </md-button>
                     <md-menu-content>
                         <md-menu-item ng-if="!check_empty('wsup')">
-                            <md-menu>
-                                    <md-button aria-label="WSUP" 
-                                    ng-click="open_database('wsup')">
-                                        <small>WSUP</small>
-                                </md-button>
-                            </md-menu>
+                            <md-button aria-label="WSUP" 
+                            ng-click="open_database('wsup')">
+                                <small>WSUP</small>
+                            </md-button>
                         </md-menu-item>
                         <md-menu-item ng-if="!check_empty('sep')">
-                                <md-menu>
-                                        <md-button aria-label="SEP" 
-                                            ng-click="open_database('sep')">
-                                                <small>SEP</small>
-                                        </md-button>
-                                </md-menu>
+                            <md-button aria-label="SEP" 
+                            ng-click="open_database('sep')">
+                                <small>SEP</small>
+                            </md-button>
                         </md-menu-item>
                         <md-menu-item ng-if="!check_empty('apprehension')">
-                                <md-menu>
-                                        <md-button aria-label="APPREHENSION" 
-                                            ng-click="open_database('apprehension')">
-                                                <small>APPREHENSION</small>
-                                        </md-button>
-                                </md-menu>
+                            <md-button aria-label="APPREHENSION" 
+                                ng-click="open_database('apprehension')">
+                                    <small>APPREHENSION</small>
+                            </md-button>
                         </md-menu-item>
                         <md-menu-item ng-if="!check_empty('admin_cases')" >
-                                <md-menu>
-                                        <md-button aria-label="ADMIN_CASES" 
-                                            ng-click="open_database('admin_cases')">
-                                                <small>Admin Cases</small>
-                                        </md-button>
-                                </md-menu>
+                            <md-button aria-label="ADMIN_CASES" 
+                            ng-click="open_database('admin_cases')">
+                                <small>Admin Cases</small>
+                            </md-button>
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>
@@ -243,30 +294,52 @@
             </md-toolbar>
             <md-content layout-padding>
                 <!-- Personal Chat -->
-                    <md-content flex ng-if="chatNav.idx == 1">
-                        <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="search_staff_box"> <i class="fa fa-search"></i> </span>
-                                </div>
-                                <input class="form-control" ng-model="search_staff" placeholder="Search Staff" aria-label="Search Staff" aria-describedby="search_staff_box">
+                <md-content flex ng-if="chatNav.idx == 1">
+                    <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="search_staff_box"> <i class="fa fa-search"></i> </span>
                             </div>
-                        <md-list class="md-dense" >
-                            <md-list-item class="md-3-line" ng-repeat="x in staff_list | orderBy:'-last_seen' | filter : search_staff track by $index" 
-                                ng-click="open_personal_chat(x)">
-                                <img ng-src="./images/user.png" class="md-avatar" alt="{{x.data.fist_name}}" />
-                                <div class="md-list-item-text" layout="column">
-                                    <h3>{{ x.data.first_name }} {{ x.data.last_name }}</h3>
-                                    <h4>{{ getUserType(x.user_level) }}</h4>
-                                    <p>
-                                        <i class="fa fa-circle" ng-class="{'col-green': calculate_if_online(x.last_seen) }"></i> 
-                                        #{{x.id_number}}
-                                    </p>
-                                    <md-divider></md-divider>
-                                </div>
-                            </md-list-item>
-                            <hr>
-                        </md-list>
-                    </md-content>
+                            <input class="form-control" ng-model="search_staff" placeholder="Search Staff" aria-label="Search Staff" aria-describedby="search_staff_box">
+                        </div>
+                    <md-list class="md-dense" >
+                        <md-list-item class="md-3-line" ng-repeat="x in staff_list | orderBy:'-last_seen' | filter : search_staff track by $index" 
+                            ng-click="open_personal_chat(x)">
+                            <img ng-src="./images/user.png" class="md-avatar" alt="{{x.data.fist_name}}" />
+                            <div class="md-list-item-text" layout="column">
+                                <h3>{{ x.data.first_name }} {{ x.data.last_name }}</h3>
+                                <h4>{{ getUserType(x.user_level) }}</h4>
+                                <p>
+                                    <i class="fa fa-circle" ng-class="{'col-green': calculate_if_online(x.last_seen) }"></i> 
+                                    #{{x.id_number}}
+                                </p>
+                                <md-divider></md-divider>
+                            </div>
+                        </md-list-item>
+                        <hr>
+                    </md-list>
+                </md-content>
+                <!-- Action Logs -->
+                <md-content flex ng-if="chatNav.idx == 4">
+                    <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="search_log_box"> <i class="fa fa-search"></i> </span>
+                            </div>
+                            <input class="form-control" ng-model="search_log" placeholder="Search Log" aria-label="Search Log" aria-describedby="search_log_box">
+                        </div>
+                    <md-list class="md-dense" >
+                        <md-list-item class="md-3-line" ng-repeat="x in log_list | orderBy:'-date' | filter : search_log track by x.date" 
+                            ng-click="open_receipt_tab(x.message,x.date);closeChatNav();">
+                            <div class="md-list-item-text" layout="column">
+                                <p>
+                                    {{x.message}}
+                                </p>
+                                <h4>{{ x.date | date }}</h4>
+                                <md-divider></md-divider>
+                            </div>
+                        </md-list-item>
+                        <hr>
+                    </md-list>
+                </md-content>
             </md-content>
         
         </md-sidenav>

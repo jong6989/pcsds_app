@@ -1,11 +1,3 @@
-<strong><small>Attachments :</small></strong>
-<ol ng-if="application.data.application.attachments.length > 0">
-    <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
-        <a target="blank" ng-href="{{api_address + '/' +  x.url}}" > {{x.name}} </a> |
-        <a target="blank" ng-href="{{api_address + '/' +  x.url}}" download> <strong>DOWNLOAD</strong> </a> 
-    </li>
-</ol>
-<hr>
 
 <md-card
     ng-if="current_active_view == 'my_transactions' || version_2"
@@ -17,15 +9,15 @@
     >
 
     <md-card-title>
-        <h5>Actions</h5>
+        <h5>Remarks</h5>
         <md-divider></md-divider>
     </md-card-title>
     <md-card-content>
         <p ng-if="application.actions.length > 0"  ng-repeat="x in application.actions track by $index ">
-            <strong class="m-l-20 col-grey"> {{x.staff}} : </strong>
-            <span class="{{'convo_' + $index }}" ></span>
-            <i ng-init="load_html(x.message,$index,'convo_')"></i>
-            <cite class="m-l-20 font-9"> {{x.date | date}} </cite>
+            <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{x.date | date: 'yyyy-MM-dd HH:mm:ss'}} </cite> </strong>
+            <div class="m-l-40"><span class="{{'convo_' + $index }}" ></span></div>
+            <div class="{{'image_holder_'+$index}}"></div>
+            <i ng-init="load_html(x.message,'convo_'+$index);extract_images_from_html('convo_'+$index,'image_holder_'+$index,2000)"></i>
             <hr>
         </p>
 
@@ -73,7 +65,7 @@
                         <md-input-container class="md-block" flex-gt-sm>
                                 <label>Personnel</label>
                                 <md-select ng-model="application.certificate_of_inspection.personnel" required>
-                                    <md-option ng-repeat="x in get_users_by_level(6)" value="{{x.data.first_name}} {{x.data.last_name}}">
+                                    <md-option ng-repeat="x in get_users_by_level(6) track by $index" name="{{x.id}}" value="{{x.data.first_name}} {{x.data.last_name}}">
                                         {{x.data.first_name}} {{x.data.last_name}}
                                     </md-option>
                                 </md-select>

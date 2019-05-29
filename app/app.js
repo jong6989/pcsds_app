@@ -205,6 +205,10 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       };
     };
 
+    $scope.set_application = (d)=>{
+      $scope.application = d;
+    }
+
     $scope.open_window_view = function(v,d){
       $localStorage.params = d;
       var x = {view: v,last_view : $scope.current_view};
@@ -282,7 +286,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.date_now = function(){
-      return moment().format("YYYY-MM-DD");
+      return moment().format("YYYY-MM-DD HH:mm:ss");
     };
 
     $scope.to_year = function(d){
@@ -407,13 +411,14 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
 
     };
 
-    $scope.print = ()=>{
+    $scope.print = (t)=>{
+      t = (t==undefined)? 1300:t;
       $timeout( ()=>{
         $window.print();
         $timeout( ()=>{
           $window.close();
         }, 500 );
-      }, 1300 );
+      }, t );
     };
 
     $scope.run_initials = function(){
@@ -452,9 +457,41 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     if(global.location.search == ""){
       $scope.run_initials();
     }else {
+      $scope.user = $localStorage.pcsd_app_user;
       $scope.render_params = queryString.parse(global.location.search) ;
       $scope.current_view = $scope.render_params.view;
       $scope.render_params.data = $localStorage.params;
+    }
+
+    $scope.load_html = (text,clas)=>{
+        $timeout(
+            ()=>{
+                $("."+clas).html( text );
+            },50
+        )
+    }
+
+    $scope.extract_images_from_html = (clas,id,duration)=>{
+      setTimeout(()=>{
+        let obj = $("."+id);
+        let hrefs = $("."+clas).children("a");
+        let list = {};
+        obj.empty();
+        for (let index = 0; index < hrefs.length; index++) {
+          let h = hrefs[index].href;
+          if(!list[h]){
+            let x = h.split('.');
+            let t = x[x.length -1];
+            if(t == 'jpg'|| t == 'png' || t == 'jpeg'){
+              var img = new Image();
+              img.src = hrefs[index].href;
+              img.style = 'width:100%;height:auto';
+              obj.append(img);
+            }
+            list[h] = true;
+          }
+        }
+      },duration);
     }
 
     $scope.validate_user = (ars)=>{

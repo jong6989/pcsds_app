@@ -1,0 +1,22 @@
+<div ng-init="action = render_params.data;print()" layout-padding>
+    <md-card class="m-t-50 m-l-50" style="width:380px">
+        <md-card-title>
+            <img src="./images/pcsdlogo.png" alt="pcsd" height="30px" class="m-r-5">
+            <h3 class="col-grey">Action Receipt</h3>
+            <div flex></div>                
+        </md-card-title>
+        <md-divider></md-divider>
+        <md-card-content>
+            <p>
+                {{action.message}}
+            </p>
+            <p>
+                Date : {{action.date | date}}
+            </p>
+        </md-card-content>
+        <md-divider></md-divider>
+        <md-card-action layout="row">
+            <p class="font-10 col-grey m-l-5">Date printed : {{date_now()}}, no: {{action.date}}, Staff: {{user.id_number}} </p>
+        </md-card-action>
+    </md-card>
+</div>

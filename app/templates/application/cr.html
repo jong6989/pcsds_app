@@ -1,4 +1,4 @@
-
+<div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div>
 <div class="p-t-20 p-l-10">
 
     <div layout="row">
@@ -21,7 +21,7 @@
         
     <div layout="row" layout-align="end">
         <div layout="column" layout-align="center center">
-            <div><strong style="text-decoration: underline"> {{application.date.split(' ')[0] | date : 'MMMM d, yyyy'}} </strong></div>
+            <div><strong style="text-decoration: underline"> {{application.date | date : 'MMMM d, yyyy'}} </strong></div>
             <div>(date)</div>
         </div>
         <div class="p-r-50"></div>
@@ -71,6 +71,15 @@
     </p>
     
     <br>
+
+    <strong><small>Attachments :</small></strong>
+    <ol ng-if="application.data.application.attachments.length > 0">
+        <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
+            <a target="blank" ng-class="{'col-green':isFileExist(x.url)}" ng-disabled="!isFileExist(x.url)" ng-href="{{downloadFolder + '/' +  x.url}}" ng-init="download_attachment(api_address+'/', x.url)"> {{x.name}} </a> |
+            <a  ng-if="isFileExist(x.url)" target="blank"  ng-disabled="!isFileExist(x.url)" ng-href="{{downloadFolder + '/' +  x.url}}" download> Download </a>
+        </li>
+    </ol>
+    <hr>
     
     <!-- Received Stamp -->
     <md-card ng-if="application.status != 0">
@@ -103,7 +112,7 @@
     <md-card ng-if="application.data.approved != undefined ">
         <md-card-content>
             Reviewed by : <strong>{{ application.data.approved.staff }} </strong> 
-            , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
+            , on  <strong>{{application.data.approved.date.split(' ')[0]}}</strong>
         </md-card-content>
     </md-card>
     
@@ -112,7 +121,7 @@
     <md-card ng-if="application.data.recommended != undefined ">
         <md-card-content>
             Recommended by : <strong>{{ application.data.recommended.staff }} </strong> 
-            , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
+            , on  <strong>{{application.data.recommended.date.split(' ')[0]}}</strong>
         </md-card-content>
     </md-card>
     
@@ -121,9 +130,15 @@
     <md-card ng-if="application.data.acknowledged != undefined ">
         <md-card-content>
             Approved by : <strong>{{ application.data.acknowledged.staff }} </strong> 
-            , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
+            , on  <strong>{{application.data.acknowledged.date.split(' ')[0]}}</strong>
         </md-card-content>
     </md-card>
     
-    
+    <!-- print stamp -->
+    <div ng-if="render_params.data != undefined" >
+        <hr>
+        <p class="font-10 col-grey italic">
+            Print Date : {{date_now()}} , Staff Number: {{user.id_number}}, Document Number: {{application.date}}
+        </p>
+    </div>
 </div>

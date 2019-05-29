@@ -205,6 +205,10 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       };
     };
 
+    $scope.set_application = (d)=>{
+      $scope.application = d;
+    }
+
     $scope.open_window_view = function(v,d){
       $localStorage.params = d;
       var x = {view: v,last_view : $scope.current_view};
@@ -282,7 +286,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.date_now = function(){
-      return moment().format("YYYY-MM-DD");
+      return moment().format("YYYY-MM-DD HH:mm:ss");
     };
 
     $scope.to_year = function(d){
@@ -407,13 +411,14 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
 
     };
 
-    $scope.print = ()=>{
+    $scope.print = (t)=>{
+      t = (t==undefined)? 1300:t;
       $timeout( ()=>{
         $window.print();
         $timeout( ()=>{
           $window.close();
         }, 500 );
-      }, 1300 );
+      }, t );
     };
 
     $scope.run_initials = function(){
@@ -452,9 +457,41 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     if(global.location.search == ""){
       $scope.run_initials();
     }else {
+      $scope.user = $localStorage.pcsd_app_user;
       $scope.render_params = queryString.parse(global.location.search) ;
       $scope.current_view = $scope.render_params.view;
       $scope.render_params.data = $localStorage.params;
+    }
+
+    $scope.load_html = (text,clas)=>{
+        $timeout(
+            ()=>{
+                $("."+clas).html( text );
+            },50
+        )
+    }
+
+    $scope.extract_images_from_html = (clas,id,duration)=>{
+      setTimeout(()=>{
+        let obj = $("."+id);
+        let hrefs = $("."+clas).children("a");
+        let list = {};
+        obj.empty();
+        for (let index = 0; index < hrefs.length; index++) {
+          let h = hrefs[index].href;
+          if(!list[h]){
+            let x = h.split('.');
+            let t = x[x.length -1];
+            if(t == 'jpg'|| t == 'png' || t == 'jpeg'){
+              var img = new Image();
+              img.src = hrefs[index].href;
+              img.style = 'width:100%;height:auto';
+              obj.append(img);
+            }
+            list[h] = true;
+          }
+        }
+      },duration);
     }
 
     $scope.validate_user = (ars)=>{
@@ -650,6 +687,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $scope.application_list = [];
     $scope.pending_list = [];
     $scope.staff_list = [];
+    $scope.log_list = [];
     $scope.api_address = api_address;
     $scope.selectedTab = 0;
     $scope.tabs = {};
@@ -667,12 +705,23 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     let ty = 12 * tm;
     const online_laps = 30000;
     var opc = {};
+    var applicationListener = null;
 
     fire.db.staffs.query.where("id","==",$scope.user.id).get().then(qs=>{
         qs.forEach(doc=>{
             $scope.me = doc.data();
             $scope.me.doc_id = doc.id;
         })
+    });
+    
+    fire.db.staffs.query.doc($scope.user.id).collection("logs").onSnapshot(qs=>{
+        let d = [];
+        qs.forEach(x=>{
+            let dx = x.data();
+            dx.id = x.id;
+            d.push(dx);
+        });
+        $scope.log_list = d;
     });
 
     $scope.send_sms = (number,message)=>{
@@ -708,10 +757,11 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             if(!fs.existsSync(dir))
                 fs.mkdirSync(dir);
         }
-        
-        download(server + address, loc, function(){
-            console.log("downloaded " + address);
-        });
+        if(!fs.existsSync(loc)){
+            download(server + address, loc, function(){
+                console.log("downloaded " + address);
+            });
+        }
     };
 
     $scope.isFileExist = (address)=>{
@@ -746,6 +796,10 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             }
         }
     };
+
+    $scope.removeTab = (tab)=>{
+        delete($scope.tabs[tab]);
+    }
 
     $scope.now = ()=>{ return Date.now();}
 
@@ -814,7 +868,19 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
 
     $scope.open_application_tab = (x)=>{
         $scope.tabs.application = { title : 'Application',application : x};
+        applicationListener = null;
+        applicationListener = fire.db.transactions.when(x.id,(d)=>{
+            if($scope.tabs.application != undefined){
+                $scope.tabs.application.application = d;
+            }
+        });
         $scope.move_tab('application');
+    }
+
+    $scope.open_receipt_tab = (msg,date)=>{
+        let stamp = (date == undefined)? Date.now(): date;
+        $scope.tabs.receipt = { title : 'Action',message : msg, date : stamp};
+        $scope.move_tab('receipt');
     }
 
     $scope.open_personal_chat = (staff)=>{
@@ -934,14 +1000,6 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         if(files.length > 0 ) upload_file(0);
     };
 
-    $scope.load_html = (text,i,c)=>{
-        $timeout(
-            ()=>{
-                $("."+c+i).html( text );
-            },50
-        )
-    }
-
     function notify_applicant(applicant_id,application_id,message){
         let notif = {
             "type" : "applicant",
@@ -968,13 +1026,14 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             }
         });
         notify_applicant(application.user.id,application.id,
-            "Your application is received and accepted for processing." 
+            "Your application is received and accepted for processing. Staff : " 
             + $scope.user.data.first_name + ' ' 
             + $scope.user.data.last_name);
         delete($scope.tabs.application);
 
-        let act = `You received application number ${application.date}.`;
+        let act = `You received application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box to process application. Thank you.`;
         $scope.toast(act);
+        $scope.open_receipt_tab(act);
         fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
         setTimeout(()=>{
             $scope.toast("See your pending box to process application.");
@@ -1007,8 +1066,9 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             notify_applicant(application.user.id,application.id,"Sorry, we are unable to process your application. Please re-submit." + result);
             clear_application_tabs();
 
-            let act = `You reject application number ${application.date}.`;
+            let act = `You reject application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}.`;
             $scope.toast(act);
+            $scope.open_receipt_tab(act);
             fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
         }, function() {
             // cancel
@@ -1031,9 +1091,10 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         fire.db.transactions.update(application.id,u);
         notify_applicant(application.user.id,application.id,"Your application is undergoing review.");
         clear_application_tabs();
-
-        let act = `You processed application number ${application.date}.`;
+        console.log(application)
+        let act = `You processed application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
         $scope.toast(act);
+        $scope.open_receipt_tab(act);
         fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
     }
 
@@ -1054,8 +1115,9 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         notify_applicant(application.user.id,application.id,"Your application has been reviewed.");
         clear_application_tabs();
 
-        let act = `You reviewed application number ${application.date} and forwarded for recommendation.`;
+        let act = `You reviewed application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
         $scope.toast(act);
+        $scope.open_receipt_tab(act);
         fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
     }
 
@@ -1071,8 +1133,9 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
                 "staff_id" : $scope.user.id
             };
         }
-        let act = `You recommend application number ${application.date} for approval.`;
+        let act = `You recommend application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
         $scope.toast(act);
+        $scope.open_receipt_tab(act);
         fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
         fire.db.transactions.update(application.id,u);
         notify_applicant(application.user.id,application.id,"Your application has been recommended for approval.");
@@ -1082,7 +1145,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $scope.acknowledgeApplication = (application,ev,extra)=>{
         var confirm = $mdDialog.prompt()
             .title('Confirm Permit')
-            .textContent(`Confirmation Code Was sent to your email. Please confirm the approval of the application number ${application.date}`)
+            .textContent(`Confirmation Code was sent to your mobile number. Please confirm the approval of the application number ${application.date}`)
             .placeholder('code')
             .ariaLabel('code')
             .initialValue('')
@@ -1113,8 +1176,9 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             notify_applicant(application.user.id,application.id,"Thank you very much! Your application is approved.");
             clear_application_tabs();
 
-            let act = `You approved application number ${application.date}.`;
+            let act = `You approved application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
             $scope.toast(act);
+            $scope.open_receipt_tab(act);
             fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
         }, function() {
             // cancel
@@ -1124,6 +1188,10 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
 
     $scope.returnApplication = (application,ev,lvl,stats)=>{
         fire.db.transactions.update(application.id,{"level":`${lvl}`,"status":`${stats}`});
+        let act = `You return application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
+        $scope.toast(act);
+        $scope.open_receipt_tab(act);
+        fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
         clear_application_tabs();
     }
 

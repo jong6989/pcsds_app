@@ -1,13 +1,4 @@
 
-<strong><small>Attachments :</small></strong>
-<ol ng-if="application.data.application.attachments.length > 0">
-    <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
-        <a target="blank" ng-class="{'col-green':isFileExist}" ng-disabled="!isFileExist" ng-href="{{downloadFolder + '/' +  x.url}}" ng-init="download_attachment(api_address+'/', x.url)"> {{x.name}} </a> |
-        <a  ng-if="isFileExist" target="blank"  ng-disabled="!isFileExist" ng-href="{{downloadFolder + '/' +  x.url}}" download> Download </a>
-    </li>
-</ol>
-<hr>
-
 <md-card
     ng-change="upload_attachments(file_drop)"
     ngf-drop ng-model="file_drop"
@@ -17,14 +8,15 @@
     >
 
     <md-card-title>
-        <h5>Actions</h5>
+        <h5>Remarks</h5>
         <md-divider></md-divider>
     </md-card-title>
     <md-card-content>
         <div ng-if="application.actions.length > 0"  ng-repeat="x in application.actions track by $index ">
-            <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{x.date | date}} </cite> </strong>
+            <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{x.date | date: 'yyyy-MM-dd HH:mm:ss'}} </cite> </strong>
             <div class="m-l-40"><span class="{{'convo_' + $index }}" ></span></div>
-            <i ng-init="load_html(x.message,$index,'convo_')"></i>
+            <div class="{{'image_holder_'+$index}}"></div>
+            <i ng-init="load_html(x.message,'convo_'+$index);extract_images_from_html('convo_'+$index,'image_holder_'+$index,2000)"></i>
             <hr>
         </div>
 
