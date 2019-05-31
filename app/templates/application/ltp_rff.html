@@ -151,11 +151,10 @@
     </div>
 
 
-    <strong><small>Attachments :</small></strong>
+    <strong><small>Attachments :</small> </strong> <md-button class="col-pink" ng-if="isFolderExist(application.date)" ng-click="openFolder(application.date)"> <i class="fa fa-folder-open-o"></i> Open Folder</md-button>
     <ol ng-if="application.data.application.attachments.length > 0">
         <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
-            <a target="blank" ng-class="{'col-green':isFileExist(x.url)}" ng-disabled="!isFileExist(x.url)" ng-href="{{downloadFolder + '/' +  x.url}}" ng-init="download_attachment(api_address+'/', x.url)"> {{x.name}} </a> |
-            <a  ng-if="isFileExist(x.url)" target="blank"  ng-disabled="!isFileExist(x.url)" ng-href="{{downloadFolder + '/' +  x.url}}" download> Download </a>
+            <a target="blank" ng-href="{{api_address+'/'+x.url}}" ng-init="download_attachment(api_address+'/', x.url,application)"> {{x.name}} </a> 
         </li>
     </ol>
     <hr>

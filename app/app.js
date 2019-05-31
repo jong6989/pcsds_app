@@ -1,7 +1,7 @@
 'use strict';
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, shell } = require('electron');
 const remote = require('electron').remote;
 const app = remote.app;
 var fs = require('fs');

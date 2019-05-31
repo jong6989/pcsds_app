@@ -23,6 +23,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     const online_laps = 30000;
     var opc = {};
     var applicationListener = null;
+    var download_queue = {};
 
     fire.db.staffs.query.where("id","==",$scope.user.id).get().then(qs=>{
         qs.forEach(doc=>{
@@ -61,28 +62,36 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         }
     }
 
-    $scope.download_attachment = (server,address)=>{
-        let loc = app.getPath('downloads') + "/brain_downloads/" + address;
-        let loc_array = loc.split("/");
-        
-        for (let i = 0; i < (loc_array.length - 1); i++) {
-            let folder = "";
-            for (let v = 0; v < (i + 1); v++) {
-                folder += loc_array[v] + "/";
+    $scope.download_attachment = (server,address,application)=>{
+        if(application != undefined && application.date != undefined){
+            let loc_array = address.split("/");
+            let filename = loc_array[(loc_array.length - 1)];
+            let dir = $scope.downloadFolder + application.date + "/";
+            let loc = dir + filename;
+            if(!fs.existsSync($scope.downloadFolder)){
+                fs.mkdirSync($scope.downloadFolder);
             }
-            let dir = folder;
-            if(!fs.existsSync(dir))
+            if(!fs.existsSync(dir)){
                 fs.mkdirSync(dir);
-        }
-        if(!fs.existsSync(loc)){
-            download(server + address, loc, function(){
-                console.log("downloaded " + address);
-            });
+            }
+            if(!fs.existsSync(loc)){
+                if(download_queue[loc] == undefined){
+                    download_queue[loc] = true;
+                    download(server + address, loc, function(){
+                        console.log("downloaded " + address);
+                        delete(download_queue[loc]);
+                    });
+                }
+            }
         }
     };
 
-    $scope.isFileExist = (address)=>{
-        return fs.existsSync(`${app.getPath('downloads')}/brain_downloads/${address}`);
+    $scope.openFolder = (appId)=>{
+        shell.openItem($scope.downloadFolder + appId);
+    }
+
+    $scope.isFolderExist = (appId)=>{
+        return fs.existsSync($scope.downloadFolder + appId);
     }
 
     $scope.toggleChatNav = (n,title)=>{
@@ -294,7 +303,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         }
     }
 
-    $scope.upload_attachments = (files,app_id)=>{
+    $scope.upload_attachments = (files,app_id,tab)=>{
         var upload_file = (idx)=>{
             $scope.uploading_file = true;
             let f = files[idx];
@@ -303,8 +312,13 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
                 if(code == 200){
                     if(files.length == (idx + 1) ){
                         let m = `<a href="${api_address}/${data.data}" target="blank" download>${f.name}</a>`;
-                        if($scope.add_tread_message[`${app_id}`] == undefined) $scope.add_tread_message[`${app_id}`] = "";
-                        $scope.add_tread_message[`${app_id}`] += m + "<br>\n";
+                        if(tab == 'chat'){
+                            if($scope.pc_tread_message[`${app_id}`] == undefined) $scope.pc_tread_message[`${app_id}`] = "";
+                            $scope.pc_tread_message[`${app_id}`] += m + "<br>\n";
+                        }else {
+                            if($scope.add_tread_message[`${app_id}`] == undefined) $scope.add_tread_message[`${app_id}`] = "";
+                            $scope.add_tread_message[`${app_id}`] += m + "<br>\n";
+                        }
                     }else {
                         upload_file(idx + 1);
                     }

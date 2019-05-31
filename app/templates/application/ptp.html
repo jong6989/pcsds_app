@@ -15,9 +15,7 @@
         </div>
     </div>
     
-    <!-- tittle -->
-    <h3 ng-if="application.data.application.application_type !=='renew'" class="align-center m-t-20 m-b-10">APPLICATION FOR <span class="col-green">NEW</span> CHAINSAW REGISTRATION</h3>
-    <h3 ng-if="application.data.application.application_type == 'renew'" class="align-center m-t-20 m-b-10">APPLICATION FOR <span class="col-blue">RENEWAL</span> OF CHAINSAW REGISTRATION</h3>
+    <h3 class="align-center m-t-20 m-b-10">APPLICATION FOR PERMIT TO PURCHASE/IMPORT CHAINSAW</h3>
         
     <div layout="row" layout-align="end">
         <div layout="column" layout-align="center center">
@@ -33,44 +31,54 @@
         <small>Palawan Council for Sustainable Development Staff</small>
     </h4>
 
+
     <br>
-    <P>
+    <p>
         <span class="p-l-40"></span>I/We {{application.data.application.applicant}}, resident of {{application.data.application.applicant_address}},
-        applies for a chainsaw Certificate of Registration. I am applying as {{application.data.application.nature}}
-    </P>
+        applies for a Permit to Purchase/Import Chainsaw.
+    </p>
 
-    <hr>
-    <div layout="row" layout-align="center center">
-        <md-card>
-            <md-card-content>
-                <h4 class="align-center">DETAILED SPECIFICATIONS</h4>
-                <hr>
-                <div>
-                    Brand: <strong>{{application.data.application.chainsaw.brand}}</strong><br>
-                    Model: <strong>{{application.data.application.chainsaw.model}}</strong><br>
-                    Engine Type and Horsepower: <strong>{{application.data.application.chainsaw.engine}}</strong><br>
-                    Maximum Length of Guidebar: <strong>{{application.data.application.chainsaw.guidebar_length}}</strong><br>
-                    Serial Number: <strong>{{application.data.application.chainsaw.serial}}</strong><br>
-                    Other Distinguishing Marks, If any: <strong>{{application.data.application.chainsaw.marks}}</strong><br>
-                    Name of Dealer: <strong>{{application.data.application.chainsaw.dealer_name}}</strong><br>
-                    Address: <strong>{{application.data.application.chainsaw.dealer_address}}</strong><br>
-                </div>
-            </md-card-content>
-        </md-card>
+    <p>
+        <span class="m-r-20"></span>
+        The requirements needed for my/our application is/are hereby submitted for your evaluation.
+    </p>
+    <p>
+        <span class="m-r-20"></span>
+        That the filing of this application does not authorize me/us to purchase and/or import chainsaw unit(s) until after the Permit has been issued.
+    </p>
+    <p>
+        <span class="m-r-20"></span>
+        I/We understood that any false representation or declaration embodied in this application or submitted requirements shall be a ground for the denial of this application without prejudice to the filing of appropriate cases.
+    </p>
+
+    <div>
+        <strong>Details of application :</strong>
+        <ol>
+            <li ng-repeat="x in application.data.application.chainsaw">Brand : {{x.brand}}, Quantity : {{x.quantity}}, Details : {{x.details}} </li>
+        </ol>
     </div>
-    <hr>
 
-    <p>
-        <span class="p-l-40"></span>
-        The requirements needed for my application, as indicated at the back hereof, are hereby submitted for your evaluation. I agree that the filing of this application does not authorize me to use, or in any manner operate the chainsaw unit until after the Certificate of Registration has been issued.
+    <p>Purpose for Purchasing/Importing: {{application.data.application.purpose}} </p>
+    <p>Name of Seller/ Supplier: {{application.data.application.supplier_name}} </p>
+    <p>Address of Seller/ Supplier: {{application.data.application.supplier_address}} </p>
+
+    <p>If Imported:</p>
+    <p>-Expected date and Time of arrival</p>
+    <p>Or release from the Bureau of Customs: 
+        {{application.data.application.date_from_custom}}
+    </p>
+    <p>Import Entry Declaration from BSP: 
+        {{application.data.application.date_of_entry_bsp}}
     </p>
 
-    <p>
-        <span class="p-l-40"></span>
-        Further I understand that any false representation or declaration embodied in this application or submitted requirements shall be a ground for the denial of this application without prejudice to the filing of appropriate cases.
-    </p>
-    
-    <br>
+    <div layout="row" layout-align="end">
+        <div layout="column" layout-align="center center">
+            <div><strong style="text-decoration: underline"> {{application.data.application.applicant}} </strong></div>
+            <div>(Applicant)</div>
+            <div class="m-t-20"> <strong>TIN : {{application.data.application.tin_no}}</strong> </div>
+        </div>
+        <div class="p-r-50"></div>
+    </div>
 
     <strong><small>Attachments :</small> </strong> <md-button class="col-pink" ng-if="isFolderExist(application.date)" ng-click="openFolder(application.date)"> <i class="fa fa-folder-open-o"></i> Open Folder</md-button>
     <ol ng-if="application.data.application.attachments.length > 0">
