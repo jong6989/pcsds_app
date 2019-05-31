@@ -1,4 +1,5 @@
 'use strict';
+var os = require('os');
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
 const { ipcRenderer, shell } = require('electron');

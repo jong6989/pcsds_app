@@ -14,7 +14,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $scope.is_online = false;
     $scope.me = {};
     $scope.my_chats = {personal : {},others:{}};
-    $scope.downloadFolder = app.getPath('downloads') + '/brain_downloads/';
+    $scope.downloadFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\brain_downloads\\' : app.getPath('downloads') + '/brain_downloads/';
     let ti = 60 * 1000;
     let th = 60 * ti;
     let td = 24 * th;
@@ -66,7 +66,8 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         if(application != undefined && application.date != undefined){
             let loc_array = address.split("/");
             let filename = loc_array[(loc_array.length - 1)];
-            let dir = $scope.downloadFolder + application.date + "/";
+            let dir = $scope.downloadFolder + application.date;
+            dir += (os.platform() == 'win32')? '\\': '/';
             let loc = dir + filename;
             if(!fs.existsSync($scope.downloadFolder)){
                 fs.mkdirSync($scope.downloadFolder);
