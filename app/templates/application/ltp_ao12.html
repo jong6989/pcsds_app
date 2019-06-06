@@ -1,7 +1,7 @@
 <div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div>
 <div class=" p-l-10" ng-controller="database_permit_controller" 
     ng-init="applicant_view=false;applicant_res=[];"> 
-    <h5 class="col-blue">ONLINE APPLICATION FOR LOCAL TRANSPORT PERMIT OF REEF-FISH-FOR-FOOD</h5>
+    <h5 class="col-blue">ONLINE APPLICATION FOR LOCAL TRANSPORT PERMIT OF WILDLIFE PRODUCTS</h5>
 
     
     <strong><small>Applicant :</small> 
@@ -181,7 +181,7 @@
     <md-card>
         <md-card-content ng-if="application.data.acknowledged != undefined ">
             Approved by : <strong>{{ application.data.acknowledged.staff }} </strong>
-            , on  <strong>{{application.data.acknowledged.date.split(' ')[0]}}</strong>
+            , on  <strong>{{application.data.acknowledged.date}}</strong>
         </md-card-content>
     </md-card>
     
@@ -196,7 +196,7 @@
         <md-card-content layout="row" layout-align="space-between">
             <div flex layout="column">
                 <div flex>
-                    Date Used : <strong> {{application.data.used.date.split(' ')[0]}} </strong> 
+                    Date Used : <strong> {{application.data.used.date}} </strong> 
                 </div>
                 <div flex>
                     Processed by : <strong>{{ application.data.used.staff }} </strong> 

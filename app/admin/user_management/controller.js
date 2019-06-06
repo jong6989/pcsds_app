@@ -1,5 +1,5 @@
 'use strict';
-myAppModule.controller('user_management_controller', function ($scope, $timeout, $utils, $mdToast, NgTableParams) {
+myAppModule.controller('user_management_controller', function ($scope, $mdDialog, $utils, $mdToast, NgTableParams) {
   var USER_DB = new JsonDB("./DB/USERS", true, false);
   const user_string = "/users";
 
@@ -32,6 +32,14 @@ myAppModule.controller('user_management_controller', function ($scope, $timeout,
 
   $scope.get_users_by_level = (lvl)=>{
     return USER_DB.getData(user_string).filter(user => user.user_level == lvl );
+  };
+
+  $scope.get_users = ()=>{
+    return USER_DB.getData(user_string);
+  };
+
+  $scope.get_user = (id)=>{
+    return USER_DB.getData(user_string).filter(user => user.id == id )[0];
   };
  
   $scope.download_users = ()=>{
@@ -88,6 +96,39 @@ myAppModule.controller('user_management_controller', function ($scope, $timeout,
       }
     };
     $utils.api(q);
+  };
+
+  $scope.change_password = (d,ev)=> {
+    var confirm = $mdDialog.prompt()
+      .title(`${d.data.first_name} ${d.data.last_name}`)
+      .textContent('Change password.')
+      .placeholder('password')
+      .ariaLabel('Change password')
+      .initialValue('')
+      .targetEvent(ev)
+      .required(true)
+      .ok('Change')
+      .cancel('Close');
+
+    $mdDialog.show(confirm).then(function(result) {
+      var q = { 
+        data : { 
+          action : "user/change_pass",
+          id : d.id,
+          password : result
+        },
+        callBack : function(data){
+          if(data.data.status == 0){
+            $scope.toast(data.data.error + "  : " + data.data.hint);
+          }else {
+            $scope.toast(data.data.data);
+          }
+        }
+      };
+      $utils.api(q);
+    }, function() {
+      //
+    });
   };
 
   $scope.update_selected_user = function(d){

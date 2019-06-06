@@ -1,11 +1,13 @@
 'use strict';
+var os = require('os');
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, shell } = require('electron');
 const remote = require('electron').remote;
 const app = remote.app;
 var fs = require('fs');
 var request = require('request');
+var path = require('path')
 const isOnline = require('is-online');
 //twillio
 const accountSid = 'ACe4baaac94c303c32abb9c5804affe7d8';
@@ -197,6 +199,20 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return fs.existsSync(f);
     };
 
+    $scope.exists = function (item, list) {
+      return list.indexOf(item) > -1;
+    };
+
+    $scope.toggle_select = function (item, list) {
+        var idx = list.indexOf(item);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        }
+        else {
+            list.push(item);
+        }
+    };
+
     $scope.get_data = function(path,xDb){
       try {
         return xDb.getData(path);
@@ -305,6 +321,12 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       );
     };
 
+    $scope.notify_me = (title,message,img)=>{
+      let n = {title: title, body : message};
+      if (img !== undefined) n.icon = img;
+      return new window.Notification(title, n);
+    };
+
     $scope.login_attempt = function(d){
       $scope.is_loading = true;
       var q = { 
@@ -362,6 +384,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
         contentElement: '#' + ID,
         parent: angular.element(document.body),
         targetEvent: ev,
+        fullscreen: true,
         clickOutsideToClose: true
       });
     };
@@ -560,7 +583,7 @@ myAppModule.controller('dashboard_controller', function ($scope, $timeout, $util
 
 });
 'use strict';
-myAppModule.controller('user_management_controller', function ($scope, $timeout, $utils, $mdToast, NgTableParams) {
+myAppModule.controller('user_management_controller', function ($scope, $mdDialog, $utils, $mdToast, NgTableParams) {
   var USER_DB = new JsonDB("./DB/USERS", true, false);
   const user_string = "/users";
 
@@ -593,6 +616,14 @@ myAppModule.controller('user_management_controller', function ($scope, $timeout,
 
   $scope.get_users_by_level = (lvl)=>{
     return USER_DB.getData(user_string).filter(user => user.user_level == lvl );
+  };
+
+  $scope.get_users = ()=>{
+    return USER_DB.getData(user_string);
+  };
+
+  $scope.get_user = (id)=>{
+    return USER_DB.getData(user_string).filter(user => user.id == id )[0];
   };
  
   $scope.download_users = ()=>{
@@ -651,6 +682,39 @@ myAppModule.controller('user_management_controller', function ($scope, $timeout,
     $utils.api(q);
   };
 
+  $scope.change_password = (d,ev)=> {
+    var confirm = $mdDialog.prompt()
+      .title(`${d.data.first_name} ${d.data.last_name}`)
+      .textContent('Change password.')
+      .placeholder('password')
+      .ariaLabel('Change password')
+      .initialValue('')
+      .targetEvent(ev)
+      .required(true)
+      .ok('Change')
+      .cancel('Close');
+
+    $mdDialog.show(confirm).then(function(result) {
+      var q = { 
+        data : { 
+          action : "user/change_pass",
+          id : d.id,
+          password : result
+        },
+        callBack : function(data){
+          if(data.data.status == 0){
+            $scope.toast(data.data.error + "  : " + data.data.hint);
+          }else {
+            $scope.toast(data.data.data);
+          }
+        }
+      };
+      $utils.api(q);
+    }, function() {
+      //
+    });
+  };
+
   $scope.update_selected_user = function(d){
     var q = { 
       data : { 
@@ -694,10 +758,11 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $scope.chatNav = {};
     $scope.add_tread_message = {};
     $scope.pc_tread_message = {};
+    $scope.group_tread_message = {};
     $scope.is_online = false;
     $scope.me = {};
     $scope.my_chats = {personal : {},others:{}};
-    $scope.downloadFolder = app.getPath('downloads') + '/brain_downloads/';
+    $scope.downloadFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\brain_downloads\\' : app.getPath('downloads') + '/brain_downloads/';
     let ti = 60 * 1000;
     let th = 60 * ti;
     let td = 24 * th;
@@ -705,7 +770,21 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     let ty = 12 * tm;
     const online_laps = 30000;
     var opc = {};
+    var initials = {};
     var applicationListener = null;
+    var download_queue = {};
+    var notifChatRecord = {};
+
+    $scope.getTransactionStatus = (n)=>{
+        if(n==0)return "New";
+        if(n==1)return "Received";
+        if(n==2)return "Declined";
+        if(n==3)return "On-Process";
+        if(n==4)return "On-Review";
+        if(n==5)return "For Recommendation";
+        if(n==6)return "Approved";
+        if(n==7)return "Used";
+    };
 
     fire.db.staffs.query.where("id","==",$scope.user.id).get().then(qs=>{
         qs.forEach(doc=>{
@@ -744,28 +823,37 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         }
     }
 
-    $scope.download_attachment = (server,address)=>{
-        let loc = app.getPath('downloads') + "/brain_downloads/" + address;
-        let loc_array = loc.split("/");
-        
-        for (let i = 0; i < (loc_array.length - 1); i++) {
-            let folder = "";
-            for (let v = 0; v < (i + 1); v++) {
-                folder += loc_array[v] + "/";
+    $scope.download_attachment = (server,address,application)=>{
+        if(application != undefined && application.date != undefined){
+            let loc_array = address.split("/");
+            let filename = loc_array[(loc_array.length - 1)];
+            let dir = $scope.downloadFolder + application.date;
+            dir += (os.platform() == 'win32')? '\\': '/';
+            let loc = dir + filename;
+            if(!fs.existsSync($scope.downloadFolder)){
+                fs.mkdirSync($scope.downloadFolder);
             }
-            let dir = folder;
-            if(!fs.existsSync(dir))
+            if(!fs.existsSync(dir)){
                 fs.mkdirSync(dir);
-        }
-        if(!fs.existsSync(loc)){
-            download(server + address, loc, function(){
-                console.log("downloaded " + address);
-            });
+            }
+            if(!fs.existsSync(loc)){
+                if(download_queue[loc] == undefined){
+                    download_queue[loc] = true;
+                    download(server + address, loc, function(){
+                        console.log("downloaded " + address);
+                        delete(download_queue[loc]);
+                    });
+                }
+            }
         }
     };
 
-    $scope.isFileExist = (address)=>{
-        return fs.existsSync(`${app.getPath('downloads')}/brain_downloads/${address}`);
+    $scope.openFolder = (appId)=>{
+        shell.openItem($scope.downloadFolder + appId);
+    }
+
+    $scope.isFolderExist = (appId)=>{
+        return fs.existsSync($scope.downloadFolder + appId);
     }
 
     $scope.toggleChatNav = (n,title)=>{
@@ -846,28 +934,44 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     //chats
     fire.db.chats.query.where("member", "array-contains", ""+$scope.user.id)
     .onSnapshot(function(querySnapshot) {
+        var forGroupChat = {};
         querySnapshot.forEach(function(doc) {
             let x = doc.data();
             if(x.type == "personal"){
                 x.member.splice(x.member.indexOf(`${$scope.user.id}`),1);
                 $scope.my_chats.personal[x.member[0]] = {id:doc.id,data:x};
+                
+                if(x.tread.length > 0){
+                    let n = x.tread[x.tread.length - 1];
+                    if (initials[`chat_${doc.id}`]){
+                        if(!notifChatRecord[n.date])$scope.notify_me(n.staff,n.message);
+                    }
+                    notifChatRecord[n.date] = true;
+                }
+                initials[`chat_${doc.id}`] = true;
                 if($scope.tabs.personal_chat != undefined){
                     if($scope.tabs.personal_chat.doc_id == doc.id){
-                        console.log("new chat");
                         $scope.tabs.personal_chat.tread = x.tread;
                         $scope.move_tab('personal_chat');
                         gotoBottom('spc_message_box');
                     }
                 }
-            }else {
-                $scope.my_chats.others[doc.id] = x;
+            }else if(x.type == 'group') {
+                forGroupChat[doc.id] = x;
             }
         });
+        $scope.group_chat_list = forGroupChat;
         $scope.$apply();
     });
 
+    $scope.create_group_chat = (data)=>{
+        fire.db.chats.query.add(data);
+        $scope.toast(`New Group Chat ${data.name} where created.`)
+        $scope.close_dialog();
+    };
+
     $scope.open_application_tab = (x)=>{
-        $scope.tabs.application = { title : 'Application',application : x};
+        $scope.tabs.application = { title : 'Transaction No.',application : x};
         applicationListener = null;
         applicationListener = fire.db.transactions.when(x.id,(d)=>{
             if($scope.tabs.application != undefined){
@@ -909,6 +1013,36 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         }
     };
 
+    $scope.open_group_chat = (group,docId)=>{
+        function opengrouptab (){
+            $scope.tabs.group_chat = { title : group.name, members : group.member,
+                doc_id : docId
+            };
+            $scope.move_tab('group_chat');
+            gotoBottom('group_message_box');
+            $scope.closeChatNav();
+        }
+        fire.db.chats.query.doc(docId).collection('treads').limit(500).orderBy('date').onSnapshot(qs=>{
+            let chats = []
+            qs.forEach(doc=>{
+                let d = doc.data();
+                d.id = doc.id;
+                chats.push(d);
+            });
+            opengrouptab();
+            let n = chats[chats.length -1];
+            if (initials[`groupchat_${docId}`]){
+                if(notifChatRecord['group_'+n.date] !== true){
+                    $scope.notify_me(group.name, n.staff + ': ' + n.message);
+                }
+            }
+            notifChatRecord['group_'+n.date] =true;
+            initials[`groupchat_${docId}`] = true;
+            $scope.tabs.group_chat.tread = chats;
+        });
+        opengrouptab();
+    };
+
     //load json data
     $http.get("./json/permitting/templates.json").then(function(data){
         $scope.application_templates = data.data.data; 
@@ -922,6 +1056,12 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             querySnapshot.forEach(function(doc) {
                 let z = doc.data();
                 d.push(z);
+                if (initials[`transaction_${doc.id}`]){
+                    let t = `${$scope.getTransactionStatus(z.status)}, Transaction`;
+                    let m = `Transaction Number : ${z.date}`;
+                    $scope.notify_me(t,m);
+                }
+                initials[`transaction_${doc.id}`] = true;
                 for (const key in $scope.tabs) {
                     if ($scope.tabs.hasOwnProperty(key) && key == 'application') {
                         if($scope.tabs[key].application.id == z.id){
@@ -935,8 +1075,8 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         });
     }
 
-    $scope.remove_spc = (staff,message)=>{
-        fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).update({"tread":firebase.firestore.FieldValue.arrayRemove(message)});
+    $scope.remove_spc = (docId,message)=>{
+        fire.db.chats.query.doc(docId).update({"tread":firebase.firestore.FieldValue.arrayRemove(message)});
         let i = 0;
         $scope.tabs.personal_chat.tread.forEach(e=>{
             if(e==message){
@@ -944,6 +1084,12 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             }
             i++;
         });
+    };
+
+    $scope.remove_chat_from_group = (groupId,docId,idx)=>{
+        let u = $scope.user.data.first_name + " " + $scope.user.data.last_name;
+        fire.db.chats.query.doc(groupId).collection('treads').doc(docId).update({"deleted": true,"removed_by": u});
+        $scope.tabs.group_chat.tread.splice(idx,1);
     };
     
     $scope.load_pending = ()=>{
@@ -977,7 +1123,14 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         }
     }
 
-    $scope.upload_attachments = (files,app_id)=>{
+    $scope.group_tread = (message)=>{
+        if($scope.tabs.group_chat.doc_id !== undefined){
+            let m = {message : message,date : Date.now(),staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name};
+            fire.db.chats.query.doc($scope.tabs.group_chat.doc_id).collection('treads').add(m);
+        }
+    }
+
+    $scope.upload_attachments = (files,app_id,tab)=>{
         var upload_file = (idx)=>{
             $scope.uploading_file = true;
             let f = files[idx];
@@ -986,8 +1139,16 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
                 if(code == 200){
                     if(files.length == (idx + 1) ){
                         let m = `<a href="${api_address}/${data.data}" target="blank" download>${f.name}</a>`;
-                        if($scope.add_tread_message[`${app_id}`] == undefined) $scope.add_tread_message[`${app_id}`] = "";
-                        $scope.add_tread_message[`${app_id}`] += m + "<br>\n";
+                        if(tab == 'chat'){
+                            if($scope.pc_tread_message[`${app_id}`] == undefined) $scope.pc_tread_message[`${app_id}`] = "";
+                            $scope.pc_tread_message[`${app_id}`] += m + "<br>\n";
+                        }else if(tab == 'group'){
+                            if($scope.group_tread_message[`${app_id}`] == undefined) $scope.group_tread_message[`${app_id}`] = "";
+                            $scope.group_tread_message[`${app_id}`] += m + "<br>\n";
+                        }else {
+                            if($scope.add_tread_message[`${app_id}`] == undefined) $scope.add_tread_message[`${app_id}`] = "";
+                            $scope.add_tread_message[`${app_id}`] += m + "<br>\n";
+                        }
                     }else {
                         upload_file(idx + 1);
                     }
@@ -1063,7 +1224,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
                     "staff_id" : $scope.user.id
                 }
             });
-            notify_applicant(application.user.id,application.id,"Sorry, we are unable to process your application. Please re-submit." + result);
+            notify_applicant(application.user.id,application.id,"Sorry, we are unable to process your application. Please re-submit. Reason: " + result);
             clear_application_tabs();
 
             let act = `You reject application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}.`;

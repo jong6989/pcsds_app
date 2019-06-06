@@ -11,6 +11,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $scope.chatNav = {};
     $scope.add_tread_message = {};
     $scope.pc_tread_message = {};
+    $scope.group_tread_message = {};
     $scope.is_online = false;
     $scope.me = {};
     $scope.my_chats = {personal : {},others:{}};
@@ -22,8 +23,21 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     let ty = 12 * tm;
     const online_laps = 30000;
     var opc = {};
+    var initials = {};
     var applicationListener = null;
     var download_queue = {};
+    var notifChatRecord = {};
+
+    $scope.getTransactionStatus = (n)=>{
+        if(n==0)return "New";
+        if(n==1)return "Received";
+        if(n==2)return "Declined";
+        if(n==3)return "On-Process";
+        if(n==4)return "On-Review";
+        if(n==5)return "For Recommendation";
+        if(n==6)return "Approved";
+        if(n==7)return "Used";
+    };
 
     fire.db.staffs.query.where("id","==",$scope.user.id).get().then(qs=>{
         qs.forEach(doc=>{
@@ -173,28 +187,44 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     //chats
     fire.db.chats.query.where("member", "array-contains", ""+$scope.user.id)
     .onSnapshot(function(querySnapshot) {
+        var forGroupChat = {};
         querySnapshot.forEach(function(doc) {
             let x = doc.data();
             if(x.type == "personal"){
                 x.member.splice(x.member.indexOf(`${$scope.user.id}`),1);
                 $scope.my_chats.personal[x.member[0]] = {id:doc.id,data:x};
+                
+                if(x.tread.length > 0){
+                    let n = x.tread[x.tread.length - 1];
+                    if (initials[`chat_${doc.id}`]){
+                        if(!notifChatRecord[n.date])$scope.notify_me(n.staff,n.message);
+                    }
+                    notifChatRecord[n.date] = true;
+                }
+                initials[`chat_${doc.id}`] = true;
                 if($scope.tabs.personal_chat != undefined){
                     if($scope.tabs.personal_chat.doc_id == doc.id){
-                        console.log("new chat");
                         $scope.tabs.personal_chat.tread = x.tread;
                         $scope.move_tab('personal_chat');
                         gotoBottom('spc_message_box');
                     }
                 }
-            }else {
-                $scope.my_chats.others[doc.id] = x;
+            }else if(x.type == 'group') {
+                forGroupChat[doc.id] = x;
             }
         });
+        $scope.group_chat_list = forGroupChat;
         $scope.$apply();
     });
 
+    $scope.create_group_chat = (data)=>{
+        fire.db.chats.query.add(data);
+        $scope.toast(`New Group Chat ${data.name} where created.`)
+        $scope.close_dialog();
+    };
+
     $scope.open_application_tab = (x)=>{
-        $scope.tabs.application = { title : 'Application',application : x};
+        $scope.tabs.application = { title : 'Transaction No.',application : x};
         applicationListener = null;
         applicationListener = fire.db.transactions.when(x.id,(d)=>{
             if($scope.tabs.application != undefined){
@@ -236,6 +266,36 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         }
     };
 
+    $scope.open_group_chat = (group,docId)=>{
+        function opengrouptab (){
+            $scope.tabs.group_chat = { title : group.name, members : group.member,
+                doc_id : docId
+            };
+            $scope.move_tab('group_chat');
+            gotoBottom('group_message_box');
+            $scope.closeChatNav();
+        }
+        fire.db.chats.query.doc(docId).collection('treads').limit(500).orderBy('date').onSnapshot(qs=>{
+            let chats = []
+            qs.forEach(doc=>{
+                let d = doc.data();
+                d.id = doc.id;
+                chats.push(d);
+            });
+            opengrouptab();
+            let n = chats[chats.length -1];
+            if (initials[`groupchat_${docId}`]){
+                if(notifChatRecord['group_'+n.date] !== true){
+                    $scope.notify_me(group.name, n.staff + ': ' + n.message);
+                }
+            }
+            notifChatRecord['group_'+n.date] =true;
+            initials[`groupchat_${docId}`] = true;
+            $scope.tabs.group_chat.tread = chats;
+        });
+        opengrouptab();
+    };
+
     //load json data
     $http.get("./json/permitting/templates.json").then(function(data){
         $scope.application_templates = data.data.data; 
@@ -249,6 +309,12 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             querySnapshot.forEach(function(doc) {
                 let z = doc.data();
                 d.push(z);
+                if (initials[`transaction_${doc.id}`]){
+                    let t = `${$scope.getTransactionStatus(z.status)}, Transaction`;
+                    let m = `Transaction Number : ${z.date}`;
+                    $scope.notify_me(t,m);
+                }
+                initials[`transaction_${doc.id}`] = true;
                 for (const key in $scope.tabs) {
                     if ($scope.tabs.hasOwnProperty(key) && key == 'application') {
                         if($scope.tabs[key].application.id == z.id){
@@ -262,8 +328,8 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         });
     }
 
-    $scope.remove_spc = (staff,message)=>{
-        fire.db.staffs.query.doc(`${$scope.user.id}`).collection('chats').doc(`${staff.id}`).update({"tread":firebase.firestore.FieldValue.arrayRemove(message)});
+    $scope.remove_spc = (docId,message)=>{
+        fire.db.chats.query.doc(docId).update({"tread":firebase.firestore.FieldValue.arrayRemove(message)});
         let i = 0;
         $scope.tabs.personal_chat.tread.forEach(e=>{
             if(e==message){
@@ -271,6 +337,12 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             }
             i++;
         });
+    };
+
+    $scope.remove_chat_from_group = (groupId,docId,idx)=>{
+        let u = $scope.user.data.first_name + " " + $scope.user.data.last_name;
+        fire.db.chats.query.doc(groupId).collection('treads').doc(docId).update({"deleted": true,"removed_by": u});
+        $scope.tabs.group_chat.tread.splice(idx,1);
     };
     
     $scope.load_pending = ()=>{
@@ -304,6 +376,13 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         }
     }
 
+    $scope.group_tread = (message)=>{
+        if($scope.tabs.group_chat.doc_id !== undefined){
+            let m = {message : message,date : Date.now(),staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name};
+            fire.db.chats.query.doc($scope.tabs.group_chat.doc_id).collection('treads').add(m);
+        }
+    }
+
     $scope.upload_attachments = (files,app_id,tab)=>{
         var upload_file = (idx)=>{
             $scope.uploading_file = true;
@@ -316,6 +395,9 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
                         if(tab == 'chat'){
                             if($scope.pc_tread_message[`${app_id}`] == undefined) $scope.pc_tread_message[`${app_id}`] = "";
                             $scope.pc_tread_message[`${app_id}`] += m + "<br>\n";
+                        }else if(tab == 'group'){
+                            if($scope.group_tread_message[`${app_id}`] == undefined) $scope.group_tread_message[`${app_id}`] = "";
+                            $scope.group_tread_message[`${app_id}`] += m + "<br>\n";
                         }else {
                             if($scope.add_tread_message[`${app_id}`] == undefined) $scope.add_tread_message[`${app_id}`] = "";
                             $scope.add_tread_message[`${app_id}`] += m + "<br>\n";
@@ -395,7 +477,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
                     "staff_id" : $scope.user.id
                 }
             });
-            notify_applicant(application.user.id,application.id,"Sorry, we are unable to process your application. Please re-submit." + result);
+            notify_applicant(application.user.id,application.id,"Sorry, we are unable to process your application. Please re-submit. Reason: " + result);
             clear_application_tabs();
 
             let act = `You reject application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}.`;

@@ -1,14 +1,3 @@
-<script>
-    // var map;
-    // function initMap() {
-    //     map = new google.maps.Map(document.getElementById('map'), {
-    //     center: {lat: 9.784568, lng: 118.7340907},
-    //     zoom: 9
-    //     });
-    // }
-</script>
-<!-- <div class="coordinate-map-view" id="map" style="height:300px"></div> -->
-<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJnCE34jNQ8mfQAcBt1zlGj5CJZwaOYfM&callback=initMap" async defer></script> -->
 <section layout-xs="column" layout-gt-xs="row" ng-controller="applications_controller" 
     ng-init="set_page_title('Online Applications');load_db(0);active_btn = 'New';load_pending();">
 
@@ -129,7 +118,8 @@
             <md-card md-whiteframe="3" flex layout="row">
                 <md-card-content flex layout="row">
                         <md-tabs flex md-selected="selectedTab" md-border-bottom md-autoselect md-swipe-content>
-                            <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : #{{tab.application.date || tab.staff.id_number || tab.date}}">
+                            <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : {{tab.application.date || tab.staff.id_number || tab.date || tab.members.length}}">
+                                
                                 <!-- Application Documents -->
                                 <div ng-show="f == 'application' || f == 'pending'">
                                     <div ng-hide="true"> {{application = tab.application}} </div>
@@ -201,9 +191,9 @@
                                     <md-content id="spc_message_box" layout-padding ng-style="{ height: (iframeHeight - 370) + 'px' }">
                                         <div ng-if="tab.tread.length > 0"  ng-repeat="x in tab.tread track by x.date " ng-init="passTime = date_gap(now(),x.date)">
                                             <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{passTime}} </cite> </strong>
-                                            <div class="m-l-40"><span class="{{'spc_' + $index }}" ></span></div>
-                                            <div class="{{'image_holder_'+$index}}"></div>
-                                            <i ng-init="load_html(x.message,'spc_'+$index);extract_images_from_html('spc_'+$index,'image_holder_'+$index,2000)"></i>
+                                            <div class="m-l-40"><span class="{{'personnal_chat_' + $index }}" ></span></div>
+                                            <div class="{{'chat_image_holder_'+$index}}"></div>
+                                            <i ng-init="load_html(x.message,'personnal_chat_'+$index);extract_images_from_html('personnal_chat_'+$index,'chat_image_holder_'+$index,2000)"></i>
                                             <i class="fa fa-trash col-red pointer" ng-dblclick="remove_spc(tab.staff,x)" ng-show="is_online">
                                                 <md-tooltip md-direction="top">Double Click to remove this message</md-tooltip>
                                             </i>
@@ -227,6 +217,48 @@
                                     </div>
                                     <md-divider></md-divider>
                                     <md-button class="md-primary" ng-click="removeTab('personal_chat')">
+                                        Close
+                                    </md-button>
+                                </div>
+                                <!-- Group Chat -->
+                                <div ng-show="f == 'group_chat'" >
+                                    <div ng-controller="user_management_controller" ng-init="download_users();">
+                                        <strong class="font-11 col-grey p-b-10 m-t-15" ng-repeat="x in tab.members" ng-init="member = get_user(x)"> {{member.data.first_name}},</strong>
+                                    </div>
+                                    <md-content id="group_message_box" layout-padding ng-style="{ height: (iframeHeight - 370) + 'px' }">
+                                        <div ng-if="tab.tread.length > 0"  ng-repeat="x in tab.tread track by x.date " ng-init="passTime = date_gap(now(),x.date)">
+                                            <div ng-if="x.deleted == undefined">
+                                                <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{passTime}} </cite> </strong>
+                                                <div class="m-l-40"><span class="{{'group_chat_' + $index }}" ></span></div>
+                                                <div class="{{'group_chat_image_holder_'+$index}}"></div>
+                                                <i ng-init="load_html(x.message,'group_chat_'+$index);extract_images_from_html('group_chat_'+$index,'group_chat_image_holder_'+$index,2000)"></i>
+                                                <i class="fa fa-trash col-red pointer" ng-dblclick="remove_chat_from_group(tab.doc_id,x.id,$index)" ng-show="is_online">
+                                                    <md-tooltip md-direction="top">Double Click to remove this message</md-tooltip>
+                                                </i>
+                                            </div>
+                                            <div ng-if="x.deleted" class="font-10 col-grey">
+                                                {{x.removed_by}} removed a message...
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </md-content>
+                                    <p ng-hide="is_online">No internet connection...</p>
+                                    <div ng-show="is_online">
+                                        <form name="form_add_tread_group">
+                                            <div layout="row">
+                                                <textarea flex accept-charset="ISO-8859-1" ng-model="group_tread_message[''+tab.doc_id]" rows="3" placeholder="message"></textarea>
+                                            </div>
+                                            <md-button type="submit" ng-disabled="group_tread_message[''+tab.doc_id] == undefined" ng-click="group_tread(group_tread_message[''+tab.doc_id]);group_tread_message[''+tab.doc_id] = '';" class="md-raised" >
+                                                <cite class="font-12"> <i class="fa fa-send"></i> Send Message</cite>
+                                            </md-button>
+                                            <md-progress-linear md-mode="indeterminate" ng-show="uploading_file"></md-progress-linear>
+                                            <md-button class="md-raised font-12"  ng-hide="uploading_file" ngf-select="upload_attachments($files,tab.doc_id,'group')">
+                                                <cite class="font-10"> <i class="fa fa-upload"></i> upload attachments</cite>
+                                            </md-button>
+                                        </form>
+                                    </div>
+                                    <md-divider></md-divider>
+                                    <md-button class="md-primary" ng-click="removeTab('group_chat')">
                                         Close
                                     </md-button>
                                 </div>
@@ -295,7 +327,13 @@
         <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="chats_nav">
 
             <md-toolbar class="bg-teal">
-                <h1 class="md-toolbar-tools">{{chatNav.title}}</h1>
+                <h1 class="md-toolbar-tools">
+                    {{chatNav.title}}
+                    <md-button ng-if="chatNav.idx == 2" class="md-icon-button" aria-label="Add" ng-click="showPrerenderedDialog($event,'createGroupChat')">
+                        <md-tooltip md-direction="buttom">Create a new group chat</md-tooltip>
+                        <i class="fa fa-plus m-l-20"></i>
+                    </md-button>
+                </h1>
             </md-toolbar>
             <md-content layout-padding>
                 <!-- Personal Chat -->
@@ -320,9 +358,21 @@
                                 <md-divider></md-divider>
                             </div>
                         </md-list-item>
-                        <hr>
                     </md-list>
                 </md-content>
+                <!-- Group Chat -->
+                <md-content flex ng-if="chatNav.idx == 2">
+                        <md-list class="md-dense" >
+                            <md-list-item class="md-2-line" ng-repeat="(i,x) in group_chat_list track by $index" 
+                                ng-click="open_group_chat(x,i)">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>{{ x.name }}</h3>
+                                    <h4>{{ x.member.length }} members</h4>
+                                    <md-divider></md-divider>
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
                 <!-- Action Logs -->
                 <md-content flex ng-if="chatNav.idx == 4">
                     <div class="input-group">
@@ -348,4 +398,7 @@
             </md-content>
         
         </md-sidenav>
+
+        <!--  -->
+        <div ng-include="'./app/templates/modal/newGroupChat.html'"></div>
 </section>

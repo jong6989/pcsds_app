@@ -7,6 +7,7 @@ const remote = require('electron').remote;
 const app = remote.app;
 var fs = require('fs');
 var request = require('request');
+var path = require('path')
 const isOnline = require('is-online');
 //twillio
 const accountSid = 'ACe4baaac94c303c32abb9c5804affe7d8';
@@ -198,6 +199,20 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return fs.existsSync(f);
     };
 
+    $scope.exists = function (item, list) {
+      return list.indexOf(item) > -1;
+    };
+
+    $scope.toggle_select = function (item, list) {
+        var idx = list.indexOf(item);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        }
+        else {
+            list.push(item);
+        }
+    };
+
     $scope.get_data = function(path,xDb){
       try {
         return xDb.getData(path);
@@ -306,6 +321,12 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       );
     };
 
+    $scope.notify_me = (title,message,img)=>{
+      let n = {title: title, body : message};
+      if (img !== undefined) n.icon = img;
+      return new window.Notification(title, n);
+    };
+
     $scope.login_attempt = function(d){
       $scope.is_loading = true;
       var q = { 
@@ -363,6 +384,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
         contentElement: '#' + ID,
         parent: angular.element(document.body),
         targetEvent: ev,
+        fullscreen: true,
         clickOutsideToClose: true
       });
     };
