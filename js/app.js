@@ -760,6 +760,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $scope.pc_tread_message = {};
     $scope.group_tread_message = {};
     $scope.is_online = false;
+    $scope.is_loading = false;
     $scope.me = {};
     $scope.my_chats = {personal : {},others:{}};
     $scope.downloadFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\brain_downloads\\' : app.getPath('downloads') + '/brain_downloads/';
@@ -785,6 +786,11 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         if(n==6)return "Approved";
         if(n==7)return "Used";
     };
+
+    function trigerLoading(){
+        $scope.is_loading = true;
+        $timeout(()=>{$scope.is_loading = false;},100000);
+    }
 
     fire.db.staffs.query.where("id","==",$scope.user.id).get().then(qs=>{
         qs.forEach(doc=>{
@@ -944,7 +950,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
                 if(x.tread.length > 0){
                     let n = x.tread[x.tread.length - 1];
                     if (initials[`chat_${doc.id}`]){
-                        if(!notifChatRecord[n.date])$scope.notify_me(n.staff,n.message);
+                        // if(!notifChatRecord[n.date])$scope.notify_me(n.staff,n.message);
                     }
                     notifChatRecord[n.date] = true;
                 }
@@ -1033,7 +1039,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             let n = chats[chats.length -1];
             if (initials[`groupchat_${docId}`]){
                 if(notifChatRecord['group_'+n.date] !== true){
-                    $scope.notify_me(group.name, n.staff + ': ' + n.message);
+                    // $scope.notify_me(group.name, n.staff + ': ' + n.message);
                 }
             }
             notifChatRecord['group_'+n.date] =true;
@@ -1059,7 +1065,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
                 if (initials[`transaction_${doc.id}`]){
                     let t = `${$scope.getTransactionStatus(z.status)}, Transaction`;
                     let m = `Transaction Number : ${z.date}`;
-                    $scope.notify_me(t,m);
+                    // $scope.notify_me(t,m);
                 }
                 initials[`transaction_${doc.id}`] = true;
                 for (const key in $scope.tabs) {
@@ -1161,44 +1167,60 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         if(files.length > 0 ) upload_file(0);
     };
 
-    function notify_applicant(applicant_id,application_id,message){
-        let notif = {
-            "type" : "applicant",
-            "user" : applicant_id,
-            "transaction_id" : application_id,
-            "message" : message,
-            "status" : "0",
-            "date" : Date.now()
-        };
-        fire.db.notifications.query.add(notif);
-    }
-    function clear_application_tabs(){
-        delete($scope.tabs.application);
-    }
+    // function notify_applicant(applicant_id,application_id,message){
+    //     let notif = {
+    //         "type" : "applicant",
+    //         "user" : applicant_id,
+    //         "transaction_id" : application_id,
+    //         "message" : message,
+    //         "status" : "0",
+    //         "date" : Date.now()
+    //     };
+    //     fire.db.notifications.query.add(notif);
+    // }
+
+    // function clear_application_tabs(){
+    //     delete($scope.tabs.application);
+    // }
 
     $scope.receive_single = (application)=>{
-        fire.db.transactions.update(application.id,{
-            "level":"5",
-            "status":"1",
-            "data.received" : {
-                "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
-                "date" : $scope.date_now(),
-                "staff_id" : $scope.user.id
-            }
+        trigerLoading();
+        fire.call('receive_transaction')({
+            doc_id:application.id,
+            doc_date: application.date,
+            staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+            staff_id: $scope.me.doc_id,
+            applicant_id: application.user.id,
+            applicant_name: application.data.application.applicant
+        }).then(res=>{
+            $scope.is_loading = false;
+            $scope.toast(res.data);
+            $scope.open_receipt_tab(res.data);
         });
-        notify_applicant(application.user.id,application.id,
-            "Your application is received and accepted for processing. Staff : " 
-            + $scope.user.data.first_name + ' ' 
-            + $scope.user.data.last_name);
         delete($scope.tabs.application);
 
-        let act = `You received application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box to process application. Thank you.`;
-        $scope.toast(act);
-        $scope.open_receipt_tab(act);
-        fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
-        setTimeout(()=>{
-            $scope.toast("See your pending box to process application.");
-        },3000)
+        // fire.db.transactions.update(application.id,{
+        //     "level":"5",
+        //     "status":"1",
+        //     "data.received" : {
+        //         "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+        //         "date" : $scope.date_now(),
+        //         "staff_id" : $scope.user.id
+        //     }
+        // });
+        // notify_applicant(application.user.id,application.id,
+        //     "Your application is received and accepted for processing. Staff : " 
+        //     + $scope.user.data.first_name + ' ' 
+        //     + $scope.user.data.last_name);
+        // delete($scope.tabs.application);
+
+        // let act = `You received application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box to process application. Thank you.`;
+        // $scope.toast(act);
+        // $scope.open_receipt_tab(act);
+        // fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
+        // setTimeout(()=>{
+        //     $scope.toast("See your pending box to process application.");
+        // },3000)
     }
 
     $scope.rejectApplication = (application,ev)=>{
@@ -1214,23 +1236,39 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             .cancel('Cancel');
 
         $mdDialog.show(confirm).then(function(result) {
-            fire.db.transactions.update(application.id,{
-                "level":"-1",
-                "status":"2",
-                "data.rejected" : {
-                    "message" : result,
-                    "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
-                    "date" : $scope.date_now(),
-                    "staff_id" : $scope.user.id
-                }
+            trigerLoading();
+            fire.call('reject_transaction')({
+                doc_id:application.id,
+                doc_date: application.date,
+                staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+                reject_reason: result,
+                staff_id: $scope.me.doc_id,
+                applicant_id: application.user.id,
+                applicant_name: application.data.application.applicant
+            }).then(res=>{
+                $scope.is_loading = false;
+                $scope.toast(res.data);
+                $scope.open_receipt_tab(res.data);
             });
-            notify_applicant(application.user.id,application.id,"Sorry, we are unable to process your application. Please re-submit. Reason: " + result);
-            clear_application_tabs();
+            delete($scope.tabs.application);
 
-            let act = `You reject application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}.`;
-            $scope.toast(act);
-            $scope.open_receipt_tab(act);
-            fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
+            // fire.db.transactions.update(application.id,{
+            //     "level":"-1",
+            //     "status":"2",
+            //     "data.rejected" : {
+            //         "message" : result,
+            //         "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+            //         "date" : $scope.date_now(),
+            //         "staff_id" : $scope.user.id
+            //     }
+            // });
+            // notify_applicant(application.user.id,application.id,"Sorry, we are unable to process your application. Please re-submit. Reason: " + result);
+            // clear_application_tabs();
+
+            // let act = `You reject application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}.`;
+            // $scope.toast(act);
+            // $scope.open_receipt_tab(act);
+            // fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
         }, function() {
             // cancel
         });
@@ -1239,68 +1277,118 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $scope.acceptApplication = (application,ev,extra)=>{
         let u = {};
         if(extra !== undefined) u = extra;
-        u["level"] = "7";
-        if(application.data.accepted == undefined){
-            u["status"] = "3";
-            u["data.accepted"] = {
-                "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
-                "date" : $scope.date_now(),
-                "staff_id" : $scope.user.id
-            };
-        }
+        // u["level"] = "7";
+        // if(application.data.accepted == undefined){
+        //     u["status"] = "3";
+        //     u["data.accepted"] = {
+        //         "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+        //         "date" : $scope.date_now(),
+        //         "staff_id" : $scope.user.id
+        //     };
+        // }
+        trigerLoading();
+        fire.call('process_transaction')({
+            doc_id:application.id,
+            doc_date: application.date,
+            staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+            process_info: u,
+            returned: (application.data.accepted == undefined)? true: false,
+            staff_id: $scope.me.doc_id,
+            applicant_id: application.user.id,
+            applicant_name: application.data.application.applicant
+        }).then(res=>{
+            $scope.is_loading = false;
+            $scope.toast(res.data);
+            $scope.open_receipt_tab(res.data);
+        });
+        delete($scope.tabs.application);
         
-        fire.db.transactions.update(application.id,u);
-        notify_applicant(application.user.id,application.id,"Your application is undergoing review.");
-        clear_application_tabs();
-        console.log(application)
-        let act = `You processed application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
-        $scope.toast(act);
-        $scope.open_receipt_tab(act);
-        fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
+        // fire.db.transactions.update(application.id,u);
+        // notify_applicant(application.user.id,application.id,"Your application is undergoing review.");
+        // clear_application_tabs();
+        // console.log(application)
+        // let act = `You processed application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
+        // $scope.toast(act);
+        // $scope.open_receipt_tab(act);
+        // fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
     }
 
     $scope.approveApplication = (application,ev,extra)=>{
         let u = {};
         if(extra !== undefined) u = extra;
-        u["level"] = "8";
-        if(application.data.approved == undefined){
-            u["status"] = "4";
-            u["data.approved"] = {
-                "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
-                "date" : $scope.date_now(),
-                "staff_id" : $scope.user.id
-            };
-        }
-        
-        fire.db.transactions.update(application.id,u);
-        notify_applicant(application.user.id,application.id,"Your application has been reviewed.");
-        clear_application_tabs();
+        trigerLoading();
+        fire.call('review_transaction')({
+            doc_id:application.id,
+            doc_date: application.date,
+            staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+            process_info: u,
+            returned: (application.data.approved == undefined)? true: false,
+            staff_id: $scope.me.doc_id,
+            applicant_id: application.user.id,
+            applicant_name: application.data.application.applicant
+        }).then(res=>{
+            $scope.is_loading = false;
+            $scope.toast(res.data);
+            $scope.open_receipt_tab(res.data);
+        });
+        delete($scope.tabs.application);
 
-        let act = `You reviewed application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
-        $scope.toast(act);
-        $scope.open_receipt_tab(act);
-        fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
+        // u["level"] = "8";
+        // if(application.data.approved == undefined){
+        //     u["status"] = "4";
+        //     u["data.approved"] = {
+        //         "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+        //         "date" : $scope.date_now(),
+        //         "staff_id" : $scope.user.id
+        //     };
+        // }
+        
+        // fire.db.transactions.update(application.id,u);
+        // notify_applicant(application.user.id,application.id,"Your application has been reviewed.");
+        // clear_application_tabs();
+
+        // let act = `You reviewed application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
+        // $scope.toast(act);
+        // $scope.open_receipt_tab(act);
+        // fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
     }
 
     $scope.recommendApplication = (application,ev,extra)=>{
         let u = {};
         if(extra !== undefined) u = extra;
-        u["level"] = "4";
-        if(application.data.recommended == undefined){
-            u["status"] = "5";
-            u["data.recommended"] = {
-                "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
-                "date" : $scope.date_now(),
-                "staff_id" : $scope.user.id
-            };
-        }
-        let act = `You recommend application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
-        $scope.toast(act);
-        $scope.open_receipt_tab(act);
-        fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
-        fire.db.transactions.update(application.id,u);
-        notify_applicant(application.user.id,application.id,"Your application has been recommended for approval.");
-        clear_application_tabs();
+        trigerLoading();
+        fire.call('recommend_transaction')({
+            doc_id:application.id,
+            doc_date: application.date,
+            staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+            process_info: u,
+            returned: (application.data.recommended == undefined)? true: false,
+            staff_id: $scope.me.doc_id,
+            applicant_id: application.user.id,
+            applicant_name: application.data.application.applicant
+        }).then(res=>{
+            $scope.is_loading = false;
+            $scope.toast(res.data);
+            $scope.open_receipt_tab(res.data);
+        });
+        delete($scope.tabs.application);
+
+        // u["level"] = "4";
+        // if(application.data.recommended == undefined){
+        //     u["status"] = "5";
+        //     u["data.recommended"] = {
+        //         "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+        //         "date" : $scope.date_now(),
+        //         "staff_id" : $scope.user.id
+        //     };
+        // }
+        // let act = `You recommend application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
+        // $scope.toast(act);
+        // $scope.open_receipt_tab(act);
+        // fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
+        // fire.db.transactions.update(application.id,u);
+        // notify_applicant(application.user.id,application.id,"Your application has been recommended for approval.");
+        // clear_application_tabs();
     }
 
     $scope.acknowledgeApplication = (application,ev,extra)=>{
@@ -1318,29 +1406,45 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         $mdDialog.show(confirm).then(function(result) {
             let u = {};
             if(extra !== undefined) u = extra;
-            u["level"] = "-1";
-            u["status"] = "6";
-            u["data.acknowledged"] = {
-                "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
-                "date" : $scope.date_now(),
-                "staff_id" : $scope.user.id
-            };
+            // u["level"] = "-1";
+            // u["status"] = "6";
+            // u["data.acknowledged"] = {
+            //     "staff" : $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+            //     "date" : $scope.date_now(),
+            //     "staff_id" : $scope.user.id
+            // };
             
             //expiration
-            if(application.name == "Application for Local Transport Permit RFF"){
-                u["expiration"] = $scope.to_date(Date.now() + tm);
-            }else {
-                u["expiration"] = $scope.to_date(Date.now() + ty);
-            }
+            // if(application.name == "Application for Local Transport Permit RFF"){
+            //     u["expiration"] = $scope.to_date(Date.now() + tm);
+            // }else {
+            //     u["expiration"] = $scope.to_date(Date.now() + ty);
+            // }
+            trigerLoading();
+            fire.call('approve_transaction')({
+                doc_id:application.id,
+                doc_date: application.date,
+                staff: $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
+                process_info: u,
+                staff_id: $scope.me.doc_id,
+                application_name: application.name,
+                applicant_id: application.user.id,
+                applicant_name: application.data.application.applicant
+            }).then(res=>{
+                $scope.is_loading = false;
+                $scope.toast(res.data);
+                $scope.open_receipt_tab(res.data);
+            });
+            delete($scope.tabs.application);
                 
-            fire.db.transactions.update(application.id,u);
-            notify_applicant(application.user.id,application.id,"Thank you very much! Your application is approved.");
-            clear_application_tabs();
+            // fire.db.transactions.update(application.id,u);
+            // notify_applicant(application.user.id,application.id,"Thank you very much! Your application is approved.");
+            // clear_application_tabs();
 
-            let act = `You approved application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
-            $scope.toast(act);
-            $scope.open_receipt_tab(act);
-            fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
+            // let act = `You approved application number ${application.date} of ${application.data.application.applicant} on ${$scope.to_date(application.date)}. See your pending box for updates. Thank you.`;
+            // $scope.toast(act);
+            // $scope.open_receipt_tab(act);
+            // fire.db.staffs.query.doc($scope.me.doc_id).collection("logs").add({name:"action",message:act,date:Date.now()});
         }, function() {
             // cancel
         });
@@ -2351,6 +2455,14 @@ myAppModule.controller('transactions_controller', function ($scope, $timeout, $u
     }
 
 });
+'use strict';
+myAppModule.controller('database_admin_cases_controller', function ($scope, $timeout, $utils, $mdToast,$localStorage) {
+    $scope.list_admin_cases = [
+        { name : "Admin Order 5, Series 2014", value : "AO-5-2014" },
+        { name : "Admin Order 6, Series 2014", value : "AO-6-2014" }
+    ];
+
+});
 myAppModule.controller('jao_controller',function($scope,$localStorage, $utils,$http) 
 {
     $scope.Accounting_JAO = $localStorage.Accounting_JAO || [];
@@ -2747,14 +2859,6 @@ myAppModule.controller('jao_controller',function($scope,$localStorage, $utils,$h
 
 
 })
-'use strict';
-myAppModule.controller('database_admin_cases_controller', function ($scope, $timeout, $utils, $mdToast,$localStorage) {
-    $scope.list_admin_cases = [
-        { name : "Admin Order 5, Series 2014", value : "AO-5-2014" },
-        { name : "Admin Order 6, Series 2014", value : "AO-6-2014" }
-    ];
-
-});
 'use strict';
 
 myAppModule.controller('database_permit_controller', function ($scope, $timeout, $utils, $mdToast,$localStorage) {

@@ -1,0 +1,40 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{user} {
+      allow read, write;
+    }
+    match /transactions/{transaction} {
+      allow read, write;
+    }
+    match /permits/{permit} {
+      allow read, write;
+    }
+    match /datasets/{dataset} {
+      allow read, write;
+      match /datasets/{dataset} {
+        allow read, write;
+      }
+    }
+    match /chats/{chat} {
+      allow read, write;
+      match /treads/{tread} {
+        allow read, write;
+      }
+    }
+    match /notifications/{notification} {
+      allow read, write;
+    }
+    match /settings/{setting} {
+      allow read, write;
+    }
+    match /staffs/{staff} {
+      allow read, write;
+      match /chats/{chat} {
+        allow read, write;
+      }
+      match /logs/{log} {
+        allow read, write;
+      }
+    }
+  }
+}

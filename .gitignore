@@ -67,3 +67,4 @@ uploads/
 package-lock.json
 dist/
 downloads/
+functions/node_modules/

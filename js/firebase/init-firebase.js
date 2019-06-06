@@ -17,6 +17,7 @@ firebase.firestore().enablePersistence();
 var db_list = ["transactions","datasets","notifications","chats","staffs"];
 var fire = {};
 var db = firebase.firestore();
+var fun = firebase.functions();
 
 fire.create_user = function(email, password, callback){
 	firebase.auth().createUserWithEmailAndPassword(email, password).catch(callback);
@@ -31,6 +32,10 @@ fire.logout = (callback)=>{
 			console.log(error)
 	  });
 }
+
+fire.call = (function_string)=>{
+	return fun.httpsCallable(function_string);
+};
 
 fire.user_changed = (a,b)=>{
 	firebase.auth().onAuthStateChanged(function(user) {
