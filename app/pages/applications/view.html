@@ -119,7 +119,7 @@
                 <md-card-content flex layout="column">
                     <div layout="row" layout-align="center center"><md-progress-circular class="m-t-50" ng-show="is_loading" md-diameter="96"></md-progress-circular></div>
                         <md-tabs flex md-selected="selectedTab" md-border-bottom md-autoselect md-swipe-content>
-                            <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : {{tab.application.date || tab.staff.id_number || tab.date || tab.members.length}}">
+                            <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : {{tab.application.date || tab.staff.id_number || tab.date || tab.members.length || tab.count}}">
                                 
                                 <!-- Application Documents -->
                                 <div ng-show="f == 'application' || f == 'pending'">
@@ -221,6 +221,46 @@
                                         Close
                                     </md-button>
                                 </div>
+
+                                <!-- Client Chat -->
+                                <div ng-show="f == 'client_chat'" >
+                                    <md-content id="cc_message_box" layout-padding ng-style="{ height: (iframeHeight - 420) + 'px' }">
+                                        <div ng-if="tab.tread.length > 0"  ng-repeat="x in tab.tread track by x.date " ng-init="passTime = date_gap(now(),x.date)">
+                                            <div ng-if="x.deleted == undefined">
+                                                <strong class="m-l-20 col-grey"> {{x.user}} | <cite class="m-l-20 font-9"> {{passTime}} </cite> </strong>
+                                                <div class="m-l-40"><span class="{{'client_chat_' + $index }}" ></span></div>
+                                                <div class="{{'client_chat_image_holder_'+$index}}"></div>
+                                                <i ng-init="load_html(x.message,'client_chat_'+$index);extract_images_from_html('client_chat_'+$index,'client_chat_image_holder_'+$index,2000)"></i>
+                                                <i class="fa fa-trash col-red pointer" ng-dblclick="remove_chat_from_client(tab.id,x.id,$index);" ng-show="is_online">
+                                                    <md-tooltip md-direction="top">Double Click to remove this message</md-tooltip>
+                                                </i>
+                                            </div>
+                                            <div ng-if="x.deleted" class="font-10 col-grey">
+                                                {{x.removed_by}} removed a message...
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </md-content>
+                                    <p ng-hide="is_online">No internet connection...</p>
+                                    <div ng-show="is_online">
+                                        <form name="form_add_tread_cc">
+                                            <div layout="row">
+                                                <textarea flex accept-charset="ISO-8859-1" ng-model="cc_tread_message[''+tab.id]" rows="3" placeholder="message"></textarea>
+                                            </div>
+                                            <md-button type="submit" ng-disabled="cc_tread_message[''+tab.id] == undefined" ng-click="client_tread(cc_tread_message[''+tab.id]);cc_tread_message[''+tab.id] = undefined;tab.count = 0;" class="md-raised" >
+                                                <cite class="font-12"> <i class="fa fa-send"></i> Send Message</cite>
+                                            </md-button>
+                                            <md-progress-linear md-mode="indeterminate" ng-show="uploading_file"></md-progress-linear>
+                                            <md-button class="md-raised font-12"  ng-hide="uploading_file" ngf-select="upload_attachments($files,tab.id,'client')">
+                                                <cite class="font-10"> <i class="fa fa-upload"></i> upload attachments</cite>
+                                            </md-button>
+                                        </form>
+                                    </div>
+                                    <md-divider></md-divider>
+                                    <md-button class="md-primary" ng-click="removeTab('client_chat')">
+                                        Close
+                                    </md-button>
+                                </div>
                                 <!-- Group Chat -->
                                 <div ng-show="f == 'group_chat'" >
                                     <div ng-controller="user_management_controller" ng-init="download_users();">
@@ -270,17 +310,20 @@
         </div>
 
         <div layout="column" layout-align="center center">
-            <md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="toggleChatNav(1,'Personnal Chats')">
+            <md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="update_user({'badges.personal_chat':0});toggleChatNav(1,'Personnal Chats');">
                     <md-tooltip md-direction="left">Personnal Chats</md-tooltip>
                 <i class="fa fa-comments-o"></i>
+                <span class="badge badge-pill badge-danger" ng-if="me.badges.personal_chat > 0">{{me.badges.personal_chat}}</span>
             </md-button>
-            <md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="toggleChatNav(2,'Group Chat')">
+            <md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="update_user({'badges.group_chat':0});toggleChatNav(2,'Group Chat');">
                 <md-tooltip md-direction="left">Group Chat</md-tooltip>
                 <i class="fa fa-users"></i>
+                <span class="badge badge-pill badge-danger" ng-if="me.badges.group_chat > 0">{{me.badges.group_chat}}</span>
             </md-button>
             <md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="toggleChatNav(3,'Client Chats')">
                 <md-tooltip md-direction="left">Client Chats</md-tooltip>
                 <i class="fa fa-commenting-o"></i>
+                <span class="badge badge-pill badge-danger" ng-if="client_chat_count > 0">{{client_chat_count}}</span>
             </md-button>
             <md-button class="md-fab md-mini bg-teal" aria-label="Logs" ng-click="toggleChatNav(4,'Action Logs')">
                 <md-tooltip md-direction="left">Action Logs</md-tooltip>
@@ -356,6 +399,22 @@
                                     <i class="fa fa-circle" ng-class="{'col-green': calculate_if_online(x.last_seen) }"></i> 
                                     #{{x.id_number}}
                                 </p>
+                                <span class="badge badge-pill badge-danger" ng-if="me.badges.group_chat > 0">{{my_chats.personal[x.id].data.tread.length}}</span>
+                                <md-divider></md-divider>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+                <!-- Client Chat -->
+                <md-content flex ng-if="chatNav.idx == 3">
+                    <md-list class="md-dense" >
+                        <md-list-item class="md-2-line" ng-repeat="x in client_chat_list track by x.date" 
+                            ng-click="open_client_chat(x)">
+                            <div class="md-list-item-text" layout="column">
+                                <h3>{{ x.name }} <span class="badge badge-pill badge-danger" ng-if="x.count > 0">{{x.count}}</span> 
+                                    <span ng-if="x.count > 0" class="col-red">New Message</span>
+                                    <span ng-if="x.count == 0" class="col-grey"> No inquiry...</span> 
+                                </h3>
                                 <md-divider></md-divider>
                             </div>
                         </md-list-item>

@@ -19,13 +19,18 @@ var fire = {};
 var db = firebase.firestore();
 var fun = firebase.functions();
 
-fire.create_user = function(email, password, callback){
-	firebase.auth().createUserWithEmailAndPassword(email, password).catch(callback);
-};
+// fire.create_user = function(email, password, callback){
+// 	firebase.auth().createUserWithEmailAndPassword(email, password).catch(callback);
+// };
 
-fire.login = function(user,email,callback){
-	firebase.auth().signInWithEmailAndPassword(user, email).catch(callback);
-};
+// fire.login = function(user,email,callback){
+// 	firebase.auth().signInWithEmailAndPassword(user, email).catch(callback);
+// };
+firebase.auth().signInWithEmailAndPassword('steve@pcsd.gov.ph', 'Pula6989~').then((res)=>{
+	console.log('logged in',res);
+}).catch((err)=>{
+	console.log(err);
+});
 
 fire.logout = (callback)=>{
 	firebase.auth().signOut().then(callback).catch(function(error) {

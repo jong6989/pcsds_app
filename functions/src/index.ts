@@ -30,20 +30,21 @@ function requireFields(f:Array<string>,data:any):boolean{
 function date_now(): string {
     const date = new Date();
     //YYYY-MM-DD HH:mm:ss
-    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getMilliseconds();
+    return date.getUTCFullYear() + '-' + (date.getUTCMonth() + 1) + '-' + date.getUTCDate() + ' ' + date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCMilliseconds();
 }
 
 function to_date(datenumber:number): string {
     const date = new Date(datenumber);
     //YYYY-MM-DD HH:mm:ss
-    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getMilliseconds();
+    return date.getUTCFullYear() + '-' + (date.getUTCMonth() + 1) + '-' + date.getUTCDate() + ' ' + date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCMilliseconds();
 }
 
-function notify_applicant(applicantId:string,transactionId:string,message:string): Promise<FirebaseFirestore.DocumentReference> {
+function notify_applicant(applicantId:string,transactionId:string,message:string,dateNumber: number): Promise<FirebaseFirestore.DocumentReference> {
     return admin.firestore().collection(`notifications`).add({
         "type" : "applicant",
         "user" : applicantId,
         "transaction_id" : transactionId,
+        "transaction_date" : dateNumber,
         "message" : message,
         "status" : "0",
         "date" : Date.now()
@@ -72,7 +73,7 @@ exports.receive_transaction = functions.https.onCall((data) => {
                 }
             }
         ).then(() => {
-            return notify_applicant(data.applicant_id, data.doc_id,`Your application was received and accepted for processing.`).then(() => {
+            return notify_applicant(data.applicant_id, data.doc_id,`Your application was received and accepted for processing.`,data.date).then(() => {
                 const act = `You received application number ${data.doc_date} of ${data.applicant_name} on ${to_date(data.doc_date)}. See your pending box to process application. Thank you.`;
                 return create_log(data.staff_id,act).then(() => {
                     return act;
@@ -97,7 +98,7 @@ exports.reject_transaction = functions.https.onCall((data) => {
                 }
             }
         ).then(() => {
-            return notify_applicant(data.applicant_id, data.doc_id,`Sorry, we are unable to process your application. Please re-submit. Reason: ${data.reject_reason}.`).then(() => {
+            return notify_applicant(data.applicant_id, data.doc_id,`Sorry, we are unable to process your application. Please re-submit. Reason: ${data.reject_reason}.`,data.date).then(() => {
                 const act = `You reject application number ${data.doc_date} of ${data.applicant_name} on ${to_date(data.doc_date)}. For the reason of : ${data.reject_reason}.`;
                 return create_log(data.staff_id,act).then(() => {
                     return act;
@@ -121,7 +122,7 @@ exports.process_transaction = functions.https.onCall((data) => {
             };
         }
         return admin.firestore().doc(`transactions/${data.doc_id}`).update(u).then(() => {
-            return notify_applicant(data.applicant_id, data.doc_id,`Your application is undergoing review.`).then(() => {
+            return notify_applicant(data.applicant_id, data.doc_id,`Your application is undergoing review.`,data.date).then(() => {
                 const act = `You processed application number ${data.doc_date} of ${data.applicant_name} on ${to_date(data.doc_date)}. See your pending box for updates. Thank you.`;
                 return create_log(data.staff_id,act).then(() => {
                     return act;
@@ -145,7 +146,7 @@ exports.review_transaction = functions.https.onCall((data) => {
             };
         }
         return admin.firestore().doc(`transactions/${data.doc_id}`).update(u).then(() => {
-            return notify_applicant(data.applicant_id, data.doc_id,`Your application has been reviewed.`).then(() => {
+            return notify_applicant(data.applicant_id, data.doc_id,`Your application has been reviewed.`,data.date).then(() => {
                 const act = `You reviewed application number ${data.doc_date} of ${data.applicant_name} on ${to_date(data.doc_date)}. See your pending box for updates. Thank you.`;
                 return create_log(data.staff_id,act).then(() => {
                     return act;
@@ -169,7 +170,7 @@ exports.recommend_transaction = functions.https.onCall((data) => {
             };
         }
         return admin.firestore().doc(`transactions/${data.doc_id}`).update(u).then(() => {
-            return notify_applicant(data.applicant_id, data.doc_id,`Your application has been recommended for approval.`).then(() => {
+            return notify_applicant(data.applicant_id, data.doc_id,`Your application has been recommended for approval.`,data.date).then(() => {
                 const act = `You recommend application number ${data.doc_date} of ${data.applicant_name} on ${to_date(data.doc_date)}. See your pending box for updates. Thank you.`;
                 return create_log(data.staff_id,act).then(() => {
                     return act;
@@ -198,7 +199,7 @@ exports.approve_transaction = functions.https.onCall((data) => {
             u["expiration"] = to_date(Date.now() + ty);
         }
         return admin.firestore().doc(`transactions/${data.doc_id}`).update(u).then(() => {
-            return notify_applicant(data.applicant_id, data.doc_id,`Thank you very much! Your application is approved.`).then(() => {
+            return notify_applicant(data.applicant_id, data.doc_id,`Thank you very much! Your application is approved.`,data.date).then(() => {
                 const act = `You approved application number ${data.doc_date} of ${data.applicant_name} on ${to_date(data.doc_date)}.`;
                 return create_log(data.staff_id,act).then(() => {
                     return act;
@@ -206,4 +207,47 @@ exports.approve_transaction = functions.https.onCall((data) => {
             });
         });
     }
+});
+
+exports.on_new_transaction = functions.firestore.document(`transactions/{tranId}`).onCreate((created) => {
+    const cd:any = created.data();
+    return admin.firestore().collection('staffs').where('user_level','==','5').get().then(qs => {
+        qs.forEach(doc => {
+            return doc.ref.update({
+                "badges.new_transaction": admin.firestore.FieldValue.increment(1)
+            }).then(()=>{
+                return doc.ref.collection(`notifications`).add({
+                    message: `new ${cd.name}`,
+                    status: 0
+                });
+            });
+        });
+    });
+});
+
+exports.on_chat = functions.firestore.document(`chats/{chat}`).onWrite(updated => {
+    const after:any = updated.after.data();
+    if(after.type === 'personal'){
+        return after.member.forEach((staffId: any) => {
+            return admin.firestore().doc(`staffs/${staffId}`).update({
+                "badges.personal_chat": admin.firestore.FieldValue.increment(1)
+            }).then(()=>{return null;});
+        });
+    }else {
+        return null;
+    }
+});
+
+exports.on_group_chat = functions.firestore.document(`chats/{chat}/treads/{tread}`).onCreate((created, context) => {
+    const chatId:string = context.params.chat;
+    return admin.firestore().doc(`chats/${chatId}`).get().then(qs=>{
+        const cd:any = qs.data();
+        return cd.member.forEach((staffId: any) => {
+            return admin.firestore().doc(`staffs/${staffId}`).update({
+                "badges.group_chat": admin.firestore.FieldValue.increment(1)
+            }).then(()=> {
+                return admin.firestore().doc(`chats/${chatId}`).update({"count":admin.firestore.FieldValue.increment(1)})
+            });
+        });
+    });
 });
