@@ -45,7 +45,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
 
     function trigerLoading(){
         $scope.is_loading = true;
-        $timeout(()=>{$scope.is_loading = false;},100000);
+        $timeout(()=>{$scope.is_loading = false;},4000);
     }
 
     // fire.db.staffs.query.where("id","==",$scope.user.id).get().then(qs=>{
@@ -56,12 +56,12 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     // });
 
     fire.db.staffs.when($scope.user.id,(res)=>{
-        if(res.badges.personal_chat > 0) {
-            $scope.toast('New chat conversation..')
-        }
-        if(res.badges.group_chat > 0) {
-            $scope.toast('New group chat conversation..')
-        }
+        // if(res.badges.personal_chat > 0) {
+        //     $scope.toast('New chat conversation..')
+        // }
+        // if(res.badges.group_chat > 0) {
+        //     $scope.toast('New group chat conversation..')
+        // }
         $scope.me = res;
         $scope.me.doc_id = res.id;
     });
@@ -366,6 +366,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
             var d = [];
             querySnapshot.forEach(function(doc) {
                 let z = doc.data();
+                console.log(doc.id);
                 d.push(z);
                 if (initials[`transaction_${doc.id}`]){
                     let t = `${$scope.getTransactionStatus(z.status)}, Transaction`;

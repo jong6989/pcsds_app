@@ -408,7 +408,7 @@
                 <!-- Client Chat -->
                 <md-content flex ng-if="chatNav.idx == 3">
                     <md-list class="md-dense" >
-                        <md-list-item class="md-2-line" ng-repeat="x in client_chat_list track by x.date" 
+                        <md-list-item class="md-2-line" ng-repeat="x in client_chat_list track by x.id" 
                             ng-click="open_client_chat(x)">
                             <div class="md-list-item-text" layout="column">
                                 <h3>{{ x.name }} <span class="badge badge-pill badge-danger" ng-if="x.count > 0">{{x.count}}</span> 
