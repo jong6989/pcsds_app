@@ -223,8 +223,9 @@ exports.on_new_transaction = functions.firestore.document(`transactions/{tranId}
     });
 });
 
-exports.on_chat = functions.firestore.document(`chats/{chat}`).onWrite(updated => {
+exports.on_chat = functions.firestore.document(`chats/{chat}`).onWrite( (updated, context) => {
     const after:any = updated.after.data();
+    // const chat = context.params.chat;
     if(after.type !== undefined){
         if(after.type === 'personal'){
             return after.member.forEach((staffId: any) => {
