@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "pcsd-app"
+    "default": "pcsd-app",
+    "Release": "pcsd-brain-systems"
   }
 }

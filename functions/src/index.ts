@@ -254,3 +254,23 @@ exports.on_group_chat = functions.firestore.document(`chats/{chat}/treads/{tread
         });
     });
 });
+
+
+
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+////////////////////FOR DOC//////////////////////////////
+////////////////////NETWORK//////////////////////////////
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+
+
+exports.onAgencyCreate = functions.firestore.document(`agencies/{id}`).onCreate( (created, context) => {
+    const id = context.params.id;
+    return admin.firestore().doc(`agencies/${id}`).update({"date": Date.now(), "id": id});
+} );
+
+exports.onAccountAddAtAgency = functions.firestore.document(`agencies/{id}/accounts/{idB}`).onCreate( (created, context) => {
+    const id = context.params.id;
+    return admin.firestore().doc(`agencies/${id}`).update({"accounts": admin.firestore.FieldValue.increment(1)});
+} );

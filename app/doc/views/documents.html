@@ -1,0 +1,50 @@
+<div flex layout>
+    <div flex="100" >
+        <md-toolbar class="bg-white">
+            <md-button class="md-button col-black" ng-click="openAddDraft($event)">
+                    <i class="fa fa-plus col-black"></i>
+                Add new draft
+            </md-button>
+        </md-toolbar>
+        
+        <!-- 
+
+            list here
+         -->
+    </div>
+
+    <div class="bg-teal" layout="column" layout-align="center center" >
+
+        <md-button class="md-fab md-mini bg-blue-grey" aria-label="Draft">
+            <md-tooltip md-direction="left">Draft</md-tooltip>
+            <i class="fa fa-save "></i>
+        </md-button>
+
+        <md-button class="md-fab md-mini bg-deep-purple" aria-label="Published">
+            <md-tooltip md-direction="left">Published</md-tooltip>
+            <i class="fa fa-file-zip-o"></i>
+        </md-button>
+
+        <md-button class="md-fab md-mini bg-amber" aria-label="Sent">
+            <md-tooltip md-direction="left">Sent</md-tooltip>
+            <i class="fa fa-share"></i>
+        </md-button>
+
+        <md-button class="md-fab md-mini bg-cyan" aria-label="Received">
+            <md-tooltip md-direction="left">Received</md-tooltip>
+            <i class="fa fa-inbox "></i>
+        </md-button>
+
+        <md-button class="md-fab md-mini bg-lime" aria-label="Pending">
+            <md-tooltip md-direction="left">Pending</md-tooltip>
+            <i class="fa fa-hourglass-o col-black"></i>
+        </md-button>
+
+        <md-button class="md-fab md-mini bg-brown" aria-label="Trash">
+            <md-tooltip md-direction="left">Trash</md-tooltip>
+            <i class="fa fa-trash "></i>
+        </md-button>
+
+        </md-nav-bar>
+    </div>
+</div>

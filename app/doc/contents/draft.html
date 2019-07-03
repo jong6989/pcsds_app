@@ -1,0 +1,67 @@
+<div layout-padding flex>
+    <div ng-if="(currentItem == null)" >
+        <h5>Welcome to Document Network!</h5>
+        <h6>To start saving your document, click the button bellow!</h6>
+        <md-button flex
+            class=" m-t-20 col-white bg-green md-raised p-t-20 p-b-20 p-l-10 p-r-10" 
+            ng-click="openAddDraft($event)">
+                <i class="fa fa-plus col-white"></i>
+            Create Document
+        </md-button>
+    </div>
+
+    <div ng-if="currentItem !== null">
+        <form name="formPublishDocument">
+            <h5><small>Draft ID</small> : {{currentItem.id}} </h5>
+            <md-input-container class="md-block m-t-40" flex>
+                <label>Source</label>
+                <input ng-change="toast(currentItem.source)" ng-model="currentItem.source" required>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex>
+                <label>Subject</label>
+                <input ng-change="toast(currentItem.subject)" ng-model="currentItem.subject" required>
+            </md-input-container>
+
+            <div flex-gt-sm ng-init="pdate = currentItem.published">
+                <strong>Date</strong>
+                <md-datepicker ng-change="toast(to_date(pdate))" ng-model="pdate"
+                    md-placeholder="Date"
+                    md-open-on-focus required>
+                </md-datepicker>
+            </div>
+            
+            <strong>Category</strong>
+            <md-autocomplete
+                class="md-block" flex-gt-sm="100"
+                md-selected-item="currentItem.category"
+                md-search-text="categ"
+                md-search-text-change="currentItem.category = categ"
+                md-items="x in doc_user.categories"
+                md-item-text="x"
+                md-min-length="0"
+                placeholder="Document Category">
+                <md-item-template>
+                {{x}}
+                </md-item-template>
+            </md-autocomplete>
+
+            <br>
+
+            <hr>
+            <cite class="col-pink">Published document can't be edited.</cite>
+            <br>
+            <div layout>
+                <md-button flex=60 class="md-button bg-green col-white" ng-click="null">
+                    <i class="fa fa-save"></i>
+                    Publish Document
+                </md-button>
+                <md-button flex=40 class="md-button bg-red col-white" ng-click="null">
+                    <i class="fa fa-trash"></i>
+                   Delete Draft
+                </md-button>
+            </div>
+        </form>
+    </div>
+    
+</div>

@@ -1,0 +1,38 @@
+<div layout="column" layout-align="center center">
+       
+    <div flex >
+        <md-card>
+            <md-card-title class="bg-teal">
+                <md-card-title-text>
+                    <span class="md-headline">New Account</span>
+                    <span class="md-subhead">Please Register</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content ng-init="newUser = {}" class="p-t-20">
+                <form name="docNewUserForm">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Name</label>
+                        <input ng-model="newUser.name" required>
+                    </md-input-container>
+    
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Email</label>
+                        <input type="email" ng-model="newUser.email" required>
+                    </md-input-container>
+    
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Contact Number</label>
+                        <input type="tel" ng-model="newUser.contact" required>
+                    </md-input-container>
+    
+                    <md-input-container class="md-block">
+                        <label>About you</label>
+                        <textarea ng-model="newUser.info" md-maxlength="500" rows="2" md-select-on-focus></textarea>
+                    </md-input-container>
+    
+                    <md-button type="submit" ng-click="setAccount(newUser)" ng-disabled="docNewUserForm.$invalid" class="md-raised md-primary">Login</md-button>
+                </form>
+            </md-card-content>
+        </md-card> 
+    </div>
+</div>

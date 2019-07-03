@@ -1,6 +1,6 @@
 <!-- Particles Plugin Js -->
 
-<div layout="column" style="height:{{get_window_height()}}px;" >
+<div layout="column" class=" bg-black" style="height:{{get_window_height()}}px;" >
 	<div flex="10"></div>
 	<div flex="20" layout-padding="20" layout="column" layout-align="center center">
 		<div>
@@ -8,6 +8,7 @@
 		</div>
 		<strong>PALAWAN COUNCIL FOR SUSTAINABLE DEVELOPMENT</strong>
 		<cite class="col-green">Biodiversity Resources Access Information Network</cite>
+		<br>
 	</div>
 	<div flex layout="row"  layout-align="center center">
 		
@@ -36,6 +37,16 @@
 				        </md-button>
 					</div>
 					<br>
+					<h6 class="align-center">Version {{ (app_settings == {})? '1.0.0' : app_settings.version_code }}</h6>
+					
+					<div layout="row">
+						<md-button flex ng-show="software_update_available"  
+							ng-disabled="!software_update_available" 
+							ng-click="open_software_update_folder()" 
+							class="md-raised md-warn" >
+							Install Software Update
+						</md-button>
+					</div>
 					<br>
 				</form>
 			</md-content>

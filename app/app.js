@@ -1,4 +1,5 @@
 'use strict';
+var app_version = 1;
 var os = require('os');
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
@@ -13,15 +14,6 @@ const isOnline = require('is-online');
 const accountSid = 'ACe4baaac94c303c32abb9c5804affe7d8';
 const authToken = '67efdbe7bf96924c2bf435b69df9530b';
 const smsClient = require('twilio')(accountSid, authToken);
-//mailer
-var nodemailer = require('nodemailer');
-nodemailer.SMTP = {
-  host: 'pcsd.gov.ph', // required
-  port: 465, // optional, defaults to 25 or 465
-  use_authentication: true, // optional, false by default
-  user: '_mainaccount@pcsd.gov.ph', // used only when use_authentication is true 
-  pass: '9I8tz7mCkrlF'  // used only when use_authentication is true
-}
 
 var download = (uri, filename, callback)=>{
   request.head(uri, function(err, res, body){
@@ -29,26 +21,6 @@ var download = (uri, filename, callback)=>{
   });
 };
 
-function sendEmail(sendTo,mailSubject,mailHtml,mailBody){
-  nodemailer.send_mail(
-    // e-mail options
-    {
-        sender: 'info@pcsd.gov.ph',
-        to:sendTo,
-        subject:mailSubject,
-        html: mailHtml,
-        body:mailBody
-    },
-    // callback function
-    function(error, success){
-      console.log(success);
-      console.log(error);
-        console.log('Message ' + success ? 'sent' : 'failed');
-    }
-  );
-}
-
-// sendEmail('steve@pcsd.gov.ph',"test mail lang uli ",'<strong>test ko 2</strong>GG na',"ito ay <b>body lang 2</b>");
 
 const api_address = "https://brain.pcsd.gov.ph/api";
 // const api_address = "http://localhost/pcsds_api";
@@ -162,13 +134,60 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.menus = [];
     $scope.api_address = api_address;
     $scope.is_loading = false;
-
+    $scope.app_settings = {};
+    $scope.downloadFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\brain_downloads\\' : app.getPath('downloads') + '/brain_downloads/';
+    $scope.software_update_available = false;
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildToggler('right');
 
     $scope.download = (uri,fname)=>{
       download(uri,fname,null)
     }
+
+    function updateDownload(version,address){
+      let loc_array = address.split("/");
+      let filename = loc_array[(loc_array.length - 1)];
+      let dir = $scope.downloadFolder + "brain_system_" + version;
+      dir += (os.platform() == 'win32')? '\\': '/';
+      let loc = dir + filename;
+
+      if(!fs.existsSync($scope.downloadFolder)){
+        fs.mkdirSync($scope.downloadFolder);
+      }
+      if(!fs.existsSync(dir)){
+          fs.mkdirSync(dir);
+      }
+      if(!fs.existsSync(loc)){
+        download(address, loc, function(){
+          $scope.toast("New Software Update available!");
+          $scope.software_update_available = true;
+          $scope.$apply();
+        });
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    fire.db.settings.when('desktop', (data) => {
+      $scope.app_settings = data;
+      if(app_version !== data.version) {
+        $scope.software_update_available = updateDownload(data.version, data.download);
+      }else {
+        $scope.software_update_available = false;
+      }
+      $scope.$apply();
+    }, (err) => {
+      console.log(err);
+    });
+
+    $scope.open_software_update_folder = () => {
+      let dir = $scope.downloadFolder + "brain_system_" + $scope.app_settings.version;
+      let loc_array = $scope.app_settings.download.split("/");
+      let filename = loc_array[(loc_array.length - 1)];
+      dir += ( (os.platform() == 'win32')? '\\': '/' ) + filename;
+      shell.openItem(dir);
+    };
 
     $scope.ngTable = function(d,c){
       if(c == undefined) c=100;

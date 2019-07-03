@@ -8,8 +8,16 @@
 	        </md-button>
 					<h2 flex="" md-truncate="" class="">PCSDS- {{page_title}}</h2>
 
+
+					<md-button flex ng-show="software_update_available"  
+						ng-disabled="!software_update_available" 
+						ng-click="open_software_update_folder()" 
+						class="md-raised md-warn" >
+						Install Software Update
+					</md-button>
+
 					<!-- database  -->
-						<md-menu-bar ng-controller="fireDbCrtl">
+						<!-- <md-menu-bar ng-controller="fireDbCrtl">
 								<md-menu>
 									<button aria-label="Database" ng-click="$mdMenu.open($event)" class="col-white">
 											<i class="fa fa-database m-r-10 m-l-5"></i>Database
@@ -44,7 +52,7 @@
 										</md-menu-item>
 									</md-menu-content>
 								</md-menu>
-							</md-menu-bar>
+							</md-menu-bar> -->
 
 						
 	        <md-button ng-click="toggleRight();clear_notif(new_notif)" ng-hide="isOpenRight()" class="md-icon-button animated infinite " ng-class="{'swing' : (new_notif > 0) }" aria-label="Notifications and News">
@@ -95,7 +103,7 @@
 	<!-- main content -->
 	<div flex layout-padding class="bg-light-grey" >
 		<md-content md-whiteframe="3" layout-padding="20" layout="column" ng-style="{ height: (iframeHeight - 15) + 'px' }">
-			<div ng-include="content_page"></div>
+			<div flex ng-include="content_page" layout></div>
 		</md-content>
 	</div>
     

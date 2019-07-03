@@ -7,7 +7,7 @@
 // 	messagingSenderId: "687215095072"
 // };
 
-var fire_config = {
+var config = {
 	apiKey: "AIzaSyBxVhjz6oGG0Vv3FDtPEmKLSYLy9kDVZNg",
 	authDomain: "pcsd-brain-systems.firebaseapp.com",
 	databaseURL: "https://pcsd-brain-systems.firebaseio.com",
@@ -24,7 +24,7 @@ firebase.firestore().settings({
 
 firebase.firestore().enablePersistence();
 
-var db_list = ["transactions","datasets","notifications","chats","staffs"];
+var db_list = ["transactions","datasets","notifications","chats","staffs","settings"];
 var fire = {};
 var db = firebase.firestore();
 var fun = firebase.functions();
@@ -35,7 +35,8 @@ var fun = firebase.functions();
 
 // fire.login = function(user,email,callback){
 // 	firebase.auth().signInWithEmailAndPassword(user, email).catch(callback);
-// };
+// // };
+
 firebase.auth().signInWithEmailAndPassword('steve@pcsd.gov.ph', 'Pula6989~').then((res)=>{
 	console.log('logged in',res);
 }).catch((err)=>{

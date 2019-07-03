@@ -1,0 +1,50 @@
+
+<md-content layout-padding flex >
+
+    <md-card>
+        <md-card-content class="bg-teal">
+            <h3> {{currentItem.short_name}} </h3>
+            <h4> {{currentItem.name}} </h4>
+        </md-card-content>
+    </md-card>
+    
+    <md-card ng-if="doc_user[currentItem.id].admin" ng-init="getAccounts()">
+        <md-card-title>
+            <h4 class="col-purple">ADMIN FUNCTIONS</h4>
+        </md-card-title>
+        <md-divider ></md-divider>
+        <div class="p-l-10 p-t-5 p-b-5">
+            <i class="fa fa-search m-r-5"></i>
+            <input type="text" placeholder="Search..." ng-model="search_account" >
+        </div>
+        <md-card-content layout-gt-xs layout-xs="column" style="max-height:300px">
+            
+            <div flex>
+                <h6><strong>All accounts</strong></h6>
+                <ol>
+                    <li ng-repeat="x in resultAccounts | filter : search_account" ng-if="doc_user.id !== x.id">
+                            {{x.name}}<i ng-click="openAddToAgency(x,$index,$event)" 
+                            ng-if="!hasId(currentItem.id,x.agencies) " 
+                            class="fa fa-plus pointer col-green m-l-10"></i>
+                    </li>
+                </ol>
+            </div>
+            <md-divider class="m-b-10"></md-divider>
+            <div flex>
+                <h6><strong>{{currentItem.short_name}} accounts</strong></h6>
+                <ol>
+                    <li ng-repeat="x in agencyAccounts" ng-if="doc_user.id !== x.id">
+                            {{x.name}} : 
+                            <span ng-if="x[currentItem.id].division_head">Division Head</span>
+                            <span ng-if="x[currentItem.id].department_head">Department Head</span>
+                            <span ng-if="x[currentItem.id].office_head">Agency Head</span>
+                            <span ng-if="x[currentItem.id].front_office">Receiving Staff</span>
+                            <i ng-click="removeToAgency(x,$event)"
+                            class="fa fa-minus pointer col-red"></i>
+                    </li>
+                </ol>
+            </div>
+            
+        </md-card-content>
+    </md-card>
+</md-content>

@@ -19,7 +19,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $scope.is_loading = false;
     $scope.me = {doc_id:$scope.user.id};
     $scope.my_chats = {personal : {},others:{}};
-    $scope.downloadFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\brain_downloads\\' : app.getPath('downloads') + '/brain_downloads/';
+    
     let ti = 60 * 1000;
     let th = 60 * ti;
     let td = 24 * th;
