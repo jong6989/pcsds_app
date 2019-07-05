@@ -1,3 +1,9 @@
+<style>
+.fileDropDiv {
+    background-color: rgba(151, 150, 150, 0.712);
+    padding: 10px;
+}
+</style>
 <div layout-padding flex>
     <div ng-if="(currentItem == null)" >
         <h5>Welcome to Document Network!</h5>
@@ -15,26 +21,27 @@
             <h5><small>Draft ID</small> : {{currentItem.id}} </h5>
             <md-input-container class="md-block m-t-40" flex>
                 <label>Source</label>
-                <input ng-change="toast(currentItem.source)" ng-model="currentItem.source" required>
+                <input ng-blur="updateDocument(currentItem.id,{'source':currentItem.source})" ng-model="currentItem.source" required>
             </md-input-container>
 
             <md-input-container class="md-block" flex>
                 <label>Subject</label>
-                <input ng-change="toast(currentItem.subject)" ng-model="currentItem.subject" required>
+                <input ng-blur="updateDocument(currentItem.id,{'subject':currentItem.subject})" ng-model="currentItem.subject" required>
             </md-input-container>
 
             <div flex-gt-sm ng-init="pdate = currentItem.published">
                 <strong>Date</strong>
-                <md-datepicker ng-change="toast(to_date(pdate))" ng-model="pdate"
+                <md-datepicker ng-blur="updateDocument(currentItem.id,{'published': to_date(pdate)})" ng-model="pdate"
                     md-placeholder="Date"
                     md-open-on-focus required>
                 </md-datepicker>
             </div>
             
             <strong>Category</strong>
-            <md-autocomplete
+            <md-autocomplete ng-init="categ = currentItem.category"
                 class="md-block" flex-gt-sm="100"
-                md-selected-item="currentItem.category"
+                md-selected-item="categ"
+                md-selected ="toast(currentItem.category)"
                 md-search-text="categ"
                 md-search-text-change="currentItem.category = categ"
                 md-items="x in doc_user.categories"
@@ -47,9 +54,39 @@
             </md-autocomplete>
 
             <br>
-
             <hr>
-            <cite class="col-pink">Published document can't be edited.</cite>
+            <strong>Files</strong>
+
+            <div class="fileDropDiv" layout="column" layout-align="center center"
+                ng-change="upload_file(currentItem.id,file_drop)"
+                ngf-drop ng-model="file_drop"
+                ngf-allow-dir="true"
+                ngf-drag-over-class="'dragover'"
+                multiple="multiple"
+                ngf-multiple="true">
+                
+                <div>
+                    <ol>
+                        <li ng-repeat="x in currentItem.files">
+                            <input ng-model="x.name" ng-blur="renameFile(currentItem.id,x.name,$index)"  type="text" style="width: 90%">
+                            <i class="fa fa-trash col-red pointer" ng-click="deleteDocFile(currentItem.id,x,$event)"></i>
+                            <span class="ellipse font-9 col-white">{{x.url}}</span>
+                        </li>
+                    </ol>
+                </div>
+                
+                <md-progress-linear ng-show="isUploading" md-mode="indeterminate"></md-progress-linear>
+                <div ng-hide="isUploading">
+                    <md-button class="md-button" multiple="multiple" ngf-select="upload_file(currentItem.id,$files)">
+                        <i class="fa fa-upload col-white"></i>
+                        <span class="col-white">Click or Drag files here</span>
+                    </md-button>
+                </div>
+
+            </div>
+            
+            <hr>
+            <cite class="col-pink">Published document cannot be edited.</cite>
             <br>
             <div layout>
                 <md-button flex=60 class="md-button bg-green col-white" ng-click="null">
@@ -63,5 +100,7 @@
             </div>
         </form>
     </div>
-    
+    <br>
+    <br>
+    <br>
 </div>

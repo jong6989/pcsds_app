@@ -172,7 +172,10 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     fire.db.settings.when('desktop', (data) => {
       $scope.app_settings = data;
       if(app_version !== data.version) {
-        $scope.software_update_available = updateDownload(data.version, data.download);
+        let downloadUrl = data.url[os.platform()];
+        if(downloadUrl !== undefined) {
+          $scope.software_update_available = updateDownload(data.version, data.download);
+        }
       }else {
         $scope.software_update_available = false;
       }

@@ -38,7 +38,7 @@ var fun = firebase.functions();
 // // };
 
 firebase.auth().signInWithEmailAndPassword('steve@pcsd.gov.ph', 'Pula6989~').then((res)=>{
-	console.log('logged in',res);
+	// console.log('logged in',res);
 }).catch((err)=>{
 	console.log(err);
 });
