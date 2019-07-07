@@ -7,13 +7,23 @@
             </md-button>
         </md-toolbar>
         
-        <!-- 
-
-            list here
-         -->
+        <md-content>
+            <md-list class="md-dense" flex>
+                <md-subheader class="md-sticky col-teal">
+                    My Draft <input ng-model="search_draft" placeholder="search" class="m-l-10" style="border: none;border-bottom: #777 1px;">
+                </md-subheader>
+                <md-list-item class="md-3-line" ng-repeat="x in myDrafts | filter : search_draft" ng-click="setCurrentItem(x)">
+                    <div class="md-list-item-text" layout="column">
+                      <h3>{{ x.source }}</h3>
+                      <h4>{{ x.subject }}</h4>
+                      <p>{{ x.published }}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-content>
     </div>
 
-    <div class="bg-teal" layout="column" layout-align="center center" >
+    <!-- <div class="bg-teal" layout="column" layout-align="center center" >
 
         <md-button class="md-fab md-mini bg-blue-grey" aria-label="Draft">
             <md-tooltip md-direction="left">Draft</md-tooltip>
@@ -46,5 +56,5 @@
         </md-button>
 
         </md-nav-bar>
-    </div>
+    </div> -->
 </div>

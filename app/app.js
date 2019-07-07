@@ -1,5 +1,5 @@
 'use strict';
-var app_version = 1;
+var app_version = 2;
 var os = require('os');
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
@@ -14,6 +14,11 @@ const isOnline = require('is-online');
 const accountSid = 'ACe4baaac94c303c32abb9c5804affe7d8';
 const authToken = '67efdbe7bf96924c2bf435b69df9530b';
 const smsClient = require('twilio')(accountSid, authToken);
+const dbFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\pcsd_app_db\\' : app.getPath('downloads') + '/pcsd_app_db/';
+
+if(!fs.existsSync(dbFolder)){
+  fs.mkdirSync(dbFolder);
+}
 
 var download = (uri, filename, callback)=>{
   request.head(uri, function(err, res, body){
@@ -135,6 +140,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.api_address = api_address;
     $scope.is_loading = false;
     $scope.app_settings = {};
+    $scope.app_version_code = '1.0.3';
     $scope.downloadFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\brain_downloads\\' : app.getPath('downloads') + '/brain_downloads/';
     $scope.software_update_available = false;
     $scope.toggleLeft = buildDelayedToggler('left');
@@ -497,6 +503,10 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       if(n==6)return "Field Staff";
       if(n==7)return "Permitting Chief";
       if(n==8)return "Operations Director";
+      if(n==9)return "Legal Staff";
+      if(n==10)return "Staff";
+      if(n==11)return "Division Head";
+      if(n==12)return "Department Head";
     };
   
     if(global.location.search == ""){

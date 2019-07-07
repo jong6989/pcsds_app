@@ -15,7 +15,7 @@
             Create Document
         </md-button>
     </div>
-
+    
     <div ng-if="currentItem !== null">
         <form name="formPublishDocument">
             <h5><small>Draft ID</small> : {{currentItem.id}} </h5>
@@ -38,10 +38,9 @@
             </div>
             
             <strong>Category</strong>
-            <md-autocomplete ng-init="categ = currentItem.category"
+            <md-autocomplete
                 class="md-block" flex-gt-sm="100"
-                md-selected-item="categ"
-                md-selected ="toast(currentItem.category)"
+                md-selected-item="currentItem.category"
                 md-search-text="categ"
                 md-search-text-change="currentItem.category = categ"
                 md-items="x in doc_user.categories"
@@ -54,6 +53,13 @@
             </md-autocomplete>
 
             <br>
+            <hr>
+
+            <md-input-container class="md-block">
+                <label>Description</label>
+                <textarea  ng-blur="updateDocument(currentItem.id,{'description':currentItem.description})" ng-model="currentItem.description" md-maxlength="5000" rows="6" md-select-on-focus></textarea>
+            </md-input-container>
+
             <hr>
             <strong>Files</strong>
 
@@ -68,15 +74,22 @@
                 <div>
                     <ol>
                         <li ng-repeat="x in currentItem.files">
-                            <input ng-model="x.name" ng-blur="renameFile(currentItem.id,x.name,$index)"  type="text" style="width: 90%">
+                            <input ng-model="x.name" ng-blur="updateDocument(currentItem.id,{'files':currentItem.files})"  type="text" style="width: 90%">
                             <i class="fa fa-trash col-red pointer" ng-click="deleteDocFile(currentItem.id,x,$event)"></i>
+                            <i ng-hide="x.opened" class="fa fa-file col-blue pointer" ng-click="x.opened = true;openFile(currentItem.id,x.path,currentItem.files)">
+                                <md-tooltip md-direction="top">Open File</md-tooltip>
+                            </i>
+                            <i ng-show="x.opened" class="fa fa-refresh col-yellow pointer" ng-click="x.opened = false;refreshFile(currentItem.id,x,currentItem.files)">
+                                <md-tooltip md-direction="top">Refresh File</md-tooltip>
+                            </i>
                             <span class="ellipse font-9 col-white">{{x.url}}</span>
+                            <span ng-hide="checkIfUploaded(x.path)" class="font-10 col-red">not yet uploaded...</span>
+                            <i class="fa fa-check col-green" ng-show="checkIfUploaded(x.path)"></i>
                         </li>
                     </ol>
                 </div>
                 
-                <md-progress-linear ng-show="isUploading" md-mode="indeterminate"></md-progress-linear>
-                <div ng-hide="isUploading">
+                <div>
                     <md-button class="md-button" multiple="multiple" ngf-select="upload_file(currentItem.id,$files)">
                         <i class="fa fa-upload col-white"></i>
                         <span class="col-white">Click or Drag files here</span>
@@ -88,12 +101,15 @@
             <hr>
             <cite class="col-pink">Published document cannot be edited.</cite>
             <br>
+            <!-- <cite ng-hide="filesTobeUploaded.length == 0" class="col-red">Publishing will be available after upload complete. {{filesTobeUploaded.length}}</cite> -->
+            <br>
             <div layout>
-                <md-button flex=60 class="md-button bg-green col-white" ng-click="null">
+                <span flex>Publishing not yet Available...</span>
+                <!-- <md-button ng-class="{'bg-green col-white': (filesTobeUploaded.length == 0) }" ng-disabled="filesTobeUploaded.length > 0 || true" flex=60 class="md-button" ng-click="null">
                     <i class="fa fa-save"></i>
                     Publish Document
-                </md-button>
-                <md-button flex=40 class="md-button bg-red col-white" ng-click="null">
+                </md-button> -->
+                <md-button flex=40 class="md-button bg-red col-white" ng-click="deleteDraft(currentItem.id, $event)">
                     <i class="fa fa-trash"></i>
                    Delete Draft
                 </md-button>

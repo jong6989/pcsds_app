@@ -6,14 +6,22 @@
 	        <md-button ng-click="toggleLeft()" hide-gt-lg class="md-icon-button" aria-label="RightSide" >
 	          <i class="fa fa-bars"></i>
 	        </md-button>
-					<h2 flex="" md-truncate="" class="">PCSDS- {{page_title}}</h2>
+					<h2 flex="" md-truncate="" class=""><span hide-xs>PCSDS-</span> {{page_title}}</h2>
 
+					<h5 class="col-white"><span hide-xs>Version</span> {{app_version_code}} </h5>
+
+					<md-button 
+						ng-click="change_page('manual')" 
+						class="md-primary col-yellow" >
+						<i class="fa fa-book col-yellow"></i>
+						<span hide-xs>System Manual</span>
+					</md-button>
 
 					<md-button flex ng-show="software_update_available"  
 						ng-disabled="!software_update_available" 
 						ng-click="open_software_update_folder()" 
 						class="md-raised md-warn" >
-						Install Software Update
+						<span hide-xs>Install Software</span> Update
 					</md-button>
 
 					<!-- database  -->

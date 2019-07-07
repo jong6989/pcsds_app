@@ -1,6 +1,7 @@
 'use strict';
+
 myAppModule.controller('user_management_controller', function ($scope, $mdDialog, $utils, $mdToast, NgTableParams) {
-  var USER_DB = new JsonDB("./DB/USERS", true, false);
+  var USER_DB = new JsonDB(dbFolder + "USERS", true, false);
   const user_string = "/users";
 
   try {
@@ -22,7 +23,11 @@ myAppModule.controller('user_management_controller', function ($scope, $mdDialog
     {level:5,name:"Permitting Staff"},
     {level:6,name:"Field Staff"},
     {level:7,name:"Permitting Chief"},
-    {level:8,name:"Operations Director"}
+    {level:8,name:"Operations Director"},
+    {level:9,name:"Legal Staff"},
+    {level:10,name:"Staff"},
+    {level:11,name:"Division Head"},
+    {level:12,name:"Department Head"}
   ];
 
   $scope.invalidate_table = ()=>{
