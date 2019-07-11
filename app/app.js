@@ -1,5 +1,5 @@
 'use strict';
-var app_version = 2;
+var app_version = 3;
 var os = require('os');
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
@@ -140,7 +140,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.api_address = api_address;
     $scope.is_loading = false;
     $scope.app_settings = {};
-    $scope.app_version_code = '1.0.3';
+    $scope.app_version_code = '1.0.4';
     $scope.downloadFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\brain_downloads\\' : app.getPath('downloads') + '/brain_downloads/';
     $scope.software_update_available = false;
     $scope.toggleLeft = buildDelayedToggler('left');

@@ -1,49 +1,14 @@
 'use strict';
-//  // Debug
-// var doc_config = {
-// 	apiKey: "AIzaSyDJnCE34jNQ8mfQAcBt1zlGj5CJZwaOYfM",
-// 	authDomain: "pcsd-app.firebaseapp.com",
-// 	databaseURL: "https://pcsd-app.firebaseio.com",
-// 	projectId: "pcsd-app",
-// 	storageBucket: "pcsd-app.appspot.com",
-// 	messagingSenderId: "687215095072"
-// };
 
-//// Realese
-var doc_config = {
-	apiKey: "AIzaSyCELuc2f0_CcV35xeHid9-iFHU7hbrNPKg",
-	authDomain: "document-network.firebaseapp.com",
-	databaseURL: "https://document-network.firebaseio.com",
-	projectId: "document-network",
-	storageBucket: "document-network.appspot.com",
-	messagingSenderId: "583848541283"
-};
-
-var docFire = firebase.initializeApp(doc_config, 'doc');
-
-docFire.firestore().settings({
-	cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
-});
-docFire.firestore().enablePersistence();
-
-var doc = {};
-var func = {};
-doc.db = docFire.firestore();
-doc.fun = docFire.functions();
-const acc = 'accounts';
-const agencies = 'agencies';
-const documents = 'documents';
-const offlineFiles = 'offlineFiles';
-const storageFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\document_network\\' : app.getPath('downloads') + '/document_network/';
-
-myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $http) {
+document.write(`<script src="./app/doc/settings.js"></script>`);
+myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $localStorage) {
     $scope.doc_content = '';
     $scope.isLoading = true;
     $scope.isUploading = false;
     $scope.currentNavItem = 'Documents';
     $scope.currentDocSelected = 'Draft';
     $scope.currentClicked = 'draft';
-    $scope.currentItem = null;
+    $scope.currentItem = ($localStorage.currentItem == undefined)? null : $localStorage.currentItem;
     $scope.currentSubItem = {};
     $scope.currentSubIndex = {};
     $scope.myAgencies = [];
@@ -51,16 +16,39 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     $scope.resultAccounts = [];
     $scope.agencyAccounts = [];
     $scope.filesTobeUploaded = [];
-    $scope.myDrafts = [];
+    $scope.myDrafts = ($localStorage.myDrafts == undefined)? [] : $localStorage.myDrafts;
     $scope.docTabsSelected = 0;
     $scope.n = {};
-    const userId = `pcsd_${$scope.user.id}`;
-    $scope.doc_user = {};
-    
+    const userId = `pcsd_${$scope.user.id}`; //id from pcsd web api , (php), that will be saved to accounts collection
+    $scope.userId = userId;
+    $scope.doc_user = ($localStorage.doc_user == undefined)? { id: userId } : $localStorage.doc_user; //save data to local storage to remember last user
+    $scope.dateA = '';
+    $scope.dateB = '';
+    var func = {};
+
+    func.updateDoc = (id,data,callBack) => {
+        doc.db.collection(documents).doc(id).update(data).then(callBack);
+    };
+
+    func.getMyDrafts = async () => {
+        let res = await doc.db.collection(documents).where("status","==","draft").where("publisher","==",userId).get();
+        let r = res.docs.map( doc => { let o = doc.data(); o.id = doc.id; return o; });
+        return r;
+    }
+
+    func.getFilesTobeUploaded = async () => {
+        let res =   await doc.db.collection(acc).doc(userId).collection(offlineFiles).where("uploaded","==",false).get();
+        let d = res.docs.map( doc => { 
+            let o = doc.data();
+            o.id = doc.id;
+            return o;
+        });
+        return d;
+    };
 
     func.listenToAccountChange = (id) => {
         doc.db.collection(acc).doc(id).onSnapshot( doc => {
-            $scope.doc_user = doc.data();
+            $scope.doc_user = $localStorage.doc_user = doc.data();
         });
     };
 
@@ -86,33 +74,18 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         });
     };
 
-    func.getMyDrafts = async () => {
-        let res = await doc.db.collection(documents).where("status","==","draft").where("publisher","==",userId).get();
-        let r = res.docs.map( doc => { let o = doc.data(); o.id = doc.id; return o; });
-        return r;
-    }
-
     func.checkDraft = async () => {
         if(userId !== undefined) {
-            $scope.myDrafts = await func.getMyDrafts();
+            $scope.myDrafts = $localStorage.myDrafts = await func.getMyDrafts();
             if($scope.myDrafts.length > 0) {
-                $scope.currentItem = $scope.myDrafts[0];
+                $scope.currentItem = $localStorage.currentItem = $scope.myDrafts[0];
             }else {
-                $scope.currentItem = null;
+                $scope.currentItem = $localStorage.currentItem = null;
             }
         }
     };
 
-    func.getFilesTobeUploaded = async () => {
-        let res =   await doc.db.collection(acc).doc(userId).collection(offlineFiles).where("uploaded","==",false).get();
-        let d = res.docs.map( doc => { 
-            let o = doc.data();
-            o.id = doc.id;
-            return o;
-        });
-        return d;
-    };
-
+    //Create a directory to "My Downloads" and make a copy of the selected file
     func.upload = (files,callBack) => {
         let dateNow = new Date();
         const divider = (os.platform() == 'win32')? '\\' : '/';
@@ -144,23 +117,26 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         });
     }
 
+    //uploads are to PCSD website , pcsd.gov.ph , with unlimited storage
     func.uploadFile = (f) => {
-        console.log(`uploading ${f.name}:`)
-        let form = $utils.upload((data,code)=>{
-            console.log(`done ${code}:`);
-            $scope.uploadFiles();
-            if(code == 200){
-                if(data.status == 1){
-                    doc.db.collection(acc).doc(userId).collection(offlineFiles).doc(f.id).update({"uploaded": true});
-                }else {
-                    $scope.toast("error uploading");
-                    console.log(data);
+        if(fs.existsSync(storageFolder + f.path)){
+            console.log(`uploading ${f.name}:`)
+            let form = $utils.upload((data,code)=>{
+                console.log(`done ${code}:`);
+                $scope.uploadFiles();
+                if(code == 200){
+                    if(data.status == 1){
+                        doc.db.collection(acc).doc(userId).collection(offlineFiles).doc(f.id).update({"uploaded": true});
+                    }else {
+                        $scope.toast("error uploading");
+                        console.log(data);
+                    }
                 }
-            }
-        });
-        form.append('action', 'file/doc_upload');
-        form.append('userPath', f.path);
-        form.append('file',  fs.createReadStream(storageFolder + f.path), {filename: f.name});
+            });
+            form.append('action', 'file/doc_upload');
+            form.append('userPath', f.path);
+            form.append('file',  fs.createReadStream(storageFolder + f.path), {filename: f.name});
+        }
     }
     
     func.refreshDocItem = (id) => {
@@ -169,16 +145,20 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
             if(d.status !== 'archived'){
                 $scope.currentItem = d;
                 $scope.currentItem.id = doc.id;
+                $localStorage.currentItem = $scope.currentItem;
                 $scope.$apply();
             }
         });
     };
 
-    func.updateDoc = (id,data,callBack) => {
-        doc.db.collection(documents).doc(id).update(data).then(callBack);
-    };
-
     $scope.doc_init = () => {
+        //imidiate display, to prevent loading
+        if($localStorage.doc_user !== undefined) {
+            $scope.doc_content = 'app/doc/views/dashboard.html';
+            func.checkDraft();
+            $scope.isLoading = false;
+        }
+        //checking user if account activated
         doc.db.collection(acc).where('id','==',userId).get().then( qs => {
             $scope.isLoading = false;
             if(qs.empty) {
@@ -186,7 +166,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
             } else {
                 $scope.doc_content = 'app/doc/views/dashboard.html';
                 qs.forEach(doc => {
-                    $scope.doc_user = doc.data();
+                    $scope.doc_user = $localStorage.doc_user = doc.data();
                     func.listenToAccountChange(doc.id);
                     return null;
                 });
@@ -225,7 +205,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
 
     $scope.clickAgencyItem = (x) => {
         $scope.currentClicked = 'agency';
-        $scope.currentItem = x;
+        $scope.currentItem = $localStorage.currentItem = x;
         $scope.getAgencyAccounts(x.id);
         $scope.togglePane();
     };
@@ -306,6 +286,10 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
 
     $scope.openAddDraft = (evt) =>{
         delete($scope.n);
+        delete($scope.dateA);
+        delete($scope.dateB);
+        $scope.dateA = $scope.date_now();
+        $scope.dateB = $scope.date_now();
         $scope.n = {};
         $scope.showPrerenderedDialog(evt,'addDraft');
     };
@@ -329,19 +313,29 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
             $scope.currentItem = x;
             $scope.close_dialog();
             $scope.toast(`Draft document created.`);
-            $scope.myDrafts = await func.getMyDrafts();
+            $scope.myDrafts.push(x);
+            $scope.myDrafts = $localStorage.myDrafts = await func.getMyDrafts();
         }else {
             $scope.toast("system error, please re-boot this app.")
         }
         
     };
 
-    $scope.upload_file = (id,files)=>{
+    $scope.upload_file = (id,files,isRefresh)=>{
         if(files !== undefined && id !== undefined){
             func.upload(files, (url,fileName) => {
                 $scope.uploadFiles();
                 const fileObject = {"name": fileName, "url": api_address + '/uploads/' + url,"path": url, "opened": false};
-                $scope.updateDocument(id,{ "files": firebase.firestore.FieldValue.arrayUnion(fileObject) });
+                if($scope.currentItem.files == undefined) {
+                    $scope.currentItem.files = [];
+                    $scope.currentItem.files.push(fileObject);
+                    $scope.updateDocument(id,{'files': $scope.currentItem.files});
+                }else {
+                    if(!isRefresh){
+                        $scope.currentItem.files.push(fileObject);
+                        $scope.updateDocument(id,{'files': $scope.currentItem.files});
+                    }
+                }
             });
         }
     };
@@ -365,10 +359,9 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
           .ok('Yes, Remove now')
           .cancel('Cancel');
         $mdDialog.show(confirm).then(() => {
-            delete(x['$$hashKey']);
-            $scope.updateDocument(id,{
-                "files" : firebase.firestore.FieldValue.arrayRemove(x)
-            });
+            $scope.currentItem.files = $scope.currentItem.files.filter( z => (z.path !== x.path))
+                                            .map( d => { delete(d['$$hashKey']); return d; });
+            $scope.updateDocument(id,{'files': $scope.currentItem.files});
         },()=>{});
     };
 
@@ -409,15 +402,22 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         $scope.currentItem = x;
     }
 
-    $scope.openFile = (id,path,cF) => {
+    $scope.updateCleanDocFiles = (id,cF) => {
+        cF = cF.map( d => { delete(d['$$hashKey']); return d; })
         $scope.updateDocument(id,{'files': cF});
+    };
+
+    $scope.openFile = (id,path,cF) => {
+        $scope.updateCleanDocFiles(id,cF);
         shell.openItem(storageFolder + path);
     };
 
     $scope.refreshFile = (id,x,cF) => {
-        x.path = storageFolder + x.path;
-        $scope.updateDocument(id,{'files': cF});
-        $scope.upload_file(id,[x]);
+        $scope.updateCleanDocFiles(id,cF);
+        let newPath = {};
+        newPath = Object.create(x);
+        newPath.path = storageFolder + x.path;
+        $scope.upload_file(id,[newPath],true);
     };
 
 });

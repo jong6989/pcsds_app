@@ -14,6 +14,15 @@
             
                 <md-dialog-content layout-padding class="p-b-20">
                     <hr>
+
+                    <div flex-gt-sm>
+                        <strong>Date A</strong>
+                        <md-datepicker ng-model="dateA" ng-change="n.created = to_date(dateA)" 
+                            md-placeholder="Date"
+                            md-open-on-focus required>
+                        </md-datepicker>
+                    </div>
+
                     <md-input-container class="md-block m-t-40" flex>
                         <label>Source</label>
                         <input ng-model="n.source" required>
@@ -24,9 +33,9 @@
                         <input ng-model="n.subject" required>
                     </md-input-container>
 
-                    <div flex-gt-sm ng-init="pdate = date_now()">
-                        <strong>Date</strong>
-                        <md-datepicker ng-model="cdate" ng-change="n.published = to_date(cdate)" 
+                    <div flex-gt-sm >
+                        <strong>Date B</strong>
+                        <md-datepicker ng-model="dateB" ng-change="n.published = to_date(dateB)" 
                             md-placeholder="Date"
                             md-open-on-focus required>
                         </md-datepicker>

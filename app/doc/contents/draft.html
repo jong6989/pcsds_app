@@ -7,7 +7,7 @@
 <div layout-padding flex>
     <div ng-if="(currentItem == null)" >
         <h5>Welcome to Document Network!</h5>
-        <h6>To start saving your document, click the button bellow!</h6>
+        <h6>To start saving your document, click the button below!</h6>
         <md-button flex
             class=" m-t-20 col-white bg-green md-raised p-t-20 p-b-20 p-l-10 p-r-10" 
             ng-click="openAddDraft($event)">
@@ -18,7 +18,24 @@
     
     <div ng-if="currentItem !== null">
         <form name="formPublishDocument">
-            <h5><small>Draft ID</small> : {{currentItem.id}} </h5>
+            <h5><small>Draft ID</small> : <strong class="col-teal">{{currentItem.id}}</strong> </h5>
+
+            <div flex-gt-sm ng-init="createdDate = currentItem.created">
+                <strong>Date A</strong>
+                <md-datepicker ng-blur="updateDocument(currentItem.id,{'created': to_date(createdDate)})" ng-model="createdDate"
+                    md-placeholder="Date"
+                    md-open-on-focus required>
+                </md-datepicker>
+            </div>
+
+            <div flex-gt-sm ng-init="pdate = currentItem.published">
+                <strong>Date B</strong>
+                <md-datepicker ng-blur="updateDocument(currentItem.id,{'published': to_date(pdate)})" ng-model="pdate"
+                    md-placeholder="Date"
+                    md-open-on-focus required>
+                </md-datepicker>
+            </div>
+
             <md-input-container class="md-block m-t-40" flex>
                 <label>Source</label>
                 <input ng-blur="updateDocument(currentItem.id,{'source':currentItem.source})" ng-model="currentItem.source" required>
@@ -28,14 +45,6 @@
                 <label>Subject</label>
                 <input ng-blur="updateDocument(currentItem.id,{'subject':currentItem.subject})" ng-model="currentItem.subject" required>
             </md-input-container>
-
-            <div flex-gt-sm ng-init="pdate = currentItem.published">
-                <strong>Date</strong>
-                <md-datepicker ng-blur="updateDocument(currentItem.id,{'published': to_date(pdate)})" ng-model="pdate"
-                    md-placeholder="Date"
-                    md-open-on-focus required>
-                </md-datepicker>
-            </div>
             
             <strong>Category</strong>
             <md-autocomplete
@@ -74,8 +83,10 @@
                 <div>
                     <ol>
                         <li ng-repeat="x in currentItem.files">
-                            <input ng-model="x.name" ng-blur="updateDocument(currentItem.id,{'files':currentItem.files})"  type="text" style="width: 90%">
-                            <i class="fa fa-trash col-red pointer" ng-click="deleteDocFile(currentItem.id,x,$event)"></i>
+                            <input ng-model="x.name" ng-blur="updateCleanDocFiles(currentItem.id,currentItem.files)"  type="text" style="width: 90%">
+                            <i class="fa fa-trash col-red pointer" ng-click="deleteDocFile(currentItem.id,x,$event);">
+                                <md-tooltip md-direction="top">Delete File</md-tooltip>
+                            </i>
                             <i ng-hide="x.opened" class="fa fa-file col-blue pointer" ng-click="x.opened = true;openFile(currentItem.id,x.path,currentItem.files)">
                                 <md-tooltip md-direction="top">Open File</md-tooltip>
                             </i>
