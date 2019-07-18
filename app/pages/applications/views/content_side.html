@@ -1,5 +1,5 @@
-<md-card md-whiteframe="3" flex layout="row">
-    <md-card-content flex layout="column">
+<!-- <md-card md-whiteframe="3" flex layout="row">
+    <md-card-content flex layout="column"> -->
         <div layout="row" layout-align="center center"><md-progress-circular class="m-t-50" ng-show="is_loading" md-diameter="96"></md-progress-circular></div>
             <md-tabs flex md-selected="selectedTab" md-border-bottom md-autoselect md-swipe-content>
                 <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : {{tab.application.date || tab.staff.id_number || tab.date || tab.members.length || tab.count}}">
@@ -188,5 +188,5 @@
                     </div>
                 </md-tab>
             </md-tabs>
-    </md-card-content>
-</md-card>
+    <!-- </md-card-content>
+</md-card> -->
