@@ -43,6 +43,14 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         if(n==7)return "Used";
     };
 
+    $scope.tabsHasContent = () => {
+        let res = false;
+        for (const key in $scope.tabs) {
+            res = true;
+        }
+        return res;
+    }
+
     function trigerLoading(){
         $scope.is_loading = true;
         $timeout(()=>{$scope.is_loading = false;},4000);

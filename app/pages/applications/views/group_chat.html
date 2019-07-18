@@ -1,0 +1,10 @@
+<md-list class="md-dense" >
+    <md-list-item class="md-2-line" ng-repeat="(i,x) in group_chat_list track by $index" 
+        ng-click="open_group_chat(x,i)">
+        <div class="md-list-item-text" layout="column">
+            <h3>{{ x.name }}</h3>
+            <h4>{{ x.member.length }} members</h4>
+            <md-divider></md-divider>
+        </div>
+    </md-list-item>
+</md-list>

@@ -1,0 +1,31 @@
+<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="chats_nav">
+
+    <md-toolbar class="bg-teal">
+        <h1 class="md-toolbar-tools">
+            {{chatNav.title}}
+            <md-button ng-if="chatNav.idx == 2" class="md-icon-button" aria-label="Add" ng-click="showPrerenderedDialog($event,'createGroupChat')">
+                <md-tooltip md-direction="buttom">Create a new group chat</md-tooltip>
+                <i class="fa fa-plus m-l-20"></i>
+            </md-button>
+        </h1>
+    </md-toolbar>
+    <md-content layout-padding>
+        <!-- Personal Chat -->
+        <md-content flex ng-if="chatNav.idx == 1">
+            <div ng-include="'./app/pages/applications/views/personal_chat.html'"></div>
+        </md-content>
+        <!-- Client Chat -->
+        <md-content flex ng-if="chatNav.idx == 3">
+            <div ng-include="'./app/pages/applications/views/client_chat.html'"></div>
+        </md-content>
+        <!-- Group Chat -->
+        <md-content flex ng-if="chatNav.idx == 2">
+            <div ng-include="'./app/pages/applications/views/group_chat.html'"></div>
+        </md-content>
+        <!-- Action Logs -->
+        <md-content flex ng-if="chatNav.idx == 4">
+            <div ng-include="'./app/pages/applications/views/action_logs.html'"></div>
+        </md-content>
+    </md-content>
+
+</md-sidenav>

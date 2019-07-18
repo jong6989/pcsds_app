@@ -23,7 +23,7 @@ var docFire = firebase.initializeApp(doc_config, 'doc');
 docFire.firestore().settings({
 	cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
 });
-docFire.firestore().enablePersistence();
+docFire.firestore().enablePersistence({synchronizeTabs:true});
 
 var doc = {};
 doc.db = docFire.firestore();
