@@ -320,6 +320,10 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return $(window).height();
     };
 
+    $scope.get_window_width = function(){
+      return $(window).width();
+    };
+
     $scope.exportToExcel=function(Id,title){ 
         var exportHref=Excel.tableToExcel("#"+Id,title);
         $timeout(function(){location.href=exportHref;},100); // trigger download
@@ -477,6 +481,11 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
         $scope.current_view = $localStorage.current_view;
         $scope.user = $localStorage.pcsd_app_user;
         $scope.menus = $localStorage.pcsd_menus;
+        // $scope.menus.push({
+        //   name : "Database",
+        //   icon: 'fa-database',
+        //   url: 'pages/database'
+        // });
         $scope.change_page($localStorage.page_content);
       }else{
         $scope.current_view = "app/login/view.html";
@@ -487,8 +496,10 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.iframeHeight = $scope.get_window_height();
+    $scope.iframeWidth = $scope.get_window_width();
     angular.element($window).bind('resize',function(){
       $scope.iframeHeight = $window.innerHeight;
+      $scope.iframeWidth = $window.innerWidth;
       $scope.$digest();
     });
 
