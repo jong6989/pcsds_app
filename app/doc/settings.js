@@ -1,22 +1,22 @@
 // //  // Debug
-// var doc_config = {
-// 	apiKey: "AIzaSyDJnCE34jNQ8mfQAcBt1zlGj5CJZwaOYfM",
-// 	authDomain: "pcsd-app.firebaseapp.com",
-// 	databaseURL: "https://pcsd-app.firebaseio.com",
-// 	projectId: "pcsd-app",
-// 	storageBucket: "pcsd-app.appspot.com",
-// 	messagingSenderId: "687215095072"
-// };
+var doc_config = {
+	apiKey: "AIzaSyDJnCE34jNQ8mfQAcBt1zlGj5CJZwaOYfM",
+	authDomain: "pcsd-app.firebaseapp.com",
+	databaseURL: "https://pcsd-app.firebaseio.com",
+	projectId: "pcsd-app",
+	storageBucket: "pcsd-app.appspot.com",
+	messagingSenderId: "687215095072"
+};
 
 //// Realese
-var doc_config = {
-	apiKey: "AIzaSyCELuc2f0_CcV35xeHid9-iFHU7hbrNPKg",
-	authDomain: "document-network.firebaseapp.com",
-	databaseURL: "https://document-network.firebaseio.com",
-	projectId: "document-network",
-	storageBucket: "document-network.appspot.com",
-	messagingSenderId: "583848541283"
-};
+// var doc_config = {
+// 	apiKey: "AIzaSyCELuc2f0_CcV35xeHid9-iFHU7hbrNPKg",
+// 	authDomain: "document-network.firebaseapp.com",
+// 	databaseURL: "https://document-network.firebaseio.com",
+// 	projectId: "document-network",
+// 	storageBucket: "document-network.appspot.com",
+// 	messagingSenderId: "583848541283"
+// };
 
 var docFire = firebase.initializeApp(doc_config, 'doc');
 

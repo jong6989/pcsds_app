@@ -1,0 +1,19 @@
+
+<md-content layout-sm="coulumn" layout-gt-sm ng-init="invalidate_data_table(wsup_db.data)">
+    <div flex>
+        <table ng-table="data_table" class="table" show-filter="true">
+            <tr ng-repeat="x in $data">
+            <td filter="{Permit_No: 'text'}" title="'Permit No'" sortable="'Permit_No'"> {{ x.Permit_No }} </td>
+            <td filter="{First_Name: 'text'}" title="'First Name'" sortable="'First_Name'"> {{ x.First_Name }} </td>
+            <td filter="{Last_Name: 'text'}" title="'Last Name'" sortable="'Last_Name'"> {{ x.Last_Name }} </td>
+            <td filter="{ Project_Type: 'select'}" filter-data="getKeys(wsup_db.data,'Project_Type')" title="'Project Type'" >  {{ x.Project_Type }} </td>
+            <td filter="{address: 'text'}" title="'Address'" >  {{ x.address }} </td>
+            <td filter="{ Municipality: 'select'}" filter-data="getKeys(wsup_db.data,'Municipality')" title="'Municipality'" >  {{ x.Municipality }} </td>
+            <td filter="{ Issued_Year: 'select'}" filter-data="getKeys(wsup_db.data,'Issued_Year')" title="'Issued Year'" sortable="'Issued_Year'"> {{ x.Issued_Year }} </td>
+            <td filter="{ Issued_Month: 'select'}" filter-data="getKeys(wsup_db.data,'Issued_Month')" title="'Issued Month'" > {{ x.Issued_Month }} </td>
+            <td title="'Issued Day'" > {{ x.Issued_Day }} </td>
+            <td filter="{Validity_Date: 'text'}" title="'Validity Date'" sortable="'Validity_Date'"> {{ x.Validity_Date }} </td>
+            </tr>
+        </table>
+    </div>
+</md-content>

@@ -24,7 +24,7 @@ firebase.firestore().settings({
 
 firebase.firestore().enablePersistence({synchronizeTabs:true});
 
-var db_list = ["transactions","datasets","notifications","chats","staffs","settings"];
+var db_list = ["transactions","datasets","notifications","chats","staffs","settings","database"];
 var fire = {};
 var db = firebase.firestore();
 var fun = firebase.functions();

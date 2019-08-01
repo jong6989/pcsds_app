@@ -9,7 +9,7 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
     var uploading_type = '';
     $scope.is_loading = false;
     $scope.is_deleting = {value : false,type:''};
-    var PERMITS_DB = new JsonDB("./DB/PERMITS", true, false);
+    var PERMITS_DB = new JsonDB( dbFolder + "PERMITS", true, false);
 
     $scope.permit_types = [
         {code:"wsup",name:"Wildlife Special Use Permit"},
@@ -111,23 +111,6 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
         if(t=='admin_cases') {$scope.admin_cases_data.splice(0,$scope.admin_cases_data.length);}
         PERMITS_DB.push("/"+t,[]);
 
-        // let q = { 
-        //     data : { 
-        //         action : "database/permits/delete",
-        //         type : t,
-        //         user_id : $scope.user.id
-        //     },
-        //     callBack : (data)=>{
-        //         $scope.is_deleting = {value : false,type:''};
-                
-        //         let toast = (data.data.status == 0)? data.data.error : data.data.data;
-        //         $scope.toast(toast);
-        //     },
-        //     errorCallBack : ()=>{
-        //         $scope.toast("Offline, internet connection is needed for this function.");
-        //     }
-        // };
-        // $utils.api(q);
     }
 
     $scope.cancel_excel = (t)=>{
@@ -146,49 +129,54 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
     }
 
     $scope.save_database = (d,t)=>{
-        // $scope.is_loading = {value : true,type:t};
-        // $scope.total_items = calculate_items(d);
-        // $scope.pointer = 0;
         $scope.toast("Data saved");
         PERMITS_DB.push("/"+t,d);
         fire.db.datasets.update(t,{data:d});
-        
-        // var u = (sp,ip)=>{
-        //     let q = { 
-        //         data : { 
-        //             action : "database/permits/add",
-        //             data_name : d[sp].name,
-        //             data_item : d[sp].data[ip],//JSON.stringify(),
-        //             type : t,
-        //             user_id : $scope.user.id
-        //         },
-        //         callBack : (data)=>{
-        //             if(data.data.status == 1){
-        //                 PERMITS_DB.push("/"+t+"["+sp+"]/data["+ip+"]/uploaded",true);
+
+        // async function createDatabase ()  {
+        //     await fire.db.database.query.doc("WSUP").set({"id":"WSUP"});
+        //     console.log("DB Created");
+        //     d[0].data.forEach( async (e) => {
+        //         let i = {};
+        //         for (const key in e) {
+        //             if (e.hasOwnProperty(key)) {
+        //                 const element = (e[key] != undefined)? e[key] : '';
+        //                 i[key] = element;
         //             }
-        //             $scope.pointer = $scope.pointer + 1;
-        //             if($scope.total_items == $scope.pointer){
-        //                 $scope.is_loading = {value : false,type:''};
-        //                 $scope.empty_data.wsup = false;
-        //             }else {
-        //                 try {
-        //                     sp = ( d[sp].data.length == (ip + 1) ) ? (sp + 1) : sp;
-        //                     ip = ( d[sp].data.length == (ip + 1) ) ? 0 : (ip + 1);
-        //                 } catch (error) {
-        //                     console.log(error);
-        //                     sp = sp + 1;
-        //                     ip = 0;
-        //                 }
-        //                 u(sp,ip);
-        //             }
-        //         },
-        //         errorCallBack : ()=>{
-        //             u(sp,ip);
         //         }
-        //     };
-        //     $utils.api(q);
+        //         i.name = (e.First_Name  || '') + " " + (e.Middle_Name || '') + " " + (e.Last_Name || '') + " " + (e.Extension_Name || '');
+        //         i.address = (e.Street || '') + ", " + (e.Barangay || '') + ", " + (e.Municipality || '');
+        //         if(e.Issued_Year && e.Issued_Month && e.Issued_Day){
+        //             i.Issued_Date = e.Issued_Year + "-" + e.Issued_Month + "-" + e.Issued_Day;
+        //         }
+        //         if(e.Validity_Year && e.Validity_Month && e.Validity_Day) {
+        //             i.Validity_Date = e.Validity_Year + "-" + e.Validity_Month + "-" + e.Validity_Day;
+        //         }
+        //         i.keywords = i.name.split(' ').filter( d => d.length > 1);
+        //         await fire.db.database.query.doc("WSUP").collection("database").add(i);
+        //         let u = {};
+        //         u["count.all"] = firebase.firestore.FieldValue.increment(1);
+        //         if(e.Issued_Year != undefined) u[`count.${e.Issued_Year}.total`] = firebase.firestore.FieldValue.increment(1);
+        //         if(e.Issued_Month != undefined) u[`count.${e.Issued_Year}.${e.Issued_Month}`] = firebase.firestore.FieldValue.increment(1);
+        //         if(e.Municipality != undefined) u[`per_municipality.${e.Municipality}`] = firebase.firestore.FieldValue.increment(1);
+        //         await fire.db.database.query.doc("WSUP").update(u);
+        //     });
         // };
-        // u(0,0);
+        // createDatabase();
+        
+
+        // let vv = [ 'Corporation ', 'Last_Name'];
+
+        // vv.forEach(v => {
+        //     let mun = {};
+        //     d[0].data.forEach(e => {
+        //         if(e[v] != undefined)
+        //             mun[e[v]] = (mun[e[v]] == undefined)? 1 : mun[e[v]] + 1;
+        //     });
+        //     console.log(mun);
+        // });
+
+        
     }
 
     $scope.export_database_to_excel = (d,t)=>{
