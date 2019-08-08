@@ -1,22 +1,29 @@
 'use strict';
 
 document.write(`<script src="./app/doc/settings.js"></script>`);
-myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $localStorage) {
+document.write(`<script src="./app/doc/functions.js"></script>`);
+
+myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $localStorage, func) {
     $scope.doc_content = '';
     $scope.isLoading = true;
     $scope.isUploading = false;
     $scope.currentNavItem = 'Documents';
-    $scope.currentDocSelected = 'Draft';
+    $scope.currentDocSelected = 'draft';
     $scope.currentClicked = 'draft';
     $scope.currentItem = ($localStorage.currentItem == undefined)? null : $localStorage.currentItem;
     $scope.currentSubItem = {};
     $scope.currentSubIndex = {};
+    $scope.currentTransaction = {};
     $scope.myAgencies = [];
     $scope.otherAgencies = [];
     $scope.resultAccounts = [];
     $scope.agencyAccounts = [];
     $scope.filesTobeUploaded = [];
     $scope.myDrafts = ($localStorage.myDrafts == undefined)? [] : $localStorage.myDrafts;
+    $scope.myPublished = [];
+    $scope.mySent = [];
+    $scope.myReceived = [];
+    $scope.myPending = [];
     $scope.docTabsSelected = 0;
     $scope.n = {};
     const userId = `pcsd_${$scope.user.id}`; //id from pcsd web api , (php), that will be saved to accounts collection
@@ -24,138 +31,95 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     $scope.doc_user = ($localStorage.doc_user == undefined)? { id: userId } : $localStorage.doc_user; //save data to local storage to remember last user
     $scope.dateA = '';
     $scope.dateB = '';
-    var func = {};
+    func.$scope = $scope;
 
-    func.updateDoc = (id,data,callBack) => {
-        doc.db.collection(documents).doc(id).update(data).then(callBack);
-    };
-
-    func.getMyDrafts = async () => {
-        let res = await doc.db.collection(documents).where("status","==","draft").where("publisher","==",userId).get();
-        let r = res.docs.map( doc => { let o = doc.data(); o.id = doc.id; return o; });
-        return r;
-    }
-
-    func.getFilesTobeUploaded = async () => {
-        let res =   await doc.db.collection(acc).doc(userId).collection(offlineFiles).where("uploaded","==",false).get();
-        let d = res.docs.map( doc => { 
-            let o = doc.data();
-            o.id = doc.id;
-            return o;
-        });
-        return d;
-    };
-
-    func.listenToAccountChange = (id) => {
-        doc.db.collection(acc).doc(id).onSnapshot( doc => {
-            $scope.doc_user = $localStorage.doc_user = doc.data();
-        });
-    };
-
-    func.getAgencies = async () => {
-        await doc.db.collection(agencies).get().then((qs) => {
-            let a = [];
-            let b = [];
-            qs.forEach(doc => {
-                if($scope.doc_user.agencies !== undefined) {
-                    $scope.doc_user.agencies.forEach(agc => {
-                        if(doc.id == agc){
-                            a.push(doc.data());
-                        }else {
-                            b.push(doc.data());
-                        }
-                    });
-                }else {
-                    b.push(doc.data());
-                }
+    // draft 
+    doc.db.collection(documents).where("status","==","draft").where("publisher","==",userId).onSnapshot(qs => {
+        if(!qs.empty) {
+            let r = qs.docs.map(d => {
+                let o = d.data();
+                o.id = d.id;
+                return o;
             });
-            $scope.myAgencies = a;
-            $scope.otherAgencies = b;
-        });
-    };
+            $scope.myDrafts = $localStorage.myDrafts = r;
+        }
+    });
 
-    func.checkDraft = async () => {
-        if(userId !== undefined) {
-            $scope.myDrafts = $localStorage.myDrafts = await func.getMyDrafts();
-            if($scope.myDrafts.length > 0) {
-                $scope.currentItem = $localStorage.currentItem = $scope.myDrafts[0];
-            }else {
-                $scope.currentItem = $localStorage.currentItem = null;
-            }
-        }
-    };
-
-    //Create a directory to "My Downloads" and make a copy of the selected file
-    func.upload = (files,callBack) => {
-        let dateNow = new Date();
-        const divider = (os.platform() == 'win32')? '\\' : '/';
-        const saveFolder = dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider + userId + divider;
-        if(!fs.existsSync(storageFolder)){
-            fs.mkdirSync(storageFolder);
-        }
-        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider)){
-            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider);
-        }
-        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider)){
-            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider);
-        }
-        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider)){
-            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider);
-        }
-        if(!fs.existsSync(storageFolder + saveFolder)){
-            fs.mkdirSync(storageFolder + saveFolder);
-        }
-        files.forEach(f => {
-            setTimeout( () => {
-                let path = storageFolder + saveFolder + f.name;
-                fs.copyFile(f.path, path, (err) => {
-                    if (err) throw err;
-                    doc.db.collection(acc).doc(userId).collection(offlineFiles).add({"name":f.name,"path": saveFolder + f.name, "uploaded": false});
-                    callBack(saveFolder + f.name,f.name);
-                });
-            },500);
-        });
-    }
-
-    //uploads are to PCSD website , pcsd.gov.ph , with unlimited storage
-    func.uploadFile = (f) => {
-        if(fs.existsSync(storageFolder + f.path)){
-            console.log(`uploading ${f.name}:`)
-            let form = $utils.upload((data,code)=>{
-                console.log(`done ${code}:`);
-                $scope.uploadFiles();
-                if(code == 200){
-                    if(data.status == 1){
-                        doc.db.collection(acc).doc(userId).collection(offlineFiles).doc(f.id).update({"uploaded": true});
-                    }else {
-                        $scope.toast("error uploading");
-                        console.log(data);
-                    }
-                }
+    //Published 
+    doc.db.collection(documents).where("status","==","published").where("publisher","==",userId).orderBy('meta.published_time','desc')
+    .onSnapshot(qs => {
+        if(!qs.empty) {
+            let r = qs.docs.map(d => {
+                let o = d.data();
+                o.id = d.id;
+                return o;
             });
-            form.append('action', 'file/doc_upload');
-            form.append('userPath', f.path);
-            form.append('file',  fs.createReadStream(storageFolder + f.path), {filename: f.name});
+            $scope.myPublished = r;
         }
-    }
-    
-    func.refreshDocItem = (id) => {
-        doc.db.collection(documents).doc(id).get().then(doc => {
-            let d = doc.data();
-            if(d.status !== 'archived'){
-                $scope.currentItem = d;
-                $scope.currentItem.id = doc.id;
-                $localStorage.currentItem = $scope.currentItem;
-                $scope.$apply();
-            }
-        });
+    });
+
+    //pending
+    doc.db.collection(doc_transactions).where('receiver','==',$scope.userId).orderBy('time','desc').where('status','==','pending')
+    .onSnapshot( qs => {
+        if(!qs.empty) {
+            let a = qs.docs.map(
+                dx => {
+                    let b = dx.data();
+                    b.id = dx.id;
+                    return b;
+                }
+            );
+            $scope.myPending = a;
+        }
+    });
+
+    //received
+    doc.db.collection(doc_transactions).where('receiver','==',$scope.userId).orderBy('received.time','desc').where('status','==','received')
+    .onSnapshot( qs => {
+        if(!qs.empty) {
+            let a = qs.docs.map(
+                dx => {
+                    let b = dx.data();
+                    b.id = dx.id;
+                    return b;
+                }
+            );
+            $scope.myReceived = a;
+        }
+    });
+
+    //sent
+    doc.db.collection(doc_transactions).where('sender.id','==',$scope.userId).orderBy('time','desc')
+    .onSnapshot( qs => {
+        if(!qs.empty) {
+            let a = qs.docs.map(
+                dx => {
+                    let b = dx.data();
+                    b.id = dx.id;
+                    return b;
+                }
+            );
+            $scope.mySent = a;
+        }
+    });
+
+    $scope.getUserAccount = async (id,idx) => {
+        let a = await doc.db.collection(acc).doc(id).get();
+        let b = a.data();
+        b.id = a.id;
+        $scope.mySent[idx].sentUser = b;
     };
 
     $scope.doc_init = () => {
         //imidiate display, to prevent loading
         if($localStorage.doc_user !== undefined) {
             $scope.doc_content = 'app/doc/views/dashboard.html';
-            func.checkDraft();
+            func.checkDraft((a,b) => {
+                $scope.myDrafts = a;
+                $scope.currentItem = b;
+                $scope.currentClicked = 'draft';
+                $scope.currentDocSelected = 'draft';
+            });
             $scope.isLoading = false;
         }
         //checking user if account activated
@@ -167,10 +131,18 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
                 $scope.doc_content = 'app/doc/views/dashboard.html';
                 qs.forEach(doc => {
                     $scope.doc_user = $localStorage.doc_user = doc.data();
-                    func.listenToAccountChange(doc.id);
+                    func.listenToAccountChange(doc.id, (a,b) => {
+                        $scope.doc_user = a;
+                        $scope.doc_user_agencies = b;
+                    });
                     return null;
                 });
-                func.checkDraft();
+                func.checkDraft((a,b) => {
+                    $scope.myDrafts = a;
+                    $scope.currentItem = b;
+                    $scope.currentClicked = 'draft';
+                    $scope.currentDocSelected = 'draft';
+                });
             }
         } ).catch( ()=> {
             setTimeout($scope.doc_init, 3000);
@@ -178,7 +150,10 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     };
 
     $scope.loadAgencies = () => {
-        func.getAgencies();
+        func.getAgencies($scope.doc_user.agencies, (a,b) => {
+            $scope.myAgencies = a;
+            $scope.otherAgencies = b;
+        });
     };
 
     $scope.setAccount = (data) => {
@@ -194,8 +169,14 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     $scope.activeNav = (nav) => {
         $scope.currentClicked = 'draft';
         // $scope.currentItem = null;
-        func.checkDraft();
-        if(nav == 'Agencies') func.getAgencies();
+        func.checkDraft((a,b) => {
+            $scope.myDrafts = a;
+            $scope.currentItem = b;
+        });
+        if(nav == 'Agencies') func.getAgencies($scope.doc_user.agencies, (a,b) => {
+            $scope.myAgencies = a;
+            $scope.otherAgencies = b;
+        });
         $scope.togglePane();
     };
 
@@ -256,7 +237,12 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         $scope.resultAccounts.splice($scope.currentSubIndex,1);
         $scope.close_dialog();
         $scope.toast(`${u.name} is added to ${a.short_name}.`);
-        setTimeout(func.getAgencies,3000);
+        setTimeout(()=>{
+            func.getAgencies($scope.doc_user.agencies, (a,b) => {
+                $scope.myAgencies = a;
+                $scope.otherAgencies = b;
+            })
+        },3000);
     };
 
     $scope.removeToAgency = (x,ev) => {
@@ -288,15 +274,17 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         delete($scope.n);
         delete($scope.dateA);
         delete($scope.dateB);
-        $scope.dateA = $scope.date_now();
-        $scope.dateB = $scope.date_now();
-        $scope.n = {};
+        let d = $scope.date_now('YYYY-MM-DD');
+        $scope.dateA = d;
+        $scope.dateB = d;
+        $scope.n = { created : d, published : d};
         $scope.showPrerenderedDialog(evt,'addDraft');
     };
 
     $scope.createDraft = async (x) => {
         if($scope.doc_user.id !== undefined) {
             x.publisher = $scope.doc_user.id;
+            x.created_time = Date.now();
             x.status = 'draft';
             if( $scope.doc_user.categories === undefined || !$scope.doc_user.categories.includes(x.category) ) {
                 doc.db.collection(acc).doc($scope.doc_user.id)
@@ -305,7 +293,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
 
             doc.db.collection(documents).add(x).then( ref => {
                 $scope.currentItem.id = ref.id;
-                console.log(ref.id);
                 doc.db.collection(documents).doc(ref.id).update({"id":ref.id});
             });
 
@@ -321,68 +308,12 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         
     };
 
-    $scope.upload_file = (id,files,isRefresh)=>{
-        if(files !== undefined && id !== undefined){
-            func.upload(files, (url,fileName) => {
-                $scope.uploadFiles();
-                const fileObject = {"name": fileName, "url": api_address + '/uploads/' + url,"path": url, "opened": false};
-                if($scope.currentItem.files == undefined) {
-                    $scope.currentItem.files = [];
-                    $scope.currentItem.files.push(fileObject);
-                    $scope.updateDocument(id,{'files': $scope.currentItem.files});
-                }else {
-                    if(!isRefresh){
-                        $scope.currentItem.files.push(fileObject);
-                        $scope.updateDocument(id,{'files': $scope.currentItem.files});
-                    }
-                }
-            });
-        }
-    };
 
-    $scope.updateDocument = async (id,data) => {
-        if(id !== undefined) {
-            func.updateDoc(id,data, () => {
-                func.refreshDocItem(id);
-            });
-            setTimeout(()=>{func.refreshDocItem(id);},300);
-            $scope.myDrafts = await func.getMyDrafts();
-        }
-    };
-
-    $scope.deleteDocFile = (id,x,ev) => {
-        var confirm = $mdDialog.confirm()
-          .title(`Remove File ${x.name}`)
-          .textContent('are you sure?')
-          .ariaLabel('sure')
-          .targetEvent(ev)
-          .ok('Yes, Remove now')
-          .cancel('Cancel');
-        $mdDialog.show(confirm).then(() => {
-            $scope.currentItem.files = $scope.currentItem.files.filter( z => (z.path !== x.path))
-                                            .map( d => { delete(d['$$hashKey']); return d; });
-            $scope.updateDocument(id,{'files': $scope.currentItem.files});
-        },()=>{});
-    };
-
-    $scope.deleteDraft = (id,ev) => {
-        var confirm = $mdDialog.confirm()
-          .title(`Delete this Draft Document?`)
-          .textContent('are you sure?')
-          .ariaLabel('sure')
-          .targetEvent(ev)
-          .ok('Yes, Delete now')
-          .cancel('Cancel');
-        $mdDialog.show(confirm).then(() => {
-            $scope.currentItem = null;
-            $scope.updateDocument(id,{'status':'archived'});
-        },()=>{});
-    };
 
     $scope.uploadFiles = async () => {
         $scope.filesTobeUploaded = await func.getFilesTobeUploaded();
         if($scope.filesTobeUploaded.length > 0){
-            func.uploadFile($scope.filesTobeUploaded[0]);
+            func.uploadFile($scope.filesTobeUploaded[0], () => { $scope.uploadFiles(); });
         }
     };
     $scope.uploadFiles();
@@ -398,8 +329,10 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         return r;
     };
 
-    $scope.setCurrentItem = (x) => {
+    $scope.setCurrentItem = (x,t,c) => {
         $scope.currentItem = x;
+        $scope.currentClicked = t;
+        $scope.currentTransaction = c;
     }
 
     $scope.updateCleanDocFiles = (id,cF) => {
@@ -407,17 +340,24 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         $scope.updateDocument(id,{'files': cF});
     };
 
-    $scope.openFile = (id,path,cF) => {
-        $scope.updateCleanDocFiles(id,cF);
-        shell.openItem(storageFolder + path);
-    };
 
-    $scope.refreshFile = (id,x,cF) => {
-        $scope.updateCleanDocFiles(id,cF);
-        let newPath = {};
-        newPath = Object.create(x);
-        newPath.path = storageFolder + x.path;
-        $scope.upload_file(id,[newPath],true);
+    $scope.changeCurrentDocType = (t) => {
+        $scope.currentDocSelected = t;
+    }
+
+    $scope.check_pending = (evt) => {
+        setTimeout( () => {
+            if($scope.myPending.length > 0) {
+                $scope.showPrerenderedDialog(evt,'pendingDocument');
+            }
+        },5000);
+        
     };
 
 });
+
+document.write(`<script src="./app/doc/controllers/files.js"></script>`);
+document.write(`<script src="./app/doc/controllers/draft.js"></script>`);
+document.write(`<script src="./app/doc/controllers/published.js"></script>`);
+document.write(`<script src="./app/doc/controllers/pending.js"></script>`);
+document.write(`<script src="./app/doc/controllers/received.js"></script>`);

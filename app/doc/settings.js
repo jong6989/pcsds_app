@@ -31,5 +31,6 @@ doc.fun = docFire.functions();
 const acc = 'accounts';
 const agencies = 'agencies';
 const documents = 'documents';
+const doc_transactions = 'doc_transactions';
 const offlineFiles = 'offlineFiles';
 const storageFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\document_network\\' : app.getPath('downloads') + '/document_network/';

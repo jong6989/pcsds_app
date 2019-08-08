@@ -1,19 +1,42 @@
+<md-toolbar class="bg-teal">
+    <h1 class="md-toolbar-tools">
+        <md-button class="md-raised" ng-click="openAddWSUPModal($event)">
+            <i class="fa fa-plus col-green"></i>
+            add wsup data
+        </md-button>
+    </h1>
+</md-toolbar>
 
-<md-content layout-sm="coulumn" layout-gt-sm ng-init="invalidate_data_table(wsup_db.data)">
+<md-content style="height: {{iframeHeight -150}}px;" layout-sm="coulumn" layout-gt-sm ng-init="
+    invalidate_data_table(wsup_db.data);
+    getKeys(wsup_db.data,'Project_Type');
+    getKeys(wsup_db.data,'Corporation');
+    getKeys(wsup_db.data,'Municipality');
+    getKeys(wsup_db.data,'Barangay');
+    getKeys(wsup_db.data,'Issued_Year');
+    getKeys(wsup_db.data,'Issued_Month');
+    getKeys(wsup_db.data,'Issued_Day');
+    getKeys(wsup_db.data,'Validity_Year');
+    getKeys(wsup_db.data,'Type');
+">
+
     <div flex>
         <table ng-table="data_table" class="table" show-filter="true">
             <tr ng-repeat="x in $data">
-            <td filter="{Permit_No: 'text'}" title="'Permit No'" sortable="'Permit_No'"> {{ x.Permit_No }} </td>
-            <td filter="{First_Name: 'text'}" title="'First Name'" sortable="'First_Name'"> {{ x.First_Name }} </td>
-            <td filter="{Last_Name: 'text'}" title="'Last Name'" sortable="'Last_Name'"> {{ x.Last_Name }} </td>
-            <td filter="{ Project_Type: 'select'}" filter-data="getKeys(wsup_db.data,'Project_Type')" title="'Project Type'" >  {{ x.Project_Type }} </td>
-            <td filter="{address: 'text'}" title="'Address'" >  {{ x.address }} </td>
-            <td filter="{ Municipality: 'select'}" filter-data="getKeys(wsup_db.data,'Municipality')" title="'Municipality'" >  {{ x.Municipality }} </td>
-            <td filter="{ Issued_Year: 'select'}" filter-data="getKeys(wsup_db.data,'Issued_Year')" title="'Issued Year'" sortable="'Issued_Year'"> {{ x.Issued_Year }} </td>
-            <td filter="{ Issued_Month: 'select'}" filter-data="getKeys(wsup_db.data,'Issued_Month')" title="'Issued Month'" > {{ x.Issued_Month }} </td>
-            <td title="'Issued Day'" > {{ x.Issued_Day }} </td>
-            <td filter="{Validity_Date: 'text'}" title="'Validity Date'" sortable="'Validity_Date'"> {{ x.Validity_Date }} </td>
+                <td filter="{Permit_No: 'text'}" title="'Permit No'" sortable="'Permit_No'"> {{ x.Permit_No }} </td>
+                <td filter="{First_Name: 'text'}" title="'First Name'" sortable="'First_Name'"> {{ x.First_Name }} </td>
+                <td filter="{Last_Name: 'text'}" title="'Last Name'" sortable="'Last_Name'"> {{ x.Last_Name }} </td>
+                <td filter-data="dropDownSelect.Project_Type" filter="{ Project_Type: 'select'}" title="'Project Type'" >  {{ x.Project_Type }} </td>
+                <td filter="{address: 'text'}" title="'Address'" >  {{ x.address }} </td>
+                <td filter-data="dropDownSelect.Municipality" filter="{ Municipality: 'select'}" title="'Municipality'" >  {{ x.Municipality }} </td>
+                <td filter-data="dropDownSelect.Issued_Year" filter="{ Issued_Year: 'select'}" title="'Issued Year'" sortable="'Issued_Year'"> {{ x.Issued_Year }} </td>
+                <td filter-data="dropDownSelect.Issued_Month" filter="{ Issued_Month: 'select'}" title="'Issued Month'" > {{ x.Issued_Month }} </td>
+                <td title="'Issued Day'" > {{ x.Issued_Day }} </td>
+                <td filter="{Validity_Date: 'text'}" title="'Validity Date'" sortable="'Validity_Date'"> {{ x.Validity_Date }} </td>
             </tr>
         </table>
     </div>
 </md-content>
+
+<!-- modal -->
+<div ng-include="'./app/pages/database/modals/addWSUP.html'" ></div>

@@ -1,0 +1,21 @@
+
+<md-list class="md-dense" flex>
+    <md-subheader class="col-white bg-amber">
+        <div layout>
+            <strong>Pending documents </strong>
+            <input flex ng-model="search_pending" placeholder="search" class="m-l-10 m-r-10 m-t--5 p-t-5 p-b-5 p-l-5" style="border: none;border-bottom: #777 1px;">
+            <i class="fa fa-cloud-upload col-white pointer" ng-click="showPrerenderedDialog($event,'fileHistory');">
+                <md-tooltip md-direction="top">Cloud File History</md-tooltip>
+            </i>
+        </div>
+    </md-subheader>
+    <md-content style="height : {{iframeHeight - 130}}px;">
+        <md-list-item class="md-3-line" ng-repeat="x in myPending | filter : search_pending" ng-click="setCurrentItem(x.document,'pending',x);close_dialog();">
+            <div class="md-list-item-text" layout="column">
+                <h3>From {{x.sender.name}}, <cite class="font-11 col-grey" ng-repeat=" c in x.sender.access"> {{c}}, </cite></h3>
+                <h4>{{ x.document.source }} - {{ x.document.subject }}, <cite class="font-12 col-red"> {{x.remarks}} </cite> </h4>
+                <p>{{ x.date.split(' ')[0] }}, {{ date_from_now(x.time) }}</p>
+            </div>
+        </md-list-item>
+    </md-content>
+</md-list>

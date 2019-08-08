@@ -333,8 +333,9 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return a.fromNow();
     };
 
-    $scope.date_now = function(){
-      return moment().format("YYYY-MM-DD HH:mm:ss");
+    $scope.date_now = function(f){
+      f = (f == undefined)? "YYYY-MM-DD HH:mm:ss": f;
+      return moment().format(f);
     };
 
     $scope.to_year = function(d){

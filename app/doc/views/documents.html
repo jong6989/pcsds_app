@@ -1,62 +1,51 @@
 <div flex layout>
-    <div flex="100" >
-        <md-toolbar class="bg-white">
-            <md-button class="md-button col-black" ng-click="openAddDraft($event)">
-                    <i class="fa fa-plus col-black"></i>
-                Add new draft
-            </md-button>
-        </md-toolbar>
-        
-        <md-content>
-            <md-list class="md-dense" flex>
-                <md-subheader class="col-white bg-grey">
-                    <div layout>
-                        <strong>My Draft </strong>
-                        <input flex ng-model="search_draft" placeholder="search" class="m-l-10 m-r-10 m-t--5 p-t-5 p-b-5 p-l-5" style="border: none;border-bottom: #777 1px;">
-                        <i class="fa fa-cloud-upload col-white pointer" ng-click="showPrerenderedDialog($event,'fileHistory');">
-                            <md-tooltip md-direction="top">Cloud File History</md-tooltip>
-                        </i>
-                    </div>
-                </md-subheader>
-                <md-list-item class="md-3-line" ng-repeat="x in myDrafts | filter : search_draft" ng-click="setCurrentItem(x)">
-                    <div class="md-list-item-text" layout="column">
-                      <h3>{{ x.created }}</h3>
-                      <h4>{{ x.source }} - {{ x.subject }}</h4>
-                      <p>{{ x.published }}</p>
-                    </div>
-                </md-list-item>
-            </md-list>
-        </md-content>
-    </div>
+    <!-- DRAFT -->
+    <div flex ng-show="currentDocSelected == 'draft'" ng-include="'./app/doc/views/list/draft.html'"></div>
+    <!-- PUBLISHED -->
+    <div flex ng-show="currentDocSelected == 'published'" ng-include="'./app/doc/views/list/published.html'"></div>
+    <!-- SENT -->
+    <div flex ng-show="currentDocSelected == 'sent'" ng-include="'./app/doc/views/list/sent.html'"></div>
+    <!-- RECEIVED -->
+    <div flex ng-show="currentDocSelected == 'received'" ng-include="'./app/doc/views/list/received.html'"></div>
+    <!-- PENDING -->
+    <div flex ng-show="currentDocSelected == 'pending'" ng-include="'./app/doc/views/list/pending.html'"></div>
 
-    <!-- <div class="bg-teal" layout="column" layout-align="center center" >
+    <!--  -->
 
-        <md-button class="md-fab md-mini bg-blue-grey" aria-label="Draft">
+    <div class="bg-teal" layout="column" layout-align="center center">
+
+        <md-button class="md-fab md-mini bg-blue-grey" aria-label="Draft" 
+            ng-disabled="currentDocSelected == 'draft'" ng-click="changeCurrentDocType('draft')">
             <md-tooltip md-direction="left">Draft</md-tooltip>
             <i class="fa fa-save "></i>
         </md-button>
 
-        <md-button class="md-fab md-mini bg-deep-purple" aria-label="Published">
+        <md-button class="md-fab md-mini bg-amber" aria-label="Published"
+            ng-disabled="currentDocSelected == 'published'" ng-click="changeCurrentDocType('published')">
             <md-tooltip md-direction="left">Published</md-tooltip>
             <i class="fa fa-file-zip-o"></i>
         </md-button>
 
-        <md-button class="md-fab md-mini bg-amber" aria-label="Sent">
+        <md-button class="md-fab md-mini bg-deep-purple" aria-label="Sent"
+            ng-disabled="currentDocSelected == 'sent'" ng-click="changeCurrentDocType('sent')">
             <md-tooltip md-direction="left">Sent</md-tooltip>
             <i class="fa fa-share"></i>
         </md-button>
 
-        <md-button class="md-fab md-mini bg-cyan" aria-label="Received">
+        <md-button class="md-fab md-mini bg-cyan" aria-label="Received"
+            ng-disabled="currentDocSelected == 'received'" ng-click="changeCurrentDocType('received')">
             <md-tooltip md-direction="left">Received</md-tooltip>
             <i class="fa fa-inbox "></i>
         </md-button>
 
-        <md-button class="md-fab md-mini bg-lime" aria-label="Pending">
+        <md-button class="md-fab md-mini bg-lime" aria-label="Pending"
+            ng-disabled="currentDocSelected == 'pending'" ng-click="changeCurrentDocType('pending')">
             <md-tooltip md-direction="left">Pending</md-tooltip>
+            <span class="badge badge-light" ng-if="myPending.length > 0"> {{myPending.length}} </span>
             <i class="fa fa-hourglass-o col-black"></i>
         </md-button>
 
-        <md-button class="md-fab md-mini bg-brown" aria-label="Trash">
+        <!--    <md-button class="md-fab md-mini bg-brown" aria-label="Trash">
             <md-tooltip md-direction="left">Archive</md-tooltip>
             <i class="fa fa-archive "></i>
         </md-button>

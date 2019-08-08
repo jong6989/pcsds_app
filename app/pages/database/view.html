@@ -5,20 +5,15 @@
       md-no-ink-bar="true"
       md-selected-nav-item="currentNavItem"
       nav-bar-aria-label="navigation links">
-      <md-nav-item md-nav-click="changeView('./app/pages/database/views/graphs.html')" name="Statistics">
+      <md-nav-item md-nav-click="null" name="Statistics">
         Statatistics
       </md-nav-item>
-      <md-nav-item md-nav-click="changeView('./app/pages/database/views/wsup.html')" name="WSUP">
+      <md-nav-item md-nav-click="null" name="WSUP">
         WSUP
-      </md-nav-item>
-      <md-nav-item md-nav-click="null" name="CHAINSAW">
-        Chainsaw
-      </md-nav-item>
-      <md-nav-item md-nav-click="null" name="ADMIN_CHASES">
-        Admin Cases
       </md-nav-item>
     </md-nav-bar>
 
-   <div flex ng-include="database_view"></div>
+   <div flex ng-include="'./app/pages/database/views/graphs.html'" ng-show="currentNavItem == 'Statistics'"></div>
+   <div flex ng-include="'./app/pages/database/views/wsup.html'" ng-show="currentNavItem == 'WSUP'"></div>
 
 </div>

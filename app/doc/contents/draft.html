@@ -4,7 +4,7 @@
     padding: 10px;
 }
 </style>
-<div layout-padding flex>
+<div layout-padding flex ng-controller="doc_ctrl_draft">
     <div ng-if="(currentItem == null)" >
         <h5>Welcome to Document Network!</h5>
         <h6>To start saving your document, click the button below!</h6>
@@ -19,7 +19,7 @@
     <div ng-if="currentItem !== null">
         <form name="formPublishDocument">
             <h5><small>Draft ID</small> : <strong class="col-teal">{{currentItem.id}}</strong> </h5>
-
+            
             <div flex-gt-sm ng-init="createdDate = currentItem.created">
                 <strong>Date A</strong>
                 <md-datepicker ng-blur="updateDocument(currentItem.id,{'created': to_date(createdDate)})" ng-model="createdDate"
@@ -108,23 +108,49 @@
                 </div>
 
             </div>
-            
+
             <hr>
+            <br>
+            <!-- activated -->
+            <div ng-if="doc_user_agencies.length > 0" ng-init="currentItem.agency = (currentItem.agency)? currentItem.agency : doc_user_agencies[0];current_agency = currentItem.agency.id;">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Agency</label>
+                    <md-select ng-model="current_agency">
+                        <md-option ng-repeat="x in doc_user_agencies" value="{{x.id}}" ng-click="currentItem.agency = x">
+                        {{x.name}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            
             <cite class="col-pink">Published document cannot be edited.</cite>
             <br>
             <!-- <cite ng-hide="filesTobeUploaded.length == 0" class="col-red">Publishing will be available after upload complete. {{filesTobeUploaded.length}}</cite> -->
             <br>
             <div layout>
-                <span flex>Publishing not yet Available...</span>
-                <!-- <md-button ng-class="{'bg-green col-white': (filesTobeUploaded.length == 0) }" ng-disabled="filesTobeUploaded.length > 0 || true" flex=60 class="md-button" ng-click="null">
-                    <i class="fa fa-save"></i>
-                    Publish Document
-                </md-button> -->
-                <md-button flex=40 class="md-button bg-red col-white" ng-click="deleteDraft(currentItem.id, $event)">
-                    <i class="fa fa-trash"></i>
-                   Delete Draft
+                <!-- not activated -->
+                <span flex ng-if="doc_user_agencies.length == 0">Publishing not Available... Account not yet activated</span>
+                <!-- activated  --> 
+                <div flex ng-if="doc_user_agencies.length > 0 && filesTobeUploaded.length == 0 && (currentItem.files) && currentItem.files.length > 0" layout>
+                    <md-button flex ng-class="{'bg-green col-white': (filesTobeUploaded.length == 0) }" 
+                        ng-disabled="(!currentItem.files) && currentItem.files.length == 0" class="md-button" 
+                        ng-click="publishDraft(currentItem, $event)" layout-sm="column" layout-gt-sm>
+                        <div>
+                            <i class="fa fa-save"></i>
+                            Publish
+                        </div>
+                        <div class="m-l-10">Document</div>
+                    </md-button>
+                </div>
+                <md-button flex=40 class="md-button bg-red col-white" ng-click="deleteDraft(currentItem.id, $event)" layout-gt-sm>
+                    <div>
+                        <i class="fa fa-trash"></i>
+                        Delete
+                    </div> 
+                    <div class="m-l-10">Draft</div>
                 </md-button>
             </div>
+            
         </form>
     </div>
     <br>
