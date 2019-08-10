@@ -6,14 +6,18 @@
       md-selected-nav-item="currentNavItem"
       nav-bar-aria-label="navigation links">
       <md-nav-item md-nav-click="null" name="Statistics">
-        Statatistics
+        Statistics
       </md-nav-item>
       <md-nav-item md-nav-click="null" name="WSUP">
         WSUP
+      </md-nav-item>
+      <md-nav-item md-nav-click="null" name="Apprehension">
+        Apprehension
       </md-nav-item>
     </md-nav-bar>
 
    <div flex ng-include="'./app/pages/database/views/graphs.html'" ng-show="currentNavItem == 'Statistics'"></div>
    <div flex ng-include="'./app/pages/database/views/wsup.html'" ng-show="currentNavItem == 'WSUP'"></div>
+   <div flex ng-include="'./app/pages/database/views/apprehension.html'" ng-show="currentNavItem == 'Apprehension'"></div>
 
 </div>
