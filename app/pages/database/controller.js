@@ -252,47 +252,240 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
         
     }
 }).
-controller('ApprehensionController', function($scope, $fireBaseService) {
+controller('ApprehensionController', function($scope, $apprehesionService, municipalityService) {
     $scope.apprehensionsTable = $scope.ngTable([]);
-    $fireBaseService.getApprehensions().then(apprehensions => {
+    $apprehesionService.getApprehensions().then(apprehensions => {
         $scope.apprehensionsTable = $scope.ngTable(apprehensions);
     });
-    $scope.openApprehensionForm = (event) => {
 
-    }
     $scope.Months = [
-        {id: 1, title: "January"},
-        {id: 2, title: "February"},
-        {id: 3, title: "March"},
-        {id: 4, title: "April"},
-        {id: 5, title: "May"},
-        {id: 6, title: "June"},
-        {id: 7, title: "July"},
-        {id: 8, title: "August"},
-        {id: 9, title: "September"},
-        {id: 10, title: "October"},
-        {id: 11, title:"November"},
-        {id: 12, title: "December"}
+        {id: 1, title: "January", days: 31},
+        {id: 2, title: "February", days: 28},
+        {id: 3, title: "March", days: 31},
+        {id: 4, title: "April", days: 30},
+        {id: 5, title: "May", days: 31},
+        {id: 6, title: "June", days: 30},
+        {id: 7, title: "July", days: 31},
+        {id: 8, title: "August", days: 31},
+        {id: 9, title: "September", days: 30},
+        {id: 10, title: "October", days: 31},
+        {id: 11, title:"November", days: 30},
+        {id: 12, title: "December", days: 31}
     ];
+
+    $scope.apprehensionFormData = {};
+    $scope.saveApprehension  = addApprehension;
+
+    $scope.closeAppehensionForm = () => {
+        $scope.close_dialog();
+    }
+    $scope.municipalities = [];
+    municipalityService.getMunicipalities().then(municipalities => {
+        $scope.municipalities = municipalities;
+    });
+
+    $scope.refreshAOBarangays = () => {
+        municipalityService.getBarangays($scope.apprehensionFormData.AO_Municipality).then(barangays => {
+            $scope.AOBarangays = barangays;
+        });
+    }
+    $scope.refreshPABarangays = () => {
+        municipalityService.
+        getBarangays($scope.apprehensionFormData.PA_Municipality).
+        then(barangays => {
+            $scope.PABarangays = barangays;
+        });
+    }
+
+    $scope.openApprehensionForm = (event) => {
+        $scope.saveApprehension  = addApprehension;
+        $scope.showPrerenderedDialog(event,'apprehensionForm');
+    }
+
+    $scope.getApprehension = (id) => {
+        $apprehesionService.getApprehension(id).then(apprehension => {
+            $scope.apprehensionFormData = convertToFormData(apprehension);
+        })
+    }
+
+    $scope.openApprehensionFormForUpdating = (event, apprehensionID) => {
+        $scope.saveApprehension = updateApprehension;
+        $apprehesionService.getApprehension(apprehensionID).then(apprehension => {
+            $scope.apprehensionFormData = convertToFormData(apprehension);
+            $scope.refreshAOBarangays();
+            $scope.refreshPABarangays();
+            $scope.showPrerenderedDialog(event,'apprehensionForm');
+        })
+    }
+    function convertToFormData(apprehension){
+        let formData = apprehension;
+        formData.Violations = apprehension.Violations.join(',');
+        formData.ApprehensionDate =  new Date( apprehension.Year, apprehension.Month - 1, apprehension.Day);
+        formData.PA_Barangay = apprehension.PA_Barangay.toUpperCase();
+        formData.AO_Barangay = apprehension.AO_Barangay.toUpperCase();
+        return formData;
+    }
+
+    function convertToApprehensionObject(formData){
+        var apprehension = {
+            Control_Number: $scope.apprehensionFormData.Control_Number || '',
+            Case_ID :$scope.apprehensionFormData.Case_ID || '',
+            Violations: $scope.apprehensionFormData.Violations ? $scope.apprehensionFormData.Violations.split(',') : '',
+            Month: $scope.apprehensionFormData.ApprehensionDate.getMonth() + 1,
+            Day: $scope.apprehensionFormData.ApprehensionDate.getDate(),
+            Year: $scope.apprehensionFormData.ApprehensionDate.getFullYear(),
+            // Time: $scope.apprehensionFormData.ApprehensionDate.getMonth() + 1,
+            AO_Sitio : $scope.apprehensionFormData.AO_Sitio || '',
+            AO_Barangay: $scope.apprehensionFormData.AO_Barangay || '',
+            AO_Municipality: $scope.apprehensionFormData.AO_Municipality || '',
+            PA_Sitio: $scope.apprehensionFormData.PA_Sitio || '',
+            PA_Barangay: $scope.apprehensionFormData.PA_Barangay || '',
+            PA_Municipality: $scope.apprehensionFormData.PA_Municipality || '',
+            Apprehending_Agency: $scope.apprehensionFormData.Apprehending_Agency || '',
+            Remarks: $scope.apprehensionFormData.Remarks || '',
+            Keywords: [$scope.apprehensionFormData.Control_Number],
+            id: $scope.apprehensionFormData.id || ''
+        };
+        apprehension.Keywords = apprehension.Keywords.concat(apprehension.Violations);
+        
+        return apprehension;
+    }
+
+    function addApprehension(){
+        var apprehension = convertToApprehensionObject($scope.apprehensionFormData);
+         
+        $apprehesionService.
+        addApprehension(apprehension).
+        then(addOperationResult => {
+            $scope.toast("Sucess");
+            $scope.close_dialog();     
+            clearFormData();
+        },
+        failedOperationResult => {
+
+        });
+    }
+
+    function updateApprehension() {
+        var apprehension = convertToApprehensionObject($scope.apprehensionFormData);
+        $apprehesionService.
+        updateApprehension(apprehension).
+        then(updateResult => {
+            $scope.toast("Sucess");
+            $scope.close_dialog();  
+        });
+    }
+     function clearFormData(){
+        $scope.apprehensionFormData = {};
+     }
+
+    $scope.dateNow = new Date();
 }).
-service('$fireBaseService', function() {
+service('$apprehesionService', function() {
+    var apprehensionDocument = db.collection('database').doc('Apprehension') ;
+    var apprehensionCollection = apprehensionDocument.collection('apprehensions');
+
     this.getApprehensions = () => {
         var promise = new Promise((resolve, reject) => {
             db.collection('database').
-                    doc('Apprehension').
-                    collection('apprehensions').
-                    onSnapshot(snapShot => {
-                        let apprehensions = snapShot.docs.map( documentSnapshot => {
-                            let apprehension = documentSnapshot.data();
-                            apprehension.id = documentSnapshot.id;
-                            return apprehension;
-                        });
-            
-                        resolve(apprehensions);
-                    }); 
+                doc('Apprehension').
+                collection('apprehensions').
+                onSnapshot(snapShot => {
+                    let apprehensions = snapShot.docs.map( documentSnapshot => {
+                        let apprehension = documentSnapshot.data();
+                        apprehension.id = documentSnapshot.id;
+                        
+                        return apprehension;
+                    });
+        
+                    resolve(apprehensions);
+                }); 
         });
         return promise;
     };
-    
+
+    this.addApprehension = (apprehension) => {
+        var promise = new Promise((resolve, reject) =>{       
+            apprehensionCollection
+            add(apprehension).
+            then(addApprehensionResult => {
+                this.updateCounterFor(apprehension).
+                then(updateCounterResult =>{
+                    resolve(addApprehensionResult);
+                });
+            },
+            failedOperationResult => {
+                reject(failedOperationResult);
+            })
+        });
+        return promise;
+    }
+
+    this.updateApprehension = (apprehension) => {
+        let promise = new Promise((resolve, reject) => {
+            apprehensionCollection.
+            doc(apprehension.id).
+            update(apprehension).
+            then(updateResult => {
+                resolve(updateResult);
+            });
+        })
+        
+        return promise;
+    }
+
+    this.getApprehension = (id) => {
+        let promise = new Promise((resolve, reject) => {
+            apprehensionCollection.
+            doc(id).
+            onSnapshot(documentSnapshot => {
+                let apprehension = documentSnapshot.data();
+                apprehension.id = documentSnapshot.id;
+                resolve(apprehension);
+            });
+        })
+        
+        return promise;
+    }
+    this.updateCounterFor = (apprehension) => {
+        var counter = {};
+        counter["yearlyCount.total"] =firebase.firestore.FieldValue.increment(1);
+        if(apprehension.Year) 
+            counter[`yearlyCount.${apprehension.Year}.total`] = 
+                firebase.firestore.FieldValue.increment(1);
+        if(apprehension.Month) 
+            counter[`yearlyCount.${apprehension.Year}.${apprehension.Month}`] = 
+                firebase.firestore.FieldValue.increment(1);
+        if(apprehension.PA_Municipality && apprehension.PA_Municipality !== 'N/A') 
+            counter[`municipalityCount.${apprehension.PA_Municipality}`] = 
+                firebase.firestore.FieldValue.increment(1);
+        
+        return db.
+        collection('database').
+        doc('Apprehension').
+        update(counter);
+    }
+}).
+service("municipalityService", function(){
+    this.getMunicipalities = () =>{
+        var palawanMunicipalities = Object.keys(
+                require('./json/palawanMunicipalities.json').municipality_list
+                );
+
+        return new Promise((resolve, reject)=>{
+            resolve(palawanMunicipalities);
+        })
+    }
+
+    this.getBarangays = (municipality) => {
+        return new Promise((resolve, reject) => {  
+            var palawanMunicipalities = require('./json/palawanMunicipalities.json');
+            var barangays = palawanMunicipalities["municipality_list"][municipality] ?
+                palawanMunicipalities["municipality_list"][municipality]["barangay_list"] :
+                [];
+
+            resolve(barangays)
+        })
+    }
 });
 ;
