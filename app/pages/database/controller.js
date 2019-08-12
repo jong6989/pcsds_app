@@ -330,11 +330,10 @@ controller('ApprehensionController', function($scope, $apprehesionService, munic
         var apprehension = {
             Control_Number: $scope.apprehensionFormData.Control_Number || '',
             Case_ID :$scope.apprehensionFormData.Case_ID || '',
-            Violations: $scope.apprehensionFormData.Violations ? $scope.apprehensionFormData.Violations.split(',') : '',
+            Violations: $scope.apprehensionFormData.Violations && $scope.apprehensionFormData.Violations.split(',') || '',
             Month: $scope.apprehensionFormData.ApprehensionDate.getMonth() + 1,
             Day: $scope.apprehensionFormData.ApprehensionDate.getDate(),
             Year: $scope.apprehensionFormData.ApprehensionDate.getFullYear(),
-            // Time: $scope.apprehensionFormData.ApprehensionDate.getMonth() + 1,
             AO_Sitio : $scope.apprehensionFormData.AO_Sitio || '',
             AO_Barangay: $scope.apprehensionFormData.AO_Barangay || '',
             AO_Municipality: $scope.apprehensionFormData.AO_Municipality || '',
