@@ -1,6 +1,6 @@
 {
     "municipality_list": {
-      "ABORLAN": {
+      "Aborlan": {
         "barangay_list": [
           "APO-APORAWAN",
           "APOC-APOC",
@@ -23,12 +23,12 @@
           "TIGMAN"
         ]
       },
-      "AGUTAYA": {
+      "Agutaya": {
         "barangay_list": [
-          "ABAGAT (POB.)",
+          "ABAGAT",
           "ALGECIRAS",
-          "BANGCAL (POB.)",
-          "CAMBIAN (POB.)",
+          "BANGCAL",
+          "CAMBIAN",
           "CONCEPCION",
           "DIIT",
           "MARACANAO",
@@ -37,7 +37,7 @@
           "VILLASOL"
         ]
       },
-      "ARACELI": {
+      "Araceli": {
         "barangay_list": [
           "BALOGO",
           "DAGMAN",
@@ -54,7 +54,7 @@
           "TUDELA (CALANDAGAN)"
         ]
       },
-      "BALABAC": {
+      "Balabac": {
         "barangay_list": [
           "AGUTAYAN",
           "BANCALAAN",
@@ -78,7 +78,7 @@
           "SEBARING"
         ]
       },
-      "BATARAZA": {
+      "Bataraza": {
         "barangay_list": [
           "BONO-BONO",
           "BULALACAO",
@@ -89,7 +89,7 @@
           "IWAHIG",
           "MALIHUD",
           "MALITUB",
-          "MARANGAS (POB.)",
+          "MARANGAS",
           "OCAYAN",
           "PURING",
           "RIO TUBA",
@@ -104,7 +104,7 @@
           "TARUSAN"
         ]
       },
-      "BROOKE'S POINT": {
+      "Brooke's Point": {
         "barangay_list": [
           "AMAS",
           "ARIBUNGOS",
@@ -126,14 +126,14 @@
           "TUBTUB"
         ]
       },
-      "BUSUANGA": {
+      "Busuanga": {
         "barangay_list": [
           "BOGTONG",
           "BULUANG",
           "CHEEY",
           "CONCEPCION",
           "MAGLALAMBAY",
-          "NEW BUSUANGA (POB.)",
+          "NEW BUSUANGA",
           "OLD BUSUANGA",
           "PANLAITAN",
           "QUEZON",
@@ -144,31 +144,31 @@
           "SANTO NIÑO"
         ]
       },
-      "CAGAYANCILLO": {
+      "Cagayancillo": {
         "barangay_list": [
-          "BANTAYAN (POB.)",
-          "CALSADA (POB.)",
-          "CONVENTO (POB.)",
-          "LIPOT NORTH (POB.)",
-          "LIPOT SOUTH (POB.)",
+          "BANTAYAN",
+          "CALSADA",
+          "CONVENTO",
+          "LIPOT NORTH",
+          "LIPOT SOUTH",
           "MAGSAYSAY",
           "MAMPIO",
           "NUSA",
           "SANTA CRUZ",
-          "TACAS (POB.)",
+          "TACAS",
           "TALAGA",
-          "WAHIG (POB.)"
+          "WAHIG"
         ]
       },
-      "CORON": {
+      "Coron": {
         "barangay_list": [
           "BANUANG DAAN",
-          "BARANGAY I (POB.)",
-          "BARANGAY II (POB.)",
-          "BARANGAY III (POB.)",
-          "BARANGAY IV (POB.)",
-          "BARANGAY V (POB.)",
-          "BARANGAY VI (POB.)",
+          "BARANGAY I",
+          "BARANGAY II",
+          "BARANGAY III",
+          "BARANGAY IV",
+          "BARANGAY V",
+          "BARANGAY VI",
           "BINTUAN",
           "BORAC",
           "BUENAVISTA",
@@ -187,7 +187,7 @@
           "TURDA"
         ]
       },
-      "CULION": {
+      "Culion": {
         "barangay_list": [
           "BALALA",
           "BALDAT",
@@ -205,28 +205,28 @@
           "TIZA"
         ]
       },
-      "CUYO": {
+      "Cuyo": {
         "barangay_list": [
           "BALADING",
-          "BANGCAL (POB.)",
-          "CABIGSING (POB.)",
+          "BANGCAL",
+          "CABIGSING",
           "CABURIAN",
           "CAPONAYAN",
-          "CATADMAN (POB.)",
+          "CATADMAN",
           "FUNDA",
-          "LAGAORIAO (POB.)",
+          "LAGAORIAO",
           "LUBID",
-          "LUNGSOD (POB.)",
+          "LUNGSOD",
           "MANAMOC",
           "MARINGIAN",
           "PAWA",
           "SAN CARLOS",
           "SUBA",
-          "TENGA-TENGA (POB.)",
-          "TOCADAN (POB.)"
+          "TENGA-TENGA",
+          "TOCADAN"
         ]
       },
-      "DUMARAN": {
+      "Dumaran": {
         "barangay_list": [
           "BACAO",
           "BOHOL",
@@ -235,7 +235,7 @@
           "CATEP",
           "CULASIAN",
           "DANLEG",
-          "DUMARAN (POB.)",
+          "DUMARAN",
           "ILIAN",
           "ITANGIL",
           "MAGSAYSAY",
@@ -246,7 +246,7 @@
           "TANATANAON"
         ]
       },
-      "EL NIDO": {
+      "El Nido": {
         "barangay_list": [
           "ABERAWAN",
           "BAGONG BAYAN",
@@ -268,12 +268,12 @@
           "VILLA PAZ"
         ]
       },
-      "KALAYAAN": {
+      "Kalayaan": {
         "barangay_list": [
-          "PAG-ASA (POB.)"
+          "PAG-ASA"
         ]
       },
-      "LINAPACAN": {
+      "Linapacan": {
         "barangay_list": [
           "BARANGONAN (ILOC)",
           "CABUNLAWAN",
@@ -283,17 +283,17 @@
           "NANGALAO",
           "NEW CULAYLAYAN",
           "PICAL",
-          "SAN MIGUEL (POB.)",
+          "SAN MIGUEL",
           "SAN NICOLAS"
         ]
       },
-      "MAGSAYSAY": {
+      "Magsaysay": {
         "barangay_list": [
           "ALCOBA",
           "BALAGUEN",
           "CANIPO",
           "COCORO",
-          "DANAWAN (POB.)",
+          "DANAWAN",
           "EMILOD",
           "IGABAS",
           "LACAREN",
@@ -302,7 +302,7 @@
           "RIZAL"
         ]
       },
-      "NARRA": {
+      "Narra": {
         "barangay_list": [
           "ANTIPULUAN",
           "ARAMAYWAN",
@@ -318,7 +318,7 @@
           "IPILAN",
           "MALATGAO",
           "MALINAO",
-          "NARRA (POB.)",
+          "NARRA",
           "PANACAN",
           "PANACAN 2",
           "PRINCESS URDUJA",
@@ -329,14 +329,14 @@
           "TINAGONG DAGAT"
         ]
       },
-      "PUERTO PRINCESA CITY": {
+      "Puerto Princesa City": {
         "barangay_list": [
           "BABUYAN",
           "BACUNGAN",
           "BAGONG BAYAN",
-          "BAGONG PAG-ASA (POB.)",
-          "BAGONG SIKAT (POB.)",
-          "BAGONG SILANG (POB.)",
+          "BAGONG PAG-ASA",
+          "BAGONG SIKAT",
+          "BAGONG SILANG",
           "BAHILE",
           "BANCAO-BANCAO",
           "BARANGAY NG MGA MANGINGISDA",
@@ -347,37 +347,37 @@
           "INAGAWAN",
           "INAGAWAN SUB-COLONY",
           "IRAWAN",
-          "IWAHIG (POB.)",
-          "KALIPAY (POB.)",
+          "IWAHIG",
+          "KALIPAY",
           "KAMUNING",
           "LANGOGAN",
-          "LIWANAG (POB.)",
+          "LIWANAG",
           "LUCBUAN",
           "LUZVIMINDA",
-          "MABUHAY (POB.)",
+          "MABUHAY",
           "MACARASCAS",
-          "MAGKAKAIBIGAN (POB.)",
-          "MALIGAYA (POB.)",
+          "MAGKAKAIBIGAN",
+          "MALIGAYA",
           "MANALO",
           "MANDARAGAT",
-          "MANGGAHAN (POB.)",
-          "MANINGNING (POB.)",
+          "MANGGAHAN",
+          "MANINGNING",
           "MAOYON",
           "MARUFINAS",
           "MARUYOGON",
-          "MASIGLA (POB.)",
-          "MASIKAP (POB.)",
-          "MASIPAG (POB.)",
-          "MATAHIMIK (POB.)",
-          "MATIYAGA (POB.)",
-          "MAUNLAD (POB.)",
-          "MILAGROSA (POB.)",
-          "MODEL (POB.)",
-          "MONTIBLE (POB.)",
+          "MASIGLA",
+          "MASIKAP",
+          "MASIPAG",
+          "MATAHIMIK",
+          "MATIYAGA",
+          "MAUNLAD",
+          "MILAGROSA",
+          "MODEL",
+          "MONTIBLE",
           "NAPSAN",
           "NEW PANGGANGAN",
-          "PAGKAKAISA (POB.)",
-          "PRINCESA (POB.)",
+          "PAGKAKAISA",
+          "PRINCESA",
           "SALVACION",
           "SAN JOSE",
           "SAN MANUEL",
@@ -386,22 +386,22 @@
           "SAN RAFAEL",
           "SANTA CRUZ",
           "SANTA LOURDES",
-          "SANTA LUCIA (POB.)",
+          "SANTA LUCIA",
           "SANTA MONICA",
-          "SEASIDE (POB.)",
+          "SEASIDE",
           "SICSICAN",
           "SIMPOCAN",
           "TAGABINIT",
           "TAGBUROS",
-          "TAGUMPAY (POB.)",
+          "TAGUMPAY",
           "TANABAG",
-          "TANGLAW (POB.)",
+          "TANGLAW",
           "TINIGUIBAN"
         ]
       },
-      "QUEZON": {
+      "Quezon": {
         "barangay_list": [
-          "ALFONSO XIII (POB.)",
+          "ALFONSO XIII",
           "ARAMAYWAN",
           "BERONG",
           "CALATAGBAK",
@@ -417,7 +417,7 @@
           "TAGUSAO"
         ]
       },
-      "RIZAL": {
+      "Rizal": {
         "barangay_list": [
           "BUNOG",
           "CAMPONG ULAY",
@@ -432,15 +432,15 @@
           "TABURI"
         ]
       },
-      "ROXAS": {
+      "Roxas": {
         "barangay_list": [
           "ABAROAN",
           "ANTONINO",
           "BAGONG BAYAN",
-          "BARANGAY 1 (POB.)",
-          "BARANGAY II (POB.)",
-          "BARANGAY III (POB.)",
-          "BARANGAY IV (POB.)",
+          "BARANGAY 1",
+          "BARANGAY II",
+          "BARANGAY III",
+          "BARANGAY IV",
           "BARANGAY V POB. (PORAO ISLAND)",
           "BARANGAY VI POB. (JOHNSON ISLAND)",
           "CARAMAY",
@@ -467,7 +467,7 @@
           "TUMARBONG"
         ]
       },
-      "SAN VICENTE": {
+      "San Vicente": {
         "barangay_list": [
           "ALIMANGUAN",
           "BINGA",
@@ -481,7 +481,7 @@
           "SANTO NIÑO"
         ]
       },
-      "SOFRONIO ESPAÑOLA": {
+      "Sofronion Española": {
         "barangay_list": [
           "ABO-ABO",
           "IRARAY",
@@ -494,7 +494,7 @@
           "PUNANG"
         ]
       },
-      "TAYTAY": {
+      "Taytay": {
         "barangay_list": [
           "ABONGAN",
           "ALACALIAN",
