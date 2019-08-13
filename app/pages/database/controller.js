@@ -486,5 +486,238 @@ service("municipalityService", function(){
             resolve(barangays)
         })
     }
+}).
+controller('ChainsawRegistrationController', ($scope, $chainsawService, municipalityService) => {
+    $scope.registeredChainsawsTable = $scope.ngTable([]);
+    $scope.chainsawFormData = {};
+    $scope.municipalities = [];
+    $scope.barangays  = [];
+    $scope.dateNow = new Date();
+    $scope.chainsaws = [];
+
+    municipalityService.getMunicipalities().then(municipalities => {
+        $scope.municipalities = municipalities;
+    });
+
+    $chainsawService.getRegisteredChainsaws().then(chainsaws => {
+        $scope.chainsaws = chainsaws;
+        $scope.registeredChainsawsTable = $scope.ngTable(chainsaws);
+    });
+
+    function addChainsaw(){
+        let chainsaw = convertToChainsawObject($scope.chainsawFormData)
+        $chainsawService.addChainsaw(chainsaw).
+        then(result => {
+            $scope.toast('Success');
+            $scope.close_dialog();
+            $scope.chainsaws.push(chainsaw);
+            refreshRegisteredChainsawsTable();
+            $scope.chainsawFormData = {};
+        },
+        error => { 
+            console.log(error);
+        });
+    }
+
+    function refreshRegisteredChainsawsTable(){
+        $scope.registeredChainsawsTable = $scope.ngTable($scope.chainsaws);
+    }
+
+    function updateChainsaw() {
+        let updatedChainsaw = convertToChainsawObject($scope.chainsawFormData)
+        $chainsawService.updateChainsaw(updatedChainsaw).then(chainsaw => {
+            $scope.toast('Success');
+            $scope.close_dialog();
+            let index = $scope.chainsaws.findIndex(chainsaw => chainsaw.id == updatedChainsaw.id);
+            $scope.chainsaws[index] = updatedChainsaw;
+            refreshRegisteredChainsawsTable();
+            $scope.chainsawFormData = {};
+        },
+        error => {
+            $scope.toast('Ooooops something went wrong.');
+            console.log(error);
+        });        
+    }
+
+    $scope.openRegistrationForm = (event) => {
+        $scope.saveChainsaw = addChainsaw;
+        $scope.chainsawFormData = {};
+        $scope.showPrerenderedDialog(event, 'chainsawRegistrationForm');
+    }
+
+    $scope.openRegistrationFormForUpdating = (event, id) => {     
+        $scope.saveChainsaw = updateChainsaw;
+        $chainsawService.
+        getChainsaw(id).
+        then(chainsaw => {
+            $scope.chainsawFormData = chainsaw;
+            $scope.refreshBarangays();
+        })
+        $scope.showPrerenderedDialog(event, 'chainsawRegistrationForm');
+    }
+
+    $scope.closeRegistrationForm = () => {
+        $scope.close_dialog();
+    }
+
+    $scope.refreshBarangays = () =>{
+        municipalityService.getBarangays($scope.chainsawFormData.Owner.Municipality).then(barangays => {
+            $scope.barangays = barangays;
+        })
+    }
+
+    function convertToChainsawObject(formData){
+        let chainsaw = {
+            CurrentCORNumber: formData.CurrentCORNumber || '',
+            Agency: formData.Agency || '',
+            Owner: {
+                FirstName: formData.Owner && formData.Owner.FirstName || '',
+                MiddleInitial: formData.Owner && formData.Owner.MiddleInitial || '',
+                LastName: formData.Owner && formData.Owner.LastName || '',
+                NameExtension: formData.Owner && formData.Owner.NameExtension || '',
+                Barangay: formData.Owner && formData.Owner.Barangay || '',
+                Street: formData.Owner && formData.Owner.Street || '',
+                Municipality: formData.Owner && formData.Owner.Municipality || ''
+            },                
+            MetalSealNumber: formData.MetalSealNumber || '',
+            SerialNumber: formData.SerialNumber || '',
+            RegistrationDate: formData.RegistrationDate || '',
+            ExpirationDate: formData.ExpirationDate || '',
+            LimitationOfUse: formData.LimitationOfUse || '',
+            Remarks: formData.Remarks || '',
+            Keywords: [],
+            id: formData.id || ''
+        };
+        chainsaw.Keywords = [
+            chainsaw.Owner.LastName,
+            chainsaw.Owner.MiddleInitial,
+            chainsaw.Owner.FirstName,
+            chainsaw.CurrentCORNumber
+        ].filter(value => value.length > 0);
+        return chainsaw;
+    }
+}).
+service('$chainsawService', function(){
+    var chainsawDocument = db.collection('database').doc('ChainsawRegistration') ;
+    var chainsawCollection = chainsawDocument.collection('Registerted Chainsaws');
+
+    this.getRegisteredChainsaws = () => {
+        let promise = new Promise((resolve, reject) => {
+            chainsawCollection.onSnapshot(snapShot => {
+                let chainsaws = snapShot.docs.map(documentSnapshot => {
+                    let chainsaw =  documentSnapshot.data();
+                    chainsaw.id = documentSnapshot.id;
+                    return chainsaw;
+                });
+
+                resolve(chainsaws);
+            });
+        });
+
+        return promise;
+    }
+
+    this.getChainsaw = (id) => {
+        let promise = new Promise((resolve, reject) => {
+            chainsawCollection.doc(id).
+            onSnapshot(snapshot => {
+                let chainsaw = snapshot.data();
+                chainsaw.id = id;
+                chainsaw.RegistrationDate = chainsaw.RegistrationDate ? new Date(chainsaw.RegistrationDate.seconds * 1000) : '';
+                chainsaw.ExpirationDate = chainsaw.ExpirationDate ? new Date(chainsaw.ExpirationDate.seconds * 1000) : '';
+                resolve(chainsaw);
+            });
+        });
+        
+        return promise;
+    }
+    this.addChainsaw = (chainsaw) => {
+        let promise = new Promise((resolve, reject) => {
+            chainsawCollection.add(chainsaw).then(documentRef => {
+                this.updateCounterFor(chainsaw).then(result => {
+                },
+                error => {
+                
+                });
+                resolve(chainsaw);
+            },
+            error => {
+                reject(error);
+            });
+        });
+        return promise;
+    }
+
+    this.updateChainsaw = (chainsaw) => {
+        
+        let promise = new Promise((resolve, reject) => {
+            chainsawCollection.doc(chainsaw.id).update(chainsaw).
+            then(result => {
+                resolve(chainsaw);
+            },
+            error => {
+                reject(error);
+            })
+        })
+        return promise;
+    }
+
+    this.updateCounterFor = (chainsaw) => {
+        let promise = new Promise((resolve, reject) => {
+        
+        var counter = {};
+            if(chainsaw.RegistrationDate) {
+                // counter.yearlyCount = {};
+                // counter.yearlyCount.total = firebase.firestore.FieldValue.increment(1);
+                // counter.yearlyCount[chainsaw.RegistrationDate.getFullYear()] = {};
+                // counter.yearlyCount[chainsaw.RegistrationDate.getFullYear()].total = firebase.firestore.FieldValue.increment(1);
+                // counter.yearlyCount[chainsaw.RegistrationDate.getFullYear()][chainsaw.RegistrationDate.getMonth() + 1] = firebase.firestore.FieldValue.increment(1);
+                counter["yearlyCount.total"] = firebase.firestore.FieldValue.increment(1);
+                counter[`yearlyCount.${chainsaw.RegistrationDate.getFullYear()}.total`] = firebase.firestore.FieldValue.increment(1);
+                counter[`yearlyCount.${chainsaw.RegistrationDate.getFullYear()}.${chainsaw.RegistrationDate.getMonth() + 1}`] = firebase.firestore.FieldValue.increment(1); 
+            }
+
+            if(chainsaw.Municipality)
+            {
+                counter[`municipalityCount.${chainsaw.Municipality}`] = firebase.firestore.FieldValue.increment(1);
+                // counter.municipalityCount = {};
+                // counter.municipalityCount[chainsaw.Municipality] = firebase.firestore.FieldValue.increment(1);
+            }
+
+            if(Object.keys(counter).length)
+            {
+                chainsawDocument.set(counter).
+                then(result => {
+
+                },
+                error => {
+                    console.log(error);
+                });
+            }
+
+        });
+
+        return promise;
+    }
 });
-;
+// service('$chainsawService', function(){
+//     this.getRegisteredChainsaws = () => {
+//         var chainsaws = require('./json/chainsaw.json')
+//         let promise = new Promise((resolve, reject) => {
+//             resolve(chainsaws);
+//         });
+
+//         return promise;
+//     }
+
+//     this.addChainsaw = (chainsaw) => {
+//         
+//         let promise = new Promise((resolve, reject) => {
+//             this.getRegisteredChainsaws().then(chainsaws => {
+//                 chainsaws.push(chainsaw);
+//                 resolve(chainsaw);
+//             })
+//         })
+//         return promise;
+//     }
+// });
