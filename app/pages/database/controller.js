@@ -545,7 +545,7 @@ controller('ChainsawRegistrationController', ($scope, $chainsawService, municipa
         $scope.showPrerenderedDialog(event, 'chainsawRegistrationForm');
     }
 
-    $scope.openRegistrationFormForUpdating = (event, id) => {     
+    $scope.openRegistrationFormForUpdating = (id) => {     
         $scope.saveChainsaw = updateChainsaw;
         $chainsawService.
         getChainsaw(id).
@@ -565,7 +565,7 @@ controller('ChainsawRegistrationController', ($scope, $chainsawService, municipa
             $scope.barangays = barangays;
         })
     }
-
+    
     function convertToChainsawObject(formData){
         let chainsaw = {
             CurrentCORNumber: formData.CurrentCORNumber || '',
@@ -667,26 +667,19 @@ service('$chainsawService', function(){
         
         var counter = {};
             if(chainsaw.RegistrationDate) {
-                // counter.yearlyCount = {};
-                // counter.yearlyCount.total = firebase.firestore.FieldValue.increment(1);
-                // counter.yearlyCount[chainsaw.RegistrationDate.getFullYear()] = {};
-                // counter.yearlyCount[chainsaw.RegistrationDate.getFullYear()].total = firebase.firestore.FieldValue.increment(1);
-                // counter.yearlyCount[chainsaw.RegistrationDate.getFullYear()][chainsaw.RegistrationDate.getMonth() + 1] = firebase.firestore.FieldValue.increment(1);
                 counter["yearlyCount.total"] = firebase.firestore.FieldValue.increment(1);
                 counter[`yearlyCount.${chainsaw.RegistrationDate.getFullYear()}.total`] = firebase.firestore.FieldValue.increment(1);
                 counter[`yearlyCount.${chainsaw.RegistrationDate.getFullYear()}.${chainsaw.RegistrationDate.getMonth() + 1}`] = firebase.firestore.FieldValue.increment(1); 
             }
 
-            if(chainsaw.Municipality)
+            if(chainsaw.Owner.Municipality)
             {
-                counter[`municipalityCount.${chainsaw.Municipality}`] = firebase.firestore.FieldValue.increment(1);
-                // counter.municipalityCount = {};
-                // counter.municipalityCount[chainsaw.Municipality] = firebase.firestore.FieldValue.increment(1);
+                counter[`municipalityCount.${chainsaw.Municipality}`] = firebase.firestore.FieldValue.increment(1);                
             }
 
             if(Object.keys(counter).length)
             {
-                chainsawDocument.set(counter).
+                chainsawDocument.update(counter).
                 then(result => {
 
                 },
