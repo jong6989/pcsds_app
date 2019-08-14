@@ -701,25 +701,139 @@ service('$chainsawService', function(){
 
         return promise;
     }
+}).
+controller('PurchasePermitController', function($chainsawPermitToPurchaseService, $scope){
+    $scope.permits = [];
+    $scope.permitsTable = $scope.ngTable([]);
+    $scope.chainsawPurchasePermitFormData = {};
+    $scope.municipalities = [];
+    $scope.barangays  = [];
+    $scope.dateNow = new Date();
+
+    $chainsawPermitToPurchaseService.getPermits().then(permits => {
+        $scope.permits = permits;
+        $scope.permitsTable = $scope.ngTable($scope.permits);
+    });
+
+}).
+service('$chainsawPermitToPurchaseService', function($crudService){
+    var chainsawDocument = db.collection('database').doc('ChainsawPermitToPurchase') ;
+    var purchasePermitCollection = chainsawDocument.collection('permits');
+
+    this.getPermits = () => {
+        return new Promise((resolve, reject) => {
+            $crudService.getItems(purchasePermitCollection, convertoToPurchasePermitObject).then(permits => {
+                resolve(permits);
+            });
+        });
+    }
+
+    function convertoToPurchasePermitObject(snapshot){
+        let permit = snapshot.data();
+        permit.id = snapshot.id;
+
+        if(permit.Date_Issued)
+            permit.Date_Issued = new Date(permit.Date_Issued.seconds * 1000);
+        return permit;
+    }
+}).
+service('$crudService', function(){
+    this.getItems = (collection, objectConverter) => {
+        // var items = []
+        if(!objectConverter)
+            objectConverter = defaultObjectConverter;
+        
+        let promise = new Promise((resolve, reject) => {
+            collection.onSnapshot(snapShot => {
+                let items = snapShot.docs.map(documentSnapshot =>{
+                    let item = objectConverter(documentSnapshot);
+
+                    return item;
+                });
+
+                resolve(items);
+            });
+        });
+
+        return promise;
+    }
+
+    this.getItem = (id, collection, objectConverter) => {
+        if(!objectConverter)
+            objectConverter = defaultObjectConverter;
+        
+        let promise = new Promise((resolve, reject) => {
+            collection.doc(id).onSnapshot(documentSnapshot => {
+                let item = objectConverter(documentSnapshot);
+                resolve(item);
+            });
+        },
+        error => {
+            reject(error);
+        });
+
+        return promise;
+    }
+
+    function defaultObjectConverter(documentSnapshot){
+        let item =  documentSnapshot.data();
+        item.id = documentSnapshot.id;
+
+        return item;
+    }
+
+    this.addItem = (itemToAdd, collection) => {
+        
+        let promise = new Promise((resolve, reject) => {
+            collection.add(itemToAdd).then(result => {
+                resolve();
+            },
+            error => {
+                reject(error);
+            });
+        })
+        return promise;
+    }
+
+    this.updateItem = (item, collection) => {
+        let promise = new Promise((resolve, reject) => {
+            collection.doc(item.id).update(item).then(result =>{
+                resolve();
+            },
+            error => { reject(error); });
+        })
+
+        return promise;
+    }
+
+    this.updateCounterFor = (item, document) => {
+        let promise = new Promise((resolve, reject) => {
+        
+        var counter = {};
+            if(item.Year && item.Month) {
+                counter["yearlyCount.total"] = firebase.firestore.FieldValue.increment(1);
+                counter[`yearlyCount.${item.Year}.total`] = firebase.firestore.FieldValue.increment(1);
+                counter[`yearlyCount.${item.Year}.${item.Month}`] = firebase.firestore.FieldValue.increment(1); 
+            }
+
+            if(item.Municipality)
+            {
+                counter[`municipalityCount.${item.Municipality}`] = firebase.firestore.FieldValue.increment(1);                
+            }
+
+            if(Object.keys(counter).length)
+            {
+                document.update(counter).
+                then(result => {
+
+                },
+                error => {
+                    console.log(error);
+                });
+            }
+
+        });
+
+        return promise;
+    }
 });
-// service('$chainsawService', function(){
-//     this.getRegisteredChainsaws = () => {
-//         var chainsaws = require('./json/chainsaw.json')
-//         let promise = new Promise((resolve, reject) => {
-//             resolve(chainsaws);
-//         });
-
-//         return promise;
-//     }
-
-//     this.addChainsaw = (chainsaw) => {
-//         
-//         let promise = new Promise((resolve, reject) => {
-//             this.getRegisteredChainsaws().then(chainsaws => {
-//                 chainsaws.push(chainsaw);
-//                 resolve(chainsaw);
-//             })
-//         })
-//         return promise;
-//     }
-// });

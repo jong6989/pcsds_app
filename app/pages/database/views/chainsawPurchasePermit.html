@@ -1,0 +1,97 @@
+<div ng-controller="PurchasePermitController">
+    <md-toolbar class="bg-teal">
+      <h1 class="md-toolbar-tools">
+        <md-button class="md-raised" ng-click="openPermitForm($event)">
+          <i class="fa fa-plus col-green"></i>
+            register new permit to purchase
+        </md-button>
+      </h1>
+    </md-toolbar>
+  
+    <md-content
+      style="height: {{ iframeHeight - 150 }}px;"
+      layout-sm="coulumn"
+      layout-gt-sm
+      ng-init=""
+    >
+      <div flex>
+        <table ng-table="permitsTable" class="table" show-filter="true">
+          <tr ng-repeat="permit in $data">
+            <td
+              title="'First Name'"
+              sortable="'First_Name'"
+              filter="{First_Name: 'text'}"
+            >
+              {{ permit.First_Name }}
+            </td>
+            <td
+              title="'Middle Initial'"
+              sortable="'Middle_Initial'"
+              filter="{Middle_Initial: 'text'}"
+            >
+              {{ permit.Middle_Initial }}
+            </td>
+            <td
+              title="'Last Name'"
+              sortable="'permit.Last_Name'"
+              filter="{ Last_Name:'text' }"
+            >
+              {{ permit.Last_Name}}
+            </td>
+            <td title="'Extension'" 
+                sortable="'Extension'" 
+                filter="{Extension:'text'}">
+              {{ permit.Extension }}
+            </td>
+            <td
+              title="'Street'"
+              sortable="'Street'"
+              filter="{Street:'text'}"
+            >
+              {{ permit.Street }}
+            </td>
+            <td
+              title="'Barangay'"
+              sortable="'Barangay'"
+              filter="{Barangay:'text'}"
+            >
+              {{ permit.Barangay }}
+            </td>
+            <td
+              title="'Municipality'"
+              sortable="'Municipality'"
+              filter="{Municipality:'text'}"
+            >
+              {{ permit.Municipality }}
+            </td>
+            
+            <td
+              title="'Purpose'"
+              sortable="'Purpose'"
+              filter="{Purpose:'text'}"
+            >
+              {{ permit.Purpose }}
+            </td>
+            <td
+              title="'Registration Date'"
+              sortable="'RegistrationDate'"
+              filter="{RegistrationDate:'text'}"
+            >
+              {{ permit.Date_Issued.toLocaleDateString() }}
+            </td>            
+            <td title="''">
+              <md-button
+                class="md-raised"
+                ng-click="openFormForUpdating(permit.id)"
+              >
+                <i class="fa fa-plus col-green"></i>
+                EDIT
+              </md-button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </md-content>
+    <div ng-include="'./app/pages/database/modals/chainsawPermitRegistrationForm.html'"></div>
+  </div>
+  
