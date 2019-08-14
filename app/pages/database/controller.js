@@ -568,7 +568,7 @@ controller('ChainsawRegistrationController', ($scope, $chainsawService, municipa
     
     function convertToChainsawObject(formData){
         let chainsaw = {
-            CurrentCORNumber: formData.CurrentCORNumber || '',
+            CORNumber: formData.CORNumber || '',
             Agency: formData.Agency || '',
             Owner: {
                 FirstName: formData.Owner && formData.Owner.FirstName || '',
@@ -605,8 +605,7 @@ service('$chainsawService', function(){
         let promise = new Promise((resolve, reject) => {
             chainsawCollection.onSnapshot(snapShot => {
                 let chainsaws = snapShot.docs.map(documentSnapshot => {
-                    let chainsaw =  documentSnapshot.data();
-                    chainsaw.id = documentSnapshot.id;
+                    let chainsaw = convertToChainsawObject(documentSnapshot);
                     return chainsaw;
                 });
 
@@ -621,15 +620,25 @@ service('$chainsawService', function(){
         let promise = new Promise((resolve, reject) => {
             chainsawCollection.doc(id).
             onSnapshot(snapshot => {
-                let chainsaw = snapshot.data();
-                chainsaw.id = id;
-                chainsaw.RegistrationDate = chainsaw.RegistrationDate ? new Date(chainsaw.RegistrationDate.seconds * 1000) : '';
-                chainsaw.ExpirationDate = chainsaw.ExpirationDate ? new Date(chainsaw.ExpirationDate.seconds * 1000) : '';
+                let chainsaw = convertToChainsawObject(snapshot);
+                
                 resolve(chainsaw);
             });
         });
         
         return promise;
+    }
+
+    function convertToChainsawObject(snapshot){
+        let chainsaw = snapshot.data();
+        chainsaw.id = snapshot.id;
+        chainsaw.RegistrationDate = chainsaw.RegistrationDate ? new Date(chainsaw.RegistrationDate.seconds * 1000) : '';
+        chainsaw.ExpirationDate = chainsaw.ExpirationDate ? new Date(chainsaw.ExpirationDate.seconds * 1000) : '';
+        
+        if(chainsaw.Owner && chainsaw.Owner.Barangay)
+            chainsaw.Owner.Barangay = chainsaw.Owner.Barangay.toUpperCase();
+
+        return chainsaw;
     }
     this.addChainsaw = (chainsaw) => {
         let promise = new Promise((resolve, reject) => {

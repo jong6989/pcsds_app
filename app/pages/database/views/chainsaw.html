@@ -19,10 +19,10 @@
           <tr ng-repeat="chainsaw in $data">
             <td
               title="'COR Number'"
-              sortable="'CurrentCORNumber'"
-              filter="{CurrentCORNumber: 'text'}"
+              sortable="'CORNumber'"
+              filter="{CORNumber: 'text'}"
             >
-              {{ chainsaw.CurrentCORNumber }}
+              {{ chainsaw.CORNumber }}
             </td>
             <td
               title="'Agency'"
@@ -88,7 +88,7 @@
             <td
               title="'Registration Date'"
               sortable="'RegistrationDate'"
-              filter="{RegistrationDate:'datepicker'}"
+              filter="{RegistrationDate:'text'}"
             >
               {{ chainsaw.RegistrationDate.toLocaleDateString() }}
             </td>
