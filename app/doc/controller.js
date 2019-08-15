@@ -110,6 +110,10 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         $scope.mySent[idx].sentUser = b;
     };
 
+    $scope.getCurrentClicked = (c) => {
+        return ($scope.currentClicked == c);
+    };
+
     $scope.doc_init = () => {
         //imidiate display, to prevent loading
         if($localStorage.doc_user !== undefined) {
@@ -137,12 +141,12 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
                     });
                     return null;
                 });
-                func.checkDraft((a,b) => {
-                    $scope.myDrafts = a;
-                    $scope.currentItem = b;
-                    $scope.currentClicked = 'draft';
-                    $scope.currentDocSelected = 'draft';
-                });
+                // func.checkDraft((a,b) => {
+                //     $scope.myDrafts = a;
+                //     $scope.currentItem = b;
+                //     $scope.currentClicked = 'draft';
+                //     $scope.currentDocSelected = 'draft';
+                // });
             }
         } ).catch( ()=> {
             setTimeout($scope.doc_init, 3000);
@@ -333,6 +337,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         $scope.currentItem = x;
         $scope.currentClicked = t;
         $scope.currentTransaction = c;
+        $localStorage.currentItem = x;
     }
 
     $scope.updateCleanDocFiles = (id,cF) => {
@@ -360,4 +365,4 @@ document.write(`<script src="./app/doc/controllers/files.js"></script>`);
 document.write(`<script src="./app/doc/controllers/draft.js"></script>`);
 document.write(`<script src="./app/doc/controllers/published.js"></script>`);
 document.write(`<script src="./app/doc/controllers/pending.js"></script>`);
-document.write(`<script src="./app/doc/controllers/received.js"></script>`);
+document.write(`<script src="./app/doc/controllers/actions.js"></script>`);

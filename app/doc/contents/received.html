@@ -1,4 +1,4 @@
-<div ng-controller="doc_ctrl_received" >
+<div >
     <h5 class="col-grey">From</h5>
     <p>
         Name : <strong>{{currentTransaction.sender.name}}</strong> <br>
@@ -39,27 +39,8 @@
     <h5><small> Description</small> : <strong class="col-teal">{{currentItem.description}}</strong> </h5>
     <hr>
 
-    <h4 class="col-grey">
-        Files 
-        <md-button class="col-pink m-l-10" ng-if="isFolderExist(currentItem.id)" 
-            ng-click="openFolder(currentItem.id)"> 
-            <i class="fa fa-folder-open-o"></i> 
-            Open Folder
-        </md-button>
-    </h4>
-    <ol>
-        <li ng-repeat="x in currentItem.files" ng-init="a = x.path.split('/')">
-            <a ng-href="{{api_address + '/uploads/' + x.path}}" download="{{x.name}}" 
-                ng-init="dl_attachment(x.url,currentItem)">
-                {{x.name}}
-                <i class="fa fa-check col-green" ng-if="isFolderExist(currentItem.id + fileDivider + a[a.length -1])"></i>  
-            </a>
-        </li>
-    </ol>
-
-    <hr>
-    <h4 class="col-grey">Actions</h4>
-
+    <div ng-controller="doc_ctrl_actions" ng-include="'./app/doc/contents/actions.html'"></div>
+    
     <hr>
     <h4></h4>
     <br><br><br>

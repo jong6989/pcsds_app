@@ -531,6 +531,11 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     }
 
     $scope.load_html = (text,clas)=>{
+      text = text.replace('<script>','<script');
+      text = text.replace('</script>','/script>');
+      text = text.replace('< script >','<script');
+      text = text.replace('< /script >','/script>');
+      text = text.replace('script>','script');
         $timeout(
             ()=>{
                 $("."+clas).html( text );

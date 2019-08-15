@@ -40,16 +40,21 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $utils,
         let currentItem = $scope.currentItem;
         $scope.filtered_receipients = [];
         $scope.filtered_receipients = $scope.receipients.filter( a => {
-            if($scope.send_as == 'front_office'){
-                return ( a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['department_head'] );
+            if(!a[currentItem.agency.id]['active']) {
+                return false;
+            }
+            if($scope.send_as == 'front_office' || $scope.send_as == 'registry'){
+                return ( a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['registry'] );
             } else if($scope.send_as == 'division_head'){
-                return ( a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['department_head'] );
+                return ( a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['registry'] );
             } else if($scope.send_as == 'office_head'){
-                return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['office_head'] );
+                return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['registry'] );
             } else if($scope.send_as == 'department_head'){
-                return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['division_head'] );
-            }  else if($scope.send_as == 'admin'){
+                return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['registry'] );
+            } else if($scope.send_as == 'admin'){
                 return true;
+            } else if($scope.send_as == 'staff'){
+                return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['division_head'] );
             }
             return false;
         } );
@@ -95,9 +100,9 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $utils,
                 status : 'pending',
                 sender : {
                     id : $scope.doc_user.id,
-                    contact : $scope.doc_user.contact,
-                    email : $scope.doc_user.email,
-                    info : $scope.doc_user.info,
+                    contact : ($scope.doc_user.contact == undefined)? '':$scope.doc_user.contact,
+                    email : ($scope.doc_user.email == undefined)? '':$scope.doc_user.email,
+                    info : ($scope.doc_user.info == undefined)? '': $scope.doc_user.info,
                     access : accessTypes,
                     name : $scope.doc_user.name
                 },

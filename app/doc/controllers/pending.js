@@ -22,8 +22,7 @@ myAppModule.controller('doc_ctrl_pending', function ($scope, $timeout, $utils, $
                 $scope.toast('Document marked as received!');
             } );
             setTimeout( () => {
-                $scope.currentClicked = 'received';
-                $scope.currentDocSelected = 'received';
+                $scope.setCurrentItem($scope.currentItem,'received',$scope.currentTransaction);
             }, 200 );
         },()=>{});
     };
