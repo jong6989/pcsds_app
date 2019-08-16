@@ -1,0 +1,129 @@
+<div ng-controller="ChainsawRegistrationController">
+    <md-toolbar class="bg-teal">
+      <h1 class="md-toolbar-tools">
+        <md-button class="md-raised" ng-click="openRegistrationForm($event)">
+          <i class="fa fa-plus col-green"></i>
+            register new chainsaw
+        </md-button>
+      </h1>
+    </md-toolbar>
+  
+    <md-content
+      style="height: {{ iframeHeight - 150 }}px;"
+      layout-sm="coulumn"
+      layout-gt-sm
+      ng-init=""
+    >
+      <div flex>
+        <table ng-table="registeredChainsawsTable" class="table" show-filter="true">
+          <tr ng-repeat="chainsaw in $data">
+            <td
+              title="'COR Number'"
+              sortable="'CORNumber'"
+              filter="{CORNumber: 'text'}"
+            >
+              {{ chainsaw.CORNumber }}
+            </td>
+            <td
+              title="'Agency'"
+              sortable="'Agency'"
+              filter="{Agency: 'text'}"
+            >
+              {{ chainsaw.Agency }}
+            </td>
+            <td
+              title="'First Name '"
+              sortable="'Owner.FirstName'"
+              filter="{FirstName: 'text'}"
+            >
+              {{ chainsaw.Owner.FirstName }}
+            </td>
+            <td
+              title="'Middle Initial'"
+              sortable="'Owner.MiddleInitial'"
+              filter="{ MiddleInitial:'text' }"
+            >
+              {{ chainsaw.Owner.MiddleInitial}}
+            </td>
+            <td
+              title="'Last Name'"
+              sortable="'Owner.LastName'"
+              filter="{ LastName:'text' }"
+            >
+              {{ chainsaw.Owner.LastName}}
+            </td>
+            <td title="'Street'" 
+                sortable="'Owner.Street'" 
+                filter="{Street:'text'}">
+              {{ chainsaw.Owner.Street }}
+            </td>
+            <td
+              title="'Barangay'"
+              sortable="'Owner.Barangay'"
+              filter="{Barangay:'text'}"
+            >
+              {{ chainsaw.Owner.Barangay }}
+            </td>
+            <td
+              title="'Municipality'"
+              sortable="'Owner.Municipality'"
+              filter="{Municipality:'text'}"
+            >
+              {{ chainsaw.Owner.Municipality }}
+            </td>
+            <td
+              title="'Metal Seal Number'"
+              sortable="'MetalSealNumber'"
+              filter="{MetalSealNumber:'text'}"
+            >
+              {{ chainsaw.MetalSealNumber }}
+            </td>
+            <td
+              title="'Serial Number'"
+              sortable="'SerialNumber'"
+              filter="{SerialNumber:'text'}"
+            >
+              {{ chainsaw.SerialNumber }}
+            </td>
+            <td
+              title="'Registration Date'"
+              sortable="'RegistrationDate'"
+              filter="{RegistrationDate:'text'}"
+            >
+              {{ chainsaw.RegistrationDate.toLocaleDateString() }}
+            </td>
+            <td
+              title="'Expiration Date'"
+              sortable="'ExpirationDate'"
+              filter="{ExpirationDate:'text'}"
+            >
+              {{ chainsaw.ExpirationDate.toLocaleDateString() }}
+            </td>
+            <td 
+                title="'Limitation of Use'" 
+                sortable="'LimitationOfUse'" 
+                filter="{LimitationOfUse:'text'}">
+                {{chainsaw.LimitationOfUse}}
+            </td>
+            <td 
+                title="'Remarks'" 
+                sortable="'Remarks'" 
+                filter="{Remarks:'text'}">
+              {{ chainsaw.Remarks }}
+            </td>
+            <td title="''">
+              <md-button
+                class="md-raised"
+                ng-click="openRegistrationFormForUpdating(chainsaw.id)"
+              >
+                <i class="fa fa-plus col-green"></i>
+                EDIT
+              </md-button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </md-content>
+    <div ng-include="'./app/pages/database/modals/chainsawRegistrationForm.html'"></div>
+  </div>
+  

@@ -1,0 +1,143 @@
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="apprehensionForm">
+        <md-dialog layout="column" layout-align="center center">
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>Add New Appehension</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="closeAppehensionForm()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <form ng-cloak name="formApprehension">
+                <md-dialog-content layout-padding class="p-b-20">
+                    <div layout-gt-sm layout-sm="column">
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>Control No.</label>
+                                <input ng-model="apprehensionFormData.Control_Number" required>
+                            </md-input-container>
+                        </div>
+                        <md-input-container class="md-block" flex>
+                            <label>Case Title</label>
+                            <input ng-model="apprehensionFormData.Case_ID">
+                        </md-input-container>
+
+                        <md-input-container class="md-block">
+                            <label>Violations</label>
+                            <input ng-model="apprehensionFormData.Violations" required>
+                        </md-input-container>
+                        
+                    </div>
+
+                    <div layout-gt-sm layout-sm="column">
+                        <div>
+                            <md-input-container>
+                                <label>Apprehending Office Sitio/Purok/Street</label>
+                                <input ng-model="apprehensionFormData.AO_Sitio">
+                            </md-input-container>
+                        </div>
+
+                        <div>
+                            <md-input-container class="md-block">
+                                <label>Apprehending Office Municipality</label>
+                                <md-select 
+                                    ng-model="apprehensionFormData.AO_Municipality" 
+                                    ng-change="refreshAOBarangays()">
+                                    <md-option 
+                                        ng-value="municipality" 
+                                        ng-repeat="municipality in municipalities"
+                                        >
+                                        {{municipality}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>                            
+                        </div>
+
+                        <div>
+                            <md-input-container class="md-block">
+                                    <label>Apprehending Office Barangay</label>
+                                    <md-select ng-model="apprehensionFormData.AO_Barangay">
+                                        <md-option ng-value="barangay" ng-repeat="barangay in AOBarangays">
+                                            {{barangay}}
+                                        </md-option>
+                                    </md-select>
+                                    </md-autocomplete>
+        
+                            </md-input-container>
+                        </div>                       
+                    </div>
+
+
+                    <div layout-gt-sm layout-sm="column">
+                            <div>
+                                    <md-input-container>
+                                        <label>Person Apprehended Sitio/Purok/Street</label>
+                                        <input ng-model="apprehensionFormData.PA_Sitio">
+                                    </md-input-container>
+                            </div>
+                        <div>
+                        <md-input-container>
+                                <label>Person Apprehended Municipality</label>
+                                <md-select 
+                                    ng-model="apprehensionFormData.PA_Municipality" 
+                                    ng-change="refreshPABarangays()">
+                                    <md-option ng-value="municipality" 
+                                        ng-repeat="municipality in municipalities">
+                                        {{municipality}}
+                                    </md-option>
+                                </md-select>
+                        </md-input-container>
+                            
+                        </div>
+
+                        <div>
+                        <md-input-container>
+                                <label>Person Apprehended Barangay</label>
+                                <md-select ng-model="apprehensionFormData.PA_Barangay">
+                                    <md-option ng-value="barangay" ng-repeat="barangay in PABarangays">
+                                        {{barangay}}
+                                    </md-option>
+                                </md-autocomplete>
+                        </md-input-container>                            
+                            
+                        </div>                        
+                    </div>
+
+                    <div layout-gt-sm layout-sm="column">
+                            <md-input-container>
+                                    <label>Apprehending Agency</label>
+                                    <input ng-model="apprehensionFormData.Apprehending_Agency">
+                                </md-input-container>
+                            <md-input-container class="md-block">
+                                    <label>Apprehension Date</label>
+                                    <md-datepicker 
+                                    ng-model="apprehensionFormData.ApprehensionDate" 
+                                    md-max-date="dateNow" required>
+                                    </md-datepicker>
+                                </md-input-container>
+                                <md-input-container class="md-block" flex>
+                                        <label>Remarks</label>
+                                        <textarea ng-model="apprehensionFormData.Remarks" md-select-on-focus
+                                            md-maxlength="950"></textarea>
+                                    </md-input-container>
+                    </div>
+                </md-dialog-content>
+                
+                <md-dialog-actions layout="row">
+                    <span flex></span>
+                    <md-button ng-click="closeAppehensionForm()">
+                        Close
+                    </md-button>
+                    <md-button class="md-primary md-raised" 
+                        ng-click="saveApprehension();" 
+                        ng-disabled="formApprehension.$invalid">
+                        Save
+                    </md-button>
+                </md-dialog-actions>
+            </form>
+
+        </md-dialog>
+    </div>
+</div>
