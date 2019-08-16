@@ -180,7 +180,7 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
         if(e.Issued_Month != undefined) u[`count.${e.Issued_Year}.${e.Issued_Month}`] = firebase.firestore.FieldValue.increment(1);
         if(e.Municipality != undefined) u[`per_municipality.${e.Municipality}`] = firebase.firestore.FieldValue.increment(1);
         await fire.db.database.query.doc("WSUP").update(u);
-        $scope.toast('new WSUP data added!');
+        $scope.toast('New WSUP data added!');
     };
 
 
@@ -252,11 +252,18 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
         
     }
 }).
-controller('ApprehensionController', function($scope, $apprehesionService, municipalityService) {
-    $scope.apprehensionsTable = $scope.ngTable([]);
-    $apprehesionService.getApprehensions().then(apprehensions => {
-        $scope.apprehensionsTable = $scope.ngTable(apprehensions);
-    });
+controller('ApprehensionController', function($scope, $crudService, municipalityService) {
+    var apprehensionDocument = db.collection('database').doc('Apprehension') ;
+    var apprehensionCollection = apprehensionDocument.collection('apprehensions');    
+    $scope.apprehensionsTable = $scope.ngTable([]);   
+
+    $scope.refreshList = () => {
+        $crudService.getItems(apprehensionCollection).then(apprehensions => {
+            $scope.apprehensionsTable = $scope.ngTable(apprehensions);
+        })
+    }
+
+    $scope.refreshList();
 
     $scope.Months = [
         {id: 1, title: "January", days: 31},
@@ -299,23 +306,26 @@ controller('ApprehensionController', function($scope, $apprehesionService, munic
 
     $scope.openApprehensionForm = (event) => {
         $scope.saveApprehension  = addApprehension;
+        $scope.PABarangays = [];
+        $scope.AOBarangays = [];
+        $scope.apprehensionFormData = {};
         $scope.showPrerenderedDialog(event,'apprehensionForm');
     }
 
     $scope.getApprehension = (id) => {
-        $apprehesionService.getApprehension(id).then(apprehension => {
+        $crudService.getItem(id, apprehensionCollection).then(apprehension => {
             $scope.apprehensionFormData = convertToFormData(apprehension);
-        })
+        });
     }
 
     $scope.openApprehensionFormForUpdating = (event, apprehensionID) => {
         $scope.saveApprehension = updateApprehension;
-        $apprehesionService.getApprehension(apprehensionID).then(apprehension => {
+        $crudService.getItem(apprehensionID, apprehensionCollection).then(apprehension => {
             $scope.apprehensionFormData = convertToFormData(apprehension);
             $scope.refreshAOBarangays();
             $scope.refreshPABarangays();
             $scope.showPrerenderedDialog(event,'apprehensionForm');
-        })
+        });
     }
     function convertToFormData(apprehension){
         let formData = apprehension;
@@ -352,13 +362,13 @@ controller('ApprehensionController', function($scope, $apprehesionService, munic
 
     function addApprehension(){
         var apprehension = convertToApprehensionObject($scope.apprehensionFormData);
-         
-        $apprehesionService.
-        addApprehension(apprehension).
-        then(addOperationResult => {
+
+        $crudService.addItem(apprehension, apprehensionCollection).then(addOperationResult => {
             $scope.toast("Sucess");
             $scope.close_dialog();     
             clearFormData();
+            apprehension.Municipality = apprehension.PA_Municipality;
+            $crudService.updateCounterFor(apprehension, apprehensionDocument);
         },
         failedOperationResult => {
 
@@ -367,9 +377,7 @@ controller('ApprehensionController', function($scope, $apprehesionService, munic
 
     function updateApprehension() {
         var apprehension = convertToApprehensionObject($scope.apprehensionFormData);
-        $apprehesionService.
-        updateApprehension(apprehension).
-        then(updateResult => {
+        $crudService.updateItem(apprehension, apprehensionCollection).then(updateResult => {
             $scope.toast("Sucess");
             $scope.close_dialog();  
         });
@@ -379,91 +387,6 @@ controller('ApprehensionController', function($scope, $apprehesionService, munic
      }
 
     $scope.dateNow = new Date();
-}).
-service('$apprehesionService', function() {
-    var apprehensionDocument = db.collection('database').doc('Apprehension') ;
-    var apprehensionCollection = apprehensionDocument.collection('apprehensions');
-
-    this.getApprehensions = () => {
-        var promise = new Promise((resolve, reject) => {
-            db.collection('database').
-                doc('Apprehension').
-                collection('apprehensions').
-                onSnapshot(snapShot => {
-                    let apprehensions = snapShot.docs.map( documentSnapshot => {
-                        let apprehension = documentSnapshot.data();
-                        apprehension.id = documentSnapshot.id;
-                        
-                        return apprehension;
-                    });
-        
-                    resolve(apprehensions);
-                }); 
-        });
-        return promise;
-    };
-
-    this.addApprehension = (apprehension) => {
-        var promise = new Promise((resolve, reject) =>{       
-            apprehensionCollection
-            add(apprehension).
-            then(addApprehensionResult => {
-                this.updateCounterFor(apprehension).
-                then(updateCounterResult =>{
-                    resolve(addApprehensionResult);
-                });
-            },
-            failedOperationResult => {
-                reject(failedOperationResult);
-            })
-        });
-        return promise;
-    }
-
-    this.updateApprehension = (apprehension) => {
-        let promise = new Promise((resolve, reject) => {
-            apprehensionCollection.
-            doc(apprehension.id).
-            update(apprehension).
-            then(updateResult => {
-                resolve(updateResult);
-            });
-        })
-        
-        return promise;
-    }
-
-    this.getApprehension = (id) => {
-        let promise = new Promise((resolve, reject) => {
-            apprehensionCollection.
-            doc(id).
-            onSnapshot(documentSnapshot => {
-                let apprehension = documentSnapshot.data();
-                apprehension.id = documentSnapshot.id;
-                resolve(apprehension);
-            });
-        })
-        
-        return promise;
-    }
-    this.updateCounterFor = (apprehension) => {
-        var counter = {};
-        counter["yearlyCount.total"] =firebase.firestore.FieldValue.increment(1);
-        if(apprehension.Year) 
-            counter[`yearlyCount.${apprehension.Year}.total`] = 
-                firebase.firestore.FieldValue.increment(1);
-        if(apprehension.Month) 
-            counter[`yearlyCount.${apprehension.Year}.${apprehension.Month}`] = 
-                firebase.firestore.FieldValue.increment(1);
-        if(apprehension.PA_Municipality && apprehension.PA_Municipality !== 'N/A') 
-            counter[`municipalityCount.${apprehension.PA_Municipality}`] = 
-                firebase.firestore.FieldValue.increment(1);
-        
-        return db.
-        collection('database').
-        doc('Apprehension').
-        update(counter);
-    }
 }).
 service("municipalityService", function(){
     this.getMunicipalities = () =>{
@@ -487,7 +410,13 @@ service("municipalityService", function(){
         })
     }
 }).
-controller('ChainsawRegistrationController', ($scope, $chainsawService, municipalityService) => {
+controller('ChainsawRegistrationController', (
+        $scope, 
+        $crudService, 
+        municipalityService) => {
+    var chainsawDocument = db.collection('database').doc('ChainsawRegistration') ;
+    var chainsawCollection = chainsawDocument.collection('Registerted Chainsaws');
+
     $scope.registeredChainsawsTable = $scope.ngTable([]);
     $scope.chainsawFormData = {};
     $scope.municipalities = [];
@@ -499,22 +428,31 @@ controller('ChainsawRegistrationController', ($scope, $chainsawService, municipa
         $scope.municipalities = municipalities;
     });
 
-    $chainsawService.getRegisteredChainsaws().then(chainsaws => {
-        $scope.chainsaws = chainsaws;
-        $scope.registeredChainsawsTable = $scope.ngTable(chainsaws);
-    });
+    $scope.refreshList = () => {
+        $crudService.getItems(chainsawCollection, convertToChainsawObjectFromSnapshot).
+        then(chainsaws => {
+            $scope.chainsaws = chainsaws;
+            $scope.registeredChainsawsTable = $scope.ngTable(chainsaws);
+        },
+        error => {
+            $scope.toast("Oooops something went wrong. Please try again.");
+            console.log(error);
+        })
+    }
+
+    $scope.refreshList();
 
     function addChainsaw(){
-        let chainsaw = convertToChainsawObject($scope.chainsawFormData)
-        $chainsawService.addChainsaw(chainsaw).
-        then(result => {
-            $scope.toast('Success');
+        let chainsaw = convertToChainsawObject($scope.chainsawFormData);
+        $crudService.addItem(chainsaw, chainsawCollection).then(chainsaw =>{
+            $scope.toast("Succes");
             $scope.close_dialog();
             $scope.chainsaws.push(chainsaw);
             refreshRegisteredChainsawsTable();
             $scope.chainsawFormData = {};
         },
         error => { 
+            $scope.toast("Oooops something went wrong. Please try again.");
             console.log(error);
         });
     }
@@ -525,7 +463,7 @@ controller('ChainsawRegistrationController', ($scope, $chainsawService, municipa
 
     function updateChainsaw() {
         let updatedChainsaw = convertToChainsawObject($scope.chainsawFormData)
-        $chainsawService.updateChainsaw(updatedChainsaw).then(chainsaw => {
+        $crudService.updateItem(updatedChainsaw, chainsawCollection).then(result => {
             $scope.toast('Success');
             $scope.close_dialog();
             let index = $scope.chainsaws.findIndex(chainsaw => chainsaw.id == updatedChainsaw.id);
@@ -536,24 +474,29 @@ controller('ChainsawRegistrationController', ($scope, $chainsawService, municipa
         error => {
             $scope.toast('Ooooops something went wrong.');
             console.log(error);
-        });        
+        });     
     }
 
     $scope.openRegistrationForm = (event) => {
         $scope.saveChainsaw = addChainsaw;
         $scope.chainsawFormData = {};
+        $scope.barangays = [];
         $scope.showPrerenderedDialog(event, 'chainsawRegistrationForm');
     }
 
     $scope.openRegistrationFormForUpdating = (id) => {     
         $scope.saveChainsaw = updateChainsaw;
-        $chainsawService.
-        getChainsaw(id).
+        $crudService.
+        getItem(id, chainsawCollection, convertToChainsawObjectFromSnapshot).
         then(chainsaw => {
             $scope.chainsawFormData = chainsaw;
             $scope.refreshBarangays();
+            $scope.showPrerenderedDialog(event, 'chainsawRegistrationForm');
+        },
+        error => {
+            $scope.toast('Ooooops something went wrong.');
+            console.log(error);
         })
-        $scope.showPrerenderedDialog(event, 'chainsawRegistrationForm');
     }
 
     $scope.closeRegistrationForm = () => {
@@ -565,7 +508,8 @@ controller('ChainsawRegistrationController', ($scope, $chainsawService, municipa
             $scope.barangays = barangays;
         })
     }
-    
+       
+
     function convertToChainsawObject(formData){
         let chainsaw = {
             CORNumber: formData.CORNumber || '',
@@ -592,44 +536,12 @@ controller('ChainsawRegistrationController', ($scope, $chainsawService, municipa
             chainsaw.Owner.LastName,
             chainsaw.Owner.MiddleInitial,
             chainsaw.Owner.FirstName,
-            chainsaw.CurrentCORNumber
+            chainsaw.CORNumber
         ].filter(value => value.length > 0);
         return chainsaw;
     }
-}).
-service('$chainsawService', function(){
-    var chainsawDocument = db.collection('database').doc('ChainsawRegistration') ;
-    var chainsawCollection = chainsawDocument.collection('Registerted Chainsaws');
 
-    this.getRegisteredChainsaws = () => {
-        let promise = new Promise((resolve, reject) => {
-            chainsawCollection.onSnapshot(snapShot => {
-                let chainsaws = snapShot.docs.map(documentSnapshot => {
-                    let chainsaw = convertToChainsawObject(documentSnapshot);
-                    return chainsaw;
-                });
-
-                resolve(chainsaws);
-            });
-        });
-
-        return promise;
-    }
-
-    this.getChainsaw = (id) => {
-        let promise = new Promise((resolve, reject) => {
-            chainsawCollection.doc(id).
-            onSnapshot(snapshot => {
-                let chainsaw = convertToChainsawObject(snapshot);
-                
-                resolve(chainsaw);
-            });
-        });
-        
-        return promise;
-    }
-
-    function convertToChainsawObject(snapshot){
+    function convertToChainsawObjectFromSnapshot(snapshot){
         let chainsaw = snapshot.data();
         chainsaw.id = snapshot.id;
         chainsaw.RegistrationDate = chainsaw.RegistrationDate ? new Date(chainsaw.RegistrationDate.seconds * 1000) : '';
@@ -640,102 +552,119 @@ service('$chainsawService', function(){
 
         return chainsaw;
     }
-    this.addChainsaw = (chainsaw) => {
-        let promise = new Promise((resolve, reject) => {
-            chainsawCollection.add(chainsaw).then(documentRef => {
-                this.updateCounterFor(chainsaw).then(result => {
-                },
-                error => {
-                
-                });
-                resolve(chainsaw);
-            },
-            error => {
-                reject(error);
-            });
-        });
-        return promise;
-    }
-
-    this.updateChainsaw = (chainsaw) => {
-        
-        let promise = new Promise((resolve, reject) => {
-            chainsawCollection.doc(chainsaw.id).update(chainsaw).
-            then(result => {
-                resolve(chainsaw);
-            },
-            error => {
-                reject(error);
-            })
-        })
-        return promise;
-    }
-
-    this.updateCounterFor = (chainsaw) => {
-        let promise = new Promise((resolve, reject) => {
-        
-        var counter = {};
-            if(chainsaw.RegistrationDate) {
-                counter["yearlyCount.total"] = firebase.firestore.FieldValue.increment(1);
-                counter[`yearlyCount.${chainsaw.RegistrationDate.getFullYear()}.total`] = firebase.firestore.FieldValue.increment(1);
-                counter[`yearlyCount.${chainsaw.RegistrationDate.getFullYear()}.${chainsaw.RegistrationDate.getMonth() + 1}`] = firebase.firestore.FieldValue.increment(1); 
-            }
-
-            if(chainsaw.Owner.Municipality)
-            {
-                counter[`municipalityCount.${chainsaw.Municipality}`] = firebase.firestore.FieldValue.increment(1);                
-            }
-
-            if(Object.keys(counter).length)
-            {
-                chainsawDocument.update(counter).
-                then(result => {
-
-                },
-                error => {
-                    console.log(error);
-                });
-            }
-
-        });
-
-        return promise;
-    }
+    
 }).
-controller('PurchasePermitController', function($chainsawPermitToPurchaseService, $scope){
+controller('PermitController', function($crudService, municipalityService, $scope){
+    var chainsawDocument;
+    var purchasePermitCollection;
+    
+    $scope.setDocumentName = (documentName) => {
+        chainsawDocument = db.collection('database').doc(documentName) ;
+        purchasePermitCollection = chainsawDocument.collection('permits');
+    }
+
     $scope.permits = [];
     $scope.permitsTable = $scope.ngTable([]);
-    $scope.chainsawPurchasePermitFormData = {};
+    $scope.chainsawPermitFormData = {};
     $scope.municipalities = [];
     $scope.barangays  = [];
     $scope.dateNow = new Date();
 
-    $chainsawPermitToPurchaseService.getPermits().then(permits => {
-        $scope.permits = permits;
-        $scope.permitsTable = $scope.ngTable($scope.permits);
+    municipalityService.getMunicipalities().then(municipalities => {
+        $scope.municipalities = municipalities;
     });
 
-}).
-service('$chainsawPermitToPurchaseService', function($crudService){
-    var chainsawDocument = db.collection('database').doc('ChainsawPermitToPurchase') ;
-    var purchasePermitCollection = chainsawDocument.collection('permits');
+    $scope.refreshList = () => {
+        $crudService.getItems(purchasePermitCollection, converFromSnapshotToPermitObject).then(permits =>{
+            $scope.permits = permits;
+            $scope.permitsTable = $scope.ngTable($scope.permits);
+        })
+    }
 
-    this.getPermits = () => {
-        return new Promise((resolve, reject) => {
-            $crudService.getItems(purchasePermitCollection, convertoToPurchasePermitObject).then(permits => {
-                resolve(permits);
-            });
+    let addPermit = () => {
+        let permit = convertFromFormDataToPermitObject($scope.chainsawPermitFormData);
+        $crudService.addItem(permit, purchasePermitCollection).then(permit => {
+            $scope.toast("Success");
+            $scope.close_dialog();
+            $scope.permits.push(permit);
+            $crudService.updateCounterFor(permit, chainsawDocument);
+        },
+        error => {
+            console.log(error);
+            $scope.toast("Oooops something went wrong. Please try again.");
+        })
+    }
+
+    let updatePermit = () => {
+        let updatedPermit = convertFromFormDataToPermitObject($scope.chainsawPermitFormData);
+        $crudService.updateItem(updatedPermit, purchasePermitCollection).then(result => {
+            $scope.toast("Success");
+            $scope.close_dialog();
+            let index = $scope.permits.findIndex(permit => permit.id == updatedPermit.id);
+            $scope.permits[index] = updatePermit;
+            $scope.permitsTable = $scope.ngTable($scope.permits);
+        },
+        error => {
+            $scope.toast("Oooops something went wrong. Please try again.");
         });
     }
 
-    function convertoToPurchasePermitObject(snapshot){
+    $scope.refreshBarangays = () => {
+        municipalityService.getBarangays($scope.chainsawPermitFormData.Municipality).then(barangays => {
+            $scope.barangays = barangays;
+        })
+    }
+
+    $scope.openPermitForm = (event, formName) => {
+        $scope.chainsawPermitFormData = {};
+        $scope.savePermit = addPermit;
+        $scope.barangays = [];
+        $scope.showPrerenderedDialog(event, formName);
+    }
+
+    $scope.openPermitFormForUpdating = (event, formName,permitToUpate) =>{
+        $crudService.getItem(permitToUpate.id, purchasePermitCollection, converFromSnapshotToPermitObject).
+        then(permit => {
+            $scope.chainsawPermitFormData = permit;
+            $scope.refreshBarangays();
+            $scope.savePermit = updatePermit;
+            $scope.showPrerenderedDialog(event, formName);
+        })
+    }
+
+    $scope.closeRegistrationForm = () => {
+        $scope.close_dialog();
+    }
+
+    function convertFromFormDataToPermitObject(formData){
+        let permit = { 
+            First_Name: formData.First_Name || '',
+            Middle_Initial: formData.Middle_Initial || '',
+            Last_Name: formData.Last_Name || '',
+            Extension: formData.Extension || '',
+            Barangay: formData.Barangay || '',
+            Municipality: formData.Municipality || '',
+            Street: formData.Street || '',
+            Purpose: formData.Purpose || '',
+            Date_Issued: formData.Date_Issued || '',
+            COR_Number: formData.COR_Number || '',
+            id: formData.id || ''
+        };
+
+        return permit;
+    }
+
+    function converFromSnapshotToPermitObject(snapshot){
         let permit = snapshot.data();
         permit.id = snapshot.id;
+
+        permit.Barangay = permit.Barangay && permit.Barangay.toUpperCase() || '';
 
         if(permit.Date_Issued)
             permit.Date_Issued = new Date(permit.Date_Issued.seconds * 1000);
         return permit;
     }
+
 }).
 service('$crudService', function(){
     this.getItems = (collection, objectConverter) => {
@@ -783,7 +712,6 @@ service('$crudService', function(){
     }
 
     this.addItem = (itemToAdd, collection) => {
-        
         let promise = new Promise((resolve, reject) => {
             collection.add(itemToAdd).then(result => {
                 resolve();

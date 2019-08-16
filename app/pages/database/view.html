@@ -15,11 +15,14 @@
         Apprehension
       </md-nav-item>
       <md-nav-item md-nav-click="null" name="Chainsaw Registration">
-          Chainsaw Registration
+        Chainsaw Registration
       </md-nav-item>
       <md-nav-item md-nav-click="null" name="ChainsawPermitToPurchase">
-        Chainsaw Permit to Purchase
-    </md-nav-item>
+        Permit to Purchase Chainsaw
+      </md-nav-item>
+      <md-nav-item md-nav-click="null" name="ChainsawPermitToSell">
+          Permit to Sell Chainsaw
+        </md-nav-item>
     </md-nav-bar>
 
    <div flex ng-include="'./app/pages/database/views/graphs.html'" ng-show="currentNavItem == 'Statistics'"></div>
@@ -27,5 +30,7 @@
    <div flex ng-include="'./app/pages/database/views/apprehension.html'" ng-show="currentNavItem == 'Apprehension'"></div>
    <div flex ng-include="'./app/pages/database/views/chainsaw.html'" ng-show="currentNavItem == 'Chainsaw Registration'"></div>
    <div flex ng-include="'./app/pages/database/views/chainsawPurchasePermit.html'" ng-show="currentNavItem == 'ChainsawPermitToPurchase'"></div>
+   <div flex ng-include="'./app/pages/database/views/chainsawSellPermit.html'" ng-show="currentNavItem == 'ChainsawPermitToSell'"></div>
+
 
 </div>

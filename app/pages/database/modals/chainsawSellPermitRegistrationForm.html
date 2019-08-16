@@ -1,0 +1,130 @@
+<div style="visibility: hidden">
+        <div class="md-dialog-container" id="chainsawSellPermitForm">
+          <md-dialog layout="column" layout-align="center center">
+            <md-toolbar class="bg-teal">
+              <div class="md-toolbar-tools">
+                <h2>Register New Permit to Sell</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="closeRegistrationForm()">
+                  <i class="fa fa-times col-white"></i>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <form ng-cloak name="formChainsawSellPermit">
+              <md-dialog-content layout-padding class="p-b-20">  
+                <div layout-gt-sm layout-sm="column">
+                  <div>
+                    <md-input-container>
+                      <label>First Name</label>
+                      <input ng-model="chainsawPermitFormData.First_Name" 
+                        required/>
+                    </md-input-container>
+                  </div>
+      
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Middle Initial</label>
+                      <input ng-model="chainsawPermitFormData.Middle_Initial"/>
+                    </md-input-container>
+                  </div>
+      
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Last Name</label>
+                      <input ng-model="chainsawPermitFormData.Last_Name" required/>
+                    </md-input-container>
+                  </div>
+    
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Name Extension</label>
+                      <input ng-model="chainsawPermitFormData.Extension" />
+                    </md-input-container>
+                  </div>
+                </div>
+      
+                <div layout-gt-sm layout-sm="column">
+                  <div>
+                    <md-input-container>
+                      <label>Street</label>
+                      <input ng-model="chainsawPermitFormData.Street" />
+                    </md-input-container>
+                  </div>
+      
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Municipality</label>
+                      <md-select
+                        ng-model="chainsawPermitFormData.Municipality"
+                        ng-change="refreshBarangays()"
+                        required
+                      >
+                        <md-option
+                          ng-value="municipality"
+                          ng-repeat="municipality in municipalities"
+                        >
+                          {{ municipality }}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>
+                  </div>
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Barangay</label>
+                      <md-select ng-model="chainsawPermitFormData.Barangay" required>
+                        <md-option
+                          ng-value="barangay"
+                          ng-repeat="barangay in barangays"
+                        >
+                          {{ barangay }}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>
+                  </div>
+                  <div>
+                      <md-input-container class="md-block" flex>
+                          <label>Date Issued</label>
+                          <md-datepicker
+                            ng-model="chainsawPermitFormData.Date_Issued"
+                            required
+                          >
+                          </md-datepicker>
+                        </md-input-container>
+                  </div>
+                </div>
+      
+                <div layout-gt-sm layout-sm="column">
+                    <div>
+                        <md-input-container class="md-block">
+                          <label>COR Number</label>
+                          <input ng-model="chainsawPermitFormData.COR_Number" />
+                        </md-input-container>
+                      </div>
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Purpose</label>
+                      <textarea 
+                        ng-model="chainsawPermitFormData.Purpose" ></textarea>
+                    </md-input-container>
+                  </div>
+                </div>
+              </md-dialog-content>
+      
+              <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="closeRegistrationForm()">
+                  Close
+                </md-button>
+                <md-button
+                  class="md-primary md-raised"
+                  ng-click="savePermit();"
+                  ng-disabled="formChainsawSellPermit.$invalid"
+                >
+                  Save
+                </md-button>
+              </md-dialog-actions>
+            </form>
+          </md-dialog>
+        </div>
+      </div>
+      
