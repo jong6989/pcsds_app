@@ -16,7 +16,7 @@
               <div>
                 <md-input-container>
                   <label>First Name</label>
-                  <input ng-model="chainsawPurchasePermitFormData.First_Name" 
+                  <input ng-model="chainsawPermitFormData.First_Name" 
                     required/>
                 </md-input-container>
               </div>
@@ -24,21 +24,21 @@
               <div>
                 <md-input-container class="md-block">
                   <label>Middle Initial</label>
-                  <input ng-model="chainsawPurchasePermitFormData.Middle_Initial" required/>
+                  <input ng-model="chainsawPermitFormData.Middle_Initial"/>
                 </md-input-container>
               </div>
   
               <div>
                 <md-input-container class="md-block">
                   <label>Last Name</label>
-                  <input ng-model="chainsawPurchasePermitFormData.Last_Name" required/>
+                  <input ng-model="chainsawPermitFormData.Last_Name" required/>
                 </md-input-container>
               </div>
 
               <div>
                 <md-input-container class="md-block">
                   <label>Name Extension</label>
-                  <input ng-model="chainsawPurchasePermitFormData.Extension" />
+                  <input ng-model="chainsawPermitFormData.Extension" />
                 </md-input-container>
               </div>
             </div>
@@ -47,7 +47,7 @@
               <div>
                 <md-input-container>
                   <label>Street</label>
-                  <input ng-model="chainsawPurchasePermitFormData.Street" />
+                  <input ng-model="chainsawPermitFormData.Street" />
                 </md-input-container>
               </div>
   
@@ -55,7 +55,7 @@
                 <md-input-container class="md-block">
                   <label>Municipality</label>
                   <md-select
-                    ng-model="chainsawPurchasePermitFormData.Municipality"
+                    ng-model="chainsawPermitFormData.Municipality"
                     ng-change="refreshBarangays()"
                     required
                   >
@@ -71,7 +71,7 @@
               <div>
                 <md-input-container class="md-block">
                   <label>Barangay</label>
-                  <md-select ng-model="chainsawPurchasePermitFormData.Barangay" required>
+                  <md-select ng-model="chainsawPermitFormData.Barangay" required>
                     <md-option
                       ng-value="barangay"
                       ng-repeat="barangay in barangays"
@@ -81,23 +81,27 @@
                   </md-select>
                 </md-input-container>
               </div>
+              <div>
+                  <md-input-container class="md-block" flex>
+                      <label>Date Issued</label>
+                      <md-datepicker
+                        ng-model="chainsawPermitFormData.Date_Issued"
+                        required
+                      >
+                      </md-datepicker>
+                    </md-input-container>
+              </div>
             </div>
   
             <div layout-gt-sm layout-sm="column">
+              
               <div>
                 <md-input-container class="md-block">
                   <label>Purpose</label>
                   <textarea 
-                    ng-model="chainsawPurchasePermitFormData.Purpose" ></textarea>
+                    ng-model="chainsawPermitFormData.Purpose" ></textarea>
                 </md-input-container>
               </div>
-              <md-input-container class="md-block" flex>
-                <label>Expiration Date</label>
-                <md-datepicker
-                  ng-model="chainsawPurchasePermitFormData.Date_Issued"
-                >
-                </md-datepicker>
-              </md-input-container>
             </div>
           </md-dialog-content>
   
@@ -108,8 +112,8 @@
             </md-button>
             <md-button
               class="md-primary md-raised"
-              ng-click="saveChainsaw();"
-              ng-disabled="chainsawPurchasePermitForm.$invalid"
+              ng-click="savePermit();"
+              ng-disabled="formChainsawPurchasePermit.$invalid"
             >
               Save
             </md-button>

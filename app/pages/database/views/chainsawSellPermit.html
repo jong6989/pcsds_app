@@ -1,9 +1,10 @@
-<div ng-controller="PermitController" ng-init="setDocumentName('ChainsawPermitToPurchase');refreshList()">
+<div ng-controller="PermitController" 
+    ng-init="setDocumentName('ChainsawPermitToSell');refreshList()">
     <md-toolbar class="bg-teal">
       <h1 class="md-toolbar-tools">
-        <md-button class="md-raised" ng-click="openPermitForm($event, 'chainsawPurchasePermitForm')">
+        <md-button class="md-raised" ng-click="openPermitForm($event, 'chainsawSellPermitForm')">
           <i class="fa fa-plus col-green"></i>
-            register new permit to purchase
+            register new permit to sell
         </md-button>
         <md-button class="md-raised" ng-click="refreshList()">
           <i class="fa fa-refresh col-green"></i>
@@ -21,6 +22,14 @@
       <div flex>
         <table ng-table="permitsTable" class="table" show-filter="true">
           <tr ng-repeat="permit in $data">
+              <td
+              title="'COR Number'"
+              sortable="'COR_Number'"
+              filter="{COR_Number: 'text'}"
+              required
+            >
+              {{ permit.COR_Number }}
+            </td>
             <td
               title="'First Name'"
               sortable="'First_Name'"
@@ -86,7 +95,7 @@
             <td title="''">
               <md-button
                 class="md-raised"
-                ng-click="openPermitFormForUpdating($event, 'chainsawPurchasePermitForm', permit)"
+                ng-click="openPermitFormForUpdating($event, 'chainsawSellPermitForm', permit)"
               >
                 <i class="fa fa-plus col-green"></i>
                 EDIT
@@ -96,6 +105,6 @@
         </table>
       </div>
     </md-content>
-    <div ng-include="'./app/pages/database/modals/chainsawPermitRegistrationForm.html'"></div>
+    <div ng-include="'./app/pages/database/modals/chainsawSellPermitRegistrationForm.html'"></div>
   </div>
   
