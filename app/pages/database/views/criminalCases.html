@@ -1,0 +1,124 @@
+<div ng-controller="CriminalCasesController">
+    <md-toolbar class="bg-teal">
+      <h1 class="md-toolbar-tools">
+        <md-button class="md-raised" ng-click="openForm($event)">
+          <i class="fa fa-plus col-green"></i>
+          add new criminal cases
+        </md-button>
+        <md-button class="md-raised" ng-click="refreshList()">
+          <i class="fa fa-refresh col-green"></i>
+            refresh
+        </md-button>
+      </h1>
+    </md-toolbar>
+  
+    <md-content
+      style="height: {{ iframeHeight - 150 }}px;"
+      layout-sm="coulumn"
+      layout-gt-sm
+      ng-init=""
+    >
+      <div flex>
+        <table ng-table="criminalCasesTable" class="table" show-filter="true">
+          <tr ng-repeat="criminalCase in $data">
+            <td
+              title="'Case Number'"
+              sortable="'Case_Number'"
+              filter="{Case_Number: 'text'}"
+            >
+              {{ criminalCase.Case_Number }}
+            </td>
+            <td
+              title="'Date Filed'"
+              sortable="'Date_Filed'"
+              filter="{Date_Filed: 'text'}"
+            >
+              {{ criminalCase.Date_Filed }}
+            </td>
+            <td
+              title="'Violations '"
+              sortable="'Violations'"
+              filter="{Violations: 'text'}"
+            >
+              {{ apprehension.Violations.join(",") }}
+            </td>
+            <td
+              title="'Month'"
+              sortable="'Month'"
+              filter-data="Months"
+              filter="{ Month:'select' }"
+            >
+              {{ Months[apprehension.Month - 1].title }}
+            </td>
+            <td title="'Day'" sortable="'Day'">{{ apprehension.Day }}</td>
+            <td title="'Year'" sortable="'Year'" filter="{Year:'text'}">
+              {{ apprehension.Year }}
+            </td>
+            <td
+              title="'AO Sitio'"
+              sortable="'AO_Sitio'"
+              filter="{AO_Sitio:'text'}"
+            >
+              {{ apprehension.AO_Sitio }}
+            </td>
+            <td
+              title="'AO Barangay'"
+              sortable="'AO_Barangay'"
+              filter="{AO_Barangay:'text'}"
+            >
+              {{ apprehension.AO_Barangay }}
+            </td>
+            <td
+              title="'AO Municipality'"
+              sortable="'AO_Municipality'"
+              filter="{AO_Municipality:'text'}"
+            >
+              {{ apprehension.AO_Municipality }}
+            </td>
+            <td
+              title="'PA Sitio'"
+              sortable="'PA_Sitio'"
+              filter="{PA_Sitio:'text'}"
+            >
+              {{ apprehension.PA_Sitio }}
+            </td>
+            <td
+              title="'PA Barangay'"
+              sortable="'PA_Barangay'"
+              filter="{PA_Barangay:'text'}"
+            >
+              {{ apprehension.PA_Barangay }}
+            </td>
+            <td
+              title="'PA Municipality'"
+              sortable="'PA_Municipality'"
+              filter="{PA_Municipality:'text'}"
+            >
+              {{ apprehension.PA_Municipality }}
+            </td>
+            <td
+              title="'Apprehending Agency'"
+              sortable="'Apprehending_Agency'"
+              filter="{Apprehending_Agency:'text'}"
+            >
+              {{ apprehension.Apprehending_Agency }}
+            </td>
+            <td title="'Remarks'" sortable="'Remarks'" filter="{Remarks:'text'}">
+              {{ apprehension.Remarks }}
+            </td>
+            <td title="''">
+              <md-button
+                class="md-raised"
+                ng-click="openApprehensionFormForUpdating($event, apprehension.id)"
+              >
+                <i class="fa fa-plus col-green"></i>
+                EDIT
+              </md-button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </md-content>
+    <div ng-include="'./app/pages/database/modals/addApprehension.html'"></div>
+  </div>
+  

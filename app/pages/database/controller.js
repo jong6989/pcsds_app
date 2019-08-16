@@ -666,7 +666,43 @@ controller('PermitController', function($crudService, municipalityService, $scop
     }
 
 }).
+contoller('CriminalCasesController', function($crudService, $dateService, $addressService, $scope)  {
+    var criminalCasesDocument = db.collection('database').doc('CriminalCase') ;
+    var criminalCasesCollection = criminalCasesDocument.collection('CriminalCases');
+    var criminalCases = [];
+    var countries = [];
+    var provincies = [];
+    var municipalities = [];
+    var barangays = [];
+    
+    $scope.criminalCasesTable = new ngTable([]);
+    $scope.criminalCasesFormData = {};
+
+    $scope.refreshList = () => {
+        $crudService.getItems(criminalCasesCollection, convertFromSnapshotToCriminalCase).then(cases => {
+            criminalCases = cases;
+            $scope.criminalCasesTable = new ngTable(criminalCases);
+        })
+    }
+
+    function convertFromSnapshotToCriminalCase(snapshot){
+        var criminalCase = snapshot.data();
+        criminalCase.id = snapshot.id;
+
+        if(criminalCase.Date_Filed)
+            criminalCase.Date_Filed = $dateService.convertToJSDate(criminalCase.Date_Filed);
+        if(criminalCase.Fiscals_Resolution_Date)
+            criminalCase.Fiscals_Resolution_Date = $dateService.convertToJSDate(criminalCase.Fiscals_Resolution_Date);
+        if(criminalCase.Decision_Date)
+            criminalCase.Decision_Date = $dateService.convertToJSDate(criminalCase.Decision_Date);
+        if(criminalCase.Receipt_Date)
+            criminalCase.Receipt_Date = $dateService.convertToJSDate(criminalCase.Receipt_Date);
+        
+        return criminalCase;
+    }
+}).
 service('$crudService', function(){
+
     this.getItems = (collection, objectConverter) => {
         // var items = []
         if(!objectConverter)
@@ -763,5 +799,45 @@ service('$crudService', function(){
         });
 
         return promise;
+    }
+}).
+service('$dateService', function(){
+    $this.convertToJSDate = (firebaseDate) => {
+        return new Date(firebaseDate.seconds * 1000);
+    }
+}).
+service('$addressService', function(){
+    var countries = require('./json/coutries.json');
+    var philippineProvinces = require('./json/philippineProvinces.json');
+
+    this.getCountries = () =>{
+        return new Promise((resolve, reject) => {
+            resolve(countries);
+        });
+    }
+
+    this.getProvinces = (country) => {
+        return new Promise((resolve, reject) => {
+            resolve(philippineProvinces);
+        });
+    }
+
+    this.getMunicipalities = (country, province) => {
+        return new Promise((resolve, reject) => {
+            var municipalities = [];
+            if(country.toUpperCase() == 'PHILIPPINES')
+                municipalities =  philippineProvinces[province];
+            
+            resolve(municipalities);
+        })
+    }
+
+    this.getBarangays = (country, province, municipality) => {
+        return new Promise((resolve, reject) => {
+            var barangays = [];
+            if(country.toUpperCase() == 'PHILIPPINES')
+                barangays = philippineProvinces[province][municipality];
+            resolve(barangays);
+        })
     }
 });
