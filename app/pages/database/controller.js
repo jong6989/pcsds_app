@@ -39,7 +39,7 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
     $scope.wsup_db.data = ($localStorage.wsup_db_data)?  $localStorage.wsup_db_data : [];
     $scope.wsup_db.summary = ($localStorage.wsup_db_summary)?  $localStorage.wsup_db_summary : {};
     $scope.database_view = './app/pages/database/views/graphs.html';
-    $scope.currentNavItem = 'Statistics';
+    $scope.currentNavItem = 'Status';
     $scope.dropDownSelect = {};
     $scope.selectItems = {};
     $scope.n = {};
@@ -253,8 +253,9 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
     }
 }).
 controller('ApprehensionController', function($scope, $crudService, municipalityService) {
+    var moment = require('moment');
     var apprehensionDocument = db.collection('database').doc('Apprehension') ;
-    var apprehensionCollection = apprehensionDocument.collection('apprehensions');    
+    var apprehensionCollection = apprehensionDocument.collection('database');    
     $scope.apprehensionsTable = $scope.ngTable([]);   
 
     $scope.refreshList = () => {
@@ -266,6 +267,21 @@ controller('ApprehensionController', function($scope, $crudService, municipality
     $scope.refreshList();
 
     $scope.Months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
+
+    $scope.monthDropDownOptions = [
         {id: 1, title: "January", days: 31},
         {id: 2, title: "February", days: 28},
         {id: 3, title: "March", days: 31},
@@ -282,7 +298,7 @@ controller('ApprehensionController', function($scope, $crudService, municipality
 
     $scope.apprehensionFormData = {};
     $scope.saveApprehension  = addApprehension;
-
+    $scope.apprehensionForm = {};
     $scope.closeAppehensionForm = () => {
         $scope.close_dialog();
     }
@@ -292,13 +308,13 @@ controller('ApprehensionController', function($scope, $crudService, municipality
     });
 
     $scope.refreshAOBarangays = () => {
-        municipalityService.getBarangays($scope.apprehensionFormData.AO_Municipality).then(barangays => {
+        municipalityService.getBarangays($scope.apprehensionFormData.AO_MUNICIPALITY).then(barangays => {
             $scope.AOBarangays = barangays;
         });
     }
     $scope.refreshPABarangays = () => {
         municipalityService.
-        getBarangays($scope.apprehensionFormData.PA_Municipality).
+        getBarangays($scope.apprehensionFormData.PA_MUNICIPALITY).
         then(barangays => {
             $scope.PABarangays = barangays;
         });
@@ -309,6 +325,8 @@ controller('ApprehensionController', function($scope, $crudService, municipality
         $scope.PABarangays = [];
         $scope.AOBarangays = [];
         $scope.apprehensionFormData = {};
+        $scope.action = "Add";
+        $scope.apprehensionForm.title = "Add New";
         $scope.showPrerenderedDialog(event,'apprehensionForm');
     }
 
@@ -324,54 +342,58 @@ controller('ApprehensionController', function($scope, $crudService, municipality
             $scope.apprehensionFormData = convertToFormData(apprehension);
             $scope.refreshAOBarangays();
             $scope.refreshPABarangays();
+            $scope.action = "Update";
+            $scope.apprehensionForm.title = "Update";
             $scope.showPrerenderedDialog(event,'apprehensionForm');
         });
     }
     function convertToFormData(apprehension){
+        if(apprehension.APPREHENSION_DATE)
+            apprehension.ApprehensionDate = new Date(apprehension.APPREHENSION_DATE);
         let formData = apprehension;
-        formData.Violations = apprehension.Violations.join(',');
-        formData.ApprehensionDate =  new Date( apprehension.Year, apprehension.Month - 1, apprehension.Day);
-        formData.PA_Barangay = apprehension.PA_Barangay.toUpperCase();
-        formData.AO_Barangay = apprehension.AO_Barangay.toUpperCase();
         return formData;
     }
 
     function convertToApprehensionObject(formData){
         var apprehension = {
-            Control_Number: $scope.apprehensionFormData.Control_Number || '',
-            Case_ID :$scope.apprehensionFormData.Case_ID || '',
-            Violations: $scope.apprehensionFormData.Violations && $scope.apprehensionFormData.Violations.split(',') || '',
-            Month: $scope.apprehensionFormData.ApprehensionDate.getMonth() + 1,
-            Day: $scope.apprehensionFormData.ApprehensionDate.getDate(),
-            Year: $scope.apprehensionFormData.ApprehensionDate.getFullYear(),
-            AO_Sitio : $scope.apprehensionFormData.AO_Sitio || '',
-            AO_Barangay: $scope.apprehensionFormData.AO_Barangay || '',
-            AO_Municipality: $scope.apprehensionFormData.AO_Municipality || '',
-            PA_Sitio: $scope.apprehensionFormData.PA_Sitio || '',
-            PA_Barangay: $scope.apprehensionFormData.PA_Barangay || '',
-            PA_Municipality: $scope.apprehensionFormData.PA_Municipality || '',
-            Apprehending_Agency: $scope.apprehensionFormData.Apprehending_Agency || '',
-            Remarks: $scope.apprehensionFormData.Remarks || '',
-            Keywords: [$scope.apprehensionFormData.Control_Number],
+            CONTROL_NO: $scope.apprehensionFormData.CONTROL_NO || '',
+            CASE_TITLE :$scope.apprehensionFormData.CASE_TITLE || '',
+            VIOLATION: $scope.apprehensionFormData.VIOLATION || '',
+            MONTH: $scope.apprehensionFormData.ApprehensionDate.getMonth() + 1,
+            DAY: $scope.apprehensionFormData.ApprehensionDate.getDate(),
+            YEAR: $scope.apprehensionFormData.ApprehensionDate.getFullYear(),
+            AO_SO : $scope.apprehensionFormData.AO_SO || '',
+            AO_BARANGAY: $scope.apprehensionFormData.AO_BARANGAY || '',
+            AO_MUNICIPALITY: $scope.apprehensionFormData.AO_MUNICIPALITY || '',
+            PA_SO: $scope.apprehensionFormData.PA_SO || '',
+            PA_BARANGAY: $scope.apprehensionFormData.PA_BARANGAY || '',
+            PA_MUNICIPALITY: $scope.apprehensionFormData.PA_MUNICIPALITY || '',
+            APP_AGENCY: $scope.apprehensionFormData.APP_AGENCY || '',
+            REMARKS: $scope.apprehensionFormData.REMARKS || '',
+            Keywords: [],
             id: $scope.apprehensionFormData.id || ''
         };
-        apprehension.Keywords = apprehension.Keywords.concat(apprehension.Violations);
-        
+        apprehension.Keywords.push(apprehension.CASE_TITLE);
+        apprehension.Keywords.push(apprehension.CONTROL_NO);
+        apprehension.Keywords.push(apprehension.VIOLATION);
+        apprehension.Keywords = apprehension.Keywords.filter(item => { return item.length > 0; });
+        var apprehensionDate = new Date(apprehension.YEAR, apprehension.MONTH - 1, apprehension.DAY);
+
+        apprehension.APPREHENSION_DATE = moment(apprehensionDate).format('YYYY-MM-DD');
         return apprehension;
     }
 
     function addApprehension(){
         var apprehension = convertToApprehensionObject($scope.apprehensionFormData);
-
         $crudService.addItem(apprehension, apprehensionCollection).then(addOperationResult => {
             $scope.toast("Sucess");
             $scope.close_dialog();     
             clearFormData();
-            apprehension.Municipality = apprehension.PA_Municipality;
+            apprehension.Municipality = apprehension.PA_MUNICIPALITY;
             $crudService.updateCounterFor(apprehension, apprehensionDocument);
         },
         failedOperationResult => {
-
+            console.log(failedOperationResult);
         });
     }
 
@@ -399,13 +421,22 @@ service("municipalityService", function(){
         })
     }
 
-    this.getBarangays = (municipality) => {
-        return new Promise((resolve, reject) => {  
-            var palawanMunicipalities = require('./json/palawanMunicipalities.json');
-            var barangays = palawanMunicipalities["municipality_list"][municipality] ?
-                palawanMunicipalities["municipality_list"][municipality]["barangay_list"] :
-                [];
+    this.addMunicipality = (municipality) => {
 
+    }
+
+    this.getBarangays = (municipalityName) => {
+        return new Promise((resolve, reject) => {  
+            var palawanMunicipalities = require('./json/profile/municipality.json');
+            var barangays = [];
+            var index = palawanMunicipalities["data"].findIndex(municipality => 
+                    municipality.name == municipalityName);
+            console.log(index);
+            if(index >= 0){
+                barangays = palawanMunicipalities["data"][index]["brgy"].
+                    map(barangay => barangay.name);
+            }
+            
             resolve(barangays)
         })
     }
@@ -666,7 +697,7 @@ controller('PermitController', function($crudService, municipalityService, $scop
     }
 
 }).
-contoller('CriminalCasesController', function($crudService, $dateService, $addressService, $scope)  {
+controller('CriminalCasesController', function($crudService, $dateService, $addressService, $scope)  {
     var criminalCasesDocument = db.collection('database').doc('CriminalCase') ;
     var criminalCasesCollection = criminalCasesDocument.collection('CriminalCases');
     var criminalCases = [];
