@@ -95,8 +95,8 @@ controller('ApprehensionController', function($scope, $crudService, municipality
         });
     }
     function convertToFormData(apprehension){
-        if(apprehension.APPREHENSION_DATE)
-            apprehension.ApprehensionDate = new Date(apprehension.APPREHENSION_DATE);
+        if(apprehension.DATE_APPREHENSION)
+            apprehension.ApprehensionDate = new Date(apprehension.DATE_APPREHENSION);
         let formData = apprehension;
         return formData;
     }
@@ -126,29 +126,32 @@ controller('ApprehensionController', function($scope, $crudService, municipality
         apprehension.Keywords = apprehension.Keywords.filter(item => { return item.length > 0; });
         var apprehensionDate = new Date(apprehension.YEAR, apprehension.MONTH - 1, apprehension.DAY);
 
-        apprehension.APPREHENSION_DATE = moment(apprehensionDate).format('YYYY-MM-DD');
+        apprehension.DATE_APPREHENSION = moment(apprehensionDate).format('YYYY-MM-DD');
         return apprehension;
     }
 
     function addApprehension(){
         var apprehension = convertToApprehensionObject($scope.apprehensionFormData);
+        $scope.close_dialog(); 
         $crudService.addItem(apprehension, apprehensionCollection).then(addOperationResult => {
-            $scope.toast("Sucess");
-            $scope.close_dialog();     
+            $scope.toast("Sucess");                
             clearFormData();
             apprehension.Municipality = apprehension.PA_MUNICIPALITY;
             $crudService.updateCounterFor(apprehension, apprehensionDocument);
         },
         failedOperationResult => {
-            console.log(failedOperationResult);
+            $scope.toast("Adding of new apprehension failed.");
         });
     }
 
     function updateApprehension() {
         var apprehension = convertToApprehensionObject($scope.apprehensionFormData);
+        $scope.close_dialog();  
         $crudService.updateItem(apprehension, apprehensionCollection).then(updateResult => {
             $scope.toast("Sucess");
-            $scope.close_dialog();  
+        },
+        failedOperationResult => {
+            $scope.toast("Updating failed.");
         });
     }
      function clearFormData(){
