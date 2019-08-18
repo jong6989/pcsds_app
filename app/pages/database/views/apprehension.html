@@ -50,18 +50,18 @@
           >
             {{ Months[apprehension.MONTH - 1]}}
           </td>
-          <td title="'Day'" sortable="'Day'" filter="{Day:'text'}">
+          <td title="'Day'" sortable="'DAY'" filter="{DAY:'text'}">
             {{ apprehension.DAY }}
           </td>
-          <td title="'Year'" sortable="'Year'" filter="{Year:'text'}">
+          <td title="'Year'" sortable="'YEAR'" filter="{YEAR:'text'}">
             {{ apprehension.YEAR }}
           </td>
           <td
-            title="'AO Sitio'"
-            sortable="'AO_SO'"
-            filter="{AO_Sitio:'text'}"
+            title="'AO Address'"
+            sortable="'AO_Address'"
+            filter="{AO_Address:'text'}"
           >
-            {{ apprehension.AO_SO }}
+            {{ apprehension.AO_Address }}
           </td>
           <td
             title="'AO Municipality'"
@@ -69,21 +69,13 @@
             filter="{AO_Municipality:'text'}"
           >
             {{ apprehension.AO_MUNICIPALITY }}
-          </td>
+          </td>          
           <td
-            title="'AO Barangay'"
-            sortable="'AO_Barangay'"
-            filter="{AO_Barangay:'text'}"
+            title="'Address'"
+            sortable="'PA_Address'"
+            filter="{PA_Address:'text'}"
           >
-            {{ apprehension.AO_BARANGAY }}
-          </td>
-          
-          <td
-            title="'PA Sitio'"
-            sortable="'PA_SO'"
-            filter="{PA_SO:'text'}"
-          >
-            {{ apprehension.PA_SO }}
+            {{ apprehension.PA_Address }}
           </td>
           <td
             title="'PA Municipality'"
@@ -92,15 +84,7 @@
           >
             {{ apprehension.PA_MUNICIPALITY }}
           </td>
-          <td
-            title="'PA Barangay'"
-            sortable="'PA_BARANGAY'"
-            filter="{PA_BARANGAY:'text'}"
-          >
-            {{ apprehension.PA_BARANGAY }}
-          </td>
-          
-          <td
+                    <td
             title="'Apprehending Agency'"
             sortable="'APP_AGENCY'"
             filter="{APP_AGENCY:'text'}"

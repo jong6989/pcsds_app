@@ -7,6 +7,9 @@ controller('ApprehensionController', function($scope, $crudService, municipality
 
     $scope.refreshList = () => {
         $crudService.getItems(apprehensionCollection).then(apprehensions => {
+            apprehensions.forEach(apprehension => {
+                apprehension = convertToFormData(apprehension);
+            });
             $scope.apprehensionsTable = $scope.ngTable(apprehensions);
         })
     }
@@ -97,6 +100,11 @@ controller('ApprehensionController', function($scope, $crudService, municipality
     function convertToFormData(apprehension){
         if(apprehension.DATE_APPREHENSION)
             apprehension.ApprehensionDate = new Date(apprehension.DATE_APPREHENSION);
+        apprehension.AO_Address =  apprehension.AO_SO && apprehension.AO_SO != 'N/A' ? 
+            `${apprehension.AO_SO}, ${apprehension.AO_BARANGAY}` : `${apprehension.AO_BARANGAY}`;
+        apprehension.PA_Address =  apprehension.PA_SO && apprehension.PA_SO != 'N/A'? 
+            `${apprehension.PA_SO}, ${apprehension.PA_BARANGAY}` : `${apprehension.PA_BARANGAY}`;
+        
         let formData = apprehension;
         return formData;
     }
