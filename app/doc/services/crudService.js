@@ -70,6 +70,7 @@ service('$crudService', function(){
 
     this.updateCounterFor = (item, document) => {
         let promise = new Promise((resolve, reject) => {
+        console.log(item);
         
         var counter = {};
             if(item.Year && item.Month) {

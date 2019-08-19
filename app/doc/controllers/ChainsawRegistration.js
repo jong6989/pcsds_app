@@ -1,10 +1,14 @@
 myAppModule.
-controller('ChainsawRegistrationController', (
+controller('ChainsawRegistrationController', [ 
+    '$scope', 
+    '$crudService', 
+    // 'dummyCrudService',
+    'municipalityService', (
         $scope, 
         $crudService, 
         municipalityService) => {
     var chainsawDocument = db.collection('database').doc('ChainsawRegistration') ;
-    var chainsawCollection = chainsawDocument.collection('Registerted Chainsaws');
+    var chainsawCollection = chainsawDocument.collection('database');
 
     $scope.registeredChainsawsTable = $scope.ngTable([]);
     $scope.chainsawFormData = {};
@@ -12,6 +16,9 @@ controller('ChainsawRegistrationController', (
     $scope.barangays  = [];
     $scope.dateNow = new Date();
     $scope.chainsaws = [];
+    $scope.registrationForm = { title: "" };
+    $scope.registrationForm.saveButton = {text:""}
+    $scope.DropDownOptions = {};
 
     municipalityService.getMunicipalities().then(municipalities => {
         $scope.municipalities = municipalities;
@@ -36,7 +43,6 @@ controller('ChainsawRegistrationController', (
         $crudService.addItem(chainsaw, chainsawCollection).then(chainsaw =>{
             $scope.toast("Succes");
             $scope.close_dialog();
-            $scope.chainsaws.push(chainsaw);
             refreshRegisteredChainsawsTable();
             $scope.chainsawFormData = {};
         },
@@ -68,6 +74,8 @@ controller('ChainsawRegistrationController', (
 
     $scope.openRegistrationForm = (event) => {
         $scope.saveChainsaw = addChainsaw;
+        $scope.registrationForm.title = "Add New";
+        $scope.registrationForm.saveButton.text = "Add";
         $scope.chainsawFormData = {};
         $scope.barangays = [];
         $scope.showPrerenderedDialog(event, 'chainsawRegistrationForm');
@@ -75,6 +83,8 @@ controller('ChainsawRegistrationController', (
 
     $scope.openRegistrationFormForUpdating = (id) => {     
         $scope.saveChainsaw = updateChainsaw;
+        $scope.registrationForm.title = "Update";
+        $scope.registrationForm.saveButton.text = "Update";
         $crudService.
         getItem(id, chainsawCollection, convertToChainsawObjectFromSnapshot).
         then(chainsaw => {
@@ -114,8 +124,8 @@ controller('ChainsawRegistrationController', (
             },                
             MetalSealNumber: formData.MetalSealNumber || '',
             SerialNumber: formData.SerialNumber || '',
-            RegistrationDate: formData.RegistrationDate || '',
-            ExpirationDate: formData.ExpirationDate || '',
+            RegistrationDate: formData.RegistrationDate ? $scope.to_date(formData.RegistrationDate) : '',
+            ExpirationDate: formData.ExpirationDate ? $scope.to_date(formData.ExpirationDate) : '',
             LimitationOfUse: formData.LimitationOfUse || '',
             Remarks: formData.Remarks || '',
             Keywords: [],
@@ -133,13 +143,11 @@ controller('ChainsawRegistrationController', (
     function convertToChainsawObjectFromSnapshot(snapshot){
         let chainsaw = snapshot.data();
         chainsaw.id = snapshot.id;
-        chainsaw.RegistrationDate = chainsaw.RegistrationDate ? new Date(chainsaw.RegistrationDate.seconds * 1000) : '';
-        chainsaw.ExpirationDate = chainsaw.ExpirationDate ? new Date(chainsaw.ExpirationDate.seconds * 1000) : '';
-        
-        if(chainsaw.Owner && chainsaw.Owner.Barangay)
-            chainsaw.Owner.Barangay = chainsaw.Owner.Barangay.toUpperCase();
-
+        // chainsaw.RegistrationDate = chainsaw.RegistrationDate ? $scope.to_date(formData.RegistrationDate) : '';
+        // chainsaw.ExpirationDate = chainsaw.ExpirationDate ? $scope.to_date(formData.ExpirationDate) : '';
+        chainsaw.Owner.Address = chainsaw.Owner.Street ? `${chainsaw.Owner.Street }, ${chainsaw.Owner.Barangay}` : `${chainsaw.Owner.Barangay}`;
         return chainsaw;
     }
-    
-});
+
+}
+]);

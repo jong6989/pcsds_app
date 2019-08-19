@@ -145,6 +145,8 @@ controller('ApprehensionController', function($scope, $crudService, municipality
             $scope.toast("Sucess");                
             clearFormData();
             apprehension.Municipality = apprehension.PA_MUNICIPALITY;
+            apprehension.Year = apprehension.YEAR;
+            apprehension.Month = apprehension.MONTH;
             $crudService.updateCounterFor(apprehension, apprehensionDocument);
         },
         failedOperationResult => {

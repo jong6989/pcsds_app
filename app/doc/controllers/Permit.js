@@ -1,10 +1,12 @@
-myAppModule.controller('PermitController', function($crudService, municipalityService, $scope){
-    var chainsawDocument;
-    var purchasePermitCollection;
+myAppModule.controller('PermitController', 
+['$crudService', 'municipalityService', '$scope',
+ ($crudService, municipalityService, $scope) => {
+    var permitDocument;
+    var permitCollection;
     
     $scope.setDocumentName = (documentName) => {
-        chainsawDocument = db.collection('database').doc(documentName) ;
-        purchasePermitCollection = chainsawDocument.collection('permits');
+        permitDocument = db.collection('database').doc(documentName) ;
+        permitCollection = permitDocument.collection('database');
     }
 
     $scope.permits = [];
@@ -13,13 +15,14 @@ myAppModule.controller('PermitController', function($crudService, municipalitySe
     $scope.municipalities = [];
     $scope.barangays  = [];
     $scope.dateNow = new Date();
-
+    $scope.registrationForm = {};
+    $scope.registrationForm.saveButton = {};
     municipalityService.getMunicipalities().then(municipalities => {
         $scope.municipalities = municipalities;
     });
 
     $scope.refreshList = () => {
-        $crudService.getItems(purchasePermitCollection, converFromSnapshotToPermitObject).then(permits =>{
+        $crudService.getItems(permitCollection, converFromSnapshotToPermitObject).then(permits =>{
             $scope.permits = permits;
             $scope.permitsTable = $scope.ngTable($scope.permits);
         })
@@ -27,11 +30,15 @@ myAppModule.controller('PermitController', function($crudService, municipalitySe
 
     let addPermit = () => {
         let permit = convertFromFormDataToPermitObject($scope.chainsawPermitFormData);
-        $crudService.addItem(permit, purchasePermitCollection).then(permit => {
-            $scope.toast("Success");
+        $scope.toast("Success");
+
+        $crudService.addItem(permit, permitCollection).then(result => {
             $scope.close_dialog();
             $scope.permits.push(permit);
-            $crudService.updateCounterFor(permit, chainsawDocument);
+            permit.Month = permit.Month_Issued;
+            permit.Year = permit.Year_Issued;
+
+            $crudService.updateCounterFor(permit, permitDocument);
         },
         error => {
             console.log(error);
@@ -41,11 +48,12 @@ myAppModule.controller('PermitController', function($crudService, municipalitySe
 
     let updatePermit = () => {
         let updatedPermit = convertFromFormDataToPermitObject($scope.chainsawPermitFormData);
-        $crudService.updateItem(updatedPermit, purchasePermitCollection).then(result => {
-            $scope.toast("Success");
+        $scope.toast("Success");
+
+        $crudService.updateItem(updatedPermit, permitCollection).then(result => {
             $scope.close_dialog();
             let index = $scope.permits.findIndex(permit => permit.id == updatedPermit.id);
-            $scope.permits[index] = updatePermit;
+            $scope.permits[index] = updatedPermit;
             $scope.permitsTable = $scope.ngTable($scope.permits);
         },
         error => {
@@ -63,11 +71,15 @@ myAppModule.controller('PermitController', function($crudService, municipalitySe
         $scope.chainsawPermitFormData = {};
         $scope.savePermit = addPermit;
         $scope.barangays = [];
+        $scope.registrationForm.title = "Add New";
+        $scope.registrationForm.saveButton.text = "Add";
         $scope.showPrerenderedDialog(event, formName);
     }
 
     $scope.openPermitFormForUpdating = (event, formName,permitToUpate) =>{
-        $crudService.getItem(permitToUpate.id, purchasePermitCollection, converFromSnapshotToPermitObject).
+        $scope.registrationForm.title = "Update";
+        $scope.registrationForm.saveButton.text = "Update";
+        $crudService.getItem(permitToUpate.id, permitCollection, converFromSnapshotToPermitObject).
         then(permit => {
             $scope.chainsawPermitFormData = permit;
             $scope.refreshBarangays();
@@ -90,10 +102,15 @@ myAppModule.controller('PermitController', function($crudService, municipalitySe
             Municipality: formData.Municipality || '',
             Street: formData.Street || '',
             Purpose: formData.Purpose || '',
-            Date_Issued: formData.Date_Issued || '',
+            Date_Issued: $scope.to_date(formData.Date_Issued),
             COR_Number: formData.COR_Number || '',
             id: formData.id || ''
         };
+        
+        let date_issued = new Date(formData.Date_Issued);
+        permit.Month_Issued = date_issued.getMonth() + 1;
+        permit.Day_Issued = date_issued.getDate();
+        permit.Year_Issued = date_issued.getFullYear();
 
         return permit;
     }
@@ -101,12 +118,11 @@ myAppModule.controller('PermitController', function($crudService, municipalitySe
     function converFromSnapshotToPermitObject(snapshot){
         let permit = snapshot.data();
         permit.id = snapshot.id;
-
-        permit.Barangay = permit.Barangay && permit.Barangay.toUpperCase() || '';
-
-        if(permit.Date_Issued)
-            permit.Date_Issued = new Date(permit.Date_Issued.seconds * 1000);
+        permit.Address = permit.Street ? `${permit.Street}, ${permit.Barangay}` : `${permit.Barangay}`;
+        
+        // if(permit.Date_Issued)
+        //     permit.Date_Issued = new Date(permit.Date_Issued);
         return permit;
     }
 
-});
+}]);

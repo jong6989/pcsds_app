@@ -1,4 +1,4 @@
-<div ng-controller="ChainsawRegistrationController">
+<div ng-controller="ChainsawRegistrationController" >
     <md-toolbar class="bg-teal">
       <h1 class="md-toolbar-tools">
         <md-button class="md-raised" ng-click="openRegistrationForm($event)">
@@ -7,7 +7,7 @@
         </md-button>
         <md-button class="md-raised" ng-click="refreshList()">
           <i class="fa fa-refresh col-green"></i>
-            Refresh
+            clear filter
         </md-button>
       </h1>
     </md-toolbar>
@@ -16,7 +16,7 @@
       style="height: {{ iframeHeight - 150 }}px;"
       layout-sm="coulumn"
       layout-gt-sm
-      ng-init=""
+      ng-init="getAllKeyValues(chainsaws)"
     >
       <div flex>
         <table ng-table="registeredChainsawsTable" class="table" show-filter="true">
@@ -38,40 +38,33 @@
             <td
               title="'First Name '"
               sortable="'Owner.FirstName'"
-              filter="{FirstName: 'text'}"
+              filter="{'Owner.FirstName': 'text'}"
             >
               {{ chainsaw.Owner.FirstName }}
             </td>
             <td
               title="'Middle Initial'"
               sortable="'Owner.MiddleInitial'"
-              filter="{ MiddleInitial:'text' }"
+              filter="{ 'Owner.MiddleInitial':'text' }"
             >
               {{ chainsaw.Owner.MiddleInitial}}
             </td>
             <td
               title="'Last Name'"
               sortable="'Owner.LastName'"
-              filter="{ LastName:'text' }"
+              filter="{ 'Owner.LastName':'text' }"
             >
               {{ chainsaw.Owner.LastName}}
             </td>
-            <td title="'Street'" 
-                sortable="'Owner.Street'" 
-                filter="{Street:'text'}">
-              {{ chainsaw.Owner.Street }}
-            </td>
-            <td
-              title="'Barangay'"
-              sortable="'Owner.Barangay'"
-              filter="{Barangay:'text'}"
-            >
-              {{ chainsaw.Owner.Barangay }}
+            <td title="'Address'" 
+                sortable="'Owner.Address'" 
+                filter="{'Owner.Address':'text'}">
+              {{ chainsaw.Owner.Address }}
             </td>
             <td
               title="'Municipality'"
               sortable="'Owner.Municipality'"
-              filter="{Municipality:'text'}"
+              filter="{'Owner.Municipality':'text'}"
             >
               {{ chainsaw.Owner.Municipality }}
             </td>
@@ -94,14 +87,14 @@
               sortable="'RegistrationDate'"
               filter="{RegistrationDate:'text'}"
             >
-              {{ chainsaw.RegistrationDate.toLocaleDateString() }}
+              {{ chainsaw.RegistrationDate }}
             </td>
             <td
               title="'Expiration Date'"
               sortable="'ExpirationDate'"
               filter="{ExpirationDate:'text'}"
             >
-              {{ chainsaw.ExpirationDate.toLocaleDateString() }}
+              {{ chainsaw.ExpirationDate }}
             </td>
             <td 
                 title="'Limitation of Use'" 
@@ -120,7 +113,7 @@
                 class="md-raised"
                 ng-click="openRegistrationFormForUpdating(chainsaw.id)"
               >
-                <i class="fa fa-plus col-green"></i>
+                <i class="fa fa-edit col-green"></i>
                 EDIT
               </md-button>
             </td>
