@@ -22,7 +22,10 @@
       </md-nav-item>
       <md-nav-item md-nav-click="null" name="ChainsawPermitToSell">
           Permit to Sell Chainsaw
-        </md-nav-item>
+      </md-nav-item>
+      <md-nav-item md-nav-click="null" name="CriminalCases">
+          Criminal Cases
+      </md-nav-item>
     </md-nav-bar>
 
    <div flex ng-include="'./app/pages/database/views/graphs.html'" ng-show="currentNavItem == 'Statistics'"></div>
@@ -31,6 +34,5 @@
    <div flex ng-include="'./app/pages/database/views/chainsaw.html'" ng-show="currentNavItem == 'Chainsaw Registration'"></div>
    <div flex ng-include="'./app/pages/database/views/chainsawPurchasePermit.html'" ng-show="currentNavItem == 'ChainsawPermitToPurchase'"></div>
    <div flex ng-include="'./app/pages/database/views/chainsawSellPermit.html'" ng-show="currentNavItem == 'ChainsawPermitToSell'"></div>
-
-
+   <div flex ng-include="'./app/pages/database/views/criminalCases.html'" ng-show="currentNavItem == 'CriminalCases'"></div>
 </div>
