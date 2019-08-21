@@ -1,4 +1,5 @@
 var XLSX = require('xlsx');
+const uuidv1 = require('uuid/v1');
 myAppModule.
 service('dummyCrudService', function(){
     let items = [];
@@ -97,112 +98,140 @@ service('dummyCrudService', function(){
     // }
 }).
 service('dummyCriminalCrudService', function(){
+    var criminalCases = [{ 
+        Criminal_Case_Number: '1234456',
+        Date_Filed: "2019-01-01",
+        Plaintiff: "People of the Philippines",
+        Accused: "Juan dela Cruz et. all",
+        NPS_Number: "ABCD1234",
+        Search_Warrant: "XYZ987",
+        Bail_Amount: "123455.78",
+        Complainant: "Batman Inc.",
+        Agency_Filed: "Marvel Office",
+        Court_Raffled: "Regional Trial Court",
+        Respondents: [
+            {
+                Last_Name: "Potter",
+                Middle_Initial: "I",
+                First_Name: "Harry",
+                Address: "Sesame St., Sta. Monica",
+                Municipality: "Hogwartz",
+                Province: "Gotham",
+                Country: "Atlantis"
+            }
+        ],
+        Violations: "RAPD 1234 Section 456, RAPD 987 Section 3293",
+        Apprehended_Items: "3 kg peebles, 5 bakawan trees, 9 heads talking minas",
+        Other_Details: "Unlawfully  entered the Philippines Waters with intent to gain and in fact when apprehended they have in their possession, custody and control fishing nets and other fishing equipments",
+        Conveyances: "fishing boat with bow. No. 03011",
+        Market_Value: "1000000",
+        Disposition: "Banned species",
+        Apprehension_Address: "Malambunga, Punta Baja Rd.",
+        Apprehension_Date: "2019-02-28",
+        Apprehending_Agency: "Philippine National Police",
+        Apprehending_Officers: "PO1 Arlan Asutilla, PO2 Boy Langka",
+        Form_of_Filing: "Inquest",
+        Court_Status: "Pending before RTC",
+        Prosecutor_Status: "Preliminary investigation",
+        Fiscals_Resolution_Date: "2019-03-31",
+        Decision_Date: "2019-03-31",
+        Deciding_Agency: "Supreme Court",
+        Decision: "Guilty",
+        Receipt_Date: "2019-04-1",
+        Penalty: "P1,000,000.00"
+    },
+    { 
+        Criminal_Case_Number: '293809',
+        Date_Filed: "2019-01-01",
+        Plaintiff: "People of the Philippines",
+        Accused: "Jong Bautista et. all",
+        NPS_Number: "jfksdjf923",
+        Search_Warrant: "XYZ987",
+        Bail_Amount: "123455.78",
+        Complainant: "Batman Inc.",
+        Agency_Filed: "Marvel Office",
+        Court_Raffled: "Regional Trial Court",
+        Respondents: [
+            {
+                Last_Name: "Potter",
+                Middle_Initial: "I",
+                First_Name: "Harry",
+                Address: "Sesame St., Sta. Monica",
+                Municipality: "Hogwartz",
+                Province: "Gotham",
+                Country: "Atlantis"
+            },
+            {
+                Last_Name: "Hitler",
+                Middle_Initial: "Z",
+                First_Name: "Adolf",
+                Address: "Nazi St., San Rafael",
+                Municipality: "Buang",
+                Province: "Baliw",
+                Country: "Racist"
+            }
+        ],
+        Violations: "RAPD 1234 Section 456, RAPD 987 Section 3293",
+        Apprehended_Items: "3 kg peebles, 5 bakawan trees, 9 heads talking minas",
+        Other_Details: "constructed and maintained  shanty of about 4 x 5 square meters in size; that Mr. Perfecto Rufino, Jr, brought inside the Sanctuary otorized equipment.",
+        Conveyances: "fishing boat with bow. No. 03011",
+        Market_Value: "1000000",
+        Disposition: "Banned species",
+        Apprehension_Address: "Malambunga, Punta Baja Rd.",
+        Apprehension_Date: "2019-02-28",
+        Apprehending_Agency: "Philippine National Police",
+        Apprehending_Officers: "PO1 Arlan Asutilla, PO2 Boy Langka",
+        Form_of_Filing: "Inquest",
+        Court_Status: "Pending before RTC",
+        Prosecutor_Status: "Preliminary investigation",
+        Fiscals_Resolution_Date: "2019-03-31",
+        Decision_Date: "2019-03-31",
+        Deciding_Agency: "Supreme Court",
+        Decision: "Guilty",
+        Receipt_Date: "2019-04-1",
+        Penalty: "P1,000,000.00"
+    }];;
+
     this.getItems = (collection, objectConverter) => {
         return new Promise((resolve, reject)=>{
-            var snapshot = {};
-            
-            var criminalCases = [{ 
-                Criminal_Case_Number: '1234456',
-                Date_Filed: "2019-01-01",
-                Plaintiff: "People of the Philippines",
-                Accused: "Juan dela Cruz et. all",
-                NPS_Number: "ABCD1234",
-                Search_Warrant: "XYZ987",
-                Bail_Amount: "123455.78",
-                Complainant: "Batman Inc.",
-                Agency_Filed: "Marvel Office",
-                Court_Raffled: "Regional Trial Court",
-                Respondents: [
-                    {
-                        Last_Name: "Potter",
-                        Middle_Initial: "I",
-                        First_Name: "Harry",
-                        Address: "Sesame St., Sta. Monica",
-                        Municipality: "Hogwartz",
-                        Province: "Gotham",
-                        Country: "Atlantis"
-                    }
-                ],
-                Violations: "RAPD 1234 Section 456, RAPD 987 Section 3293",
-                Apprehended_Items: "3 kg peebles, 5 bakawan trees, 9 heads talking minas",
-                Other_Details: "Unlawfully  entered the Philippines Waters with intent to gain and in fact when apprehended they have in their possession, custody and control fishing nets and other fishing equipments",
-                Conveyances: "fishing boat with bow. No. 03011",
-                Market_Value: "1000000",
-                Disposition: "Banned species",
-                Apprehension_Address: "Malambunga, Punta Baja Rd.",
-                Apprehension_Date: "2019-02-28",
-                Apprehending_Agency: "Philippine National Police",
-                Apprehending_Officers: "PO1 Arlan Asutilla, PO2 Boy Langka",
-                Form_of_Filing: "Inquest",
-                Court_Status: "Pending before RTC",
-                Prosecutor_Status: "Preliminary investigation",
-                Fiscals_Resolution_Date: "2019-03-31",
-                Decision_Date: "2019-03-31",
-                Deciding_Agency: "Supreme Court",
-                Decision: "Guilty",
-                Receipt_Date: "2019-04-1",
-                Penalty: "P1,000,000.00"
-            },
-            { 
-                Criminal_Case_Number: '293809',
-                Date_Filed: "2019-01-01",
-                Plaintiff: "People of the Philippines",
-                Accused: "Jong Bautista et. all",
-                NPS_Number: "jfksdjf923",
-                Search_Warrant: "XYZ987",
-                Bail_Amount: "123455.78",
-                Complainant: "Batman Inc.",
-                Agency_Filed: "Marvel Office",
-                Court_Raffled: "Regional Trial Court",
-                Respondents: [
-                    {
-                        Last_Name: "Potter",
-                        Middle_Initial: "I",
-                        First_Name: "Harry",
-                        Address: "Sesame St., Sta. Monica",
-                        Municipality: "Hogwartz",
-                        Province: "Gotham",
-                        Country: "Atlantis"
-                    },
-                    {
-                        Last_Name: "Hitler",
-                        Middle_Initial: "Z",
-                        First_Name: "Adolf",
-                        Address: "Nazi St., San Rafael",
-                        Municipality: "Buang",
-                        Province: "Baliw",
-                        Country: "Racist"
-                    }
-                ],
-                Violations: "RAPD 1234 Section 456, RAPD 987 Section 3293",
-                Apprehended_Items: "3 kg peebles, 5 bakawan trees, 9 heads talking minas",
-                Other_Details: "constructed and maintained  shanty of about 4 x 5 square meters in size; that Mr. Perfecto Rufino, Jr, brought inside the Sanctuary otorized equipment.",
-                Conveyances: "fishing boat with bow. No. 03011",
-                Market_Value: "1000000",
-                Disposition: "Banned species",
-                Apprehension_Address: "Malambunga, Punta Baja Rd.",
-                Apprehension_Date: "2019-02-28",
-                Apprehending_Agency: "Philippine National Police",
-                Apprehending_Officers: "PO1 Arlan Asutilla, PO2 Boy Langka",
-                Form_of_Filing: "Inquest",
-                Court_Status: "Pending before RTC",
-                Prosecutor_Status: "Preliminary investigation",
-                Fiscals_Resolution_Date: "2019-03-31",
-                Decision_Date: "2019-03-31",
-                Deciding_Agency: "Supreme Court",
-                Decision: "Guilty",
-                Receipt_Date: "2019-04-1",
-                Penalty: "P1,000,000.00"
-            }];
-            snapshot.data = () => criminalCases;
-            snapshot.id = "";
             criminalCases = criminalCases.map(criminalCase => {
                 var snapshot = {};
-                snapshot.id = "";
+                snapshot.id = uuidv1();
                 snapshot.data = () => criminalCase;
                 return objectConverter(snapshot);
             })
             resolve(criminalCases);
         });
+    }
+
+    this.getItem = (id, collection, objectConverter) => {
+        return new Promise((resolve, reject) => {
+            var index = criminalCases.findIndex(criminalCase => criminalCase.id == id);
+            var snapshot = {};
+            snapshot.id = id;
+            snapshot.data = () => criminalCases[index];
+            var criminalCase = objectConverter(snapshot)
+
+            resolve(criminalCase);
+        })
+        
+    }
+    this.addItem = (itemToAdd) => {
+
+        return new Promise((resolve, reject) => {
+            criminalCases.push(itemToAdd);
+            resolve();
+        })
+    }
+
+    this.updateItem = (itemToUpdate) => {     
+        return new Promise((resolve, reject)=> {
+            var index = criminalCases.findIndex(criminalCase => criminalCase.id == itemToUpdate.id);
+            criminalCases[index] = itemToUpdate;
+            resolve();
+        })
+    }
+    this.updateCounterFor = (item) => {
+
     }
 })

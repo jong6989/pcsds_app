@@ -1,0 +1,326 @@
+<div style="visibility: hidden">
+  <div class="md-dialog-container" id="criminalCaseRegistrationForm">
+    <md-dialog layout="column" layout-align="center center">
+      <md-toolbar class="bg-teal">
+        <div class="md-toolbar-tools">
+          <h2>{{ registrationForm.title }} Criminal Case</h2>
+          <span flex></span>
+          <md-button class="md-icon-button" ng-click="close_dialog()">
+            <i class="fa fa-times col-white"></i>
+          </md-button>
+        </div>
+      </md-toolbar>
+
+      <form ng-cloak name="formCriminalCases">
+        <md-dialog-content layout-padding class="p-b-20">
+          <div layout-gt-sm layout-sm="column">
+            <div>
+              <md-input-container>
+                <label>Case Number</label>
+                <input
+                  ng-model="criminalCasesFormData.Criminal_Case_Number"
+                  required
+                />
+              </md-input-container>
+            </div>
+
+            <div>
+              <md-input-container class="md-block">
+                <label>Date Filed</label>
+                <md-datepicker
+                  ng-model="criminalCasesFormData.Date_Filed"
+                  required
+                >
+                </md-datepicker>
+              </md-input-container>
+            </div>
+
+            <div>
+              <md-input-container class="md-block">
+                <label>Plaintiff</label>
+                <input ng-model="criminalCasesFormData.Plaintiff" required />
+              </md-input-container>
+            </div>
+          </div>
+
+          <div layout-gt-sm layout-sm="column">
+              <div>
+                  <md-input-container class="md-block">
+                    <label>Accused</label>
+                    <input ng-model="criminalCasesFormData.Accused" />
+                  </md-input-container>
+                </div>
+            <div>
+              <md-input-container>
+                <label>NPS Number</label>
+                <input ng-model="criminalCasesFormData.NPS_Number" />
+              </md-input-container>
+            </div>
+
+            <div>
+              <md-input-container class="md-block">
+                <label>Search Warrant</label>
+                <input ng-model="criminalCasesFormData.Search_Warrant" />
+              </md-input-container>
+            </div>
+            <div>
+              <md-input-container class="md-block">
+                <label>Bail Amount</label>
+                <input ng-model="criminalCasesFormData.Bail_Amount"/>
+              </md-input-container>
+            </div>
+          </div>
+
+          <div layout-gt-sm layout-sm="column">
+              <div>
+                  <md-input-container class="md-block" flex>
+                    <label>Complainant</label>
+                    <input ng-model="criminalCasesFormData.Complainant" />
+                  </md-input-container>
+                </div>
+            <div>
+              <md-input-container class="md-block">
+                <label>Agency Filed</label>
+                <input ng-model="criminalCasesFormData.Agency_Filed" />
+              </md-input-container>
+            </div>
+            <div>
+              <md-input-container class="md-block">
+                <label>Court Raffled</label>
+                <input ng-model="criminalCasesFormData.Court_Raffled" />
+              </md-input-container>
+            </div>            
+          </div>
+        
+
+        <div layout-gt-sm layout-sm="column">
+            <div>
+                <md-input-container class="md-block">
+                  <label>Respondents</label>
+                </md-input-container>
+              </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Violations</label>
+              <textarea ng-model="criminalCasesFormData.Violations"></textarea>
+            </md-input-container>
+          </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Apprehended Items</label>
+              <textarea
+                ng-model="criminalCasesFormData.Apprehended_Items"
+              ></textarea>
+            </md-input-container>
+          </div>
+          
+        </div>
+
+        <div layout-gt-sm layout-sm="column">
+            <div>
+                <md-input-container class="md-block">
+                  <label>Other Details</label>
+                  <textarea
+                    ng-model="criminalCasesFormData.Other_Details"
+                  ></textarea>
+                </md-input-container>
+              </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Convenyances</label>
+              <input ng-model="criminalCasesFormData.Conveyances" />
+            </md-input-container>
+          </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Market Value</label>
+              <input ng-model="criminalCasesFormData.Market_Value" />
+            </md-input-container>
+          </div>
+        </div>
+
+        <div layout-gt-sm layout-sm="column">
+            <div>
+                <md-input-container class="md-block">
+                  <label>Disposition</label>
+                  <input ng-model="criminalCasesFormData.Disposition" />
+                </md-input-container>
+              </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Place of Apprehension (Municipality/City)</label>
+              <md-select
+                    ng-model="criminalCasesFormData.Apprehension_Municipality"
+                    ng-change="refreshBarangays()"
+                    required
+                  >
+                    <md-option
+                      ng-value="municipality"
+                      ng-repeat="municipality in municipalities"
+                    >
+                      {{ municipality }}
+                    </md-option>
+                  </md-select>
+            </md-input-container>
+          </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Barangay</label>
+              <md-select ng-model="criminalCasesFormData.Barangay" required>
+                <md-option
+                  ng-value="barangay"
+                  ng-repeat="barangay in barangays"
+                >
+                  {{ barangay }}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Apprehension Date</label>
+              <md-datepicker
+                ng-model="criminalCasesFormData.Apprehension_Date"
+              ></md-datepicker>
+            </md-input-container>
+          </div>
+          
+        </div>
+
+        <div layout-gt-sm layout-sm="column">
+            <div>
+                <md-input-container class="md-block">
+                  <label>Apprehending Agencies</label>
+                  <textarea
+                    ng-model="criminalCasesFormData.Apprehending_Agency"
+                  ></textarea>
+                </md-input-container>
+              </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Apprehending Officers</label>
+              <textarea
+                ng-model="criminalCasesFormData.Apprehending_Officers"
+              ></textarea>
+            </md-input-container>
+          </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Apprehension Date</label>
+              <md-datepicker
+                ng-model="criminalCasesFormData.Apprehension_Date"
+              ></md-datepicker>
+            </md-input-container>
+          </div>
+          
+        </div>
+
+        <div layout-gt-sm layout-sm="column">
+            <div>
+                <md-input-container class="md-block">
+                  <label>Apprehending Agency</label>
+                  <textarea
+                    ng-model="criminalCasesFormData.Apprehending_Agency"
+                  ></textarea>
+                </md-input-container>
+              </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Apprehending Officers</label>
+              <textarea
+                ng-model="criminalCasesFormData.Apprehending_Officers"
+              ></textarea>
+            </md-input-container>
+          </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Form of Filing</label>
+              <input ng-model="criminalCasesFormData.Form_of_Filing" />
+            </md-input-container>
+          </div>
+          
+        </div>
+
+        <div layout-gt-sm layout-sm="column">
+            <div>
+                <md-input-container class="md-block">
+                  <label>Court Status</label>
+                  <textarea
+                    ng-model="criminalCasesFormData.Court_Status"
+                  ></textarea>
+                </md-input-container>
+              </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Prosecutor Status</label>
+              <input ng-model="criminalCasesFormData.Prosecutor_Status" />
+            </md-input-container>
+          </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Fiscals Resolution Date</label>
+              <md-datepicker
+                ng-model="criminalCasesFormData.Fiscals_Resolution_Date"
+              ></md-datepicker>
+            </md-input-container>
+          </div>
+          
+        </div>
+
+        <div layout-gt-sm layout-sm="column">
+            <div>
+                <md-input-container class="md-block">
+                  <label>Decision Date</label>
+                  <md-datepicker
+                    ng-model="criminalCasesFormData.Decision_Date"
+                  ></md-datepicker>
+                </md-input-container>
+              </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Deciding Agency</label>
+              <input ng-model="criminalCasesFormData.Deciding_Agency" />
+            </md-input-container>
+          </div>
+          <div>
+            <md-input-container class="md-block">
+              <label>Decision</label>
+              <textarea ng-model="criminalCasesFormData.Decision"></textarea>
+            </md-input-container>
+          </div>
+          
+        </div>
+        <div layout-gt-sm layout-sm="column">
+            <div>
+                <md-input-container class="md-block">
+                  <label>Receipt Date</label>
+                  <md-datepicker
+                    ng-model="criminalCasesFormData.Receipt_Date"
+                  ></md-datepicker>
+                </md-input-container>
+              </div>
+              <div>
+                  <md-input-container class="md-block">
+                    <label>Penalty</label>
+                    <input ng-model="criminalCasesFormData.Penalty" />
+                  </md-input-container>
+                </div>
+        </div>
+      </md-dialog-content>
+        <md-dialog-actions layout="row">
+          <span flex></span>
+          <md-button ng-click="close_dialog()">
+            Close
+          </md-button>
+          <md-button
+            class="md-primary md-raised"
+            ng-click="saveCriminalCase();"
+            ng-disabled="formCriminalCases.$invalid"
+          >
+            {{ registrationForm.saveButton.text }}
+          </md-button>
+        </md-dialog-actions>
+      </form>
+    </md-dialog>
+  </div>
+</div>

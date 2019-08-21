@@ -3,11 +3,11 @@
       <h1 class="md-toolbar-tools">
         <md-button class="md-raised" ng-click="openForm($event)">
           <i class="fa fa-plus col-green"></i>
-          add new criminal cases
+          add new criminal case
         </md-button>
         <md-button class="md-raised" ng-click="refreshList()">
           <i class="fa fa-refresh col-green"></i>
-            refresh
+            clear filter
         </md-button>
       </h1>
     </md-toolbar>
@@ -33,21 +33,21 @@
               sortable="'Date_Filed'"
               filter="{Date_Filed: 'text'}"
             >
-              {{ criminalCase.Date_Filed }}
+              <div style="width:90px">{{ criminalCase.Date_Filed }}</div>
             </td>
             <td
               title="'Plaintiff'"
               sortable="'Plaintiff'"
               filter="{Plaintiff: 'text'}"
             >
-              {{ criminalCase.Plaintiff }}
+            <div style="width:175px">{{ criminalCase.Plaintiff }}</div>
             </td>
             <td
               title="'Accused'"
               sortable="'Accused'"
               filter="{Accused: 'text'}"
             >
-              {{ criminalCase.Accused }}
+            <div style="width:175px">{{ criminalCase.Accused }}</div>
             </td>
             <td
               title="'NPS Number'"
@@ -82,7 +82,7 @@
               sortable="'Agency_Filed'"
               filter="{Agency_Filed: 'text'}"
             >
-              {{ criminalCase.Agency_Filed }}
+            <div style="width:175px">{{ criminalCase.Agency_Filed }}</div>
             </td>
             <td
               title="'Court Raffled'"
@@ -103,7 +103,9 @@
               sortable="'Violations'"
               filter="{Violations: 'text'}"
             >
+            <div style="width: 170px">
               {{ criminalCase.Violations }}
+            </div>
             </td>
             <td
               title="'Apprehended Items'"
@@ -115,10 +117,16 @@
             <td
               title="'Other Details'"
               sortable="'Other_Details'"
-              filter="{Other_Details:'text'}"         
+              filter="{Other_Details:'text'}"    
+              style="padding-left: 10px"     
             >
-              {{ criminalCase.firstNWords }}
-              <a href='#' ng-if="criminalCase.firstNWords.includes('...')">View More</a>
+              <div style="width: 250px" ng-if="row[criminalCase.id].shouldCollapse">{{ firstNWords[criminalCase.id] }}</div>
+              <div style="width: 250px" ng-if="!row[criminalCase.id].shouldCollapse">{{ criminalCase.Other_Details }}</div>
+
+              <!-- <a href='#' ng-if="criminalCase.firstNWords.includes('...')" ng-click="expandDetails(criminalCase.Other_Details)">View More</a> -->
+              <a href='' ng-if="row[criminalCase.id].shouldCollapse" ng-click="$event.preventDefault();expand(row[criminalCase.id])">View More</a>
+              <a href='' ng-if="!row[criminalCase.id].shouldCollapse" ng-click="$event.preventDefault();collapse(row[criminalCase.id])">View Less</a>
+
             </td>
             <td
               title="'Conveyances'"
@@ -202,7 +210,7 @@
               sortable="'Decision_Date'"
               filter="{Decision_Date:'text'}"
             >
-              {{ criminalCase.Decision_Date }}
+            <div style="width:90px">{{ criminalCase.Decision_Date }}</div>
             </td>
             <td
               title="'Deciding Agency'"
@@ -223,7 +231,7 @@
               sortable="'Receipt_Date'"
               filter="{Receipt_Date:'text'}"
             >
-              {{ criminalCase.Receipt_Date }}
+            <div style="width:90px">{{ criminalCase.Receipt_Date }}</div>
             </td>
             <td title="'Penalty'" sortable="'Penalty'" filter="{Penalty:'text'}">
               {{ criminalCase.Penalty }}
@@ -231,7 +239,7 @@
             <td title="''">
               <md-button
                 class="md-raised"
-                ng-click="opencriminalCaseFormForUpdating($event, criminalCase.id)"
+                ng-click="openCriminalCaseFormForUpdating($event, criminalCase)"
               >
                 <i class="fa fa-plus col-green"></i>
                 EDIT
@@ -242,5 +250,7 @@
       </div>
     </md-content>
     <div ng-include="'./app/pages/database/modals/respondentList.html'"></div>
+    <div ng-include="'./app/pages/database/modals/criminalCaseRegistrationForm.html'"></div>
   </div>
+  
   
