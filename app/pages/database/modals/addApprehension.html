@@ -3,7 +3,7 @@
         <md-dialog layout="column" layout-align="center center">
             <md-toolbar class="bg-teal">
                 <div class="md-toolbar-tools">
-                    <h2>Add New Appehension</h2>
+                    <h2>{{apprehensionForm.title}} Apprehension</h2>
                     <span flex></span>
                     <md-button class="md-icon-button" ng-click="closeAppehensionForm()">
                         <i class="fa fa-times col-white"></i>
@@ -16,17 +16,17 @@
                         <div layout-gt-sm layout-sm="column">
                             <md-input-container class="md-block">
                                 <label>Control No.</label>
-                                <input ng-model="apprehensionFormData.Control_Number" required>
+                                <input ng-model="apprehensionFormData.CONTROL_NO" required>
                             </md-input-container>
                         </div>
                         <md-input-container class="md-block" flex>
                             <label>Case Title</label>
-                            <input ng-model="apprehensionFormData.Case_ID">
+                            <input ng-model="apprehensionFormData.CASE_TITLE">
                         </md-input-container>
 
                         <md-input-container class="md-block">
                             <label>Violations</label>
-                            <input ng-model="apprehensionFormData.Violations" required>
+                            <input ng-model="apprehensionFormData.VIOLATION" required>
                         </md-input-container>
                         
                     </div>
@@ -35,15 +35,15 @@
                         <div>
                             <md-input-container>
                                 <label>Apprehending Office Sitio/Purok/Street</label>
-                                <input ng-model="apprehensionFormData.AO_Sitio">
+                                <input ng-model="apprehensionFormData.AO_SO">
                             </md-input-container>
                         </div>
 
                         <div>
                             <md-input-container class="md-block">
                                 <label>Apprehending Office Municipality</label>
-                                <md-select 
-                                    ng-model="apprehensionFormData.AO_Municipality" 
+                                <!-- <md-select 
+                                    ng-model="apprehensionFormData.AO_MUNICIPALITY" 
                                     ng-change="refreshAOBarangays()">
                                     <md-option 
                                         ng-value="municipality" 
@@ -51,20 +51,40 @@
                                         >
                                         {{municipality}}
                                     </md-option>
-                                </md-select>
+                                </md-select> -->
+                                <md-autocomplete
+                                    class="md-block" flex-gt-sm="100"
+                                    md-selected-item="apprehensionFormData.AO_MUNICIPALITY"
+                                    md-search-text="AO_MUNICIPALITY"
+                                    md-search-text-change="apprehensionFormData.AO_MUNICIPALITY = AO_MUNICIPALITY"
+                                    md-items="municipality in municipalities | filter : AO_MUNICIPALITY"
+                                    md-item-text="municipality"
+                                    md-min-length="0"
+                                    md-selected-item-change ="refreshAOBarangays()"
+                                    placeholder="AO Municipality">
+                                    <md-item-template>
+                                    {{municipality}}
+                                    </md-item-template>
+                                </md-autocomplete>
                             </md-input-container>                            
                         </div>
 
                         <div>
                             <md-input-container class="md-block">
                                     <label>Apprehending Office Barangay</label>
-                                    <md-select ng-model="apprehensionFormData.AO_Barangay">
-                                        <md-option ng-value="barangay" ng-repeat="barangay in AOBarangays">
-                                            {{barangay}}
-                                        </md-option>
-                                    </md-select>
-                                    </md-autocomplete>
-        
+                                    <md-autocomplete
+                                        class="md-block" flex-gt-sm="100"
+                                        md-selected-item="apprehensionFormData.AO_BARANGAY"
+                                        md-search-text="AO_BARANGAY"
+                                        md-search-text-change="apprehensionFormData.AO_BARANGAY = AO_BARANGAY"
+                                        md-items="barangay in AOBarangays | filter : AO_BARANGAY"
+                                        md-item-text="barangay"
+                                        md-min-length="0"
+                                        placeholder="AO Barangay">                                                  
+                                    <md-item-template>
+                                    {{barangay}}
+                                    </md-item-template>
+                                </md-autocomplete>        
                             </md-input-container>
                         </div>                       
                     </div>
@@ -74,41 +94,55 @@
                             <div>
                                     <md-input-container>
                                         <label>Person Apprehended Sitio/Purok/Street</label>
-                                        <input ng-model="apprehensionFormData.PA_Sitio">
+                                        <input ng-model="apprehensionFormData.PA_SO">
                                     </md-input-container>
                             </div>
                         <div>
                         <md-input-container>
                                 <label>Person Apprehended Municipality</label>
-                                <md-select 
-                                    ng-model="apprehensionFormData.PA_Municipality" 
-                                    ng-change="refreshPABarangays()">
-                                    <md-option ng-value="municipality" 
-                                        ng-repeat="municipality in municipalities">
-                                        {{municipality}}
-                                    </md-option>
-                                </md-select>
+                                <md-autocomplete
+                                    class="md-block" flex-gt-sm="100"
+                                    md-selected-item="apprehensionFormData.PA_MUNICIPALITY"
+                                    md-search-text="PA_MUNICIPALITY"
+                                    md-search-text-change="apprehensionFormData.PA_MUNICIPALITY = PA_MUNICIPALITY"
+                                    md-items="municipality in municipalities | filter : PA_MUNICIPALITY"
+                                    md-item-text="municipality"
+                                    md-min-length="0"
+                                    md-selected-item-change ="refreshPABarangays()"
+                                    placeholder="PA Municipality">
+                                    <md-item-template>
+                                    {{municipality}}
+                                    </md-item-template>
+                                </md-autocomplete>
+                        </md-input-container>
+
+                        <md-input-container>
+
+                                <md-autocomplete
+                                        class="md-block" flex-gt-sm="100"
+                                        md-selected-item="apprehensionFormData.PA_BARANGAY"
+                                        md-search-text="PA_BARANGAY"
+                                        md-search-text-change="apprehensionFormData.PA_BARANGAY = PA_BARANGAY"
+                                        md-items="barangay in PABarangays | filter : PA_BARANGAY"
+                                        md-item-text="barangay"
+                                        md-min-length="0"
+                                        placeholder="PA Barangay">                                                  
+                                    <md-item-template>
+                                {{barangay}}
+                                </md-item-template>
+                                </md-autocomplete>
                         </md-input-container>
                             
                         </div>
 
-                        <div>
-                        <md-input-container>
-                                <label>Person Apprehended Barangay</label>
-                                <md-select ng-model="apprehensionFormData.PA_Barangay">
-                                    <md-option ng-value="barangay" ng-repeat="barangay in PABarangays">
-                                        {{barangay}}
-                                    </md-option>
-                                </md-autocomplete>
-                        </md-input-container>                            
-                            
+                        <div>      
                         </div>                        
                     </div>
 
                     <div layout-gt-sm layout-sm="column">
                             <md-input-container>
                                     <label>Apprehending Agency</label>
-                                    <input ng-model="apprehensionFormData.Apprehending_Agency">
+                                    <input ng-model="apprehensionFormData.APP_AGENCY">
                                 </md-input-container>
                             <md-input-container class="md-block">
                                     <label>Apprehension Date</label>
@@ -116,12 +150,12 @@
                                     ng-model="apprehensionFormData.ApprehensionDate" 
                                     md-max-date="dateNow" required>
                                     </md-datepicker>
-                                </md-input-container>
-                                <md-input-container class="md-block" flex>
-                                        <label>Remarks</label>
-                                        <textarea ng-model="apprehensionFormData.Remarks" md-select-on-focus
-                                            md-maxlength="950"></textarea>
-                                    </md-input-container>
+                            </md-input-container>
+                            <md-input-container class="md-block" flex>
+                                    <label>Remarks</label>
+                                    <textarea ng-model="apprehensionFormData.REMARKS" md-select-on-focus
+                                        md-maxlength="950"></textarea>
+                            </md-input-container>
                     </div>
                 </md-dialog-content>
                 
@@ -133,7 +167,7 @@
                     <md-button class="md-primary md-raised" 
                         ng-click="saveApprehension();" 
                         ng-disabled="formApprehension.$invalid">
-                        Save
+                        {{action}}
                     </md-button>
                 </md-dialog-actions>
             </form>

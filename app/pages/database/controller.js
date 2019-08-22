@@ -39,7 +39,7 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
     $scope.wsup_db.data = ($localStorage.wsup_db_data)?  $localStorage.wsup_db_data : [];
     $scope.wsup_db.summary = ($localStorage.wsup_db_summary)?  $localStorage.wsup_db_summary : {};
     $scope.database_view = './app/pages/database/views/graphs.html';
-    $scope.currentNavItem = 'Statistics';
+    $scope.currentNavItem = 'Status';
     $scope.dropDownSelect = {};
     $scope.selectItems = {};
     $scope.n = {};
@@ -816,28 +816,12 @@ service('$addressService', function(){
         });
     }
 
-    this.getProvinces = (country) => {
-        return new Promise((resolve, reject) => {
-            resolve(philippineProvinces);
-        });
-    }
+document.write(`<script src="./app/doc/services/crudService.js"></script>`);
+document.write(`<script src="./app/doc/services/municipalitiesService.js"></script>`);
+document.write(`<script src="./app/doc/services/dateService.js"></script>`);
 
-    this.getMunicipalities = (country, province) => {
-        return new Promise((resolve, reject) => {
-            var municipalities = [];
-            if(country.toUpperCase() == 'PHILIPPINES')
-                municipalities =  philippineProvinces[province];
-            
-            resolve(municipalities);
-        })
-    }
+document.write(`<script src="./app/doc/controllers/Apprehension.js"></script>`);
+document.write(`<script src="./app/doc/controllers/ChainsawRegistration.js"></script>`);
+document.write(`<script src="./app/doc/controllers/CriminalCases.js"></script>`);
+document.write(`<script src="./app/doc/controllers/Permit.js"></script>`);
 
-    this.getBarangays = (country, province, municipality) => {
-        return new Promise((resolve, reject) => {
-            var barangays = [];
-            if(country.toUpperCase() == 'PHILIPPINES')
-                barangays = philippineProvinces[province][municipality];
-            resolve(barangays);
-        })
-    }
-});

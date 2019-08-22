@@ -7,7 +7,7 @@
         </md-button>
         <md-button class="md-raised" ng-click="refreshList()">
           <i class="fa fa-refresh col-green"></i>
-            Refresh
+            clear filter
         </md-button>
       </h1>
     </md-toolbar>
@@ -48,18 +48,11 @@
               {{ permit.Extension }}
             </td>
             <td
-              title="'Street'"
-              sortable="'Street'"
-              filter="{Street:'text'}"
+              title="'Address'"
+              sortable="'Address'"
+              filter="{Address:'text'}"
             >
-              {{ permit.Street }}
-            </td>
-            <td
-              title="'Barangay'"
-              sortable="'Barangay'"
-              filter="{Barangay:'text'}"
-            >
-              {{ permit.Barangay }}
+              {{ permit.Address }}
             </td>
             <td
               title="'Municipality'"
@@ -78,17 +71,17 @@
             </td>
             <td
               title="'Registration Date'"
-              sortable="'RegistrationDate'"
-              filter="{RegistrationDate:'text'}"
+              sortable="'Date_Issued'"
+              filter="{Date_Issued:'text'}"
             >
-              {{ permit.Date_Issued.toLocaleDateString() }}
+              {{ permit.Date_Issued }}
             </td>            
             <td title="''">
               <md-button
                 class="md-raised"
                 ng-click="openPermitFormForUpdating($event, 'chainsawPurchasePermitForm', permit)"
               >
-                <i class="fa fa-plus col-green"></i>
+                <i class="fa fa-edit col-green"></i>
                 EDIT
               </md-button>
             </td>

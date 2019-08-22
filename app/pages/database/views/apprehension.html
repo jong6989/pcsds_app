@@ -7,7 +7,7 @@
       </md-button>
       <md-button class="md-raised" ng-click="refreshList()">
         <i class="fa fa-refresh col-green"></i>
-          refresh
+          clear filter
       </md-button>
     </h1>
   </md-toolbar>
@@ -23,95 +23,83 @@
         <tr ng-repeat="apprehension in $data">
           <td
             title="'Control Number'"
-            sortable="'Control_Number'"
-            filter="{Control_Number: 'text'}"
+            sortable="'CONTROL_NO'"
+            filter="{CONTROL_NO: 'text'}"
           >
-            {{ apprehension.Control_Number }}
+            {{ apprehension.CONTROL_NO }}
           </td>
           <td
             title="'Control Title'"
-            sortable="'Case_ID'"
-            filter="{Case_ID: 'text'}"
+            sortable="'CASE_TITLE'"
+            filter="{CASE_TITLE: 'text'}"
           >
-            {{ apprehension.Case_ID }}
+            {{ apprehension.CASE_TITLE }}
           </td>
           <td
             title="'Violations '"
-            sortable="'Violations'"
-            filter="{Violations: 'text'}"
+            sortable="'VIOLATION'"
+            filter="{VIOLATION: 'text'}"
           >
-            {{ apprehension.Violations.join(",") }}
+            {{ apprehension.VIOLATION }}
           </td>
           <td
             title="'Month'"
             sortable="'Month'"
-            filter-data="Months"
-            filter="{ Month:'select' }"
+            filter-data="monthDropDownOptions"
+            filter="{ MONTH:'select' }"
           >
-            {{ Months[apprehension.Month - 1].title }}
+            {{ Months[apprehension.MONTH - 1]}}
           </td>
-          <td title="'Day'" sortable="'Day'">{{ apprehension.Day }}</td>
-          <td title="'Year'" sortable="'Year'" filter="{Year:'text'}">
-            {{ apprehension.Year }}
+          <td title="'Day'" sortable="'DAY'" filter="{DAY:'text'}">
+            {{ apprehension.DAY }}
           </td>
-          <td
-            title="'AO Sitio'"
-            sortable="'AO_Sitio'"
-            filter="{AO_Sitio:'text'}"
-          >
-            {{ apprehension.AO_Sitio }}
+          <td title="'Year'" sortable="'YEAR'" filter="{YEAR:'text'}">
+            {{ apprehension.YEAR }}
           </td>
           <td
-            title="'AO Barangay'"
-            sortable="'AO_Barangay'"
-            filter="{AO_Barangay:'text'}"
+            title="'AO Address'"
+            sortable="'AO_Address'"
+            filter="{AO_Address:'text'}"
           >
-            {{ apprehension.AO_Barangay }}
+            {{ apprehension.AO_Address }}
           </td>
           <td
             title="'AO Municipality'"
-            sortable="'AO_Municipality'"
+            sortable="'AO_MUNICIPALITY'"
             filter="{AO_Municipality:'text'}"
           >
-            {{ apprehension.AO_Municipality }}
-          </td>
+            {{ apprehension.AO_MUNICIPALITY }}
+          </td>          
           <td
-            title="'PA Sitio'"
-            sortable="'PA_Sitio'"
-            filter="{PA_Sitio:'text'}"
+            title="'Address'"
+            sortable="'PA_Address'"
+            filter="{PA_Address:'text'}"
           >
-            {{ apprehension.PA_Sitio }}
-          </td>
-          <td
-            title="'PA Barangay'"
-            sortable="'PA_Barangay'"
-            filter="{PA_Barangay:'text'}"
-          >
-            {{ apprehension.PA_Barangay }}
+            {{ apprehension.PA_Address }}
           </td>
           <td
             title="'PA Municipality'"
-            sortable="'PA_Municipality'"
-            filter="{PA_Municipality:'text'}"
+            sortable="'PA_MUNICIPALITY'"
+            filter="{PA_MUNICIPALITY:'text'}"
           >
-            {{ apprehension.PA_Municipality }}
+            {{ apprehension.PA_MUNICIPALITY }}
           </td>
-          <td
+                    <td
             title="'Apprehending Agency'"
-            sortable="'Apprehending_Agency'"
-            filter="{Apprehending_Agency:'text'}"
+            sortable="'APP_AGENCY'"
+            filter="{APP_AGENCY:'text'}"
           >
-            {{ apprehension.Apprehending_Agency }}
+            {{ apprehension.APP_AGENCY }}
           </td>
-          <td title="'Remarks'" sortable="'Remarks'" filter="{Remarks:'text'}">
-            {{ apprehension.Remarks }}
+          <td title="'Remarks'" sortable="'REMARKS'" filter="{REMARKS:'text'}">
+            {{ apprehension.REMARKS }}
           </td>
           <td title="''">
             <md-button
               class="md-raised"
               ng-click="openApprehensionFormForUpdating($event, apprehension.id)"
             >
-              <i class="fa fa-plus col-green"></i>
+              <i class="fa fa-edit col-green"></i>
               EDIT
             </md-button>
           </td>

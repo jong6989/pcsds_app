@@ -3,7 +3,7 @@
     <md-dialog layout="column" layout-align="center center">
       <md-toolbar class="bg-teal">
         <div class="md-toolbar-tools">
-          <h2>Register Chainsaw</h2>
+          <h2>{{registrationForm.title}} Chainsaw</h2>
           <span flex></span>
           <md-button class="md-icon-button" ng-click="closeRegistrationForm()">
             <i class="fa fa-times col-white"></i>
@@ -135,7 +135,7 @@
             ng-click="saveChainsaw();"
             ng-disabled="formChainsaw.$invalid"
           >
-            Save
+            {{registrationForm.saveButton.text}}
           </md-button>
         </md-dialog-actions>
       </form>

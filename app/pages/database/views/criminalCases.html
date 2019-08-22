@@ -23,10 +23,10 @@
           <tr ng-repeat="criminalCase in $data">
             <td
               title="'Case Number'"
-              sortable="'Case_Number'"
-              filter="{Case_Number: 'text'}"
+              sortable="'Criminal_Case_Number'"
+              filter="{Criminal_Case_Number: 'text'}"
             >
-              {{ criminalCase.Case_Number }}
+              {{ criminalCase.Criminal_Case_Number }}
             </td>
             <td
               title="'Date Filed'"
@@ -36,80 +36,202 @@
               {{ criminalCase.Date_Filed }}
             </td>
             <td
+              title="'Plaintiff'"
+              sortable="'Plaintiff'"
+              filter="{Plaintiff: 'text'}"
+            >
+              {{ criminalCase.Plaintiff }}
+            </td>
+            <td
+              title="'Accused'"
+              sortable="'Accused'"
+              filter="{Accused: 'text'}"
+            >
+              {{ criminalCase.Accused }}
+            </td>
+            <td
+              title="'NPS Number'"
+              sortable="'NPS_Number'"
+              filter="{NPS_Number: 'text'}"
+            >
+              {{ criminalCase.NPS_Number }}
+            </td>
+            <td
+              title="'Search Warrant'"
+              sortable="'Search_Warrant'"
+              filter="{Search_Warrant: 'text'}"
+            >
+              {{ criminalCase.Search_Warrant }}
+            </td>
+            <td
+              title="'Bail Amount'"
+              sortable="'Bail_Amount'"
+              filter="{Bail_Amount: 'text'}"
+            >
+              {{ criminalCase.Bail_Amount }}
+            </td>
+            <td
+              title="'Complainant'"
+              sortable="'Complainant'"
+              filter="{Complainant: 'text'}"
+            >
+              {{ criminalCase.Complainant }}
+            </td>
+            <td
+              title="'Agency Filed'"
+              sortable="'Agency_Filed'"
+              filter="{Agency_Filed: 'text'}"
+            >
+              {{ criminalCase.Agency_Filed }}
+            </td>
+            <td
+              title="'Court Raffled'"
+              sortable="'Court_Raffled'"
+              filter="{Court_Raffled: 'text'}"
+            >
+              {{ criminalCase.Court_Raffled }}
+            </td>
+            <td
+              title="'Respondents'"
+              sortable="'Respondents'"
+              filter="{Respondents: 'text'}"
+            >
+              <a href="#" ng-click="viewRepondents($event, criminalCase.Respondents)">View</a>
+            </td>
+            <td
               title="'Violations '"
               sortable="'Violations'"
               filter="{Violations: 'text'}"
             >
-              {{ apprehension.Violations.join(",") }}
+              {{ criminalCase.Violations }}
             </td>
             <td
-              title="'Month'"
-              sortable="'Month'"
-              filter-data="Months"
-              filter="{ Month:'select' }"
+              title="'Apprehended Items'"
+              sortable="'Apprehended_Items'"
+              filter="{Apprehended_Items:'text'}"
             >
-              {{ Months[apprehension.Month - 1].title }}
-            </td>
-            <td title="'Day'" sortable="'Day'">{{ apprehension.Day }}</td>
-            <td title="'Year'" sortable="'Year'" filter="{Year:'text'}">
-              {{ apprehension.Year }}
+              {{ criminalCase.Apprehended_Items }}
             </td>
             <td
-              title="'AO Sitio'"
-              sortable="'AO_Sitio'"
-              filter="{AO_Sitio:'text'}"
+              title="'Other Details'"
+              sortable="'Other_Details'"
+              filter="{Other_Details:'text'}"         
             >
-              {{ apprehension.AO_Sitio }}
+              {{ criminalCase.firstNWords }}
+              <a href='#' ng-if="criminalCase.firstNWords.includes('...')">View More</a>
             </td>
             <td
-              title="'AO Barangay'"
-              sortable="'AO_Barangay'"
-              filter="{AO_Barangay:'text'}"
+              title="'Conveyances'"
+              sortable="'Conveyances'"
+              filter="{Conveyances:'text'}"
             >
-              {{ apprehension.AO_Barangay }}
+              {{ criminalCase.Conveyances }}
             </td>
             <td
-              title="'AO Municipality'"
-              sortable="'AO_Municipality'"
-              filter="{AO_Municipality:'text'}"
+              title="'Market Value'"
+              sortable="'Market_Value'"
+              filter="{Market_Value:'text'}"
             >
-              {{ apprehension.AO_Municipality }}
+              {{ criminalCase.Market_Value }}
             </td>
             <td
-              title="'PA Sitio'"
-              sortable="'PA_Sitio'"
-              filter="{PA_Sitio:'text'}"
+              title="'Disposition'"
+              sortable="'Disposition'"
+              filter="{Disposition:'text'}"
             >
-              {{ apprehension.PA_Sitio }}
+              {{ criminalCase.Disposition }}
             </td>
             <td
-              title="'PA Barangay'"
-              sortable="'PA_Barangay'"
-              filter="{PA_Barangay:'text'}"
+              title="'Apprehension Address'"
+              sortable="'Apprehension_Address'"
+              filter="{Apprehension_Address:'text'}"
             >
-              {{ apprehension.PA_Barangay }}
+              {{ criminalCase.Apprehension_Address }}
             </td>
             <td
-              title="'PA Municipality'"
-              sortable="'PA_Municipality'"
-              filter="{PA_Municipality:'text'}"
+              title="'Apprehension Date'"
+              sortable="'Apprehension_Date'"
+              filter="{Apprehension_Date:'text'}"
             >
-              {{ apprehension.PA_Municipality }}
+              {{ criminalCase.Apprehension_Date }}
             </td>
             <td
               title="'Apprehending Agency'"
               sortable="'Apprehending_Agency'"
               filter="{Apprehending_Agency:'text'}"
             >
-              {{ apprehension.Apprehending_Agency }}
+              {{ criminalCase.Apprehending_Agency }}
             </td>
-            <td title="'Remarks'" sortable="'Remarks'" filter="{Remarks:'text'}">
-              {{ apprehension.Remarks }}
+            <td
+              title="'Apprehending Officers'"
+              sortable="'Apprehending_Officers'"
+              filter="{Apprehending_Officers:'text'}"
+            >
+              {{ criminalCase.Apprehending_Officers }}
+            </td>
+            <td
+              title="'Form Filing'"
+              sortable="'Form_of_Filing'"
+              filter="{Form_of_Filing:'text'}"
+            >
+              {{ criminalCase.Form_of_Filing }}
+            </td>
+            <td
+              title="'Court Status'"
+              sortable="'Court_Status'"
+              filter="{Court_Status:'text'}"
+            >
+              {{ criminalCase.Court_Status }}
+            </td>
+            <td
+              title="'Prosecutor Status'"
+              sortable="'Prosecutor_Status'"
+              filter="{Prosecutor_Status:'text'}"
+            >
+              {{ criminalCase.Prosecutor_Status }}
+            </td>
+            <td
+              title="'Fiscals Resolution Date'"
+              sortable="'Fiscals_Resolution_Date'"
+              filter="{Fiscals_Resolution_Date:'text'}"
+            >
+              {{ criminalCase.Fiscals_Resolution_Date }}
+            </td>
+            <td
+              title="'Decision Date'"
+              sortable="'Decision_Date'"
+              filter="{Decision_Date:'text'}"
+            >
+              {{ criminalCase.Decision_Date }}
+            </td>
+            <td
+              title="'Deciding Agency'"
+              sortable="'Deciding_Agency'"
+              filter="{Deciding_Agency:'text'}"
+            >
+              {{ criminalCase.Deciding_Agency }}
+            </td>
+            <td
+              title="'Decision'"
+              sortable="'Decision'"
+              filter="{Decision:'text'}"
+            >
+              {{ criminalCase.Decision }}
+            </td>
+            <td
+              title="'Receipt Date'"
+              sortable="'Receipt_Date'"
+              filter="{Receipt_Date:'text'}"
+            >
+              {{ criminalCase.Receipt_Date }}
+            </td>
+            <td title="'Penalty'" sortable="'Penalty'" filter="{Penalty:'text'}">
+              {{ criminalCase.Penalty }}
             </td>
             <td title="''">
               <md-button
                 class="md-raised"
-                ng-click="openApprehensionFormForUpdating($event, apprehension.id)"
+                ng-click="opencriminalCaseFormForUpdating($event, criminalCase.id)"
               >
                 <i class="fa fa-plus col-green"></i>
                 EDIT
@@ -119,6 +241,6 @@
         </table>
       </div>
     </md-content>
-    <div ng-include="'./app/pages/database/modals/addApprehension.html'"></div>
+    <div ng-include="'./app/pages/database/modals/respondentList.html'"></div>
   </div>
   
