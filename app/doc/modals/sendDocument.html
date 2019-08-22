@@ -30,7 +30,7 @@
                     <div ng-if="send_as !== undefined">
                         <h6>Select Receipient</h6>
                         <ol ng-init="sendAsSelected(send_as)">
-                            <li ng-repeat="x in filtered_receipients | filter : search_receipient">
+                            <li ng-repeat="x in filtered_receipients | filter : search_receipient" ng-if="userId != x.id">
                                 <md-checkbox ng-checked="exists(x.id, reciepientList)" ng-click="toggle_select(x.id, reciepientList)" ng-hide="userId == x.id">
                                     {{x.name}} 
                                 </md-checkbox>

@@ -1,5 +1,5 @@
 'use strict';
-var app_version = 3;
+var app_version = 4;
 var os = require('os');
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
@@ -140,7 +140,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.api_address = api_address;
     $scope.is_loading = false;
     $scope.app_settings = {};
-    $scope.app_version_code = '1.0.4';
+    $scope.app_version_code = '1.1.0';
     $scope.downloadFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\brain_downloads\\' : app.getPath('downloads') + '/brain_downloads/';
     $scope.software_update_available = false;
     $scope.toggleLeft = buildDelayedToggler('left');
@@ -151,28 +151,33 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     }
 
     function updateDownload(version,address){
-      let loc_array = address.split("/");
-      let filename = loc_array[(loc_array.length - 1)];
-      let dir = $scope.downloadFolder + "brain_system_" + version;
-      dir += (os.platform() == 'win32')? '\\': '/';
-      let loc = dir + filename;
+      if(address != undefined) {
+        let loc_array = address.split("/");
+        let filename = loc_array[(loc_array.length - 1)];
+        let dir = $scope.downloadFolder + "brain_system_" + version;
+        dir += (os.platform() == 'win32')? '\\': '/';
+        let loc = dir + filename;
 
-      if(!fs.existsSync($scope.downloadFolder)){
-        fs.mkdirSync($scope.downloadFolder);
-      }
-      if(!fs.existsSync(dir)){
-          fs.mkdirSync(dir);
-      }
-      if(!fs.existsSync(loc)){
-        download(address, loc, function(){
-          $scope.toast("New Software Update available!");
-          $scope.software_update_available = true;
-          $scope.$apply();
-        });
+        if(!fs.existsSync($scope.downloadFolder)){
+          fs.mkdirSync($scope.downloadFolder);
+        }
+        if(!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+        if(!fs.existsSync(loc)){
+          download(address, loc, function(){
+            $scope.toast("New Software Update available!");
+            $scope.software_update_available = true;
+            $scope.$apply();
+          });
+          return false;
+        } else {
+          return true;
+        }
+      }else {
         return false;
-      } else {
-        return true;
       }
+      
     }
 
     fire.db.settings.when('desktop', (data) => {
@@ -320,6 +325,10 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return $(window).height();
     };
 
+    $scope.get_window_width = function(){
+      return $(window).width();
+    };
+
     $scope.exportToExcel=function(Id,title){ 
         var exportHref=Excel.tableToExcel("#"+Id,title);
         $timeout(function(){location.href=exportHref;},100); // trigger download
@@ -329,8 +338,9 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return a.fromNow();
     };
 
-    $scope.date_now = function(){
-      return moment().format("YYYY-MM-DD HH:mm:ss");
+    $scope.date_now = function(f){
+      f = (f == undefined)? "YYYY-MM-DD HH:mm:ss": f;
+      return moment().format(f);
     };
 
     $scope.to_year = function(d){
@@ -477,6 +487,11 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
         $scope.current_view = $localStorage.current_view;
         $scope.user = $localStorage.pcsd_app_user;
         $scope.menus = $localStorage.pcsd_menus;
+        // $scope.menus.push({
+        //   name : "Database",
+        //   icon: 'fa-database',
+        //   url: 'pages/database'
+        // });
         $scope.change_page($localStorage.page_content);
       }else{
         $scope.current_view = "app/login/view.html";
@@ -487,8 +502,10 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.iframeHeight = $scope.get_window_height();
+    $scope.iframeWidth = $scope.get_window_width();
     angular.element($window).bind('resize',function(){
       $scope.iframeHeight = $window.innerHeight;
+      $scope.iframeWidth = $window.innerWidth;
       $scope.$digest();
     });
 
@@ -519,6 +536,11 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     }
 
     $scope.load_html = (text,clas)=>{
+      text = text.replace('<script>','<script');
+      text = text.replace('</script>','/script>');
+      text = text.replace('< script >','<script');
+      text = text.replace('< /script >','/script>');
+      text = text.replace('script>','script');
         $timeout(
             ()=>{
                 $("."+clas).html( text );
@@ -607,162 +629,154 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
 ;
 'use strict';
 
-document.write(`<script src="./app/doc/settings.js"></script>`);
-myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $localStorage) {
+// document.write(`<script src="./app/doc/settings.js"></script>`);
+// document.write(`<script src="./app/doc/functions.js"></script>`);
+
+myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $localStorage, func) {
     $scope.doc_content = '';
     $scope.isLoading = true;
     $scope.isUploading = false;
     $scope.currentNavItem = 'Documents';
-    $scope.currentDocSelected = 'Draft';
+    $scope.currentDocSelected = 'draft';
     $scope.currentClicked = 'draft';
     $scope.currentItem = ($localStorage.currentItem == undefined)? null : $localStorage.currentItem;
     $scope.currentSubItem = {};
     $scope.currentSubIndex = {};
+    $scope.currentTransaction = {};
     $scope.myAgencies = [];
     $scope.otherAgencies = [];
     $scope.resultAccounts = [];
     $scope.agencyAccounts = [];
     $scope.filesTobeUploaded = [];
     $scope.myDrafts = ($localStorage.myDrafts == undefined)? [] : $localStorage.myDrafts;
+    $scope.myPublished = [];
+    $scope.mySent = [];
+    $scope.myReceived = [];
+    $scope.myPending = [];
+    $scope.doc_user_agencies = [];
     $scope.docTabsSelected = 0;
     $scope.n = {};
     const userId = `pcsd_${$scope.user.id}`; //id from pcsd web api , (php), that will be saved to accounts collection
     $scope.userId = userId;
     $scope.doc_user = ($localStorage.doc_user == undefined)? { id: userId } : $localStorage.doc_user; //save data to local storage to remember last user
+    $scope.document_types = [
+        'generic', 'incoming', 'outgoing', 'Back-To-Office-Report', 'acommplishments', 'report', 'request'
+    ];
+    $scope.request_types = [
+        'service','man power', 'data or e-file', 'report', 'file', 'information'
+    ];
     $scope.dateA = '';
     $scope.dateB = '';
-    var func = {};
+    func.$scope = $scope;
 
-    func.updateDoc = (id,data,callBack) => {
-        doc.db.collection(documents).doc(id).update(data).then(callBack);
-    };
-
-    func.getMyDrafts = async () => {
-        let res = await doc.db.collection(documents).where("status","==","draft").where("publisher","==",userId).get();
-        let r = res.docs.map( doc => { let o = doc.data(); o.id = doc.id; return o; });
-        return r;
-    }
-
-    func.getFilesTobeUploaded = async () => {
-        let res =   await doc.db.collection(acc).doc(userId).collection(offlineFiles).where("uploaded","==",false).get();
-        let d = res.docs.map( doc => { 
-            let o = doc.data();
-            o.id = doc.id;
-            return o;
-        });
-        return d;
-    };
-
-    func.listenToAccountChange = (id) => {
-        doc.db.collection(acc).doc(id).onSnapshot( doc => {
-            $scope.doc_user = $localStorage.doc_user = doc.data();
-        });
-    };
-
-    func.getAgencies = async () => {
-        await doc.db.collection(agencies).get().then((qs) => {
-            let a = [];
-            let b = [];
-            qs.forEach(doc => {
-                if($scope.doc_user.agencies !== undefined) {
-                    $scope.doc_user.agencies.forEach(agc => {
-                        if(doc.id == agc){
-                            a.push(doc.data());
-                        }else {
-                            b.push(doc.data());
-                        }
-                    });
-                }else {
-                    b.push(doc.data());
-                }
+    // draft 
+    doc.db.collection(documents).where("status","==","draft").where("publisher","==",userId).onSnapshot(qs => {
+        if(!qs.empty) {
+            let r = qs.docs.map(d => {
+                let o = d.data();
+                o.id = d.id;
+                return o;
             });
-            $scope.myAgencies = a;
-            $scope.otherAgencies = b;
-        });
-    };
+            $scope.myDrafts = $localStorage.myDrafts = r;
+        }else {
+            $localStorage.currentItem = undefined;
+            $localStorage.myDrafts = [];
+            $scope.myDrafts = [];
+            if($scope.currentClicked == 'draft')
+                $scope.currentItem = null;
+        }
+    });
 
-    func.checkDraft = async () => {
-        if(userId !== undefined) {
-            $scope.myDrafts = $localStorage.myDrafts = await func.getMyDrafts();
-            if($scope.myDrafts.length > 0) {
-                $scope.currentItem = $localStorage.currentItem = $scope.myDrafts[0];
-            }else {
-                $scope.currentItem = $localStorage.currentItem = null;
-            }
-        }
-    };
-
-    //Create a directory to "My Downloads" and make a copy of the selected file
-    func.upload = (files,callBack) => {
-        let dateNow = new Date();
-        const divider = (os.platform() == 'win32')? '\\' : '/';
-        const saveFolder = dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider + userId + divider;
-        if(!fs.existsSync(storageFolder)){
-            fs.mkdirSync(storageFolder);
-        }
-        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider)){
-            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider);
-        }
-        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider)){
-            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider);
-        }
-        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider)){
-            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider);
-        }
-        if(!fs.existsSync(storageFolder + saveFolder)){
-            fs.mkdirSync(storageFolder + saveFolder);
-        }
-        files.forEach(f => {
-            setTimeout( () => {
-                let path = storageFolder + saveFolder + f.name;
-                fs.copyFile(f.path, path, (err) => {
-                    if (err) throw err;
-                    doc.db.collection(acc).doc(userId).collection(offlineFiles).add({"name":f.name,"path": saveFolder + f.name, "uploaded": false});
-                    callBack(saveFolder + f.name,f.name);
-                });
-            },500);
-        });
-    }
-
-    //uploads are to PCSD website , pcsd.gov.ph , with unlimited storage
-    func.uploadFile = (f) => {
-        if(fs.existsSync(storageFolder + f.path)){
-            console.log(`uploading ${f.name}:`)
-            let form = $utils.upload((data,code)=>{
-                console.log(`done ${code}:`);
-                $scope.uploadFiles();
-                if(code == 200){
-                    if(data.status == 1){
-                        doc.db.collection(acc).doc(userId).collection(offlineFiles).doc(f.id).update({"uploaded": true});
-                    }else {
-                        $scope.toast("error uploading");
-                        console.log(data);
-                    }
-                }
+    //Published 
+    doc.db.collection(documents).where("status","==","published").where("publisher","==",userId).orderBy('meta.published_time','desc')
+    .onSnapshot(qs => {
+        if(!qs.empty) {
+            let r = qs.docs.map(d => {
+                let o = d.data();
+                o.id = d.id;
+                return o;
             });
-            form.append('action', 'file/doc_upload');
-            form.append('userPath', f.path);
-            form.append('file',  fs.createReadStream(storageFolder + f.path), {filename: f.name});
+            $scope.myPublished = r;
         }
-    }
-    
-    func.refreshDocItem = (id) => {
-        doc.db.collection(documents).doc(id).get().then(doc => {
-            let d = doc.data();
-            if(d.status !== 'archived'){
-                $scope.currentItem = d;
-                $scope.currentItem.id = doc.id;
-                $localStorage.currentItem = $scope.currentItem;
-                $scope.$apply();
-            }
-        });
+    });
+
+    //pending
+    doc.db.collection(doc_transactions).where('receiver','==',$scope.userId).orderBy('time','desc').where('status','==','pending')
+    .onSnapshot( qs => {
+        if(!qs.empty) {
+            let a = qs.docs.map(
+                dx => {
+                    let b = dx.data();
+                    b.id = dx.id;
+                    return b;
+                }
+            );
+            $scope.myPending = a;
+        }
+    });
+    $scope.removeFromPending = (id) => {
+        $scope.myPending = $scope.myPending.filter( i => (i.id != id) );
+    };
+
+    //received
+    doc.db.collection(doc_transactions).where('receiver','==',$scope.userId).orderBy('received.time','desc').where('status','==','received')
+    .onSnapshot( qs => {
+        if(!qs.empty) {
+            let a = qs.docs.map(
+                dx => {
+                    let b = dx.data();
+                    b.id = dx.id;
+                    return b;
+                }
+            );
+            $scope.myReceived = a;
+        }
+    });
+
+    //sent
+    doc.db.collection(doc_transactions).where('sender.id','==',$scope.userId).orderBy('time','desc')
+    .onSnapshot( qs => {
+        if(!qs.empty) {
+            let a = qs.docs.map(
+                dx => {
+                    let b = dx.data();
+                    b.id = dx.id;
+                    return b;
+                }
+            );
+            $scope.mySent = a;
+        }
+    });
+
+    $scope.getUserAccount = async (id,idx) => {
+        let a = await doc.db.collection(acc).doc(id).get();
+        let b = a.data();
+        b.id = a.id;
+        $scope.mySent[idx].sentUser = b;
+    };
+
+    $scope.getCurrentClicked = (c) => {
+        return ($scope.currentClicked == c);
+    };
+
+    $scope.setLocal = (key,value) => {
+        $localStorage[key] = value;
+    };
+
+    $scope.getLocal = (key) => {
+        return $localStorage[key];
     };
 
     $scope.doc_init = () => {
         //imidiate display, to prevent loading
         if($localStorage.doc_user !== undefined) {
             $scope.doc_content = 'app/doc/views/dashboard.html';
-            func.checkDraft();
+            // func.checkDraft((a,b) => {
+            //     $scope.myDrafts = a;
+            //     $scope.currentItem = b;
+            //     $scope.currentClicked = 'draft';
+            //     $scope.currentDocSelected = 'draft';
+            // });
             $scope.isLoading = false;
         }
         //checking user if account activated
@@ -774,10 +788,20 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
                 $scope.doc_content = 'app/doc/views/dashboard.html';
                 qs.forEach(doc => {
                     $scope.doc_user = $localStorage.doc_user = doc.data();
-                    func.listenToAccountChange(doc.id);
+                    func.listenToAccountChange(doc.id, (a,b) => {
+                        $scope.doc_user = a;
+                        $scope.doc_user_agencies = b;
+                        if($scope.currentClicked == 'draft' && $scope.currentItem != undefined)
+                            $scope.currentItem.agency = b[0];
+                    });
                     return null;
                 });
-                func.checkDraft();
+                // func.checkDraft((a,b) => {
+                //     $scope.myDrafts = a;
+                //     $scope.currentItem = b;
+                //     $scope.currentClicked = 'draft';
+                //     $scope.currentDocSelected = 'draft';
+                // });
             }
         } ).catch( ()=> {
             setTimeout($scope.doc_init, 3000);
@@ -785,7 +809,10 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     };
 
     $scope.loadAgencies = () => {
-        func.getAgencies();
+        func.getAgencies($scope.doc_user.agencies, (a,b) => {
+            $scope.myAgencies = a;
+            $scope.otherAgencies = b;
+        });
     };
 
     $scope.setAccount = (data) => {
@@ -801,8 +828,14 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     $scope.activeNav = (nav) => {
         $scope.currentClicked = 'draft';
         // $scope.currentItem = null;
-        func.checkDraft();
-        if(nav == 'Agencies') func.getAgencies();
+        func.checkDraft((a,b) => {
+            $scope.myDrafts = a;
+            $scope.currentItem = b;
+        });
+        if(nav == 'Agencies') func.getAgencies($scope.doc_user.agencies, (a,b) => {
+            $scope.myAgencies = a;
+            $scope.otherAgencies = b;
+        });
         $scope.togglePane();
     };
 
@@ -863,7 +896,12 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         $scope.resultAccounts.splice($scope.currentSubIndex,1);
         $scope.close_dialog();
         $scope.toast(`${u.name} is added to ${a.short_name}.`);
-        setTimeout(func.getAgencies,3000);
+        setTimeout(()=>{
+            func.getAgencies($scope.doc_user.agencies, (a,b) => {
+                $scope.myAgencies = a;
+                $scope.otherAgencies = b;
+            })
+        },3000);
     };
 
     $scope.removeToAgency = (x,ev) => {
@@ -895,15 +933,17 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         delete($scope.n);
         delete($scope.dateA);
         delete($scope.dateB);
-        $scope.dateA = $scope.date_now();
-        $scope.dateB = $scope.date_now();
-        $scope.n = {};
+        let d = $scope.date_now('YYYY-MM-DD');
+        $scope.dateA = d;
+        $scope.dateB = d;
+        $scope.n = { created : d, published : d, keywords : [], category : 'none', type : ($localStorage.currentDocType) ? $localStorage.currentDocType: 'generic'};
         $scope.showPrerenderedDialog(evt,'addDraft');
     };
 
     $scope.createDraft = async (x) => {
         if($scope.doc_user.id !== undefined) {
             x.publisher = $scope.doc_user.id;
+            x.created_time = Date.now();
             x.status = 'draft';
             if( $scope.doc_user.categories === undefined || !$scope.doc_user.categories.includes(x.category) ) {
                 doc.db.collection(acc).doc($scope.doc_user.id)
@@ -912,12 +952,14 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
 
             doc.db.collection(documents).add(x).then( ref => {
                 $scope.currentItem.id = ref.id;
-                console.log(ref.id);
                 doc.db.collection(documents).doc(ref.id).update({"id":ref.id});
             });
 
             $scope.currentClicked = 'draft';
             $scope.currentItem = x;
+            if($scope.doc_user_agencies.length > 0 ){
+                $scope.currentItem.agency = $scope.doc_user_agencies[0];
+            }
             $scope.close_dialog();
             $scope.toast(`Draft document created.`);
             $scope.myDrafts.push(x);
@@ -928,6 +970,373 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         
     };
 
+
+
+    $scope.uploadFiles = async () => {
+        $scope.filesTobeUploaded = await func.getFilesTobeUploaded();
+        if($scope.filesTobeUploaded.length > 0){
+            func.uploadFile($scope.filesTobeUploaded[0], () => { $scope.uploadFiles(); });
+        }
+    };
+    $scope.uploadFiles();
+    setTimeout($scope.uploadFiles,10000);
+
+    $scope.checkIfUploaded = (path) => {
+        let r = true;
+        $scope.filesTobeUploaded.forEach(f => {
+            if( f.path === path) {
+                r = f.uploaded;
+            }
+        });
+        return r;
+    };
+
+    $scope.setCurrentItem = (x,t,c) => {
+        $scope.currentItem = x;
+        $scope.currentClicked = t;
+        $scope.currentTransaction = c;
+        $localStorage.currentItem = x;
+    }
+
+    $scope.updateCleanDocFiles = (id,cF) => {
+        cF = cF.map( d => { delete(d['$$hashKey']); return d; })
+        $scope.updateDocument(id,{'files': cF});
+    };
+
+
+    $scope.changeCurrentDocType = (t) => {
+        $scope.currentDocSelected = t;
+    }
+
+    $scope.check_pending = (evt) => {
+        setTimeout( () => {
+            if($scope.myPending.length > 0) {
+                $scope.showPrerenderedDialog(evt,'pendingDocument');
+            }
+        },5000);
+        
+    };
+
+});
+
+// document.write(`<script src="./app/doc/controllers/files.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/draft.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/published.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/pending.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/actions.js"></script>`);
+
+myAppModule.service('func', function($utils, $localStorage) {
+    var func = {};
+
+    func.updateDoc = (id,data,callBack) => {
+        doc.db.collection(documents).doc(id).update(data).then(callBack);
+    };
+
+    //Drafts
+    func.getMyDrafts = async () => {
+        let res = await doc.db.collection(documents).where("status","==","draft").where("publisher","==",func.$scope.userId).get();
+        let r = res.docs.map( doc => { let o = doc.data(); o.id = doc.id; return o; });
+        return r;
+    }
+
+    func.getFilesTobeUploaded = async () => {
+        let res =   await doc.db.collection(acc).doc(func.$scope.userId).collection(offlineFiles).where("uploaded","==",false).get();
+        let d = res.docs.map( dx => { 
+            let o = dx.data();
+            o.id = dx.id;
+            return o;
+        });
+        return d;
+    };
+
+    func.listenToAccountChange = (id,callback) => {
+        doc.db.collection(acc).doc(id).onSnapshot( async (d) => {
+            $localStorage.doc_user = d.data();
+            let c = [];
+            if(!d.empty && $localStorage.doc_user.agencies != undefined){
+                await $localStorage.doc_user.agencies.map( async v => {
+                    let a = await doc.db.collection(agencies).doc(v).get();
+                    if(a.empty){
+                        $localStorage.doc_user_agencies = [];
+                        return {};
+                    }else {
+                        let b = a.data();
+                        b.id = a.id;
+                        c.push(b);
+                        return b;
+                    }
+                });
+            }
+            
+            $localStorage.doc_user_agencies = c;
+            callback(d.data(),c);
+        });
+    };
+
+    func.getAgencies = async (x,callback) => {
+        await doc.db.collection(agencies).get().then((qs) => {
+            let a = [];
+            let b = [];
+            qs.forEach(dx => {
+                let c = dx.data(); c.id = dx.id;
+                if(x != undefined) {
+                    if(x.agencies !== undefined){
+                        x.agencies.forEach(agc => {
+                            if(dx.id == agc){
+                                a.push(c);
+                            }else {
+                                b.push(c);
+                            }
+                        });
+                    }else {
+                        b.push(c);
+                    }
+                }else {
+                    b.push(c);
+                }
+            });
+            callback(a,b);
+        });
+    };
+
+    func.checkDraft = async (callback) => {
+        $localStorage.myDrafts = await func.getMyDrafts();
+        if($localStorage.myDrafts.length > 0) {
+            $localStorage.currentItem = func.$scope.myDrafts[0];
+            func.$scope.createdDate = $localStorage.currentItem.created;
+            func.$scope.pdate = $localStorage.currentItem.published;
+        }else {
+            $localStorage.currentItem = null;
+        }
+        callback($localStorage.myDrafts, $localStorage.currentItem);
+    };
+
+    func.refreshDocItem = (id,callback) => {
+        doc.db.collection(documents).doc(id).get().then(dx => {
+            let d = dx.data();
+            if(d.status !== 'archived'){
+                d.id = dx.id;
+                $localStorage.currentItem = d;
+                callback(d);
+            }
+        });
+    };
+    //Create a directory to "My Downloads" and make a copy of the selected file
+    func.upload = (files,callBack,userId) => {
+        let dateNow = new Date();
+        const divider = (os.platform() == 'win32')? '\\' : '/';
+        const saveFolder = dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider + userId + divider;
+        if(!fs.existsSync(storageFolder)){
+            fs.mkdirSync(storageFolder);
+        }
+        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider)){
+            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider);
+        }
+        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider)){
+            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider);
+        }
+        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider)){
+            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider);
+        }
+        if(!fs.existsSync(storageFolder + saveFolder)){
+            fs.mkdirSync(storageFolder + saveFolder);
+        }
+        files.forEach(f => {
+            setTimeout( () => {
+                let path = storageFolder + saveFolder + f.name;
+                fs.copyFile(f.path, path, (err) => {
+                    if (err) throw err;
+                    doc.db.collection(acc).doc(userId).collection(offlineFiles).add({"name":f.name,"path": saveFolder + f.name, "uploaded": false});
+                    callBack(saveFolder + f.name,f.name);
+                });
+            },500);
+        });
+    }
+
+    //uploads are to PCSD website , pcsd.gov.ph , with unlimited storage
+    func.uploadFile = (f,callback) => {
+        if(fs.existsSync(storageFolder + f.path)){
+            console.log(`uploading ${f.name}:`)
+            let form = $utils.upload((data,code)=>{
+                console.log(`done ${code}:`);
+                callback();
+                if(code == 200){
+                    if(data.status == 1){
+                        doc.db.collection(acc).doc(func.$scope.userId).collection(offlineFiles).doc(f.id).update({"uploaded": true});
+                    }else {
+                        func.$scope.toast("error uploading");
+                        console.log(data);
+                    }
+                }
+            });
+            form.append('action', 'file/doc_upload');
+            form.append('userPath', f.path);
+            form.append('file',  fs.createReadStream(storageFolder + f.path), {filename: f.name});
+        }
+    }
+
+    return func;
+});
+// //  // Debug
+// var doc_config = {
+// 	apiKey: "AIzaSyDJnCE34jNQ8mfQAcBt1zlGj5CJZwaOYfM",
+// 	authDomain: "pcsd-app.firebaseapp.com",
+// 	databaseURL: "https://pcsd-app.firebaseio.com",
+// 	projectId: "pcsd-app",
+// 	storageBucket: "pcsd-app.appspot.com",
+// 	messagingSenderId: "687215095072"
+// };
+
+//// Realese
+var doc_config = {
+	apiKey: "AIzaSyCELuc2f0_CcV35xeHid9-iFHU7hbrNPKg",
+	authDomain: "document-network.firebaseapp.com",
+	databaseURL: "https://document-network.firebaseio.com",
+	projectId: "document-network",
+	storageBucket: "document-network.appspot.com",
+	messagingSenderId: "583848541283"
+};
+
+var docFire = firebase.initializeApp(doc_config, 'doc');
+
+docFire.firestore().settings({
+	cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+});
+docFire.firestore().enablePersistence({synchronizeTabs:true});
+
+var doc = {};
+doc.db = docFire.firestore();
+doc.fun = docFire.functions();
+const acc = 'accounts';
+const agencies = 'agencies';
+const documents = 'documents';
+const doc_transactions = 'doc_transactions';
+const offlineFiles = 'offlineFiles';
+const storageFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\document_network\\' : app.getPath('downloads') + '/document_network/';
+
+'use strict';
+
+
+myAppModule.controller('manual_controller', function ($scope, $timeout, $utils, $mdToast,$mdDialog) {
+    $scope.selectedManualTabIndex = 0;
+
+    $scope.setTab = (t) => {
+        $scope.selectedManualTabIndex = t;
+    }
+});
+'use strict';
+
+myAppModule.controller('doc_ctrl_actions', function ($scope, $timeout, $utils, $mdToast,$mdDialog, func, $localStorage) {
+    var download_queue = {};
+    $scope.uploading_file = false;
+    $scope.add_action = {};
+    $scope.fileDivider = (os.platform() == 'win32')? '\\': '/';
+
+    var actionDocId = '';
+
+    $scope.init_doc = () => {
+        if($scope.currentNavItem == 'Documents' && $scope.currentDocSelected != 'draft'){
+            $scope.currentItem.actions = [];
+            $scope.documentItemListener = doc.db.collection(documents).doc($localStorage.currentItem.id).onSnapshot(dx => {
+                $scope.currentItem = dx.data();
+                $scope.currentItem.id = dx.id;
+                $localStorage.currentItem = $scope.currentItem;
+                actionDocId = $scope.currentItem.id;
+                $scope.$apply();
+            });
+        }else {
+            clearInterval(actions_interval);
+        };
+    };
+
+    var actions_interval = null;
+    actions_interval = setInterval( ()=> {
+        if($localStorage.currentItem == undefined){
+            clearInterval(actions_interval);
+        }else if(actionDocId !== $localStorage.currentItem.id) {
+            $scope.init_doc();
+        }
+    }, 300 );
+    
+    $scope.dl_attachment = (address,dx)=>{
+        if(dx != undefined){
+            let loc_array = address.split("/");
+            let filename = loc_array[(loc_array.length - 1)];
+            let dir = storageFolder + dx.id;
+            dir += $scope.fileDivider;
+            let loc = dir + filename;
+            if(!fs.existsSync(storageFolder)){
+                fs.mkdirSync(storageFolder);
+            }
+            if(!fs.existsSync(dir)){
+                fs.mkdirSync(dir);
+            }
+            if(!fs.existsSync(loc)){
+                if(download_queue[loc] == undefined){
+                    download_queue[loc] = true;
+                    download(address, loc, function(){
+                        console.log("downloaded " + address);
+                        delete(download_queue[loc]);
+                    });
+                }
+            }
+        }
+    };
+
+    $scope.openFolder = (id)=>{
+        shell.openItem(storageFolder + id);
+    }
+
+    $scope.isFolderExist = (id)=>{
+        return fs.existsSync(storageFolder + id);
+    }
+
+
+    $scope.uploadFiles = (files,id)=>{
+        var upload_file = (idx)=>{
+            $scope.uploading_file = true;
+            let f = files[idx];
+            var form = $utils.upload((data,code)=>{
+                $scope.uploading_file = false;
+                if(code == 200){
+                    if(files.length == (idx + 1) ){
+                        let m = `<a href="${api_address}/${data.data}" target="blank" download>${f.name}</a>`;
+                        if($scope.add_action[id] == undefined) $scope.add_action[id] = '';
+                        $scope.add_action[id] += m + "<br>\n";
+                    }else {
+                        upload_file(idx + 1);
+                    }
+                }
+            });
+            form.append('action', 'user/upload_file');
+            form.append('file',  fs.createReadStream(f.path), {filename: f.name});
+            form.append('user_id', $scope.userId);
+        };
+        if(files.length > 0 ) upload_file(0);
+    };
+
+    $scope.addAction = (txt) => {
+        let o = {
+            name : $scope.doc_user.name,
+            time : Date.now(),
+            date : $scope.date_now(),
+            message : txt
+        };
+        doc.db.collection(documents).doc($localStorage.currentItem.id).update({
+            'actions' : firebase.firestore.FieldValue.arrayUnion(o)
+        });
+    };
+    
+    
+});
+'use strict';
+
+myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $mdToast,$mdDialog, func, $localStorage) {
+    $scope.doc_user_agencies = ($localStorage.doc_user_agencies == undefined)? [] : $localStorage.doc_user_agencies;
+    func.$scope = $scope;
+    $scope.createdDate = undefined;
+    $scope.pdate = undefined;
+    
     $scope.upload_file = (id,files,isRefresh)=>{
         if(files !== undefined && id !== undefined){
             func.upload(files, (url,fileName) => {
@@ -943,16 +1352,21 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
                         $scope.updateDocument(id,{'files': $scope.currentItem.files});
                     }
                 }
-            });
+            }, $scope.userId);
         }
     };
 
     $scope.updateDocument = async (id,data) => {
         if(id !== undefined) {
-            func.updateDoc(id,data, () => {
-                func.refreshDocItem(id);
+            doc.db.collection(documents).doc(id).update(data).then(() => {
+                func.refreshDocItem(id, (a) => {
+                    $scope.currentItem = a;
+                });
             });
-            setTimeout(()=>{func.refreshDocItem(id);},300);
+            setTimeout(()=>{func.refreshDocItem(id, (a) => {
+                $scope.currentItem = a;
+                $scope.$apply();
+            });},300);
             $scope.myDrafts = await func.getMyDrafts();
         }
     };
@@ -986,32 +1400,22 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         },()=>{});
     };
 
-    $scope.uploadFiles = async () => {
-        $scope.filesTobeUploaded = await func.getFilesTobeUploaded();
-        if($scope.filesTobeUploaded.length > 0){
-            func.uploadFile($scope.filesTobeUploaded[0]);
-        }
-    };
-    $scope.uploadFiles();
-    setTimeout($scope.uploadFiles,10000);
-
-    $scope.checkIfUploaded = (path) => {
-        let r = true;
-        $scope.filesTobeUploaded.forEach(f => {
-            if( f.path === path) {
-                r = f.uploaded;
-            }
-        });
-        return r;
-    };
-
-    $scope.setCurrentItem = (x) => {
-        $scope.currentItem = x;
-    }
-
-    $scope.updateCleanDocFiles = (id,cF) => {
-        cF = cF.map( d => { delete(d['$$hashKey']); return d; })
-        $scope.updateDocument(id,{'files': cF});
+    $scope.publishDraft = (item,ev) => {
+        var confirm = $mdDialog.confirm()
+          .title(`Publish this Draft Document?`)
+          .textContent('are you sure?')
+          .ariaLabel('sure')
+          .targetEvent(ev)
+          .ok('Yes, Publish now')
+          .cancel('Cancel');
+        $mdDialog.show(confirm).then(() => {
+            let meta = {'published_date': $scope.date_now('YYYY-MM-DD'), 'published_time': Date.now() };
+            let u = {'status':'published', 'meta': meta, 'agency': item.agency };
+            doc.db.collection(documents).doc(item.id).update(u);
+            $scope.currentItem.status = 'publish';
+            $scope.currentItem.meta = meta;
+            $scope.setCurrentItem($scope.currentItem,'published');
+        },()=>{});
     };
 
     $scope.openFile = (id,path,cF) => {
@@ -1028,51 +1432,258 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     };
 
 });
-// //  // Debug
-// var doc_config = {
-// 	apiKey: "AIzaSyDJnCE34jNQ8mfQAcBt1zlGj5CJZwaOYfM",
-// 	authDomain: "pcsd-app.firebaseapp.com",
-// 	databaseURL: "https://pcsd-app.firebaseio.com",
-// 	projectId: "pcsd-app",
-// 	storageBucket: "pcsd-app.appspot.com",
-// 	messagingSenderId: "687215095072"
-// };
-
-//// Realese
-var doc_config = {
-	apiKey: "AIzaSyCELuc2f0_CcV35xeHid9-iFHU7hbrNPKg",
-	authDomain: "document-network.firebaseapp.com",
-	databaseURL: "https://document-network.firebaseio.com",
-	projectId: "document-network",
-	storageBucket: "document-network.appspot.com",
-	messagingSenderId: "583848541283"
-};
-
-var docFire = firebase.initializeApp(doc_config, 'doc');
-
-docFire.firestore().settings({
-	cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
-});
-docFire.firestore().enablePersistence();
-
-var doc = {};
-doc.db = docFire.firestore();
-doc.fun = docFire.functions();
-const acc = 'accounts';
-const agencies = 'agencies';
-const documents = 'documents';
-const offlineFiles = 'offlineFiles';
-const storageFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\document_network\\' : app.getPath('downloads') + '/document_network/';
-
 'use strict';
 
+myAppModule.controller('doc_ctrl_files', function ($scope, $timeout, $utils, $mdToast,$mdDialog) {
+    const userId = $scope.userId;
+    $scope.fileLogs = [];
 
-myAppModule.controller('manual_controller', function ($scope, $timeout, $utils, $mdToast,$mdDialog) {
-    $scope.selectedManualTabIndex = 0;
+    doc.db.collection(acc).doc(userId).collection(offlineFiles).onSnapshot(qs => {
+        let res = qs.docs.map( doc => { let x = doc.data(); x.id = doc.id; return x;});
+        $scope.fileLogs = res;
+    });
+});
+'use strict';
 
-    $scope.setTab = (t) => {
-        $scope.selectedManualTabIndex = t;
-    }
+myAppModule.controller('doc_ctrl_pending', function ($scope, $timeout, $utils, $mdToast,$mdDialog, func, $localStorage) {
+    
+    $scope.receiveDocument = (evt) => {
+        var confirm = $mdDialog.confirm()
+          .title(`Mark this document as received?`)
+          .textContent('are you sure?')
+          .ariaLabel('sure')
+          .targetEvent(evt)
+          .ok('I received this document')
+          .cancel('Cancel');
+        $mdDialog.show(confirm).then(() => {
+            $scope.close_dialog();
+            doc.db.collection(doc_transactions).doc($scope.currentTransaction.id).update({
+                status : 'received',
+                received : {
+                    date : $scope.date_now(),
+                    time : Date.now()
+                }
+            }).then( () => {
+                $scope.removeFromPending($scope.currentTransaction.id);
+                $scope.toast('Document marked as received!');
+            } );
+            setTimeout( () => {
+                $scope.setCurrentItem($scope.currentItem,'received',$scope.currentTransaction);
+            }, 200 );
+        },()=>{});
+    };
+
+    $scope.declineDocument = (evt) => {
+        var confirm = $mdDialog.prompt()
+        .title('Declining this request.')
+        .textContent('why?')
+        .placeholder('reason')
+        .ariaLabel('Reason')
+        .initialValue('Duplicate')
+        .targetEvent(evt)
+        .required(true)
+        .ok('Confirm')
+        .cancel('Cancel');
+
+        $mdDialog.show(confirm).then(function(result) {
+            $scope.close_dialog();
+            doc.db.collection(doc_transactions).doc($scope.currentTransaction.id).update({
+                status : 'declined',
+                declined : {
+                    date : $scope.date_now(),
+                    time : Date.now(),
+                    reason : result
+                }
+            }).then( () => {
+                $scope.toast('Document declined!');
+            } );
+            $scope.removeFromPending($scope.currentTransaction.id);
+            setTimeout( () => {
+                $scope.setCurrentItem(undefined,'draft',undefined);
+            }, 200 );
+        }, ()=>{} );
+    };
+    
+});
+'use strict';
+
+myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $utils, $mdToast,$mdDialog, func, $localStorage) {
+    $scope.receipients = ($localStorage.doc_receipients)? $localStorage.doc_receipients : [];
+    $scope.filtered_receipients = [];
+    $scope.reciepientList = [];
+    $scope.currentReciepients = [];
+    $scope.sendingRemarks = '';
+    var currentDisplayedDocument = null;
+    $scope.send_as = $localStorage.doc_send_as;
+    func.$scope = $scope;
+    
+    $scope.loadReciepients = (a,b) => {
+        doc.db.collection(acc).where(`${b}.active`,"==",true).onSnapshot(qs => {
+            if(!qs.empty) {
+                let r = qs.docs.map(d => {
+                    let o = d.data();
+                    o.id = d.id;
+                    return o;
+                });
+                $scope.receipients = r;
+                $localStorage.doc_receipients = r;
+                $scope.$apply();
+            }else {
+                $localStorage.doc_receipients = [];
+            }
+        });
+        for (const k in a) {
+            if($localStorage.doc_send_as == undefined) {
+                $localStorage.doc_send_as = k;
+                $scope.send_as = k;
+            }
+        }
+    };
+
+    $scope.openSendDocument = (item,evt) =>{
+        $scope.showPrerenderedDialog(evt,'sendDocument');
+    };
+
+    $scope.filterReciepient = () => {
+        let currentItem = $scope.currentItem;
+        if(currentItem != undefined){
+            $scope.filtered_receipients = [];
+            $scope.filtered_receipients = $scope.receipients.filter( a => {
+                if(!a[currentItem.agency.id]['active']) {
+                    return false;
+                }
+                if($scope.send_as == 'front_office' || $scope.send_as == 'registry'){
+                    return ( a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['registry'] );
+                } else if($scope.send_as == 'division_head'){
+                    return ( a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['registry'] );
+                } else if($scope.send_as == 'office_head'){
+                    return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['registry'] );
+                } else if($scope.send_as == 'department_head'){
+                    return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['registry'] );
+                } else if($scope.send_as == 'admin'){
+                    return true;
+                } else if($scope.send_as == 'staff'){
+                    return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['division_head'] );
+                }
+                return false;
+            } );
+        }
+    };
+
+    $scope.sendAsSelected = (a) => {
+        $scope.reciepientList = [];
+        $localStorage.doc_send_as = a;
+        setTimeout($scope.filterReciepient, 200);
+    };
+
+    $scope.backToDraft = (item,ev) => {
+        var confirm = $mdDialog.confirm()
+          .title(`Pulling Back to Draft.`)
+          .textContent('All data and connections will be reset to DRAFT state.')
+          .ariaLabel('backt to draft')
+          .targetEvent(ev)
+          .ok('I understand the risk, pull back now!')
+          .cancel('Cancel');
+        $mdDialog.show(confirm).then( async () => {
+            let u = {'status':'draft', 'meta': {} };
+            doc.db.collection(documents).doc(item.id).update(u);
+            item.status = 'draft';
+            $scope.setCurrentItem($scope.currentItem,'draft');
+            console.log($scope.currentClicked,$scope.currentDocSelected);
+        },()=>{});
+    };
+
+    $scope.previewFile = (path) => {
+        shell.openItem(storageFolder + path);
+    };
+
+    $scope.sendThisDocument = (item, reciepients, r) => {
+        let remarks = r;
+        //create transactions
+        reciepients.map( a => {
+            let accessTypes = [];
+            for (const k in $scope.doc_user[item.agency.id]) {
+                accessTypes.push(k);
+            }
+            doc.db.collection(doc_transactions).add({
+                document : item,
+                status : 'pending',
+                sender : {
+                    id : $scope.doc_user.id,
+                    contact : ($scope.doc_user.contact == undefined)? '':$scope.doc_user.contact,
+                    email : ($scope.doc_user.email == undefined)? '':$scope.doc_user.email,
+                    info : ($scope.doc_user.info == undefined)? '': $scope.doc_user.info,
+                    access : accessTypes,
+                    name : $scope.doc_user.name
+                },
+                receiver : a,
+                'remarks' : remarks,
+                time : Date.now(),
+                date : $scope.date_now()
+            });
+            //update document for current receipients
+            doc.db.collection(documents).doc(item.id).update({
+                last_sent_time : Date.now(),
+                receipients : firebase.firestore.FieldValue.arrayUnion(a)
+            });
+            return a;
+        } );
+        setTimeout( () => {
+            $scope.toast(`Sent to ${reciepients.length} receipient${(reciepients.length > 1)? 's':''}.`);
+        }, 1000 );
+
+        //close and reset variables
+        $scope.reciepientList = [];
+        $scope.sendingRemarks = '';
+        $scope.close_dialog();
+    };
+
+    $scope.load_current_receipients = (r) => {
+        if(r != undefined) {
+            currentDisplayedDocument = $scope.currentItem.id;
+            delete($scope.currentReciepients);
+            $scope.currentReciepients = [];
+            r.forEach(receiver_id => {
+                doc.db.collection(acc).doc(receiver_id).get().then(dx => {
+                    let a = dx.data();
+                    a.id = dx.id;
+                    a.sentItems = [];
+                    $scope.currentReciepients.push(a);
+                    doc.db.collection(doc_transactions).where('receiver','==',receiver_id)
+                        .where('document.id','==',$scope.currentItem.id)
+                        .where('sender.id','==',$scope.userId)
+                        .get()
+                        .then( qs => {
+                            qs.forEach(
+                                dy => {
+                                    let b = dy.data();
+                                    b.id = dy.id;
+                                    $scope.currentReciepients = $scope.currentReciepients.map(
+                                        c => {
+                                            if(c.id == b.receiver)
+                                                c.sentItems.push(b);
+                                            return c;
+                                        }
+                                    );
+                                }
+                            );
+                        } );
+                });
+            });
+        }
+    };
+    
+    var publishing_receipients_interval = null;
+    $scope.init_publishing_receipients = () => {
+        $scope.load_current_receipients($scope.currentItem.receipients);
+        publishing_receipients_interval = setInterval( ()=> {
+            if(currentDisplayedDocument != $scope.currentItem.id && $scope.currentItem.receipients != undefined)
+                $scope.load_current_receipients($scope.currentItem.receipients);
+            if($scope.currentItem.receipients == undefined)
+                clearInterval(publishing_receipients_interval);
+        }, 400);
+    };
+
 });
 'use strict';
 
@@ -1244,17 +1855,6 @@ myAppModule.controller('user_management_controller', function ($scope, $mdDialog
 });
 'use strict';
 
-myAppModule.controller('doc_ctrl_files', function ($scope, $timeout, $utils, $mdToast,$mdDialog) {
-    const userId = $scope.userId;
-    $scope.fileLogs = [];
-
-    doc.db.collection(acc).doc(userId).collection(offlineFiles).onSnapshot(qs => {
-        let res = qs.docs.map( doc => { let x = doc.data(); x.id = doc.id; return x;});
-        $scope.fileLogs = res;
-    });
-});
-'use strict';
-
 myAppModule.controller('applications_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $http) {
     $scope.application_list = [];
     $scope.pending_list = [];
@@ -1297,6 +1897,14 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
         if(n==6)return "Approved";
         if(n==7)return "Used";
     };
+
+    $scope.tabsHasContent = () => {
+        let res = false;
+        for (const key in $scope.tabs) {
+            res = true;
+        }
+        return res;
+    }
 
     function trigerLoading(){
         $scope.is_loading = true;
@@ -2042,97 +2650,6 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
 });
 'use strict';
 
-myAppModule.controller('fireDbCrtl', function ($scope, $timeout, $utils, $mdToast,$localStorage, $mdDialog) {
-    var XLSX = require('xlsx');
-    var user = $scope.user;
-    $scope.db = {};
-    var selectedDb = "";
-
-    $scope.setDb = (s)=>{
-        selectedDb = s;
-    }
-    
-    $scope.upload_excel = (f,t)=>{
-        if(uploading_type != '') return null;
-        if(typeof(f) == typeof([])){
-            uploading_type = t;
-            var f = f[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var data = e.target.result;
-                data = new Uint8Array(data);
-                let wb = XLSX.read(data, {type: 'array'});
-                wb.SheetNames.forEach(element => {
-                    if(t=='wsup') $scope.wsup_data.push({name : element, data : XLSX.utils.sheet_to_json(wb.Sheets[element]) });
-                });
-            };
-            reader.readAsArrayBuffer(f);
-        }else {
-            $scope.toast("file error");
-        }
-    }
-
-    $scope.export_database_to_excel = (d,t)=>{
-        ipcRenderer.send('save_workbook_as_excel',d);
-    }
-
-    $scope.open_database = (t)=>{
-        $scope.open_window_view("app/pages/database/permits/single/sheets.html",t);
-    };
-
-    function newCtrl($scope, $mdDialog) {
-        $scope.cancel = function() {
-            $mdDialog.cancel();
-        };
-        $scope.createDB = (name)=>{
-            fire.db.datasets.query.add({
-                "staff_id" : user.id,
-                "name" : name,
-                "date" : Date.now()
-            });
-            $mdDialog.cancel();
-        }
-        $scope.createSheet = (name)=>{
-            let g = {
-                "staff_id" : user.id,
-                "name" : name,
-                "date" : Date.now()
-            };
-            fire.db.datasets.query.doc(selectedDb).collection("datasets").add(g);
-            $mdDialog.cancel();
-        }
-    }
-
-    var listener = {};
-    listener["main"] = fire.db.datasets.query.where("staff_id","==",user.id).onSnapshot(qs=>{
-        qs.forEach(doc=>{
-            $scope.db[doc.id] = {data:doc.data()};
-            listener[doc.id] = fire.db.datasets.query.doc(doc.id).collection("datasets").onSnapshot(qs=>{
-                let x = {};
-                let c = true;
-                qs.forEach(doc=>{
-                    c =false;
-                    x[doc.id] = doc.data();
-                });
-                $scope.db[doc.id].sheets = (c)? null : x;
-            });
-        })
-    });
-
-    $scope.open_modal = (ev,template)=>{
-        $mdDialog.show({
-            controller: newCtrl,
-            templateUrl: template,
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose:true,
-            fullscreen: true
-          });
-    }
-
-});
-'use strict';
-
 myAppModule.controller('document_management_controller', function ($scope, $timeout, $utils, $mdDialog, $interval) {
     var INCOMING_DB = new JsonDB("./DB/INCOMING_DOCUMENTS", true, false);
     const documents_string = "/documents";
@@ -2389,6 +2906,941 @@ myAppModule.controller('document_management_controller', function ($scope, $time
 
 });
 
+'use strict';
+
+document.write(`<script src="./plugins/chartjs/Chart.min.js"></script>`);
+var graphOption = {
+    responsive: true,
+    title: {
+        display: true,
+        text: ''
+    },
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+    },
+    hover: {
+        mode: 'nearest',
+        intersect: true
+    },
+    scales: {
+        xAxes: [{
+            display: true,
+            scaleLabel: {
+                display: true,
+                labelString: 'Year'
+            }
+        }],
+        yAxes: [{
+            display: true,
+            scaleLabel: {
+                display: true,
+                labelString: 'Count'
+            }
+        }]
+    }
+};
+myAppModule.controller('pcsd_database_controller', function ($scope, 
+    $timeout, $utils, $mdToast,$localStorage) {
+    var XLSX = require('xlsx');
+    $scope.wsup_db = { data : [], summary : {} };
+    $scope.wsup_db.data = ($localStorage.wsup_db_data)?  $localStorage.wsup_db_data : [];
+    $scope.wsup_db.summary = ($localStorage.wsup_db_summary)?  $localStorage.wsup_db_summary : {};
+    $scope.database_view = './app/pages/database/views/graphs.html';
+    $scope.currentNavItem = 'Statistics';
+    $scope.dropDownSelect = {};
+    $scope.selectItems = {};
+    $scope.n = {};
+
+    //WSUP
+    fire.db.database.query.doc('WSUP').collection("database").onSnapshot(qs => {
+        let res = qs.docs.map( dx => {
+            let b = dx.data();
+            b.id = dx.id;
+            return b;
+        });
+        $scope.wsup_db.data = $localStorage.wsup_db_data = res;
+        $scope.invalidate_data_table($scope.wsup_db.data);
+    });
+    fire.db.database.when("WSUP",(d) => {
+        $scope.wsup_db.summary = $localStorage.wsup_db_summary = d;
+        setTimeout($scope.loadGraph, 100);
+    });
+
+    $scope.invalidate_data_table = (d)=>{
+        $scope.data_table = $scope.ngTable(d);
+    };
+
+    $scope.getKeys = (data,key) => {
+        let f = {};
+        data.map( d => { 
+            if(d[key]) f[d[key]] = true; 
+            return d[key]; 
+        } );
+        let r = [];
+        let c = [];
+        for (const key in f) {
+            r.push({id: key, title: key});
+            c.push(key);
+        }
+        $scope.selectItems[key] = c;
+        $scope.dropDownSelect[key] = r;
+    };
+
+    $scope.changeView = (v) => { $scope.database_view = v; };
+
+    $scope.loadGraph = () => {
+        let labels = [];
+        let datas = [];
+        if($scope.wsup_db.summary){
+            //Yearly Count
+            if($scope.wsup_db.summary.count){
+                for (const key in $scope.wsup_db.summary.count) {
+                    if ($scope.wsup_db.summary.count.hasOwnProperty(key)) {
+                        const e = $scope.wsup_db.summary.count[key];
+                        if(key != 'all'){
+                            labels.push(key);
+                            datas.push(e.total);
+                        }
+                    }
+                }
+                graphOption.title.text = 'Yearly Permit Status';
+                var graph_config = {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'WSUP',
+                            fill: false,
+                            backgroundColor: '#f67019',
+                            borderColor: '#f67019',
+                            data: datas,
+                        }]
+                    },
+                    options: graphOption
+                };
+                new Chart(document.getElementById('canvas1').getContext('2d'), graph_config);
+            }
+            
+            //Per Municipality
+            if($scope.wsup_db.summary.per_municipality){
+                labels = [];
+                datas = [];
+                for (const key in $scope.wsup_db.summary.per_municipality) {
+                    if ($scope.wsup_db.summary.per_municipality.hasOwnProperty(key)) {
+                        const e = $scope.wsup_db.summary.per_municipality[key];
+                        if(e > 50) {
+                            labels.push(key);
+                            datas.push(e);
+                        }
+                    }
+                }
+                graphOption.title.text = 'Total Permit Per Municipality';
+                graphOption.scales.xAxes[0].scaleLabel.labelString = 'Municipality/City';
+                var graph_config = {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'WSUP',
+                            fill: false,
+                            backgroundColor: '#f67019',
+                            borderColor: '#f67019',
+                            data: datas,
+                        }]
+                    },
+                    options: graphOption
+                };
+                new Chart(document.getElementById('canvas2').getContext('2d'), graph_config);
+            }
+        }else {
+            setTimeout($scope.loadGraph, 3000);
+        };
+    };
+
+    $scope.openAddWSUPModal = (evt) => {
+        $scope.n = {};
+        $scope.showPrerenderedDialog(evt,'addWSUP');
+    };
+
+    $scope.addWSUPData = async (e) => {
+        $scope.close_dialog();
+        let i = {};
+        for (const key in e) {
+            if (e.hasOwnProperty(key)) {
+                const element = (e[key] != undefined)? e[key] : '';
+                i[key] = element;
+            }
+        }
+        i.name = (e.First_Name  || '') + " " + (e.Middle_Name || '') + " " + (e.Last_Name || '') + " " + (e.Extension_Name || '');
+        i.address = (e.Street || '') + ", " + (e.Barangay || '') + ", " + (e.Municipality || '');
+        if(e.Issued_Year && e.Issued_Month && e.Issued_Day){
+            i.Issued_Date = e.Issued_Year + "-" + e.Issued_Month + "-" + e.Issued_Day;
+        }
+        if(e.Validity_Year && e.Validity_Month && e.Validity_Day) {
+            i.Validity_Date = e.Validity_Year + "-" + e.Validity_Month + "-" + e.Validity_Day;
+        }
+        i.keywords = i.name.split(' ').filter( d => d.length > 1);
+        await fire.db.database.query.doc("WSUP").collection("database").add(i);
+        let u = {};
+        u["count.all"] = firebase.firestore.FieldValue.increment(1);
+        if(e.Issued_Year != undefined) u[`count.${e.Issued_Year}.total`] = firebase.firestore.FieldValue.increment(1);
+        if(e.Issued_Month != undefined) u[`count.${e.Issued_Year}.${e.Issued_Month}`] = firebase.firestore.FieldValue.increment(1);
+        if(e.Municipality != undefined) u[`per_municipality.${e.Municipality}`] = firebase.firestore.FieldValue.increment(1);
+        await fire.db.database.query.doc("WSUP").update(u);
+        $scope.toast('New WSUP data added!');
+    };
+
+
+    $scope.upload_excel = (files, permitType)=>{
+        if(uploading_type != '') return;
+        if(typeof(files) == typeof([])){
+            uploading_type = t;
+            var file = files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var data = new Uint8Array(e.target.result);
+                let wb = XLSX.read(data, {type: 'array'});
+                wb.SheetNames.forEach(element => {
+                    let jsonData = XLSX.utils.sheet_to_json(wb.Sheets[element]);
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }else {
+            $scope.toast("file error");
+        }
+
+    }
+
+    $scope.save_database = (json, databaseName)=>{
+
+        async function createDatabase ()  {
+            await fire.db.database.query.doc("WSUP").set({"id":"WSUP"});
+            //console.log("DB Created");
+            json[0].data.forEach( async (e) => {
+                let i = {};
+                for (const key in e) {
+                    if (e.hasOwnProperty(key)) {
+                        const element = (e[key] != undefined)? e[key] : '';
+                        i[key] = element;
+                    }
+                }
+                i.name = (e.First_Name  || '') + " " + (e.Middle_Name || '') + " " + (e.Last_Name || '') + " " + (e.Extension_Name || '');
+                i.address = (e.Street || '') + ", " + (e.Barangay || '') + ", " + (e.Municipality || '');
+                if(e.Issued_Year && e.Issued_Month && e.Issued_Day){
+                    i.Issued_Date = e.Issued_Year + "-" + e.Issued_Month + "-" + e.Issued_Day;
+                }
+                if(e.Validity_Year && e.Validity_Month && e.Validity_Day) {
+                    i.Validity_Date = e.Validity_Year + "-" + e.Validity_Month + "-" + e.Validity_Day;
+                }
+                i.keywords = i.name.split(' ').filter( d => d.length > 1);
+                await fire.db.database.query.doc("WSUP").collection("database").add(i);
+                let u = {};//statisticss
+                u["count.all"] = firebase.firestore.FieldValue.increment(1);
+                if(e.Issued_Year != undefined) u[`count.${e.Issued_Year}.total`] = firebase.firestore.FieldValue.increment(1);
+                if(e.Issued_Month != undefined) u[`count.${e.Issued_Year}.${e.Issued_Month}`] = firebase.firestore.FieldValue.increment(1);
+                if(e.Municipality != undefined) u[`per_municipality.${e.Municipality}`] = firebase.firestore.FieldValue.increment(1);
+                await fire.db.database.query.doc("WSUP").update(u);
+            });
+        };
+        createDatabase();
+        
+
+        // let vv = [ 'Corporation ', 'Last_Name'];
+
+        // vv.forEach(v => {
+        //     let mun = {};
+        //     d[0].data.forEach(e => {
+        //         if(e[v] != undefined)
+        //             mun[e[v]] = (mun[e[v]] == undefined)? 1 : mun[e[v]] + 1;
+        //     });
+        //     console.log(mun);
+        // });
+
+        
+    }
+}).
+controller('ApprehensionController', function($scope, $crudService, municipalityService) {
+    var apprehensionDocument = db.collection('database').doc('Apprehension') ;
+    var apprehensionCollection = apprehensionDocument.collection('apprehensions');    
+    $scope.apprehensionsTable = $scope.ngTable([]);   
+
+    $scope.refreshList = () => {
+        $crudService.getItems(apprehensionCollection).then(apprehensions => {
+            $scope.apprehensionsTable = $scope.ngTable(apprehensions);
+        })
+    }
+
+    $scope.refreshList();
+
+    $scope.Months = [
+        {id: 1, title: "January", days: 31},
+        {id: 2, title: "February", days: 28},
+        {id: 3, title: "March", days: 31},
+        {id: 4, title: "April", days: 30},
+        {id: 5, title: "May", days: 31},
+        {id: 6, title: "June", days: 30},
+        {id: 7, title: "July", days: 31},
+        {id: 8, title: "August", days: 31},
+        {id: 9, title: "September", days: 30},
+        {id: 10, title: "October", days: 31},
+        {id: 11, title:"November", days: 30},
+        {id: 12, title: "December", days: 31}
+    ];
+
+    $scope.apprehensionFormData = {};
+    $scope.saveApprehension  = addApprehension;
+
+    $scope.closeAppehensionForm = () => {
+        $scope.close_dialog();
+    }
+    $scope.municipalities = [];
+    municipalityService.getMunicipalities().then(municipalities => {
+        $scope.municipalities = municipalities;
+    });
+
+    $scope.refreshAOBarangays = () => {
+        municipalityService.getBarangays($scope.apprehensionFormData.AO_Municipality).then(barangays => {
+            $scope.AOBarangays = barangays;
+        });
+    }
+    $scope.refreshPABarangays = () => {
+        municipalityService.
+        getBarangays($scope.apprehensionFormData.PA_Municipality).
+        then(barangays => {
+            $scope.PABarangays = barangays;
+        });
+    }
+
+    $scope.openApprehensionForm = (event) => {
+        $scope.saveApprehension  = addApprehension;
+        $scope.PABarangays = [];
+        $scope.AOBarangays = [];
+        $scope.apprehensionFormData = {};
+        $scope.showPrerenderedDialog(event,'apprehensionForm');
+    }
+
+    $scope.getApprehension = (id) => {
+        $crudService.getItem(id, apprehensionCollection).then(apprehension => {
+            $scope.apprehensionFormData = convertToFormData(apprehension);
+        });
+    }
+
+    $scope.openApprehensionFormForUpdating = (event, apprehensionID) => {
+        $scope.saveApprehension = updateApprehension;
+        $crudService.getItem(apprehensionID, apprehensionCollection).then(apprehension => {
+            $scope.apprehensionFormData = convertToFormData(apprehension);
+            $scope.refreshAOBarangays();
+            $scope.refreshPABarangays();
+            $scope.showPrerenderedDialog(event,'apprehensionForm');
+        });
+    }
+    function convertToFormData(apprehension){
+        let formData = apprehension;
+        formData.Violations = apprehension.Violations.join(',');
+        formData.ApprehensionDate =  new Date( apprehension.Year, apprehension.Month - 1, apprehension.Day);
+        formData.PA_Barangay = apprehension.PA_Barangay.toUpperCase();
+        formData.AO_Barangay = apprehension.AO_Barangay.toUpperCase();
+        return formData;
+    }
+
+    function convertToApprehensionObject(formData){
+        var apprehension = {
+            Control_Number: $scope.apprehensionFormData.Control_Number || '',
+            Case_ID :$scope.apprehensionFormData.Case_ID || '',
+            Violations: $scope.apprehensionFormData.Violations && $scope.apprehensionFormData.Violations.split(',') || '',
+            Month: $scope.apprehensionFormData.ApprehensionDate.getMonth() + 1,
+            Day: $scope.apprehensionFormData.ApprehensionDate.getDate(),
+            Year: $scope.apprehensionFormData.ApprehensionDate.getFullYear(),
+            AO_Sitio : $scope.apprehensionFormData.AO_Sitio || '',
+            AO_Barangay: $scope.apprehensionFormData.AO_Barangay || '',
+            AO_Municipality: $scope.apprehensionFormData.AO_Municipality || '',
+            PA_Sitio: $scope.apprehensionFormData.PA_Sitio || '',
+            PA_Barangay: $scope.apprehensionFormData.PA_Barangay || '',
+            PA_Municipality: $scope.apprehensionFormData.PA_Municipality || '',
+            Apprehending_Agency: $scope.apprehensionFormData.Apprehending_Agency || '',
+            Remarks: $scope.apprehensionFormData.Remarks || '',
+            Keywords: [$scope.apprehensionFormData.Control_Number],
+            id: $scope.apprehensionFormData.id || ''
+        };
+        apprehension.Keywords = apprehension.Keywords.concat(apprehension.Violations);
+        
+        return apprehension;
+    }
+
+    function addApprehension(){
+        var apprehension = convertToApprehensionObject($scope.apprehensionFormData);
+
+        $crudService.addItem(apprehension, apprehensionCollection).then(addOperationResult => {
+            $scope.toast("Sucess");
+            $scope.close_dialog();     
+            clearFormData();
+            apprehension.Municipality = apprehension.PA_Municipality;
+            $crudService.updateCounterFor(apprehension, apprehensionDocument);
+        },
+        failedOperationResult => {
+
+        });
+    }
+
+    function updateApprehension() {
+        var apprehension = convertToApprehensionObject($scope.apprehensionFormData);
+        $crudService.updateItem(apprehension, apprehensionCollection).then(updateResult => {
+            $scope.toast("Sucess");
+            $scope.close_dialog();  
+        });
+    }
+     function clearFormData(){
+        $scope.apprehensionFormData = {};
+     }
+
+    $scope.dateNow = new Date();
+}).
+service("municipalityService", function(){
+    this.getMunicipalities = () =>{
+        var palawanMunicipalities = Object.keys(
+                require('./json/palawanMunicipalities.json').municipality_list
+                );
+
+        return new Promise((resolve, reject)=>{
+            resolve(palawanMunicipalities);
+        })
+    }
+
+    this.getBarangays = (municipality) => {
+        return new Promise((resolve, reject) => {  
+            var palawanMunicipalities = require('./json/palawanMunicipalities.json');
+            var barangays = palawanMunicipalities["municipality_list"][municipality] ?
+                palawanMunicipalities["municipality_list"][municipality]["barangay_list"] :
+                [];
+
+            resolve(barangays)
+        })
+    }
+}).
+controller('ChainsawRegistrationController', (
+        $scope, 
+        $crudService, 
+        municipalityService) => {
+    var chainsawDocument = db.collection('database').doc('ChainsawRegistration') ;
+    var chainsawCollection = chainsawDocument.collection('Registerted Chainsaws');
+
+    $scope.registeredChainsawsTable = $scope.ngTable([]);
+    $scope.chainsawFormData = {};
+    $scope.municipalities = [];
+    $scope.barangays  = [];
+    $scope.dateNow = new Date();
+    $scope.chainsaws = [];
+
+    municipalityService.getMunicipalities().then(municipalities => {
+        $scope.municipalities = municipalities;
+    });
+
+    $scope.refreshList = () => {
+        $crudService.getItems(chainsawCollection, convertToChainsawObjectFromSnapshot).
+        then(chainsaws => {
+            $scope.chainsaws = chainsaws;
+            $scope.registeredChainsawsTable = $scope.ngTable(chainsaws);
+        },
+        error => {
+            $scope.toast("Oooops something went wrong. Please try again.");
+            console.log(error);
+        })
+    }
+
+    $scope.refreshList();
+
+    function addChainsaw(){
+        let chainsaw = convertToChainsawObject($scope.chainsawFormData);
+        $crudService.addItem(chainsaw, chainsawCollection).then(chainsaw =>{
+            $scope.toast("Succes");
+            $scope.close_dialog();
+            $scope.chainsaws.push(chainsaw);
+            refreshRegisteredChainsawsTable();
+            $scope.chainsawFormData = {};
+        },
+        error => { 
+            $scope.toast("Oooops something went wrong. Please try again.");
+            console.log(error);
+        });
+    }
+
+    function refreshRegisteredChainsawsTable(){
+        $scope.registeredChainsawsTable = $scope.ngTable($scope.chainsaws);
+    }
+
+    function updateChainsaw() {
+        let updatedChainsaw = convertToChainsawObject($scope.chainsawFormData)
+        $crudService.updateItem(updatedChainsaw, chainsawCollection).then(result => {
+            $scope.toast('Success');
+            $scope.close_dialog();
+            let index = $scope.chainsaws.findIndex(chainsaw => chainsaw.id == updatedChainsaw.id);
+            $scope.chainsaws[index] = updatedChainsaw;
+            refreshRegisteredChainsawsTable();
+            $scope.chainsawFormData = {};
+        },
+        error => {
+            $scope.toast('Ooooops something went wrong.');
+            console.log(error);
+        });     
+    }
+
+    $scope.openRegistrationForm = (event) => {
+        $scope.saveChainsaw = addChainsaw;
+        $scope.chainsawFormData = {};
+        $scope.barangays = [];
+        $scope.showPrerenderedDialog(event, 'chainsawRegistrationForm');
+    }
+
+    $scope.openRegistrationFormForUpdating = (id) => {     
+        $scope.saveChainsaw = updateChainsaw;
+        $crudService.
+        getItem(id, chainsawCollection, convertToChainsawObjectFromSnapshot).
+        then(chainsaw => {
+            $scope.chainsawFormData = chainsaw;
+            $scope.refreshBarangays();
+            $scope.showPrerenderedDialog(event, 'chainsawRegistrationForm');
+        },
+        error => {
+            $scope.toast('Ooooops something went wrong.');
+            console.log(error);
+        })
+    }
+
+    $scope.closeRegistrationForm = () => {
+        $scope.close_dialog();
+    }
+
+    $scope.refreshBarangays = () =>{
+        municipalityService.getBarangays($scope.chainsawFormData.Owner.Municipality).then(barangays => {
+            $scope.barangays = barangays;
+        })
+    }
+       
+
+    function convertToChainsawObject(formData){
+        let chainsaw = {
+            CORNumber: formData.CORNumber || '',
+            Agency: formData.Agency || '',
+            Owner: {
+                FirstName: formData.Owner && formData.Owner.FirstName || '',
+                MiddleInitial: formData.Owner && formData.Owner.MiddleInitial || '',
+                LastName: formData.Owner && formData.Owner.LastName || '',
+                NameExtension: formData.Owner && formData.Owner.NameExtension || '',
+                Barangay: formData.Owner && formData.Owner.Barangay || '',
+                Street: formData.Owner && formData.Owner.Street || '',
+                Municipality: formData.Owner && formData.Owner.Municipality || ''
+            },                
+            MetalSealNumber: formData.MetalSealNumber || '',
+            SerialNumber: formData.SerialNumber || '',
+            RegistrationDate: formData.RegistrationDate || '',
+            ExpirationDate: formData.ExpirationDate || '',
+            LimitationOfUse: formData.LimitationOfUse || '',
+            Remarks: formData.Remarks || '',
+            Keywords: [],
+            id: formData.id || ''
+        };
+        chainsaw.Keywords = [
+            chainsaw.Owner.LastName,
+            chainsaw.Owner.MiddleInitial,
+            chainsaw.Owner.FirstName,
+            chainsaw.CORNumber
+        ].filter(value => value.length > 0);
+        return chainsaw;
+    }
+
+    function convertToChainsawObjectFromSnapshot(snapshot){
+        let chainsaw = snapshot.data();
+        chainsaw.id = snapshot.id;
+        chainsaw.RegistrationDate = chainsaw.RegistrationDate ? new Date(chainsaw.RegistrationDate.seconds * 1000) : '';
+        chainsaw.ExpirationDate = chainsaw.ExpirationDate ? new Date(chainsaw.ExpirationDate.seconds * 1000) : '';
+        
+        if(chainsaw.Owner && chainsaw.Owner.Barangay)
+            chainsaw.Owner.Barangay = chainsaw.Owner.Barangay.toUpperCase();
+
+        return chainsaw;
+    }
+    
+}).
+controller('PermitController', function($crudService, municipalityService, $scope){
+    var chainsawDocument;
+    var purchasePermitCollection;
+    
+    $scope.setDocumentName = (documentName) => {
+        chainsawDocument = db.collection('database').doc(documentName) ;
+        purchasePermitCollection = chainsawDocument.collection('permits');
+    }
+
+    $scope.permits = [];
+    $scope.permitsTable = $scope.ngTable([]);
+    $scope.chainsawPermitFormData = {};
+    $scope.municipalities = [];
+    $scope.barangays  = [];
+    $scope.dateNow = new Date();
+
+    municipalityService.getMunicipalities().then(municipalities => {
+        $scope.municipalities = municipalities;
+    });
+
+    $scope.refreshList = () => {
+        $crudService.getItems(purchasePermitCollection, converFromSnapshotToPermitObject).then(permits =>{
+            $scope.permits = permits;
+            $scope.permitsTable = $scope.ngTable($scope.permits);
+        })
+    }
+
+    let addPermit = () => {
+        let permit = convertFromFormDataToPermitObject($scope.chainsawPermitFormData);
+        $crudService.addItem(permit, purchasePermitCollection).then(permit => {
+            $scope.toast("Success");
+            $scope.close_dialog();
+            $scope.permits.push(permit);
+            $crudService.updateCounterFor(permit, chainsawDocument);
+        },
+        error => {
+            console.log(error);
+            $scope.toast("Oooops something went wrong. Please try again.");
+        })
+    }
+
+    let updatePermit = () => {
+        let updatedPermit = convertFromFormDataToPermitObject($scope.chainsawPermitFormData);
+        $crudService.updateItem(updatedPermit, purchasePermitCollection).then(result => {
+            $scope.toast("Success");
+            $scope.close_dialog();
+            let index = $scope.permits.findIndex(permit => permit.id == updatedPermit.id);
+            $scope.permits[index] = updatePermit;
+            $scope.permitsTable = $scope.ngTable($scope.permits);
+        },
+        error => {
+            $scope.toast("Oooops something went wrong. Please try again.");
+        });
+    }
+
+    $scope.refreshBarangays = () => {
+        municipalityService.getBarangays($scope.chainsawPermitFormData.Municipality).then(barangays => {
+            $scope.barangays = barangays;
+        })
+    }
+
+    $scope.openPermitForm = (event, formName) => {
+        $scope.chainsawPermitFormData = {};
+        $scope.savePermit = addPermit;
+        $scope.barangays = [];
+        $scope.showPrerenderedDialog(event, formName);
+    }
+
+    $scope.openPermitFormForUpdating = (event, formName,permitToUpate) =>{
+        $crudService.getItem(permitToUpate.id, purchasePermitCollection, converFromSnapshotToPermitObject).
+        then(permit => {
+            $scope.chainsawPermitFormData = permit;
+            $scope.refreshBarangays();
+            $scope.savePermit = updatePermit;
+            $scope.showPrerenderedDialog(event, formName);
+        })
+    }
+
+    $scope.closeRegistrationForm = () => {
+        $scope.close_dialog();
+    }
+
+    function convertFromFormDataToPermitObject(formData){
+        let permit = { 
+            First_Name: formData.First_Name || '',
+            Middle_Initial: formData.Middle_Initial || '',
+            Last_Name: formData.Last_Name || '',
+            Extension: formData.Extension || '',
+            Barangay: formData.Barangay || '',
+            Municipality: formData.Municipality || '',
+            Street: formData.Street || '',
+            Purpose: formData.Purpose || '',
+            Date_Issued: formData.Date_Issued || '',
+            COR_Number: formData.COR_Number || '',
+            id: formData.id || ''
+        };
+
+        return permit;
+    }
+
+    function converFromSnapshotToPermitObject(snapshot){
+        let permit = snapshot.data();
+        permit.id = snapshot.id;
+
+        permit.Barangay = permit.Barangay && permit.Barangay.toUpperCase() || '';
+
+        if(permit.Date_Issued)
+            permit.Date_Issued = new Date(permit.Date_Issued.seconds * 1000);
+        return permit;
+    }
+
+}).
+controller('CriminalCasesController', function($crudService, $dateService, $addressService, $scope)  {
+    var criminalCasesDocument = db.collection('database').doc('CriminalCase') ;
+    var criminalCasesCollection = criminalCasesDocument.collection('CriminalCases');
+    var criminalCases = [];
+    var countries = [];
+    var provincies = [];
+    var municipalities = [];
+    var barangays = [];
+    
+    $scope.criminalCasesTable = new ngTable([]);
+    $scope.criminalCasesFormData = {};
+
+    $scope.refreshList = () => {
+        $crudService.getItems(criminalCasesCollection, convertFromSnapshotToCriminalCase).then(cases => {
+            criminalCases = cases;
+            $scope.criminalCasesTable = new ngTable(criminalCases);
+        })
+    }
+
+    function convertFromSnapshotToCriminalCase(snapshot){
+        var criminalCase = snapshot.data();
+        criminalCase.id = snapshot.id;
+
+        if(criminalCase.Date_Filed)
+            criminalCase.Date_Filed = $dateService.convertToJSDate(criminalCase.Date_Filed);
+        if(criminalCase.Fiscals_Resolution_Date)
+            criminalCase.Fiscals_Resolution_Date = $dateService.convertToJSDate(criminalCase.Fiscals_Resolution_Date);
+        if(criminalCase.Decision_Date)
+            criminalCase.Decision_Date = $dateService.convertToJSDate(criminalCase.Decision_Date);
+        if(criminalCase.Receipt_Date)
+            criminalCase.Receipt_Date = $dateService.convertToJSDate(criminalCase.Receipt_Date);
+        
+        return criminalCase;
+    }
+}).
+service('$crudService', function(){
+
+    this.getItems = (collection, objectConverter) => {
+        // var items = []
+        if(!objectConverter)
+            objectConverter = defaultObjectConverter;
+        
+        let promise = new Promise((resolve, reject) => {
+            collection.onSnapshot(snapShot => {
+                let items = snapShot.docs.map(documentSnapshot =>{
+                    let item = objectConverter(documentSnapshot);
+
+                    return item;
+                });
+
+                resolve(items);
+            });
+        });
+
+        return promise;
+    }
+
+    this.getItem = (id, collection, objectConverter) => {
+        if(!objectConverter)
+            objectConverter = defaultObjectConverter;
+        
+        let promise = new Promise((resolve, reject) => {
+            collection.doc(id).onSnapshot(documentSnapshot => {
+                let item = objectConverter(documentSnapshot);
+                resolve(item);
+            });
+        },
+        error => {
+            reject(error);
+        });
+
+        return promise;
+    }
+
+    function defaultObjectConverter(documentSnapshot){
+        let item =  documentSnapshot.data();
+        item.id = documentSnapshot.id;
+
+        return item;
+    }
+
+    this.addItem = (itemToAdd, collection) => {
+        let promise = new Promise((resolve, reject) => {
+            collection.add(itemToAdd).then(result => {
+                resolve();
+            },
+            error => {
+                reject(error);
+            });
+        })
+        return promise;
+    }
+
+    this.updateItem = (item, collection) => {
+        let promise = new Promise((resolve, reject) => {
+            collection.doc(item.id).update(item).then(result =>{
+                resolve();
+            },
+            error => { reject(error); });
+        })
+
+        return promise;
+    }
+
+    this.updateCounterFor = (item, document) => {
+        let promise = new Promise((resolve, reject) => {
+        
+        var counter = {};
+            if(item.Year && item.Month) {
+                counter["yearlyCount.total"] = firebase.firestore.FieldValue.increment(1);
+                counter[`yearlyCount.${item.Year}.total`] = firebase.firestore.FieldValue.increment(1);
+                counter[`yearlyCount.${item.Year}.${item.Month}`] = firebase.firestore.FieldValue.increment(1); 
+            }
+
+            if(item.Municipality)
+            {
+                counter[`municipalityCount.${item.Municipality}`] = firebase.firestore.FieldValue.increment(1);                
+            }
+
+            if(Object.keys(counter).length)
+            {
+                document.update(counter).
+                then(result => {
+
+                },
+                error => {
+                    console.log(error);
+                });
+            }
+
+        });
+
+        return promise;
+    }
+}).
+service('$dateService', function(){
+    $this.convertToJSDate = (firebaseDate) => {
+        return new Date(firebaseDate.seconds * 1000);
+    }
+}).
+service('$addressService', function(){
+    var countries = require('./json/coutries.json');
+    var philippineProvinces = require('./json/philippineProvinces.json');
+
+    this.getCountries = () =>{
+        return new Promise((resolve, reject) => {
+            resolve(countries);
+        });
+    }
+
+    this.getProvinces = (country) => {
+        return new Promise((resolve, reject) => {
+            resolve(philippineProvinces);
+        });
+    }
+
+    this.getMunicipalities = (country, province) => {
+        return new Promise((resolve, reject) => {
+            var municipalities = [];
+            if(country.toUpperCase() == 'PHILIPPINES')
+                municipalities =  philippineProvinces[province];
+            
+            resolve(municipalities);
+        })
+    }
+
+    this.getBarangays = (country, province, municipality) => {
+        return new Promise((resolve, reject) => {
+            var barangays = [];
+            if(country.toUpperCase() == 'PHILIPPINES')
+                barangays = philippineProvinces[province][municipality];
+            resolve(barangays);
+        })
+    }
+});
+
+'use strict';
+
+myAppModule.controller('fireDbCrtl', function ($scope, $timeout, $utils, $mdToast,$localStorage, $mdDialog) {
+    var XLSX = require('xlsx');
+    var user = $scope.user;
+    $scope.db = {};
+    var selectedDb = "";
+
+    $scope.setDb = (s)=>{
+        selectedDb = s;
+    }
+    
+    $scope.upload_excel = (f,t)=>{
+        if(uploading_type != '') return null;
+        if(typeof(f) == typeof([])){
+            uploading_type = t;
+            var f = f[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var data = e.target.result;
+                data = new Uint8Array(data);
+                let wb = XLSX.read(data, {type: 'array'});
+                wb.SheetNames.forEach(element => {
+                    if(t=='wsup') $scope.wsup_data.push({name : element, data : XLSX.utils.sheet_to_json(wb.Sheets[element]) });
+                });
+            };
+            reader.readAsArrayBuffer(f);
+        }else {
+            $scope.toast("file error");
+        }
+    }
+
+    $scope.export_database_to_excel = (d,t)=>{
+        ipcRenderer.send('save_workbook_as_excel',d);
+    }
+
+    $scope.open_database = (t)=>{
+        $scope.open_window_view("app/pages/database/permits/single/sheets.html",t);
+    };
+
+    function newCtrl($scope, $mdDialog) {
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.createDB = (name)=>{
+            fire.db.datasets.query.add({
+                "staff_id" : user.id,
+                "name" : name,
+                "date" : Date.now()
+            });
+            $mdDialog.cancel();
+        }
+        $scope.createSheet = (name)=>{
+            let g = {
+                "staff_id" : user.id,
+                "name" : name,
+                "date" : Date.now()
+            };
+            fire.db.datasets.query.doc(selectedDb).collection("datasets").add(g);
+            $mdDialog.cancel();
+        }
+    }
+
+    var listener = {};
+    listener["main"] = fire.db.datasets.query.where("staff_id","==",user.id).onSnapshot(qs=>{
+        qs.forEach(doc=>{
+            $scope.db[doc.id] = {data:doc.data()};
+            listener[doc.id] = fire.db.datasets.query.doc(doc.id).collection("datasets").onSnapshot(qs=>{
+                let x = {};
+                let c = true;
+                qs.forEach(doc=>{
+                    c =false;
+                    x[doc.id] = doc.data();
+                });
+                $scope.db[doc.id].sheets = (c)? null : x;
+            });
+        })
+    });
+
+    $scope.open_modal = (ev,template)=>{
+        $mdDialog.show({
+            controller: newCtrl,
+            templateUrl: template,
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: true
+          });
+    }
+
+});
 'use strict';
 myAppModule.controller('fuel_log_controller', function ($scope, $timeout, $utils, $mdDialog,$localStorage, $interval,$filter) {
 
@@ -3449,7 +4901,7 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
     var uploading_type = '';
     $scope.is_loading = false;
     $scope.is_deleting = {value : false,type:''};
-    var PERMITS_DB = new JsonDB("./DB/PERMITS", true, false);
+    var PERMITS_DB = new JsonDB( dbFolder + "PERMITS", true, false);
 
     $scope.permit_types = [
         {code:"wsup",name:"Wildlife Special Use Permit"},
@@ -3551,23 +5003,6 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
         if(t=='admin_cases') {$scope.admin_cases_data.splice(0,$scope.admin_cases_data.length);}
         PERMITS_DB.push("/"+t,[]);
 
-        // let q = { 
-        //     data : { 
-        //         action : "database/permits/delete",
-        //         type : t,
-        //         user_id : $scope.user.id
-        //     },
-        //     callBack : (data)=>{
-        //         $scope.is_deleting = {value : false,type:''};
-                
-        //         let toast = (data.data.status == 0)? data.data.error : data.data.data;
-        //         $scope.toast(toast);
-        //     },
-        //     errorCallBack : ()=>{
-        //         $scope.toast("Offline, internet connection is needed for this function.");
-        //     }
-        // };
-        // $utils.api(q);
     }
 
     $scope.cancel_excel = (t)=>{
@@ -3586,49 +5021,54 @@ myAppModule.controller('database_permit_controller', function ($scope, $timeout,
     }
 
     $scope.save_database = (d,t)=>{
-        // $scope.is_loading = {value : true,type:t};
-        // $scope.total_items = calculate_items(d);
-        // $scope.pointer = 0;
         $scope.toast("Data saved");
         PERMITS_DB.push("/"+t,d);
         fire.db.datasets.update(t,{data:d});
-        
-        // var u = (sp,ip)=>{
-        //     let q = { 
-        //         data : { 
-        //             action : "database/permits/add",
-        //             data_name : d[sp].name,
-        //             data_item : d[sp].data[ip],//JSON.stringify(),
-        //             type : t,
-        //             user_id : $scope.user.id
-        //         },
-        //         callBack : (data)=>{
-        //             if(data.data.status == 1){
-        //                 PERMITS_DB.push("/"+t+"["+sp+"]/data["+ip+"]/uploaded",true);
+
+        // async function createDatabase ()  {
+        //     await fire.db.database.query.doc("WSUP").set({"id":"WSUP"});
+        //     console.log("DB Created");
+        //     d[0].data.forEach( async (e) => {
+        //         let i = {};
+        //         for (const key in e) {
+        //             if (e.hasOwnProperty(key)) {
+        //                 const element = (e[key] != undefined)? e[key] : '';
+        //                 i[key] = element;
         //             }
-        //             $scope.pointer = $scope.pointer + 1;
-        //             if($scope.total_items == $scope.pointer){
-        //                 $scope.is_loading = {value : false,type:''};
-        //                 $scope.empty_data.wsup = false;
-        //             }else {
-        //                 try {
-        //                     sp = ( d[sp].data.length == (ip + 1) ) ? (sp + 1) : sp;
-        //                     ip = ( d[sp].data.length == (ip + 1) ) ? 0 : (ip + 1);
-        //                 } catch (error) {
-        //                     console.log(error);
-        //                     sp = sp + 1;
-        //                     ip = 0;
-        //                 }
-        //                 u(sp,ip);
-        //             }
-        //         },
-        //         errorCallBack : ()=>{
-        //             u(sp,ip);
         //         }
-        //     };
-        //     $utils.api(q);
+        //         i.name = (e.First_Name  || '') + " " + (e.Middle_Name || '') + " " + (e.Last_Name || '') + " " + (e.Extension_Name || '');
+        //         i.address = (e.Street || '') + ", " + (e.Barangay || '') + ", " + (e.Municipality || '');
+        //         if(e.Issued_Year && e.Issued_Month && e.Issued_Day){
+        //             i.Issued_Date = e.Issued_Year + "-" + e.Issued_Month + "-" + e.Issued_Day;
+        //         }
+        //         if(e.Validity_Year && e.Validity_Month && e.Validity_Day) {
+        //             i.Validity_Date = e.Validity_Year + "-" + e.Validity_Month + "-" + e.Validity_Day;
+        //         }
+        //         i.keywords = i.name.split(' ').filter( d => d.length > 1);
+        //         await fire.db.database.query.doc("WSUP").collection("database").add(i);
+        //         let u = {};
+        //         u["count.all"] = firebase.firestore.FieldValue.increment(1);
+        //         if(e.Issued_Year != undefined) u[`count.${e.Issued_Year}.total`] = firebase.firestore.FieldValue.increment(1);
+        //         if(e.Issued_Month != undefined) u[`count.${e.Issued_Year}.${e.Issued_Month}`] = firebase.firestore.FieldValue.increment(1);
+        //         if(e.Municipality != undefined) u[`per_municipality.${e.Municipality}`] = firebase.firestore.FieldValue.increment(1);
+        //         await fire.db.database.query.doc("WSUP").update(u);
+        //     });
         // };
-        // u(0,0);
+        // createDatabase();
+        
+
+        // let vv = [ 'Corporation ', 'Last_Name'];
+
+        // vv.forEach(v => {
+        //     let mun = {};
+        //     d[0].data.forEach(e => {
+        //         if(e[v] != undefined)
+        //             mun[e[v]] = (mun[e[v]] == undefined)? 1 : mun[e[v]] + 1;
+        //     });
+        //     console.log(mun);
+        // });
+
+        
     }
 
     $scope.export_database_to_excel = (d,t)=>{

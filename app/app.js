@@ -1,5 +1,5 @@
 'use strict';
-var app_version = 3;
+var app_version = 4;
 var os = require('os');
 var JsonDB = require('node-json-db');
 const queryString = require('query-string');
@@ -140,7 +140,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.api_address = api_address;
     $scope.is_loading = false;
     $scope.app_settings = {};
-    $scope.app_version_code = '1.0.4';
+    $scope.app_version_code = '1.1.0';
     $scope.downloadFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\brain_downloads\\' : app.getPath('downloads') + '/brain_downloads/';
     $scope.software_update_available = false;
     $scope.toggleLeft = buildDelayedToggler('left');
@@ -151,28 +151,33 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     }
 
     function updateDownload(version,address){
-      let loc_array = address.split("/");
-      let filename = loc_array[(loc_array.length - 1)];
-      let dir = $scope.downloadFolder + "brain_system_" + version;
-      dir += (os.platform() == 'win32')? '\\': '/';
-      let loc = dir + filename;
+      if(address != undefined) {
+        let loc_array = address.split("/");
+        let filename = loc_array[(loc_array.length - 1)];
+        let dir = $scope.downloadFolder + "brain_system_" + version;
+        dir += (os.platform() == 'win32')? '\\': '/';
+        let loc = dir + filename;
 
-      if(!fs.existsSync($scope.downloadFolder)){
-        fs.mkdirSync($scope.downloadFolder);
-      }
-      if(!fs.existsSync(dir)){
-          fs.mkdirSync(dir);
-      }
-      if(!fs.existsSync(loc)){
-        download(address, loc, function(){
-          $scope.toast("New Software Update available!");
-          $scope.software_update_available = true;
-          $scope.$apply();
-        });
+        if(!fs.existsSync($scope.downloadFolder)){
+          fs.mkdirSync($scope.downloadFolder);
+        }
+        if(!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+        if(!fs.existsSync(loc)){
+          download(address, loc, function(){
+            $scope.toast("New Software Update available!");
+            $scope.software_update_available = true;
+            $scope.$apply();
+          });
+          return false;
+        } else {
+          return true;
+        }
+      }else {
         return false;
-      } else {
-        return true;
       }
+      
     }
 
     fire.db.settings.when('desktop', (data) => {

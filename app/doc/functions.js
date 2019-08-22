@@ -27,13 +27,21 @@ myAppModule.service('func', function($utils, $localStorage) {
         doc.db.collection(acc).doc(id).onSnapshot( async (d) => {
             $localStorage.doc_user = d.data();
             let c = [];
-            await $localStorage.doc_user.agencies.map( async v => {
-                let a = await doc.db.collection(agencies).doc(v).get();
-                let b = a.data();
-                b.id = a.id;
-                c.push(b);
-                return b;
-            });
+            if(!d.empty && $localStorage.doc_user.agencies != undefined){
+                await $localStorage.doc_user.agencies.map( async v => {
+                    let a = await doc.db.collection(agencies).doc(v).get();
+                    if(a.empty){
+                        $localStorage.doc_user_agencies = [];
+                        return {};
+                    }else {
+                        let b = a.data();
+                        b.id = a.id;
+                        c.push(b);
+                        return b;
+                    }
+                });
+            }
+            
             $localStorage.doc_user_agencies = c;
             callback(d.data(),c);
         });
@@ -44,16 +52,21 @@ myAppModule.service('func', function($utils, $localStorage) {
             let a = [];
             let b = [];
             qs.forEach(dx => {
-                if(x.agencies !== undefined) {
-                    x.agencies.forEach(agc => {
-                        if(dx.id == agc){
-                            a.push(dx.data());
-                        }else {
-                            b.push(dx.data());
-                        }
-                    });
+                let c = dx.data(); c.id = dx.id;
+                if(x != undefined) {
+                    if(x.agencies !== undefined){
+                        x.agencies.forEach(agc => {
+                            if(dx.id == agc){
+                                a.push(c);
+                            }else {
+                                b.push(c);
+                            }
+                        });
+                    }else {
+                        b.push(c);
+                    }
                 }else {
-                    b.push(dx.data());
+                    b.push(c);
                 }
             });
             callback(a,b);
@@ -64,6 +77,8 @@ myAppModule.service('func', function($utils, $localStorage) {
         $localStorage.myDrafts = await func.getMyDrafts();
         if($localStorage.myDrafts.length > 0) {
             $localStorage.currentItem = func.$scope.myDrafts[0];
+            func.$scope.createdDate = $localStorage.currentItem.created;
+            func.$scope.pdate = $localStorage.currentItem.published;
         }else {
             $localStorage.currentItem = null;
         }

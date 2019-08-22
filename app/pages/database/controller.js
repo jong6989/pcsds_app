@@ -666,7 +666,7 @@ controller('PermitController', function($crudService, municipalityService, $scop
     }
 
 }).
-contoller('CriminalCasesController', function($crudService, $dateService, $addressService, $scope)  {
+controller('CriminalCasesController', function($crudService, $dateService, $addressService, $scope)  {
     var criminalCasesDocument = db.collection('database').doc('CriminalCase') ;
     var criminalCasesCollection = criminalCasesDocument.collection('CriminalCases');
     var criminalCases = [];

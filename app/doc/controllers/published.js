@@ -4,11 +4,10 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $utils,
     $scope.receipients = ($localStorage.doc_receipients)? $localStorage.doc_receipients : [];
     $scope.filtered_receipients = [];
     $scope.reciepientList = [];
+    $scope.currentReciepients = [];
     $scope.sendingRemarks = '';
+    var currentDisplayedDocument = null;
     $scope.send_as = $localStorage.doc_send_as;
-    let reciepientRules = {
-
-    };
     func.$scope = $scope;
     
     $scope.loadReciepients = (a,b) => {
@@ -22,6 +21,8 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $utils,
                 $scope.receipients = r;
                 $localStorage.doc_receipients = r;
                 $scope.$apply();
+            }else {
+                $localStorage.doc_receipients = [];
             }
         });
         for (const k in a) {
@@ -38,26 +39,28 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $utils,
 
     $scope.filterReciepient = () => {
         let currentItem = $scope.currentItem;
-        $scope.filtered_receipients = [];
-        $scope.filtered_receipients = $scope.receipients.filter( a => {
-            if(!a[currentItem.agency.id]['active']) {
+        if(currentItem != undefined){
+            $scope.filtered_receipients = [];
+            $scope.filtered_receipients = $scope.receipients.filter( a => {
+                if(!a[currentItem.agency.id]['active']) {
+                    return false;
+                }
+                if($scope.send_as == 'front_office' || $scope.send_as == 'registry'){
+                    return ( a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['registry'] );
+                } else if($scope.send_as == 'division_head'){
+                    return ( a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['registry'] );
+                } else if($scope.send_as == 'office_head'){
+                    return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['registry'] );
+                } else if($scope.send_as == 'department_head'){
+                    return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['registry'] );
+                } else if($scope.send_as == 'admin'){
+                    return true;
+                } else if($scope.send_as == 'staff'){
+                    return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['division_head'] );
+                }
                 return false;
-            }
-            if($scope.send_as == 'front_office' || $scope.send_as == 'registry'){
-                return ( a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['registry'] );
-            } else if($scope.send_as == 'division_head'){
-                return ( a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['registry'] );
-            } else if($scope.send_as == 'office_head'){
-                return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['registry'] );
-            } else if($scope.send_as == 'department_head'){
-                return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['department_head'] || a[currentItem.agency.id]['office_head'] || a[currentItem.agency.id]['division_head'] || a[currentItem.agency.id]['registry'] );
-            } else if($scope.send_as == 'admin'){
-                return true;
-            } else if($scope.send_as == 'staff'){
-                return ( a[currentItem.agency.id]['front_office'] || a[currentItem.agency.id]['staff'] || a[currentItem.agency.id]['division_head'] );
-            }
-            return false;
-        } );
+            } );
+        }
     };
 
     $scope.sendAsSelected = (a) => {
@@ -118,15 +121,60 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $utils,
             });
             return a;
         } );
-
         setTimeout( () => {
-            $scope.toast(`Sent to ${reciepients.length} receipients.`);
+            $scope.toast(`Sent to ${reciepients.length} receipient${(reciepients.length > 1)? 's':''}.`);
         }, 1000 );
 
         //close and reset variables
         $scope.reciepientList = [];
         $scope.sendingRemarks = '';
         $scope.close_dialog();
+    };
+
+    $scope.load_current_receipients = (r) => {
+        if(r != undefined) {
+            currentDisplayedDocument = $scope.currentItem.id;
+            delete($scope.currentReciepients);
+            $scope.currentReciepients = [];
+            r.forEach(receiver_id => {
+                doc.db.collection(acc).doc(receiver_id).get().then(dx => {
+                    let a = dx.data();
+                    a.id = dx.id;
+                    a.sentItems = [];
+                    $scope.currentReciepients.push(a);
+                    doc.db.collection(doc_transactions).where('receiver','==',receiver_id)
+                        .where('document.id','==',$scope.currentItem.id)
+                        .where('sender.id','==',$scope.userId)
+                        .get()
+                        .then( qs => {
+                            qs.forEach(
+                                dy => {
+                                    let b = dy.data();
+                                    b.id = dy.id;
+                                    $scope.currentReciepients = $scope.currentReciepients.map(
+                                        c => {
+                                            if(c.id == b.receiver)
+                                                c.sentItems.push(b);
+                                            return c;
+                                        }
+                                    );
+                                }
+                            );
+                        } );
+                });
+            });
+        }
+    };
+    
+    var publishing_receipients_interval = null;
+    $scope.init_publishing_receipients = () => {
+        $scope.load_current_receipients($scope.currentItem.receipients);
+        publishing_receipients_interval = setInterval( ()=> {
+            if(currentDisplayedDocument != $scope.currentItem.id && $scope.currentItem.receipients != undefined)
+                $scope.load_current_receipients($scope.currentItem.receipients);
+            if($scope.currentItem.receipients == undefined)
+                clearInterval(publishing_receipients_interval);
+        }, 400);
     };
 
 });

@@ -9,21 +9,28 @@ myAppModule.controller('doc_ctrl_actions', function ($scope, $timeout, $utils, $
     var actionDocId = '';
 
     $scope.init_doc = () => {
-        $scope.currentItem.actions = [];
-        $scope.documentItemListener = doc.db.collection(documents).doc($localStorage.currentItem.id).onSnapshot(dx => {
-            $scope.currentItem = dx.data();
-            $scope.currentItem.id = dx.id;
-            $localStorage.currentItem = $scope.currentItem;
-            actionDocId = $scope.currentItem.id;
-            $scope.$apply();
-        });
+        if($scope.currentNavItem == 'Documents' && $scope.currentDocSelected != 'draft'){
+            $scope.currentItem.actions = [];
+            $scope.documentItemListener = doc.db.collection(documents).doc($localStorage.currentItem.id).onSnapshot(dx => {
+                $scope.currentItem = dx.data();
+                $scope.currentItem.id = dx.id;
+                $localStorage.currentItem = $scope.currentItem;
+                actionDocId = $scope.currentItem.id;
+                $scope.$apply();
+            });
+        }else {
+            clearInterval(actions_interval);
+        };
     };
 
-    setInterval( ()=> {
-        if(actionDocId !== $localStorage.currentItem.id) {
+    var actions_interval = null;
+    actions_interval = setInterval( ()=> {
+        if($localStorage.currentItem == undefined){
+            clearInterval(actions_interval);
+        }else if(actionDocId !== $localStorage.currentItem.id) {
             $scope.init_doc();
         }
-    }, 200 );
+    }, 300 );
     
     $scope.dl_attachment = (address,dx)=>{
         if(dx != undefined){

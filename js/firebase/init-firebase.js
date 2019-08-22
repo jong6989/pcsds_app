@@ -1,20 +1,20 @@
-var config = {
-	apiKey: "AIzaSyDJnCE34jNQ8mfQAcBt1zlGj5CJZwaOYfM",
-	authDomain: "pcsd-app.firebaseapp.com",
-	databaseURL: "https://pcsd-app.firebaseio.com",
-	projectId: "pcsd-app",
-	storageBucket: "pcsd-app.appspot.com",
-	messagingSenderId: "687215095072"
-};
-
 // var config = {
-// 	apiKey: "AIzaSyBxVhjz6oGG0Vv3FDtPEmKLSYLy9kDVZNg",
-// 	authDomain: "pcsd-brain-systems.firebaseapp.com",
-// 	databaseURL: "https://pcsd-brain-systems.firebaseio.com",
-// 	projectId: "pcsd-brain-systems",
-// 	storageBucket: "pcsd-brain-systems.appspot.com",
-// 	messagingSenderId: "268908472667"
+// 	apiKey: "AIzaSyDJnCE34jNQ8mfQAcBt1zlGj5CJZwaOYfM",
+// 	authDomain: "pcsd-app.firebaseapp.com",
+// 	databaseURL: "https://pcsd-app.firebaseio.com",
+// 	projectId: "pcsd-app",
+// 	storageBucket: "pcsd-app.appspot.com",
+// 	messagingSenderId: "687215095072"
 // };
+
+var config = {
+	apiKey: "AIzaSyBxVhjz6oGG0Vv3FDtPEmKLSYLy9kDVZNg",
+	authDomain: "pcsd-brain-systems.firebaseapp.com",
+	databaseURL: "https://pcsd-brain-systems.firebaseio.com",
+	projectId: "pcsd-brain-systems",
+	storageBucket: "pcsd-brain-systems.appspot.com",
+	messagingSenderId: "268908472667"
+};
 
 firebase.initializeApp(config);
 

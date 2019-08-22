@@ -1,6 +1,6 @@
 {
   "name": "pcsds_app",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "PCSDS APP",
   "main": "main.js",
   "scripts": {
@@ -37,11 +37,12 @@
     "electron": "^4.0.3",
     "electron-packager": "^13.1.1",
     "electron-wix-msi": "^2.1.1",
-    "gulp": "^4.0.0"
+    "gulp": "^4.0.2"
   },
   "dependencies": {
     "bootstrap": "^4.2.1",
     "geolocation": "^0.2.0",
+    "gulp-cli": "^2.2.0",
     "gulp-concat": "^2.6.1",
     "gulp-uglify": "^3.0.2",
     "is-online": "^8.2.0",

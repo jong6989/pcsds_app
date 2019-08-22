@@ -1,7 +1,7 @@
 'use strict';
 
-document.write(`<script src="./app/doc/settings.js"></script>`);
-document.write(`<script src="./app/doc/functions.js"></script>`);
+// document.write(`<script src="./app/doc/settings.js"></script>`);
+// document.write(`<script src="./app/doc/functions.js"></script>`);
 
 myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $localStorage, func) {
     $scope.doc_content = '';
@@ -24,11 +24,18 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     $scope.mySent = [];
     $scope.myReceived = [];
     $scope.myPending = [];
+    $scope.doc_user_agencies = [];
     $scope.docTabsSelected = 0;
     $scope.n = {};
     const userId = `pcsd_${$scope.user.id}`; //id from pcsd web api , (php), that will be saved to accounts collection
     $scope.userId = userId;
     $scope.doc_user = ($localStorage.doc_user == undefined)? { id: userId } : $localStorage.doc_user; //save data to local storage to remember last user
+    $scope.document_types = [
+        'generic', 'incoming', 'outgoing', 'Back-To-Office-Report', 'acommplishments', 'report', 'request'
+    ];
+    $scope.request_types = [
+        'service','man power', 'data or e-file', 'report', 'file', 'information'
+    ];
     $scope.dateA = '';
     $scope.dateB = '';
     func.$scope = $scope;
@@ -42,6 +49,12 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
                 return o;
             });
             $scope.myDrafts = $localStorage.myDrafts = r;
+        }else {
+            $localStorage.currentItem = undefined;
+            $localStorage.myDrafts = [];
+            $scope.myDrafts = [];
+            if($scope.currentClicked == 'draft')
+                $scope.currentItem = null;
         }
     });
 
@@ -72,6 +85,9 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
             $scope.myPending = a;
         }
     });
+    $scope.removeFromPending = (id) => {
+        $scope.myPending = $scope.myPending.filter( i => (i.id != id) );
+    };
 
     //received
     doc.db.collection(doc_transactions).where('receiver','==',$scope.userId).orderBy('received.time','desc').where('status','==','received')
@@ -114,16 +130,24 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         return ($scope.currentClicked == c);
     };
 
+    $scope.setLocal = (key,value) => {
+        $localStorage[key] = value;
+    };
+
+    $scope.getLocal = (key) => {
+        return $localStorage[key];
+    };
+
     $scope.doc_init = () => {
         //imidiate display, to prevent loading
         if($localStorage.doc_user !== undefined) {
             $scope.doc_content = 'app/doc/views/dashboard.html';
-            func.checkDraft((a,b) => {
-                $scope.myDrafts = a;
-                $scope.currentItem = b;
-                $scope.currentClicked = 'draft';
-                $scope.currentDocSelected = 'draft';
-            });
+            // func.checkDraft((a,b) => {
+            //     $scope.myDrafts = a;
+            //     $scope.currentItem = b;
+            //     $scope.currentClicked = 'draft';
+            //     $scope.currentDocSelected = 'draft';
+            // });
             $scope.isLoading = false;
         }
         //checking user if account activated
@@ -138,6 +162,8 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
                     func.listenToAccountChange(doc.id, (a,b) => {
                         $scope.doc_user = a;
                         $scope.doc_user_agencies = b;
+                        if($scope.currentClicked == 'draft' && $scope.currentItem != undefined)
+                            $scope.currentItem.agency = b[0];
                     });
                     return null;
                 });
@@ -281,7 +307,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         let d = $scope.date_now('YYYY-MM-DD');
         $scope.dateA = d;
         $scope.dateB = d;
-        $scope.n = { created : d, published : d};
+        $scope.n = { created : d, published : d, keywords : [], category : 'none', type : ($localStorage.currentDocType) ? $localStorage.currentDocType: 'generic'};
         $scope.showPrerenderedDialog(evt,'addDraft');
     };
 
@@ -302,6 +328,9 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
 
             $scope.currentClicked = 'draft';
             $scope.currentItem = x;
+            if($scope.doc_user_agencies.length > 0 ){
+                $scope.currentItem.agency = $scope.doc_user_agencies[0];
+            }
             $scope.close_dialog();
             $scope.toast(`Draft document created.`);
             $scope.myDrafts.push(x);
@@ -361,8 +390,8 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
 
 });
 
-document.write(`<script src="./app/doc/controllers/files.js"></script>`);
-document.write(`<script src="./app/doc/controllers/draft.js"></script>`);
-document.write(`<script src="./app/doc/controllers/published.js"></script>`);
-document.write(`<script src="./app/doc/controllers/pending.js"></script>`);
-document.write(`<script src="./app/doc/controllers/actions.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/files.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/draft.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/published.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/pending.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/actions.js"></script>`);

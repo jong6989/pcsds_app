@@ -3,6 +3,8 @@
 myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $mdToast,$mdDialog, func, $localStorage) {
     $scope.doc_user_agencies = ($localStorage.doc_user_agencies == undefined)? [] : $localStorage.doc_user_agencies;
     func.$scope = $scope;
+    $scope.createdDate = undefined;
+    $scope.pdate = undefined;
     
     $scope.upload_file = (id,files,isRefresh)=>{
         if(files !== undefined && id !== undefined){

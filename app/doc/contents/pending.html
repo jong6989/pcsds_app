@@ -4,7 +4,7 @@
         Name : <strong>{{currentTransaction.sender.name}}</strong> <br>
         Email : <strong>{{currentTransaction.sender.email}}</strong> <br>
         Contact : <strong>{{currentTransaction.sender.contact}}</strong> <br>
-        Access : <cite ng-repeat="a in currentTransaction.sender.access"> {{a}}, </cite> <br>
+        Access : <cite ng-repeat="a in currentTransaction.sender.access"> {{(a == 'active')?'':a}}, </cite> <br>
     </p>
     <hr>
     <h5 class="col-grey">Sent</h5>
@@ -19,17 +19,8 @@
     </p>
     <hr>
     
-    <h5><small>Doc ID</small> : <strong class="col-teal">{{currentItem.id}}</strong> </h5>
-    <h5><small> Agency</small> : <strong class="col-teal">{{currentItem.agency.name}}</strong> </h5>
-    <h5><small> Date Published</small> : <strong class="col-teal">{{currentItem.meta.published_date}}</strong>
-        <cite class="font-12">, {{date_from_now(currentItem.meta.published_time)}}</cite> </h5>
-    <hr>
-    <h5><small> Date A</small> : <strong class="col-teal">{{currentItem.created}}</strong> </h5>
-    <h5><small> Date B</small> : <strong class="col-teal">{{currentItem.published}}</strong> </h5>
-    <h5><small> Source</small> : <strong class="col-teal">{{currentItem.source}}</strong> </h5>
-    <h5><small> Subject</small> : <strong class="col-teal">{{currentItem.subject}}</strong> </h5>
-    <h5><small> Category</small> : <strong class="col-teal">{{currentItem.category}}</strong> </h5>
-    <h5><small> Description</small> : <strong class="col-teal">{{currentItem.description}}</strong> </h5>
+    <div ng-include="'./app/doc/contents/document.html'"></div>
+    
     <hr>
     
     <h4 class="col-grey">Actions</h4>

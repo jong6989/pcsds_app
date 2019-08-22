@@ -14,9 +14,10 @@
             <md-content flex layout class="m-l-10" >
                 <div ng-include="'./app/doc/contents/agency.html'" flex ng-if="currentClicked == 'agency'"></div>
                 <div ng-include="'./app/doc/contents/draft.html'" flex ng-if="currentClicked == 'draft'"></div>
-                <div ng-include="'./app/doc/contents/published.html'" flex ng-if="currentClicked == 'published' || currentClicked == 'sent'"></div>
+                <div ng-include="'./app/doc/contents/published.html'" flex ng-if="currentClicked == 'published'"></div>
                 <div ng-include="'./app/doc/contents/pending.html'" flex ng-if="currentClicked == 'pending'"></div>
                 <div ng-include="'./app/doc/contents/received.html'" flex ng-if="currentClicked == 'received'"></div>
+                <div ng-include="'./app/doc/contents/sent.html'" flex ng-if="currentClicked == 'sent'"></div>
                 
             </md-content>
             <md-sidenav

@@ -19,31 +19,35 @@
         </div>
         <md-card-content layout-gt-xs layout-xs="column" style="max-height:300px">
             
-            <div flex>
+            <md-content flex>
                 <h6><strong>All accounts</strong></h6>
-                <ol>
-                    <li ng-repeat="x in resultAccounts | filter : search_account" ng-if="doc_user.id !== x.id">
-                            {{x.name}}<i ng-click="openAddToAgency(x,$index,$event)" 
-                            ng-if="!hasId(currentItem.id,x.agencies) " 
-                            class="fa fa-plus pointer col-green m-l-10"></i>
-                    </li>
-                </ol>
-            </div>
+                <div>
+                    <ol>
+                        <li ng-repeat="x in resultAccounts | filter : search_account" ng-if="doc_user.id !== x.id">
+                                {{x.name}}<i ng-click="openAddToAgency(x,$index,$event)" 
+                                ng-if="!hasId(currentItem.id,x.agencies) " 
+                                class="fa fa-plus pointer col-green m-l-10"></i>
+                        </li>
+                    </ol>
+                </div>
+            </md-content>
             <md-divider class="m-b-10"></md-divider>
-            <div flex>
+            <md-content flex>
                 <h6><strong>{{currentItem.short_name}} accounts</strong></h6>
-                <ol>
-                    <li ng-repeat="x in agencyAccounts" ng-if="doc_user.id !== x.id">
-                            {{x.name}} : 
+                <div>
+                    <ol>
+                        <li ng-repeat="x in agencyAccounts" ng-if="doc_user.id !== x.id">
+                                {{x.name}} : 
                             <span ng-if="x[currentItem.id].division_head">Division Head</span>
                             <span ng-if="x[currentItem.id].department_head">Department Head</span>
                             <span ng-if="x[currentItem.id].office_head">Agency Head</span>
                             <span ng-if="x[currentItem.id].front_office">Receiving Staff</span>
                             <i ng-click="removeToAgency(x,$event)"
                             class="fa fa-minus pointer col-red"></i>
-                    </li>
-                </ol>
-            </div>
+                        </li>
+                    </ol>
+                </div>
+            </md-content>
             
         </md-card-content>
     </md-card>
