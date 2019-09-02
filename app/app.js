@@ -8,7 +8,8 @@ const remote = require('electron').remote;
 const app = remote.app;
 var fs = require('fs');
 var request = require('request');
-var path = require('path')
+var path = require('path');
+var QRCode = require('qrcode');
 const isOnline = require('is-online');
 //twillio
 const accountSid = 'ACe4baaac94c303c32abb9c5804affe7d8';
@@ -19,6 +20,31 @@ const dbFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\pcsd_
 if(!fs.existsSync(dbFolder)){
   fs.mkdirSync(dbFolder);
 }
+
+var nodemailer = require('nodemailer');
+var pcsdmailer = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'bboyjong6989@gmail.com',
+    pass: 'Pula6989~'
+  }
+});
+
+var mailOptions = {
+  from: 'steve@pcsd.gov.ph',
+  to: 'b.boy_jong@yahoo.com',
+  subject: 'Test email from NODE',
+  text: 'Yeah!!! its legit!'
+};
+
+// pcsdmailer.sendMail(mailOptions, function(error, info){
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log('Email sent: ' + info.response);
+//   }
+// });
+
 
 var download = (uri, filename, callback)=>{
   request.head(uri, function(err, res, body){
@@ -67,6 +93,12 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return r.form();
     };
    return f;
+})
+.config(function($sceDelegateProvider) {
+  $sceDelegateProvider.resourceUrlWhitelist([
+    'self',
+    'https://document-network.web.app/**'
+  ]);
 })
 .factory('Excel',function($window){
         var uri='data:application/vnd.ms-excel;base64,',
@@ -139,6 +171,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.menus = [];
     $scope.api_address = api_address;
     $scope.is_loading = false;
+    $scope.is_printing = false;
     $scope.app_settings = {};
     $scope.app_version_code = '1.1.0';
     $scope.downloadFolder = (os.platform() == 'win32')? app.getPath('downloads') + '\\brain_downloads\\' : app.getPath('downloads') + '/brain_downloads/';
@@ -533,6 +566,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       $scope.render_params = queryString.parse(global.location.search) ;
       $scope.current_view = $scope.render_params.view;
       $scope.render_params.data = $localStorage.params;
+      $scope.is_printing = true;
     }
 
     $scope.load_html = (text,clas)=>{
@@ -579,50 +613,34 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return r;
     };
 
-    $scope.get_notifs = ()=>{
-        // return NOTIFICATION_DB.getData(notif_string);
+    $scope.generate_qr_code = (id,text)=>{
+      let canvas = document.getElementById(id);
+      QRCode.toCanvas(canvas, text, function (error) {
+        if (error) console.error(error);
+      })
     };
 
-    $scope.set_new_notif = ()=>{
-      $scope.new_notif = ($scope.user.data.received_notifs == undefined) ? ( ($scope.notifs == undefined)? 0 : $scope.notifs.length ) : $scope.notifs.length - $scope.user.data.received_notifs;
-    };
-
-    $scope.set_notif =()=>{
-        $scope.notifs = $scope.get_notifs();
-        $scope.set_new_notif();
-    };
-    $scope.load_notifs = ()=>{
-        // if($scope.user != undefined){
-        //   var d = NOTIFICATION_DB.getData(notif_string);
-        //   var l = (d.length > 0)? d[d.length - 1].id : 0;
-        //   var current_length = d.length;
-        //   let q = { 
-        //       data : { 
-        //           action : "database/notification/load",
-        //           offset : current_length,
-        //           last_id : l,
-        //           user_id : $scope.user.id
-        //       },
-        //       callBack : function(data){
-        //           if(data.data.status == 1){
-        //               NOTIFICATION_DB.push(notif_string,data.data.data,false);
-        //               $timeout($scope.set_notif,200);
-        //           }
-        //           $timeout($scope.load_notifs,3000);
-        //       }
-        //   };
-        //   $utils.api(q);
-        // }
-    };
-
-    $scope.clear_notif = (n)=>{
-      // if($scope.new_notif > 0){
-      //   $http.get(api_address + "?action=user/clear_notif&user_id=" + $scope.user.id + "&count=" + n ).then(function(data){
-      //     $scope.user = $localStorage.pcsd_app_user = data.data.data;
-      //     $scope.set_notif();
-      //   });
-      // }
-    };
+    var signaturePad = [];
+    $scope.generate_signature_field = (id,idx) => {
+      let wrapper = document.getElementById(id);
+      let canvas = wrapper.querySelector('canvas');
+      signaturePad[idx] = new SignaturePad(canvas);
+      $scope.signed = (i)=> {
+        return signaturePad[i].toDataURL();
+      }
+      $scope.signisEmpty = (i) => {
+        signaturePad[i].isEmpty();
+      }
+      $scope.signclear = (i) => {
+        signaturePad[i].clear();
+      }
+      $scope.signoff = (i) => {
+        signaturePad[i].off();
+      }
+      $scope.signon = (i) => {
+        signaturePad[i].on();
+      }
+    }
     
     
 })

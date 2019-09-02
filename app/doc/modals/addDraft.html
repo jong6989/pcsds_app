@@ -1,7 +1,7 @@
 <div style="visibility: hidden">
     <div class="md-dialog-container" id="addDraft">
         <md-dialog layout="column" layout-align="center center">
-            <form ng-cloak name="form_add_draft">
+            <form ng-cloak name="form_add_draft" ng-init="createTemplate = ''">
                 <md-toolbar class="bg-teal">
                     <div class="md-toolbar-tools">
                         <h2>Create a draft document</h2>
@@ -15,16 +15,25 @@
                 <md-dialog-content layout-padding class="p-b-20">
                     <hr>
 
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>Document Type</label>
-                        <md-select ng-model="n.type">
-                            <md-option ng-repeat="x in document_types" value="{{x}}" ng-click="setLocal('currentDocType',x);">
-                            {{x}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
+                    <strong>Document Template</strong>
 
-                    <div flex-gt-sm ng-if="n.type != 'request'">
+                    <md-autocomplete
+                        class="md-block" 
+                        md-selected-item="n.template"
+                        md-selected-item-change="setLocal('currentDocTemplate', x)"
+                        md-search-text="doc_create_template"
+                        md-items="x in document_templates | filter : doc_create_template"
+                        md-item-text="x.name"
+                        md-min-length="0"
+                        placeholder="Search Template">
+                        <md-item-template>
+                            {{x.name}}
+                        </md-item-template>
+                    </md-autocomplete>
+                    <hr>
+                    <div ng-include="n.template.create"></div>
+
+                    <!-- <div flex-gt-sm ng-if="n.type != 'request'">
                         <strong ng-if="n.type == 'generic'">Date A</strong>
                         <strong ng-if="n.type == 'incoming'">Correspondence Date</strong>
                         <strong ng-if="n.type == 'outgoing'">Date Requested</strong>
@@ -118,7 +127,7 @@
                             {{x}}
                             </md-item-template>
                         </md-autocomplete>
-                    </div>
+                    </div> -->
                     <hr>
                 </md-dialog-content>
             
@@ -127,7 +136,7 @@
                 <md-button ng-click="close_dialog()">
                     Close
                 </md-button>
-                <md-button class="md-primary md-raised" ng-disabled="form_add_draft.$invalid" 
+                <md-button class="md-primary md-raised" ng-disabled="form_add_draft.$invalid || n.template == {} || n.template == undefined" 
                     ng-click="createDraft(n);">
                     Create Draft
                 </md-button>

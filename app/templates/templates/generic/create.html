@@ -1,0 +1,61 @@
+
+
+<div flex-gt-sm>
+    <strong>Date A</strong>
+    <md-datepicker ng-model="dateA" ng-change="n.created = to_date(dateA)" 
+        md-placeholder="Date"
+        md-open-on-focus required>
+    </md-datepicker>
+</div>
+
+<md-input-container class="md-block m-t-40" flex>
+    <label>Source / From</label>
+    <input ng-model="n.source" required>
+</md-input-container> 
+
+<md-input-container class="md-block" flex>
+    <label>Subject</label>
+    <input ng-model="n.subject" required>
+</md-input-container>
+
+<div flex-gt-sm>
+    <strong>Date B</strong>
+    <md-datepicker ng-model="dateB" ng-change="n.published = to_date(dateB)" 
+        md-placeholder="Date"
+        md-open-on-focus required>
+    </md-datepicker>
+</div>
+
+<div>
+    <md-input-container class="md-block">
+        <label>Content</label>
+        <textarea ng-model="n.description" md-maxlength="5000" rows="6" md-select-on-focus required></textarea>
+    </md-input-container>
+</div>
+
+<br>
+<strong>Keywords</strong>
+<md-chips ng-model="n.keywords" md-add-on-blur="true" readonly="false"
+ input-aria-label="Keywords" placeholder="add keywords"
+md-removable="true" required></md-chips>
+
+<br>
+
+<div>
+    <strong> Category (Personal Filter) </strong>
+    <md-autocomplete
+        class="md-block" flex-gt-sm="100"
+        md-selected-item="n.category"
+        md-search-text="categ"
+        md-search-text-change="n.category = categ"
+        md-items="x in doc_user.categories"
+        md-item-text="x"
+        md-min-length="0"
+        placeholder="Document Category">
+        <md-item-template>
+        {{x}}
+        </md-item-template>
+    </md-autocomplete>
+</div>
+<hr>
+</md-dialog-content>

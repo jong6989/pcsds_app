@@ -25,16 +25,16 @@
             {{currentTransaction.date}}, 
             {{ date_from_now(currentTransaction.time) }}
         </p>
-    </div>
     <hr>
+    </div>
     <div ng-if="currentTransaction.status == 'declined'">
         <h5 class="col-orange">Declined <cite> Reason : <strong>{{currentTransaction.declined.reason}}</strong> </cite></h5>
         <p>
             {{currentTransaction.declined.date}}, 
             {{ date_from_now(currentTransaction.declined.time) }}
         </p>
+        <hr>
     </div>
-    <hr>
 
     <h5 class="col-grey">Remark</h5>
     <p>

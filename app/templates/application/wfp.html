@@ -17,11 +17,14 @@
                 <img  ng-src="{{ api_address + '/' + application.data.application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3">
             </div>
         </div>
+
+        <div class="align-center m-t-20 m-b-10">
+            <div ng-init="scale_text = (application.data.application.farm_scale == 'large')? 'MEDIUM-LARGE SCALE FARMING' : 'SMALL SCALE FARMING'; "></div>
+            <h3 ng-if="application.data.application.application_type == 'new'" >APPLICATION FOR <span class="col-green">NEW</span> {{scale_text}} WILDLIFE FARM PERMIT (WCP)</h3>
+            <h3 ng-if="application.data.application.application_type == 'renew'" >APPLICATION FOR <span class="col-blue">RENEWAL</span> OF {{scale_text}} WILDLIFE FARM PERMIT (WCP)</h3>
+            <h4>Transaction No.: {{application.date}} </h4>
+        </div>
     
-        <!-- Tittle -->
-        <div ng-init="scale_text = (application.data.application.farm_scale == 'large')? 'MEDIUM-LARGE SCALE FARMING' : 'SMALL SCALE FARMING'; "></div>
-        <h3 ng-if="application.data.application.application_type == 'new'" class="align-center m-t-20 m-b-10">APPLICATION FOR <span class="col-green">NEW</span> {{scale_text}} WILDLIFE FARM PERMIT (WCP)</h3>
-        <h3 ng-if="application.data.application.application_type == 'renew'" class="align-center m-t-20 m-b-10">APPLICATION FOR <span class="col-blue">RENEWAL</span> OF {{scale_text}} WILDLIFE FARM PERMIT (WCP)</h3>
 
         <div layout="row" layout-align="end">
             <div layout="column" layout-align="center center">
@@ -110,17 +113,18 @@
                     <div><strong style="text-decoration: underline"> {{application.data.application.applicant}} </strong></div>
                     <div>(Applicant)</div>
                     <div class="m-t-20"> <strong>TIN : {{application.data.application.tin_no}}</strong> </div>
+
+                    <div style="max-width: 300px">
+                        <p>{{application.data.application.applicant_address}}</p>
+                    </div>
                 </div>
-                <div class="p-r-50"></div>
-            </div>
                 
-            <div style="max-width: 300px">
-                <p>{{application.data.application.applicant_address}}</p>
+                <div class="p-r-50"></div>
             </div>
     
         </div>
     
-    
+    <div ng-if="!is_printing">
         <strong><small>Attachments :</small> </strong> <md-button class="col-pink" ng-if="isFolderExist(application.date)" ng-click="openFolder(application.date)"> <i class="fa fa-folder-open-o"></i> Open Folder</md-button>
         <ol ng-if="application.data.application.attachments.length > 0">
             <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
@@ -128,10 +132,10 @@
             </li>
         </ol>
         <hr>
-    
-    
-    <!-- Received Stamp -->
-    <md-card ng-if="application.status != 0">
+        
+        
+        <!-- Received Stamp -->
+        <md-card ng-if="application.status != 0">
             <md-card-content>
                 Received by : <strong>{{ application.data.received.staff }}</strong> 
                 , on <strong>{{application.data.received.date.split(' ')[0]}}</strong>
@@ -192,3 +196,6 @@
             </p>
         </div>
     </div>
+
+    
+</div>

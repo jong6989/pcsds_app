@@ -1,9 +1,9 @@
 'use strict';
 
-// document.write(`<script src="./app/doc/settings.js"></script>`);
-// document.write(`<script src="./app/doc/functions.js"></script>`);
+document.write(`<script src="./app/doc/settings.js"></script>`);
+document.write(`<script src="./app/doc/functions.js"></script>`);
 
-myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $localStorage, func) {
+myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $localStorage, func, $http) {
     $scope.doc_content = '';
     $scope.isLoading = true;
     $scope.isUploading = false;
@@ -30,9 +30,15 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     const userId = `pcsd_${$scope.user.id}`; //id from pcsd web api , (php), that will be saved to accounts collection
     $scope.userId = userId;
     $scope.doc_user = ($localStorage.doc_user == undefined)? { id: userId } : $localStorage.doc_user; //save data to local storage to remember last user
-    $scope.document_types = [
-        'generic', 'incoming', 'outgoing', 'Back-To-Office-Report', 'acommplishments', 'report', 'request'
-    ];
+    
+    //Download Document Templates
+    $scope.document_templates = [];//($localStorage.document_templates == undefined)? [] : $localStorage.document_templates;
+    //https://document-network.web.app/pcsd/templates/items8.json
+    $http.get('./app/templates/templates/items.json').then((data)=>{
+        $localStorage.document_templates = data.data.data;
+        $scope.document_templates = data.data.data;
+    }, ()=>{});
+
     $scope.request_types = [
         'service','man power', 'data or e-file', 'report', 'file', 'information'
     ];
@@ -307,7 +313,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         let d = $scope.date_now('YYYY-MM-DD');
         $scope.dateA = d;
         $scope.dateB = d;
-        $scope.n = { created : d, published : d, keywords : [], category : 'none', type : ($localStorage.currentDocType) ? $localStorage.currentDocType: 'generic'};
+        $scope.n = { created : d, published : d, keywords : [], category : 'none', template : ($localStorage.currentDocTemplate) ? $localStorage.currentDocTemplate: {} };
         $scope.showPrerenderedDialog(evt,'addDraft');
     };
 
@@ -363,16 +369,17 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     };
 
     $scope.setCurrentItem = (x,t,c) => {
+        if($scope.currentNavItem == 'Documents'){
+            setTimeout(()=>{func.refreshDocItem(x.id, (a) => {
+                $scope.currentItem = a;
+                $scope.$apply();
+            });},300);
+        }
         $scope.currentItem = x;
         $scope.currentClicked = t;
         $scope.currentTransaction = c;
         $localStorage.currentItem = x;
     }
-
-    $scope.updateCleanDocFiles = (id,cF) => {
-        cF = cF.map( d => { delete(d['$$hashKey']); return d; })
-        $scope.updateDocument(id,{'files': cF});
-    };
 
 
     $scope.changeCurrentDocType = (t) => {
@@ -390,8 +397,8 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
 
 });
 
-// document.write(`<script src="./app/doc/controllers/files.js"></script>`);
-// document.write(`<script src="./app/doc/controllers/draft.js"></script>`);
-// document.write(`<script src="./app/doc/controllers/published.js"></script>`);
-// document.write(`<script src="./app/doc/controllers/pending.js"></script>`);
-// document.write(`<script src="./app/doc/controllers/actions.js"></script>`);
+document.write(`<script src="./app/doc/controllers/files.js"></script>`);
+document.write(`<script src="./app/doc/controllers/draft.js"></script>`);
+document.write(`<script src="./app/doc/controllers/published.js"></script>`);
+document.write(`<script src="./app/doc/controllers/pending.js"></script>`);
+document.write(`<script src="./app/doc/controllers/actions.js"></script>`);

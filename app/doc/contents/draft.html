@@ -17,11 +17,39 @@
     </div>
     
     <div ng-if="currentItem !== null">
-        <form name="formPublishDocument">
-            <h4><small>Document Type :</small> {{ (currentItem.type)?currentItem.type : 'generic'}} </h4>
-            <h5><small>Draft ID</small> : <strong class="col-teal">{{currentItem.id}}</strong> </h5>
+        <form name="formPublishDocument" >
+
+            <div ng-if="currentItem.template == undefined">No template.. Please Choose a Document Template.</div>
+
+            <strong>Document Template</strong>
+
+            <md-autocomplete
+                class="md-block" 
+                md-selected-item="currentItem.template"
+                md-selected-item-change="setLocal('currentDocTemplate', x);"
+                md-search-text="doc_create_template"
+                md-items="x in document_templates | filter : doc_create_template"
+                md-item-text="x.name"
+                md-min-length="0"
+                placeholder="Search Template">
+                <md-item-template ng-click="updateDocument(currentItem.id,{'template': currentItem.template })">
+                    {{x.name}}
+                </md-item-template>
+            </md-autocomplete>
+            <div ng-if="currentItem.keywords == undefined" ng-init="currentItem.keywords = []"></div>
+            <div ng-if="currentItem.template != undefined" ng-include="currentItem.template.edit"></div>
+
+            <!-- Template -->
+            <!-- <div ng-repeat="x in document_templates" ng-if="currentItem.template == undefined || currentItem.type == undefined">
+                <div  ng-if="currentItem.type == undefined && currentItem.template == undefined && document_templates.length > 0" >
+                    <div ng-if="x.type == document_templates[0].type" ng-include="document_templates[0].edit"></div>
+                </div>
+                <div  ng-if="x.type == currentItem.type" ng-include="x.edit"></div>
+            </div> -->
             
-            <div flex-gt-sm ng-init="createdDate = currentItem.created" ng-if="currentItem.type != 'request'">
+            
+            
+            <!-- <div flex-gt-sm ng-init="createdDate = currentItem.created" ng-if="currentItem.type != 'request'">
                 <strong ng-if="currentItem.type == undefined || currentItem.type == 'generic'"> Date A</strong> 
                 <strong ng-if="currentItem.type == 'incoming'"> Correspondence Date</strong> 
                 <strong ng-if="currentItem.type == 'outgoing'"> Date Requested</strong> 
@@ -115,7 +143,7 @@
             
             <md-chips ng-model="currentItem.keywords" md-add-on-blur="true" readonly="false"
                 input-aria-label="Keywords" placeholder="add keywords"
-                ng-change="updateDocument(currentItem.id,{'keywords':currentItem.keywords});" md-removable="true"></md-chips>
+                ng-change="updateDocument(currentItem.id,{'keywords':currentItem.keywords});" md-removable="true"></md-chips> -->
 
             <hr>
             <strong>Files</strong>
@@ -181,7 +209,7 @@
                 <!-- not activated -->
                 <span flex ng-if="doc_user_agencies.length == 0">Publishing not Available... Account not yet activated</span>
                 <!-- activated  --> 
-                <div flex ng-if="doc_user_agencies.length > 0 && filesTobeUploaded.length == 0" layout>
+                <div flex ng-if="doc_user_agencies.length > 0 && filesTobeUploaded.length == 0 && currentItem.template != undefined" layout>
                     <md-button flex ng-class="{'bg-green col-white': (filesTobeUploaded.length == 0) }"  class="md-button" 
                         ng-click="currentItem.agency = (currentItem.agency)? currentItem.agency : doc_user_agencies[0];publishDraft(currentItem, $event)" layout-sm="column" layout-gt-sm>
                         <div>

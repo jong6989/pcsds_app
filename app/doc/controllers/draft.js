@@ -40,6 +40,12 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
         }
     };
 
+
+    $scope.updateCleanDocFiles = (id,cF) => {
+        cF = cF.map( d => { delete(d['$$hashKey']); return d; })
+        $scope.updateDocument(id,{'files': cF});
+    };
+
     $scope.deleteDocFile = (id,x,ev) => {
         var confirm = $mdDialog.confirm()
           .title(`Remove File ${x.name}`)

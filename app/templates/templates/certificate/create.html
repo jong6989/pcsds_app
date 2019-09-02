@@ -1,0 +1,124 @@
+<div ng-init="n.subject = 'CERTIFICATION'; titles = ['Ms.','Mrs.','Mr.']; ">
+	
+	<h3 class="align-center">CERTIFICATION</h3>
+	<hr>
+	<md-input-container class="md-block m-t-40">
+	    <label>Application No.</label>
+	    <input ng-model="n.application_no" required>
+	</md-input-container> 
+	<hr>
+	<br>
+	<strong>Applicant</strong>
+	<div layout>
+		<md-input-container class="md-block" flex="20">
+		    <label>Title</label>
+		    <md-select ng-model="name_title">
+		      <md-option ng-repeat="x in titles" value="{{x}}">
+		        {{x}}
+		      </md-option>
+		    </md-select>
+	  	</md-input-container>
+
+		<md-input-container class="md-block m-t-40" flex>
+		    <label>Name</label>
+		    <input ng-model="name1" required>
+		</md-input-container>
+	</div>
+
+	<md-input-container class="md-block m-t-40" >
+	    <label>Address</label>
+	    <input ng-model="address" required>
+	</md-input-container>
+	<hr>
+
+	<strong>Requested By</strong>
+
+	<div layout>
+		<md-input-container class="md-block" flex="20">
+		    <label>Title</label>
+		    <md-select ng-model="req_title">
+		      <md-option ng-repeat="x in titles" value="{{x}}">
+		        {{x}}
+		      </md-option>
+		    </md-select>
+	  	</md-input-container>
+
+		<md-input-container class="md-block m-t-40" flex>
+		    <label>Name</label>
+		    <input ng-model="req_name" required>
+		</md-input-container>
+	</div>
+
+	<hr>
+	<strong>Date</strong>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+		    <label>Day</label>
+		    <input ng-model="day" required>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+		    <label>Month</label>
+		    <input ng-model="month" required>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+		    <label>Year</label>
+		    <input ng-model="year" required>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+		    <label>Paid amount</label>
+		    <input ng-model="n.paid_amount" >
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+		    <label>OR Number</label>
+		    <input ng-model="n.paid_or_number" >
+		</md-input-container>
+		<div flex-gt-sm>
+		    <strong>Date Paid</strong>
+		    <md-datepicker ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
+		        md-placeholder="Date"
+		        md-open-on-focus>
+		    </md-datepicker>
+		</div>
+	</div>
+	<hr>
+	<br>
+	<br>
+	<strong>PREVIEW</strong>
+	<br>
+	<p> <span class="m-l-50"></span>
+		{{ n.line1 = 
+			'This is to certify that ' + name_title + ' ' + name1 + ', with business address located at ' + address 
+		 	+ ', has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 05, series of 2014 (Guidelines for the Regulation and Monitoring of Catching, Culture, Trade, Transport and Export of Reef-Fish-For-Food in Palawan) or any other PCSD administrative orders.'
+		}}
+	</p>
+	<br>
+	<p>
+		<span class="m-l-50"></span>
+		{{ n.line2 = 
+			'This Certification is being issued upon the request of ' + req_title + ' ' + req_name +
+			' for the purpose of applying for Wildlife Special Use Permit.'
+		}}
+	</p>
+	<br>
+	<p>
+		<span class="m-l-50"></span>
+		{{
+			n.line3 = 
+			'Given this ' + day + 'th day of ' + month + ' ' + year + ' at PCSDS, Sta. Monica Heights, Puerto Princesa City, Palawan.'
+		}}
+	</p>
+	<br>
+	<br>
+	<br>
+
+
+
+
+</div>
+
+

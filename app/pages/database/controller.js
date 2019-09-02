@@ -815,7 +815,7 @@ service('$addressService', function(){
             resolve(countries);
         });
     }
-
+});
 document.write(`<script src="./app/doc/services/crudService.js"></script>`);
 document.write(`<script src="./app/doc/services/municipalitiesService.js"></script>`);
 document.write(`<script src="./app/doc/services/dateService.js"></script>`);

@@ -1,218 +1,273 @@
-<div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div>
-<div class=" p-l-10" ng-controller="database_permit_controller" 
-    ng-init="applicant_view=false;applicant_res=[];"> 
-    <h5 class="col-blue">ONLINE APPLICATION FOR LOCAL TRANSPORT PERMIT OF WILDLIFE PRODUCTS</h5>
-
-    
-    <strong><small>Applicant :</small> 
-        {{application.data.application.applicant}}  : 
-        <small ng-click="applicant_view = !applicant_view" class="col-red pointer">Search</small>
-    </strong> 
-    <md-card ng-if="applicant_view" ng-init="chop_name = application.data.application.applicant.split(' ')">
-        <md-card-content ng-init="search_db_results = []">
-
-            <div ng-show="search_db_results.length > 0" ng-repeat="permit_type in permit_types">
-                <div class="col-grey font-14" style="font-weight: bold;text-decoration: underline double;">{{permit_type.name}}</div>
-                <div ng-repeat="x in get_data_scope(permit_type.code)">
-                    <div ng-repeat="y in x">
-                        <div ng-repeat="o in y | filter : chop_name[0] | filter : chop_name[2] as qqqq" ng-init="search_db_results.push(qqqq)">
-                            <strong ng-repeat="(z,v) in o" class="col-teal"> <small>{{z}}</small> : {{v}} </strong>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
+<div ng-if="is_printing" ng-init="set_application($localStorage.params);print();"></div>
+<style>
+    table {
+        border-collapse: collapse;
+    }
+    thead tr td {
+        height: 50px;
+    }
+    td {
+        border: 1px solid black;
+        padding: 10px;
+    }
+</style>
+<div>
+    <div layout="row">
+        <div flex layout-gt-xs="row" layout-xs="column">
+            <div flex flex-gt-xs="15" layout-align="center center">
+                <img src="./images/pcsdlogo.png" class="p-t-5" style="width:100%;">
             </div>
-
-            <cite ng-if="search_db_results.length == 0" class="col-red">No results found...</cite>
-        </md-card-content>
-    </md-card>
-    <br>
-    <strong><small>Contact :</small> {{application.data.application.contact}} </strong> <br>
-    <strong><small>Required Permit Type :</small> {{application.data.application.required_permit_type}} </strong> <br>
-    <strong><small>Required Permit :</small> {{application.data.application.required_permit}} </strong> <br>
+            <div flex layout-align="center" class="m-l-20">
+                <h4><strong>Republic of the Philippines</strong> <br>
+                    <small>Republic Act 7611</small><br>
+                    <small>PALAWAN COUNCIL for SUSTAINABLE DEVELOPMENT</small>
+                </h4>
+            </div>
+        </div>
+    </div>
     
+    <div class="align-center m-t-20 m-b-10">
+        <h3 >APPLICATION FOR: LOCAL TRANSPORT PERMIT (AO12)</h3>
+        <h4>Transaction No.: {{application.date}} </h4>
+    </div>
+    
+        
+    <div layout="row" layout-align="end">
+        <div layout="column" layout-align="center center">
+            <div><strong style="text-decoration: underline"> {{application.date | date : 'MMMM d, yyyy'}} </strong></div>
+            <div>(date)</div>
+        </div>
+        <div class="p-r-50"></div>
+    </div>
+
+    <h4>
+        NELSON P. DEVANADERA <br>
+        <small>Executive Director</small><br>
+        <small>Palawan Council for Sustainable Development Staff</small>
+    </h4>
+
+    Sir: <br>
+
+    <span class="p-l-20"></span>I would like to request for the inspection and certification of the following species/items and 
+    corresponding information intended for transport by virtue of {{application.data.application.required_permit_type}} {{application.data.application.required_permit}}
+    to wit: 
     <br>
-    <strong><small>Purpose :</small> 
-        <span ng-if="application.data.application.purpose.commercial">commercial</span> 
-        <span ng-if="application.data.application.purpose.research">research</span> 
-        <span ng-if="application.data.application.purpose.exhibit">exhibit</span> 
-        <span ng-if="application.data.application.purpose.other != null">{{application.data.application.purpose.other}}</span> 
-    </strong><br>
-    <strong><small>Place of Origin :</small> 
+
+    <h4 class="col-blue-grey" >
+        Purpose of transport:
+    </h4>
+    <div flex layout-gt-sm="row"></div>
+        <div flex-gt-sm="30"><md-checkbox aria-label="commercial" ng-disabled="true" ng-model="application.data.application.purpose.commercial"></md-checkbox> Commercial </div>
+        <div flex-gt-sm="30"><md-checkbox aria-label="research" ng-disabled="true" ng-model="application.data.application.purpose.research"></md-checkbox> Research </div>
+        <div flex-gt-sm="30"><md-checkbox aria-label="Exhibit" ng-disabled="true" ng-model="application.data.application.purpose.exhibit"></md-checkbox> Exhibit </div>
+        <div flex-gt-sm="30" ng-if="application.data.application.purpose.other"><md-checkbox aria-label="Other" ng-disabled="true" ng-model="application.data.application.purpose.other != ''"></md-checkbox> {{application.data.application.purpose.other}} </div>
+    </div>
+
+    <br>
+    <hr>
+    <div layout>
+        <div flex></div>
+        <div>
+            <table >
+                <thead >
+                    <tr>
+                        <td><strong>Species</strong></td>
+                        <td><strong>Quantity</strong> </td>
+                        <td><strong>Description</strong></td>
+                        <td><strong>Remarks</strong></td>
+                    </tr>
+                </thead>
+                <tr ng-repeat=" x in application.data.application.specimen">
+                    <td>{{x.species_name}}</td>
+                    <td>{{x.species_qty}}{{x.species_unit}}</td>
+                    <td>{{x.species_des}}</td>
+                    <td>{{x.species_boxes}} {{(x.species_boxes > 1)?'boxes':'box'}}</td>
+                </tr>
+            </table>
+        </div>
+        <div flex></div>
+    </div>
+    <br>
+    <hr>
+    <p>
+        The above-enumerated species shall be transported by Mr/Mrs {{application.data.application.shipper.name}} to {{application.data.application.recipient.name}}
+        with address at {{application.data.application.recipient.address}} on {{application.data.application.date_of_transport.split(' ')[0] | date}} 
+        via <span ng-if="application.data.application.via.aircraft">Aircraft</span>
+        <span ng-if="application.data.application.via.vessel">Vessel</span> located at {{application.data.application.place_of_transport}}
+    </p>
+    <hr>
+    <strong>Place of Origin :
         {{application.data.application.place_of_origin.barangay}}, {{application.data.application.place_of_origin.municipality}} </strong> <br>
 
-    <strong><small>Collertor or Supplier :</small> 
+    <strong>Collertor or Supplier :
         {{application.data.application.collector_or_supplier.name}},
         {{application.data.application.collector_or_supplier.address}}
-    </strong> <br>
-    <strong><small>Specimen :</small></strong>
-    <ol ng-if="application.data.application.specimen.length > 0">
-        <li ng-repeat=" x in application.data.application.specimen"> 
-            {{x.species_qty}}{{x.species_unit}} of {{x.species_des}} {{x.species_name}} in {{x.species_boxes}} {{(x.species_boxes > 1)?'boxes':'box'}}
-        </li>
-    </ol>
+    </strong> 
     <br>
-    <strong><small>Shipper :</small> {{application.data.application.shipper.name}}, {{application.data.application.shipper.address}} </strong> <br>
     <br>
-    <strong><small>Recipient :</small> {{application.data.application.recipient.name}}, {{application.data.application.recipient.address}} </strong> <br>
-    <br>
-    <strong><small>Via :</small> 
-        <span ng-if="application.data.application.via.aircraft">aircraft</span> 
-        <span ng-if="application.data.application.via.vessel">vessel</span> 
-    </strong><br>
-    <strong><small>Place of Transport :</small> {{application.data.application.place_of_transport}} </strong> <br>
-    <strong><small>Date of Transport :</small> {{application.data.application.date_of_transport.split(' ')[0] | date}} </strong> <br>
-    
-    
-    <!-- Received Stamp -->
-    <md-card>
-        <md-card-content>
-            <div ng-if="application.status != 0" >
-                <hr class="p-t-10">
-                Received by : <strong>{{ application.data.received.staff }}</strong> 
-                , on  <strong>{{application.data.received.date.split(' ')[0]}}</strong>
-            </div>
-        </md-card-content>
-    </md-card>
+
+    <br> <br>
+    <div layout="row" layout-align="end">
+        <div layout="column" layout-align="center center">
+            <div><strong style="text-decoration: underline"> {{application.data.application.applicant}} </strong></div>
+            <div>(Applicant)</div>
+            <div class="m-t-20"> <strong>TIN : {{application.data.application.tin_no}}</strong> </div>
+        </div>
+        <div class="p-r-50"></div>
+    </div>
     
 
-    <!-- Rejected Stamp -->
-    <md-card ng-if="application.data.rejected != undefined ">
-        <md-card-content>
-            Rejected by : <strong>{{ application.data.rejected.staff }} </strong> 
-            , on  <strong>{{application.data.rejected.date.split(' ')[0]}}</strong>
-        </md-card-content>
-    </md-card>
-    
 
-    <!-- Accepted Stamp -->
-    <div ng-if="application.data.accepted != undefined " >
-        <md-card >
-            <md-card-title>
-                <md-card-title-text>
-                <span class="md-headline">Certificate of inspection</span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-card-content layout="row" layout-align="space-between">
-                <div flex layout="column">
-                    <div flex>
-                        Personnel : <strong>{{application.data.certificate_of_inspection.personnel}}</strong> 
-                    </div>
-                    <div flex>
-                        Remark :<strong>{{application.data.certificate_of_inspection.remark}}</strong> 
-                    </div>
-                </div>
-                <div flex layout="column">
-                    <div flex>
-                        Location : <strong>{{application.data.certificate_of_inspection.location}}</strong> 
-                    </div>
-                    <div flex>
-                        Latitude : <strong>{{application.data.certificate_of_inspection.latitude}}</strong>  
-                    </div>
-                    <div flex>
-                        Longitude : <strong>{{application.data.certificate_of_inspection.longitude}}</strong> 
-                    </div>
-                </div>
-            </md-card-content>
-        </md-card>
-
-        <md-card class="m-b-20">
-            <md-card-title>
-                <md-card-title-text>
-                <span class="md-headline">Payment Slip</span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-card-content layout="row" layout-align="space-between">
-                <div flex layout="column">
-                    <div flex>
-                        O.R Number : <strong>{{application.data.payment_slip.or_number}}</strong> 
-                    </div>
-                    <div flex>
-                        Amount :<strong>{{application.data.payment_slip.amount}}</strong> 
-                    </div>
-                </div>
-                <div flex layout="column">
-                    <div flex>
-                        Date Issued : <strong>{{application.data.payment_slip.issued}}</strong> 
-                    </div>
-                    <div flex>
-                        Issued By : <strong>{{application.data.payment_slip.issued_by}}</strong> 
-                    </div>
-                </div>
-            </md-card-content>
-        </md-card>
-
+    <div ng-if="!is_printing">
+        <!-- Received Stamp -->
         <md-card>
             <md-card-content>
-                Processed by : <strong>{{ application.data.accepted.staff }} </strong> 
-                , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
+                <div ng-if="application.status != 0" >
+                    <hr class="p-t-10">
+                    Received by : <strong>{{ application.data.received.staff }}</strong> 
+                    , on  <strong>{{application.data.received.date.split(' ')[0]}}</strong>
+                </div>
             </md-card-content>
         </md-card>
-    </div>
-
-
-    <strong><small>Attachments :</small> </strong> <md-button class="col-pink" ng-if="isFolderExist(application.date)" ng-click="openFolder(application.date)"> <i class="fa fa-folder-open-o"></i> Open Folder</md-button>
-    <ol ng-if="application.data.application.attachments.length > 0">
-        <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
-            <a target="blank" ng-href="{{api_address+'/'+x.url}}" ng-init="download_attachment(api_address+'/', x.url,application)"> {{x.name}} </a> 
-        </li>
-    </ol>
-    <hr>
-
-    <!-- Approved Stamp -->
-    <md-card ng-if="application.data.approved != undefined " >
-        <md-card-content>
-            Reviewed by : <strong>{{ application.data.approved.staff }} </strong> 
-            , on  <strong>{{application.data.approved.date.split(' ')[0]}}</strong>     
-        </md-card-content>
-    </md-card>
+        
+        <!-- Rejected Stamp -->
+        <md-card ng-if="application.data.rejected != undefined ">
+            <md-card-content>
+                Rejected by : <strong>{{ application.data.rejected.staff }} </strong> 
+                , on  <strong>{{application.data.rejected.date.split(' ')[0]}}</strong>
+            </md-card-content>
+        </md-card>
+        
+        <!-- Accepted Stamp -->
+        <div ng-if="application.data.accepted != undefined " >
+            <md-card >
+                <md-card-title>
+                    <md-card-title-text>
+                    <span class="md-headline">Certificate of inspection</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content layout="row" layout-align="space-between">
+                    <div flex layout="column">
+                        <div flex>
+                            Personnel : <strong>{{application.data.certificate_of_inspection.personnel}}</strong> 
+                        </div>
+                        <div flex>
+                            Remark :<strong>{{application.data.certificate_of_inspection.remark}}</strong> 
+                        </div>
+                    </div>
+                    <div flex layout="column">
+                        <div flex>
+                            Location : <strong>{{application.data.certificate_of_inspection.location}}</strong> 
+                        </div>
+                        <div flex>
+                            Latitude : <strong>{{application.data.certificate_of_inspection.latitude}}</strong>  
+                        </div>
+                        <div flex>
+                            Longitude : <strong>{{application.data.certificate_of_inspection.longitude}}</strong> 
+                        </div>
+                    </div>
+                </md-card-content>
+            </md-card>
     
-
-    <!-- Recommended Stamp -->
-    <md-card ng-if="application.data.recommended != undefined ">
-        <md-card-content>
-            Recommended by : <strong>{{ application.data.recommended.staff }} </strong> 
-            , on  <strong>{{application.data.recommended.date.split(' ')[0]}}</strong>
-        </md-card-content>
-    </md-card>
+            <md-card class="m-b-20">
+                <md-card-title>
+                    <md-card-title-text>
+                    <span class="md-headline">Payment Slip</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content layout="row" layout-align="space-between">
+                    <div flex layout="column">
+                        <div flex>
+                            O.R Number : <strong>{{application.data.payment_slip.or_number}}</strong> 
+                        </div>
+                        <div flex>
+                            Amount :<strong>{{application.data.payment_slip.amount}}</strong> 
+                        </div>
+                    </div>
+                    <div flex layout="column">
+                        <div flex>
+                            Date Issued : <strong>{{application.data.payment_slip.issued}}</strong> 
+                        </div>
+                        <div flex>
+                            Issued By : <strong>{{application.data.payment_slip.issued_by}}</strong> 
+                        </div>
+                    </div>
+                </md-card-content>
+            </md-card>
     
-
-    <!-- Acknowledged Stamp -->
-    <md-card>
-        <md-card-content ng-if="application.data.acknowledged != undefined ">
-            Approved by : <strong>{{ application.data.acknowledged.staff }} </strong>
-            , on  <strong>{{application.data.acknowledged.date}}</strong>
-        </md-card-content>
-    </md-card>
+            <md-card>
+                <md-card-content>
+                    Processed by : <strong>{{ application.data.accepted.staff }} </strong> 
+                    , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
+                </md-card-content>
+            </md-card>
+        </div>
     
-
-    <!-- used stamp -->
-    <md-card class="m-b-20" ng-if="application.data.used != undefined">
-        <md-card-title>
-            <md-card-title-text>
-            <span class="md-headline">Permit Usage</span>
-            </md-card-title-text>
-        </md-card-title>
-        <md-card-content layout="row" layout-align="space-between">
-            <div flex layout="column">
-                <div flex>
-                    Date Used : <strong> {{application.data.used.date}} </strong> 
-                </div>
-                <div flex>
-                    Processed by : <strong>{{ application.data.used.staff }} </strong> 
-                </div>
-                <div flex>
-                    Remark : <strong>{{application.data.used.remark}}</strong> 
-                </div>
-            </div>
-        </md-card-content>
-    </md-card>
     
-    <!-- print stamp -->
-    <div ng-if="render_params.data != undefined" >
+        <strong><small>Attachments :</small> </strong> <md-button class="col-pink" ng-if="isFolderExist(application.date)" ng-click="openFolder(application.date)"> <i class="fa fa-folder-open-o"></i> Open Folder</md-button>
+        <ol ng-if="application.data.application.attachments.length > 0">
+            <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
+                <a target="blank" ng-href="{{api_address+'/'+x.url}}" ng-init="download_attachment(api_address+'/', x.url,application)"> {{x.name}} </a> 
+            </li>
+        </ol>
         <hr>
-        <p class="font-10 col-grey italic">
-            Print Date : {{date_now()}} , Staff Number: {{user.id_number}}, Document Number: {{application.date}}
-        </p>
+    
+        <!-- Approved Stamp -->
+        <md-card ng-if="application.data.approved != undefined " >
+            <md-card-content>
+                Reviewed by : <strong>{{ application.data.approved.staff }} </strong> 
+                , on  <strong>{{application.data.approved.date.split(' ')[0]}}</strong>     
+            </md-card-content>
+        </md-card>
+        
+    
+        <!-- Recommended Stamp -->
+        <md-card ng-if="application.data.recommended != undefined ">
+            <md-card-content>
+                Recommended by : <strong>{{ application.data.recommended.staff }} </strong> 
+                , on  <strong>{{application.data.recommended.date.split(' ')[0]}}</strong>
+            </md-card-content>
+        </md-card>
+        
+    
+        <!-- Acknowledged Stamp -->
+        <md-card>
+            <md-card-content ng-if="application.data.acknowledged != undefined ">
+                Approved by : <strong>{{ application.data.acknowledged.staff }} </strong>
+                , on  <strong>{{application.data.acknowledged.date}}</strong>
+            </md-card-content>
+        </md-card>
+        
+    
+        <!-- used stamp -->
+        <md-card class="m-b-20" ng-if="application.data.used != undefined">
+            <md-card-title>
+                <md-card-title-text>
+                <span class="md-headline">Permit Usage</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+                <div flex layout="column">
+                    <div flex>
+                        Date Used : <strong> {{application.data.used.date}} </strong> 
+                    </div>
+                    <div flex>
+                        Processed by : <strong>{{ application.data.used.staff }} </strong> 
+                    </div>
+                    <div flex>
+                        Remark : <strong>{{application.data.used.remark}}</strong> 
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        
+        <!-- print stamp -->
+        <div ng-if="render_params.data != undefined" >
+            <hr>
+            <p class="font-10 col-grey italic">
+                Print Date : {{date_now()}} , Staff Number: {{user.id_number}}, Document Number: {{application.date}}
+            </p>
+        </div>
     </div>
+
 </div>
