@@ -15,19 +15,34 @@
     <h3 class="align-center">CERTIFICATION</h3>
     <br>
     <br>
-    <p> <span class="m-l-50"></span>
-		{{ currentItem.line1 }}
-	</p>
-	<br>
-	<p>
-		<span class="m-l-50"></span>
-		{{ currentItem.line2 }}
-	</p>
-	<br>
-	<p>
-		<span class="m-l-50"></span>
-		{{ currentItem.line3 }}
-    </p>
+    <!-- regular templates -->
+    <div ng-if="currentItem.c_type != 'empty'">
+        <p> <span class="m-l-50"></span>
+            {{ currentItem.line1 }}
+        </p>
+        <br>
+        <p>
+            <span class="m-l-50"></span>
+            {{ currentItem.line2 }}
+        </p>
+        <br>
+        <p>
+            <span class="m-l-50"></span>
+            {{ currentItem.line3 }}
+        </p>
+    </div>
+    <!-- end regular template -->
+
+    <!-- no template -->
+    <div ng-if="currentItem.c_type == 'empty'">
+        <div ng-repeat="x in currentItem.lines">
+            <p> <span class="m-l-50"></span>
+                {{ x }}
+            </p>
+            <br>
+        </div>
+    </div>
+    <!-- end no template -->
     
     <br>
     <div layout>
@@ -56,7 +71,7 @@
                 </md-button> 
             </div>
             
-            <div ng-if="currentItem.sign1.signature == undefined;" id="sign1" ng-init="generate_signature_field('sign1',0);" style="border: black dashed 1px;">
+            <div layout="column" layout-align="center center" ng-if="currentItem.sign1.signature == undefined;" id="sign1" ng-init="generate_signature_field('sign1',0);" style="border: black dashed 1px;">
                 <canvas></canvas>
                 <button ng-click="signclear(0)">Clear Signature</button>
                 <button ng-click=" updateDocument(currentItem.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">Save Signature</button>
@@ -80,7 +95,7 @@
                 </md-button> 
             </div>
             
-            <div ng-if="currentItem.sign2.signature == undefined;" id="sign2" ng-init="generate_signature_field('sign2',1);" style="border: black dashed 1px;">
+            <div layout="column" layout-align="center center" ng-if="currentItem.sign2.signature == undefined;" id="sign2" ng-init="generate_signature_field('sign2',1);" style="border: black dashed 1px;">
                 <canvas></canvas>
                 <button ng-click="signclear(1)">Clear Signature</button>
                 <button ng-click=" updateDocument(currentItem.id,{'sign2.signature': signed(1), 'sign2.user' : userId }) ">Save Signature</button>

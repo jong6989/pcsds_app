@@ -25,7 +25,7 @@
 		<div layout>
 			<md-input-container class="md-block" flex="15">
 				<label>Title</label>
-				<md-select ng-model="name_title">
+				<md-select ng-model="n.name_title">
 					<md-option ng-repeat="x in titles" value="{{x}}">
 					{{x}}
 					</md-option>
@@ -138,38 +138,18 @@
 				<input ng-model="year" required>
 			</md-input-container>
 		</div>
-		<hr>
-		<br>
-		<strong>Payment</strong>
-		<div layout>
-			<md-input-container class="md-block m-t-40" flex>
-				<label>Paid amount</label>
-				<input ng-model="n.paid_amount" >
-			</md-input-container>
-			<md-input-container class="md-block m-t-40" flex>
-				<label>OR Number</label>
-				<input ng-model="n.paid_or_number" >
-			</md-input-container>
-			<div flex-gt-sm>
-				<strong>Date Paid</strong>
-				<md-datepicker ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
-					md-placeholder="Date"
-					md-open-on-focus>
-				</md-datepicker>
-			</div>
-		</div>
 
 		<!-- paragraph builder -->
 		<div ng-if="n.c_type == 'wsup_ao5'" ng-hide>
 			{{ n.line1 = 
-				'This is to certify that ' + name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
 					+ ', has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 05, series of 2014 (Guidelines for the Regulation and Monitoring of Catching, Culture, Trade, Transport and Export of Reef-Fish-For-Food in Palawan) or any other PCSD administrative orders.'
 			}}
 		</div>
 
 		<div ng-if="n.c_type == 'wsup_ao12'" ng-hide>
 			{{ n.line1 = 
-				'This is to certify that ' + name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
 					+ ', has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 12, series of 2011 (Detailed Guidelines in the ' +
 					'Implementation of Republic Act No. 9147 and Joint DENR-DA-PCSD Administrative Order No. 01 as may be made Applicable in the Province of Palawan) or any other PCSD administrative orders.'
 			}}
@@ -177,48 +157,48 @@
 
 		<div ng-if="n.c_type == 'wsup_ao5' || n.c_type == 'wsup_ao12'" ng-hide>
 			{{ n.line2 = 
-				'This Certification is being issued upon the request of ' + req_title + ' ' + n.applicant_l_name +
+				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name +
 				' for the purpose of applying for Wildlife Special Use Permit.'
 			}}
 		</div>
 
 		<div ng-if="n.c_type == 'wcp_ao5'" ng-hide>
 			{{ n.line1 = 
-				'This is to certify that ' + name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
 					+ ',  has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 05, series of 2014 (Guidelines for the Regulation and Monitoring of Catching, Culture, Trade, Transport and Export of Reef-Fish-For-Food in Palawan) or any other PCSD administrative orders.'
 			}}
 			{{ n.line2 = 
-				'This Certification is being issued upon the request of ' + req_title + ' ' + n.applicant_l_name +
+				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name +
 				' for the purpose of applying for Wildlife Collector\’s Permit.'
 			}}
 		</div>
 
 		<div ng-if="n.c_type == 'sep'" ng-hide>
 			{{ n.line1 = 
-				'This is to certify that ' + name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', whose Forest Land Use Agreement for other lawful purposes applied area is located at ' + n.address 
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', whose Forest Land Use Agreement for other lawful purposes applied area is located at ' + n.address 
 					+ ',  has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 06, as amended, or any other PCSD administrative orders.'
 			}}
 			{{ n.line2 = 
-				'This Certification is being issued upon the request of ' + req_title + ' ' + n.applicant_l_name +
+				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name +
 				' for the purpose of applying for SEP Clearance.'
 			}}
 		</div>
 
 		<div ng-if="n.c_type == 'sup'" ng-hide>
 			{{ n.line1 = 
-				'This is to certify that ' + name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', resident of ' + n.address + ', owner of chainsaw unit bearing Serial Numbers ' + n.chainsaw_bearing_number
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', resident of ' + n.address + ', owner of chainsaw unit bearing Serial Numbers ' + n.chainsaw_bearing_number
 					+ ' with Metal Seal Number ' + n.chainsaw_metal_seal_number
 					+ ',  has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 07, as amended, or any other PCSD administrative orders.'
 			}}
 			{{ n.line2 = 
-				'This Certification is being issued upon the request of ' + req_title + ' ' + applicant_l_name +
+				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name +
 				' for the purpose of applying for Special Use Permit. '
 			}}
 		</div>
 
 		<div ng-if="n.c_type == 'sup+'" ng-hide>
 			{{ n.line1 = 
-				'This is to certify that ' + name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', resident of ' + n.address + ', owner of chainsaw unit bearing Serial Numbers ' + n.chainsaw_bearing_number
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', resident of ' + n.address + ', owner of chainsaw unit bearing Serial Numbers ' + n.chainsaw_bearing_number
 					+ ' with Metal Seal Number ' + n.chainsaw_metal_seal_number 
 					+ ( (n.applicants.length > 0)? ' and ' + n.applicants[0].full_name : '' )
 					+ ( (n.applicants.length > 1)? ' and ' + n.applicants[1].full_name : '' )
@@ -230,7 +210,7 @@
 					+ ', have no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 07, as amended, or any other PCSD administrative orders.'
 			}}
 			{{ n.line2 = 
-				'This Certification is being issued upon the request of ' + n.req_title + ' ' + n.applicant_l_name 
+				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name 
 				+ ( (n.applicants.length > 1)? ', ' : ' and ' ) + ( (n.applicants.length > 0)? n.applicants[0].l_name : '' )
 				+ ( (n.applicants.length > 2)? ', ' : ' and ' ) + ( (n.applicants.length > 1)? n.applicants[0].l_name : '' )
 				+ ( (n.applicants.length > 3)? ', ' : ' and ' ) + ( (n.applicants.length > 2)? n.applicants[0].l_name : '' )
@@ -263,10 +243,30 @@
 		<md-button class="md-button md-primary" ng-click="n.lines.push('')">add paragraph</md-button>
 	</div>
 
+	<hr>
 	<br>
-	<br>
-	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Paid amount</label>
+			<input ng-model="n.paid_amount" >
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>OR Number</label>
+			<input ng-model="n.paid_or_number" >
+		</md-input-container>
+		<div flex-gt-sm>
+			<strong>Date Paid</strong>
+			<md-datepicker ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
+				md-placeholder="Date"
+				md-open-on-focus>
+			</md-datepicker>
+		</div>
+	</div>
 
+	<br>
+	<br>
+	<br>
 
 </div>
 

@@ -15,19 +15,34 @@
     <h3 class="align-center">CERTIFICATION</h3>
     <br>
     <br>
-    <p> <span class="m-l-50"></span>
-		{{ currentItem.line1 }}
-	</p>
-	<br>
-	<p>
-		<span class="m-l-50"></span>
-		{{ currentItem.line2 }}
-	</p>
-	<br>
-	<p>
-		<span class="m-l-50"></span>
-		{{ currentItem.line3 }}
-    </p>
+    <!-- regular templates -->
+    <div ng-if="currentItem.c_type != 'empty'">
+		<p> <span class="m-l-50"></span>
+			{{ currentItem.line1 }}
+		</p>
+		<br>
+		<p>
+			<span class="m-l-50"></span>
+			{{ currentItem.line2 }}
+		</p>
+		<br>
+		<p>
+			<span class="m-l-50"></span>
+			{{ currentItem.line3 }}
+		</p>
+	</div>
+	<!-- end regular template -->
+
+	<!-- no template -->
+	<div ng-if="currentItem.c_type == 'empty'">
+		<div ng-repeat="x in currentItem.lines">
+			<p> <span class="m-l-50"></span>
+				{{ x }}
+			</p>
+			<br>
+		</div>
+	</div>
+	<!-- end no template -->
     
     <br>
     <div layout>
