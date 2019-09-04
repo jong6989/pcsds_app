@@ -6,7 +6,7 @@
 	<!-- certification templates -->
 	<md-input-container class="md-block" >
 		<label>Type of Certificate</label>
-		<md-select ng-model="n.c_type">
+		<md-select ng-model="n.c_type" required>
 			<md-option ng-repeat="x in c_types" value="{{x}}">
 			{{x}}
 			</md-option>
@@ -89,7 +89,7 @@
 					<label>Last Name</label>
 					<input ng-model="n.applicants[$index].l_name" ng-blur="n.keywords.push(n.applicants[$index].l_name)" required>
 				</md-input-container>
-				<div ng-hide>
+				<div ng-hide="true">
 					{{
 						n.applicants[$index].full_name = n.applicants[$index].title + ' ' + n.applicants[$index].f_name + ' ' + n.applicants[$index].m_name + ' ' + n.applicants[$index].l_name;
 					}}
@@ -140,14 +140,14 @@
 		</div>
 
 		<!-- paragraph builder -->
-		<div ng-if="n.c_type == 'wsup_ao5'" ng-hide>
+		<div ng-if="n.c_type == 'wsup_ao5'" ng-hide="true">
 			{{ n.line1 = 
 				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
 					+ ', has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 05, series of 2014 (Guidelines for the Regulation and Monitoring of Catching, Culture, Trade, Transport and Export of Reef-Fish-For-Food in Palawan) or any other PCSD administrative orders.'
 			}}
 		</div>
 
-		<div ng-if="n.c_type == 'wsup_ao12'" ng-hide>
+		<div ng-if="n.c_type == 'wsup_ao12'" ng-hide="true">
 			{{ n.line1 = 
 				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
 					+ ', has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 12, series of 2011 (Detailed Guidelines in the ' +
@@ -155,14 +155,14 @@
 			}}
 		</div>
 
-		<div ng-if="n.c_type == 'wsup_ao5' || n.c_type == 'wsup_ao12'" ng-hide>
+		<div ng-if="n.c_type == 'wsup_ao5' || n.c_type == 'wsup_ao12'" ng-hide="true">
 			{{ n.line2 = 
 				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name +
 				' for the purpose of applying for Wildlife Special Use Permit.'
 			}}
 		</div>
 
-		<div ng-if="n.c_type == 'wcp_ao5'" ng-hide>
+		<div ng-if="n.c_type == 'wcp_ao5'" ng-hide="true">
 			{{ n.line1 = 
 				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
 					+ ',  has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 05, series of 2014 (Guidelines for the Regulation and Monitoring of Catching, Culture, Trade, Transport and Export of Reef-Fish-For-Food in Palawan) or any other PCSD administrative orders.'
@@ -173,7 +173,7 @@
 			}}
 		</div>
 
-		<div ng-if="n.c_type == 'sep'" ng-hide>
+		<div ng-if="n.c_type == 'sep'" ng-hide="true">
 			{{ n.line1 = 
 				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', whose Forest Land Use Agreement for other lawful purposes applied area is located at ' + n.address 
 					+ ',  has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 06, as amended, or any other PCSD administrative orders.'
@@ -184,7 +184,7 @@
 			}}
 		</div>
 
-		<div ng-if="n.c_type == 'sup'" ng-hide>
+		<div ng-if="n.c_type == 'sup'" ng-hide="true">
 			{{ n.line1 = 
 				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', resident of ' + n.address + ', owner of chainsaw unit bearing Serial Numbers ' + n.chainsaw_bearing_number
 					+ ' with Metal Seal Number ' + n.chainsaw_metal_seal_number
@@ -196,7 +196,7 @@
 			}}
 		</div>
 
-		<div ng-if="n.c_type == 'sup+'" ng-hide>
+		<div ng-if="n.c_type == 'sup+'" ng-hide="true">
 			{{ n.line1 = 
 				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', resident of ' + n.address + ', owner of chainsaw unit bearing Serial Numbers ' + n.chainsaw_bearing_number
 					+ ' with Metal Seal Number ' + n.chainsaw_metal_seal_number 
@@ -211,17 +211,17 @@
 			}}
 			{{ n.line2 = 
 				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name 
-				+ ( (n.applicants.length > 1)? ', ' : ' and ' ) + ( (n.applicants.length > 0)? n.applicants[0].l_name : '' )
-				+ ( (n.applicants.length > 2)? ', ' : ' and ' ) + ( (n.applicants.length > 1)? n.applicants[0].l_name : '' )
-				+ ( (n.applicants.length > 3)? ', ' : ' and ' ) + ( (n.applicants.length > 2)? n.applicants[0].l_name : '' )
-				+ ( (n.applicants.length > 4)? ', ' : ' and ' ) + ( (n.applicants.length > 3)? n.applicants[0].l_name : '' )
-				+ ( (n.applicants.length > 5)? ', ' : ' and ' ) + ( (n.applicants.length > 4)? n.applicants[0].l_name : '' )
-				+ ( (n.applicants.length > 6)? ', ' : ' and ' ) + ( (n.applicants.length > 5)? n.applicants[0].l_name : '' )
+				+ ( (n.applicants.length > 0)? ( (n.applicants.length > 1)? ', ' : ' and ' ) + n.applicants[0].title + ' ' +  n.applicants[0].l_name : '' ) 
+				+ ( (n.applicants.length > 1)? ( (n.applicants.length > 2)? ', ' : ' and ' ) + n.applicants[1].title + ' ' +  n.applicants[1].l_name : '' )
+				+ ( (n.applicants.length > 2)? ( (n.applicants.length > 3)? ', ' : ' and ' ) + n.applicants[2].title + ' ' +  n.applicants[2].l_name : '' )
+				+ ( (n.applicants.length > 3)? ( (n.applicants.length > 4)? ', ' : ' and ' ) + n.applicants[3].title + ' ' +  n.applicants[3].l_name : '' )
+				+ ( (n.applicants.length > 4)? ( (n.applicants.length > 5)? ', ' : ' and ' ) + n.applicants[4].title + ' ' +  n.applicants[4].l_name : '' )
+				+ ( (n.applicants.length > 5)? ( (n.applicants.length > 6)? ', ' : ' and ' ) + n.applicants[5].title + ' ' +  n.applicants[5].l_name : '' )
 				+ ' for the purpose of applying for Special Use Permit. '
 			}}
 		</div>
 
-		<div ng-hide>
+		<div ng-hide="true">
 			{{
 				n.line3 = 
 				'Given this ' + day + 'th day of ' + month + ' ' + year + ' at PCSDS, Sta. Monica Heights, Puerto Princesa City, Palawan.'
