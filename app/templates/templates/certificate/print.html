@@ -1,0 +1,88 @@
+<style type="text/css">
+	.roman {
+		font-family: 'Times New Roman', Times, serif;
+	}
+</style>
+<div  ng-init="currentItem = render_params.data;print(3000);" class="roman">
+	<!-- header -->
+	<div ng-include="'./app/templates/templates/header.html'"></div>
+	<hr>
+    <div layout layout-align="center end">
+        <strong>Application No.: {{currentItem.application_no}}</strong>
+    </div>
+    <br>
+    <br>
+    <h3 class="align-center">CERTIFICATION</h3>
+    <br>
+    <br>
+    <p> <span class="m-l-50"></span>
+		{{ currentItem.line1 }}
+	</p>
+	<br>
+	<p>
+		<span class="m-l-50"></span>
+		{{ currentItem.line2 }}
+	</p>
+	<br>
+	<p>
+		<span class="m-l-50"></span>
+		{{ currentItem.line3 }}
+    </p>
+    
+    <br>
+    <div layout>
+		<div flex="40">
+			<p>
+				<strong class="font-11">
+					Verified and checked from the
+					records of PCSD Adjudication
+					Board Secretariat by:
+				</strong>
+			</p>
+
+		</div>
+	</div>
+    <!-- Signature -->
+	<div layout ng-controller="doc_ctrl_draft">
+        <!-- sign 1 -->
+		<div flex style="padding: 10px" ng-init="currentItem.sign1 = (currentItem.sign1 == undefined)? { name:'',designation:''}:currentItem.sign1;">
+            <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center">
+                <img ng-if="currentItem.sign1.signature != undefined" src="{{currentItem.sign1.signature}}" alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong> </div>
+                <div class="align-center"> {{currentItem.sign1.designation}} </div>
+            </div>
+        </div>
+        <!-- sign 2 -->
+		<div flex style="padding: 10px" ng-init="currentItem.sign2 = (currentItem.sign2 == undefined)? {}:currentItem.sign2;">
+            <div ng-if="currentItem.sign2.signature != undefined;" layout="column" layout-align="center center">
+                <img ng-if="currentItem.sign2.signature != undefined" src="{{currentItem.sign2.signature}}" alt="Signature2" width="auto" style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong> </div>
+                <div class="align-center"> {{currentItem.sign2.designation}} </div>
+            </div>
+		</div>
+    </div>
+    
+    <br>
+    <div layout>
+		<div flex="40">
+			<p>
+				<strong>
+					Paid the amount of Php {{currentItem.paid_amount}}.00
+                </strong>
+                <br>
+                <strong>
+                    under O.R. No.  {{currentItem.paid_or_number}}
+                </strong>
+                <br>
+                <strong >
+                    Date:  {{currentItem.paid_date}}
+                </strong>
+			</p>
+		</div>
+	</div>
+
+	<hr>
+	<br>
+	<!-- footer -->
+	<div ng-include="'./app/templates/templates/footer.html'"></div>
+</div>

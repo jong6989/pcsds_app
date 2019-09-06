@@ -127,6 +127,8 @@ service('dummyCriminalCrudService', function(){
         Market_Value: "1000000",
         Disposition: "Banned species",
         Apprehension_Address: "Malambunga, Punta Baja Rd.",
+        Apprehension_Municipality: "Aborlan",
+        Apprehension_Barangay: "Aporawan",
         Apprehension_Date: "2019-02-28",
         Apprehending_Agency: "Philippine National Police",
         Apprehending_Officers: "PO1 Arlan Asutilla, PO2 Boy Langka",
@@ -178,6 +180,8 @@ service('dummyCriminalCrudService', function(){
         Market_Value: "1000000",
         Disposition: "Banned species",
         Apprehension_Address: "Malambunga, Punta Baja Rd.",
+        Apprehension_Municipality: "Bataraza",
+        Apprehension_Barangay: "Buliluyan",
         Apprehension_Date: "2019-02-28",
         Apprehending_Agency: "Philippine National Police",
         Apprehending_Officers: "PO1 Arlan Asutilla, PO2 Boy Langka",
@@ -233,5 +237,193 @@ service('dummyCriminalCrudService', function(){
     }
     this.updateCounterFor = (item) => {
 
+    }
+}).
+service('dummyLTPWildlife', function() {
+    var wildlifeInspection = {
+        purpose: "The quick brown fox",
+        origin: "Disneyland",
+        species: [
+            { name: "turtle", quantity: 100, description: "green turtle", remarks: "Species are mutants"},
+            { name: "wild boar", quantity: 34, description: "", remarks: "vegetarian"},
+            { name: "peacock", quantity: 12, description: "endangered peacocks", remarks: "Highly radioactive"},
+            { name: "anteater", quantity: 92, description: "palawan anteater", remarks: ""} 
+        ],
+        transporter: {
+            name: "Nick Fury",
+            address: "Hogwartz"
+        },
+        consignee: {
+            name: "SHIELD",
+            address: "Hogwartz"
+        },
+        recipient:{
+            name: "Charles Xavier",
+            address: "X Mansion"
+        },
+        transportation:{
+            means: "UFO",
+            date: "2023-01-01"
+        },
+        applicant: {
+            TIN: "ABCD1234",
+            name: "Juan dela Cruz",
+            address: "Missing Rd., Brgy. Binabaha, Dugyot City"
+        },
+        inspection_date: new Date(),
+        certificate_number: "01-01-123456"
+    }
+
+    this.getItem = (id, collection, objectConverter) => {
+        console.log("Hello")
+        return new Promise((resolve, reject) => {
+            resolve(wildlifeInspection);
+        });
+    }
+}).
+service('dummywildlifeImportService', function() {
+    var certification = {
+        certification_number: "201-04",
+        purpose: "commercial",
+        species:[
+            {name: "turtle", description: "green turtle", quantity:"3 heads"},
+            {name: "eagle", description: "black eagle", quantity:"2 heads"},
+            {name: "parrot", description: "yellow parrot", quantity:"7 heads"},
+            {name: "snake", description: "red snakes", quantity:"9 heads"},
+        ],
+        origin: {
+            country: "Malaysia"
+        },
+        destination: {
+            city: "Brooke's Point"
+        },
+        document_attached: "Philippine Constitution",
+        import: {
+            date: "2010-04-23",
+            air_cargo:{ name: "Philippine Airlines", number: "ASD3430", loading_port: "Normandy", loading_date: "2019-05-17"},
+            sea_cargo:{  name: "Super Ferry", number: "8909SDFB", loading_port: "NAIA", loading_date: "2019-05-18"},
+            postal_cargo:{  name: "LBC", number: "ADS989", loading_port: "ISIS International Airport", loading_date: "2019-06-66"},
+        },
+        exporter: {
+            name: "Juan dela Cruz",
+            address: "Missing Rd., Brgy. Binabaha, Dugyot City",
+            tin: "29833-334-2902",
+            contact_number: "123-456789",
+            fax: "987-6423"
+        },
+        importer: {
+            name: "Jon Snow",
+            address: "Puerto Princesa City",
+            contact_number: "494-3232",
+            fax: "499-3299"
+        },
+        fee: 360.00,
+        official_receipt: {
+            number: "2105349",
+            date: "2019-03-15"
+        },
+        validator: {
+            full_name: "Levita A. Lagrada",
+            position: "PDO IV/OIC-EZMED"
+        }
+    }
+
+    this.getItem = (id, collection, objectConverter) => {
+        return new Promise((resolve, reject) => {
+            resolve(certification);
+        })
+    }
+
+    this.getCertification = (certificationNumber) => {
+        return new Promise((resolve, reject) => {
+            resolve(certification);
+        });
+    }
+}).
+service('dummyGratuitousPermitService', function(){
+    var gratuitousPermit = {
+        applicant:{
+            last_name: "dela Cruz",
+            first_name: "Juan",
+            middle_name: "",
+            nationality: "Filipino",
+            degree: "BS in Environmental Science",
+            employment: {
+                agency: "DENR",
+                nature: "Government",
+                position: "Engineer II",
+            },
+            cedula: {
+                issuance_date: "2019-01-1",
+                issuance_address: "Puerto Princesa City",
+                number: "CC1234567890"
+            },
+            photo: "pcsdlogo.png"
+        },
+            agency: {
+                name: "National Geography",
+                address: "New York City, USA",
+                head: "Donal Trump",
+                contact_number: "123456",
+                fax_number: "8765432"
+            },
+        species_to_be_collected: "1 wildboar, 2 red eagle, 3 blue squirrel",
+        purpose_of_collection: "Doctoral dissertation",
+        places_of_collection: "Aborlan, Narra, Roxas, Puerto Princesa City",
+        related_works: "hunting, trekking, diving",
+        foriegn_contact: "John Doe",
+        local_contact: "Maria Clara"
+    };
+
+    this.getItem = (id, collection, objectConverter) =>{
+        return new Promise((resolve, reject) => {
+            resolve(gratuitousPermit);
+        })
+    }
+}).
+service('dummywildlifeExportCertService', function(){
+    var wildlifeExportCertification = {
+        certification_number: "2019-13",
+        applicant: {
+            last_name: "Park",
+            first_name: "Jong-Seok",
+            middle_initial: "",
+            agency: "Chungbuk National University"
+        },
+        gratuitous_permit_number: "2018-39",
+        species: [
+            { name: "Orthoptera", description: "Preserved Speciment", quantity: "13 pcs"},
+            { name: "Blattodea", description: "Preserved Speciment", quantity: "81 pcs"},
+            { name: "Hymenoptera", description: "Preserved Speciment", quantity: "166 pcs"},
+            { name: "Hemiptera", description: "Preserved Speciment", quantity: "84 pcs"},
+            { name: "Coleoptera", description: "Preserved Speciment", quantity: "509 pcs"},
+            { name: "Phasmatodea", description: "Preserved Speciment", quantity: "5 pcs"}
+        ],
+        container: "27 small vials, 7 medium size of containers and 5 packs of Whirl-Pak",
+        transportation: {
+            valid_from: "2019-06-21",
+            valid_until: "2019-07-21",
+            type: "Aircraft"
+        },
+        fee: 310.00,
+        official_receipt: {
+            number: "2108209",
+            date: "2019-06-20"
+        },
+        issuance_date: "2019-06-21",
+        validator: {
+            full_name: "Levita A. Lagrada",
+            position: "PDO IV/OIC-EZMED"
+        }
+    };
+
+    wildlifeExportCertification.full_name = `${wildlifeExportCertification.applicant.first_name} 
+    ${wildlifeExportCertification.applicant.middle_initial} 
+    ${wildlifeExportCertification.applicant.last_name}`;
+
+    this.getCertification = (id) => {
+        return new Promise((resolve, reject) => {
+            resolve(wildlifeExportCertification);
+        });
     }
 })

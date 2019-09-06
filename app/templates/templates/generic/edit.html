@@ -1,0 +1,50 @@
+<div flex-gt-sm ng-init="createdDate = currentItem.created">
+    <strong> Date A</strong> 
+    <md-datepicker ng-blur="updateDocument(currentItem.id,{'created': to_date(createdDate)})" ng-model="createdDate"
+        md-placeholder="Date"
+        md-open-on-focus required>
+    </md-datepicker>
+</div>
+
+<div flex-gt-sm ng-init="pdate = currentItem.published">
+    <strong> Date B</strong> 
+    <md-datepicker ng-blur="updateDocument(currentItem.id,{'published': to_date(pdate)})" ng-model="pdate"
+        md-placeholder="Date"
+        md-open-on-focus required>
+    </md-datepicker>
+</div>
+
+<md-input-container class="md-block m-t-40" flex>
+    <label>Source</label>
+    <input ng-blur="updateDocument(currentItem.id,{'source':currentItem.source})" ng-model="currentItem.source" required>
+</md-input-container>
+
+<md-input-container class="md-block" flex>
+    <label>Subject</label>
+    <input ng-blur="updateDocument(currentItem.id,{'subject':currentItem.subject})" ng-model="currentItem.subject" required>
+</md-input-container>
+
+<md-input-container class="md-block" flex-gt-sm>
+    <label>Category</label>
+    <md-select ng-model="currentItem.category">
+        <md-option ng-repeat="x in doc_user.categories" value="{{x}}" ng-click="updateDocument(currentItem.id,{'category': x})">
+        {{x}}
+        </md-option>
+    </md-select>
+</md-input-container>
+
+<br>
+<hr>
+
+<md-input-container class="md-block">
+    <label>Content</label>
+    <textarea  ng-blur="updateDocument(currentItem.id,{'description':currentItem.description})" ng-model="currentItem.description" md-maxlength="5000" rows="6" md-select-on-focus></textarea>
+</md-input-container>
+
+<br>
+
+<strong>Keywords</strong>
+
+<md-chips ng-focus="currentItem.keywords = (currentItem.keywords)? currentItem.keywords : []" ng-model="currentItem.keywords" md-add-on-blur="true" readonly="false"
+    input-aria-label="Keywords" placeholder="add keywords"
+ng-change="updateDocument(currentItem.id,{'keywords':currentItem.keywords});" md-removable="true"></md-chips>

@@ -1,11 +1,12 @@
 
 myAppModule.
 controller('CriminalCasesController', [
-'dummyCrudService', 
+'dummyCriminalCrudService', 
 // '$dateServie', 
 // '$addressService', 
 '$scope', 
-function($crudService, $scope)  {
+'municipalityService',
+function($crudService, $scope, municipalityService)  {
     var criminalCasesDocument = db.collection('database').doc('CriminalCase') ;
     var criminalCasesCollection = criminalCasesDocument.collection('databases');
     var criminalCases = [];
@@ -63,6 +64,17 @@ function($crudService, $scope)  {
     $scope.registrationForm = { title: "" };
     $scope.registrationForm.saveButton = {text:""}
 
+    municipalityService.getMunicipalities().then(municipalities => {
+        $scope.municipalities = municipalities;
+    });
+
+    $scope.refreshBarangays = () => {
+        municipalityService.getBarangays($scope.criminalCasesFormData.Apprehension_Municipality).then(barangays => {
+            $scope.barangays = barangays;
+            $scope.criminalCasesFormData.Barangay = "";
+        })
+    }
+
     $scope.refreshList = () => {
         $crudService.getItems(criminalCasesCollection, convertFromSnapshotToCriminalCase).then(cases => {
             criminalCases = cases;
@@ -101,6 +113,7 @@ function($crudService, $scope)  {
         });
 
         criminalCase.Keywords = criminalCase.Keywords.filter(keyword => keyword && keyword.length > 0);
+        console.log(criminalCase);
         return criminalCase;
     }
 
@@ -147,6 +160,8 @@ function($crudService, $scope)  {
         $scope.registrationForm.saveButton.text = "Update";
         $crudService.getItem(criminalCase.id, criminalCasesCollection, convertFromSnapshotToCriminalCase).then(criminalCase => {
             $scope.criminalCasesFormData = criminalCase;
+            $scope.refreshBarangays();
+            $scope.criminalCasesFormData.Apprehension_Barangay = criminalCase.Apprehension_Barangay;
             $scope.showPrerenderedDialog(event, 'criminalCaseRegistrationForm');
         })
         $scope.saveCriminalCase = updateCriminalCase;
@@ -169,6 +184,15 @@ function($crudService, $scope)  {
         })
     }
 
+    $scope.closeRegistrationForm = () => {
+        $crudService.getItem($scope.criminalCasesFormData.id, 
+            criminalCasesCollection, 
+            convertFromSnapshotToCriminalCase).then(criminalCase => {
+            $scope.criminalCasesFormData = criminalCase;
+        }) ;
+        $scope.close_dialog();
+    }
+
     function updateCriminalCase() {
         $scope.close_dialog();
         var criminalCase = convertFromFormDataToCriminalCase($scope.criminalCasesFormData);
@@ -189,4 +213,5 @@ function($crudService, $scope)  {
         let firstNWords = words.slice(0, N).join(' ') + "...";
         return firstNWords;
     }
+    
 }]);

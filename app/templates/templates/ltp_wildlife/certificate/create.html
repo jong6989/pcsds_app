@@ -1,0 +1,170 @@
+<div ng-init="n.subject = 'CERTIFICATION OF INSPECTION'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
+	
+	<h3 class="align-center">CERTIFICATION OF INSPECTION</h3>
+	<hr>
+	<md-input-container class="md-block m-t-40">
+	    <label>Certification No.</label>
+	    <input ng-model="n.application_no" required>
+	</md-input-container> 
+	<br>
+
+	<div layout>
+		<md-input-container flex>
+			<label>(Unknown Field)</label>
+			<input ng-model="unknown" required>
+		</md-input-container>
+		<md-input-container class="md-block"  flex>
+			<label>Place of Origin of Wildlife/Wildlife Derivative</label>
+			<input ng-model="origin" required>
+		</md-input-container>
+		<md-input-container class="md-block"  flex>
+			<label>Purpose</label>
+			<input ng-model="purpose" required>
+		</md-input-container>
+	</div>
+
+	<div>
+		<!-- <md-input-container > -->
+			<label>Wildlife/Wildlife Derivatives Inspected</label>
+			<table ng-init="rows=[0]; n.species=[]">
+				<tr ng-repeat="row in rows">
+					<td ng-init="n.species[row]={}">
+						<md-input-container flex>
+							<label>Species (Scientific Name/Common Name)</label>
+							<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>														
+							<input ng-model="n.species[row].name" required>
+						</md-input-container>
+					</td>
+					<td>
+						<md-input-container flex>
+							<label>Quantity</label>
+							<input ng-model="n.species[row].quantity" required>
+						</md-input-container>
+					</td>
+					<td>
+						<md-input-container flex>
+							<label>Description (i.e. live, fresh, etc.)</label>
+							<md-tooltip direction="left">Description (i.e. live, fresh, etc.)</md-tooltip>
+							<textarea ng-model="n.species[row].description" required></textarea></td>
+						</md-input-container>
+					<td>
+						<md-input-container>
+							<label>Remarks (i.e. kind, size and no. of boxes)</label>	
+							<md-tooltip direction="left">Remarks (i.e. kind, size and no. of boxes)</md-tooltip>
+							<textarea ng-model="n.species[row].remarks" ></textarea>
+						</md-input-container>
+					</td>
+				</tr>
+			</table>
+			<md-button ng-click="rows.push(rows.length)" class="md-primary md-raised">
+				Add Row
+			</md-button>
+		<!-- </md-input-container> -->
+	</div>
+
+	<strong>Requested By</strong>
+	<div layout>
+		<md-input-container>
+		    <label>Title</label>
+		    <md-select ng-model="name_title">
+		      <md-option ng-repeat="x in titles" value="{{x}}">
+		        {{x}}
+		      </md-option>
+		    </md-select>
+	  	</md-input-container>
+
+		<md-input-container flex>
+		    <label>Name</label>
+		    <input ng-model="applicant_name" required>
+		</md-input-container>
+	</div>
+
+	
+	
+	<div layout>
+		<md-input-container flex>
+			<label>Recipient Name</label>
+			<input ng-model="recipient_name" required>
+		</md-input-container>
+		<md-input-container flex>
+			<label>Date of Transport</label>
+			<md-datepicker ng-model="transport_date" required></md-datepicker>
+		</md-input-container>
+		<md-input-container flex> 
+			<label>Transportation Vehicle/Vessel</label>
+			<input ng-model="transportation_vessel" required>
+		</md-input-container>
+		<md-input-container flex>
+			<label>Date of Issuance</label>
+			<md-datepicker ng-model="issuance_date"
+			md-placeholder="Date of Issuance"
+			required></md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+		    <label>Paid amount</label>
+		    <input ng-model="n.paid_amount" >
+		</md-input-container>
+		<md-input-container flex>
+		    <label>OR Number</label>
+		    <input ng-model="n.paid_or_number" >
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker ng-model="n.paid_date" ng-change="n.paid_date = to_date(paid_date)" 
+				md-placeholder="Date of Payment"
+				md-open-on-focus>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<br>
+	<strong>PREVIEW</strong>
+	<br>
+	<p> <span class="m-l-50"></span>
+		{{ n.line1 = 
+			'This is to certify that the ' + unknown + ' has undertaken the inspection of wildlife/wildlife derivative ' +
+			' and by-products which was produced/gathered from ' + origin + ' for the purposes of ' + purpose + '. ' +
+			'The species and its quantity of are as follows:'
+		}}
+	</p>
+	<br>
+	<style>.borderedTable tr td { border: 1px solid }</style>
+	<table class="borderedTable" style="width: 100%">
+			<tr style="text-align: center">
+				<td>Species (Scientific Name/Common Name)</td>
+				<td>Quantity</td>
+				<td>Description (i.e. live, fresh, etc.)</td>
+				<td>Remarks (i.e. kind, size and no. of boxes)</td>
+			</tr>
+			<tr ng-repeat="specimen in n.species">
+				<td>{{specimen.name}}</td>
+				<td>{{specimen.quantity}}</td>
+				<td>{{specimen.description}}</td>
+				<td>{{specimen.remarks}}</td>
+			</tr>
+	</table>
+		<br>
+	<p>
+		<span class="m-l-50"></span>
+		{{ n.line2 = 
+			'This Certification is being issued upon the request of Mr./Ms.' + applicant_name + ' to support his/her ' +
+			'application for transport of the above-mentioned specimens to ' + recipient_name + ' which will be transported '+
+			'on ' + get_full_month_name(transport_date) + ' ' + to_day(transport_date) + ', ' + to_year(transport_date) +
+			' through ' + transportation_vessel + '.'
+		}}
+	</p>
+	<br>
+	<p>
+		<span class="m-l-50"></span>
+		{{
+			n.line3 = 
+			'Issued this ' + to_day_of_month(issuance_date) + ' day of ' + get_full_month_name(issuance_date) + ', ' + to_year(issuance_date) +
+			' in Palawan Council for Sustainable Development Staff (PCSDS) Office, Sta. Monica, Puerto Princesa City.'
+		}}
+	</p>
+</div>

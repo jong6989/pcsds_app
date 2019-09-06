@@ -24,6 +24,7 @@ myAppModule.controller('fireDbCrtl', function ($scope, $timeout, $utils, $mdToas
                     if(t=='wsup') $scope.wsup_data.push({name : element, data : XLSX.utils.sheet_to_json(wb.Sheets[element]) });
                 });
             };
+            
             reader.readAsArrayBuffer(f);
         }else {
             $scope.toast("file error");

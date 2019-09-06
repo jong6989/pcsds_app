@@ -33,13 +33,13 @@ var graphOption = {
     }
 };
 myAppModule.controller('pcsd_database_controller', function ($scope, 
-    $timeout, $utils, $mdToast,$localStorage) {
+    $timeout, $utils, $mdToast,$localStorage, $crudService, municipalityService) {
     var XLSX = require('xlsx');
     $scope.wsup_db = { data : [], summary : {} };
     $scope.wsup_db.data = ($localStorage.wsup_db_data)?  $localStorage.wsup_db_data : [];
     $scope.wsup_db.summary = ($localStorage.wsup_db_summary)?  $localStorage.wsup_db_summary : {};
     $scope.database_view = './app/pages/database/views/graphs.html';
-    $scope.currentNavItem = 'Status';
+    $scope.currentNavItem = 'respondents';
     $scope.dropDownSelect = {};
     $scope.selectItems = {};
     $scope.n = {};
@@ -81,75 +81,145 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
 
     $scope.changeView = (v) => { $scope.database_view = v; };
 
-    $scope.loadGraph = () => {
-        let labels = [];
+    var graphYearlyPermit = () => {
+        let labels = getLabels();
         let datas = [];
+
+        
         if($scope.wsup_db.summary){
             //Yearly Count
             if($scope.wsup_db.summary.count){
-                for (const key in $scope.wsup_db.summary.count) {
-                    if ($scope.wsup_db.summary.count.hasOwnProperty(key)) {
-                        const e = $scope.wsup_db.summary.count[key];
-                        if(key != 'all'){
-                            labels.push(key);
-                            datas.push(e.total);
-                        }
-                    }
-                }
-                graphOption.title.text = 'Yearly Permit Status';
-                var graph_config = {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'WSUP',
-                            fill: false,
-                            backgroundColor: '#f67019',
-                            borderColor: '#f67019',
-                            data: datas,
-                        }]
-                    },
-                    options: graphOption
-                };
-                new Chart(document.getElementById('canvas1').getContext('2d'), graph_config);
-            }
-            
-            //Per Municipality
-            if($scope.wsup_db.summary.per_municipality){
-                labels = [];
-                datas = [];
-                for (const key in $scope.wsup_db.summary.per_municipality) {
-                    if ($scope.wsup_db.summary.per_municipality.hasOwnProperty(key)) {
-                        const e = $scope.wsup_db.summary.per_municipality[key];
-                        if(e > 50) {
-                            labels.push(key);
-                            datas.push(e);
-                        }
-                    }
-                }
-                graphOption.title.text = 'Total Permit Per Municipality';
-                graphOption.scales.xAxes[0].scaleLabel.labelString = 'Municipality/City';
-                var graph_config = {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'WSUP',
-                            fill: false,
-                            backgroundColor: '#f67019',
-                            borderColor: '#f67019',
-                            data: datas,
-                        }]
-                    },
-                    options: graphOption
-                };
-                new Chart(document.getElementById('canvas2').getContext('2d'), graph_config);
-            }
-        }else {
-            setTimeout($scope.loadGraph, 3000);
-        };
-    };
+                labels.forEach(label => {
+                    const e = $scope.wsup_db.summary.count[label];
+                    datas.push(e ? e.total : 0);
+                });
 
+                graphOption.title.text = 'Yearly Statistics';
+                var graph_config = {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'WSUP',
+                            fill: false,
+                            backgroundColor: '#f67019',
+                            borderColor: '#f67019',
+                            data: datas,
+                        }]
+                    },
+                    options: graphOption
+                };
+                
+                return new Chart(document.getElementById('canvas1').getContext('2d'), graph_config);
+            }
+        }
+    }
+
+    var yearlyGraph;
+    var byMunicipalGraph;
+
+    function getLabels() {
+        let labels = [];
+        var now = new Date();
+        
+        for(var i = 2012; i <= now.getFullYear(); i++){
+            labels.push(i);
+        }
+
+        return labels;
+    }
+    function loadYearlyStatGraph(documentName, label, backgroundColor, borderColor){
+        let data = [];
+        var statistics = $crudService.getCountByYear(fire.db.database, documentName);
+        statistics.then(yearlyCount => {
+            yearlyGraph.config.data.labels.forEach(label => {
+                data.push(yearlyCount[label] ? yearlyCount[label].total : 0);                
+            });
+
+            yearlyGraph.config.data.datasets.push({
+                label: label,
+                fill: false,
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
+                data: data,
+            })
+            
+        });
+    }
+
+    function loadByMunicipalityStatGraph(documentName, label, backgroundColor, borderColor){
+        let data = [];
+        var statistics = $crudService.getCountByMunicipality(fire.db.database, documentName);
+        statistics.then(byMunicipalityCount => {
+            byMunicipalGraph.config.data.labels.forEach(label => {
+                data.push(byMunicipalityCount[label] ? byMunicipalityCount[label] : 0);                
+            });
+
+            byMunicipalGraph.config.data.datasets.push({
+                label: label,
+                fill: false,
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
+                data: data,
+            })
+            
+        });
+    }
+
+    $scope.loadGraph = async() => {
+        if($scope.wsup_db.summary){            
+            yearlyGraph = graphYearlyPermit();
+            loadYearlyStatGraph("ChainsawPermitToPurchase", "Permit to Purchase Chainsaw", "green", "green");
+            loadYearlyStatGraph("ChainsawPermitToSell", "Permit to Sell Chainsaw", "blue", "blue");
+            loadYearlyStatGraph("ChainsawRegistration", "Chainsaw Registration", "yellow", "yellow");
+            loadYearlyStatGraph("Apprehension", "Apprehensions", "brown", "brown");
+
+            //Per Municipality
+            byMunicipalGraph = await getByMunicipalityGraph();
+            loadByMunicipalityStatGraph("ChainsawPermitToPurchase", "Permit to Purchase Chainsaw", "green", "green");
+            loadByMunicipalityStatGraph("ChainsawPermitToSell", "Permit to Sell Chainsaw", "blue", "blue");
+            loadByMunicipalityStatGraph("ChainsawRegistration", "Chainsaw Registration", "yellow", "yellow");
+            loadByMunicipalityStatGraph("Apprehension", "Apprehensions", "brown", "brown");
+            
+        };
+
+    }
+
+    async function getByMunicipalityGraph(){
+        var graph_config = {};
+
+        var labels = await municipalityService.getMunicipalities();
+        var data = [];
+
+        labels.forEach(label => {
+            const e = $scope.wsup_db.summary.per_municipality[label];
+            data.push(e || 0);
+        });
+
+        if($scope.wsup_db.summary.per_municipality) {
+            graphOption.title.text = 'Statistics Per Municipality';
+            graphOption.scales.xAxes[0].scaleLabel.labelString = 'Municipality/City';
+            graph_config = {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'WSUP',
+                        fill: false,
+                        backgroundColor: '#f67019',
+                        borderColor: '#f67019',
+                        data: data,
+                    }]
+                },
+                options: graphOption
+            };
+        }
+
+        // }else {
+        //     setTimeout($scope.loadGraph, 3000);
+        // };
+        return new Chart(document.getElementById('canvas2').getContext('2d'), graph_config);
+    }
     $scope.openAddWSUPModal = (evt) => {
         $scope.n = {};
         $scope.showPrerenderedDialog(evt,'addWSUP');
@@ -254,11 +324,19 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
 });
 
 document.write(`<script src="./app/doc/services/crudService.js"></script>`);
+document.write(`<script src="./app/doc/services/dummyCrudService.js"></script>`);
 document.write(`<script src="./app/doc/services/municipalitiesService.js"></script>`);
 document.write(`<script src="./app/doc/services/dateService.js"></script>`);
+document.write(`<script src="./app/doc/services/collection.js"></script>`);
 
 document.write(`<script src="./app/doc/controllers/Apprehension.js"></script>`);
 document.write(`<script src="./app/doc/controllers/ChainsawRegistration.js"></script>`);
 document.write(`<script src="./app/doc/controllers/CriminalCases.js"></script>`);
 document.write(`<script src="./app/doc/controllers/Permit.js"></script>`);
+document.write(`<script src="./app/doc/controllers/CaseRespondent.js"></script>`);
+document.write(`<script src="./app/doc/services/caseRespondentFormListener.js"></script>`);
+document.write(`<script src="./app/doc/services/addressService.js"></script>`);
+document.write(`<script src="./app/doc/controllers/dummyControllers.js"></script>`);
+
+
 

@@ -32,7 +32,8 @@ const api_address = "https://brain.pcsd.gov.ph/api";
 //initialize moment
 moment().format("YYYY-MM-DD h:mm:ss");
 
-var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessages','ngFileUpload','ngStorage','ngTable'])
+var myAppModule = angular.module('pcsd_app', 
+['ngMaterial','ngAnimate', 'ngMessages','ngFileUpload','ngStorage','ngTable'])
 
 .factory("$utils",function($mdToast){
    var f = {};
@@ -346,6 +347,46 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       return $filter('date')(d, "MM");
     }
 
+    $scope.get_full_date = function(date){
+      return $filter('date')(date, "MMMM dd, yyyy");
+    }
+    $scope.get_full_month_name = function(date){
+      return $filter('date')(date, "MMMM");
+    }
+    $scope.to_day = function(d){
+      return $filter('date')(d, "dd");
+    }
+
+    $scope.toString = (collection, key) => {
+      var values = key ? collection.map(item => item[key]) : collection;
+      var slicedElements = values.slice(0, values.length - 1);
+      var joined = slicedElements.join(', ') + ' and ' + values[values.length - 1];
+
+      return joined;
+    }
+    $scope.to_day_of_month = function(date){
+      if(!date) return "";
+
+      var day = $filter('date')(date, "d");
+      var suffix = "th";
+
+      if(!day.startsWith("1")){
+        if(day.endsWith("1"))
+          suffix = "st";
+        else if(day.endsWith("2"))
+          suffix = "nd";
+        else if(day.endsWith("3"))
+          suffix = "rd";
+      }
+
+      return `${day}${suffix}`;
+    }
+
+    $scope.format = (date, formatString) => {
+      if(!formatString) formatString = "YYYY-MM-DD";
+      return moment(date).format(formatString);
+    }
+
     $scope.toast = function(t){
       $mdToast.show(
         $mdToast.simple()
@@ -478,22 +519,29 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     };
 
     $scope.run_initials = function(){
-      if($localStorage.pcsd_app_user !== undefined && $localStorage.current_view !== undefined && $localStorage.content_page !== undefined){
-        $scope.current_view = $localStorage.current_view;
-        $scope.user = $localStorage.pcsd_app_user;
-        $scope.menus = $localStorage.pcsd_menus;
-        // $scope.menus.push({
-        //   name : "Database",
-        //   icon: 'fa-database',
-        //   url: 'pages/database'
-        // });
-        $scope.change_page($localStorage.page_content);
-      }else{
-        $scope.current_view = "app/login/view.html";
-      }
+      // if($localStorage.pcsd_app_user !== undefined && $localStorage.current_view !== undefined && $localStorage.content_page !== undefined){
+      //   $scope.current_view = $localStorage.current_view;
+
+      //   $scope.user = $localStorage.pcsd_app_user;
+      //   $scope.menus = $localStorage.pcsd_menus;
+      //   // $scope.menus.push({
+      //   //   name : "Database",
+      //   //   icon: 'fa-database',
+      //   //   url: 'pages/database'
+      //   // });
+      //   $scope.change_page($localStorage.page_content);
+      // }else{
+      //   $scope.current_view = "app/login/view.html";
+      // }
 
       // $scope.current_view = "app/login/view.html";
+      // $scope.current_view = "app/pages/database/view.html";
 
+        // $scope.user = { id: 99};
+        // $scope.content_page = "app/templates/certifications/wildlife_export_certification.html";
+        $scope.current_view = "app/templates/main.html";
+        $scope.content_page = "app/templates/templates/wildlife_import/certificate/print.html";
+      
     };
 
     $scope.iframeHeight = $scope.get_window_height();

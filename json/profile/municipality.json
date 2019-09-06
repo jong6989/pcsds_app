@@ -1,6 +1,7 @@
 {
 	"data" : [
-		{"name":"Aborlan",
+		{
+		"name":"Aborlan",
 		"brgy":[
 		{"name":"Apo-Aporawan"},
 		{"name":"Apoc-apoc"},
@@ -328,7 +329,7 @@
 	
 		]},
 	
-		{"name":"Puerto Princesa","brgy":[
+		{"name":"Puerto Princesa City","brgy":[
 			{"name":"Babuyan"},
 			{"name":"Bacungan"},
 			{"name":"Bagong Bayan"},

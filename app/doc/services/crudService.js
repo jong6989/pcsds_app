@@ -99,4 +99,22 @@ service('$crudService', function(){
 
         return promise;
     }
+
+    this.getCountByYear = (collection, documentName) => {
+        return new Promise((resolve, reject) => {
+            collection.when(documentName, (document) => {
+                resolve(document.yearlyCount);
+            })
+        })
+        
+    }
+
+    this.getCountByMunicipality = (collection, documentName) => {
+        return new Promise((resolve, reject) => {
+            collection.when(documentName, (document) => {
+                resolve(document.municipalityCount);
+            })
+        })
+        
+    }
 })
