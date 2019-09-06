@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div style="visibility: hidden">
     <div class="md-dialog-container" id="addDraft">
         <md-dialog layout="column" layout-align="center center">
@@ -74,4 +75,153 @@
 
         </md-dialog>
     </div>
+=======
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="addDraft">
+        <md-dialog layout="column" layout-align="center center">
+            <form ng-cloak name="form_add_draft" ng-init="createTemplate = ''">
+                <md-toolbar class="bg-teal">
+                    <div class="md-toolbar-tools">
+                        <h2>Create a draft document</h2>
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-click="close_dialog()">
+                            <i class="fa fa-times col-white"></i>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+            
+                <md-dialog-content layout-padding class="p-b-20">
+                    <hr>
+
+                    <strong>Document Template</strong>
+
+                    <md-autocomplete
+                        class="md-block" 
+                        md-selected-item="n.template"
+                        md-selected-item-change="setLocal('currentDocTemplate', x)"
+                        md-search-text="doc_create_template"
+                        md-items="x in document_templates | filter : doc_create_template"
+                        md-item-text="x.name"
+                        md-min-length="0"
+                        placeholder="Search Template">
+                        <md-item-template>
+                            {{x.name}}
+                        </md-item-template>
+                    </md-autocomplete>
+                    <hr>
+                    <div ng-include="n.template.create"></div>
+
+                    <!-- <div flex-gt-sm ng-if="n.type != 'request'">
+                        <strong ng-if="n.type == 'generic'">Date A</strong>
+                        <strong ng-if="n.type == 'incoming'">Correspondence Date</strong>
+                        <strong ng-if="n.type == 'outgoing'">Date Requested</strong>
+                        <strong ng-if="n.type == 'Back-To-Office-Report'">Date of Travel</strong>
+                        <strong ng-if="n.type == 'acommplishments'">Start Date</strong>
+                        <strong ng-if="n.type == 'report'">Start Date</strong>
+                        <md-datepicker ng-model="dateA" ng-change="n.created = to_date(dateA)" 
+                            md-placeholder="Date"
+                            md-open-on-focus required>
+                        </md-datepicker>
+                    </div>
+
+                    <md-input-container class="md-block m-t-40" flex ng-if="n.type == 'incoming'">
+                        <label>Source / From</label>
+                        <input ng-model="n.source" required>
+                    </md-input-container> 
+
+                    <md-input-container class="md-block" flex>
+                        <label>Subject</label>
+                        <input ng-model="n.subject" required>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex ng-if="n.type == 'request'">
+                        <label>Purpose of request</label>
+                        <input ng-model="n.request_purpose" required>
+                    </md-input-container>
+
+                    <div ng-if="n.type == 'request'">
+                        <strong> Request Type </strong>
+                        <md-autocomplete
+                            class="md-block" flex-gt-sm="100"
+                            md-selected-item="n.request_type"
+                            md-search-text="request_type"
+                            md-search-text-change="n.request_type = request_type"
+                            md-items="x in request_types"
+                            md-item-text="x"
+                            md-min-length="0"
+                            placeholder="Type of request">
+                            <md-item-template>
+                            {{x}}
+                            </md-item-template>
+                        </md-autocomplete>
+                    </div>
+                    <br>
+                    <md-input-container class="md-block" flex ng-if="n.type == 'request'">
+                        <label>Request Target</label>
+                        <input ng-model="n.request_target" placeholder="name of person or item" required>
+                    </md-input-container>
+
+                    <div flex-gt-sm>
+                        <strong ng-if="n.type == 'generic'">Date B</strong>
+                        <strong ng-if="n.type == 'incoming'">Date Received</strong>
+                        <strong ng-if="n.type == 'outgoing'">Date Filed</strong>
+                        <strong ng-if="n.type == 'Back-To-Office-Report'">Date Returned</strong>
+                        <strong ng-if="n.type == 'acommplishments'">End Date</strong>
+                        <strong ng-if="n.type == 'report'">End Date</strong>
+                        <strong ng-if="n.type == 'request'">Deadline</strong>
+                        <md-datepicker ng-model="dateB" ng-change="n.published = to_date(dateB)" 
+                            md-placeholder="Date"
+                            md-open-on-focus required>
+                        </md-datepicker>
+                    </div>
+
+                    <div ng-if="n.type == 'report' || n.type == 'Back-To-Office-Report' || n.type == 'request' || n.type == 'generic' || n.type == 'acommplishments'">
+                        <md-input-container class="md-block">
+                            <label>Content</label>
+                            <textarea ng-model="n.description" md-maxlength="5000" rows="6" md-select-on-focus required></textarea>
+                        </md-input-container>
+                    </div>
+
+                    <br>
+                    <strong>Keywords</strong>
+                    <md-chips ng-model="n.keywords" md-add-on-blur="true" readonly="false"
+                     input-aria-label="Keywords" placeholder="add keywords"
+                    md-removable="true" required></md-chips>
+        
+                    <br>
+                    
+                    <div>
+                        <strong> Category (Personal Filter) </strong>
+                        <md-autocomplete
+                            class="md-block" flex-gt-sm="100"
+                            md-selected-item="n.category"
+                            md-search-text="categ"
+                            md-search-text-change="n.category = categ"
+                            md-items="x in doc_user.categories"
+                            md-item-text="x"
+                            md-min-length="0"
+                            placeholder="Document Category">
+                            <md-item-template>
+                            {{x}}
+                            </md-item-template>
+                        </md-autocomplete>
+                    </div> -->
+                    <hr>
+                </md-dialog-content>
+            
+                <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="close_dialog()">
+                    Close
+                </md-button>
+                <md-button class="md-primary md-raised" ng-disabled="form_add_draft.$invalid || n.template == {} || n.template == undefined" 
+                    ng-click="createDraft(n);">
+                    Create Draft
+                </md-button>
+                </md-dialog-actions>
+            </form>
+
+        </md-dialog>
+    </div>
+>>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 </div>

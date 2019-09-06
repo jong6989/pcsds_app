@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div style="visibility: hidden">
     <div class="md-dialog-container" id="sendDocument" ng-controller="doc_ctrl_published">
         <md-dialog layout="column" layout-align="center center">
@@ -66,4 +67,74 @@
 
         </md-dialog>
     </div>
+=======
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="sendDocument" ng-controller="doc_ctrl_published">
+        <md-dialog layout="column" layout-align="center center">
+            <form ng-cloak name="form_send_document">
+                <md-toolbar class="p--10">
+                    <div class="md-toolbar-tools bg-teal">
+                        Send as
+                        <md-input-container md-no-float class="md-block" flex-gt-sm >
+                            <md-select ng-model="send_as">
+                                <md-option ng-repeat="(a,b) in doc_user[currentItem.agency.id]" value="{{a}}" 
+                                    ng-click="sendAsSelected(a)" ng-if="b && (a != 'active')">
+                                {{a}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-click="close_dialog()">
+                            <i class="fa fa-times col-white"></i>
+                        </md-button>
+                    </div>
+                    <div class="md-toolbar-tools bg-teal">
+                        <md-input-container md-no-float class="md-block m-t-20">
+                            <input ng-model="search_receipient" class="col-white" type="text" placeholder="Search Reciepient">
+                        </md-input-container>
+                    </div>
+                </md-toolbar>
+            
+                <md-dialog-content layout-padding class="p-b-20">
+                    
+                    <div ng-if="send_as !== undefined">
+                        <h6>Select Receipient</h6>
+                        <ol ng-init="sendAsSelected(send_as)">
+                            <li ng-repeat="x in filtered_receipients | filter : search_receipient" ng-if="userId != x.id">
+                                <md-checkbox ng-checked="exists(x.id, reciepientList)" ng-click="toggle_select(x.id, reciepientList)" ng-hide="userId == x.id">
+                                    {{x.name}} 
+                                </md-checkbox>
+                                - 
+                                <cite class="font-11 col-grey" ng-repeat="(a,b) in  x[currentItem.agency.id]" ng-if="a != 'active' && b">
+                                   {{a}} ,
+                                </cite>
+                            </li>
+                        </ol>
+                    </div>
+                </md-dialog-content>
+            
+                <md-dialog-actions >
+                    <div flex layout="column">
+                        <div layout>
+                            <md-input-container md-no-float class="md-block" flex layout>
+                                <input ng-model="sendingRemarks" placeholder="Remarks" flex>
+                            </md-input-container>
+                        </div>
+                        <div layout>
+                            <span flex></span>
+                            <md-button ng-click="close_dialog()">
+                                Close
+                            </md-button>
+                            <md-button type="submit" class="md-primary md-raised" ng-disabled="reciepientList.length == 0" 
+                                ng-click="sendThisDocument(currentItem,reciepientList,sendingRemarks)">
+                                Send
+                            </md-button>
+                        </div>
+                    </div>
+                </md-dialog-actions>
+            </form>
+
+        </md-dialog>
+    </div>
+>>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 </div>

@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 <div flex-gt-sm ng-init="createdDate = currentItem.created">
     <strong> Date A</strong> 
     <md-datepicker ng-blur="updateDocument(currentItem.id,{'created': to_date(createdDate)})" ng-model="createdDate"
@@ -52,8 +47,4 @@
 
 <md-chips ng-focus="currentItem.keywords = (currentItem.keywords)? currentItem.keywords : []" ng-model="currentItem.keywords" md-add-on-blur="true" readonly="false"
     input-aria-label="Keywords" placeholder="add keywords"
-<<<<<<< HEAD
 ng-change="updateDocument(currentItem.id,{'keywords':currentItem.keywords});" md-removable="true"></md-chips>
-=======
-    ng-change="updateDocument(currentItem.id,{'keywords':currentItem.keywords});" md-removable="true"></md-chips>
->>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120

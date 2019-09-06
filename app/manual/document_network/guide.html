@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div>
         <h4>Document Network</h4>
         
@@ -134,4 +135,61 @@
         <br>
         <br>
         <br>
+=======
+<div layout style="height: {{iframeHeight - 130}}px">
+    <div flex-gt-sm="15" flex-xs="35" flex-sm="25">
+        <md-content>
+            <ul>
+                <li ng-click="selectedDocNetworkTabIndex = 0"><a href="javascript::(){}"> Starting Up </a></li>
+                <li ng-click="selectedDocNetworkTabIndex = 1"><a href="javascript::(){}"> Creating Draft </a></li>
+                <li ng-click="selectedDocNetworkTabIndex = 2"><a href="javascript::(){}"> Uploading Files </a></li>
+                <li ng-click="selectedDocNetworkTabIndex = 3"><a href="javascript::(){}"> File History </a></li>
+                <li ng-click="selectedDocNetworkTabIndex = 4"><a href="javascript::(){}"> Publishing </a></li>
+                <li ng-click="selectedDocNetworkTabIndex = 5"><a href="javascript::(){}"> Receiving Docs </a></li>
+                <li ng-click="selectedDocNetworkTabIndex = 6"><a href="javascript::(){}"> Attached Files </a></li>
+                <li ng-click="selectedDocNetworkTabIndex = 7"><a href="javascript::(){}"> Sending Actions </a></li>
+                <li ng-click="selectedDocNetworkTabIndex = 8"><a href="javascript::(){}"> Incoming Documents </a></li>
+                <li ng-click="selectedDocNetworkTabIndex = 9"><a href="javascript::(){}"> Internal Request </a></li>
+            </ul>
+        </md-content>
+    </div>
+    <div flex ng-init="selectedDocNetworkTabIndex = 0;" layout>
+            <!-- <i class="fa fa-print" ng-click="print()"></i> -->
+        <div flex>
+            <md-tabs flex  md-border-bottom md-selected="selectedDocNetworkTabIndex" style="min-height: 100%">
+                <md-tab label="Starting Up">
+                    <div ng-include="'./app/manual/document_network/views/1.html'"></div>
+                </md-tab>
+                <md-tab label="Creating Draft">
+                    <div ng-include="'./app/manual/document_network/views/2.html'"></div>
+                </md-tab>
+                <md-tab label="Uploading Files">
+                    <div ng-include="'./app/manual/document_network/views/3.html'"></div>
+                </md-tab>
+                <md-tab label="File History">
+                    <div ng-include="'./app/manual/document_network/views/4.html'"></div>
+                </md-tab>
+                <md-tab label="Publishing">
+                    <div ng-include="'./app/manual/document_network/views/5.html'"></div>
+                </md-tab>
+                <md-tab label="Receiving">
+                    <div ng-include="'./app/manual/document_network/views/6.html'"></div>
+                </md-tab>
+                <md-tab label="Access Files">
+                    <div ng-include="'./app/manual/document_network/views/7.html'"></div>
+                </md-tab>
+                <md-tab label="Action Taken">
+                    <div ng-include="'./app/manual/document_network/views/8.html'"></div>
+                </md-tab>
+                <md-tab label="Incoming">
+                    <div ng-include="'./app/manual/document_network/views/9.html'"></div>
+                </md-tab>
+                <md-tab label="Request">
+                    <div ng-include="'./app/manual/document_network/views/10.html'"></div>
+                </md-tab>
+            </md-tabs>
+        </div>
+        
+    </div>
+>>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 </div>

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 "data" : [
     {
         "name" : "Generic Template",
@@ -25,4 +26,32 @@
         "print" : "./app/templates/templates/certificate/print.html"
     }
 ]
+=======
+	"data" : [
+		{
+			"name" : "Generic Template",
+			"type" : "generic",
+			"create" : "./app/templates/templates/generic/create.html",
+			"edit" : "./app/templates/templates/generic/edit.html",
+			"view" : "./app/templates/templates/generic/view.html",
+			"print" : "./app/templates/templates/generic/print.html"
+		},
+		{
+			"name" : "Incoming Communications",
+			"type" : "incoming",
+			"create" : "./app/templates/templates/incoming/create.html",
+			"edit" : "./app/templates/templates/incoming/edit.html",
+			"view" : "./app/templates/templates/incoming/view.html",
+			"print" : "./app/templates/templates/incoming/print.html"
+		},
+		{
+			"name" : "Certificate",
+			"type" : "certificate",
+			"create" : "./app/templates/templates/certificate/create.html",
+			"edit" : "./app/templates/templates/certificate/edit.html",
+			"view" : "./app/templates/templates/certificate/view.html",
+			"print" : "./app/templates/templates/certificate/print.html"
+		}
+	]
+>>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div ng-controller="doc_ctrl_pending" >
     <h5 class="col-grey">From</h5>
     <p>
@@ -47,4 +48,46 @@
     <hr>
     <h4></h4>
     <br><br><br>
+=======
+<div ng-controller="doc_ctrl_pending" >
+    <h5 class="col-grey">From</h5>
+    <p>
+        Name : <strong>{{currentTransaction.sender.name}}</strong> <br>
+        Email : <strong>{{currentTransaction.sender.email}}</strong> <br>
+        Contact : <strong>{{currentTransaction.sender.contact}}</strong> <br>
+        Access : <cite ng-repeat="a in currentTransaction.sender.access"> {{(a == 'active')?'':a}}, </cite> <br>
+    </p>
+    <hr>
+    <h5 class="col-grey">Sent</h5>
+    <p>
+        {{currentTransaction.date}}, 
+        {{ date_from_now(currentTransaction.time) }}
+    </p>
+    <hr>
+    <h5 class="col-grey">Remark</h5>
+    <p>
+        <strong class="col-red">{{currentTransaction.remarks}}</strong>
+    </p>
+    <hr>
+    
+    <div ng-include="'./app/doc/contents/document.html'"></div>
+    
+    <hr>
+    
+    <h4 class="col-grey">Actions</h4>
+    <div layout-gt-sm layout-sm="column">
+        <md-button class="md-button md-warn" ng-click="declineDocument($event)" layout-gt-sm>
+            <i class="fa fa-paper-plane m-r-5"></i>
+            Decline
+        </md-button>
+        <md-button class="md-button md-primary" ng-click="receiveDocument($event)" layout-gt-sm>
+            <i class="fa fa-undo m-r-5"></i>
+            Receive
+        </md-button>
+    </div>
+
+    <hr>
+    <h4></h4>
+    <br><br><br>
+>>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 </div>

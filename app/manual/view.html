@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <style>
 .ss_border {
   border: 2px #555 dashed;
@@ -23,4 +24,31 @@
         </md-tab>
     </md-tabs>
     
+=======
+<style>
+.ss_border {
+  border: 2px #555 dashed;
+}
+</style>
+<div flex ng-init="set_page_title('System Manual');" ng-controller="manual_controller" layout="column">
+
+    <md-tabs flex  md-border-bottom md-selected="selectedManualTabIndex">
+        <md-tab label="What's New?">
+          <md-content class="md-padding" >
+            <div ng-include="'./app/manual/new/whatsnew.html'"></div>
+          </md-content>
+        </md-tab>
+        <md-tab label="Document Network">
+          <md-content flex class="md-padding" >
+            <div ng-include="'./app/manual/document_network/guide.html'"></div>
+          </md-content>
+        </md-tab>
+        <md-tab label="Online Permitting">
+          <md-content class="md-padding">
+            <div ng-include="'./app/manual/online_permitting/guide.html'"></div>
+          </md-content>
+        </md-tab>
+    </md-tabs>
+    
+>>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 </div>
