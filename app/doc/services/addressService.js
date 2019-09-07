@@ -1,7 +1,7 @@
 myAppModule.
 service('$addressService', function(){
-    var countries = [];
-    var philippineRegions = require('./json/philippine_region_provinces_municipalities.json');
+    var countries = require('./json/coutries.json');
+    var philippineProvinces = require('./json/philippineProvinces.json');
 
     this.getCountries = () =>{
         return new Promise((resolve, reject) => {
@@ -11,24 +11,16 @@ service('$addressService', function(){
 
     this.getProvinces = (country) => {
         return new Promise((resolve, reject) => {
-            var provinces = [];
-            for(const region in philippineRegions){
-                provinces = provinces.concat(Object.keys(philippineRegions[region]["province_list"]));
-            }
-           resolve(provinces);
+            resolve(philippineProvinces);
         });
     }
 
     this.getMunicipalities = (country, province) => {
         return new Promise((resolve, reject) => {
             var municipalities = [];
-            for(const region in philippineRegions){
-                if(philippineRegions[region]["province_list"][province]){
-                    municipalities = Object.keys(philippineRegions[region]["province_list"][province]["municipality_list"]);
-                    break;
-                }
-             }
-
+            if(country.toUpperCase() == 'PHILIPPINES')
+                municipalities =  philippineProvinces[province];
+            
             resolve(municipalities);
         })
     }
@@ -37,20 +29,7 @@ service('$addressService', function(){
         return new Promise((resolve, reject) => {
             var barangays = [];
             if(country.toUpperCase() == 'PHILIPPINES')
-            {
-                for(const region in philippineRegions){
-                    for(const _province in philippineRegions[region]["province_list"]){
-                        if(_province !== province) continue;
-    
-                        for(const _municipality in philippineRegions[region]["province_list"][province]["municipality_list"]){
-                            if(_municipality !== municipality) continue;
-                            barangays = philippineRegions[region]["province_list"][province]["municipality_list"][municipality]["barangay_list"];
-                            break;
-                        }
-                        break;
-                    }
-                 }
-            }
+                barangays = philippineProvinces[province][municipality];
             resolve(barangays);
         })
     }

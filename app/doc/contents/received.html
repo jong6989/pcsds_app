@@ -1,70 +1,3 @@
-<<<<<<< HEAD
-<div ng-controller="doc_ctrl_received" >
-    <h5 class="col-grey">From</h5>
-    <p>
-        Name : <strong>{{currentTransaction.sender.name}}</strong> <br>
-        Email : <strong>{{currentTransaction.sender.email}}</strong> <br>
-        Contact : <strong>{{currentTransaction.sender.contact}}</strong> <br>
-        Access : <cite ng-repeat="a in currentTransaction.sender.access"> {{a}}, </cite> <br>
-    </p>
-    <hr>
-    <h5 class="col-grey">Sent</h5>
-    <p>
-        {{currentTransaction.date}}, 
-        {{ date_from_now(currentTransaction.time) }}
-    </p>
-    <hr>
-    <h5 class="col-grey">Received</h5>
-    <p ng-init="received = date_gap(currentTransaction.received.time, currentTransaction.time).split(' ')">
-        {{currentTransaction.received.date}}, 
-        <strong class="col-blue">within {{ received[0] }} {{ received[1] }}</strong>
-    </p>
-    <hr>
-    <h5 class="col-grey">Remark</h5>
-    <p>
-        <strong class="col-red">{{currentTransaction.remarks}}</strong>
-    </p>
-
-    <hr>
-    
-    <h5><small>Doc ID</small> : <strong class="col-teal">{{currentItem.id}}</strong> </h5>
-    <h5><small> Agency</small> : <strong class="col-teal">{{currentItem.agency.name}}</strong> </h5>
-    <h5><small> Date Published</small> : <strong class="col-teal">{{currentItem.meta.published_date}}</strong>
-        <cite class="font-12">, {{date_from_now(currentItem.meta.published_time)}}</cite> </h5>
-    <hr>
-    <h5><small> Date A</small> : <strong class="col-teal">{{currentItem.created}}</strong> </h5>
-    <h5><small> Date B</small> : <strong class="col-teal">{{currentItem.published}}</strong> </h5>
-    <h5><small> Source</small> : <strong class="col-teal">{{currentItem.source}}</strong> </h5>
-    <h5><small> Subject</small> : <strong class="col-teal">{{currentItem.subject}}</strong> </h5>
-    <h5><small> Category</small> : <strong class="col-teal">{{currentItem.category}}</strong> </h5>
-    <h5><small> Description</small> : <strong class="col-teal">{{currentItem.description}}</strong> </h5>
-    <hr>
-
-    <h4 class="col-grey">
-        Files 
-        <md-button class="col-pink m-l-10" ng-if="isFolderExist(currentItem.id)" 
-            ng-click="openFolder(currentItem.id)"> 
-            <i class="fa fa-folder-open-o"></i> 
-            Open Folder
-        </md-button>
-    </h4>
-    <ol>
-        <li ng-repeat="x in currentItem.files" ng-init="a = x.path.split('/')">
-            <a ng-href="{{api_address + '/uploads/' + x.path}}" download="{{x.name}}" 
-                ng-init="dl_attachment(x.url,currentItem)">
-                {{x.name}}
-                <i class="fa fa-check col-green" ng-if="isFolderExist(currentItem.id + fileDivider + a[a.length -1])"></i>  
-            </a>
-        </li>
-    </ol>
-
-    <hr>
-    <h4 class="col-grey">Actions</h4>
-
-    <hr>
-    <h4></h4>
-    <br><br><br>
-=======
 <div >
     <h5 class="col-grey">From</h5>
     <p>
@@ -113,5 +46,4 @@
     <hr>
     <h4></h4>
     <br><br><br>
->>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 </div>

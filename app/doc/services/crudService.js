@@ -70,9 +70,9 @@ service('$crudService', function(){
 
     this.updateCounterFor = (item, document) => {
         let promise = new Promise((resolve, reject) => {
+        console.log(item);
         
         var counter = {};
-        document.set(counter, { merge: true});
             if(item.Year && item.Month) {
                 counter["yearlyCount.total"] = firebase.firestore.FieldValue.increment(1);
                 counter[`yearlyCount.${item.Year}.total`] = firebase.firestore.FieldValue.increment(1);
@@ -98,23 +98,5 @@ service('$crudService', function(){
         });
 
         return promise;
-    }
-
-    this.getCountByYear = (collection, documentName) => {
-        return new Promise((resolve, reject) => {
-            collection.when(documentName, (document) => {
-                resolve(document.yearlyCount);
-            })
-        })
-        
-    }
-
-    this.getCountByMunicipality = (collection, documentName) => {
-        return new Promise((resolve, reject) => {
-            collection.when(documentName, (document) => {
-                resolve(document.municipalityCount);
-            })
-        })
-        
     }
 })

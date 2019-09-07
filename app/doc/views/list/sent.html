@@ -1,29 +1,3 @@
-<<<<<<< HEAD
-
-<md-list class="md-dense" flex>
-    <md-subheader class="col-white bg-amber">
-        <div layout>
-            <strong>Sent documents </strong>
-            <input flex ng-model="search_sent" placeholder="search" class="m-l-10 m-r-10 m-t--5 p-t-5 p-b-5 p-l-5" style="border: none;border-bottom: #777 1px;">
-            <i class="fa fa-cloud-upload col-white pointer" ng-click="showPrerenderedDialog($event,'fileHistory');">
-                <md-tooltip md-direction="top">Cloud File History</md-tooltip>
-            </i>
-        </div>
-    </md-subheader>
-    <md-content style="height : {{iframeHeight - 130}}px;">
-        <md-list-item class="md-3-line" ng-repeat="x in mySent | filter : search_sent" ng-click="setCurrentItem(x.document,'sent')" ng-init="getUserAccount(x.receiver,$index)">
-            <div class="md-list-item-text" layout="column">
-                <h3>To {{x.sentUser.name}}, <strong
-                    ng-class="{ 'col-green': (x.status == 'received'), 'col-grey': (x.status == 'pending'), 'col-yellow': (x.status == 'declined') }"> 
-                    {{ x.status }}, </strong>
-                </h3>
-                <h4>{{ x.document.source }} - {{ x.document.subject }}</h4>
-                <p>{{ x.date.split(' ')[0] }}, Sent {{ date_from_now(x.time) }}</p>
-            </div>
-        </md-list-item>
-    </md-content>
-    
-=======
 
 <md-list class="md-dense" flex>
     <md-subheader class="col-white bg-amber">
@@ -48,5 +22,4 @@
         </md-list-item>
     </md-content>
     
->>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 </md-list>

@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-<section flex layout="column" ng-controller="doc_controller" 
-    ng-init="set_page_title('Document Network');doc_init();check_pending($event);">
-
-    <div flex="100" layout-align="center center" ng-if="isLoading" layout>
-        <md-progress-circular md-mode="indeterminate" md-diameter="70"></md-progress-circular>
-    </div>
-    
-    <div ng-hide="isLoading" layout flex ng-include="doc_content"></div>
-    <div ng-include="'./app/doc/modals/addToAgency.html'" ></div>
-    <div ng-include="'./app/doc/modals/addDraft.html'" ></div>
-    <div ng-include="'./app/doc/modals/fileHistory.html'" ></div>
-    <div ng-include="'./app/doc/modals/sendDocument.html'" ></div>
-    <div ng-include="'./app/doc/modals/pending.html'" ></div>
-    
-=======
 <section flex layout="column" ng-controller="doc_controller" 
     ng-init="set_page_title('Document Network');doc_init();check_pending($event);">
 
@@ -33,5 +17,4 @@
         <div ng-include="x.view"></div>
     </div>
     
->>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 </section>

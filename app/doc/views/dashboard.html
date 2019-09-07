@@ -1,67 +1,3 @@
-<<<<<<< HEAD
-<style>
-.docNav {
-    position: fixed;
-    bottom: 2%;
-    z-index: 99;
-    margin-left: 0px;
-}
-</style>
-
-<div flex layout >
-    <div flex layout="column">
-        
-        <section layout flex>
-            <md-content flex layout class="m-l-10" >
-                <div ng-include="'./app/doc/contents/agency.html'" flex ng-if="currentClicked == 'agency'"></div>
-                <div ng-include="'./app/doc/contents/draft.html'" flex ng-if="currentClicked == 'draft'"></div>
-                <div ng-include="'./app/doc/contents/published.html'" flex ng-if="currentClicked == 'published' || currentClicked == 'sent'"></div>
-                <div ng-include="'./app/doc/contents/pending.html'" flex ng-if="currentClicked == 'pending'"></div>
-                <div ng-include="'./app/doc/contents/received.html'" flex ng-if="currentClicked == 'received'"></div>
-                
-            </md-content>
-            <md-sidenav
-                layout flex
-                class="md-sidenav-right"
-                md-component-id="dashSide"
-                md-is-locked-open="$mdMedia('gt-xs')"
-                md-whiteframe="2">
-
-                <div flex layout ng-include="'./app/doc/views/documents.html'" ng-if="currentNavItem == 'Documents'"></div>
-                <div flex ng-include="'./app/doc/views/agencies.html'" ng-if="currentNavItem === 'Agencies'" layout-padding></div>
-
-            </md-sidenav>
-                
-        </section>
-
-
-        <div class="docNav bg-white" layout >
-            <md-nav-bar flex
-                md-selected-nav-item="currentNavItem"
-                nav-bar-aria-label="navigation links">
-                <md-nav-item md-nav-click="activeNav('Documents')" name="Documents">
-                    <div layout-align="center center" layout-xs="column" layout-gt-xs="row">
-                        <i class="fa fa-file-text col-blue"></i>
-                        <span class="m-l-5 font-10">Documents</span>
-                    </div>
-                </md-nav-item>
-                <!-- <md-nav-item md-nav-click="activeNav('Connections')" name="Connections">
-                    <div layout-align="center center" layout-xs="column" layout-gt-xs="row">
-                        <i class="fa fa-group col-green"></i>
-                        <span class="m-l-5 font-10" >Connections</span>
-                    </div>
-                </md-nav-item> -->
-                <md-nav-item md-nav-click="activeNav('Agencies')" name="Agencies">
-                    <div layout-align="center center" layout-xs="column" layout-gt-xs="row">
-                        <i class="fa fa-building-o col-purple"></i>
-                        <span class="m-l-5 font-10">Agencies</span>
-                    </div>
-                </md-nav-item>
-            </md-nav-bar>
-        </div>
-        
-    </div>
-=======
 <style>
 .docNav {
     position: fixed;
@@ -125,5 +61,4 @@
         </div>
         
     </div>
->>>>>>> 0db6323950245b7f49c7215f6c47c93d73607120
 </div>

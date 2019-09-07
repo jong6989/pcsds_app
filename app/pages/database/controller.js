@@ -824,3 +824,4 @@ document.write(`<script src="./app/doc/controllers/Apprehension.js"></script>`);
 document.write(`<script src="./app/doc/controllers/ChainsawRegistration.js"></script>`);
 document.write(`<script src="./app/doc/controllers/CriminalCases.js"></script>`);
 document.write(`<script src="./app/doc/controllers/Permit.js"></script>`);
+
