@@ -1,0 +1,147 @@
+<!-- <div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div> -->
+<div class="p-t-20 p-l-10" ng-controller="WildlifeImportCertificationController" ng-init="set_application($localStorage.params)">
+<div ng-include="'./app/templates/application/style.html'"></div>
+
+        <div layout="row">
+            <div flex layout-gt-xs="row" layout-xs="column">
+                <div flex flex-gt-xs="15" layout-align="center center">
+                    <img src="./images/pcsdlogo.png" class="p-t-5" style="width:100%;">
+                </div>
+                <div flex layout-align="left" class="m-l-20">
+                    <div>&nbsp;</div>
+                    <h4><strong>Republic of the Philippines</strong> <br>
+                        <small>(Republic Act 7611)</small><br>
+                        <small>PALAWAN COUNCIL for SUSTAINABLE DEVELOPMENT</small>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div layout="row" layout-align="end">
+            <div layout="column" layout-align="center center">
+                <div><strong style="text-decoration: underline"> {{application.date | date : 'MMMM d, yyyy'}} </strong></div>
+                <div>(Date)</div>
+            </div>
+            <div class="p-r-50"></div>
+        </div>
+
+        <h5 style="text-align: center; margin-top:35px;margin-bottom:45px;" >APPLICATION FOR WILDLIFE IMPORT CERTIFICATION</h5>
+
+        <div>
+            NELSON P. DEVANADERA <br>
+            Executive Director<br>
+            Palawan Council for Sustainable Development Staff
+            Puerto Princesa City
+        </div>
+        <br/>
+        Sir: <br><br/>
+        I would like to request for the issuance of permit/certification for the following species/items/articles of
+        wildlife (fauna/flora) intended for import for purposes <underlined>{{application.data.application.purpose}}</underlined> 
+        (commercial/non-commercial/scientific, etc.)
+<br><br>
+        <ol>
+            <table style="width: 100%;text-align: justify">
+                <tr >
+                    <td>Common Name/Scientific Name</td>
+                    <td>Description of parts/derivatives<br>including identifying marks or<br>numbers (age and sex)</td>
+                    <td>Quantity/Weight</td>
+                </tr>
+                <tr ng-repeat="specy in application.data.application.species" class="underlined">
+                    <td><li>{{specy.name}}</li></td>
+                    <td>{{specy.description}}</td>
+                    <td>{{specy.quantity}}</td>
+                </tr>
+            </table>
+        </ol>
+        <br/>
+        <br/>
+        Documents attached:  <text class="underlined">{{application.data.application.document_attached}}</text><br>
+        The aformentioned speciment will be imported on or before <text class="underlined">{{application.data.application.import.date}}</text>
+        <br/>
+        <br/>
+
+        <table class="borderedTable" style="width: 100%">
+            <tr style="text-align: center; font:bold"><td>Air Cargo</td><td>Sea Cargo</td><td>Postal Cargo</td></tr>
+            <tr>
+                <td>Plane: {{application.data.application.import.air_cargo.name}}  &nbsp;&nbsp;&nbsp;
+                Flt. No {{application.data.application.import.air_cargo.number}}</td>
+                <td>Vessel: {{application.data.application.import.sea_cargo.name}} &nbsp;&nbsp;&nbsp;Voyage No.: {{application.data.application.import.sea_cargo.number}}</td>
+                <td>Carrier: {{application.data.application.import.postal_cargo.name}}</td>
+            </tr>
+            <!-- <tr ng-if="application.data.application.import.cargo.type == 'Sea'">
+                    <td>Plane:   &nbsp;&nbsp;&nbsp;
+                    Flt. No </td>
+                    <td>Vessel: {{application.data.application.import.cargo.name}}&nbsp;&nbsp;&nbsp;
+                        Voyage No.: {{application.data.application.import.cargo.name}}"</td>
+                    <td>Carrier: &nbsp;&nbsp;&nbsp;</td>
+            </tr>
+            <tr ng-if="application.data.application.import.cargo.type == 'Postal'">
+                    <td>Plane:   &nbsp;&nbsp;&nbsp;
+                    Flt. No </td>
+                    <td>Vessel: &nbsp;&nbsp;&nbsp;</td>
+                    <td>Carrier:{{application.data.application.import.cargo.name}}</td>
+            </tr> -->
+            <tr>
+                <td>Port of Loading: {{application.data.application.import.air_cargo.loading_port}}</td>
+                <td>Port of Loading: {{application.data.application.import.sea_cargo.loading_port}}</td>
+                <td>Port of Loading: {{application.data.application.import.postal_cargo.loading_port}}</td>
+            </tr>
+            <tr>
+                <td>Date of Loading: {{application.data.application.import.air_cargo.loading_date}}</td>
+                <td>Date of Loading: {{application.data.application.import.sea_cargo.loading_date}}</td>
+                <td>Date of Loading: {{application.data.application.import.postal_cargo.loading_date}}</td>
+            </tr>
+        </table>
+<br/>
+        <table>
+            <tr>
+                <td style="padding-right: 15px;">Name of Exporter: <text class="underlined">{{application.data.application.exporter.name}}</text></td>
+                <td>Address: <text class="underlined">{{application.data.application.exporter.address}}</text></td>
+            </tr>
+            <tr>
+                <td>TIN: <text class="underlined">{{application.data.application.exporter.tin}}</text></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>Telephone Number/s: <text class="underlined">{{application.data.application.exporter.contact_number}}</text></td>
+                <td>FAX No.: <text class="underlined">{{application.data.application.exporter.fax}}</text></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                    <td>Name of Importer: <text class="underlined">{{application.data.application.importer.name}}</text></td>
+                    <td>Address: <text class="underlined">{{application.data.application.importer.address}}</text></td>
+                </tr>
+                <tr>
+                    <td>Telephone Number/s: <text class="underlined">{{application.data.application.importer.contact_number}}</text></td>
+                    <td>FAX No.: <text class="underlined">{{application.data.application.importer.fax}}</text> </td>
+                </tr>   
+        </table>
+        <div>
+                
+        </div>
+        <br/>
+        <table>
+               
+        </table>
+            <br><br><br>
+        <div layout="row" >
+            <div layout="column" layout-align="start" style="width: 20%">
+                <div class="underlined">&nbsp;</div>
+                <div style="text-align: center">Signature of Applicant</div>
+            </div>
+            <div></div>
+            <div  style="width: 60%">&nbsp;</div>
+            <div layout="column" layout-align="end" style="width: 20%; text-align: center">
+                <div class="underlined">&nbsp;</div>
+                <div>Verified</div>
+                <div class="underlined">&nbsp;</div>
+                <div>Position</div>
+                <div class="underlined">&nbsp;</div>
+                <div>Date</div>
+                </div>
+        </div>    
+        <div ng-include="'./app/templates/application/attachments_template.html'"></div>
+        <div ng-include="'./app/templates/application/stamp_template.html'"></div>    
+    </div>
