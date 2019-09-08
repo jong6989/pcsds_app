@@ -136,7 +136,8 @@
                 <md-button ng-click="close_dialog()">
                     Close
                 </md-button>
-                <md-button class="md-primary md-raised" ng-disabled="form_add_draft.$invalid || n.template == {} || n.template == undefined" 
+                <md-button class="md-primary md-raised" 
+                ng-disabled="form_add_draft.$invalid || n.template == {} || n.template == undefined" 
                     ng-click="createDraft(n);">
                     Create Draft
                 </md-button>

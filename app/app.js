@@ -383,7 +383,49 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.to_month = function(d){
       return $filter('date')(d, "MM");
     }
+    $scope.get_full_date = function(date){
+      return $filter('date')(date, "MMMM dd, yyyy");
+    }
+    $scope.get_full_month_name = function(date){
+      return $filter('date')(date, "MMMM");
+    }
+    $scope.to_day = function(d){
+      return $filter('date')(d, "dd");
+    }
 
+    $scope.toString = (collection, key) => {
+      var values = key ? collection.map(item => item[key]) : collection;
+      var slicedElements = values.slice(0, values.length - 1);
+      var joined = slicedElements.join(', ') + ' and ' + values[values.length - 1];
+
+      return joined;
+    }
+    $scope.to_day_of_month = function(date){
+      if(!date) return "";
+
+      var day = $filter('date')(date, "d");
+      var suffix = "th";
+
+      if(!day.startsWith("1")){
+        if(day.endsWith("1"))
+          suffix = "st";
+        else if(day.endsWith("2"))
+          suffix = "nd";
+        else if(day.endsWith("3"))
+          suffix = "rd";
+      }
+
+      if(day === "1")
+        suffix = "st";
+
+      return `${day}${suffix}`;
+    }
+
+    $scope.format = (date, formatString) => {
+      if(!formatString) formatString = "YYYY-MM-DD";
+      return moment(date).format(formatString);
+    }
+    
     $scope.toast = function(t){
       $mdToast.show(
         $mdToast.simple()
@@ -532,6 +574,9 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
 
       // $scope.current_view = "app/login/view.html";
 
+      // $scope.current_view = "app/templates/main.html";
+      // $scope.content_page = "app/templates/templates/ltp_wildlife/certificate/create.html";
+      
     };
 
     $scope.iframeHeight = $scope.get_window_height();

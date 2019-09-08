@@ -82,58 +82,61 @@ controller('WSUPOtherUsesController', function($scope) {
         return values.join(', ');
     }
 }).
-controller('DummyLTPWildlifeController', ['$scope', 'dummyLTPWildlife', '$localStorage',
-    function($scope, $ltpWildlifeInspection, $localStorage){
-    $localStorage.params = {
-        data:{
-            application: {},
-            received: {
-                staff: "Maria Clara",
-                date: "2019-06-12 01:32:43"
-            },
-            status: 1
-        },
-        date: new Date()
-    };
+controller('DummyLTPWildlifeController', ['$scope', '$localStorage',
+    function($scope, $localStorage){
+        $scope.transport_date = $scope.currentItem.transport_date;
+        $scope.issuance_date = $scope.currentItem.issuance_date;
+        $scope.paid_date = $scope.currentItem.paid_date;
+    // $localStorage.params = {
+    //     data:{
+    //         application: {},
+    //         received: {
+    //             staff: "Maria Clara",
+    //             date: "2019-06-12 01:32:43"
+    //         },
+    //         status: 1
+    //     },
+    //     date: new Date()
+    // };
 
-    $ltpWildlifeInspection.getItem(0, [], null).then(wildlifeInspection => {
-        $localStorage.params.data.application = wildlifeInspection;
-        $scope.ltpWildlifeInspectionTable = $scope.ngTable(wildlifeInspection.species);
-    });
+    // $ltpWildlifeInspection.getItem(0, [], null).then(wildlifeInspection => {
+    //     $localStorage.params.data.application = wildlifeInspection;
+    //     $scope.ltpWildlifeInspectionTable = $scope.ngTable(wildlifeInspection.species);
+    // });
 
-    $scope.set_application = (data) => {
-        $scope.application = data;        
-    }
+    // $scope.set_application = (data) => {
+    //     $scope.application = data;        
+    // }
 
-    $scope.set_certificate = (data) => {
-        $scope.application = data;        
-    }
+    // $scope.set_certificate = (data) => {
+    //     $scope.application = data;        
+    // }
 
-    $scope.render_params = { data: {}}
-    $scope.render_params.data = {
-        application_no : "2019-01-1234",
-        line1: "This is to certify that the applicant has undertaken the inspection of wildlife/wildlife derivative and by-products which was produced/gathered from Balabac for the purposes of domestication. The species and its quantity of are as follows:",
-        line2: "This Certification is being issued upon the request of Mr./Ms.Juan dela Cruz to support his/her application for transport of the above-mentioned specimens to Maria Clara which will be transported on September 04, 2019 through van.",
-        line3: "Issued this 4th day of September, 2019 in Palawan Council for Sustainable Development Staff (PCSDS) Office, Sta. Monica, Puerto Princesa City.",
-        species: [
-            { name: "Orthoptera", quantity: "2 heads", description: "Preserved specimen", remarks: "fresh"},
-            { name: "Blattodea", quantity: "4 heads", description: "Preserved specimen", remarks: "fresh"},
-            { name: "Odonata", quantity: "2 heads", description: "Preserved specimen", remarks: "fresh"}
-        ],
-        paid_amount: "P1,000",
-        paid_or_number: "ABCD1234",
-        paid_date: "September 04, 2019",
-        sign1: {
-            name: "Arlan T. Asutilla",
-            designation: "Programmer",
-            signature: "xxxxxxxxx"
-        },
-        sign2: {
-            name: "Juan dela Cruz",
-            designation: "Director",
-            signature: "xxxxxxxxx"
-        }
-    }
+    // $scope.render_params = { data: {}}
+    // $scope.render_params.data = {
+    //     application_no : "2019-01-1234",
+    //     line1: "This is to certify that the applicant has undertaken the inspection of wildlife/wildlife derivative and by-products which was produced/gathered from Balabac for the purposes of domestication. The species and its quantity of are as follows:",
+    //     line2: "This Certification is being issued upon the request of Mr./Ms.Juan dela Cruz to support his/her application for transport of the above-mentioned specimens to Maria Clara which will be transported on September 04, 2019 through van.",
+    //     line3: "Issued this 4th day of September, 2019 in Palawan Council for Sustainable Development Staff (PCSDS) Office, Sta. Monica, Puerto Princesa City.",
+    //     species: [
+    //         { name: "Orthoptera", quantity: "2 heads", description: "Preserved specimen", remarks: "fresh"},
+    //         { name: "Blattodea", quantity: "4 heads", description: "Preserved specimen", remarks: "fresh"},
+    //         { name: "Odonata", quantity: "2 heads", description: "Preserved specimen", remarks: "fresh"}
+    //     ],
+    //     paid_amount: "P1,000",
+    //     paid_or_number: "ABCD1234",
+    //     paid_date: "September 04, 2019",
+    //     sign1: {
+    //         name: "Arlan T. Asutilla",
+    //         designation: "Programmer",
+    //         signature: "xxxxxxxxx"
+    //     },
+    //     sign2: {
+    //         name: "Juan dela Cruz",
+    //         designation: "Director",
+    //         signature: "xxxxxxxxx"
+    //     }
+    // }
 }]).
 controller('WildlifeImportCertificationController', ['$scope', 'dummywildlifeImportService', '$localStorage',
 function($scope, $wildlifeImportService, $localStorage){

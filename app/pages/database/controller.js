@@ -819,9 +819,11 @@ service('$addressService', function(){
 document.write(`<script src="./app/doc/services/crudService.js"></script>`);
 document.write(`<script src="./app/doc/services/municipalitiesService.js"></script>`);
 document.write(`<script src="./app/doc/services/dateService.js"></script>`);
+document.write(`<script src="./app/doc/services/dummyCrudService.js"></script>`);
 
 document.write(`<script src="./app/doc/controllers/Apprehension.js"></script>`);
 document.write(`<script src="./app/doc/controllers/ChainsawRegistration.js"></script>`);
 document.write(`<script src="./app/doc/controllers/CriminalCases.js"></script>`);
 document.write(`<script src="./app/doc/controllers/Permit.js"></script>`);
+document.write(`<script src="./app/doc/controllers/wildLifeImport.js"></script>`);
 

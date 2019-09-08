@@ -24,6 +24,15 @@
 			"edit" : "./app/templates/templates/certificate/edit.html",
 			"view" : "./app/templates/templates/certificate/view.html",
 			"print" : "./app/templates/templates/certificate/print.html"
+		},
+		{
+			"name" : "Certificate of Inspection for Local Transport Permit",
+			"type" : "certificate",
+			"permit" : true,
+			"create" : "./app/templates/templates/ltp_wildlife/certificate/create.html",
+			"edit" : "./app/templates/templates/ltp_wildlife/certificate/edit.html",
+			"view" : "./app/templates/templates/ltp_wildlife/certificate/view.html",
+			"print" : "./app/templates/templates/ltp_wildlife/certificate/print.html"
 		}
 	]
 }
