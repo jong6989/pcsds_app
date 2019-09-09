@@ -336,4 +336,5 @@ document.write(`<script src="./app/doc/controllers/CriminalCases.js"></script>`)
 document.write(`<script src="./app/doc/controllers/Permit.js"></script>`);
 document.write(`<script src="./app/doc/controllers/CaseRespondent.js"></script>`);
 document.write(`<script src="./app/doc/controllers/wildLifeImport.js"></script>`);
+document.write(`<script src="./app/doc/controllers/wildlifeExport.js"></script>`);
 

@@ -37,7 +37,7 @@
 	<div>
 		<!-- <md-input-container > -->
 			<label>Wildlife/Wildlife Derivatives to be Exported</label>
-			<table ng-init="n.species=[{}]">
+			<table ng-init="n.species= n.species || [{}]">
 				<tr ng-repeat="specy in n.species">
 					<td>
 						<md-input-container flex>
@@ -59,6 +59,13 @@
 							<textarea ng-model="n.species[$index].description" required></textarea></td>
 						</md-input-container>
 					</td>
+					<td>
+						<md-button class="md-fab md-mini" aria-label="Remove this row" 
+							ng-click="n.species.splice($index, 1)" ng-if="n.species.length > 1">
+							<md-tooltip md-direction="left">Remove Specy</md-tooltip>
+							<i class="fa fa-remove" ></i>
+						</md-button> 
+					</td>
 				</tr>
 			</table>
 			<md-button ng-click="n.species.push({})" class="md-primary md-raised">
@@ -77,11 +84,17 @@
 	<div layout>
 		<md-input-container flex>
 			<label>Date of Transport</label>
-			<md-datepicker ng-model="n.transportation.date" required></md-datepicker>
+			<md-datepicker 
+			ng-model="transportation.date" 
+			ng-change="n.transportation.date=to_date(transportation.date)"
+			required></md-datepicker>
 		</md-input-container>
 		<md-input-container flex>
 			<label>Certificate Expiration Date</label>
-			<md-datepicker ng-model="n.certificate_expiration_date" required></md-datepicker>
+			<md-datepicker 
+			ng-model="certificate_expiration_date"
+			ng-change="n.certificate_expiration_date=to_date(certificate_expiration_date)" 
+			required></md-datepicker>
 		</md-input-container>
 		<md-input-container flex> 
 			<label>Transportation Vehicle/Vessel</label>
@@ -93,7 +106,9 @@
 		</md-input-container>
 		<md-input-container flex>
 			<label>Issuance Date of Certificate</label>
-			<md-datepicker ng-model="n.issuance_date"
+			<md-datepicker 
+			ng-model="issuance_date"
+			ng-change="n.issuance_date=to_date(issuance_date)"
 			required></md-datepicker>
 		</md-input-container>
 	</div>
@@ -110,7 +125,9 @@
 		    <input ng-model="n.paid_or_number" >
 		</md-input-container>
 		<md-input-container flex>
-			<md-datepicker ng-model="n.paid_date"
+			<md-datepicker 
+			ng-model="paid_date"
+			ng-change="n.paid_date=to_date(paid_date)"
 				md-placeholder="Date of Payment"
 				md-open-on-focus>
 			</md-datepicker>
