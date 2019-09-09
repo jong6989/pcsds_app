@@ -1,8 +1,99 @@
-<div 
-ng-controller="WildlifeExportController"
-ng-init="currentItem.subject = 'CERTIFICATION FOR WILDLIFE EXPORT'; titles = ['Ms.','Mrs.','Mr.']; currentItem.keywords = [];"
->
-	<!-- <div ng-if="currentItem"> -->
-		<div ng-init="n=currentItem" ng-include="'./app/templates/templates/wildlife_export/certificate/create.html'"></div>
-	<!-- </div> -->
+<div>
+    <br>
+    <br>
+    <div layout layout-align="center end">
+        <strong>Wildlife Export<strong>
+        <strong>Certification No.: {{currentItem.application_no}}</strong>
+    </div>
+    <br>
+    <br>
+    <h3 class="align-center">CERTIFICATION</h3>
+    <hr>
+
+    <!-- with template -->
+    <div ng-if="currentItem.c_type != 'empty'">
+        <br>
+        <div layout>
+            <textarea rows="6" flex name="line1" ng-model="currentItem.line1"
+                ng-blur="updateDocument(currentItem.id,{'line1': currentItem.line1})"></textarea>
+        </div>
+        <table class="borderedTable" style="width: 100%">
+            <tr style="text-align: center">
+                <td>Species (Scientific Name/Common Name)</td>
+                <td>Quantity</td>
+                <td>Description (i.e. live, fresh, etc.)</td>
+            </tr>
+            <tr ng-repeat="specimen in currentItem.species">
+                <td><textarea ng-model="specimen.name">{{specimen.name}}</textarea></td>
+                <td style="text-align:right"><textarea ng-model="specimen.quantity">{{specimen.quantity}}</textarea></td>
+                <td><textarea  ng-model="specimen.description">{{specimen.description}}</textarea></td>
+            </tr>
+        </table>
+        <br>
+        <div layout>
+            <textarea rows="6" flex name="line2" ng-model="currentItem.line2"
+                ng-blur="updateDocument(currentItem.id,{'line2': currentItem.line2})"></textarea>
+        </div><br>
+        <div layout>
+            <textarea rows="6" flex name="line3" ng-model="currentItem.line3"
+                ng-blur="updateDocument(currentItem.id,{'line3': currentItem.line3})"></textarea>
+        </div>
+        <div layout>
+            <textarea rows="6" flex name="line4" ng-model="currentItem.line4"
+                ng-blur="updateDocument(currentItem.id,{'line4': currentItem.line4})"></textarea>
+        </div>
+        <div layout>
+            <textarea rows="6" flex name="line5" ng-model="currentItem.line5"
+                ng-blur="updateDocument(currentItem.id,{'line5': currentItem.line5})"></textarea>
+        </div>
+        <div layout>
+            <textarea rows="6" flex name="line6" ng-model="currentItem.line6"
+                ng-blur="updateDocument(currentItem.id,{'line6': currentItem.line6})"></textarea>
+        </div>
+    </div>
+
+    <!-- empty template -->
+    <div ng-if="currentItem.c_type == 'empty'">
+        <div ng-repeat="x in currentItem.lines" layout="column">
+            <div layout>
+                <textarea rows="6" flex name="line_{{$index}}"
+                    ng-blur="updateDocument(currentItem.id,{'lines': currentItem.lines})"
+                    ng-model="currentItem.lines[$index]"></textarea>
+            </div>
+            <md-button class="md-button md-warn" ng-click="currentItem.lines.splice($index,1)"
+                ng-if="currentItem.lines.length > 1">remove paragraph</md-button>
+            <hr>
+        </div>
+        <br>
+        <md-button class="md-button md-primary" ng-click="currentItem.lines.push('')">add paragraph</md-button>
+    </div>
+
+
+    <hr>
+    <br>
+    <strong>Payment</strong>
+    <div layout>
+        <md-input-container class="md-block m-t-40" flex>
+            <label>Paid amount</label>
+            <input ng-model="currentItem.paid_amount"
+                ng-blur="updateDocument(currentItem.id,{'paid_amount': currentItem.paid_amount})">
+        </md-input-container>
+        <md-input-container class="md-block m-t-40" flex>
+            <label>OR Number</label>
+            <input ng-model="currentItem.paid_or_number"
+                ng-blur="updateDocument(currentItem.id,{'paid_or_number': currentItem.paid_or_number})">
+        </md-input-container>
+        <div flex-gt-sm ng-init="paid_date = currentItem.paid_date">
+            <strong>Date Paid</strong>
+            <md-datepicker ng-model="paid_date"
+                ng-change="currentItem.paid_date = to_date(paid_date); updateDocument(currentItem.id,{'paid_date': currentItem.paid_date})"
+                md-placeholder="Date" md-open-on-focus>
+            </md-datepicker>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
 </div>
