@@ -42,6 +42,15 @@
 			"edit" : "./app/templates/templates/wildlife_export/certificate/edit.html",
 			"view" : "./app/templates/templates/wildlife_export/certificate/view.html",
 			"print" : "./app/templates/templates/wildlife_export/certificate/print.html"
+		},
+		{
+			"name" : "Certificate of Wildlife Import",
+			"type" : "certificate",
+			"permit" : true,
+			"create" : "./app/templates/templates/wildlife_import/certificate/create.html",
+			"edit" : "./app/templates/templates/wildlife_import/certificate/edit.html",
+			"view" : "./app/templates/templates/wildlife_import/certificate/view.html",
+			"print" : "./app/templates/templates/wildlife_import/certificate/print.html"
 		}
 	]
 }

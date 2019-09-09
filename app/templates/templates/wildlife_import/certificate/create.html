@@ -1,4 +1,5 @@
-<div ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
+<div
+ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
 	
 	<h3 class="align-center">CERTIFICATION FOR WILDLIFE IMPORT</h3>
 	<hr>
@@ -33,24 +34,31 @@
 	<div>
 		<!-- <md-input-container > -->
 			<strong>Wildlife/Wildlife Derivatives to be Imported</strong>
-			<table ng-init="rows=[0]; n.species=[]">
-				<tr ng-repeat="row in rows">
-					<td ng-init="n.species[row]={}">
+			<table ng-init="n.species=n.species || [{}]">
+				<tr ng-repeat="specy in n.species">
+					<td>
 						<md-input-container flex>
 							<label>Species (Scientific Name/Common Name)</label>
 							<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>														
-							<input ng-model="n.species[row].name" required>
+							<input ng-model="n.species[$index].name" required>
 						</md-input-container>
 					</td>
 					<td>
 						<md-input-container flex>
 							<label>Quantity</label>
-							<input ng-model="n.species[row].quantity" required>
+							<input ng-model="n.species[$index].quantity" required>
 						</md-input-container>
+					</td>
+					<td>
+						<md-button class="md-fab md-mini" aria-label="Remove this row" 
+							ng-click="n.species.splice($index, 1)" ng-if="n.species.length > 1">
+							<md-tooltip md-direction="left">Remove Specy</md-tooltip>
+							<i class="fa fa-remove" ></i>
+						</md-button> 
 					</td>
 				</tr>
 			</table>
-			<md-button ng-click="rows.push(rows.length)" class="md-primary md-raised">
+			<md-button ng-click="n.species.push({})" class="md-primary md-raised">
 				Add Row
 			</md-button>
 		<!-- </md-input-container> -->
@@ -80,7 +88,9 @@
 			<label>Date of Import</label>
 			<md-tooltip direction="left">Date of Import</md-tooltip>														
 			
-			<md-datepicker ng-model="n.import.date"
+			<md-datepicker 
+			ng-change="n.import.date=to_date(import.date)"
+			ng-model="import.date"
 			md-tooltip="Date of Import"
 			required></md-datepicker>
 		</md-input-container>
@@ -91,7 +101,9 @@
 		<md-input-container>
 			<label>Date of Issuance of Certificate</label>
 			<md-tooltip direction="left">Date of Issuance of Certificate</md-tooltip>														
-			<md-datepicker ng-model="n.issuance_date">
+			<md-datepicker 
+				ng-model="issuance_date"
+				ng-change="n.issuance_date=to_date(issuance_date)">
 
 			</md-datepicker>
 		</md-input-container>
@@ -111,7 +123,8 @@
 		</md-input-container>
 		<md-input-container flex>
 			<label>Date of Payment</label>
-			<md-datepicker ng-model="n.paid_date"
+			<md-datepicker ng-model="paid_date"
+				md-change="n.paid_date=to_date(paid_date)"
 				md-open-on-focus>
 			</md-datepicker>
 		</md-input-container>
