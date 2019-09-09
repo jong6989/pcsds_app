@@ -19,7 +19,9 @@
     </p>
     <hr>
     
-    <div ng-include="'./app/doc/contents/document.html'"></div>
+    <div ng-if="currentItem.template != undefined" style="border: #000 solid 1px; padding: 20px; box-shadow: #777 3-px 3px 1px;margin: 10px; background-color: #fff;">
+        <div ng-include="currentItem.template.view"></div>
+    </div>
     
     <hr>
     

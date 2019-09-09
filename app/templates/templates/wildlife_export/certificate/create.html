@@ -1,0 +1,190 @@
+<div ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE EXPORT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
+	
+	<h3 class="align-center">C E R T I F I C A T I O N</h3>
+	<hr>
+	<md-input-container class="md-block m-t-40">
+	    <label>Certification No.</label>
+	    <input ng-model="n.application_no" required>
+	</md-input-container> 
+	<md-input-container class="md-block m-t-40">
+	    <label>Gratuitous Permit No.</label>
+	    <input ng-model="n.gratuitous_permit_number" required>
+	</md-input-container> 
+	<br>
+
+	<strong>Applicant Information</strong>
+	<div layout>
+		<md-input-container flex>
+			<label>Last Name</label>
+			<input ng-model="n.applicant.last_name" required>
+		</md-input-container>
+		<md-input-container class="md-block"  flex>
+			<label>First Name</label>
+			<input ng-model="n.applicant.first_name" required>
+		</md-input-container>
+		<md-input-container class="md-block"  flex>
+			<label>Middle Name</label>
+			<input ng-model="n.applicant.middle_name">
+		</md-input-container>
+		<md-input-container class="md-block"  flex>
+			<label>Agency</label>
+			<input ng-model="n.applicant.agency">
+		</md-input-container>
+		<input type="hidden"
+			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
+	</div>
+
+	<div>
+		<!-- <md-input-container > -->
+			<label>Wildlife/Wildlife Derivatives to be Exported</label>
+			<table ng-init="rows=[0]; n.species=[]">
+				<tr ng-repeat="row in rows">
+					<td ng-init="n.species[row]={}">
+						<md-input-container flex>
+							<label>Species (Scientific Name/Common Name)</label>
+							<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>														
+							<input ng-model="n.species[row].name" required>
+						</md-input-container>
+					</td>
+					<td>
+						<md-input-container flex>
+							<label>Quantity</label>
+							<input ng-model="n.species[row].quantity" required>
+						</md-input-container>
+					</td>
+					<td>
+						<md-input-container flex>
+							<label>Description (i.e. live, fresh, etc.)</label>
+							<md-tooltip direction="left">Description (i.e. live, fresh, etc.)</md-tooltip>
+							<textarea ng-model="n.species[row].description" required></textarea></td>
+						</md-input-container>
+					</td>
+				</tr>
+			</table>
+			<md-button ng-click="rows.push(rows.length)" class="md-primary md-raised">
+				Add Row
+			</md-button>
+		<!-- </md-input-container> -->
+	</div>
+
+	<div layout>
+		<md-input-container flex>
+		    <label>Containers</label>
+		    <textarea ng-model="n.container"></textarea>
+		</md-input-container>
+	</div>
+	
+	<div layout>
+		<md-input-container flex>
+			<label>Date of Transport</label>
+			<md-datepicker ng-model="n.transportation.date" required></md-datepicker>
+		</md-input-container>
+		<md-input-container flex>
+			<label>Certificate Expiration Date</label>
+			<md-datepicker ng-model="n.certificate_expiration_date" required></md-datepicker>
+		</md-input-container>
+		<md-input-container flex> 
+			<label>Transportation Vehicle/Vessel</label>
+			<md-select ng-model="n.transportaion.type">
+				<md-option ng-repeat="vessel in ['Aircraft', 'Seacraft', 'Courrier']" value="{{vessel}}">
+				  {{vessel}}
+				</md-option>
+			  </md-select>
+		</md-input-container>
+		<md-input-container flex>
+			<label>Issuance Date of Certificate</label>
+			<md-datepicker ng-model="n.issuance_date"
+			required></md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+		    <label>Paid amount</label>
+		    <input ng-model="n.paid_amount" >
+		</md-input-container>
+		<md-input-container flex>
+		    <label>OR Number</label>
+		    <input ng-model="n.paid_or_number" >
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker ng-model="n.paid_date"
+				md-placeholder="Date of Payment"
+				md-open-on-focus>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<br>
+	<strong>PREVIEW</strong>
+	<br>
+	<p> 
+		<span class="m-l-50"></span>
+		{{ n.line1 = 
+			'This is to certify that ' + n.applicant.full_name + ' of ' + n.applicant.agency + ', is authorized to export ' +
+			' sample specimen for research purposes only by virtue of Gratuitous Permit No. ' + n.gratuitous_permit_number +
+			' to wit:'
+		}}
+	</p>
+	<style>.borderedTable tr td { border: 1px solid }</style>
+	<table class="borderedTable" style="width: 100%">
+			<tr style="text-align: center">
+				<td>Species (Scientific Name/Common Name)</td>
+				<td>Quantity</td>
+				<td>Description</td>
+			</tr>
+			<tr ng-repeat="specimen in n.species">
+				<td>{{specimen.name}}</td>
+				<td>{{specimen.quantity}}</td>
+				<td>{{specimen.description}}</td>
+			</tr>
+	</table>
+	<br>
+	<p>
+		<span class="m-l-50"></span>
+		{{ n.line2 = 
+			'Contained in ' + n.container + '.'
+		}}
+	</p>
+	<p>
+		<span class="m-l-50"></span>
+		{{
+			n.line3 = 
+			'The above specimens shall be transported on ' + get_full_date(n.transportation.date) + 
+			' and valid until ' +  get_full_date(n.certificate_expiration_date) +
+			' via ' + n.transportaion.type + ' and have been verified as not included in Appendices I, 
+			II and III of the Convention ' +
+			'on International Trade in Endangered Species of Wild Fauna and Flora (CITES).'
+		}}
+	</p>
+	<p>
+		<span class="m-l-50"></span>
+		{{
+			n.line4 = 
+			'This Certification is not valid without the dry seal of the Palawan Council for 
+			Sustainable Development or if ' +
+			'contains erasures or altercation.'
+		}}
+	</p>
+	<p>
+		<span class="m-l-50"></span>
+		{{
+			n.line5 = 
+			'Certification fee in the amount of Php ' + n.paid_amount + 
+			' was paid under the Palawan Council for Sustainable ' +
+			'Development (PCSD) Official Receipt No. ' + n.paid_or_number + ' dated ' + get_full_date(n.paid_date) + '.'
+		}}
+	</p>
+	<p>
+		<span class="m-l-50"></span>
+		{{
+			n.line6 = 
+			'Issued this ' + to_day_of_month(n.issuance_date) + ' day of ' + get_full_month_name(n.issuance_date) + 
+			', ' + to_year(n.issuance_date) +
+			' in Palawan Council for Sustainable Development Staff (PCSDS) Office, Sta. Monica, Puerto Princesa City.'
+		}}
+	</p>
+</div>
