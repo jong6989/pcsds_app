@@ -13,24 +13,12 @@
     <div ng-if="currentItem.c_type != 'empty'">
         <br>
         
-        <div layout>
+        <div layout ng-init="lines={}" ng-repeat="line in ['line1', 'line2', 'line3']">
             <textarea rows="6" 
-            flex name="line1" 
-            ng-model="currentItem.line1"  
-            ng-blur="updateDocument(currentItem.id,{'line1': currentItem.line1})"></textarea>
-        </div><br>
-        <div layout>
-            <textarea rows="6" 
-            flex name="line2" 
-            ng-model="currentItem.line2"  
-            ng-blur="updateDocument(currentItem.id,{'line2': currentItem.line2})"></textarea>
-        </div><br>
-        <div layout>
-            <textarea rows="6" 
-            flex name="line3" 
-            ng-model="currentItem.line3"  
-            ng-blur="updateDocument(currentItem.id,{'line3': currentItem.line3})"></textarea>
-        </div>
+            flex name="line" 
+            ng-model="currentItem[line]"  
+            ng-blur="updateDocument(currentItem.id,lines[line]=currentItem[line])"></textarea>
+        </div><br>   
     </div>
 
     <!-- empty template -->
