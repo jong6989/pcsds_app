@@ -68,3 +68,13 @@ package-lock.json
 dist/
 downloads/
 functions/node_modules/
+orig.git/
+plugins/
+build/
+css/
+DB/
+functions/
+images/
+js/
+images/
+json/

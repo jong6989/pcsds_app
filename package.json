@@ -34,7 +34,6 @@
   "author": "PCSD IT UNIT",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^4.0.3",
     "electron-packager": "^13.1.1",
     "electron-wix-msi": "^2.1.1",
     "gulp": "^4.0.2"

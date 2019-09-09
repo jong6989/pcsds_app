@@ -37,6 +37,7 @@
 	<div>
 		<!-- <md-input-container > -->
 			<label>Wildlife/Wildlife Derivatives to be Exported</label>
+<<<<<<< HEAD
 			<table ng-init="rows=[0]; n.species=[]">
 				<tr ng-repeat="row in rows">
 					<td ng-init="n.species[row]={}">
@@ -44,24 +45,45 @@
 							<label>Species (Scientific Name/Common Name)</label>
 							<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>														
 							<input ng-model="n.species[row].name" required>
+=======
+			<table ng-init="n.species=[{}]">
+				<tr ng-repeat="specy in n.species">
+					<td>
+						<md-input-container flex>
+							<label>Species (Scientific Name/Common Name)</label>
+							<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>														
+							<input ng-model="n.species[$index].name" required>
+>>>>>>> 438e16a0cfa651616eae577562816fc13957336b
 						</md-input-container>
 					</td>
 					<td>
 						<md-input-container flex>
 							<label>Quantity</label>
+<<<<<<< HEAD
 							<input ng-model="n.species[row].quantity" required>
+=======
+							<input ng-model="n.species[$index].quantity" required>
+>>>>>>> 438e16a0cfa651616eae577562816fc13957336b
 						</md-input-container>
 					</td>
 					<td>
 						<md-input-container flex>
 							<label>Description (i.e. live, fresh, etc.)</label>
 							<md-tooltip direction="left">Description (i.e. live, fresh, etc.)</md-tooltip>
+<<<<<<< HEAD
 							<textarea ng-model="n.species[row].description" required></textarea></td>
+=======
+							<textarea ng-model="n.species[$index].description" required></textarea></td>
+>>>>>>> 438e16a0cfa651616eae577562816fc13957336b
 						</md-input-container>
 					</td>
 				</tr>
 			</table>
+<<<<<<< HEAD
 			<md-button ng-click="rows.push(rows.length)" class="md-primary md-raised">
+=======
+			<md-button ng-click="n.species.push({})" class="md-primary md-raised">
+>>>>>>> 438e16a0cfa651616eae577562816fc13957336b
 				Add Row
 			</md-button>
 		<!-- </md-input-container> -->

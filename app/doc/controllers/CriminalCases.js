@@ -1,5 +1,5 @@
 myAppModule.
-controller('CriminalCasesController', ['dummyCriminalCrudService', 
+controller('CriminalCasesController', ['$crudService', 
 // '$dateServie', 
 // '$addressService', 
 '$scope', 

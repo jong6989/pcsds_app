@@ -34,6 +34,7 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
             });
             setTimeout(()=>{func.refreshDocItem(id, (a) => {
                 $scope.currentItem = a;
+
                 $scope.$apply();
             });},300);
             $scope.myDrafts = await func.getMyDrafts();

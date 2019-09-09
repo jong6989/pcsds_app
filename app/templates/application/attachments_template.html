@@ -1,0 +1,8 @@
+<strong><small>Attachments :</small> </strong> <md-button class="col-pink" ng-if="isFolderExist(application.date)" 
+    ng-click="openFolder(application.date)"> <i class="fa fa-folder-open-o"></i> Open Folder</md-button>
+<ol ng-if="application.data.application.attachments.length > 0">
+    <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
+        <a target="blank" ng-href="{{api_address+'/'+x.url}}" ng-init="download_attachment(api_address+'/', x.url,application)"> {{x.name}} </a> 
+    </li>
+</ol>
+<hr>

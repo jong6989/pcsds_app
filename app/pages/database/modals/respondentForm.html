@@ -1,0 +1,150 @@
+<div style="visibility: hidden">
+        <div class="md-dialog-container" id="respondentFormWindow">
+          <md-dialog layout="column" layout-align="center center">
+            <md-toolbar class="bg-teal">
+              <div class="md-toolbar-tools">
+                <h2>{{respondentForm.title}} Respondent</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="closeRespondentForm()">
+                  <i class="fa fa-times col-white"></i>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <form ng-cloak name="formRespondent">
+              <md-dialog-content layout-padding class="p-b-20">  
+                <div layout-gt-sm layout-sm="column">
+                  <div>
+                    <md-input-container>
+                      <label>First Name</label>
+                      <input ng-model="respondentForm.formData.First_Name" 
+                        required/>
+                    </md-input-container>
+                  </div>
+      
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Middle Initial</label>
+                      <input ng-model="respondentForm.formData.Middle_Initial"/>
+                    </md-input-container>
+                  </div>
+      
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Last Name</label>
+                      <input ng-model="respondentForm.formData.Last_Name" required/>
+                    </md-input-container>
+                  </div>
+    
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Name Extension</label>
+                      <input ng-model="respondentForm.formData.Extension" />
+                    </md-input-container>
+                  </div>
+                </div>
+      
+                <div layout-gt-sm layout-sm="column">
+                  
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Country</label>
+                      <md-autocomplete
+                          class="md-block" flex-gt-sm="100"
+                          md-selected-item="respondentForm.formData.Country"
+                          md-search-text="Country"
+                          md-search-text-change="respondentForm.formData.Country = Country"
+                          md-items="country in respondentForm.countries | filter : Country"
+                          md-item-text="country"
+                          md-min-length="0"
+                          placeholder="Country">                                                  
+                      <md-item-template>
+                      {{country}}
+                      </md-item-template>
+                  </md-autocomplete>        
+                  </md-input-container>
+                  </div>
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Province</label>
+                      <md-autocomplete
+                          class="md-block" flex-gt-sm="100"
+                          md-selected-item="respondentForm.formData.Province"
+                          md-search-text="Province"
+                          md-selected-item-change ="respondentForm.refreshMunicipalities();"
+                          md-items="province in respondentForm.provinces | filter : Province"
+                          md-item-text="province"
+                          md-min-length="0"
+                          placeholder="Province">                                                  
+                          <md-item-template>
+                          {{province}}
+                          </md-item-template>
+                      </md-autocomplete>
+                    </md-input-container>
+                  </div>
+
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Municipality</label>
+                      <md-autocomplete
+                          class="md-block" flex-gt-sm="100"
+                          md-selected-item="respondentForm.formData.Municipality"
+                          md-search-text="Municipality"
+                          md-selected-item-change ="respondentForm.refreshBarangays() "
+                          md-items="municipality in respondentForm.municipalities | filter : Municipality"
+                          md-item-text="municipality"
+                          md-min-length="0"
+                          placeholder="Municipality">                                                  
+                          <md-item-template>
+                          {{municipality}}
+                          </md-item-template>
+                      </md-autocomplete>
+                    </md-input-container>
+                  </div>
+                  <div>
+                    <md-input-container class="md-block">
+                      <label>Barangay</label>
+                      <md-autocomplete
+                          class="md-block" flex-gt-sm="100"
+                          md-selected-item="respondentForm.formData.Barangay"
+                          md-search-text="Barangay"
+                          md-items="barangay in respondentForm.barangays | filter : Barangay"
+                          md-item-text="barangay"
+                          md-min-length="0"
+                          placeholder="Barangay">                                                  
+                          <md-item-template>
+                          {{barangay}}
+                          </md-item-template>
+                      </md-autocomplete>
+                    </md-input-container>
+                  </div>
+                  
+                </div>
+      
+                <div layout-gt-sm layout-sm="column">
+                  <div>
+                    <md-input-container>
+                      <label>Street</label>
+                      <input ng-model="respondentForm.formData.Street" />
+                    </md-input-container>
+                  </div>
+                </div>
+              </md-dialog-content>
+      
+              <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="closeRespondentForm()">
+                  Close
+                </md-button>
+                <md-button
+                  class="md-primary md-raised"
+                  ng-click="saveRespondent(respondentForm.formData);"
+                  ng-disabled="formRespondent.$invalid"
+                >
+                  {{respondentForm.saveButton.text}}
+                </md-button>
+              </md-dialog-actions>
+            </form>
+          </md-dialog>
+        </div>
+      </div>
+      

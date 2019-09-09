@@ -1,4 +1,5 @@
-<div ng-init="n.subject = 'CERTIFICATION'; n.keywords = []; titles = ['Ms.','Mrs.','Mr.']; n.c_type = 'empty'; c_types = ['empty','wsup_ao5','wsup_ao12','wcp_ao5','sep','sup','sup+']; ">
+<div ng-init="n.subject = 'CERTIFICATION'; n.keywords = []; titles = ['Ms.','Mrs.','Mr.']; n.c_type = 'empty'; 
+c_types = ['empty','wsup_ao5','wsup_ao12','wcp_ao5','sep','sup','sup+']; ">
 	
 	<h3 class="align-center">CERTIFICATION</h3>
 	<hr>
@@ -62,7 +63,8 @@
 			<br>
 			<strong>With</strong>
 			<div layout ng-repeat="x in n.applicants">
-				<md-button class="md-fab md-mini" aria-label="Remove Applicant" ng-click="n.applicants.splice($index,1)" ng-if="n.applicants.length > 1">
+				<md-button class="md-fab md-mini" 
+				aria-label="Remove Applicant" ng-click="n.applicants.splice($index,1)" ng-if="n.applicants.length > 1">
 					<md-tooltip md-direction="left">Remove Applicant</md-tooltip>
 					<i class="fa fa-remove" ></i>
 				</md-button> 
@@ -95,7 +97,8 @@
 					}}
 				</div>
 			</div>
-			<md-button class="md-fab md-mini md-primary" aria-label="Add Applicant" ng-click="n.applicants.push({})" ng-if="n.applicants.length < 6">
+			<md-button class="md-fab md-mini md-primary" aria-label="Add Applicant" 
+			ng-click="n.applicants.push({})" ng-if="n.applicants.length < 6">
 				<md-tooltip md-direction="left">Add Applicant</md-tooltip>
 				<i class="fa fa-plus" ></i>
 			</md-button> 
