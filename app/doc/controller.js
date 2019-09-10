@@ -369,7 +369,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
     };
 
     $scope.setCurrentItem = (x,t,c) => {
-        
         if($scope.currentNavItem == 'Documents'){
             setTimeout(()=>{func.refreshDocItem(x.id, (a) => {
                 $scope.currentItem = a;

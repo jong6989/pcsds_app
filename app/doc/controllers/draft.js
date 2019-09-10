@@ -30,12 +30,10 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
             doc.db.collection(documents).doc(id).update(data).then(() => {
                 func.refreshDocItem(id, (a) => {
                     $scope.currentItem = a;
-                    console.log($scop.currentItem);
                 });
             });
             setTimeout(()=>{func.refreshDocItem(id, (a) => {
                 $scope.currentItem = a;
-                console.log($scop.currentItem);
 
                 $scope.$apply();
             });},300);

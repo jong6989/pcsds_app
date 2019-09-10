@@ -244,6 +244,7 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     $scope.change_page = function(p){
       $scope.content_page = "app/" + p + "/view.html";
       $scope.active_page = p;
+      console.log(p);
       $localStorage.content_page = p;
       $scope.close_left_side();
     };
@@ -572,10 +573,13 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
         $scope.current_view = "app/login/view.html";
       }
 
+      $scope.content_page = "app/doc/view.html";
       // $scope.current_view = "app/login/view.html";
+      // $scope.content_page = "app/pages/database/view.html";
+
 
       // $scope.current_view = "app/templates/main.html";
-      // $scope.content_page = "app/templates/templates/ltp_wildlife/certificate/create.html";
+      // $scope.content_page = "app/templates/templates/wildlife_export/certificate/create.html";
       
     };
 
