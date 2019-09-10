@@ -1,4 +1,4 @@
-<div
+<div ng-controller="DummyWSUPController"
 	ng-init="n.subject = 'WILDLIFE SPECIAL USE PERMIT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
 
 	<h3 class="align-center">WILDLIFE SPECIAL USE PERMIT</h3>
@@ -41,7 +41,35 @@
 		<input type="hidden"
 			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
 	</div>
-
+	<strong>Allowed Wildlife Species to Buy and Sell</strong>
+	<div>
+		<table ng-init="n.species=n.species || [{}]">
+			<th>
+				<td>Kind of Species</td>
+				<td>Scientific Name</td>
+				<td>Local Name</td>
+			</th>
+			<tr ng-repeat="specy in n.species">
+				<td><input ng-model="n.species[$index].kind"></td>
+				<td><input ng-model="n.species[$index].scientific_name" required></td>
+				<td><input ng-model="n.species[$index].local_name" required></td>
+				<td>
+						<md-button 
+						ng-if="n.species.length > 1"
+						class="md-fab md-mini" 
+						aria-label="Remove this row" 
+						ng-click="n.species.splice($index, 1)" 
+						>
+						<md-tooltip md-direction="left">Remove Specy</md-tooltip>
+						<i class="fa fa-remove" ></i>
+					</md-button> 
+				</td>
+			</tr>
+		</table>
+		<md-button ng-click="n.species.push({})" class="md-primary md-raised">
+			Add Row
+		</md-button>
+	</div>
 	<div>
 		<md-input-container>
 			<label>Date of Issuance of Certificate</label>
@@ -137,19 +165,19 @@
 	<div style="text-align: center">
 		<h4>
 				{{
-					n.line6 = n.applicant.address
+					n.line8 = n.applicant.address
 				}}
 		</h4>
 		
 		<div></div>
 		{{
-			n.line7 = 'Address of Proponent'
+			n.line9 = 'Address of Proponent'
 		}}
 	</div>
 	<br>
 	<p>
 		{{
-			n.line8 = 'Issued on ' + get_full_date(n.issuance_date) + ' in Puerto Princesa City, Palawan valid until ' +
+			n.line10 = 'Issued on ' + get_full_date(n.issuance_date) + ' in Puerto Princesa City, Palawan valid until ' +
 			get_full_date(n.expiration_date)
 		}}
 	</p>
