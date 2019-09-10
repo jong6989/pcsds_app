@@ -51,6 +51,15 @@
 			"edit" : "./app/templates/templates/wildlife_import/certificate/edit.html",
 			"view" : "./app/templates/templates/wildlife_import/certificate/view.html",
 			"print" : "./app/templates/templates/wildlife_import/certificate/print.html"
+		},
+		{
+			"name" : "Wildlife Special Use Permit",
+			"type" : "permit_wsup",
+			"permit" : true,
+			"create" : "./app/templates/templates/wsup/certificate/create.html",
+			"edit" : "./app/templates/templates/wsup/certificate/edit.html",
+			"view" : "./app/templates/templates/wsup/certificate/view.html",
+			"print" : "./app/templates/templates/wsup/certificate/print.html"
 		}
 	]
 }
