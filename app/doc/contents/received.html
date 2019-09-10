@@ -26,17 +26,20 @@
 
     <hr>
     
-    <h4><small>Document Type :</small> {{ (currentItem.type)?currentItem.type : 'generic'}} </h4>
+    <!-- <h4><small>Document Type :</small> {{ (currentItem.type)?currentItem.type : 'generic'}} </h4>
     <h5><small>Doc ID</small> : <strong class="col-teal">{{currentItem.id}}</strong> </h5>
     <h5><small> Agency</small> : <strong class="col-teal">{{currentItem.agency.name}}</strong> </h5>
     <h5><small> Date Published</small> : <strong class="col-teal">{{currentItem.meta.published_date}}</strong>
         <cite class="font-12">, {{date_from_now(currentItem.meta.published_time)}}</cite> </h5>
-    <hr>
+    <hr> -->
     
     <!-- Template -->
-    <div ng-repeat="x in document_templates">
-        <div  ng-if="x.type == currentItem.type" ng-include="x.view"></div>
+    <div ng-if="currentItem.template != undefined" style="border: #000 solid 1px; padding: 20px; box-shadow: #777 3-px 3px 1px;margin: 10px; background-color: #fff;">
+        <div ng-include="currentItem.template.view"></div>
     </div>
+    <!-- <div ng-repeat="x in document_templates">
+        <div  ng-if="x.type == currentItem.type" ng-include="x.view"></div>
+    </div> -->
     <!-- <div ng-include="'./app/doc/contents/document.html'"></div> -->
     
     <hr>
