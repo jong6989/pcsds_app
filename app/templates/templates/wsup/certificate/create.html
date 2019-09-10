@@ -44,11 +44,11 @@
 	<strong>Allowed Wildlife Species to Buy and Sell</strong>
 	<div>
 		<table ng-init="n.species=n.species || [{}]">
-			<th>
+			<tr>
 				<td>Kind of Species</td>
 				<td>Scientific Name</td>
 				<td>Local Name</td>
-			</th>
+			</tr>
 			<tr ng-repeat="specy in n.species">
 				<td><input ng-model="n.species[$index].kind"></td>
 				<td><input ng-model="n.species[$index].scientific_name" required></td>
