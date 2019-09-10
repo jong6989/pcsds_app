@@ -1,0 +1,31 @@
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="viewDocument">
+        <md-dialog layout="column" layout-align="center center">
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>{{currentItem.subject}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            
+            <md-dialog-content layout-padding class="p-b-20">
+                
+                <hr>
+                <div ng-include="currentItem.template.view"></div>
+                
+                <hr>
+            </md-dialog-content>
+        
+            <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="close_dialog()">
+                Close
+            </md-button>
+            </md-dialog-actions>
+
+        </md-dialog>
+    </div>
+</div>

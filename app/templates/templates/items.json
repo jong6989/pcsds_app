@@ -20,10 +20,10 @@
 			"name" : "Certificate of no-pending Case",
 			"type" : "certificate_of_no_pending_case",
 			"permit" : true,
-			"create" : "./app/templates/templates/certificate/create.html",
-			"edit" : "./app/templates/templates/certificate/edit.html",
-			"view" : "./app/templates/templates/certificate/view.html",
-			"print" : "./app/templates/templates/certificate/print.html"
+			"create" : "./app/templates/templates/certificate_npc/create.html",
+			"edit" : "./app/templates/templates/certificate_npc/edit.html",
+			"view" : "./app/templates/templates/certificate_npc/view.html",
+			"print" : "./app/templates/templates/certificate_npc/print.html"
 		},
 		{
 			"name" : "Certificate of Inspection (LTP)",

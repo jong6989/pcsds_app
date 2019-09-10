@@ -107,4 +107,39 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
         $scope.upload_file(id,[newPath],true);
     };
 
+    $scope.addDrafttoApplication = (x) =>{
+        if($scope.doc_user.id !== undefined) {
+            x.publisher = $scope.doc_user.id;
+            x.created_time = Date.now();
+            x.status = 'draft';
+
+            doc.db.collection(documents).add(x).then( ref => {
+                $scope.currentItem.id = ref.id;
+                doc.db.collection(documents).doc(ref.id).update({"id":ref.id});
+            });
+            $scope.currentItem = x;
+            if($scope.doc_user_agencies.length > 0 ){
+                $scope.currentItem.agency = $scope.doc_user_agencies[0];
+            }
+            $scope.toast(`Document created. Please open Document Network for Publishing.`);
+            $scope.close_dialog();
+        }else {
+            $scope.toast("system error, please activate your account for document network.")
+        }
+    };
+
+    $scope.getApplicationDocuments = (applicationNumber)=>{
+        doc.db.collection(documents).where("application_no","==",applicationNumber)
+        .onSnapshot(qs => {
+            if(!qs.empty) {
+                let r = qs.docs.map(d => {
+                    let o = d.data();
+                    o.id = d.id;
+                    return o;
+                });
+                $scope.application_documents = r;
+            }
+        });
+    };
+
 });

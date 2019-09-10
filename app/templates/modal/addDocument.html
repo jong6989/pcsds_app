@@ -1,10 +1,10 @@
 <div style="visibility: hidden">
-    <div class="md-dialog-container" id="addDraft">
+    <div class="md-dialog-container" id="addDocument">
         <md-dialog layout="column" layout-align="center center">
-            <form ng-cloak name="form_add_draft" ng-init="createTemplate = ''">
+            <form ng-cloak name="form_add_draft" ng-controller="doc_ctrl_draft">
                 <md-toolbar class="bg-teal">
                     <div class="md-toolbar-tools">
-                        <h2>Create a draft document</h2>
+                        <h2>Add document to application</h2>
                         <span flex></span>
                         <md-button class="md-icon-button" ng-click="close_dialog()">
                             <i class="fa fa-times col-white"></i>
@@ -13,26 +13,10 @@
                 </md-toolbar>
                 
                 <md-dialog-content layout-padding class="p-b-20">
-                    <hr>
-
-                    <strong>Document Template</strong>
-
-                    <md-autocomplete
-                        class="md-block" 
-                        md-selected-item="n.template"
-                        md-selected-item-change="setLocal('currentDocTemplate', x)"
-                        md-search-text="doc_create_template"
-                        md-items="x in document_templates | filter : doc_create_template"
-                        md-item-text="x.name"
-                        md-min-length="0"
-                        placeholder="Search Template">
-                        <md-item-template>
-                            {{x.name}}
-                        </md-item-template>
-                    </md-autocomplete>
+                    
                     <hr>
                     <div ng-include="n.template.create"></div>
-
+                    
                     <hr>
                 </md-dialog-content>
             
@@ -43,8 +27,8 @@
                 </md-button>
                 <md-button class="md-primary md-raised" 
                 ng-disabled="form_add_draft.$invalid || n.template == {} || n.template == undefined" 
-                    ng-click="createDraft(n);">
-                    Create Draft
+                    ng-click="addDrafttoApplication(n);">
+                    Save
                 </md-button>
                 </md-dialog-actions>
             </form>
