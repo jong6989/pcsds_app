@@ -138,8 +138,8 @@ controller('DummyLTPWildlifeController', ['$scope', '$localStorage',
     //     }
     // }
 }]).
-controller('WildlifeImportCertificationController', ['$scope', 'dummywildlifeImportService', '$localStorage',
-function($scope, $wildlifeImportService, $localStorage){
+controller('WildlifeImportCertificationController', ['$scope', '$localStorage',
+function($scope, $localStorage){
     var collection = [];
     
 
@@ -154,10 +154,6 @@ function($scope, $wildlifeImportService, $localStorage){
         },
         date: new Date()
     };
-
-    $wildlifeImportService.getItem(0, collection).then(wildlifeImportCert => {
-        $localStorage.params.data.application = wildlifeImportCert;
-    });
     
     $scope.getLoadingPort = (transportation) => {
         if(transportation.air_cargo)
@@ -186,6 +182,12 @@ function($scope, $wildlifeImportService, $localStorage){
 
     $scope.render_params ={ data:{
         application_no: '2019-04',
+        applicant:{
+            last_name: "Asutilla",
+            first_name: "Arlan",
+            middle_name: "T",
+            address: "Sta. Monica, Puerto Princesa City"
+        },
         line1: "This is to certify that Pena Dugasan of Brooke's Point, Palawan, is authorized to import from Sandakan, Sabah, Malaysia, the following for commercial purposes only, provided, that a Non-CITES Export Certification or equivalent permit has been secured from CITES Management Authority/Malaysia.",
         line2: "The above-mentioned Edible's Bird Nest, Wild mushroom and Rat's Ear shall be imported by Pena Dugasan on March 15, 2019 via Cargo Vessel at Brooke's Point Port and have been verified as not included in Appendices I, II and III of Convention on International Trade in Endangered Species of Wild Fauna and Flora (CITES).",
         line3: "Certification fee in the amount of Php 360 was paid under the Palawan Council for Sustainable Development (PCSD) Official Receipt No. 2105349 dated March 15, 2019.",
@@ -205,9 +207,25 @@ function($scope, $wildlifeImportService, $localStorage){
             name: "Juan dela Cruz",
             designation: "Director",
             signature: "xxxxxxxxx"
-        }
+        },
+        origin: {
+            country: "Malaysia",
+            address: "Sandakan, Sabah"
+        },
+        transportation: {
+            type: "Aircraft"
+        },
+        import: {
+            date: "2019-08-01"
+        },
+        destination_port: "Puerto Princesa International Airport",
+        issuance_date: "2019-07-28",
+        paid_amount: "1000",
+        paid_or_number: "ABCD1234",
+        paid_date: "2019-07-28"
     }};
 
+    // $scope.n = $scope.render_params.data;
 }]).
 controller('GratuitousPermitController', ['$scope', 'dummyGratuitousPermitService', "$localStorage",
     function($scope, $gratuitousPermitService, $localStorage){
@@ -234,7 +252,7 @@ controller('GratuitousPermitController', ['$scope', 'dummyGratuitousPermitServic
     $scope.application = data;
     }
 }]).
-controller('WildlifeExportController', ['$scope', 'dummywildlifeExportCertService', "$localStorage",
+controller('WildlifeExportControllerdummy', ['$scope', 'dummywildlifeExportCertService', "$localStorage",
 function($scope, 
     $wildlifeExportService, 
     $localStorage){
