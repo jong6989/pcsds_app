@@ -1,0 +1,83 @@
+<div ng-include="'./app/templates/application/style.html'"></div>
+<style type="text/css">
+    .roman {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
+<div ng-init="currentItem = render_params.data;print(3000); " class="roman">
+<!-- <div ng-controller="DummyChainsawPurchasePermitController" ng-init="currentItem=n;" class="roman"> -->
+
+    <div ng-include="'./app/templates/templates/header.html'"></div>
+    <hr>
+    <p>
+        <div class="align-center">
+            <strong>{{ currentItem.line1}}</strong><br>
+            {{ currentItem.line2 }}
+        </div>
+    </p>
+    <br>
+    <p>
+        {{ currentItem.line3 }}
+    </p>
+    <p>
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td>{{currentItem.applicant.title + ' ' + currentItem.applicant.full_name}}</td>
+            </tr>
+            <tr>
+                <td>Address:</td>
+                <td>{{currentItem.applicant.address}}</td>
+            </tr>
+            <tr>
+                <td>Purpose:</td>
+                <td>{{currentItem.purpose}}</td>
+            </tr>
+
+            <tr>
+                <td>Date Issued:&nbsp;&nbsp;</td>
+                <td>{{currentItem.date_issued}}</td>
+            </tr>
+        </table>
+    </p>
+    <div layout>
+        <div style="width:60%">&nbsp;</div>
+        <div>
+            {{currentItem.line8 }}<br><br><br>
+            {{currentItem.line9 }}<br>
+            {{currentItem.line10}}
+        </div>
+    </div>
+
+    <br ng-repeat="i in [1,2,3]">
+    <div layout ng-controller="doc_ctrl_draft">
+        <div style="width: 50%">
+            <div>Prepared by:</div><br><br><br>
+            <div flex
+                ng-init="currentItem.sign1 = (currentItem.sign1 == undefined) ? { name:'',designation:''} : currentItem.sign1;">
+                <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center">
+                    <img ng-if="currentItem.sign1.signature != undefined" src="{{currentItem.sign1.signature}}"
+                        alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                    <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong> </div>
+                    <div class="align-center"> {{currentItem.sign1.designation}} </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div>Noted by:</div><br><br><br>
+            <div flex
+                ng-init="currentItem.sign2 = (currentItem.sign2 == undefined) ? { name:'',designation:''} : currentItem.sign2;">
+                <div ng-if="currentItem.sign2.signature != undefined;" layout="column" layout-align="center center">
+                    <img ng-if="currentItem.sign2.signature != undefined" src="{{currentItem.sign2.signature}}"
+                        alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                    <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong> </div>
+                    <div class="align-center"> {{currentItem.sign2.designation}} </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <br>
+    <!-- footer -->
+    <div ng-include="'./app/templates/templates/footer.html'"></div>
+</div>

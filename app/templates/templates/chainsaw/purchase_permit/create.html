@@ -1,7 +1,8 @@
 <div ng-init="n.subject = 'PERMIT TO PURCHASE/IMPORT'; 
 	n.keywords = []; 
 	titles = ['Ms.','Mrs.','Mr.']; 
-	n.c_type = 'permit'; ">
+	n.c_type = 'permit'; "
+	>
 
 	<h3 class="align-center">PERMIT TO PURCHASE/IMPORT CHAINSAW</h3>
 	<hr>
@@ -39,6 +40,8 @@
 			<label>Address</label>
 			<input ng-model="n.applicant.address" required>
 		</md-input-container>
+		<input type="hidden"
+			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
 	</div>
 
 	<md-input-container>
@@ -66,7 +69,7 @@
 	<div><strong>PREVIEW</strong></div>
 	<p>
 		<div class="align-center">
-			<strong>{{ n.line1 = 'PERMIT TO PURCHASES/IMPORT'}}</strong>
+			<strong>{{ n.line1 = 'PERMIT TO PURCHASES/IMPORT'}}</strong><br>
 			{{ n.line2 = n.permit_no }}
 		</div>
 	</p>
@@ -79,13 +82,13 @@
 	</p>
 	<p>
 		<table>
-			<tr ng-init="n.line4='Name: ' + n.title + ' ' + n.applicant.full_name">
+			<tr ng-init="n.line4='Name: ' + n.applicant.title + ' ' + n.applicant.full_name">
 				<td>Name:</td>
-				<td>{{n.title + ' ' + n.applicant.full_name}}</td>
+				<td>{{n.applicant.title + ' ' + n.applicant.full_name}}</td>
 			</tr>
 			<tr ng-init="n.line5='Address: ' + n.applicant.address">
 				<td>Address:</td>
-				<td>Address: {{n.address}}</td>
+				<td>{{n.applicant.address}}</td>
 			</tr>
 			<tr ng-init="n.line6='Purpose:' + n.purpose">
 				<td>Purpose:</td>
@@ -98,13 +101,12 @@
 			</tr>
 		</table>
 	</p>
-
 	<div layout>
-		<div style="width:60%">nbsp;</div>
+		<div style="width:60%">&nbsp;</div>
 		<div>
-			Issued by:<br><br><br>
-			{{n.issued_by.name}}<br>
-			{{n.issued_by.designation}}
+				{{n.line8 = 'Issued by: '}}<br><br><br>
+				{{n.line9 = n.issued_by.name}}<br>
+				{{n.line10 = n.issued_by.designation}}
 		</div>
 	</div>
 </div>

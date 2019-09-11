@@ -1,0 +1,10 @@
+<div style="width:90%">
+	<hr>
+    <br>
+    <div style="width:100%" ng-repeat="line in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+        <input style="width:100%" ng-if="line!=3" ng-model="currentItem['line'+line]">
+        <textarea style="width:100%" ng-if="line==3" ng-model="currentItem['line'+line]"></textarea>
+        <br><br>
+    </div>
+	
+</div>
