@@ -98,9 +98,13 @@
                 </md-button> 
             </div>
             
+<<<<<<< HEAD:app/templates/templates/certificate/view.html
             <div layout="column" layout-align="center center" 
             ng-if="currentItem.sign2.signature == undefined;" id="sign2" ng-init="generate_signature_field('sign2',1);" 
             style="border: black dashed 1px;">
+=======
+            <div layout="column" layout-align="center center" ng-if="currentItem.sign2.signature == undefined && userId != undefined" id="sign2" ng-init="generate_signature_field('sign2',1);" style="border: black dashed 1px;">
+>>>>>>> 016f1c6eeb1caf0107145c21c9d678e8892b3420:app/templates/templates/certificate_npc/view.html
                 <canvas></canvas>
                 <button ng-click="signclear(1)">Clear Signature</button>
                 <button ng-click=" updateDocument(currentItem.id,{'sign2.signature': signed(1), 'sign2.user' : userId }) ">Save Signature</button>
