@@ -1,0 +1,110 @@
+<div ng-init="n.subject = 'PERMIT TO PURCHASE/IMPORT'; 
+	n.keywords = []; 
+	titles = ['Ms.','Mrs.','Mr.']; 
+	n.c_type = 'permit'; ">
+
+	<h3 class="align-center">PERMIT TO PURCHASE/IMPORT CHAINSAW</h3>
+	<hr>
+	<br>
+	<md-input-container class="md-block m-t-40">
+		<label>Permit No.</label>
+		<input ng-model="n.permit_no" required>
+	</md-input-container>
+	<hr>
+	<br>
+
+	<strong>Applicant Information</strong>
+	<div>
+		<md-input-container>
+			<label>Title</label>
+			<md-select ng-model="n.applicant.title">
+				<md-option ng-repeat="x in titles" value="{{x}}">
+					{{x}}
+				</md-option>
+			</md-select>
+		</md-input-container>
+		<md-input-container>
+			<label>First Name</label>
+			<input ng-model="n.applicant.first_name" required>
+		</md-input-container>
+		<md-input-container>
+			<label>Middle Name</label>
+			<input ng-model="n.applicant.middle_name">
+		</md-input-container>
+		<md-input-container>
+			<label>Last Name</label>
+			<input ng-model="n.applicant.last_name" required>
+		</md-input-container>
+		<md-input-container>
+			<label>Address</label>
+			<input ng-model="n.applicant.address" required>
+		</md-input-container>
+	</div>
+
+	<md-input-container>
+		<label>Number of Chainsaw to Purchase/Import:</label>
+		<input ng-model="n.quantity_to_purchase" required>
+	</md-input-container>
+	<md-input-container>
+		<label>Purpose</label>
+		<textarea ng-model="n.purpose" required></textarea>
+	</md-input-container>
+	<md-input-container>
+		<label>Date Issued</label>
+		<md-datepicker ng-model=n.date_issued></md-datepicker>
+	</md-input-container>
+	<md-input-container>
+		<label>Issued by</label>
+		<input ng-model="n.issued_by.name" required>
+	</md-input-container>
+	<md-input-container>
+		<label>Designation</label>
+		<input ng-model="n.issued_by.designation" required>
+	</md-input-container>
+	<hr>
+
+	<div><strong>PREVIEW</strong></div>
+	<p>
+		<div class="align-center">
+			<strong>{{ n.line1 = 'PERMIT TO PURCHASES/IMPORT'}}</strong>
+			{{ n.line2 = n.permit_no }}
+		</div>
+	</p>
+	<br>
+	<p>
+		{{ n.line3 = 'Having complied with the provisions of PCSD Administrative Order No. 07, as amended, ' + 
+		'otherwise known as the Implementing Rules and Regulations of the Chainsaw Act of 2002, and after evaluation ' + 
+		'conducted by the PCSDS, this permit to purchase ' + n.quantity_to_purchase + 
+		' UNIT(S) of chainsaw is hereby issued to:'}}
+	</p>
+	<p>
+		<table>
+			<tr ng-init="n.line4='Name: ' + n.title + ' ' + n.applicant.full_name">
+				<td>Name:</td>
+				<td>{{n.title + ' ' + n.applicant.full_name}}</td>
+			</tr>
+			<tr ng-init="n.line5='Address: ' + n.applicant.address">
+				<td>Address:</td>
+				<td>Address: {{n.address}}</td>
+			</tr>
+			<tr ng-init="n.line6='Purpose:' + n.purpose">
+				<td>Purpose:</td>
+				<td>{{n.purpose}}</td>
+			</tr>
+
+			<tr ng-init="n.line7='Date Issued' + to_date(n.date_issued)">
+				<td>Date Issued:</td>
+				<td>{{n.date_issued}}</td>
+			</tr>
+		</table>
+	</p>
+
+	<div layout>
+		<div style="width:60%">nbsp;</div>
+		<div>
+			Issued by:<br><br><br>
+			{{n.issued_by.name}}<br>
+			{{n.issued_by.designation}}
+		</div>
+	</div>
+</div>
