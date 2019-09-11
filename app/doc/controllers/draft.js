@@ -128,18 +128,4 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
         }
     };
 
-    $scope.getApplicationDocuments = (applicationNumber)=>{
-        doc.db.collection(documents).where("application_no","==",applicationNumber)
-        .onSnapshot(qs => {
-            if(!qs.empty) {
-                let r = qs.docs.map(d => {
-                    let o = d.data();
-                    o.id = d.id;
-                    return o;
-                });
-                $scope.application_documents = r;
-            }
-        });
-    };
-
 });

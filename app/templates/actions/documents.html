@@ -10,8 +10,8 @@
         <strong>Added Documents</strong>
         <div>
             <ol>
-                <li ng-repeat="x in application_documents" ng-click="currentItem = x; showPrerenderedDialog($event,'viewDocument')">
-                    {{x.subject}}
+                <li class="pointer" ng-repeat="x in application_documents" ng-click="currentItem = x; showPrerenderedDialog($event,'viewDocument')">
+                    {{x.subject}} - {{x.status}}
                 </li>
             </ol>
         </div>
@@ -22,10 +22,10 @@
         template : {
             'name' : 'Certificate of no-pending Case',
             'type' : 'certificate_of_no_pending_case',
-            'create' : './app/templates/templates/certificate/create.html',
-            'edit' : './app/templates/templates/certificate/edit.html',
-            'view' : './app/templates/templates/certificate/view.html',
-            'print' : './app/templates/templates/certificate/print.html'
+            'create' : './app/templates/templates/certificate_npc/create.html',
+            'edit' : './app/templates/templates/certificate_npc/edit.html',
+            'view' : './app/templates/templates/certificate_npc/view.html',
+            'print' : './app/templates/templates/certificate_npc/print.html'
         },
         created : date_now('YYYY-MM-DD'),
         published : date_now('YYYY-MM-DD'),

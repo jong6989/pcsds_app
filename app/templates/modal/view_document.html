@@ -15,7 +15,13 @@
                 
                 <hr>
                 <div ng-include="currentItem.template.view"></div>
-                
+                <hr>
+                <div layout layout-align="center center">
+                    <md-button ng-if="currentItem.template != undefined" class="md-fab " aria-label="Print Document" ng-click="open_window_view(currentItem.template.print, currentItem)">
+                        <md-tooltip md-direction="left">Print this document</md-tooltip>
+                        <i class="fa fa-print" ></i>
+                    </md-button> 
+                </div>
                 <hr>
             </md-dialog-content>
         
