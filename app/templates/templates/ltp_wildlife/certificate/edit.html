@@ -12,10 +12,12 @@
     <!-- with template -->
     <div ng-if="currentItem.c_type != 'empty'">
         <br>
-
         <div ng-repeat="line in ['line1', 'line2', 'line3']">
-            <textarea style="width: 100%" rows="6" ng-init="lines={}; lines[line]=currentItem[line]" flex name="line"
-                ng-model="currentItem[line]" ng-blur="updateDocument(currentItem.id, lines)">
+            <textarea style="width: 100%" rows="6" 
+            ng-init="lines={};" 
+            flex name="line"
+            ng-model="currentItem[line]" 
+            ng-blur="lines[line]=currentItem[line];updateDocument(currentItem.id, lines)">
         </textarea>
             <div ng-if="line==='line1'">
                 <style>
@@ -31,10 +33,9 @@
                         <td>Remarks (i.e. kind, size and no. of boxes)</td>
                     </tr>
                     <tr ng-repeat="specimen in currentItem.species">
-                        <td><input ng-model="specimen.name"></td>
-                        <td><input ng-model="specimen.quantity"></td>
-                        <td><input ng-model="specimen.description"></td>
-                        <td><input ng-model="specimen.remarks"></td>
+                        <td ng-repeat="key in ['name', 'quantity', 'description', 'remarks']">
+                            <input ng-model="specimen[key]" ng-blur="updateDocument(currentItem.id, { species: currentItem.species})" />
+                        </td>
                     </tr>
                 </table>
             </div>

@@ -1,0 +1,184 @@
+<div ng-controller="DummyWSUPController"
+	ng-init="n.subject = 'WILDLIFE SPECIAL USE PERMIT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
+
+	<h3 class="align-center">WILDLIFE SPECIAL USE PERMIT</h3>
+	<hr>
+	<md-input-container class="md-block m-t-40">
+		<label>WSUP No.</label>
+		<input ng-model="n.wsup_no" required>
+	</md-input-container>
+	<br>
+
+	<strong>Project Information</strong>
+	<div layout>
+		<md-input-container flex>
+			<label>Name of Project/Undertaking</label>
+			<input ng-model="n.project.name" required>
+		</md-input-container>
+		<md-input-container flex>
+			<label>Project Location (Street, Sitio, Barangay, Municipality)</label>
+			<input ng-model="n.project.location" required>
+		</md-input-container>
+	</div>
+	<strong>Applicant Information</strong>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>First Name</label>
+			<input ng-model="n.applicant.first_name" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Middle Name</label>
+			<input ng-model="n.applicant.middle_name">
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Last Name</label>
+			<input ng-model="n.applicant.last_name">
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Address</label>
+			<input ng-model="n.applicant.address">
+		</md-input-container>
+		<input type="hidden"
+			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
+	</div>
+	<strong>Allowed Wildlife Species to Buy and Sell</strong>
+	<div>
+		<table ng-init="n.species=n.species || [{}]">
+			<th>
+				<td>Kind of Species</td>
+				<td>Scientific Name</td>
+				<td>Local Name</td>
+			</th>
+			<tr ng-repeat="specy in n.species">
+				<td><input ng-model="n.species[$index].kind"></td>
+				<td><input ng-model="n.species[$index].scientific_name" required></td>
+				<td><input ng-model="n.species[$index].local_name" required></td>
+				<td>
+						<md-button 
+						ng-if="n.species.length > 1"
+						class="md-fab md-mini" 
+						aria-label="Remove this row" 
+						ng-click="n.species.splice($index, 1)" 
+						>
+						<md-tooltip md-direction="left">Remove Specy</md-tooltip>
+						<i class="fa fa-remove" ></i>
+					</md-button> 
+				</td>
+			</tr>
+		</table>
+		<md-button ng-click="n.species.push({})" class="md-primary md-raised">
+			Add Row
+		</md-button>
+	</div>
+	<div>
+		<md-input-container>
+			<label>Date of Issuance of Certificate</label>
+			<md-tooltip direction="left">Date of Issuance of Certificate</md-tooltip>
+			<md-datepicker ng-model="issuance_date" ng-change="n.issuance_date=to_date(issuance_date)">
+
+			</md-datepicker>
+		</md-input-container>
+		<md-input-container>
+			<label>Date of Expiration of Certificate</label>
+			<md-tooltip direction="left">Date of Expiration of Certificate</md-tooltip>
+			<md-datepicker ng-model="expiration_date" ng-change="n.expiration_date=to_date(expiration_date)">
+			</md-datepicker>
+		</md-input-container>
+	</div>
+
+	<hr>
+	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+			<label>Paid amount</label>
+			<input ng-model="n.paid_amount">
+		</md-input-container>
+		<md-input-container flex>
+			<label>OR Number</label>
+			<input ng-model="n.paid_or_number">
+		</md-input-container>
+		<md-input-container flex>
+			<label>Date of Payment</label>
+			<md-datepicker ng-model="paid_date" md-change="n.paid_date=to_date(paid_date)" md-open-on-focus>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<br>
+	<strong>PREVIEW</strong>
+	<br>
+	<p>
+		<span class="m-l-50"></span>
+		{{ n.line1 = 
+			'Pursuant to Republic Act 9147, otherwise known as the “Wildlife Resources Conservation and Protection Act” 
+			dated July 30, 2001; Joint DENR-DA-PCSD Administrative Order No. 1 
+			(“Joint Implementing Rules and Regulations Pursuant to RA 9147”), s. 2004; 
+			and section 19 of the PCSD Administrative Order No. 12, this Wildlife Special Use Permit is hereby granted to: '
+		}}
+	</p>
+
+	<p>
+		<div style="text-align: center">
+			<h2>
+				{{ 
+					n.line2 = n.project.name.toUpperCase() 
+				}}
+			</h2>
+
+			<div>
+				{{
+					n.line3 = 'Name of Project/Undertaking'
+				}}
+			</div>
+		</div>
+
+	</p>
+
+	<div style="text-align: center">
+		<h4>
+				{{
+					n.line4 = n.project.location
+				}}
+		</h4>
+		
+		<div></div>
+		{{
+			n.line5 = 'Project Location (Street, Sitio, Barangay, Municipality)'
+		}}
+	</div>
+	<br>
+	<div style="text-align: center">
+		<h4>
+				{{
+					n.line6 = n.applicant.full_name
+				}}
+		</h4>
+		
+		<div></div>
+		{{
+			n.line7 = 'Name of Proponent'
+		}}
+	</div>
+	<br>
+	<div style="text-align: center">
+		<h4>
+				{{
+					n.line8 = n.applicant.address
+				}}
+		</h4>
+		
+		<div></div>
+		{{
+			n.line9 = 'Address of Proponent'
+		}}
+	</div>
+	<br>
+	<p>
+		{{
+			n.line10 = 'Issued on ' + get_full_date(n.issuance_date) + ' in Puerto Princesa City, Palawan valid until ' +
+			get_full_date(n.expiration_date)
+		}}
+	</p>
+</div>

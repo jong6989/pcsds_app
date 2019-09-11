@@ -12,48 +12,54 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 	<div layout>
 		<md-input-container flex>
 			<label>(Unknown Field)</label>
-			<input ng-model="unknown" required>
+			<input ng-model="n.unknown" required>
 		</md-input-container>
 		<md-input-container class="md-block"  flex>
 			<label>Place of Origin of Wildlife/Wildlife Derivative</label>
-			<input ng-model="origin" required>
+			<input ng-model="n.origin" required>
 		</md-input-container>
 		<md-input-container class="md-block"  flex>
 			<label>Purpose</label>
-			<input ng-model="purpose" required>
+			<input ng-model="n.purpose" required>
 		</md-input-container>
 	</div>
 
 	<div>
-		<!-- <md-input-container > -->
 			<label>Wildlife/Wildlife Derivatives Inspected</label>
-			<table ng-init="rows=[0]; n.species=[]">
-				<tr ng-repeat="row in rows">
-					<td ng-init="n.species[row]={}">
+			<table ng-init="n.species=n.species || [{}]">
+				<tr ng-repeat="specy in n.species">
+					<td>
 						<md-input-container flex>
 							<label>Species (Scientific Name/Common Name)</label>
 							<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>														
-							<input ng-model="n.species[row].name" required>
+							<input ng-model="n.species[$index].name" required>
 						</md-input-container>
 					</td>
 					<td>
 						<md-input-container flex>
 							<label>Quantity</label>
-							<input ng-model="n.species[row].quantity" required>
+							<input ng-model="n.species[$index].quantity" required>
 						</md-input-container>
 					</td>
 					<td>
 						<md-input-container flex>
 							<label>Description (i.e. live, fresh, etc.)</label>
 							<md-tooltip direction="left">Description (i.e. live, fresh, etc.)</md-tooltip>
-							<textarea ng-model="n.species[row].description" required></textarea></td>
+							<textarea ng-model="n.species[$index].description" required></textarea></td>
 						</md-input-container>
 					<td>
 						<md-input-container>
 							<label>Remarks (i.e. kind, size and no. of boxes)</label>	
 							<md-tooltip direction="left">Remarks (i.e. kind, size and no. of boxes)</md-tooltip>
-							<textarea ng-model="n.species[row].remarks" ></textarea>
+							<textarea ng-model="n.species[$index].remarks" ></textarea>
 						</md-input-container>
+					</td>
+					<td>
+						<md-button class="md-fab md-mini" aria-label="Remove this row" 
+							ng-click="n.species.splice($index, 1)" ng-if="n.species.length > 1">
+							<md-tooltip md-direction="left">Remove Specy</md-tooltip>
+							<i class="fa fa-remove" ></i>
+						</md-button> 
 					</td>
 				</tr>
 			</table>
@@ -67,7 +73,7 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 	<div layout>
 		<md-input-container>
 		    <label>Title</label>
-		    <md-select ng-model="name_title">
+		    <md-select ng-model="n.name_title">
 		      <md-option ng-repeat="x in titles" value="{{x}}">
 		        {{x}}
 		      </md-option>
@@ -76,7 +82,7 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 
 		<md-input-container flex>
 		    <label>Name</label>
-		    <input ng-model="applicant_name" required>
+		    <input ng-model="n.applicant_name" required>
 		</md-input-container>
 	</div>
 
@@ -85,7 +91,7 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 	<div layout>
 		<md-input-container flex>
 			<label>Recipient Name</label>
-			<input ng-model="recipient_name" required>
+			<input ng-model="n.recipient_name" required>
 		</md-input-container>
 		<md-input-container flex>
 			<label>Date of Transport</label>
@@ -93,7 +99,7 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 		</md-input-container>
 		<md-input-container flex> 
 			<label>Transportation Vehicle/Vessel</label>
-			<input ng-model="transportation_vessel" required>
+			<input ng-model="n.transportation_vessel" required>
 		</md-input-container>
 		<md-input-container flex>
 			<label>Date of Issuance</label>
@@ -128,8 +134,8 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 	<br>
 	<p> <span class="m-l-50"></span>
 		{{ n.line1 = 
-			'This is to certify that the ' + unknown + ' has undertaken the inspection of wildlife/wildlife derivative ' +
-			' and by-products which was produced/gathered from ' + origin + ' for the purposes of ' + purpose + '. ' +
+			'This is to certify that the ' + n.unknown + ' has undertaken the inspection of wildlife/wildlife derivative ' +
+			' and by-products which was produced/gathered from ' + origin + ' for the purposes of ' + n.purpose + '. ' +
 			'The species and its quantity of are as follows:'
 		}}
 	</p>
@@ -153,10 +159,10 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 	<p>
 		<span class="m-l-50"></span>
 		{{ n.line2 = 
-			'This Certification is being issued upon the request of Mr./Ms.' + applicant_name + ' to support his/her ' +
-			'application for transport of the above-mentioned specimens to ' + recipient_name + ' which will be transported '+
-			'on ' + get_full_month_name(transport_date) + ' ' + to_day(transport_date) + ', ' + to_year(transport_date) +
-			' through ' + transportation_vessel + '.'
+			'This Certification is being issued upon the request of Mr./Ms.' + n.applicant_name + ' to support his/her ' +
+			'application for transport of the above-mentioned specimens to ' + n.recipient_name + ' which will be transported '+
+			'on ' + get_full_month_name(n.transport_date) + ' ' + to_day(n.transport_date) + ', ' + to_year(n.transport_date) +
+			' through ' + n.transportation_vessel + '.'
 		}}
 	</p>
 	<br>
@@ -164,7 +170,8 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 		<span class="m-l-50"></span>
 		{{
 			n.line3 = 
-			'Issued this ' + to_day_of_month(issuance_date) + ' day of ' + get_full_month_name(issuance_date) + ', ' + to_year(issuance_date) +
+			'Issued this ' + to_day_of_month(n.issuance_date) + ' day of ' + get_full_month_name(n.issuance_date) + ', ' 
+			+ to_year(n.issuance_date) +
 			' in Palawan Council for Sustainable Development Staff (PCSDS) Office, Sta. Monica, Puerto Princesa City.'
 		}}
 	</p>

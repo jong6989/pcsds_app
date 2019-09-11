@@ -326,7 +326,6 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
 document.write(`<script src="./app/doc/services/crudService.js"></script>`);
 document.write(`<script src="./app/doc/services/municipalitiesService.js"></script>`);
 document.write(`<script src="./app/doc/services/dateService.js"></script>`);
-// document.write(`<script src="./app/doc/services/dummyCrudService.js"></script>`);
 document.write(`<script src="./app/doc/services/collection.js"></script>`);
 document.write(`<script src="./app/doc/services/addressService.js"></script>`);
 
@@ -337,4 +336,8 @@ document.write(`<script src="./app/doc/controllers/Permit.js"></script>`);
 document.write(`<script src="./app/doc/controllers/CaseRespondent.js"></script>`);
 document.write(`<script src="./app/doc/controllers/wildLifeImport.js"></script>`);
 document.write(`<script src="./app/doc/controllers/wildlifeExport.js"></script>`);
+document.write(`<script src="./app/doc/controllers/wildlifeInspection.js"></script>`);
+
+document.write(`<script src="./app/doc/services/dummyCrudService.js"></script>`);
+document.write(`<script src="./app/doc/controllers/dummyControllers.js"></script>`);
 
