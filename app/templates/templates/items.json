@@ -69,6 +69,15 @@
 			"edit" : "./app/templates/templates/wsup/evaluation/edit.html",
 			"view" : "./app/templates/templates/wsup/evaluation/view.html",
 			"print" : "./app/templates/templates/wsup/evaluation/print.html"
+		},
+		{
+			"name" : "Chainsaw Purchase/Import Permit",
+			"type" : "permit",
+			"permit" : true,
+			"create" : "./app/templates/templates/chainsaw/purchase_permit/create.html",
+			"edit" : "./app/templates/templates/chainsaw/purchase_permit/edit.html",
+			"view" : "./app/templates/templates/chainsaw/purchase_permit/view.html",
+			"print" : "./app/templates/templates/chainsaw/purchase_permit/print.html"
 		}
 	]
 }
