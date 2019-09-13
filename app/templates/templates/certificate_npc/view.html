@@ -85,37 +85,7 @@
                 </md-input-container>
 			</div>
         </div>
-        <!-- sign 2 -->
-		<div flex style="padding: 10px" ng-init="currentItem.sign2 = (currentItem.sign2 == undefined)? {}:currentItem.sign2;">
-            <div ng-if="currentItem.sign2.signature != undefined;" layout="column" layout-align="center center">
-                <img ng-if="currentItem.sign2.signature != undefined" src="{{currentItem.sign2.signature}}" alt="Signature2" width="auto" style="margin-bottom: -35px;">
-                <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong> </div>
-                <div class="align-center"> {{currentItem.sign2.designation}} </div>
-                <md-button class="md-fab md-mini" aria-label="Remove Signature" ng-if="currentItem.sign2.user == userId" 
-                ng-click="updateDocument(currentItem.id,{'sign2' : {} })">
-                    <md-tooltip md-direction="left">Remove Signature</md-tooltip>
-                    <i class="fa fa-remove" ></i>
-                </md-button> 
-            </div>
-            
-<<<<<<< HEAD:app/templates/templates/certificate/view.html
-            <div layout="column" layout-align="center center" 
-            ng-if="currentItem.sign2.signature == undefined;" id="sign2" ng-init="generate_signature_field('sign2',1);" 
-            style="border: black dashed 1px;">
-=======
-            <div layout="column" layout-align="center center" ng-if="currentItem.sign2.signature == undefined && userId != undefined" id="sign2" ng-init="generate_signature_field('sign2',1);" style="border: black dashed 1px;">
->>>>>>> 016f1c6eeb1caf0107145c21c9d678e8892b3420:app/templates/templates/certificate_npc/view.html
-                <canvas></canvas>
-                <button ng-click="signclear(1)">Clear Signature</button>
-                <button ng-click=" updateDocument(currentItem.id,{'sign2.signature': signed(1), 'sign2.user' : userId }) ">Save Signature</button>
-                <md-input-container md-no-float class="md-block" ng-if="currentItem.sign2.signature == undefined;">
-                    <input ng-model="currentItem.sign2.name" ng-blur="updateDocument(currentItem.id,{'sign2.name' : currentItem.sign2.name })" type="text" placeholder="Name" aria-label="Name2">
-                </md-input-container>
-                <md-input-container md-no-float class="md-block" ng-if="currentItem.sign2.signature == undefined;">
-                    <input ng-model="currentItem.sign2.designation" ng-blur="updateDocument(currentItem.id,{'sign2.designation' : currentItem.sign2.designation })"  type="text" placeholder="Designation" aria-label="designation2">
-                </md-input-container>
-            </div>
-		</div>
+		
     </div>
     
     <br>

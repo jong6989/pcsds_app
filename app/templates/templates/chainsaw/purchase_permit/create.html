@@ -15,8 +15,8 @@
 	<br>
 
 	<strong>Applicant Information</strong>
-	<div>
-		<md-input-container>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
 			<label>Title</label>
 			<md-select ng-model="n.applicant.title">
 				<md-option ng-repeat="x in titles" value="{{x}}">
@@ -24,19 +24,19 @@
 				</md-option>
 			</md-select>
 		</md-input-container>
-		<md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
 			<label>First Name</label>
 			<input ng-model="n.applicant.first_name" required>
 		</md-input-container>
-		<md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
 			<label>Middle Name</label>
 			<input ng-model="n.applicant.middle_name">
 		</md-input-container>
-		<md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
 			<label>Last Name</label>
 			<input ng-model="n.applicant.last_name" required>
 		</md-input-container>
-		<md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
 			<label>Address</label>
 			<input ng-model="n.applicant.address" required>
 		</md-input-container>
@@ -44,28 +44,48 @@
 			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
 	</div>
 
-	<md-input-container>
-		<label>Number of Chainsaw to Purchase/Import:</label>
-		<input ng-model="n.quantity_to_purchase" required>
-	</md-input-container>
-	<md-input-container>
-		<label>Purpose</label>
-		<textarea ng-model="n.purpose" required></textarea>
-	</md-input-container>
-	<md-input-container>
-		<label>Date Issued</label>
-		<md-datepicker ng-model=n.date_issued></md-datepicker>
-	</md-input-container>
-	<md-input-container>
-		<label>Issued by</label>
-		<input ng-model="n.issued_by.name" required>
-	</md-input-container>
-	<md-input-container>
-		<label>Designation</label>
-		<input ng-model="n.issued_by.designation" required>
-	</md-input-container>
-	<hr>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Number of Chainsaw to Purchase/Import:</label>
+			<input type="number" min="1" ng-model="n.quantity_to_purchase" required>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Purpose</label>
+			<textarea ng-model="n.purpose" required></textarea>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Date Issued</label>
+			<md-datepicker ng-model="date_issued" ng-blur="n.date_issued=to_date(date_issued)"></md-datepicker>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Issued by</label>
+			<input ng-model="n.issued_by.name" required>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Designation</label>
+			<input ng-model="n.issued_by.designation" required>
+		</md-input-container>
+	</div>
 
+	<hr>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+		    <label>Paid amount</label>
+		    <input ng-model="n.paid_amount" type="number">
+		</md-input-container>
+		<md-input-container flex>
+		    <label>OR Number</label>
+		    <input ng-model="n.paid_or_number" >
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
+				md-placeholder="Date of Payment"
+				md-open-on-focus>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<br>
 	<div><strong>PREVIEW</strong></div>
 	<p>
 		<div class="align-center">
@@ -82,20 +102,24 @@
 	</p>
 	<p>
 		<table>
-			<tr ng-init="n.line4='Name: ' + n.applicant.title + ' ' + n.applicant.full_name">
+			<tr>
+				<input type="hidden" ng-value="n.line4='Name: ' + n.applicant.title + ' ' + n.applicant.full_name">
 				<td>Name:</td>
 				<td>{{n.applicant.title + ' ' + n.applicant.full_name}}</td>
 			</tr>
-			<tr ng-init="n.line5='Address: ' + n.applicant.address">
+			<tr>
+					<input type="hidden" ng-value="n.line5='Address: ' + n.applicant.address">
 				<td>Address:</td>
 				<td>{{n.applicant.address}}</td>
 			</tr>
-			<tr ng-init="n.line6='Purpose:' + n.purpose">
+			<tr>
+				<input type="hidden" ng-value="n.line6='Purpose:' + n.purpose">
 				<td>Purpose:</td>
 				<td>{{n.purpose}}</td>
 			</tr>
 
-			<tr ng-init="n.line7='Date Issued' + to_date(n.date_issued)">
+			<tr>
+				<input type="hidden" ng-value="n.line7='Date Issued: ' + get_full_date(n.date_issued)">
 				<td>Date Issued:</td>
 				<td>{{n.date_issued}}</td>
 			</tr>
@@ -104,9 +128,31 @@
 	<div layout>
 		<div style="width:60%">&nbsp;</div>
 		<div>
-				{{n.line8 = 'Issued by: '}}<br><br><br>
-				{{n.line9 = n.issued_by.name}}<br>
-				{{n.line10 = n.issued_by.designation}}
+			{{n.line8 = 'Issued by: '}}<br><br><br>
+			{{n.line9 = n.issued_by.name}}<br>
+			{{n.line10 = n.issued_by.designation}}
 		</div>
+	</div>
+	<br><br>
+	<div style="margin-left:1in">
+		<div style="text-align:center">{{n.line11='TERMS AND CONDITIONS'}}</div>
+		<DIV>
+			<ul>
+				<li>{{n.line12='The grantee shall buy the chainsaw unit from an authorized person or entity possessing ' +
+					'a valid permit to sell.'}}</li>
+				<li>{{n.line13='The grantee shall upon, purchase of the chainsaw unit register the same with the ' +
+					'PCSD'}}</li>
+				<li>{{n.line14='This permit is non-transferable and shall be used solely by the grantee.'}}</li>
+				<li>{{n.line15='Only ' + n.quantity_to_purchase + ' unit is allowed to be purchased under this permit.'}}</li>
+			</ul>
+		</DIV>
+	</div>
+	<div>
+		{{n.line16='PAID UNDER O.R. NO. ' + n.paid_or_number}}<br>
+		{{n.line17 = 'AMOUNT PAID: Php ' + n.paid_amount + '.00'}}<br>
+		{{n.line18 = 'DATE OF PAYMENT: ' + n.paid_date}}
+	</div>
+	<div>
+		{{n.line19 = 'This permit is valid only for three (3) months from date of issuance or upon permformance of the rest.'}}
 	</div>
 </div>

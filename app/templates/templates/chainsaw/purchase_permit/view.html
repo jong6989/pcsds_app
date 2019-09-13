@@ -3,7 +3,9 @@
 		font-family: 'Times New Roman', Times, serif;
 	}
 </style>
-<div class="roman" ng-controller="DummyChainsawPurchasePermitController" ng-init="currentItem=n">
+<!-- <div class="roman" ng-controller="DummyChainsawPurchasePermitController" ng-init="currentItem=n"  style="margin:0.5in"> -->
+<div class="roman" style="margin:0.5in">
+
 	<!-- header -->
 	<div ng-include="'./app/templates/templates/header.html'"></div>
 	<hr>
@@ -19,25 +21,29 @@
         {{ currentItem.line3 }}
     </p>
     <p>
-        <table>
-            <tr>
-                <td>Name:</td>
-                <td>{{currentItem.applicant.title + ' ' + currentItem.applicant.full_name}}</td>
-            </tr>
-            <tr>
-                <td>Address:</td>
-                <td>{{currentItem.applicant.address}}</td>
-            </tr>
-            <tr>
-                <td>Purpose:</td>
-                <td>{{currentItem.purpose}}</td>
-            </tr>
-
-            <tr>
-                <td>Date Issued:&nbsp;&nbsp;</td>
-                <td>{{currentItem.date_issued}}</td>
-            </tr>
-        </table>
+            <table>
+                    <tr>
+                        <td>{{currentItem['line4'].split(':')[0]}}</td>
+                        <td style="width:10%;text-align:center">:</td>
+                        <td>{{currentItem['line4'].split(':')[1]}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{currentItem['line5'].split(':')[0]}}</td>
+                        <td style="text-align:center">:</td>
+                        <td>{{currentItem['line5'].split(':')[1]}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{currentItem['line6'].split(':')[0]}}</td>
+                        <td style="text-align:center">:</td>
+                        <td>{{currentItem['line6'].split(':')[1]}}</td>
+                    </tr>
+        
+                    <tr>
+                        <td>{{currentItem['line7'].split(':')[0]}}</td>
+                        <td style="text-align:center">:</td>
+                        <td>{{currentItem['line7'].split(':')[1]}}</td>
+                    </tr>
+                </table>
     </p>
     <div layout>
         <div style="width:60%">&nbsp;</div>
@@ -47,9 +53,8 @@
     </div>
     
     <!-- Signature -->
-	<div layout ng-controller="doc_ctrl_draft">
+	<div layout ng-controller="doc_ctrl_draft" ng-init="currentItem.sign1=currentItem.issued_by">
         <div style="width:60%">&nbsp;</div>
-        <!-- sign 1 -->
 		<div flex style="padding: 10px" ng-init="currentItem.sign1 = (currentItem.sign1 == undefined)? { name:'',designation:''}:currentItem.sign1;">
             <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center">
                 <img ng-if="currentItem.sign1.signature != undefined" src="{{currentItem.sign1.signature}}" alt="Signature1" width="auto" style="margin-bottom: -35px;">
@@ -68,16 +73,40 @@
                 <button ng-click=" updateDocument(currentItem.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">
                     Save Signature
                 </button>
-                <md-input-container md-no-float class="md-block" ng-init="currentItem.sign1=currentItem.issued_by">
-                    <input ng-model="currentItem.sign1.name" ng-blur="updateDocument(currentItem.id,{'sign1.name' : currentItem.sign1.name })" type="text" placeholder="Name" aria-label="Name">
+                <md-input-container md-no-float class="md-block"  >
+                    <input ng-model="currentItem.sign1.name" 
+                    ng-blur="updateDocument(currentItem.id,{'sign1.name' : currentItem.sign1.name })" 
+                    type="text" placeholder="Name" aria-label="Name">
                 </md-input-container>
                 <md-input-container md-no-float class="md-block">
-                    <input ng-model="currentItem.sign1.designation" ng-blur="updateDocument(currentItem.id,{'sign1.designation' : currentItem.sign1.designation })"  type="text" placeholder="Designation" aria-label="designation">
+                    <input ng-model="currentItem.sign1.designation" 
+                    ng-blur="updateDocument(currentItem.id,{'sign1.designation' : currentItem.sign1.designation })"  
+                    type="text" placeholder="Designation" aria-label="designation">
                 </md-input-container>
 			</div>
         </div>
         
     </div>
+
+    <div style="margin-left:2in;margin-right: 2in">
+            <div style="text-align:center">{{currentItem['line11']}}</div>
+            <DIV>
+                <ol>
+                    <li ng-repeat="line in [12, 13, 14, 15]">
+                        {{currentItem['line'+line]}}
+                    </li>
+                </ol>
+            </DIV>
+        </div>
+        <br>
+        <div>
+            <div ng-repeat="line in [16, 17, 18]">
+                <b>{{currentItem['line'+line]}}</b>
+            </div>
+        </div><br>
+        <div>
+            {{currentItem['line19']}}
+        </div>
 	<!-- footer -->
 	<div ng-include="'./app/templates/templates/footer.html'"></div>
 </div>
