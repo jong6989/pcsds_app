@@ -1,0 +1,32 @@
+<div ng-controller="login_controller" >
+
+	<div layout="column" style="height:{{get_window_height()}}px;" >
+		<div flex="10"></div>
+		<div flex layout-padding="20" layout="column" layout-align="center center">
+			<div>
+				<img src="images/brain_logo.png" width="40%" style="margin-left:30%" height="auto" alt="pcsd">
+			</div>
+			<h2 class="col-white align-center">PALAWAN COUNCIL <br> <small>FOR</small> <br>SUSTAINABLE DEVELOPMENT</h2>
+			<h4 class="col-green align-center">ONLINE PERMITTING</h4>
+			<strong class="col-grey pointer" ng-click="showPrerenderedDialog($event,'login_modal')">
+				<i class="fa fa-sign-in m-r-10"></i>
+				Login</strong> 
+			<strong class="col-grey pointer" ng-click="showPrerenderedDialog($event,'register_modal')">
+					<i class="fa fa-user-plus m-r-10"></i>Register</strong> 
+			<strong class="col-grey pointer" ng-click="showPrerenderedDialog($event,'report_modal')">
+					<i class="fa fa-bullhorn m-r-10"></i>Sumbong</strong> 
+			<!-- <strong class="col-teal pointer" ng-click="showPrerenderedDialog($event,'info_modal')">Information</strong> -->
+		</div>
+		
+	</div>
+	
+	
+	<!-- Register Modal -->
+	<div style="visibility: hidden" ng-include="'app/templates/modals/register_modal.html'" ></div>
+	<!-- Login Modal -->
+	<div style="visibility: hidden" ng-include="'app/templates/modals/login_modal.html'" ></div>
+	<!-- Report Modal -->
+	<div style="visibility: hidden" ng-include="'app/templates/modals/report_modal.html'" ></div>
+	<!-- Information Modal -->
+	<!-- <div style="visibility: hidden" ng-include="'app/templates/modals/info_modal.html'" ></div> -->
+</div>

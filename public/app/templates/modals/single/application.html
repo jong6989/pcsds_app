@@ -1,0 +1,18 @@
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="singleTransaction">
+        <md-dialog layout-padding layout="column" layout-align="center center">
+        <md-dialog-content>
+            <div class="md-dialog-content" ng-hide="application == {} "  layout="column" layout-align="center center">
+                <md-content ng-repeat="x in app_templates" ng-show="application.name == x.name ">
+                    <div ng-include="x.url"></div>
+                </md-content>
+            </div>
+            <!-- loading -->
+            <div ng-show=" application == {} " layout="row" layout-sm="column" layout-align="space-around">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+        </md-dialog-content>
+
+        </md-dialog>
+    </div>
+</div>

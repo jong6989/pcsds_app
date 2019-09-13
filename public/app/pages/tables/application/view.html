@@ -1,0 +1,21 @@
+
+<div ng-controller="applicant_dashboard_controller" ng-init="table_my_application = load_table($localStorage.my_applications,table_my_application)">
+    <h3 class="col-teal">My Applications</h3>
+    <table ng-table="table_my_application" class="table" show-filter="true">
+        <tr ng-repeat="x in $data "
+            ng-click="set_application(x,$event)" class="pointer">
+            <td sortable="'id'"> {{x.date}} </td>
+            <td title="'Title'" sortable="'x.name'"> {{ x.name }} </td>
+            <td title="'Submittion Date'"> {{ x.date}} </td>
+            <td title="'Status'" > 
+                <strong ng-class=" {'col-green' : (x.status == 0), 'col-blue' : (x.status == 1), 'col-red' : (x.status == 2),
+                        'col-teal' : (x.status == 3),'col-brown' : (x.status == 4),'col-indigo' : (x.status == 5),'col-deep-orange' : (x.status == 6) } ">
+                    {{ getStatusCode(x.status) }}
+                </strong> 
+            </td>
+        </tr>
+    </table>
+
+    <!-- single application modal -->
+    <div ng-include="'app/templates/modals/single/application.html'"></div>
+</div>

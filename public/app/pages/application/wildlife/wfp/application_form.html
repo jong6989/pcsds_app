@@ -1,0 +1,453 @@
+<div flex layout="column" md-whiteframe="3" ng-init=" initData('wfp') " layout-padding="50" layout-margin class="md-card p-l-20 p-r-20">
+    <form name="form_online_application" >
+        <div flex layout-gt-xs="row" layout-xs="column">
+            <div flex flex-gt-xs="15" layout-align="center center">
+                <img src="images/pcsd_logo.png" class="p-t-5" style="width:100%;">
+            </div>
+            <div flex layout-align="center" class="m-l-20">
+                <h4><strong>Republic of the Philippines</strong> <br>
+                    <small>Republic Act 7611</small><br>
+                    <small>PALAWAN COUNCIL for SUSTAINABLE DEVELOPMENT</small>
+                </h4>
+                Date: {{ date_now() | date : 'MMMM d, yyyy'}}
+            </div>
+        </div>
+
+        <md-divider></md-divider>
+
+        <div flex class="p-t-10 p-b-10">
+            <h3 class="col-blue-grey m-t-20 m-b-20">ONLINE APPLICATION FOR WILDLIFE FARM PERMIT</h3>
+            <div layout-gt-sm="row" ng-init="new_application.application_type = 'new';">
+                <md-radio-group ng-model="new_application.application_type">
+                    <md-radio-button value="new" class="md-primary">New</md-radio-button>
+                    <md-radio-button value="renew"> Renew </md-radio-button>
+                </md-radio-group>
+            </div>
+            <hr>
+            <div layout-gt-sm="row" ng-init="new_application.farm_scale = 'large';">
+                <md-radio-group ng-model="new_application.farm_scale">
+                    <md-radio-button value="large" class="md-primary"> MEDIUM-LARGE SCALE FARMING </md-radio-button>
+                    <md-radio-button value="small"> SMALL SCALE FARMING </md-radio-button>
+                </md-radio-group>
+            </div>
+        </div>
+        
+        <md-divider></md-divider>
+
+        <strong class="col-grey m-t-20">Applicant Photo : </strong>
+        <div ng-init="new_application.applicant_photo = user.data.profile_picture">
+            <div flex-gt-xs="35" layout-padding  ng-show="!is_using_camera"
+                ngf-drop ng-model="picFile"
+                ngf-allow-dir="true"
+                ngf-drag-over-class="'dragover'"
+                ngf-multiple="false"
+                ngf-pattern="image/*"
+                >
+    
+                <img ng-hide="picFile !== null" ng-src="{{ (new_application.applicant_photo == undefined)? 'images/user.png' : api_address  + new_application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3">
+    
+                <img class="align-center" ng-show="picFile !== null" ng-src="{{croppedDataUrl}}" />
+    
+                <img-crop ng-show="picFile !== null" image="picFile  | ngfDataUrl"                 
+                    result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
+                </img-crop>
+    
+                <md-progress-linear ng-show="upload_process()" md-mode="determinate" value="{{photo_uploading_rate}}"></md-progress-linear>
+                <hr>
+    
+                <md-button ng-hide="picFile !== null"
+                    ngf-select ng-model="picFile" accept="image/*">
+                    Upload Picture
+                </md-button>
+
+                <md-button ng-click="toggle_using_camera()">
+                    Use Camera
+                </md-button>
+    
+                <md-button ng-show="(picFile !== null) && !upload_process()" ng-click="upload_photo(croppedDataUrl, 'wsup_rff_photo.jpg');picFile=null;">Save</md-button> 
+                <md-button ng-show="(picFile !== null) && !upload_process()" ng-click="clear_cropping_image()" >Cancel</md-button>
+ 
+    
+            </div>
+    
+            <div layout="column" ng-if="is_using_camera">
+    
+                <div ng-hide="fromCamera == undefined" class="align-center"><img ng-src="{{croppedDataUrl}}" /></div>
+                <md-button ng-if="fromCamera != undefined" ng-click="upload_photo(croppedDataUrl, 'wsup_rff_photo.jpg')" >
+                    Save Image
+                </md-button>
+                
+                <img-crop ng-hide="fromCamera == undefined" image="fromCamera"                 
+                    result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
+                </img-crop>
+    
+                <ng-camera
+                    capture-message="Captured!"
+                    countdown="3"
+                    viewer-height="375"
+                    viewer-width="500"
+                    crop-height="375"
+                    crop-width="500"
+                    output-height="525"
+                    output-width="700"
+                    image-format="jpeg"
+                    jpeg-quality="100"
+                    action-message="Use this image"
+                    snapshot="fromCamera"
+                    shutter-url="shutter.mp3"
+                ></ng-camera>
+                <md-button ng-click="toggle_using_camera();picFile = null">
+                    Cancel
+                </md-button>
+            </div>
+        </div>
+        <hr>
+
+        <div class="m-t-20" ng-hide="is_using_camera">
+
+            <div flex>
+                <h4>
+                    NELSON P. DEVANADERA <br>
+                    <small>Executive Director</small><br>
+                    <small>Palawan Council for Sustainable Development Staff</small>
+                </h4>
+    
+                Sir: <br>
+                    
+                <span class="p-l-20"></span>In accordance with R.A. 9147 otherwise known as the "Wildlife Resources Conservation and Protection Act", with which I shall familiarize myself and to which strict compliance of same is hereby promised,
+                 
+                <div layout-gt-xs="row" layout-xs="column" class="m-t-20" ng-init="new_application.nationality = user.data.nationality">
+                    <div class="m-r-20">1. <strong>I,</strong></div> 
+                    <md-autocomplete style="display:inline" required
+                            md-selected-item="new_application.applicant"
+                            md-search-text="naapplicant"
+                            md-search-text-change="new_application.applicant = naapplicant"
+                            md-items="x in [user.data.full_name]"
+                            md-item-text="x"
+                            md-min-length="0"
+                            placeholder="Applicant">
+                        <md-item-template>
+                            {{x}}
+                        </md-item-template>
+                    </md-autocomplete>
+                    <div class="m-l-20" flex-gt-xs>have the honor to apply for a Wildlife Special Use Permit.</div>
+                </div>
+    
+                <div layout="column" ng-init="age_array = date_gap(date_now(),user.data.birth_day).split(' ')">
+                    <div layout-gt-xs="row" layout-xs="column" class="m-t-20">
+                        <div class="m-r-20">2. <strong class="col-blue-grey">I am</strong> </div>
+                        <div ng-init="new_application.age = to_int(age_array[0]);">
+                            <input ng-model="new_application.age" type="number" min="18">
+                        </div>
+                        <div class="m-l-20" flex-gt-xs>{{age_array[1]}} of age, citizen of </div>
+                    </div>
+                    <div layout-gt-xs="row" layout-xs="column" class="m-t-20">
+                        <div>
+                            <md-select ng-model="new_application.nationality" required>
+                                <md-option><em>None</em></md-option>
+                                <md-option ng-repeat="x in nationalities" ng-value="x.nationality" >
+                                    {{x.en_short_name}} - {{x.nationality}}
+                                </md-option>
+                            </md-select>
+                        </div> 
+                        <div class="m-l-20" flex-gt-xs>by birth (if by naturalization, submit papers for verification)</div>
+                    </div>
+                </div>
+    
+                <div layout-gt-xs="row" layout-xs="column" ng-init="bday = new_application.birth_day = user.data.birth_day; new_application.place_of_birth = user.data.place_of_birth;">
+                    <div flex>
+                        <strong class="col-blue-grey">Date of Birth <cite class="font-10">(must be 18+)</cite></strong>
+                        <md-datepicker ng-model="bday" ng-change="new_application.birth_day = to_date(bday)" md-placeholder="Birth Date"
+                            md-min-date="minDate" md-max-date="maxDate" md-open-on-focus required></md-datepicker>
+                    </div>
+                    <div flex>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Place of Birth (Address)</label>
+                            <input ng-model="new_application.place_of_birth" required>
+                        </md-input-container>
+                    </div>
+                </div>
+    
+                <div layout-gt-xs="row" layout-xs="column" 
+                    ng-init="new_application.residence_address = user.data.current_address;new_application.residence_tel_num = user.data.current_phone;">
+                    <div flex>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Residence Address</label>
+                            <input ng-model="new_application.residence_address" required>
+                        </md-input-container>
+                    </div>
+                    <div flex>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Residence Tel. Number</label>
+                            <input ng-model="new_application.residence_tel_num" required>
+                        </md-input-container>
+                    </div>
+                </div>
+    
+                <div layout-gt-xs="row" layout-xs="column">
+                    <div flex>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Business Address</label>
+                            <input ng-model="new_application.business_address" required>
+                        </md-input-container>
+                    </div>
+                    <div flex>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Business Tel. Number</label>
+                            <input ng-model="new_application.business_tel_num" required>
+                        </md-input-container>
+                    </div>
+                </div>
+
+                <br>
+                    <div>3.	My occupation is <input type="text" class="m-l-5 m-r-5" placeholder="" ng-model="new_application.occupation">. </div>
+                <br>
+    
+                <div layout-gt-xs="row" layout-xs="column" class="m-t-20" ng-init="new_application.civil_status = user.data.civil_status">
+                    <div class="m-r-20">4. <strong class="col-blue-grey">I am</strong> </div>
+                    <md-input-container>
+                        <label>Civil Status</label>
+                        <md-select ng-model="new_application.civil_status">
+                            <md-option value="single"><em>Single</em></md-option>
+                            <md-option value="married"><em>Married</em></md-option>
+                            <md-option value="widowed"><em>Widowed</em></md-option>
+                            <md-option value="separated"><em>Separated</em></md-option>
+                        </md-select>
+                    </md-input-container>
+                    <div ng-if="new_application.civil_status == 'married'" class="m-l-20" flex-gt-xs>and the name of my spouse/wife </div>
+                    <md-input-container ng-if="new_application.civil_status == 'married'" class="md-block" flex-gt-sm ng-init="new_application.spouse_name = user.data.spouse_name">
+                        <label>Spouse/Wife Name</label>
+                        <input ng-model="new_application.spouse_name" required>
+                    </md-input-container>
+                </div>
+    
+                <div layout-gt-xs="row" layout-xs="column" class="m-t-20" ng-init="new_application.org_member = 'false';">
+                    <div class="m-r-20">5. <strong class="col-blue-grey">I am</strong> </div>
+                    <md-radio-group ng-model="new_application.org_member" required>
+                        <md-radio-button value="true" class="md-primary">a member</md-radio-button>
+                        <md-radio-button value="false"> not a member </md-radio-button>
+                    </md-radio-group>
+                    <div flex class="m-l-10">of a sportsmen and/or game club and/or scientific or conservation society and/or live fish trader association or cooperative.</div>
+                </div>
+    
+                <div ng-if="new_application.org_member == 'true'">
+                    <h5 class="col-blue-grey" ng-init="new_application.organizations = [{}]" flex>
+                            Organization: <md-button class="md-raised" ng-click="new_application.organizations.push({});">Add Organization</md-button>
+                    </h5>
+                    
+                    <div>
+                        <div ng-repeat="x in new_application.organizations"  flex layout-gt-sm="row" >
+                            <div flex-gt-sm="5">
+                                <i class="fa fa-trash pointer col-red" ng-click="new_application.organizations.splice(new_application.organizations.indexOf(x),1);"></i>
+                                {{$index + 1}}.
+                            </div>
+        
+                            <md-autocomplete
+                                class="md-block m-r-10" flex-gt-sm="30" required
+                                    md-selected-item="new_application.organizations[new_application.organizations.indexOf(x)].name"
+                                    md-search-text="norgname"
+                                    md-search-text-change="new_application.organizations[new_application.organizations.indexOf(x)].name = norgname"
+                                    md-items="x in organization_list"
+                                    md-item-text="x"
+                                    md-min-length="0"
+                                    placeholder="Org Name">
+                                <md-item-template>
+                                    {{x}}
+                                </md-item-template>
+                            </md-autocomplete>
+        
+                            <md-input-container class="md-block m-r-10" flex-gt-sm>
+                                <label>Your Position / Contribution</label>
+                                <input ng-model="new_application.organizations[new_application.organizations.indexOf(x)].position" required>
+                            </md-input-container>
+        
+                            <md-input-container class="md-block" flex-gt-sm=>
+                                <label>Org Description</label>
+                                <input ng-model="new_application.organizations[new_application.organizations.indexOf(x)].desc" required>
+                            </md-input-container>
+        
+                        </div>
+                    </div>
+                </div>
+                
+                <p>
+                    6. I intend to breed the following wildlife:
+                </p>
+    
+                <br>
+    
+                <h5 class="col-blue-grey" ng-init="new_application.species = [{}]" flex>
+                    Wildlife Species: <md-button class="md-raised" ng-click="new_application.species.push({});">Add Species</md-button>
+                </h5>
+                
+                <div>
+                    <div ng-repeat="x in new_application.species"  flex layout-gt-sm="row" >
+                        <div flex-gt-sm="5">
+                            <i class="fa fa-trash pointer col-red" ng-click="new_application.species.splice(new_application.species.indexOf(x),1);"></i>
+                            {{$index + 1}}.
+                        </div>
+    
+                        <md-autocomplete
+                            class="md-block m-r-10" flex-gt-sm="30" required
+                              md-selected-item="new_application.species[new_application.species.indexOf(x)].name"
+                              md-search-text="nassn"
+                              md-search-text-change="new_application.species[new_application.species.indexOf(x)].name = nassn"
+                              md-items="x in rff_specimen_list"
+                              md-item-text="x"
+                              md-min-length="0"
+                              placeholder="Kind/Species">
+                            <md-item-template>
+                              {{x}}
+                            </md-item-template>
+                        </md-autocomplete>
+    
+                        <md-input-container class="md-block m-r-10" flex-gt-sm>
+                           <label>Monthly Volume</label>
+                           <input ng-model="new_application.species[new_application.species.indexOf(x)].monthly_volume" required>
+                        </md-input-container>
+    
+                        <md-input-container class="md-block" flex-gt-sm=>
+                           <label>Source Area (Sitio, Brgy., Municipality) </label>
+                           <input ng-model="new_application.species[new_application.species.indexOf(x)].source_area" required>
+                        </md-input-container>
+    
+                    </div>
+                </div>
+
+                <p class="m-t-20">
+                    7.	Wildlife species to be collected under this permit shall be taken by means of:
+                </p>
+    
+                <h5 class="col-blue-grey" ng-init="new_application.techniques = [{}]" flex>
+                    Technique/s to be used: <md-button class="md-raised" ng-click="new_application.techniques.push({});">Add Technique</md-button>
+                </h5>
+                
+                <div>
+                    <div ng-repeat="x in new_application.techniques"  flex layout-gt-sm="row" >
+                        <div flex-gt-sm="5">
+                            <i class="fa fa-trash pointer col-red" ng-click="new_application.techniques.splice(new_application.techniques.indexOf(x),1);"></i>
+                            {{$index + 1}}.
+                        </div>
+    
+                        <md-input-container class="md-block m-r-10" flex-gt-sm>
+                            <label>(Indicate collection technique/s to be used)</label>
+                            <input ng-model="new_application.techniques[new_application.techniques.indexOf(x)].name" required>
+                        </md-input-container>
+                    </div>
+                </div>
+
+                <p class="m-t-20">
+                    8.	The names of my authorized trappers/collectors are :
+                </p>
+    
+                <h5 class="col-blue-grey" ng-init="new_application.collectors = [{}]" flex>
+                    Authorized Collectors: <md-button class="md-raised" ng-click="new_application.collectors.push({});">Add Collector</md-button>
+                </h5>
+                
+                <div>
+                    <div ng-repeat="x in new_application.collectors"  flex layout-gt-sm="row" >
+                        <div flex-gt-sm="5">
+                            <i class="fa fa-trash pointer col-red" ng-click="new_application.collectors.splice(new_application.collectors.indexOf(x),1);"></i>
+                            {{$index + 1}}.
+                        </div>
+    
+                        <md-input-container class="md-block m-r-10" flex-gt-sm>
+                            <label>Name</label>
+                            <input ng-model="new_application.collectors[new_application.collectors.indexOf(x)].name" required>
+                        </md-input-container>
+    
+                        <md-input-container class="md-block" flex-gt-sm=>
+                            <label>Address</label>
+                            <input ng-model="new_application.collectors[new_application.collectors.indexOf(x)].address" required>
+                        </md-input-container>
+    
+                    </div>
+                </div>
+
+                <p>9. I understand that the information stated in this application are all true and correct and any omission of facts therein shall cause the disapproval of this application and/or cancellation of the permit that may be issued to me.</p>
+                <br>
+                <p>10. I understand that the filing of this application conveys no right to take, collect or possess any wildlife until a permit is issued to me by the PCSD.</p>
+                <!-- <br>
+                <p>11. The application fee in the amount of <input type="text" class="m-l-5 m-r-5" ng-model="new_application.application_fee"> made payable to the PCSDS with Official Receipt No.
+                    <input type="text" class="m-l-5 m-r-5" ng-model="new_application.or_no">  is herewith enclosed. Non- approval or non-issuance of the permit does not entitle me to a refund of the fee.</p>
+                 -->
+                <hr class="m-t-40">
+                
+                <h4 class="col-blue-grey">
+                    Applicant:
+                </h4>
+                <div layout="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                       <label>Applicant's Name</label>
+                       <input ng-model="new_application.applicant" required>
+                    </md-input-container>
+    
+                    <md-input-container class="md-block" flex-gt-sm>
+                       <label>Applicant's Contact Number</label>
+                       <input ng-model="new_application.contact" required>
+                    </md-input-container>
+                </div>
+
+                <div layout="row" ng-init="new_application.tin_no = user.data.tin_no; new_application.applicant_address = user.data.current_address;">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Applicant Address : </label>
+                        <input ng-model="new_application.applicant_address" required>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+                       <label>Tax Identification Number : </label>
+                       <input ng-model="new_application.tin_no" required>
+                    </md-input-container>
+                </div>
+    
+                
+                <strong>Required Attachments :</strong>
+                <div ng-init="new_application.attachments = [
+                    {name:'Free & Prior Informed Consent (FPIC).'},
+                    {name:'Barangay Clearance.'},
+                    {name:'Municipal/City Clearance'},
+                    {name:'Protected Areas and Mgt. Bureau if inside a protected area'},
+                    {name:'Consent of individuals/associations with valid tenurial or other private rights '},
+                    {name:'Scanned Valid ID of authorized collectors/trappers'}
+                    ]
+                    ">
+                    <ol>
+                        <li ng-repeat="x in new_application.attachments">
+                            <cite ng-class="{'col-green':(x.url !== undefined)}">{{x.name}}</cite>
+                            <i ng-hide="x.url == undefined" class="fa fa-check col-green"></i>
+                            <i ng-show="x.url == undefined" class="fa fa-times col-red"></i>
+                            <button class="col-blue" ng-click="change_attachment_index($index);showPrerenderedDialog($event,'upload_modal')">upload</button>
+                        </li>
+                    </ol>
+
+                    <strong ng-init="ia = new_application.attachments.length;ib = new_application.attachments.length + 1;ic = new_application.attachments.length + 2">
+                        Other attachments </strong>
+                        <cite class="col-grey">(Optional for attachments not stated above)</cite>
+                    <div>
+                        <input placeholder="File name" ng-model="new_application.attachments[ia].name" > 
+                    </div>
+                    <div>
+                        <input placeholder="File name" ng-model="new_application.attachments[ib].name" > 
+                    </div>
+                    <div>
+                        <input placeholder="File name" ng-model="new_application.attachments[ic].name" > 
+                    </div>
+
+                </div>
+    
+            </div>
+    
+            <hr class="m-t-20">
+            <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <md-button ng-hide=" is_loading " ng-disabled="form_online_application.$invalid" ng-click="submit_application(new_application,'Application for Wildlife Farm Permit','wfp')" 
+                class="md-primary md-raised md-block" >
+                <strong class="font-16">Submit Application</strong>
+            </md-button>
+        </div>
+
+    </form>
+    <!-- modals -->
+    <div style="visibility: hidden" ng-include="'app/templates/modals/select/upload.html'" ></div>
+</div>

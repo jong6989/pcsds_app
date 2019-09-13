@@ -1,0 +1,59 @@
+<div  class="md-dialog-container" id="fullname_modal" > 
+
+	<md-dialog aria-label="Full Name">
+        <form name="form_edit_fullname">
+            <md-toolbar class="bg-blue-grey">
+            <div class="md-toolbar-tools m-t-10">
+                <strong> Edit Full Name  </strong>
+            </div>
+            </md-toolbar>
+            
+            <md-dialog-content layout-padding="20">
+
+                <div layout-padding>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Password</label>
+                        <input ng-model="editProfilePassword" type="password" required>
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row" ng-init="edit_f_name = { first_name : user.data.first_name, middle_name : user.data.middle_name , last_name : user.data.last_name , extension_name : user.data.extension_name }">
+
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>First name</label>
+                        <input ng-model="edit_f_name.first_name" required>
+                    </md-input-container>
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Middle Name</label>
+                        <input ng-model="edit_f_name.middle_name">
+                    </md-input-container>
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Last Name</label>
+                        <input ng-model="edit_f_name.last_name" required>
+                    </md-input-container>
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Extension (JR., SR)</label>
+                        <input ng-model="edit_f_name.extension_name">
+                    </md-input-container>
+                </div>
+
+            </md-dialog-content>
+
+            <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="close_dialog()">
+            close
+            </md-button>
+            <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <md-button type="submit" ng-disabled="form_edit_fullname.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="edit_profile('full_name',edit_f_name,editProfilePassword)">
+                save
+            </md-button>
+            </md-dialog-actions>
+        </form>
+	</md-dialog>
+</div>

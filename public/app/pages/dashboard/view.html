@@ -1,0 +1,119 @@
+<div ng-init="set_page_title('Dashboard');profile_checker(user,$event);load_my_applications();" ng-controller="applicant_dashboard_controller">
+    <div layout-gt-xs="row">
+        <md-card flex-gt-xs="50">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline col-teal">Applications - <strong>{{$localStorage.my_applications.length}}</strong> </span>
+                </md-card-title-text>
+            </md-card-title>
+
+            <div style="max-height: 210px; overflow: scroll;" >
+                <md-card-content >
+                    <md-list>
+                        <md-list-item ng-repeat="x in $localStorage.my_applications | limitTo : 10" ng-click="set_application(x,$event)" >
+                            {{x.date}} - {{x.date | date}} - {{ getStatusCode(x.status) }}
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </div>
+
+            <md-divider></md-divider>
+            <md-card-actions layout="row" layout-align="end center">
+                
+                <a href="#!/pages/tables/application" ng-hide="$localStorage.my_applications.length == 0">
+                    <md-button>
+                        <md-tooltip md-direction="top">Click to view all Applications</md-tooltip>
+                        View All
+                    </md-button>
+                </a>
+                <md-menu>
+                    <md-button aria-label="Application Menus" class="" ng-click="$mdMenu.open()">
+                        <md-tooltip md-direction="top">Create Permit Application</md-tooltip>
+                        <strong class="col-pink"> <i class="fa fa-plus"></i> Add</strong>
+                    </md-button>
+                    <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
+                        <md-menu-item ng-repeat="x in application_menus">
+                            <a ng-href="{{x.url}}">
+                                <md-button>
+                                    {{x.name}}
+                                </md-button>
+                            </a>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-card-actions>
+        </md-card>
+
+        <md-card>
+            <md-card-title>
+                <h3 class="md-title">Wildlife</h3>
+            </md-card-title>
+            <md-card-content>
+                <a ng-href="#!/pages/application/wildlife/wsup_rff">
+                    <md-tooltip md-direction="top">a permit authorizing qualified persons to directly collect reef-fish-for-food or buy the same from holders of wildlife collector’s permit for direct trade or other commercial purposes</md-tooltip>
+                    WILDLIFE SPECIAL USE PERMIT (RFF)
+                </a>
+
+                <hr>
+
+                <a ng-href="#!/pages/application/wildlife/wsup_ao12">
+                    <md-tooltip md-direction="top">a permit authorizing qualified persons to collect non-threatened economically important species for direct trade or other commercial purposes</md-tooltip>
+                    WILDLIFE SPECIAL USE PERMIT (AO12)
+                </a>
+
+                <hr>
+
+                <a ng-href="#!/pages/application/wildlife/ltp_rff">
+                    <md-tooltip md-direction="top">a permit issued by the PCSD to a holder of wildlife collector’s permit, wildlife farm permit or wildlife special use permit authorizing him/her to bring reef-fish-for-food from Palawan to other provinces in Philippines</md-tooltip>
+                    LOCAL TRANSPORT PERMIT for RFF
+                </a>
+
+                <hr>
+
+                <a ng-href="#!/pages/application/wildlife/ltp_ao12">
+                    <md-tooltip md-direction="top">a permit issued by the PCSD to a holder of wildlife collector’s permit, wildlife farm permit or wildlife special use permit authorizing him/her to bring wildlife products from Palawan to other provinces in Philippines</md-tooltip>
+                    LOCAL TRANSPORT PERMIT for Wildlife Products
+                </a>
+
+                <hr>
+
+                <a ng-href="#!/pages/application/wildlife/wcp">
+                    <md-tooltip md-direction="top">a permit to take or collect from the wild certain species and quantities of wildlife for commercial purposes</md-tooltip>
+                    WILDLIFE COLLECTOR'S PERMIT
+                </a>
+
+                <hr>
+
+                <a ng-href="#!/pages/application/wildlife/wfp">
+                    <md-tooltip md-direction="top">means a permit to develop, operate and maintain a wildlife breeding farm for conservation, trade and/or scientific purposes</md-tooltip>
+                    WILDLIFE FARM PERMIT
+                </a>
+
+            </md-card-content>
+        </md-card>
+
+    </div>
+
+    <div layout-gt-sm="row">
+        <md-card>
+            <md-card-title>
+                <h3 class="md-title">Chainsaw</h3>
+            </md-card-title>
+            <md-card-content>
+                <a ng-href="#!/pages/application/chainsaw/purchase">
+                    <md-tooltip md-direction="top">Permit to Purchase/Import</md-tooltip>
+                    Permit to Purchase/Import
+                </a>
+                <hr>
+                <a ng-href="#!/pages/application/chainsaw/registration">
+                    <md-tooltip md-direction="top">Registration of Chainsaw</md-tooltip>
+                    Chainsaw Registration
+                </a>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- single application modal -->
+    <div ng-include="'app/templates/modals/single/application.html'"></div>
+
+</div>

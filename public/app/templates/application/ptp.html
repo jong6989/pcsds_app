@@ -1,0 +1,150 @@
+
+<div class="p-t-20 p-l-10">
+    <md-button class="md-raised md-primary" ng-click="openQrPage('ptp',application.id,application.date)">
+        <md-tooltip md-direction="top">Click to view your digital transantion receipt via Quick Responce (QR) Code.</md-tooltip>
+        OPEN QR CODE
+    </md-button>
+    <hr>
+    <br>
+    <div layout-gt-xs="row" layout-xs="column" layout-align="center center">
+        <div flex-gt-xs="20" flex-xs > 
+            <img src="images/pcsd_logo.png" alt="Palawan Counsil for Sustainable Development" width="80%">
+        </div>
+        <div flex>
+            <h4 class="col-grey md-display-1">Palawan Council for Sustainable Development</h4>
+            <h6 class="col-green md-subtitle"><cite>Online Application</cite></h6>
+        </div>
+    </div>
+
+    <!-- tittle -->
+    <h3 class="align-center m-t-20 m-b-10">APPLICATION FOR PERMIT TO PURCHASE/IMPORT CHAINSAW</h3>
+        
+    <div layout="row" layout-align="end">
+        <div layout="column" layout-align="center center">
+            <div><strong style="text-decoration: underline"> {{application.date | date : 'MMMM d, yyyy'}} </strong></div>
+            <div>(date)</div>
+        </div>
+        <div class="p-r-50"></div>
+    </div>
+
+    <h4>
+        NELSON P. DEVANADERA <br>
+        <small>Executive Director</small><br>
+        <small>Palawan Council for Sustainable Development Staff</small>
+    </h4>
+
+    <br>
+    <p>
+        <span class="p-l-40"></span>I/We {{application.data.application.applicant}}, resident of {{application.data.application.applicant_address}},
+        applies for a Permit to Purchase/Import Chainsaw.
+    </p>
+
+    <p>
+        <span class="m-r-20"></span>
+        The requirements needed for my/our application is/are hereby submitted for your evaluation.
+    </p>
+    <p>
+        <span class="m-r-20"></span>
+        That the filing of this application does not authorize me/us to purchase and/or import chainsaw unit(s) until after the Permit has been issued.
+    </p>
+    <p>
+        <span class="m-r-20"></span>
+        I/We understood that any false representation or declaration embodied in this application or submitted requirements shall be a ground for the denial of this application without prejudice to the filing of appropriate cases.
+    </p>
+
+    <div>
+        <strong>Details of application :</strong>
+        <ol>
+            <li ng-repeat="x in application.data.application.chainsaw">Brand : {{x.brand}}, Quantity : {{x.quantity}}, Details : {{x.details}} </li>
+        </ol>
+    </div>
+
+    <p>Purpose for Purchasing/Importing: {{application.data.application.purpose}} </p>
+    <p>Name of Seller/ Supplier: {{application.data.application.supplier_name}} </p>
+    <p>Address of Seller/ Supplier: {{application.data.application.supplier_address}} </p>
+
+    <p>If Imported:</p>
+    <p>-Expected date and Time of arrival</p>
+    <p>Or release from the Bureau of Customs: 
+        {{application.data.application.date_from_custom}}
+    </p>
+    <p>Import Entry Declaration from BSP: 
+        {{application.data.application.date_of_entry_bsp}}
+    </p>
+
+    <div layout="row" layout-align="end">
+        <div layout="column" layout-align="center center">
+            <div><strong style="text-decoration: underline"> {{application.data.application.applicant}} </strong></div>
+            <div>(Applicant)</div>
+            <div class="m-t-20"> <strong>TIN : {{application.data.application.tin_no}}</strong> </div>
+        </div>
+        <div class="p-r-50"></div>
+    </div>
+    
+    <hr>
+    
+    <!-- Received Stamp -->
+    <div ng-if="application.status > 0" >
+        <md-card>
+            <md-card-content>
+                Received by : <strong>{{ application.data.received.staff }}</strong> 
+                , on <strong>{{application.data.received.date}}</strong>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Rejected Stamp -->
+    <div ng-if="application.data.rejected != undefined " >
+        <md-card>
+            <md-card-content>
+                Rejected by : <strong>{{ application.data.rejected.staff }} </strong> 
+                Reason : <strong>{{ application.data.rejected.message }} </strong> 
+                , on <strong>{{application.data.rejected.date}}</strong>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Accepted Stamp -->
+    <div ng-if="application.data.accepted != undefined " >
+        <md-card>
+            <md-card-content>
+                Processed by : <strong>{{ application.data.accepted.staff }} </strong> 
+                , on  <strong>{{application.data.accepted.date}}</strong>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Approved Stamp -->
+    <div ng-if="application.data.approved != undefined " >
+        <md-card>
+            <md-card-content>
+                Reviewed by : <strong>{{ application.data.approved.staff }} </strong> 
+                , on  <strong>{{application.data.approved.date}}</strong>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Recommended Stamp -->
+    <div ng-if="application.data.recommended != undefined " >
+        <md-card>
+            <md-card-content>
+                Recommended by : <strong>{{ application.data.recommended.staff }} </strong> 
+                , on  <strong>{{application.data.recommended.date}}</strong>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Acknowledged Stamp -->
+    <div ng-if="application.data.acknowledged != undefined " >
+        <md-card>
+            <md-card-content>
+                Approved by : <strong>{{ application.data.acknowledged.staff }} </strong>
+                , on  <strong>{{application.data.acknowledged.date}}</strong>
+                <br>
+                Expiration : <strong>{{application.expiration | date}}</strong>
+            </md-card-content>
+        </md-card>
+    <md-divider class="m-t-20 m-b-20"></md-divider>
+
+
+</div>

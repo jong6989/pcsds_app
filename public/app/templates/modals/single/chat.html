@@ -1,0 +1,45 @@
+<div class="md-dialog-container" id="chat_modal" > 
+    <md-dialog aria-label="Chat">
+        <md-toolbar class="bg-light-grey">
+            <div class="md-toolbar-tools m-t-10">
+            <strong> Live Chat  </strong>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content layout-padding="20">
+            <div id="chat_holder">
+                <div ng-repeat="x in chat_list track by x.date">
+                    <div ng-if="x.deleted == undefined">
+                        <h6 layout="row">
+                            <div flex ng-if="x.user == user.data.first_name + ' ' + user.data.last_name"></div>
+                            <div ng-class="{'col-pink': (x.user !== user.data.first_name + ' ' + user.data.last_name),'col-grey': (x.user == user.data.first_name + ' ' + user.data.last_name)}"><small>From:</small> {{x.user}}</div>
+                        </h6>
+                        <div layout="row">
+                            <div flex ng-if="x.user == user.data.first_name + ' ' + user.data.last_name"></div>
+                            <p> {{x.message}} . <strong class="font-10 col-grey">{{date_from_now(x.date)}} </strong> </p>
+                        </div>
+                    </div>
+                    <div ng-if="x.deleted" class="font-10 col-grey">
+                        {{x.removed_by}} removed a message...
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="close_dialog()">
+                close
+            </md-button>
+            <form flex name="newChatForm" layout="row" novalidate>
+                <md-input-container flex md-no-float class="md-block p-l-10 m-b--10">
+                    <input ng-model="newChat" type="text" placeholder="message">
+                </md-input-container>
+                <md-button type="submit" ng-click="sendChat(newChat);newChat=''" ng-disabled="newChat == ''" class="md-raised md-primary">
+                    <i class="fa fa-paper-plane"></i>
+                    Send
+                </md-button>
+            </form>
+        </md-dialog-actions>
+    </md-dialog>
+</div>

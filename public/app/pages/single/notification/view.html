@@ -1,0 +1,17 @@
+<div ng-controller="single_controller" ng-init="set_page_title('Notification'); get_single_notif($event);">
+
+    <strong class="col-grey">Transaction number :</strong> {{notif.transaction_date}}
+    <hr>
+    <strong class="col-grey">Date :</strong> {{notif.date | date}}
+    <hr>
+    <strong class="col-grey">Message :</strong> {{notif.message}}
+    <hr>
+
+    <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <md-content ng-hide=" is_loading " ng-repeat="x in app_templates" ng-if="application.name == x.name ">
+        <div ng-include="x.url"></div>
+    </md-content> 
+
+</div>
