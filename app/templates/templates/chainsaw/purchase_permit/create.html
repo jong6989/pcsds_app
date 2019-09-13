@@ -2,6 +2,7 @@
 	n.keywords = []; 
 	titles = ['Ms.','Mrs.','Mr.']; 
 	n.c_type = 'permit'; "
+	ng-controller="DummyChainsawPurchasePermitController"
 	>
 
 	<h3 class="align-center">PERMIT TO PURCHASE/IMPORT CHAINSAW</h3>
@@ -17,31 +18,14 @@
 	<strong>Applicant Information</strong>
 	<div layout>
 		<md-input-container class="md-block m-t-40" flex>
-			<label>Title</label>
-			<md-select ng-model="n.applicant.title">
-				<md-option ng-repeat="x in titles" value="{{x}}">
-					{{x}}
-				</md-option>
-			</md-select>
+			<label>Name</label>
+			<textarea ng-model="n.applicant.name">
 		</md-input-container>
-		<md-input-container class="md-block m-t-40" flex>
-			<label>First Name</label>
-			<input ng-model="n.applicant.first_name" required>
-		</md-input-container>
-		<md-input-container class="md-block m-t-40" flex>
-			<label>Middle Name</label>
-			<input ng-model="n.applicant.middle_name">
-		</md-input-container>
-		<md-input-container class="md-block m-t-40" flex>
-			<label>Last Name</label>
-			<input ng-model="n.applicant.last_name" required>
-		</md-input-container>
+
 		<md-input-container class="md-block m-t-40" flex>
 			<label>Address</label>
 			<input ng-model="n.applicant.address" required>
 		</md-input-container>
-		<input type="hidden"
-			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
 	</div>
 
 	<div layout>
@@ -103,9 +87,9 @@
 	<p>
 		<table>
 			<tr>
-				<input type="hidden" ng-value="n.line4='Name: ' + n.applicant.title + ' ' + n.applicant.full_name">
+				<input type="hidden" ng-value="n.line4='Name: ' + n.applicant.name">
 				<td>Name:</td>
-				<td>{{n.applicant.title + ' ' + n.applicant.full_name}}</td>
+				<td>{{n.applicant.name}}</td>
 			</tr>
 			<tr>
 					<input type="hidden" ng-value="n.line5='Address: ' + n.applicant.address">
