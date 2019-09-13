@@ -1,5 +1,5 @@
-<div style="width:90%" ng-controller="DummyChainsawPurchasePermitController" ng-init="currentItem=n">
-<!-- <div style="width:90%"> -->
+<!-- <div style="width:90%" ng-controller="DummyChainsawPurchasePermitController" ng-init="currentItem=n"> -->
+<div style="width:90%">
 
     <hr>
     <br>
@@ -13,7 +13,7 @@
         <div style="text-align:center"><input ng-model="currentItem.line11"></div>
         <DIV>
             <ul>
-                <li ng-repeat="line in [12, 13, 14]">
+                <li ng-repeat="line in [12, 13, 14, 15]">
                     <textarea style="width:100%" ng-model="currentItem['line'+line]"></textarea>
                 </li>
             </ul>
@@ -21,11 +21,11 @@
     </div>
     <br>
     <div>
-        <div ng-repeat="line in [15, 16, 17]">
+        <div ng-repeat="line in [16, 17, 18]">
             <input style="width:100%" ng-model="currentItem['line'+line]">
         </div>
     </div>
     <div>
-        <input style="width:100%" ng-model="currentItem['line18']">
+        <input style="width:100%" ng-model="currentItem['line19']">
     </div>
 </div>

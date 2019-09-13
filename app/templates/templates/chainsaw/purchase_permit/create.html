@@ -2,7 +2,6 @@
 	n.keywords = []; 
 	titles = ['Ms.','Mrs.','Mr.']; 
 	n.c_type = 'permit'; "
-	ng-controller="DummyChainsawPurchasePermitController"
 	>
 
 	<h3 class="align-center">PERMIT TO PURCHASE/IMPORT CHAINSAW</h3>
@@ -19,7 +18,7 @@
 	<div layout>
 		<md-input-container class="md-block m-t-40" flex>
 			<label>Name</label>
-			<textarea ng-model="n.applicant.name">
+			<textarea ng-model="n.applicant.name"></textarea>
 		</md-input-container>
 
 		<md-input-container class="md-block m-t-40" flex>
@@ -127,7 +126,7 @@
 				<li>{{n.line13='The grantee shall upon, purchase of the chainsaw unit register the same with the ' +
 					'PCSD'}}</li>
 				<li>{{n.line14='This permit is non-transferable and shall be used solely by the grantee.'}}</li>
-				<li>{{n.line15='Only ' + n.quantity_to_purchase + ' unit is allowed to be purchased under this permit.'}}</li>
+				<li>{{n.line15='Only ' + n.quantity_to_purchase + ' units is allowed to be purchased under this permit.'}}</li>
 			</ul>
 		</DIV>
 	</div>

@@ -3,8 +3,8 @@
 		font-family: 'Times New Roman', Times, serif;
 	}
 </style>
-<div class="roman" ng-controller="DummyChainsawPurchasePermitController" ng-init="currentItem=n"  style="margin:0.5in">
-<!-- <div class="roman" style="margin:0.5in"> -->
+<!-- <div class="roman" ng-controller="DummyChainsawPurchasePermitController" ng-init="currentItem=n"  style="margin:0.5in"> -->
+<div class="roman" style="margin:0.5in">
 
 	<!-- header -->
 	<div ng-include="'./app/templates/templates/header.html'"></div>
@@ -25,7 +25,7 @@
                     <tr>
                         <td>{{currentItem['line4'].split(':')[0]}}</td>
                         <td style="width:10%;text-align:center">:</td>
-                        <td>{{currentItem['line4'].split(':')[1]}}</td>
+                        <td>{{currentItem['line4'].split(':').slice(1).join(' ')}}</td>
                     </tr>
                     <tr>
                         <td>{{currentItem['line5'].split(':')[0]}}</td>
@@ -53,7 +53,7 @@
     </div>
     
     <!-- Signature -->
-	<div layout ng-controller="doc_ctrl_draft" ng-init="currentItem.sign1=currentItem.issued_by">
+	<div layout ng-controller="doc_ctrl_draft">
         <div style="width:60%">&nbsp;</div>
 		<div flex style="padding: 10px" ng-init="currentItem.sign1 = (currentItem.sign1 == undefined)? { name:'',designation:''}:currentItem.sign1;">
             <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center">
@@ -87,8 +87,8 @@
         </div>
         
     </div>
-
-    <div style="margin-left:2in;margin-right: 2in">
+<br>
+    <div style="margin-left:0.5in;margin-right: 0.5in">
             <div style="text-align:center">{{currentItem['line11']}}</div>
             <DIV>
                 <ol>
