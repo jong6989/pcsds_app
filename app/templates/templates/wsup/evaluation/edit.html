@@ -1,0 +1,26 @@
+<div ng-include="'./app/templates/application/style.html'"></div>
+<!-- <div ng-controller="DummyWSUPEvaluationController" ng-init="currentItem=n" style="width:100%"> -->
+<div style="width:100%">
+	<br>
+	<br>
+	<div layout layout-align="center">
+		<strong>WILDLIFE SPECIAL USE PERMIT EVALUATION FORM<strong>
+	</div>
+	<br>
+	<hr>
+
+    <div ng-repeat="line in ['1', '2', '3', '4', '5', '6', '7', '8', '9', 
+    '10', '11', '12', '13', '14', '15', '16', '17', '18']">
+        <input 
+            style="width:100%"
+            ng-if="line!='line9'&&line!='line11'"
+            style="width: 100%" rows="6" flex name="{{'line'+line}}"
+			ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)"
+            ng-model="currentItem['line'+line]">
+        <textarea  style="width:100%" ng-if="line=='line9'||line=='line11'" ng-model="currentItem['line'+line]"></textarea>
+        <br><br>
+	</div>
+	<br>
+	<hr>
+	<br>
+</div>

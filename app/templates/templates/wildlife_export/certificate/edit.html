@@ -70,7 +70,8 @@
         </md-input-container>
         <div flex-gt-sm ng-init="paid_date = currentItem.paid_date">
             <strong>Date Paid</strong>
-            <md-datepicker ng-model="paid_date"
+            <md-datepicker 
+                ng-model="paid_date"
                 ng-change="currentItem.paid_date = to_date(paid_date); updateDocument(currentItem.id,{'paid_date': currentItem.paid_date})"
                 md-placeholder="Date" md-open-on-focus>
             </md-datepicker>
