@@ -1,0 +1,168 @@
+<div flex layout="column" md-whiteframe="3" ng-init=" initData('CR') " layout-padding="50" layout-margin class="md-card p-l-20 p-r-20">
+    <form name="form_online_application" >
+        <div flex layout-gt-xs="row" layout-xs="column">
+            <div flex flex-gt-xs="15" layout-align="center center">
+                <img src="images/pcsd_logo.png" class="p-t-5" style="width:100%;">
+            </div>
+            <div flex layout-align="center" class="m-l-20">
+                <h4><strong>Republic of the Philippines</strong> <br>
+                    <small>Republic Act 7611</small><br>
+                    <small>PALAWAN COUNCIL for SUSTAINABLE DEVELOPMENT</small>
+                </h4>
+                Date: {{ date_now() | date : 'MMMM d, yyyy'}}
+            </div>
+        </div>
+
+        <md-divider></md-divider>
+
+        <!-- title -->
+        <div flex class="p-t-10 p-b-10">
+            <h3 class="col-blue-grey m-t-20 m-b-20">ONLINE APPLICATION FOR CHAINSAW REGISTRATION</h3>
+            <div layout-gt-sm="row" ng-init="new_application.application_type = 'new';">
+                <md-radio-group ng-model="new_application.application_type">
+                    <md-radio-button value="new" class="md-primary">New</md-radio-button>
+                    <md-radio-button value="renew"> Renew </md-radio-button>
+                </md-radio-group>
+            </div>
+        </div>
+        
+        <md-divider></md-divider>
+
+        <div class="m-t-20" >
+
+            <div flex>
+                <h4>
+                    NELSON P. DEVANADERA <br>
+                    <small>Executive Director</small><br>
+                    <small>Palawan Council for Sustainable Development Staff</small>
+                </h4>
+                 
+                <br>
+                <p ng-init="new_application.applicant = user.data.full_name; new_application.applicant_address = user.data.current_address; new_application.nature = '';">
+                    <span class="m-r-20"></span>
+                    I/We <input type="text" placeholder="applicant name" ng-model="new_application.applicant" required>, resident of 
+                    <input type="text" placeholder="applicant address" ng-model="new_application.applicant_address" required>
+                    , applies for a chainsaw Certificate of Registration. I am applying as
+                    <select ng-model="new_application.nature" required>
+                        <option value="">--click--</option>
+                        <option value="Holder/s of any subsisting tenurial instrument">Holder/s of any subsisting tenurial instrument</option>
+                        <option value="Orchard/s fruit tree farmer">Orchard/s fruit tree farmer</option>
+                        <option value="Industrial tree farmer">Industrial tree farmer</option>
+                        <option value="Licensed wood processor">Licensed wood processor</option>
+                        <option value="Any entity who shows satisfactory proof that the possession and use of chainsaw if for legal purpose">Any entity who shows satisfactory proof that the possession and use of chainsaw if for legal purpose</option>
+                        <option value="Agencies of the government that use chainsaw unit/s in the performance of official functions">Agencies of the government that use chainsaw unit/s in the performance of official functions</option>
+                    </select>
+                </p> 
+
+                <hr>
+
+                <p class="col-grey align-center">
+                    Guide : Choose from existing chainsaw list, if none, click "Add Chainsaw" Butoon to add Chainsaw Details.
+                </p>
+                
+                <div layout-gt-sm="row" layout-align="center center">
+                    <md-input-container>
+                        <label>Chainsaw</label>
+                        <md-select ng-model="new_application.chainsaw" required>
+                            <md-option ng-value="undefined"><em>No Chainsaw</em></md-option>
+                            <md-option ng-repeat="x in user.data.chainsaws" ng-value="x" >
+                            {{x.brand}},{{x.model}}, {{x.engine}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <div>
+                        <md-button class="md-raised " ng-click="showPrerenderedDialog($event,'add_chainsaw_modal')">
+                            Add Chainsaw
+                        </md-button>
+                    </div>
+                </div>
+
+                <div ng-if="new_application.chainsaw !== undefined" layout="row" layout-align="center center">
+                    <md-card>
+                        <md-card-content>
+                            <h4 class="align-center">DETAILED SPECIFICATIONS</h4>
+                            <hr>
+                            <div>
+                                Brand: <strong>{{new_application.chainsaw.brand}}</strong><br>
+                                Model: <strong>{{new_application.chainsaw.model}}</strong><br>
+                                Engine Type and Horsepower: <strong>{{new_application.chainsaw.engine}}</strong><br>
+                                Maximum Length of Guidebar: <strong>{{new_application.chainsaw.guidebar_length}}</strong><br>
+                                Serial Number: <strong>{{new_application.chainsaw.serial}}</strong><br>
+                                Other Distinguishing Marks, If any: <strong>{{new_application.chainsaw.marks}}</strong><br>
+                                Name of Dealer: <strong>{{new_application.chainsaw.dealer_name}}</strong><br>
+                                Address: <strong>{{new_application.chainsaw.dealer_address}}</strong><br>
+                            </div>
+                        </md-card-content>
+                    </md-card>
+                </div>
+
+                <hr>
+
+                <p>
+                    <span class="m-r-20"></span>
+                    The requirements needed for my application, as indicated at the back hereof, are hereby submitted for your evaluation. I agree that the filing of this application does not authorize me to use, or in any manner operate the chainsaw unit until after the Certificate of Registration has been issued.
+                </p>
+
+                <p>
+                    <span class="m-r-20"></span>
+                    Further I understand that any false representation or declaration embodied in this application or submitted requirements shall be a ground for the denial of this application without prejudice to the filing of appropriate cases.
+                </p>
+    
+                <hr>
+    
+                
+                <strong>Required Attachments :</strong>
+                <div ng-init="new_application.attachments = [
+                        {name:'Affidavit of Legal Use'},
+                        {name:'Business Permit from LGU(Mayors Permit)'},
+                        {name:'Copy of Chainsaw Registration (COR)'},
+                        {name:'Barangay Certificate/Clearance'},
+                        {name:'Permit to Operate (PCA/DENR)'},
+                        {name:'Barangay Resolution'},
+                        {name:'Certificate from Head Office'},
+                        {name:'Picture of Area'},
+                        {name:'Copy of Land Title'},
+                    ]
+                    ">
+                    <ol>
+                        <li ng-repeat="x in new_application.attachments">
+                            <cite ng-class="{'col-green':(x.url !== undefined)}">{{x.name}}</cite>
+                            <i ng-hide="x.url == undefined" class="fa fa-check col-green"></i>
+                            <i ng-show="x.url == undefined" class="fa fa-times col-red"></i>
+                            <button class="col-blue" ng-click="change_attachment_index($index);showPrerenderedDialog($event,'upload_modal')">upload</button>
+                        </li>
+                    </ol>
+
+                    <strong ng-init="ia = new_application.attachments.length;ib = new_application.attachments.length + 1;ic = new_application.attachments.length + 2">
+                        Other attachments </strong>
+                        <cite class="col-grey">(Optional for attachments not stated above)</cite>
+                    <div>
+                        <input placeholder="File name" ng-model="new_application.attachments[ia].name" > 
+                    </div>
+                    <div>
+                        <input placeholder="File name" ng-model="new_application.attachments[ib].name" > 
+                    </div>
+                    <div>
+                        <input placeholder="File name" ng-model="new_application.attachments[ic].name" > 
+                    </div>
+
+                </div>
+    
+            </div>
+    
+            <hr class="m-t-20">
+            <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <md-button ng-hide=" is_loading " ng-disabled="form_online_application.$invalid" ng-click="submit_application(new_application,'Application for Chainsaw Registration','cr')" 
+                class="md-primary md-raised md-block" >
+                <strong class="font-16">Submit Application</strong>
+            </md-button>
+        </div>
+
+    </form>
+
+    <!-- modals -->
+    <div style="visibility: hidden" ng-include="'app/templates/modals/chainsaw/add.html'" ></div>
+    <div style="visibility: hidden" ng-include="'app/templates/modals/select/upload.html'" ></div>
+</div>

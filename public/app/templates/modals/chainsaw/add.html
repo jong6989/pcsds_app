@@ -1,0 +1,72 @@
+<div  class="md-dialog-container" id="add_chainsaw_modal" > 
+    <md-dialog aria-label="Add Chainsaw">
+        <form name="form_add_chainsaw" ng-controller="profile_controller">
+            <md-toolbar class="bg-blue-grey">
+            <div class="md-toolbar-tools m-t-10">
+                <strong> Add New Chainsaw  </strong>
+            </div>
+            </md-toolbar>
+            
+            <md-dialog-content layout-padding="20"  
+                ng-init="chainsaw = {}">
+
+                <h3 class="align-center">DETAILED SPECIFICATIONS</h3>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Brand</label>
+                    <input ng-model="chainsaw.brand" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Model</label>
+                    <input ng-model="chainsaw.model" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Engine Type and Horsepower:</label>
+                    <input ng-model="chainsaw.engine" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Maximum Length of Guidebar</label>
+                    <input ng-model="chainsaw.guidebar_length" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Serial Number</label>
+                    <input ng-model="chainsaw.serial" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Other Distinguishing Marks, If any</label>
+                    <input ng-model="chainsaw.marks" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Name of Dealer</label>
+                    <input ng-model="chainsaw.dealer_name" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Dealer Address</label>
+                    <input ng-model="chainsaw.dealer_address" required>
+                </md-input-container>
+
+
+            </md-dialog-content>
+
+            <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="close_dialog()">
+                close
+            </md-button>
+            <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <md-button type="submit" ng-disabled="form_add_chainsaw.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="add_chainsaw(chainsaw)">
+                save
+            </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</div>

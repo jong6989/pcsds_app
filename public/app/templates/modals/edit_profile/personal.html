@@ -1,0 +1,96 @@
+<div  class="md-dialog-container" id="personal_modal" > 
+
+        <md-dialog aria-label="Personal Data">
+            <form name="form_edit_personal" ng-controller="login_controller">
+                <md-toolbar class="bg-blue-grey">
+                <div class="md-toolbar-tools m-t-10">
+                    <strong> Edit Personal Data  </strong>
+                </div>
+                </md-toolbar>
+                
+                <md-dialog-content layout-padding="20"  
+                    ng-init="edit_personal = { place_of_birth : user.data.place_of_birth, nationality : user.data.nationality , 
+                        gender : user.data.gender , civil_status : user.data.civil_status, 
+                        spouse_name : user.data.spouse_name, father : user.data.father , mother : user.data.mother }">
+    
+                    <div layout-padding>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Password</label>
+                            <input ng-model="editProfilePassword" type="password" required>
+                        </md-input-container>
+                    </div>
+    
+                    <div layout-gt-sm="row">
+                        
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Birth Place Address</label>
+                            <input ng-model="edit_personal.place_of_birth" required>
+                        </md-input-container>
+            
+                        <md-input-container>
+                            <label>Nationality</label>
+                            <md-select ng-model="edit_personal.nationality" required>
+                                <md-option><em>None</em></md-option>
+                                <md-option ng-repeat="x in nationalities" ng-value="x.nationality" >
+                                    {{x.en_short_name}} - {{x.nationality}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        
+                    </div>
+
+                    <div layout-gt-sm="row">
+                        <strong class="col-grey m-r-10">
+                            Gender: 
+                        </strong>
+                        <md-radio-group ng-model="edit_personal.gender" required>
+                            <md-radio-button value="male" class="md-primary">Male</md-radio-button>
+                            <md-radio-button value="female"> Female</md-radio-button>
+                        </md-radio-group>
+            
+                        <strong class="col-grey m-r-10">
+                            Civil Status : 
+                        </strong>
+            
+                        <md-radio-group ng-model="edit_personal.civil_status" required>
+                            <md-radio-button value="single" class="md-primary"> Single </md-radio-button>
+                            <md-radio-button value="married" class="md-primary"> Married </md-radio-button>
+                            <md-radio-button value="widowed" class="md-primary"> Widowed </md-radio-button>
+                            <md-radio-button value="separated" class="md-primary"> Separated </md-radio-button>
+                        </md-radio-group>
+            
+                        <md-input-container ng-if="edit_personal.civil_status == 'married'" class="md-block" flex-gt-sm>
+                            <label>Spouse Name :</label>
+                            <input ng-model="edit_personal.spouse_name" required>
+                        </md-input-container>
+                    </div>
+
+                    <div layout-gt-sm="row">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Father's Full Name : </label>
+                            <input ng-model="edit_personal.father" required>
+                        </md-input-container>
+            
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Mother's Maiden Name :</label>
+                            <input ng-model="edit_personal.mother" required>
+                        </md-input-container>
+                    </div>
+    
+                </md-dialog-content>
+    
+                <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="close_dialog()">
+                    close
+                </md-button>
+                <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+                <md-button type="submit" ng-disabled="form_edit_personal.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="edit_profile('personal',edit_personal,editProfilePassword)">
+                    save
+                </md-button>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
+    </div>

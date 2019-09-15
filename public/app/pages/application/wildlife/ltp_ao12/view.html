@@ -1,0 +1,14 @@
+<div ng-controller="application_controller" ng-init="set_page_title('Application for Local Transport Permit of AO12')">
+    <md-tabs md-dynamic-height md-border-bottom md-selected="selectedIndex">
+        <md-tab label="Info">
+          <md-content layout="column" class="md-padding" style="height:{{get_window_height() - 160}}px">
+            <div ng-include="'app/pages/application/wildlife/ltp_ao12/requirements.html'"></div>
+          </md-content>
+        </md-tab>
+        <md-tab label="Application Form">
+          <md-content class="md-padding" style="height:{{get_window_height() - 160}}px">
+            <div ng-include="'app/pages/application/wildlife/ltp_ao12/application_form.html'"></div>
+          </md-content>
+        </md-tab>
+    </md-tabs>
+</div>

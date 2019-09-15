@@ -1,0 +1,79 @@
+<div  class="md-dialog-container" id="gID_modal" > 
+
+        <md-dialog aria-label="Government ID">
+            <form name="form_edit_gID" ng-controller="login_controller">
+                <md-toolbar class="bg-blue-grey">
+                <div class="md-toolbar-tools m-t-10">
+                    <strong> Edit Government ID  </strong>
+                </div>
+                </md-toolbar>
+                
+                <md-dialog-content layout-padding="20" ng-init="edit_gID = { tin_no : user.data.tin_no, gov_id : user.data.gov_id }">
+    
+                    <div layout-padding>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Password</label>
+                            <input ng-model="editProfilePassword" type="password" required>
+                        </md-input-container>
+                    </div>
+    
+                    <div layout-gt-sm="row" >
+    
+                        <md-input-container class="md-block m-r-10" flex-gt-sm>
+                            <label>Tax Identification Number : </label>
+                            <input ng-model="edit_gID.tin_no" required>
+                        </md-input-container>
+            
+                        <md-autocomplete
+                            class="md-block m-r-10" flex-gt-sm="30"
+                            md-selected-item="edit_gID.gov_id.name"
+                            md-search-text="sq"
+                            md-search-text-change="edit_gID.gov_id.name = sq"
+                            md-items="x in gov_ids"
+                            md-item-text="x"
+                            md-min-length="0"
+                            placeholder="ID NAME:">
+                            <md-item-template>
+                            {{x}}
+                            </md-item-template>
+                        </md-autocomplete>
+
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>ID Number</label>
+                            <input ng-model="edit_gID.gov_id.number" required>
+                        </md-input-container>
+                        
+                    </div>
+
+                    <div layout-gt-sm="row">
+                        <div flex-gt-sm ng-init="dateIssued = edit_gID.gov_id.date_issued" class=" m-r-10">
+                            <md-datepicker ng-model="dateIssued" ng-change="edit_gID.gov_id.date_issued = to_date(dateIssued)" md-placeholder="Date Issued" md-open-on-focus required></md-datepicker>
+                        </div>
+
+                        <md-input-container class="md-block m-r-10" flex-gt-sm>
+                            <label>Place Issued</label>
+                            <input ng-model="edit_gID.gov_id.place_issued" required>
+                        </md-input-container>
+            
+                        <div flex-gt-sm ng-init="dateValid = edit_gID.gov_id.valid_until">
+                            <md-datepicker ng-model="dateValid" ng-change="edit_gID.gov_id.valid_until = to_date(dateValid)" md-placeholder="Valid Until" md-open-on-focus required></md-datepicker>
+                        </div>
+                    </div>
+    
+                </md-dialog-content>
+    
+                <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="close_dialog()">
+                close
+                </md-button>
+                <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+                <md-button type="submit" ng-disabled="form_edit_gID.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="edit_profile('gID',edit_gID,editProfilePassword)">
+                    save
+                </md-button>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
+    </div>

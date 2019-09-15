@@ -1,0 +1,32 @@
+<div ng-controller="single_controller" ng-init="set_page_title('QR Code');" layout="row" layout-align="center center" id="qrCard">
+    
+    <div flex-md="60" layout-padding>
+        <md-card>
+            <md-card-title>
+                <h4 class="align-center">TRANSACTION QR CODE</h4>
+            </md-card-title>
+            <md-divider></md-divider>
+            <md-card-content>
+                <h6 class="align-center">No: {{params.id}} </h6>
+                <div layout="row" layout-align="center center">
+                    <div id="qr_code" ng-init="generate_qr('qr_code', qr_address + '#!?type='+params.type+'&id=' + params.id)"></div>
+                </div>
+                <div class="m-t-5 align-center">This image serves as your transaction receipt. </div>
+                <div class="align-center">Scan this QR code with any mobile app capable of scanning QR codes. </div> 
+                <div layout="row" layout-align="center center">
+                        <a ng-href="{{qr_address + '#!?type='+params.type+'&id=' + params.id}}">{{qr_address + '#!?type='+params.type+'&id=' + params.id}}</a>
+                </div>
+            </md-card-content>
+        </md-card>
+        <div layout="row" class="print-hide">
+            <md-button class="md-warn m-t-20" ng-click="save_qr('qr_code', params.type+'-'+params.id)">
+                Save QR
+            </md-button>
+            <md-button class="md-warn m-t-20" ng-click="printDiv('qrCard')">
+                Print
+            </md-button>
+        </div>
+    </div>
+    
+
+</div>

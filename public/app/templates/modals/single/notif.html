@@ -1,0 +1,33 @@
+<md-dialog aria-label="Notification">
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Notification</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <i class="fa fa-cross col-red"></i>
+                </md-button>
+            </div>
+        </md-toolbar>
+    
+        <md-dialog-content layout-padding>
+        
+           <md-card>
+               <md-card-title>
+                    <h3>Notification</h3>
+               </md-card-title>
+               <md-card-content>
+                    {{data.message}}{{selectedData.message}}
+               </md-card-content>
+           </md-card>
+
+        </md-dialog-content>
+    
+        <md-dialog-actions layout="row">
+        <span flex></span>
+        <md-button ng-click="cancel()">
+            Close
+        </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

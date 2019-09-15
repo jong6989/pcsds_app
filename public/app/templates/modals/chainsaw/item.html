@@ -1,0 +1,29 @@
+<div class="md-dialog-container" id="single_chainsaw_item">
+    <md-dialog layout-padding layout="column" layout-align="center center">
+        <md-dialog-content>
+            <h4 class="align-center">DETAILED SPECIFICATIONS</h4>
+            <hr>
+            <div>
+                Brand: <strong>{{single_chainsaw.brand}}</strong><br>
+                Model: <strong>{{single_chainsaw.model}}</strong><br>
+                Engine Type and Horsepower: <strong>{{single_chainsaw.engine}}</strong><br>
+                Maximum Length of Guidebar: <strong>{{single_chainsaw.guidebar_length}}</strong><br>
+                Serial Number: <strong>{{single_chainsaw.serial}}</strong><br>
+                Other Distinguishing Marks, If any: <strong>{{single_chainsaw.marks}}</strong><br>
+                Name of Dealer: <strong>{{single_chainsaw.dealer_name}}</strong><br>
+                Address: <strong>{{single_chainsaw.dealer_address}}</strong><br>
+            </div>
+            <hr>
+            <div layout="row" layout-align="end">
+                <md-button class="md-raised" ng-click="close_dialog()">
+                    Close
+                </md-button>
+                <md-button class="md-raised md-warn" ng-dblclick="remove_chainsaw(single_chainsaw)">
+                    <md-tooltip md-direction="top"> Double Click to Remove Chainsaw </md-tooltip>
+                    Remove
+                </md-button>
+            </div>
+        </md-dialog-content>
+
+    </md-dialog>
+</div>

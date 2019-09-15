@@ -1,0 +1,347 @@
+<div flex layout="column" md-whiteframe="3" ng-init=" initData() " layout-padding="50" layout-margin class="md-card p-l-20 p-r-20">
+    <form name="form_online_ltp_application" >
+        <div flex layout-gt-xs="row" layout-xs="column">
+            <div flex flex-gt-xs="15" layout-align="center center">
+                <img src="images/pcsd_logo.png" class="p-t-5" style="width:100%;">
+            </div>
+            <div flex layout-align="center" class="m-l-20">
+                <h4><strong>Republic of the Philippines</strong> <br>
+                    <small>Republic Act 7611</small><br>
+                    <small>PALAWAN COUNCIL for SUSTAINABLE DEVELOPMENT</small>
+                </h4>
+                Date: {{ date_now() | date : 'MMMM d, yyyy'}}
+            </div>
+        </div>
+
+        <md-divider></md-divider>
+
+        <!-- title -->
+        <div flex class="p-t-10 p-b-10">
+            <h3 class="col-blue-grey">ONLINE APPLICATION FOR LOCAL TRANSPORT PERMIT OF WILDLIFE PRODUCTS</h3>
+        </div>
+        
+        <md-divider></md-divider>
+
+        <div flex>
+            <h4>
+                NELSON P. DEVANADERA <br>
+                <small>Executive Director</small><br>
+                <small>Palawan Council for Sustainable Development Staff</small>
+            </h4>
+
+            Sir: <br>
+            
+                <span class="p-l-20"></span>I would like to request for the inspection and certification of the following species/items and corresponding information intended for transport by virtue of 
+             <br>
+              <div layout="row">
+
+                <md-input-container>
+                  <label>Permit Type:</label>
+                  <md-select ng-model="new_application.required_permit_type" required>
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="x in permit_types" ng-value="x.code" >
+                      {{x.name}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+
+                <md-input-container flex class="md-block" >
+                  <label>Permit Number :</label>
+                  <input ng-model="new_application.required_permit" required>
+                </md-input-container>
+             </div>
+          
+
+            to wit: 
+            <br>
+
+            <h4 class="col-blue-grey" ng-init="new_application.purpose = { commercial : false, research : false, exhibit : false}">
+                Purpose of transport:
+            </h4>
+            <div flex layout-gt-sm="row">
+                <div flex-gt-sm="30"><md-checkbox aria-label="commercial" ng-model="new_application.purpose.commercial"></md-checkbox> Commercial </div>
+                <div flex-gt-sm="30"><md-checkbox aria-label="research" ng-model="new_application.purpose.research"></md-checkbox> Research </div>
+                <div flex-gt-sm="30"><md-checkbox aria-label="Exhibit" ng-model="new_application.purpose.exhibit"></md-checkbox> Exhibit </div>
+
+                
+
+            </div>
+
+            <md-autocomplete
+                class="md-block" flex-gt-sm="30"
+                  md-selected-item="new_application.purpose.other"
+                  md-search-text="napo"
+                  md-search-text-change="new_application.purpose.other = napo"
+                  md-items="x in other_purpose"
+                  md-item-text="x"
+                  md-min-length="0"
+                  placeholder="Others Specify:">
+                <md-item-template>
+                  {{x}}
+                </md-item-template>
+            </md-autocomplete>
+
+            <h4 class="col-blue-grey" ng-init="new_application.place_of_origin = {}">
+                Place of origin:
+            </h4>
+            <div layout="row">
+
+                <md-input-container>
+                  <label>Municipality</label>
+                  <md-select ng-model="new_application.place_of_origin.municipality" required>
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="municipality in municipalities" 
+                        ng-value="municipality.name" ng-click="set_municipality(municipality)">
+                      {{municipality.name}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+
+                <md-input-container ng-show="mun.brgy.length > 0">
+                  <label>Barangay</label>
+                  <md-select ng-model="new_application.place_of_origin.barangay" required>
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="bgy in mun.brgy" 
+                        ng-value="bgy.name">
+                      {{bgy.name}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+
+            </div>
+                
+            <h4 class="col-blue-grey" ng-init="new_application.collector_or_supplier = {}">
+                Collector/Supplier:
+            </h4>
+            <div layout="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                   <label>Supplier's Name</label>
+                   <input ng-model="new_application.collector_or_supplier.name" required>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                   <label>Supplier's Address</label>
+                   <input ng-model="new_application.collector_or_supplier.address" required>
+                </md-input-container>
+                
+            </div>
+
+            <h4 class="col-blue-grey" ng-init="new_application.specimen = [{}]" flex>
+                Specimen: <md-button class="md-raised" ng-click="new_application.specimen.push({});">Add Specimen</md-button>
+            </h4>
+            <div>
+                <div ng-repeat="x in new_application.specimen"  flex layout-gt-sm="row" >
+                    <div flex-gt-sm="5">
+                        <i ng-if="new_application.specimen.length > 1" class="fa fa-trash pointer col-red" ng-click="new_application.specimen.splice(new_application.specimen.indexOf(x),1);"></i>
+                        {{$index + 1}}.
+                    </div>
+
+                    <md-autocomplete
+                        class="md-block" flex-gt-sm="30" required
+                          md-selected-item="new_application.specimen[new_application.specimen.indexOf(x)].species_name"
+                          md-search-text="nass"
+                          md-search-text-change="new_application.specimen[new_application.specimen.indexOf(x)].species_name = nass"
+                          md-items="x in ao12_specimen_list"
+                          md-item-text="x"
+                          md-min-length="0"
+                          placeholder="Species Name">
+                        <md-item-template>
+                          {{x}}
+                        </md-item-template>
+                    </md-autocomplete>
+
+                    <md-input-container class="md-block" flex-gt-sm="10">
+                       <label>Quantity</label>
+                       <input type="number" min="1" max="9999" ng-model="new_application.specimen[new_application.specimen.indexOf(x)].species_qty" required>
+                    </md-input-container>
+
+                    <md-input-container>
+                      <label>Unit</label>
+                      <md-select ng-model="new_application.specimen[new_application.specimen.indexOf(x)].species_unit" required>
+                        <md-option value="pcs">pcs</md-option>
+                        <md-option value="kg">kg</md-option>
+                        <md-option value="cm">cm</md-option>
+                        <md-option value="dozen">dozen</md-option>
+                      </md-select>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="10">
+                       <label>Boxes</label>
+                       <input type="number" min="1" max="9999" ng-model="new_application.specimen[new_application.specimen.indexOf(x)].species_boxes" required>
+                    </md-input-container>
+
+                    <md-autocomplete
+                        class="md-block" flex-gt-sm="30" required
+                          md-selected-item="new_application.specimen[new_application.specimen.indexOf(x)].species_des"
+                          md-search-text="nassd"
+                          md-search-text-change="new_application.specimen[new_application.specimen.indexOf(x)].species_des = nassd"
+                          md-items="x in specimen_quality_list"
+                          md-item-text="x"
+                          md-min-length="0"
+                          placeholder="Classification">
+                        <md-item-template>
+                          {{x}}
+                        </md-item-template>
+                    </md-autocomplete>
+
+                </div>
+            </div>
+
+            <p>The above species/ commodities/ items will be transported by:</p>
+
+            <h4 class="col-blue-grey" ng-init="new_application.shipper = {}">
+                Shipper:
+            </h4>
+            <div layout="row">
+
+                <md-autocomplete
+                    class="md-block" flex-gt-sm="30" required
+                      md-selected-item="new_application.shipper.name"
+                      md-search-text="nashippername"
+                      md-search-text-change="new_application.shipper.name = nashippername"
+                      md-items="x in shippers_name"
+                      md-item-text="x"
+                      md-min-length="0"
+                      placeholder="Shipper's Name">
+                    <md-item-template>
+                      {{x}}
+                    </md-item-template>
+                </md-autocomplete>
+
+                <md-autocomplete
+                    class="md-block" flex-gt-sm="30" required
+                      md-selected-item="new_application.shipper.address"
+                      md-search-text="nashipperaddress"
+                      md-search-text-change="new_application.shipper.address = nashipperaddress"
+                      md-items="y in shippers_address"
+                      md-item-text="y"
+                      md-min-length="0"
+                      placeholder="Shipper's Address">
+                    <md-item-template>
+                      {{y}}
+                    </md-item-template>
+                </md-autocomplete>
+                
+            </div>
+
+            <h4 class="col-blue-grey" ng-init="new_application.recipient = {}">
+                Recipient:
+            </h4>
+            <div layout="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                   <label>Recipient's Name</label>
+                   <input ng-model="new_application.recipient.name" required>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                   <label>Recipient's Address</label>
+                   <input ng-model="new_application.recipient.address" required>
+                </md-input-container>
+            </div>
+
+            <h4 class="col-blue-grey" >
+                On:
+            </h4>
+            <md-datepicker ng-model="date_of_transport" ng-change="new_application.date_of_transport = to_date(date_of_transport)" md-placeholder="Date of transport" md-open-on-focus></md-datepicker>
+
+            <h4 class="col-blue-grey" ng-init="new_application.via = {aircraft : true, vessel : false}">
+                Via:
+            </h4>
+            <div layout-gt-xs="row">
+                <div flex><md-checkbox aria-label="Aircraft" ng-model="new_application.via.aircraft"></md-checkbox> Aircraft </div>
+                <div flex><md-checkbox aria-label="Vessel" ng-model="new_application.via.vessel"></md-checkbox> Vessel </div>
+                <br>
+                
+            </div>
+
+            <div>
+                <md-input-container class="md-block">
+                    <label>other mode of transportation:</label>
+                    <input ng-model="new_application.via.other">
+                </md-input-container>
+            </div>
+
+            <h4 class="col-blue-grey" >
+                Located at the:
+            </h4>
+            <div layout="row">
+                <md-autocomplete
+                    class="md-block" flex-gt-sm="30" required
+                      md-selected-item="new_application.place_of_transport"
+                      md-search-text="nasplaceoT"
+                      md-search-text-change="new_application.place_of_transport = nasplaceoT"
+                      md-items="x in places_of_transport"
+                      md-item-text="x"
+                      md-min-length="0"
+                      placeholder="Place of Transport">
+                    <md-item-template>
+                      {{x}}
+                    </md-item-template>
+                </md-autocomplete>
+            </div>
+
+            <hr>
+            
+            <h4 class="col-blue-grey">
+                Applicant:
+            </h4>
+            <div layout="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                   <label>Applicant's Name</label>
+                   <input ng-model="new_application.applicant" required>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm>
+                   <label>Applicant's Contact Number</label>
+                   <input ng-model="new_application.contact" required>
+                </md-input-container>
+            </div>
+
+            
+            <strong>Required Attachments :</strong>
+                <div ng-init="new_application.attachments = [
+                    {name:'Documents supporting the legal possession - (i.e. WCP, WFP, WSUP, receipt from holders of WFP)'},
+                    {name:'FIQS – Final Certification'},
+                    {name:'Auxiliary invoice from the Municipal/City Government'},
+                    {name:'Image of Actual Specimen'}
+                    ]
+                    ">
+                <ol>
+                    <li ng-repeat="x in new_application.attachments">
+                        <cite ng-class="{'col-green':(x.url !== undefined)}">{{x.name}}</cite>
+                        <i ng-hide="x.url == undefined" class="fa fa-check col-green"></i>
+                        <i ng-show="x.url == undefined" class="fa fa-times col-red"></i>
+                        <button class="col-blue" ng-click="change_attachment_index($index);showPrerenderedDialog($event,'upload_modal')">upload</button>
+                    </li>
+                </ol>
+
+                <strong ng-init="ia = new_application.attachments.length;ib = new_application.attachments.length + 1;ic = new_application.attachments.length + 2">
+                    Other attachments </strong>
+                    <cite class="col-grey">(Optional for attachments not stated above)</cite>
+                <div>
+                    <input placeholder="File name" ng-model="new_application.attachments[ia].name" > 
+                </div>
+                <div>
+                    <input placeholder="File name" ng-model="new_application.attachments[ib].name" > 
+                </div>
+                <div>
+                    <input placeholder="File name" ng-model="new_application.attachments[ic].name" > 
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr class="m-t-20">
+        <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+        <md-button ng-hide=" is_loading " ng-disabled="form_online_ltp_application.$invalid" ng-click="submit_application(new_application,'Application for Local Transport Permit AO12','ltp_ao12')" 
+            class="md-primary md-raised md-block" >
+            <strong class="font-16">Submit Application</strong>
+        </md-button>
+
+    </form>
+    <!-- modals -->
+    <div style="visibility: hidden" ng-include="'app/templates/modals/select/upload.html'" ></div>
+</div>
