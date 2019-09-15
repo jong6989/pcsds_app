@@ -11,8 +11,8 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 
 	<div layout>
 		<md-input-container flex>
-			<label>(Unknown Field)</label>
-			<input ng-model="n.unknown" required>
+			<label>Inspector Name:</label>
+			<input ng-model="n.inspector" required>
 		</md-input-container>
 		<md-input-container class="md-block"  flex>
 			<label>Place of Origin of Wildlife/Wildlife Derivative</label>
@@ -114,7 +114,7 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 	<div layout>
 		<md-input-container flex>
 		    <label>Paid amount</label>
-		    <input ng-model="n.paid_amount" >
+		    <input type="number" ng-model="n.paid_amount" >
 		</md-input-container>
 		<md-input-container flex>
 		    <label>OR Number</label>
@@ -134,8 +134,8 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 	<br>
 	<p> <span class="m-l-50"></span>
 		{{ n.line1 = 
-			'This is to certify that the ' + n.unknown + ' has undertaken the inspection of wildlife/wildlife derivative ' +
-			' and by-products which was produced/gathered from ' + origin + ' for the purposes of ' + n.purpose + '. ' +
+			'This is to certify that ' + n.inspector + ' has undertaken the inspection of wildlife/wildlife derivative ' +
+			' and by-products which was produced/gathered from ' + n.origin + ' for the purposes of ' + n.purpose + '. ' +
 			'The species and its quantity of are as follows:'
 		}}
 	</p>

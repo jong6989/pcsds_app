@@ -18,7 +18,7 @@
 	<div layout>
 		<md-input-container class="md-block m-t-40" flex>
 			<label>Name</label>
-			<textarea ng-model="n.applicant.name"></textarea>
+			<textarea ng-model="n.applicant.name" required></textarea>
 		</md-input-container>
 
 		<md-input-container class="md-block m-t-40" flex>
@@ -55,16 +55,18 @@
 	<div layout>
 		<md-input-container flex>
 		    <label>Paid amount</label>
-		    <input ng-model="n.paid_amount" type="number">
+		    <input ng-model="n.paid_amount" type="number" required>
 		</md-input-container>
 		<md-input-container flex>
 		    <label>OR Number</label>
-		    <input ng-model="n.paid_or_number" >
+		    <input ng-model="n.paid_or_number" required>
 		</md-input-container>
 		<md-input-container flex>
 			<md-datepicker ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
 				md-placeholder="Date of Payment"
-				md-open-on-focus>
+				md-open-on-focus 
+				required
+				>
 			</md-datepicker>
 		</md-input-container>
 	</div>

@@ -49,9 +49,19 @@
 				<td>Local Name</td>
 			</tr>
 			<tr ng-repeat="specy in n.species">
-				<td><input ng-model="n.species[$index].kind"></td>
-				<td><input ng-model="n.species[$index].scientific_name" required></td>
-				<td><input ng-model="n.species[$index].local_name" required></td>
+				<td>
+					<md-input-container>
+						<input ng-model="n.species[$index].kind">
+					</md-input-container>
+					</td>
+				<td>
+					<md-input-container>
+						<input ng-model="n.species[$index].scientific_name" required></td>
+					</md-input-container>
+				<td>
+					<md-input-container>
+						<input ng-model="n.species[$index].local_name" required></td>
+					</md-input-container>
 				<td>
 						<md-button 
 						ng-if="n.species.length > 1"
