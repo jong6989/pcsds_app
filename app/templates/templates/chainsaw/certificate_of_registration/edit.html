@@ -1,0 +1,53 @@
+<!-- <div style="width:90%" ng-controller="DummyChainsawRegistrationController" ng-init="currentItem=n"> -->
+<div style="width:90%">
+    <div class="align-center">
+        <div>{{currentItem.line1}}
+        </div>
+        <div style="width:100%" ng-repeat="line in [2, 3, 4, 5]">
+            <input style="width:100%" ng-if="line!=3" ng-model="currentItem['line'+line]">
+            <textarea style="width:100%" ng-if="line==3" ng-model="currentItem['line'+line]"></textarea>
+            <br><br>
+        </div>
+    </div>
+    <div>
+        <div ng-repeat="line in [6, 7, 8]">
+            <input style="width:100%" ng-if="line!=8" ng-model="currentItem['line'+line]">
+            <textarea style="width:100%" ng-if="line==8" ng-model="currentItem['line'+line]"></textarea>
+            <br><br>
+        </div>
+    </div>
+    <br>
+    <div>
+        <table>
+            <tr>
+                <td>Brand</td>
+                <td><input ng-model="currentItem.chainsaw.brand"></td>
+                <td>Serial/Engine No.:</td>
+                <td><input ng-model="currentItem.chainsaw.serial_number"></td>
+            </tr>
+            <tr>
+                <td>Engine Type and Horsepower:</td>
+                <td><input ng-model="currentItem.chainsaw.horsepower"></td>
+                <td>PCSD Metal Seal No.:</td>
+                <td><input ng-model="currentItem.chainsaw.metal_seal_number"></td>
+            </tr>
+            <tr>
+                <td>Issued on</td>
+                <td><input ng-model="currentItem.issued_date"></td>
+                <td>at</td>
+                <td><input ng-model="currentItem.issued_at"></td>
+            </tr>
+            <tr>
+                <td>Expiry Date</td>
+                <td><input ng-model="currentItem.expiry_date"></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </div>
+    <br><br>
+    APPROVED:
+    <div ng-repeat="line in [13, 14, 15, 16, 17, 18]" >
+        <input ng-model="currentItem['line'+line]" style="width:100%"><br><br>
+    </div>
+</div>

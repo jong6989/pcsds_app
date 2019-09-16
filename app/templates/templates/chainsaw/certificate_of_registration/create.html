@@ -1,0 +1,192 @@
+<div ng-init="n.subject = 'CHAINSAW CERTIFICATE OF REGISTRATION'; 
+	n.keywords = []; 
+	n.c_type = 'permit'; "
+	>
+
+	<h3 class="align-center">CHAINSAW CERTIFICATE OF REGISTRATION</h3>
+	<hr>
+	<br>
+	<md-input-container class="md-block m-t-40">
+		<label>Registration No.</label>
+		<input ng-model="n.registration_number" required>
+	</md-input-container>
+	<hr>
+	<br>
+
+	<strong>Applicant Information</strong>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Name</label>
+			<input ng-model="n.applicant.name" required>
+		</md-input-container>
+
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Address</label>
+			<input ng-model="n.applicant.address" required>
+		</md-input-container>
+	</div>
+
+	<div layout>
+		<md-input-container flex>
+			<label>Intended Use of Chainsaw</label>
+			<input ng-model="n.intended_use" ng-value="Legal Use"  required>
+		</md-input-container>
+		<md-input-container flex>
+			<label>Limitation of Use</label>
+			<textarea ng-model="n.limitation_of_use"></textarea>
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container flex>
+			<label>Brand</label>
+			<input ng-model="n.chainsaw.brand">
+		</md-input-container>
+		<md-input-container flex>
+			<label>Serial/Engine Number</label>
+			<input ng-model="n.chainsaw.serial_number">
+		</md-input-container>
+		<md-input-container flex>
+			<label>Engine Type and Horsepower</label>
+			<input ng-model="n.chainsaw.horsepower">
+		</md-input-container>
+		<md-input-container flex>
+			<label>PCSD Metal Seal Number</label>
+			<input ng-model="n.chainsaw.metal_seal_number">
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container flex>
+			<md-datepicker 
+			ng-init="issued_date=n.issued_date"
+			ng-model="issued_date"
+			ng-change="n.issued_date=to_date(issued_date)"
+			md-placeholder="Issued Date"
+			md-open-on-focus
+			required
+			>
+				</md-datepicker>
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker 
+				ng-init="expiry_date=n.expiry_date"
+				ng-model="expiry_date"
+				ng-change="n.expiry_date=to_date(expiry_date)"
+				md-placeholder="Expiry Date"
+				md-open-on-focus
+				required
+			></md-datepicker>
+		</md-input-container>
+		<md-input-container flex>
+			<label>Issued At</label>
+			<input ng-model="n.issued_at">
+		</md-input-container>
+	</div>
+
+	<hr>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+		    <label>Paid amount</label>
+		    <input ng-model="n.paid_amount" type="number" required>
+		</md-input-container>
+		<md-input-container flex>
+		    <label>OR Number</label>
+		    <input ng-model="n.paid_or_number" required>
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker 
+				ng-init="paid_date=n.paid_date"
+				ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
+				md-placeholder="Date of Payment"
+				md-open-on-focus 
+				required
+				>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<br>
+	<div><strong>PREVIEW</strong></div>
+	<p>
+		<div class="align-center">
+			<strong>{{ n.line1 = 'CERTIFICATE OF REGISTRATION'}}</strong><br>
+			{{ n.line2 = n.registration_number }}
+		</div>
+	</p>
+	<br>
+	<p>
+		<div class="align-center">
+			{{ n.line3 = 'After having complied with the provisions of PCSD Administrative Order No.7 Series of 2012' + 
+				'otherwise known as the Implementing Rules and Regulations of the Chainsaw Act of 2002 (R.A. No. 9175) ' + 
+				'entitled "AN ACT REGULATING THE POSSESSION, OWNERSHIP, SALE, IMPORTATION AND USE OF ' + 
+				'CHAINSAWS PENALIZING VIOLATIONS THEREOF AND FOR OTHER RELATED PURPOSES" ' +
+				'for the Province of Palawan, this Certificate of Registration to possess, own, or use a chainsaw ' +
+				'is hereby issued to: '}}
+		</div>
+	</p>
+	<br>
+	<p>
+			<div class="align-center" style="padding:0.5in; border:1px solid; margin-left:1in; margin-right: 1in">
+				<b>{{ n.line4=n.applicant.name}}</b><br>
+				{{ n.line5=n.applicant.address }}
+			</div>	
+	</p>
+	<p>
+		{{n.line6='bearing the following information and descriptions: '}}
+	</p>
+	<p>
+		{{n.line7='Intended Use of Chainsaw: ' + n.intended_use }}
+	</p>
+	<p>
+		{{n.line8='Limitation of Use ' + n.limitation_of_use }}
+	</p>
+	<p>
+		<input type="hidden" ng-value="n.line9='Brand: ' + n.chainsaw.brand + ' Serial/Engine No.: ' + 
+			n.chainsaw.serial_number">
+		<input type="hidden" ng-value="n.line10='Engine Type and Horsepower: ' + n.chainsaw.horsepower + 
+			' PCSD Metal Seal No.: ' + n.chainsaw.metal_seal_number">
+		<input type="hidden" ng-value="n.line11='Issued on ' + n.issued_date + ' at ' + n.issued_at">
+		<input type="hidden" ng-value="n.line12='Expiry Date ' + n.expiry_date">
+		<table>
+			<tr>
+				<td>Brand</td><td>{{n.chainsaw.brand}}</td>
+				<td>Serial Engine No:</td><td>{{n.chainsaw.serial_number}}</td>
+			</tr>
+			<tr>
+				<td>Engine Type and Horsepower:</td><td>{{n.chainsaw.horsepower}}</td>
+				<td>PCSD Metal Seal No.:</td><td>{{n.chainsaw.metal_seal_number}}</td>
+			</tr>
+			<tr>
+				<td>Issued on</td><td>{{n.issued_date}}</td>
+				<td>at</td><td>{{n.issued_at}}</td>
+			</tr>
+			<tr>
+				<td>Expiry Date</td><td>{{n.expiry_date}}</td>
+				<td>&nbsp;</td><td>&nbsp;</td>
+			</tr>
+		</table>
+	</p>
+	<p>
+		<div layout>
+			<div style="width:60%">&nbsp;</div>
+			<div>
+				APPROVED:<br><br><br>
+				{{n.line13=pcsd.head.full_name.toUpperCase()}}<br>
+				{{n.line14=pcsd.head.position.toUpperCase()}}
+			</div>
+		</div>
+	</p>
+	<p>
+		{{n.line15='Not valid without PCSD official seal.'}}
+	</p>
+	<p>
+		<div class="align-center">
+			{{n.line16='(PLEASE SEE AT THE BACK PAGE THE TERMS AND CONDITIONS OF THIS CERTIFICATE OF REGISTRATION)'}}
+		</div>
+	</p>
+	<br>
+	<div>
+		{{n.line17='PAID UNDER O.R. NO. ' + n.paid_or_number}}<br>
+		{{n.line18 = 'AMOUNT PAID: Php ' + (n.paid_amount | number:2) }}<br>
+		{{n.line19 = 'DATE OF PAYMENT: ' + get_full_date(n.paid_date)}}
+	</div>
+</div>
