@@ -1,0 +1,105 @@
+<style type="text/css">
+    .roman {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
+<!-- <div class="roman" ng-controller="DummyPermitToSellController" ng-init="currentItem=n" style="margin:0.5in"> -->
+    <div class="roman" style="margin:0.5in">
+
+    <!-- header -->
+    <div ng-include="'./app/templates/templates/header.html'"></div>
+    <hr>
+
+    <div class="align-center">
+        <strong>{{ currentItem.line1}}</strong><br>
+        {{currentItem.line2}}
+    </div>
+
+    <br>
+
+    <div>
+        {{currentItem.line3}}
+    </div>
+
+    <br>
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>:</td>
+            <td>
+                {{currentItem.applicant.name.toUpperCase()}}
+            </td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>:</td>
+            <td>
+                {{currentItem.applicant.address}}
+            </td>
+        </tr>
+        <tr>
+            <td>Date Issued</td>
+            <td>:</td>
+            <td>
+                {{get_full_date(currentItem.date_issued)}}
+            </td>
+        </tr>
+    </table>
+
+    <div layout>
+        <div style="width:60%">&nbsp;</div>
+        <div>Issued by:</div>
+    </div>
+
+    <!-- Signature -->
+    <div layout ng-controller="doc_ctrl_draft">
+        <div style="width:60%">&nbsp;</div>
+        <div flex style="padding: 10px"
+            ng-init="currentItem.sign1 = (currentItem.sign1 == undefined)? { name:'',designation:''}:currentItem.sign1;">
+            <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center">
+                <img ng-if="currentItem.sign1.signature != undefined" src="{{currentItem.sign1.signature}}"
+                    alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong> </div>
+                <div class="align-center"> {{currentItem.sign1.designation}} </div>
+                <md-button class="md-fab md-mini" aria-label="Remove Signature" ng-if="currentItem.sign1.user == userId"
+                    ng-click="updateDocument(currentItem.id,{'sign1' : {} })">
+                    <md-tooltip md-direction="left">Remove Signature</md-tooltip>
+                    <i class="fa fa-remove"></i>
+                </md-button>
+            </div>
+
+            <div layout="column" layout-align="center center" ng-if="currentItem.sign1.signature == undefined;"
+                id="sign1" ng-init="generate_signature_field('sign1',0);" style="border: black dashed 1px;">
+                <canvas></canvas>
+                <button ng-click="signclear(0)">Clear Signature</button>
+                <button
+                    ng-click=" updateDocument(currentItem.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">
+                    Save Signature
+                </button>
+                <md-input-container md-no-float class="md-block">
+                    <input ng-model="currentItem.sign1.name"
+                        ng-blur="updateDocument(currentItem.id,{'sign1.name' : currentItem.sign1.name })" type="text"
+                        placeholder="Name" aria-label="Name">
+                </md-input-container>
+                <md-input-container md-no-float class="md-block">
+                    <input ng-model="currentItem.sign1.designation"
+                        ng-blur="updateDocument(currentItem.id,{'sign1.designation' : currentItem.sign1.designation })"
+                        type="text" placeholder="Designation" aria-label="designation">
+                </md-input-container>
+            </div>
+        </div>
+
+    </div>
+    <br>
+    <div ng-repeat="line in [9,10,11]">
+        {{currentItem['line'+line]}}<br>
+    </div>
+    <hr>
+    <div class="align-center">TERMS AND CONDITIONS</div>
+
+    <ol>
+        <li ng-repeat="line in [12,13,14]">{{currentItem['line'+line]}}</li>
+    </ol>
+    <!-- footer -->
+    <div ng-include="'./app/templates/templates/footer.html'"></div>
+</div>
