@@ -4,8 +4,10 @@
     <hr>
     <br>
     <div style="width:100%" ng-repeat="line in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
-        <input style="width:100%" ng-if="line!=3&&line!=4" ng-model="currentItem['line'+line]">
-        <textarea style="width:100%" ng-if="line==3||line==4" ng-model="currentItem['line'+line]"></textarea>
+        <input style="width:100%" ng-if="line!=3&&line!=4" ng-model="currentItem['line'+line]"
+            ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)">
+        <textarea style="width:100%" ng-if="line==3||line==4" ng-model="currentItem['line'+line]"
+        ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)"></textarea>
         <br><br>
     </div>
     <br>
@@ -14,7 +16,8 @@
         <DIV>
             <ul>
                 <li ng-repeat="line in [12, 13, 14, 15]">
-                    <textarea style="width:100%" ng-model="currentItem['line'+line]"></textarea>
+                    <textarea style="width:100%" ng-model="currentItem['line'+line]"
+                    ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)"></textarea>
                 </li>
             </ul>
         </DIV>
@@ -22,10 +25,12 @@
     <br>
     <div>
         <div ng-repeat="line in [16, 17, 18]">
-            <input style="width:100%" ng-model="currentItem['line'+line]">
+            <input style="width:100%" ng-model="currentItem['line'+line]" 
+            ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)">
         </div>
     </div>
     <div>
-        <input style="width:100%" ng-model="currentItem['line19']">
+        <input style="width:100%" ng-model="currentItem['line19']" 
+            ng-blur="updateDocument(currentItem.id, line19: currentItem.line19)">
     </div>
 </div>

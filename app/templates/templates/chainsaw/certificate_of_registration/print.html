@@ -4,7 +4,7 @@
         font-family: 'Times New Roman', Times, serif;
     }
 </style>
-<div ng-init="currentItem = render_params.data;print(3000); " class="roman" style="margin:0.5in">
+<div ng-init="currentItem = render_params.data; print(3000)" class="roman" style="margin:0.5in">
 <!-- <div ng-controller="DummyChainsawRegistrationController" ng-init="currentItem=n;" class="roman" style="margin:0.5in"> -->
 
     <div ng-include="'./app/templates/templates/header.html'"></div>
@@ -92,6 +92,37 @@
     <div>
         <div ng-repeat="line in [17, 18, 19]"><b>{{currentItem['line'+line]}}</b></div>
     </div>
+    <hr>
+    <br>
+	<div class="align-center">TERMS AND CONDITIONS</div>
 
+    <ol>
+        <li ng-repeat="line in [20,21,22,23,24,25,26]">
+            {{currentItem['line'+line]}}
+        </li>
+    </ol>
+    
+    <br>
+    <br>
+	<p>{{currentItem.line27}}</p>
+    <br>
+    <hr>
+	<div class='align-center'>CONFROME</div><BR>
+    {{currentItem.line28}}
+    <div layout ng-controller="doc_ctrl_draft">
+            <div style="width:60%">&nbsp;</div>
+    
+            <div>
+                <div flex
+                    ng-init="currentItem.sign2 = (currentItem.sign2 == undefined) ? { name:'',designation:''} : currentItem.sign2;">
+                    <div ng-if="currentItem.sign2.signature != undefined;" layout="column" layout-align="center center">
+                        <img ng-if="currentItem.sign2.signature != undefined" src="{{currentItem.sign2.signature}}"
+                            alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                        <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong> </div>
+                        <div class="align-center"> {{get_full_date(currentItem.sign2.date_signed)}} </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     <div ng-include="'./app/templates/templates/footer.html'"></div>
 </div>

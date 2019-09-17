@@ -29,7 +29,7 @@
 	<div layout>
 		<md-input-container flex>
 			<label>Intended Use of Chainsaw</label>
-			<input ng-model="n.intended_use" ng-value="Legal Use"  required>
+			<input ng-value="'Legal Use'" ng-model="n.intended_use">
 		</md-input-container>
 		<md-input-container flex>
 			<label>Limitation of Use</label>
@@ -188,5 +188,50 @@
 		{{n.line17='PAID UNDER O.R. NO. ' + n.paid_or_number}}<br>
 		{{n.line18 = 'AMOUNT PAID: Php ' + (n.paid_amount | number:2) }}<br>
 		{{n.line19 = 'DATE OF PAYMENT: ' + get_full_date(n.paid_date)}}
+	</div>
+	<hr>
+	<div class="align-center">TERMS AND CONDITIONS</div>
+	<input type="hidden" ng-value="n.line20='An authenticated copy of this Certificate 
+		must accompany the chainsaw user at all times'">
+	<input type="hidden" ng-value="n.line21='The chainsaw unit covered by this Certificate 
+		shall not be rented out to other persons and shall be used only for the purpose stated on the face hereof.
+		use of the chainsaw shall be a ground for cancellation of this Certification of Registration'">
+	<input type="hidden" ng-value="n.line22='The chainsaw unit covered by this Certificate shall be used only 
+		within private property owned by '+n.applicant.name">
+	<input type="hidden" ng-value="n.line23='The chainsaw unit covered by this Certificate shall be used for cutting 
+		and pruning of planted trees in the area stated above, and only upon possession of a valid cutting or 
+		utilization permit from concerned government agencies'">
+	<input type="hidden" ng-value="n.line24='In the exercise of their visitorial power, authorized PCSDS officials/personnel 
+		shall be allowed to conduct monitoring/inspection without prior notice'">
+	<input type="hidden" ng-value="n.line25='In case of loss of the unit covered by this Certificate of Registration, 
+		the District Management Office concerned or the PCSDS should be informed in writing within three (3) calendar 
+		days from the discovery of such loss.'">
+	<input type="hidden" ng-value="n.line26='The metal seal and serial number attached to the chainsaw unit shall not be 
+		removed, relocated, defaced or tampered. In case accidental removal, the same shall immediately be reported to 
+		the PCSDS'">
+	<ol>
+		<li ng-repeat="line in [20,21,22,23,24,25,26]">{{n['line'+line]}}</li>
+	</ol>
+	<br>
+	{{n.line27='Violation of/non-compliance with the above conditions shall be a ground for the cancellation/revocation ' + 
+	'of this Certificate of Registration.'}}
+	<br>
+	<hr>
+	<div class='align-center'>CONFROME</div><BR>
+	<P>
+		{{n.line28='I, ' + n.applicant.name + ', the grantee of the foregoing certifcate of chanisaw ' + 
+		'registration, hereby certify that I have read and understood the terms and conditions for which ' +
+		'this Certificate of Registration is issued and I hereby express my conformity thereto and my commitment ' +
+		'to abide by the provisions of PCSD Administrative Order No. 7, as amended, and other PCSD policies ' +
+		'similar or related thereto.'}}
+	</P>
+	<br><br><br>
+	<div layout>
+		<div style="width:60%">&nbsp;</div>
+		<div>
+			<div style="border-bottom:1px solid">&nbsp;</div>
+			<div>Grantee's Signature Over Printed Name</div>
+			<div>Date Signed:</div>
+		</div>
 	</div>
 </div>

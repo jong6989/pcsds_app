@@ -34,7 +34,8 @@
                     </tr>
                     <tr ng-repeat="specimen in currentItem.species">
                         <td ng-repeat="key in ['name', 'quantity', 'description', 'remarks']">
-                            <input ng-model="specimen[key]" ng-blur="updateDocument(currentItem.id, { species: currentItem.species})" />
+                            <input ng-model="specimen[key]" 
+                            ng-blur="updateDocument(currentItem.id, { species: currentItem.species})" />
                         </td>
                     </tr>
                 </table>

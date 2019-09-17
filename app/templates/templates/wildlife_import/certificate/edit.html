@@ -34,8 +34,13 @@
 						<td>Quantity</td>
 					</tr>
 					<tr ng-repeat="specimen in currentItem.species">
-						<td><textarea ng-model="specimen.name">{{specimen.name}}</textarea></td>
-						<td style="text-align:right"><textarea ng-model="specimen.quantity">{{specimen.quantity}}</textarea></td>
+						<td><textarea ng-model="specimen.name"
+							ng-blur="updateDocument(currentItem.id, { species: currentItem.species})"
+							>{{specimen.name}}</textarea></td>
+						<td style="text-align:right">
+							<textarea ng-model="specimen.quantity" 
+								ng-blur="updateDocument(currentItem.id, { species: currentItem.species})">{{specimen.quantity}}
+							</textarea></td>
 					</tr>
 				</table>
 			</div>

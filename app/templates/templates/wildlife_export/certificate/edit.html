@@ -19,7 +19,6 @@
             style="width:100%"
             rows="6" flex 
             name="line" 
-
             ng-model="currentItem[line]"
             ng-blur="lines={}; lines[line]=currentItem[line];updateDocument(currentItem.id,lines)">
         </textarea>
@@ -31,8 +30,15 @@
             </tr>
             <tr ng-repeat="specimen in currentItem.species">
                 <td><textarea ng-model="specimen.name">{{specimen.name}}</textarea></td>
-                <td style="text-align:right"><textarea ng-model="specimen.quantity">{{specimen.quantity}}</textarea></td>
-                <td><textarea  ng-model="specimen.description">{{specimen.description}}</textarea></td>
+                <td style="text-align:right">
+                    <textarea ng-model="specimen.quantity" 
+                        ng-blur="updateDocument(currentItem.id,{'quantity': specimen.quantity})">
+                        {{specimen.quantity}}
+                    </textarea></td>
+                <td><textarea  ng-model="specimen.description" 
+                        ng-blur="updateDocument(currentItem.id,{'description': specimen.description})">
+                        {{specimen.description}}
+                    </textarea></td>
             </tr>
         </table>
         </div>

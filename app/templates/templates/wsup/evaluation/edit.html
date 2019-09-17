@@ -17,7 +17,9 @@
             style="width: 100%" rows="6" flex name="{{'line'+line}}"
 			ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)"
             ng-model="currentItem['line'+line]">
-        <textarea  style="width:100%" ng-if="line=='line9'||line=='line11'" ng-model="currentItem['line'+line]"></textarea>
+		<textarea  style="width:100%" ng-if="line=='line9'||line=='line11'" ng-model="currentItem['line'+line]"
+			ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)">
+		</textarea>
         <br><br>
 	</div>
 	<br>
