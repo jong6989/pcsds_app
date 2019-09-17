@@ -79,5 +79,24 @@
 			"view" : "./app/templates/templates/chainsaw/purchase_permit/view.html",
 			"print" : "./app/templates/templates/chainsaw/purchase_permit/print.html"
 		}
+		,
+		{
+			"name" : "Chainsaw Certificate of Registration",
+			"type" : "certificate",
+			"permit" : true,
+			"create" : "./app/templates/templates/chainsaw/certificate_of_registration/create.html",
+			"edit" : "./app/templates/templates/chainsaw/certificate_of_registration/edit.html",
+			"view" : "./app/templates/templates/chainsaw/certificate_of_registration/view.html",
+			"print" : "./app/templates/templates/chainsaw/certificate_of_registration/print.html"
+		},
+		{
+			"name" : "Chainsaw Permit To Sell",
+			"type" : "permit",
+			"permit" : true,
+			"create" : "./app/templates/templates/chainsaw/permit_to_sell/create.html",
+			"edit" : "./app/templates/templates/chainsaw/permit_to_sell/edit.html",
+			"view" : "./app/templates/templates/chainsaw/permit_to_sell/view.html",
+			"print" : "./app/templates/templates/chainsaw/permit_to_sell/print.html"
+		}
 	]
 }
