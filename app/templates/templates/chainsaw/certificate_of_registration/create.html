@@ -8,7 +8,7 @@
 	<br>
 	<md-input-container class="md-block m-t-40">
 		<label>Registration No.</label>
-		<input ng-model="n.registration_number" required>
+		<input ng-model="n.registration_number" ng-blur="n.keywords[0]=n.registration_number" required>
 	</md-input-container>
 	<hr>
 	<br>
@@ -17,12 +17,12 @@
 	<div layout>
 		<md-input-container class="md-block m-t-40" flex>
 			<label>Name</label>
-			<input ng-model="n.applicant.name" required>
+			<input ng-model="n.applicant.name" ng-blur="n.keywords[0]=n.applicant.name" required>
 		</md-input-container>
 
 		<md-input-container class="md-block m-t-40" flex>
 			<label>Address</label>
-			<input ng-model="n.applicant.address" required>
+			<input ng-model="n.applicant.address" ng-blur="n.keywords[1]=n.applicant.address" required>
 		</md-input-container>
 	</div>
 
@@ -39,11 +39,11 @@
 	<div layout>
 		<md-input-container flex>
 			<label>Brand</label>
-			<input ng-model="n.chainsaw.brand">
+			<input ng-model="n.chainsaw.brand" ng-blur="n.keywords[2]=n.chainsaw.brand">
 		</md-input-container>
 		<md-input-container flex>
 			<label>Serial/Engine Number</label>
-			<input ng-model="n.chainsaw.serial_number">
+			<input ng-model="n.chainsaw.serial_number" ng-blur="n.keywords[3]=n.chainsaw.serial_number">
 		</md-input-container>
 		<md-input-container flex>
 			<label>Engine Type and Horsepower</label>
@@ -234,4 +234,6 @@
 			<div>Date Signed:</div>
 		</div>
 	</div>
+
+	
 </div>

@@ -1,16 +1,16 @@
 <div ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE EXPORT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
-<!-- <div ng-controller="WildlifeExportControllerdummy" ng-init="n=render_params.data; n.subject = 'CERTIFICATION FOR WILDLIFE EXPORT';  	titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">-->
+<!-- <div ng-controller="WildlifeExportControllerdummy" ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE EXPORT';  	titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; "> -->
 
 	
 	<h3 class="align-center">C E R T I F I C A T I O N</h3>
 	<hr>
 	<md-input-container class="md-block m-t-40">
 	    <label>Certification No.</label>
-	    <input ng-model="n.application_no" required>
+	    <input ng-model="n.application_no"  ng-blur="n.keywords[0]=n.application_no" required>
 	</md-input-container> 
 	<md-input-container class="md-block m-t-40">
 	    <label>Gratuitous Permit No.</label>
-	    <input ng-model="n.gratuitous_permit_number" required>
+	    <input ng-model="n.gratuitous_permit_number"  ng-blur="n.keywords[1]=n.gratuitous_permit_number" required>
 	</md-input-container> 
 	<br>
 
@@ -18,11 +18,11 @@
 	<div layout>
 		<md-input-container flex>
 			<label>Last Name</label>
-			<input ng-model="n.applicant.last_name" required>
+			<input ng-model="n.applicant.last_name"  ng-blur="n.keywords[2]=n.applicant.last_name" required>
 		</md-input-container>
 		<md-input-container class="md-block"  flex>
 			<label>First Name</label>
-			<input ng-model="n.applicant.first_name" required>
+			<input ng-model="n.applicant.first_name"  ng-blur="n.keywords[3]=n.applicant.first_name" required>
 		</md-input-container>
 		<md-input-container class="md-block"  flex>
 			<label>Middle Name</label>
@@ -30,7 +30,7 @@
 		</md-input-container>
 		<md-input-container class="md-block"  flex>
 			<label>Agency</label>
-			<input ng-model="n.applicant.agency">
+			<input ng-model="n.applicant.agency"  ng-blur="n.keywords[4]=n.applicant.agency || ''">
 		</md-input-container>
 		<input type="hidden"
 			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
@@ -45,7 +45,7 @@
 						<md-input-container flex>
 							<label>Species (Scientific Name/Common Name)</label>
 							<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>														
-							<input ng-model="n.species[$index].name" required>
+							<input ng-model="n.species[$index].name"  required>
 						</md-input-container>
 					</td>
 					<td>

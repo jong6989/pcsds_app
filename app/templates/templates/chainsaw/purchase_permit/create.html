@@ -9,7 +9,7 @@
 	<br>
 	<md-input-container class="md-block m-t-40">
 		<label>Permit No.</label>
-		<input ng-model="n.permit_no" required>
+		<input ng-model="n.permit_no" ng-blur="n.keywords[0]=n.applicant.name"  required>
 	</md-input-container>
 	<hr>
 	<br>
@@ -18,12 +18,12 @@
 	<div layout>
 		<md-input-container class="md-block m-t-40" flex>
 			<label>Name</label>
-			<textarea ng-model="n.applicant.name" required></textarea>
+			<textarea ng-model="n.applicant.name" ng-blur="n.keywords[1]=n.applicant.name" required></textarea>
 		</md-input-container>
 
 		<md-input-container class="md-block m-t-40" flex>
 			<label>Address</label>
-			<input ng-model="n.applicant.address" required>
+			<input ng-model="n.applicant.address" ng-blur="n.keywords[2]=n.applicant.address" required>
 		</md-input-container>
 	</div>
 
@@ -140,4 +140,5 @@
 	<div>
 		{{n.line19 = 'This permit is valid only for three (3) months from date of issuance or upon permformance of the rest.'}}
 	</div>
+	
 </div>

@@ -5,7 +5,7 @@ ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.'
 	<hr>
 	<md-input-container class="md-block m-t-40">
 	    <label>Certification No.</label>
-	    <input ng-model="n.application_no" required>
+	    <input ng-model="n.application_no"  ng-blur="n.keywords[0]=n.application_no" required>
 	</md-input-container> 
 	<br>
 
@@ -13,11 +13,11 @@ ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.'
 	<div layout>
 		<md-input-container flex>
 			<label>Last Name</label>
-			<input ng-model="n.applicant.last_name" required>
+			<input ng-model="n.applicant.last_name"  ng-blur="n.keywords[1]=n.applicant.last_name" required>
 		</md-input-container>
 		<md-input-container class="md-block"  flex>
 			<label>First Name</label>
-			<input ng-model="n.applicant.first_name" required>
+			<input ng-model="n.applicant.first_name"  ng-blur="n.keywords[2]=n.applicant.first_name" required>
 		</md-input-container>
 		<md-input-container class="md-block"  flex>
 			<label>Middle Name</label>
@@ -40,7 +40,7 @@ ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.'
 						<md-input-container flex>
 							<label>Species (Scientific Name/Common Name)</label>
 							<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>														
-							<input ng-model="n.species[$index].name" required>
+							<input ng-model="n.species[$index].name"  required>
 						</md-input-container>
 					</td>
 					<td>

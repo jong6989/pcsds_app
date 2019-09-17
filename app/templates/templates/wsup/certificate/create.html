@@ -7,12 +7,11 @@
 		<input ng-model="n.wsup_no" required>
 	</md-input-container>
 	<br>
-
 	<strong>Project Information</strong>
 	<div layout>
 		<md-input-container flex>
 			<label>Name of Project/Undertaking</label>
-			<input ng-model="n.project.name" required>
+			<input ng-model="n.project.name"  ng-blur="n.keywords[0]=n.project.name" required>
 		</md-input-container>
 		<md-input-container flex>
 			<label>Project Location (Street, Sitio, Barangay, Municipality)</label>
@@ -23,7 +22,7 @@
 	<div layout>
 		<md-input-container class="md-block" flex>
 			<label>First Name</label>
-			<input ng-model="n.applicant.first_name" required>
+			<input ng-model="n.applicant.first_name"  ng-blur="n.keywords[1]=n.applicant.first_name" required>
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Middle Name</label>
@@ -31,11 +30,11 @@
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Last Name</label>
-			<input ng-model="n.applicant.last_name">
+			<input ng-model="n.applicant.last_name"  ng-blur="n.keywords[2]=n.applicant.last_name">
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Address</label>
-			<input ng-model="n.applicant.address">
+			<input ng-model="n.applicant.address"  ng-blur="n.keywords[3]=n.applicant.address">
 		</md-input-container>
 		<input type="hidden"
 			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">

@@ -1,111 +1,112 @@
 <div ng-init="n.subject = 'CERTIFICATION OF INSPECTION'; 
 titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
-	
+
 	<h3 class="align-center">CERTIFICATION OF INSPECTION</h3>
 	<hr>
 	<md-input-container class="md-block m-t-40">
-	    <label>Certification No.</label>
-	    <input ng-model="n.application_no" required>
-	</md-input-container> 
+		<label>Certification No.</label>
+		<input ng-model="n.application_no" ng-blur="n.keywords[0]=n.application_no" required>
+	</md-input-container>
 	<br>
 
 	<div layout>
 		<md-input-container flex>
 			<label>Inspector Name:</label>
-			<input ng-model="n.inspector" required>
+			<input ng-model="n.inspector" ng-blur="n.keywords[1]=n.inspector" required>
 		</md-input-container>
-		<md-input-container class="md-block"  flex>
+		<md-input-container class="md-block" flex>
 			<label>Place of Origin of Wildlife/Wildlife Derivative</label>
 			<input ng-model="n.origin" required>
 		</md-input-container>
-		<md-input-container class="md-block"  flex>
+		<md-input-container class="md-block" flex>
 			<label>Purpose</label>
 			<input ng-model="n.purpose" required>
 		</md-input-container>
 	</div>
 
 	<div>
-			<label>Wildlife/Wildlife Derivatives Inspected</label>
-			<table ng-init="n.species=n.species || [{}]">
-				<tr ng-repeat="specy in n.species">
-					<td>
-						<md-input-container flex>
-							<label>Species (Scientific Name/Common Name)</label>
-							<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>														
-							<input ng-model="n.species[$index].name" required>
-						</md-input-container>
-					</td>
-					<td>
-						<md-input-container flex>
-							<label>Quantity</label>
-							<input ng-model="n.species[$index].quantity" required>
-						</md-input-container>
-					</td>
-					<td>
-						<md-input-container flex>
-							<label>Description (i.e. live, fresh, etc.)</label>
-							<md-tooltip direction="left">Description (i.e. live, fresh, etc.)</md-tooltip>
-							<textarea ng-model="n.species[$index].description" required></textarea></td>
-						</md-input-container>
-					<td>
-						<md-input-container>
-							<label>Remarks (i.e. kind, size and no. of boxes)</label>	
-							<md-tooltip direction="left">Remarks (i.e. kind, size and no. of boxes)</md-tooltip>
-							<textarea ng-model="n.species[$index].remarks" ></textarea>
-						</md-input-container>
-					</td>
-					<td>
-						<md-button class="md-fab md-mini" aria-label="Remove this row" 
-							ng-click="n.species.splice($index, 1)" ng-if="n.species.length > 1">
-							<md-tooltip md-direction="left">Remove Specy</md-tooltip>
-							<i class="fa fa-remove" ></i>
-						</md-button> 
-					</td>
-				</tr>
-			</table>
-			<md-button ng-click="rows.push(rows.length)" class="md-primary md-raised">
-				Add Row
-			</md-button>
+		<label>Wildlife/Wildlife Derivatives Inspected</label>
+		<table ng-init="n.species=n.species || [{}]">
+			<tr ng-repeat="specy in n.species">
+				<td>
+					<md-input-container flex>
+						<label>Species (Scientific Name/Common Name)</label>
+						<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>
+						<input ng-model="n.species[$index].name" required>
+					</md-input-container>
+				</td>
+				<td>
+					<md-input-container flex>
+						<label>Quantity</label>
+						<input ng-model="n.species[$index].quantity" required>
+					</md-input-container>
+				</td>
+				<td>
+					<md-input-container flex>
+						<label>Description (i.e. live, fresh, etc.)</label>
+						<md-tooltip direction="left">Description (i.e. live, fresh, etc.)</md-tooltip>
+						<textarea ng-model="n.species[$index].description" required></textarea>
+				</td>
+				</md-input-container>
+				<td>
+					<md-input-container>
+						<label>Remarks (i.e. kind, size and no. of boxes)</label>
+						<md-tooltip direction="left">Remarks (i.e. kind, size and no. of boxes)</md-tooltip>
+						<textarea ng-model="n.species[$index].remarks"></textarea>
+					</md-input-container>
+				</td>
+				<td>
+					<md-button class="md-fab md-mini" aria-label="Remove this row"
+						ng-click="n.species.splice($index, 1)" ng-if="n.species.length > 1">
+						<md-tooltip md-direction="left">Remove Specy</md-tooltip>
+						<i class="fa fa-remove"></i>
+					</md-button>
+				</td>
+			</tr>
+		</table>
+		<md-button ng-click="n.species.push({})" class="md-primary md-raised">
+			Add Row
+		</md-button>
 		<!-- </md-input-container> -->
 	</div>
 
 	<strong>Requested By</strong>
 	<div layout>
 		<md-input-container>
-		    <label>Title</label>
-		    <md-select ng-model="n.name_title">
-		      <md-option ng-repeat="x in titles" value="{{x}}">
-		        {{x}}
-		      </md-option>
-		    </md-select>
-	  	</md-input-container>
+			<label>Title</label>
+			<md-select ng-model="n.name_title">
+				<md-option ng-repeat="x in titles" value="{{x}}">
+					{{x}}
+				</md-option>
+			</md-select>
+		</md-input-container>
 
 		<md-input-container flex>
-		    <label>Name</label>
-		    <input ng-model="n.applicant_name" required>
+			<label>Name</label>
+			<input ng-model="n.applicant_name" required ng-blur="n.keywords[2]=n.applicant_name">
 		</md-input-container>
 	</div>
 
-	
-	
+
+
 	<div layout>
 		<md-input-container flex>
 			<label>Recipient Name</label>
-			<input ng-model="n.recipient_name" required>
+			<input ng-model="n.recipient_name" ng-blur="n.keywords[3]=n.recipient_name" required>
 		</md-input-container>
 		<md-input-container flex>
 			<label>Date of Transport</label>
-			<md-datepicker ng-model="transport_date" ng-change="n.transport_date = to_date(transport_date)" required></md-datepicker>
+			<md-datepicker ng-model="transport_date" ng-change="n.transport_date = to_date(transport_date)" required>
+			</md-datepicker>
 		</md-input-container>
-		<md-input-container flex> 
+		<md-input-container flex>
 			<label>Transportation Vehicle/Vessel</label>
 			<input ng-model="n.transportation_vessel" required>
 		</md-input-container>
 		<md-input-container flex>
 			<label>Date of Issuance</label>
 			<md-datepicker ng-model="issuance_date" ng-change="n.issuance_date = to_date(issuance_date)"
-			md-placeholder="Date of Issuance"
-			required></md-datepicker>
+				md-placeholder="Date of Issuance" required></md-datepicker>
 		</md-input-container>
 	</div>
 	<hr>
@@ -113,17 +114,16 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 	<strong>Payment</strong>
 	<div layout>
 		<md-input-container flex>
-		    <label>Paid amount</label>
-		    <input type="number" ng-model="n.paid_amount" >
+			<label>Paid amount</label>
+			<input type="number" ng-model="n.paid_amount">
 		</md-input-container>
 		<md-input-container flex>
-		    <label>OR Number</label>
-		    <input ng-model="n.paid_or_number" >
+			<label>OR Number</label>
+			<input ng-model="n.paid_or_number">
 		</md-input-container>
 		<md-input-container flex>
-			<md-datepicker ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
-				md-placeholder="Date of Payment"
-				md-open-on-focus>
+			<md-datepicker ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)"
+				md-placeholder="Date of Payment" md-open-on-focus>
 			</md-datepicker>
 		</md-input-container>
 	</div>
@@ -140,22 +140,26 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 		}}
 	</p>
 	<br>
-	<style>.borderedTable tr td { border: 1px solid }</style>
+	<style>
+		.borderedTable tr td {
+			border: 1px solid
+		}
+	</style>
 	<table class="borderedTable" style="width: 100%">
-			<tr style="text-align: center">
-				<td>Species (Scientific Name/Common Name)</td>
-				<td>Quantity</td>
-				<td>Description (i.e. live, fresh, etc.)</td>
-				<td>Remarks (i.e. kind, size and no. of boxes)</td>
-			</tr>
-			<tr ng-repeat="specimen in n.species">
-				<td>{{specimen.name}}</td>
-				<td>{{specimen.quantity}}</td>
-				<td>{{specimen.description}}</td>
-				<td>{{specimen.remarks}}</td>
-			</tr>
+		<tr style="text-align: center">
+			<td>Species (Scientific Name/Common Name)</td>
+			<td>Quantity</td>
+			<td>Description (i.e. live, fresh, etc.)</td>
+			<td>Remarks (i.e. kind, size and no. of boxes)</td>
+		</tr>
+		<tr ng-repeat="specimen in n.species">
+			<td>{{specimen.name}}</td>
+			<td>{{specimen.quantity}}</td>
+			<td>{{specimen.description}}</td>
+			<td>{{specimen.remarks}}</td>
+		</tr>
 	</table>
-		<br>
+	<br>
 	<p>
 		<span class="m-l-50"></span>
 		{{ n.line2 = 

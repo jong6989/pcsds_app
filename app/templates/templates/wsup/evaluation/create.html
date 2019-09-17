@@ -1,4 +1,4 @@
-<div ng-controller="WSUPEvaluationController"
+<div
 	ng-init="n.subject = 'WILDLIFE SPECIAL USE PERMIT EVALUATION FORM'; 
 	titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
 
@@ -9,7 +9,8 @@
 	<div layout>
 		<md-input-container class="md-block" flex>
 			<label>First Name</label>
-			<input ng-model="n.applicant.first_name" required>
+			<input ng-model="n.applicant.first_name" 
+				ng-blur="n.keywords[0]=n.applicant.first_name" required>
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Middle Name</label>
@@ -17,15 +18,15 @@
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Last Name</label>
-			<input ng-model="n.applicant.last_name">
+			<input ng-model="n.applicant.last_name" ng-blur="n.keywords[1]=n.applicant.first_name" required>
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Residence Address</label>
-			<input ng-model="n.applicant.residence_address">
+			<input ng-model="n.applicant.residence_address" ng-blur="n.keywords[2]=n.applicant.residence_address || ''">
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Business Address</label>
-			<input ng-model="n.applicant.business_address">
+			<input ng-model="n.applicant.business_address" ng-blur="n.keywords[3]=n.applicant.business_address || ''">
 		</md-input-container>
 		<input type="hidden"
 			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
