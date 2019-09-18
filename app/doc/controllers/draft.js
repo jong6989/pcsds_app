@@ -26,18 +26,21 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
     };
 
     $scope.updateDocument = async (id,data) => {
+        console.log(id);
+        console.log(data);
         if(id !== undefined) {
             doc.db.collection(documents).doc(id).update(data).then(() => {
                 func.refreshDocItem(id, (a) => {
                     $scope.currentItem = a;
+                    console.log(a);
                 });
             });
-            setTimeout(()=>{func.refreshDocItem(id, (a) => {
-                $scope.currentItem = a;
+            // setTimeout(()=>{func.refreshDocItem(id, (a) => {
+            //     $scope.currentItem = a;
 
-                $scope.$apply();
-            });},300);
-            $scope.myDrafts = await func.getMyDrafts();
+            //     $scope.$apply();
+            // });},300);
+            // $scope.myDrafts = await func.getMyDrafts();
         }
     };
 

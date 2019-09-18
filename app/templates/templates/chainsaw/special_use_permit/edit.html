@@ -1,0 +1,106 @@
+<div ng-include="'./app/templates/application/style.html'"></div>
+
+<div style="width:90%" ng-controller="DummyChainsawSUPController" ng-init="currentItem=n">
+<!-- <div style="width:90%"> -->
+    <div class="center-align">SPECIAL USE PERMIT</div>
+    <div><input ng-model="currentItem.line2" ng-blur="updateDocument(currentItem.id, {line2:currentItem.line2})"></div>
+    <hr>
+    <br>
+    <div><textarea style="width:100%" ng-model="currentItem.line3" ng-blur="updateDocument(currentItem.id, {line3:currentItem.line3})"></textarea></div>
+    <table style="width:100%">
+			<tr>
+				<td>Name of Chainsaw Owner/Applicant</td>
+				<td>:</td>
+                <td><input ng-model="currentItem.owner_name" 
+                    ng-blur="updateDocument(currentItem.id, {owner_name:currentItem.owner_name})" ></td>
+			</tr>
+			<tr>
+				<td>Owner of Planted Trees/Representative</td>
+				<td>:</td>
+                <td><input ng-model="currentItem.owner_of_planted_trees" 
+                    ng-blur="updateDocument(currentItem.id, {owner_of_planted_trees:currentItem.owner_of_planted_trees})"></td>
+			</tr>
+			<tr>
+				<td>Addres</td>
+				<td>:</td>
+                <td><input ng-model="currentItem.address" 
+                    ng-blur="updateDocument(currentItem.id, {address:currentItem.address})"></td>
+			</tr>
+
+			<tr>
+				<td>Chainsaw Registration Number</td>
+				<td>:</td>
+				<td><input ng-model="currentItem.chainsaw.registration_number" ng-blur="updateDocument(currentItem.id, {'chainsaw.registration_number':currentItem.chainsaw.registration_number})"></td>
+			</tr>
+			<tr>
+				<td>Chainsaw Serial Number</td>
+				<td>:</td>
+				<td><input ng-model="currentItem.chainsaw.serial_number" ng-blur="updateDocument(currentItem.id, {'chainsaw.serial_number':currentItem.chainsaw.serial_number})"></td>
+			</tr>
+			<tr>
+				<td>Chainsaw Metal Seal Number</td>
+				<td>:</td>
+				<td><input ng-model="currentItem.chainsaw.metal_seal_number" ng-blur="updateDocument(currentItem.id, {'chainsaw.metal_seal_number':currentItem.chainsaw.metal_seal_number})"><td>
+			</tr>
+			<tr>
+				<td>Place of Origin</td>
+				<td>:</td>
+				<td><textarea ng-model="currentItem.chainsaw.place_of_origin" ng-blur="updateDocument(currentItem.id, {place_of_origin:currentItem.place_of_origin})"></textarea></td>
+			</tr>
+			<tr>
+				<td>Place of Destination</td>
+				<td>:</td>
+				<td><textarea ng-model="currentItem.chainsaw.place_of_destination" ng-blur="updateDocument(currentItem.id, {place_of_destination:currentItem.place_of_destination})"></textarea></td>
+			</tr>
+			<tr>
+				<td>Purpose</td>
+				<td>:</td>
+				<td><textarea ng-model="currentItem.purpose" ng-blur="updateDocument(currentItem.id, {purpose:currentItem.purpose})"></textarea></td>
+			</tr>
+			<tr>
+				<td>Date Issued</td>
+				<td>:</td>
+				<td>
+                    <input ng-model="currentItem.date_issued" ng-blur="updateDocument(currentItem.id, {date_issued:currentItem.date_issued})"></td>
+			</tr>
+			<tr>
+				<td>Expiry Date</td>
+				<td>:</td>
+				<td><input ng-model="currentItem.expiry_date" ng-blur="updateDocument(currentItem.id, {expiry_date:currentItem.expiry_date})"></td>
+			</tr>
+		</table>
+
+        <div ng-repeat="line in [4,5,6,7,8,9]">
+            <input ng-model="currentItem['line'+line]" 
+                ng-blur="lines={};lines['line'+line];updateDocument(currentItem.id, lines)"><br>
+        </div>
+        <hr>
+	<div class="center-align">
+		TERMS AND CONDITIONS
+	</div>
+	<ul>
+		<li ng-repeat="term in currentItem.terms">
+            <textarea ng-model="currentItem.terms[$index]" style="width:100%" 
+            ng-blur="updateDocument(currentItem.id,{ terms: currentItem.terms})"></textarea>
+		</li>
+	</ul>
+	<hr>
+	<br>
+	<div class="center-align">CONFORME</div>
+	<p>
+        <textarea ng-model="currentItem.line10" style="width:100%" 
+        ng-blur="updateDocument(currentItem.id, {line10: currentItem.line10})"></textarea>
+	</p>
+	<div layout>
+		<div style="width:70%">&nbsp;</div>
+		<div>
+			<div class="underlined">&nbsp;</div>
+            <div><input ng-model="currentItem.line11" 
+                ng-blur="updateDocument(currentItem.id, {line11: currentItem.line11})">
+                </div>
+			<div><input ng-model="currentItem.line12" 
+                ng-blur="updateDocument(currentItem.id, {line12: currentItem.line12})"></div>
+		</div>
+	</div>
+    
+</div>
