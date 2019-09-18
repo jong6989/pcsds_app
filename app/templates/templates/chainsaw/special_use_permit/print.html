@@ -10,82 +10,80 @@
     <p>
         <div class="align-center">
             <strong>SPECIAL USE PERMIT</strong><br>
-            {{ n.line2 }}
+            {{ currentItem.line2 }}
         </div>
     </p>
     <br>
     <p>
-        {{ n.line3 }}
+        {{ currentItem.line3 }}
     </p>
     <p>
         <table>
             <tr>
                 <td>Name of Chainsaw Owner/Applicant</td>
                 <td>:</td>
-                <td>{{n.owner_name.toUpperCase()}}</td>
+                <td>{{currentItem.owner_name.toUpperCase()}}</td>
             </tr>
             <tr>
                 <td>Owner of Planted Trees/Representative:</td>
                 <td>:</td>
-                <td>{{n.owner_of_planted_trees.toUpperCase()}}</td>
+                <td>{{currentItem.owner_of_planted_trees.toUpperCase()}}</td>
             </tr>
             <tr>
                 <td>Addres:</td>
                 <td>:</td>
-                <td>{{n.address}}</td>
+                <td>{{currentItem.address}}</td>
             </tr>
 
             <tr>
                 <td>Chainsaw Registration Number</td>
                 <td>:</td>
-                <td>{{n.chainsaw.registration_number}}</td>
+                <td>{{currentItem.chainsaw.registration_number}}</td>
             </tr>
             <tr>
                 <td>Chainsaw Serial Number</td>
                 <td>:</td>
-                <td>{{n.chainsaw.serial_number}}</td>
+                <td>{{currentItem.chainsaw.serial_number}}</td>
             </tr>
             <tr>
                 <td>Chainsaw Metal Seal Number</td>
                 <td>:</td>
-                <td>{{n.chainsaw.metal_seal_number}}</td>
+                <td>{{currentItem.chainsaw.metal_seal_number}}</td>
             </tr>
             <tr>
                 <td>Place of Origin</td>
                 <td>:</td>
-                <td>{{n.chainsaw.place_of_origin}}</td>
+                <td>{{currentItem.chainsaw.place_of_origin}}</td>
             </tr>
             <tr>
                 <td>Place of Destination</td>
                 <td>:</td>
-                <td>{{n.chainsaw.place_of_destination}}</td>
+                <td>{{currentItem.chainsaw.place_of_destination}}</td>
             </tr>
             <tr>
                 <td>Purpose</td>
                 <td>:</td>
-                <td>{{n.purpose}}</td>
+                <td>{{currentItem.purpose}}</td>
             </tr>
             <tr>
                 <td>Date Issued</td>
                 <td>:</td>
-                <td>{{get_full_date(n.date_issued)}}</td>
+                <td>{{get_full_date(currentItem.date_issued)}}</td>
             </tr>
             <tr>
                 <td>Expiry Date</td>
                 <td>:</td>
-                <td>{{get_full_date(n.expiry_date)}}</td>
+                <td>{{get_full_date(currentItem.expiry_date)}}</td>
             </tr>
         </table>
     </p>
     <div layout>
         <div style="width:60%">&nbsp;</div>
         <div>
-            {{n.line4 }}<br><br>
+            {{currentItem.line4 }}<br><br>
         </div>
     </div>
 
-
-    <br ng-repeat="i in [1,2]">
     <div layout ng-controller="doc_ctrl_draft">
         <div style="width:60%">&nbsp;</div>
 
@@ -104,32 +102,39 @@
     <br>
     <br><br>
     <div>
-        {{n.line7}}<br>
-        {{n.line8}}<br>
-        {{n.line9}}
+        {{currentItem.line7}}<br>
+        {{currentItem.line8}}<br>
+        {{currentItem.line9}}
     </div>
     <hr>
-    <div class="center-align">
+    <div class="align-center">
         TERMS AND CONDITIONS
     </div>
     <ul>
-        <li ng-repeat="term in n.terms">
+        <li ng-repeat="term in currentItem.terms">
             {{term}}
         </li>
     </ul>
     <hr>
     <br>
-    <div class="center-align">CONFORME</div>
+    <div class="align-center">CONFORME</div>
     <p>
-        {{n.line10 }}
+        {{currentItem.line10 }}
     </p>
-    <div layout>
-        <div style="width:70%">&nbsp;</div>
-        <div>
-            <div class="underlined">&nbsp;</div>
-            <div>{{n.line11}}</div>
-            <div>{{n.line12}}</div>
+    <div layout ng-controller="doc_ctrl_draft">
+            <div style="width:60%">&nbsp;</div>
+    
+            <div>
+                <div flex
+                    ng-init="currentItem.sign2 = (currentItem.sign2 == undefined) ? { name:'',designation:''} : currentItem.sign2;">
+                    <div ng-if="currentItem.sign2.signature != undefined;" layout="column" layout-align="center center">
+                        <img ng-if="currentItem.sign2.signature != undefined" src="{{currentItem.sign2.signature}}"
+                            alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                        <div class="align-center"> {{currentItem.line11}} </div>
+                        <div class="align-center"> {{currentItem.line12 + ' ' + currentItem.sign2.date_signed}} </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
     <div ng-include="'./app/templates/templates/footer.html'"></div>
 </div>
