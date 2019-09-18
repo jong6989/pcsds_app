@@ -135,7 +135,7 @@
         {{currentItem.line9}}
     </div>
     <hr>
-    <div class="center-align">
+    <div class="align-center">
         TERMS AND CONDITIONS
     </div>
     <ul>
@@ -145,28 +145,21 @@
     </ul>
     <hr>
     <br>
-    <div class="center-align">CONFORME</div>
+    <div class="align-center">CONFORME</div>
     <p>
         {{currentItem.line10 }}
     </p>
-    <div layout>
-        <div style="width:70%">&nbsp;</div>
-        <div>
-            <div class="underlined">&nbsp;</div>
-            <div>{{currentItem.line11}}</div>
-            <div>{{currentItem.line12}}</div>
-        </div>
-    </div>
+    
 
     <div layout ng-controller="doc_ctrl_draft">
             <div style="width:60%">&nbsp;</div>
             <div flex style="padding: 10px"
-                ng-init="currentItem.sign2 = (currentItem.sign2 == undefined)? { name:'',designation:''}:currentItem.sign2;">
+                ng-init="currentItem.sign2 = (currentItem.sign2 == undefined)? { name:'',date_signed:''}:currentItem.sign2;">
                 <div ng-if="currentItem.sign2.signature != undefined;" layout="column" layout-align="center center">
                     <img ng-if="currentItem.sign2.signature != undefined" src="{{currentItem.sign2.signature}}"
                         alt="Signature1" width="auto" style="margin-bottom: -35px;">
                     <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong> </div>
-                    <div class="align-center"> {{currentItem.sign2.date_signed}} </div>
+                    <div class="align-center"> {{to_date(currentItem.sign2.date_signed)}} </div>
                     <md-button class="md-fab md-mini" aria-label="Remove Signature" ng-if="currentItem.sign2.user == userId"
                         ng-click="updateDocument(currentItem.id,{'sign2' : {} })">
                         <md-tooltip md-direction="left">Remove Signature</md-tooltip>
@@ -185,14 +178,14 @@
                     <md-input-container md-no-float class="md-block">
                         <input ng-model="currentItem.sign2.name"
                             ng-blur="updateDocument(currentItem.id,{'sign2.name' : currentItem.sign2.name })" type="text"
-                            placeholder="Name" aria-label="Name">
+                            md-placeholder="Name" aria-label="Name">
                     </md-input-container>
                     <md-input-container md-no-float class="md-block">
                         <md-datepicker
                             md-open-on-focus
-                            ng-model="currentItem.sign2.date_signed"
-                            ng-blur="updateDocument(currentItem.id,{'sign2.designation' : currentItem.sign2.date_signed })"
-                            placeholder="Date Signed" aria-label="date signed">
+                            ng-model="date_signed"
+                            ng-blur="currentItem.sign2.date_signed=to_date(date_signed);updateDocument(currentItem.id,{'sign2.date_signed' : currentItem.sign2.date_signed });"
+                            md-placeholder="Date Signed" aria-label="date signed">
                     </md-input-container>
                 </div>
             </div>
