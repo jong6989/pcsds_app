@@ -1,0 +1,145 @@
+<style type="text/css">
+    .roman {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
+<!-- <div class="roman" ng-controller="ChainsawDealershipPermitController" ng-init="currentItem=n" style="margin:0.5in"> -->
+    <div class="roman" style="margin:0.5in">
+
+    <!-- header -->
+    <div ng-include="'./app/templates/templates/header.html'"></div>
+
+    <hr>
+    <p>
+        <div class="align-center">
+            <strong>{{ currentItem.line1}}</strong><br>
+            {{currentItem.line2}}
+
+        </div>
+    </p>
+    <div>
+    </div>
+
+    <br>
+    <p>
+        <div class="align-center" style="padding:0.5in; border:1px solid; margin-left:1in; margin-right: 1in">
+            <div ng-repeat="line in [4,5,6]">
+                <div ng-if="line===5&&currentItem['line5']">{{currentItem['line5']}}</div>
+                <div ng-if="line!=5">{{currentItem['line'+line]}}</div>
+            </div>
+
+        </div>
+    </p>
+    <br><br>
+
+    <p>
+        <div ng-repeat="line in [7,8,9]">
+            {{currentItem['line'+line]}}
+            <br ng-if="line===7">
+        </div>
+    </p>
+    <div layout>
+        <div style="width:60%">&nbsp;</div>
+        <div>APPROVED:</div>
+    </div>
+    <!-- Signature -->
+    <div layout ng-controller="doc_ctrl_draft">
+        <div style="width:60%">&nbsp;</div>
+        <div flex style="padding: 10px"
+            ng-init="currentItem.sign1 = (currentItem.sign1 == undefined)? { name:'',designation:''}:currentItem.sign1;">
+            <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center">
+                <img ng-if="currentItem.sign1.signature != undefined" src="{{currentItem.sign1.signature}}"
+                    alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong> </div>
+                <div class="align-center"> {{currentItem.sign1.designation}} </div>
+                <md-button class="md-fab md-mini" aria-label="Remove Signature" ng-if="currentItem.sign1.user == userId"
+                    ng-click="updateDocument(currentItem.id,{'sign1' : {} })">
+                    <md-tooltip md-direction="left">Remove Signature</md-tooltip>
+                    <i class="fa fa-remove"></i>
+                </md-button>
+            </div>
+            <div layout="column" layout-align="center center" ng-if="currentItem.sign1.signature == undefined;"
+                id="sign1" ng-init="generate_signature_field('sign1',0);" style="border: black dashed 1px;">
+                <canvas></canvas>
+                <button ng-click="signclear(0)">Clear Signature</button>
+                <button
+                    ng-click=" updateDocument(currentItem.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">
+                    Save Signature
+                </button>
+                <md-input-container md-no-float class="md-block">
+                    <input ng-model="currentItem.sign1.name"
+                        ng-blur="updateDocument(currentItem.id,{'sign1.name' : currentItem.sign1.name })" type="text"
+                        placeholder="Name" aria-label="Name">
+                </md-input-container>
+                <md-input-container md-no-float class="md-block">
+                    <input ng-model="currentItem.sign1.designation"
+                        ng-blur="updateDocument(currentItem.id,{'sign1.designation' : currentItem.sign1.designation })"
+                        type="text" placeholder="Designation" aria-label="designation">
+                </md-input-container>
+            </div>
+        </div>
+
+    </div>
+    <br>
+    <div>
+        <div ng-repeat="line in [12,13,14,15,16]">
+            {{currentItem['line'+line]}}
+        </div>
+    </div>
+    <hr>
+    <div class="align-center">TERMS AND CONDITIONS</div>
+    <ol>
+        <li ng-repeat="line in [17,18,19,20,21]">
+            {{currentItem['line'+line]}}
+        </li>
+    </ol>
+    <br>
+    <div>
+        {{currentItem.line22}}
+    </div>
+    <br>
+    <hr>
+    <div class='align-center'>CONFROME</div><BR>
+    {{currentItem.line23}}
+
+    <div layout ng-controller="doc_ctrl_draft">
+        <div style="width:60%"></div>
+        <div flex style="padding: 10px"
+            ng-init="currentItem.sign2 = (currentItem.sign2 == undefined)? { name:'',designation:''}:currentItem.sign2;">
+            <div ng-if="currentItem.sign2.signature != undefined;" layout="column" layout-align="center center">
+                <img ng-if="currentItem.sign2.signature != undefined" src="{{currentItem.sign2.signature}}"
+                    alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong> </div>
+                <div>Grantee's Signature Over Printed Name</div>
+                <div class="align-center">Date signed: {{currentItem.sign2.date_signed}} </div>
+                <md-button class="md-fab md-mini" aria-label="Remove Signature"
+                    ng-click="updateDocument(currentItem.id,{'sign2' : {} })">
+                    <md-tooltip md-direction="left">Remove Signature</md-tooltip>
+                    <i class="fa fa-remove"></i>
+                </md-button>
+            </div>
+
+            <div layout="column" layout-align="center center" ng-if="currentItem.sign2.signature == undefined;"
+                id="sign2" ng-init="generate_signature_field('sign2',0);" style="border: black dashed 1px;">
+                <canvas></canvas>
+                <button ng-click="signclear(0)">Clear Signature</button>
+                <button ng-click=" updateDocument(currentItem.id,{'sign2.signature': signed(0), 'sign2.user' : '' }) ">
+                    Save Signature
+                </button>
+                <md-input-container md-no-float class="md-block">
+                    <input ng-model="currentItem.sign2.name"
+                        ng-blur="updateDocument(currentItem.id,{'sign2.name' : currentItem.sign2.name })" type="text"
+                        placeholder="Name" aria-label="Name">
+                </md-input-container>
+                <md-input-container md-no-float class="md-block">
+                    <md-datepicker ng-model="date_signed" ng-change="currentItem.sign2.date_signed=to_date(date_signed)"
+                        ng-blur="updateDocument(currentItem.id, {'sign2.date_signed' : currentItem.sign2.date_signed })"
+                        md-placeholder="Date Signed" md-open-on-focus>
+                    </md-datepicker>
+                </md-input-container>
+            </div>
+        </div>
+    </div>
+    <!-- footer -->
+    <div ng-include="'./app/templates/templates/footer.html'"></div>
+</div>
