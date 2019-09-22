@@ -1,7 +1,5 @@
 <div ng-init="n.subject = 'SEP CLEARANCE'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
 <!-- <div ng-controller="SEPController" ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE EXPORT';  	titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; "> -->
-
-
 	<h3 class="align-center">SEP CLEARANCE</h3>
 	<hr>
 	<md-input-container class="md-block m-t-40">
@@ -23,7 +21,7 @@
 	<div layout>
 		<md-input-container class="md-block" flex>
 			<label>Name of Proponent</label>
-			<input ng-model="n.proponent.name" ng-blur="n.keywords[3]=n.proponent.address" required>
+			<input ng-model="n.proponent.name" ng-blur="n.keywords[3]=n.proponent.name" required>
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Address of Proponent</label>
@@ -113,14 +111,14 @@
 	</p>
 	<br>
 	<p>
-		<div class="align-center">
-			{{n.line18='Not valid without PCSD official seal.'}}<br>
-			{{n.line19='(PLEASE SEE AT THE BACK PAGE THE TERMS AND CONDITIONS OF THIS CERTIFICATE OF REGISTRATION)'}}
-		</div>
-
+		{{n.line18='This Clearance is issued this ' +  to_day_of_month(n.date_issued + ' day of ' + 
+		get_full_month_name(n.date_issued) + ' ' + to_year(n.date_issued) + ' in Puerto Princesa City.'}}
 	</p>
 	<p>
 		<div class="align-center">
+			{{n.line19='Not valid without PCSD official seal.'}}<br>
+			{{n.line20='(PLEASE SEE AT THE BACK PAGE THE TERMS AND CONDITIONS OF THIS CERTIFICATE OF REGISTRATION)'}}
 		</div>
+
 	</p>
 </div>
