@@ -1,5 +1,7 @@
 <div ng-init="n.subject = 'SEP CLEARANCE'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
-<!-- <div ng-controller="SEPController" ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE EXPORT';  	titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; "> -->
+<!-- <div ng-controller="SEPController" -->
+	<!-- ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE EXPORT';  	titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; "> -->
+
 	<h3 class="align-center">SEP CLEARANCE</h3>
 	<hr>
 	<md-input-container class="md-block m-t-40">
@@ -57,6 +59,20 @@
 	</div>
 	<hr>
 	<br>
+	<div class="align-center">TERMS AND CONDITIONS</div>
+	<ol ng-init="n.terms=['']">
+		<li ng-repeat="term in n.terms track by $index">
+			<md-input-container flex>
+				<textarea ng-model="n.terms[$index]" style="width:1000px" required></textarea>
+			</md-input-container>
+			<md-button class="md-fab md-mini" aria-label="Remove this row" ng-click="n.terms.splice($index, 1)"
+				ng-if="n.terms.length > 1">
+				<md-tooltip md-direction="left">Remove</md-tooltip>
+				<i class="fa fa-remove"></i>
+			</md-button>
+		</li>
+	</ol>
+	<md-button ng-click="n.terms.push('')" class="md-primary md-raised">Add Term/Condition</md-button>
 	<br>
 	<strong>PREVIEW</strong>
 	<br>
@@ -111,7 +127,7 @@
 	</p>
 	<br>
 	<p>
-		{{n.line18='This Clearance is issued this ' +  to_day_of_month(n.date_issued + ' day of ' + 
+		{{n.line18='This Clearance is issued this ' +  to_day_of_month(n.date_issued) + ' day of ' + 
 		get_full_month_name(n.date_issued) + ' ' + to_year(n.date_issued) + ' in Puerto Princesa City.'}}
 	</p>
 	<p>

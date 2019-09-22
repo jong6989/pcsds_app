@@ -115,6 +115,15 @@
 			"edit" : "./app/templates/templates/chainsaw/dealership_permit/edit.html",
 			"view" : "./app/templates/templates/chainsaw/dealership_permit/view.html",
 			"print" : "./app/templates/templates/chainsaw/dealership_permit/print.html"
+		},
+		{
+			"name" : "SEP Clerance",
+			"type" : "permit",
+			"permit" : true,
+			"create" : "./app/templates/templates/sep/clearance/create.html",
+			"edit" : "./app/templates/templates/sep/clearance/edit.html",
+			"view" : "./app/templates/templates/sep/clearance/view.html",
+			"print" : "./app/templates/templates/sep/clearance/print.html"
 		}
 	]
 }

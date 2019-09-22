@@ -9,7 +9,7 @@
 
     <p>
         <div class="align-center">
-            {{ n.line1 = 'SEP CLERANCE'}}<br>
+            {{ currentItem.line1 = 'SEP CLERANCE'}}<br>
             <input ng-model="currentItem.line2" ng-blur="updateDocument(currentItem.id,{'line2': currentItem.line2})">
         </div>
 
@@ -72,27 +72,27 @@
     <br>
     <hr>
     <div class="align-center">
+        
         <input ng-init="currentItem.line21='TERMS AND CONDITIONS'" ng-model="currentItem.line21"
         ng-blur="updateDocument(currentItem.id, {line21: currentItem.line21})">
     </div>
     <br>
     <div>
-        <textarea ng-init="currentItem.line22='This Clearance is issued  subject to the terms and conditions stipulated below:'"
+        <textarea ng-init="currentItem.line22='This Clearance is issued  subject to 
+        the terms and conditions stipulated below:'"
             ng-model="currentItem.line22"
             ng-blur="updateDocument(currentItem.id, {line22: currentItem.line22})"></textarea>
     </div>
     
-    <ul
-        ng-init='[
-            "The proponent shall pay the penalty of fine in an amount of not less than Php 50,000.00 for violating section 
-            22.4 of PCSD Admin Order No 06, \"Operating any project without the required SEP Clearance;\"",
-            ""
-        ]'
-    >
-        <li>
-
-        </li>
-    </ul>
+    <ol>
+            <li ng-repeat="term in currentItem.terms track by $index">
+                <md-input-container flex>
+                    <textarea ng-model="term" style="width:1000px" 
+                    ng-blur="updateDocument(currentItem.id, {terms: currentItem.terms})"
+                    required></textarea>
+                </md-input-container>
+            </li>
+        </ol>
     <br>
     <p>
         <textarea ng-init="currentItem.line24='Non-compliance with any of the above condition shall sufficient cause for the suspension 
