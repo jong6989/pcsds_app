@@ -1,0 +1,100 @@
+<!-- <div style="width:90%" ng-controller="ChainsawDealershipPermitController" ng-init="currentItem=n"> -->
+<div style="width:90%">
+<div ng-include="'./app/templates/application/style.html'"></div>
+
+    <p>
+		<div class="align-center">
+			<strong>{{ currentItem.line1}}</strong><br>
+			
+		</div>
+    </p>
+    <div>
+        <input ng-model="currentItem.permit_number" 
+            ng-blur="updateDocument(currentItem.id,{'line2': currentItem.line2})">
+    </div>
+	<br>
+
+		<div>
+            <textarea 
+                ng-model="currentItem.line3"
+                ng-blur="updateDocument(currentItem.id,{'line3': currentItem.line3})">
+            </textarea>
+		</div>
+
+	<br>
+	<p>
+            <div class="align-center" style="padding:0.5in; border:1px solid; margin-left:1in; margin-right: 1in">
+                <div ng-repeat="line in [4,5,6]">
+                        <input ng-model="currentItem['line'+line]"
+                        ng-blur="lines={}; lines['line'+line]=currentItem['line'+line];
+                            updateDocument(currentItem.id, lines)">
+                </div>
+                
+			</div>	
+    </p>
+    <br><br>
+    
+	<p>
+        <div ng-repeat="line in [7,8,9]">
+            <input ng-model="currentItem['line'+line]"
+                ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)"><br>
+                <br ng-if="line===7">
+        </div>
+	</p>
+	<p>
+		<div layout>
+			<div style="width:60%">&nbsp;</div>
+			<div>
+                APPROVED:<br><br><br>
+                <div ng-repeat="line in [10,11]">
+                    <input ng-model="currentItem['line'+line]"
+                    ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)">
+                <br>
+                </div>
+			</div>
+		</div>
+    </p>
+    <div>
+        <div ng-repeat="line in [12,13,14,15,16]">
+                <input ng-model="currentItem['line'+line]"
+                ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)"><br>
+        </div>
+    </div>
+	<hr>
+    <div class="align-center">TERMS AND CONDITIONS</div>
+	<ol>
+		<li ng-repeat="line in [17,18,19,20,21]">
+                <textarea ng-model="currentItem['line'+line]"
+                ng-blur="lines={};lines['line'+line]=currentItem['line'+line];updateDocument(currentItem.id, lines)">
+                </textarea>
+
+        </li>
+	</ol>
+    <br>
+    <div>
+        <textarea 
+            ng-model="currentItem.line22" 
+            ng-blur="updateDocument(currentItem.id, {line22:currentItem.line22})">
+
+        </textarea>
+    </div>
+	<br>
+	<hr>
+	<div class='align-center'>CONFROME</div><BR>
+	<P>
+            <textarea 
+                ng-model="currentItem.line23" 
+                ng-blur="updateDocument(currentItem.id, {line23:currentItem.line23})">
+            </textarea>
+	</P>
+	<br><br><br>
+	<div layout>
+		<div style="width:60%">&nbsp;</div>
+		<div>
+			<div style="border-bottom:1px solid">&nbsp;</div>
+			<div>Grantee's Signature Over Printed Name</div>
+			<div>Date Signed:</div>
+		</div>
+	</div>
+    <br>
+</div>

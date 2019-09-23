@@ -293,6 +293,8 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     }
 
     $scope.open_window_view = function(v,d){
+      console.log(v);
+      console.log(d);
       $localStorage.params = d;
       var x = {view: v,last_view : $scope.current_view};
       window.open('index.html?'+ $.param(x), 'modal');
@@ -576,11 +578,8 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       $scope.content_page = "app/doc/view.html";
       // $scope.current_view = "app/login/view.html";
       // $scope.content_page = "app/pages/database/view.html";
-
-
       // $scope.current_view = "app/templates/main.html";
-      // $scope.content_page = "app/templates/templates/wildlife_export/certificate/create.html";
-      
+      // $scope.content_page = "app/templates/templates/chainsaw/dealership_permit/view.html";
     };
 
     $scope.iframeHeight = $scope.get_window_height();
@@ -691,6 +690,11 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       }
     }
     
-    
+    $scope.pcsd = {
+      head: {
+          full_name: "Nelson P. Devandera",
+          position: "PCSDS Executive Director"
+      }
+    }
 })
 ;

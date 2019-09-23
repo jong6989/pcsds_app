@@ -1,7 +1,7 @@
 <div ng-init="n.subject = 'CHAINSAW SPECIAL USE PERMIT'; 
 	n.keywords = []; 
 	titles = ['Ms.','Mrs.','Mr.']; 
-	n.c_type = 'permit'; " ng-controller="DummyChainsawSUPController">
+	n.c_type = 'permit'; ">
 	<h3 class="center-align">CHAINSAW SPECIAL USE PERMIT</h3>
 	<hr>
 	<br>
@@ -149,12 +149,12 @@
 			<tr>
 				<td>Place of Origin</td>
 				<td>:</td>
-				<td>{{n.place_of_origin}}</td>
+				<td>{{n.chainsaw.place_of_origin}}</td>
 			</tr>
 			<tr>
 				<td>Place of Destination</td>
 				<td>:</td>
-				<td>{{n.place_of_destination}}</td>
+				<td>{{n.chainsaw.place_of_destination}}</td>
 			</tr>
 			<tr>
 				<td>Purpose</td>
@@ -210,8 +210,8 @@
 		<div style="width:70%">&nbsp;</div>
 		<div>
 			<div class="underlined">&nbsp;</div>
-			<div>Grantee's signature Over Printed Name</div>
-			<div>Date Signed:</div>
+			<div>{{n.line11="Grantee's signature Over Printed Name"}}</div>
+			<div>{{n.line12='Date Signed:'}}</div>
 		</div>
 	</div>
 </div>

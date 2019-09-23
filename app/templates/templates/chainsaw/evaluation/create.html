@@ -1,0 +1,141 @@
+<div ng-init="n.subject = 'Certificate of no-pending case'; n.keywords = []; 
+    application_types={'Renewal':'renewal.html','Special Use Permit':'special_use.html'};
+    n.application_type='Renewal';
+    n.application_template='renewal.html';
+    n.items={}">
+    <h3 class="align-center">CHAINSAW APPLICATION EVALUATION</h3>
+
+    <md-input-container class="md-block">
+        <label>Type of Application</label>
+        <md-select ng-model="n.application_type"
+            md-change="n.application_template=application_types[n.application_type]" required>
+            <md-option ng-repeat="type in ['Renewal', 'Special Use Permit']" value="{{type}}">
+                {{type}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+    <br>
+    <div ng-include="'./app/templates/templates/chainsaw/evaluation/templates/common.html'"></div>
+    <div ng-include="'./app/templates/templates/chainsaw/evaluation/templates/'+application_types[n.application_type]">
+    </div>
+    <strong>Requirements Submitted</strong>
+    <ol ng-init="n.requirements_submitted=n.requirements_submitted || ['']">
+        <li ng-repeat="requirement in n.requirements_submitted track by $index">
+            <input ng-model="n.requirements_submitted[$index]" required>
+            <md-button ng-if="n.requirements_submitted.length > 1" class="md-fab md-mini" aria-label="Remove this row"
+                ng-click="n.requirements_submitted.splice($index, 1)">
+                <md-tooltip md-direction="left">Remove requirement</md-tooltip>
+                <i class="fa fa-remove"></i>
+            </md-button>
+        </li>
+    </ol>
+    <md-button ng-click="n.requirements_submitted.push('')" class="md-primary md-raised">
+        Add Row
+    </md-button>
+    <br>
+    <div layout>
+        <md-input-container flex>
+            <label>Evaluation</label>
+            <textarea ng-model="n.evaluation"></textarea>
+        </md-input-container>
+        <md-input-container flex>
+            <label>Recommendation</label>
+            <textarea ng-model="n.recommendation"></textarea>
+        </md-input-container>
+        <md-input-container flex>
+            <label>Date Evaluated</label>
+            <md-datepicker ng-model="date_evaluated" ng-change="n.date_evaluated=to_date(date_evaluated)">
+
+            </md-datepicker>
+        </md-input-container>
+
+    </div>
+    <br>
+    <hr>
+    <div class="align-center"><strong>PREVIEW</strong></div>
+    <br>
+    <div class="align-center">
+        <DIV><strong>{{ n.line1 = 'EVALUATION REPORT' }}</strong></DIV>
+        <div><i>{{n.line2 = 'Application for Chainsaw ' + n.application_type}}</i></div>
+    </div>
+    <div>
+        <ol>
+            <li>
+                <div>Background Information</div>
+                <p>
+                    The following information pertains to the applicant per se:<br>
+                    <table>
+                        <tr>
+                            <td>Chainsaw Owner/Applicant Name</td>
+                            <td>:</td>
+                            <td>{{n.applicant.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>:</td>
+                            <td>{{n.applicant.address}}</td>
+                        </tr>
+                        <tr>
+                            <td>Application Type</td>
+                            <td>:</td>
+                            <td>{{n.application_type}}</td>
+                        </tr>
+                        <tr>
+                            <td>Brand</td>
+                            <td>:</td>
+                            <td>{{n.chainsaw.brand}}</td>
+                        </tr>
+                        <tr>
+                            <td>Serial Number</td>
+                            <td>:</td>
+                            <td>{{n.chainsaw.serial_number}}</td>
+                        </tr>
+                        <tr>
+                            <td>Metal Seal Number</td>
+                            <td>:</td>
+                            <td>{{n.chainsaw.metal_seal_number}}</td>
+                        </tr>
+                        <tr>
+                            <td>Engine Type</td>
+                            <td>:</td>
+                            <td>{{n.chainsaw.engine_type}}</td>
+                        </tr>
+                        <tr>
+                            <td>Horsepower</td>
+                            <td>:</td>
+                            <td>{{n.chainsaw.horsepower}}</td>
+                        </tr>
+                        <tr  ng-repeat="item in currentItem.items[n.application_type]">
+                            <td>{{item.label}}</td>
+                            <td>:</td>
+                            <td>{{
+                                n[item.model_name]
+                            }}</td>
+                        </tr>
+                    </table>
+                </p>
+                <p>
+                    Requirements submitted for evaluation:
+                    <ul>
+                        <li ng-repeat="requirement in n.requirements_submitted">
+                            {{requirement}}
+                        </li>
+                    </ul>
+                </p>
+            </li>
+            <li>Evaluation
+                <p>
+                    {{n.evaluation}}
+                </p>
+            </li>
+            <li>Recommendation
+                <p>
+                    {{n.recommendation}}
+                </p>
+            </li>
+        </ol>
+        <div>Date:
+            <p>{{n.date_evaluated}}</p>
+        </div>
+    </div>
+</div>
