@@ -63,7 +63,7 @@
             <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
-            <md-button type="submit" ng-disabled="form_add_chainsaw.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="add_chainsaw(chainsaw)">
+            <md-button type="submit" ng-disabled="form_add_chainsaw.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="add_array_to_profile('chainsaws',chainsaw);close_dialog();">
                 save
             </md-button>
             </md-dialog-actions>

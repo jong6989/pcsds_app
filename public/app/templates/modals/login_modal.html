@@ -13,8 +13,8 @@
 			<form name="form_login" ng-init="login = {}" >
 					
 				<md-input-container class="md-block" flex-gt-sm>
-					<label>User Name</label>
-					<input ng-model="login.name" required>
+					<label>Email</label>
+					<input type="email" ng-model="login.name" required>
 				</md-input-container>
 				<md-input-container class="md-block" flex-gt-sm>
 					<label>Password</label>
@@ -26,8 +26,11 @@
 		</md-dialog-content>
 
 		<md-dialog-actions layout="row">
-		  <span flex></span>
-		  <md-button type="submit" ng-disabled="form_login.$invalid" ng-click="login_attempt(login)" class="md-raised md-block md-primary" >
+		  	<span flex></span>
+		  	<div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+			</div>
+		  	<md-button ng-hide=" is_loading " type="submit" ng-disabled="form_login.$invalid" ng-click="userLogin(login);" class="md-raised md-block md-primary" >
 	           Login
 			</md-button>
 		</form>

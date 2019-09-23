@@ -1,7 +1,7 @@
 <div  class="md-dialog-container" id="personal_modal" > 
 
         <md-dialog aria-label="Personal Data">
-            <form name="form_edit_personal" ng-controller="login_controller">
+            <form name="form_edit_personal">
                 <md-toolbar class="bg-blue-grey">
                 <div class="md-toolbar-tools m-t-10">
                     <strong> Edit Personal Data  </strong>
@@ -11,14 +11,7 @@
                 <md-dialog-content layout-padding="20"  
                     ng-init="edit_personal = { place_of_birth : user.data.place_of_birth, nationality : user.data.nationality , 
                         gender : user.data.gender , civil_status : user.data.civil_status, 
-                        spouse_name : user.data.spouse_name, father : user.data.father , mother : user.data.mother }">
-    
-                    <div layout-padding>
-                        <md-input-container class="md-block" flex-gt-sm>
-                            <label>Password</label>
-                            <input ng-model="editProfilePassword" type="password" required>
-                        </md-input-container>
-                    </div>
+                        spouse_name : ((user.data.spouse_name)? user.data.spouse_name : '') , father : user.data.father , mother : user.data.mother }">
     
                     <div layout-gt-sm="row">
                         
@@ -87,7 +80,7 @@
                 <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>
-                <md-button type="submit" ng-disabled="form_edit_personal.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="edit_profile('personal',edit_personal,editProfilePassword)">
+                <md-button type="submit" ng-disabled="form_edit_personal.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="update_data_to_profile(edit_personal);close_dialog();">
                     save
                 </md-button>
                 </md-dialog-actions>

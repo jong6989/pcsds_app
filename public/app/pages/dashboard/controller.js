@@ -12,16 +12,19 @@ myAppModule.controller('applicant_dashboard_controller', function ($scope, $http
     ];
 
     $scope.load_my_applications = ()=>{
-        fire.db.transactions.query.where("user.id", "==", `${$scope.user.id}`)
-        .onSnapshot(function(querySnapshot) {
-            var d = [];
-            querySnapshot.forEach(function(doc) {
-                let z = doc.data();
-                d.push(z);
+        var profileId = localData.get('profileId');
+        if(profileId){
+            fire.db.transactions.query.where("user.id", "==", profileId)
+            .onSnapshot(function(querySnapshot) {
+                var d = [];
+                querySnapshot.forEach(function(doc) {
+                    let z = doc.data();
+                    d.push(z);
+                });
+                $localStorage.my_applications = d;
+                $scope.$apply();
             });
-            $localStorage.my_applications = d;
-            $scope.$apply();
-        });
+        }
     };
 
     $scope.profile_checker = (user,event)=>{

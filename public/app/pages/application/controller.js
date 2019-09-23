@@ -40,40 +40,67 @@ myAppModule.controller('application_controller', function ($scope, $http, $locat
 
     $scope.upload_photo = function(dataUrl, name){
         $scope.is_using_camera = false;
-        Upload.upload({
-            url: api_address,
-            data: {
-                action:"applicant/account/upload_photo",
-                user_id : $scope.user.id,
-                file: Upload.dataUrltoBlob(dataUrl, name)
-            }
-        }).then(function (data) {
-            if(data.data.status == 1){
-                $scope.new_application.applicant_photo = data.data.data;
-            }
-        }, null, function (evt) {
-            $scope.photo_uploading_rate = parseInt(100.0 * evt.loaded / evt.total);
-        });
+        //check auth
+        let profileId = localData.get('profileId');
+        if(profileId){
+            $scope.is_uploading = true;
+            let dateStamp = Date.now();
+            let uploadImage = storageRef.child(`uploads/${profileId}/profile_pictures/${dateStamp}-${name}`);
+            uploadImage.putString(dataUrl, 'data_url').then(function(snapshot) {
+                snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    $scope.new_application.applicant_photo = downloadURL;
+                    $scope.picFile = null;
+                    $scope.is_uploading =false;
+                    $scope.$apply();
+                
+                });
+            }).catch(()=>{
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Upload Failed',
+                    footer: 'Please try again'
+                  });
+                  $scope.is_uploading = false;
+                  $scope.$apply();
+            });
+        }else {
+            location.reload();
+        }
+        // Upload.upload({
+        //     url: api_address,
+        //     data: {
+        //         action:"applicant/account/upload_photo",
+        //         user_id : $scope.user.id,
+        //         file: Upload.dataUrltoBlob(dataUrl, name)
+        //     }
+        // }).then(function (data) {
+        //     if(data.data.status == 1){
+        //         $scope.new_application.applicant_photo = data.data.data;
+        //     }
+        // }, null, function (evt) {
+        //     $scope.photo_uploading_rate = parseInt(100.0 * evt.loaded / evt.total);
+        // });
     };
 
     //initialize data
-    $http.get(api_address + "json/permitting/specimen_classification.json").then(function(data){
+    $http.get( "json/permitting/specimen_classification.json").then(function(data){
         $scope.specimen_quality_list = data.data.data; 
     });
 
-    $http.get(api_address + "json/permitting/organizations.json").then(function(data){
+    $http.get( "json/permitting/organizations.json").then(function(data){
         $scope.organization_list = data.data.data; 
     });
 
-    $http.get(api_address + "json/permitting/rff_specimen.json").then(function(data){
+    $http.get( "json/permitting/rff_specimen.json").then(function(data){
         $scope.rff_specimen_list = data.data.data; 
     });
 
-    $http.get(api_address + "json/permitting/ao12_specimen.json").then(function(data){
+    $http.get( "json/permitting/ao12_specimen.json").then(function(data){
         $scope.ao12_specimen_list = data.data.data; 
     });
 
-    $http.get(api_address + "json/permitting/permit_types.json").then(function(data){
+    $http.get( "json/permitting/permit_types.json").then(function(data){
         $scope.permit_types = data.data.data;
     });
 
@@ -81,24 +108,23 @@ myAppModule.controller('application_controller', function ($scope, $http, $locat
         $scope.selectedIndex = n;
     };
 
-    $http.get(api_address + "json/profile/municipality.json").then(function(data){
+    $http.get( "json/profile/municipality.json").then(function(data){
         $scope.municipalities = data.data.data;
     });
 
-    $http.get(api_address + "json/profile/nationalities.json").then(function(data){
+    $http.get( "json/profile/nationalities.json").then(function(data){
         $scope.nationalities = data.data.data; 
     });
 
-    $http.get(api_address + "json/profile/purpose_of_transport.json").then(function(data){
+    $http.get( "json/profile/purpose_of_transport.json").then(function(data){
         $scope.other_purpose = data.data.data;
     });
 
-    $http.get(api_address + "json/profile/place_of_transport.json").then(function(data){
+    $http.get( "json/profile/place_of_transport.json").then(function(data){
         angular.forEach(data.data.data, function(value, key) {
             $scope.places_of_transport.push(value.name);
         });
     });
-
 
     $scope.initData = function(n){
         if($localStorage.brain_online_application[n] == undefined){
@@ -156,7 +182,7 @@ myAppModule.controller('application_controller', function ($scope, $http, $locat
                 "data" : { "application": application },
                 "date" : tId,
                 "status" : "0",
-                "user" : $scope.user,
+                "user" : $scope.user.data,
                 "name" : key
             }
         ).then(ref=>{
@@ -175,30 +201,69 @@ myAppModule.controller('application_controller', function ($scope, $http, $locat
     $scope.upload_attachments = (fs)=>{
         var upload_file = (idx)=>{
             $scope.uploading_file = true;
-            Upload.upload({
-                url: api_address,
-                data: {
-                    action:"applicant/account/upload_attachments",
-                    file: fs[idx],
-                    user_id : $scope.user.id
-                }
-            }).then(function (data) {
-                $scope.uploading_file = false;
-                if(fs.length == (idx + 1) ){
-                    $scope.user = $localStorage.brain_app_user = data.data.data.user;
-                    if($scope.attachment_select_index==-1){
-                        $scope.new_application.attachments.push({
-                            name: data.data.data.file_name,
-                            url : data.data.data.url
-                        })
-                    }else {
-                        $scope.add_attachment(data.data.data.url);
-                    }
+            let profileId = localData.get('profileId');
+            if(profileId){
+                let dateStamp = Date.now();
+                let uploadRef = storageRef.child(`uploads/${profileId}/attachments/${dateStamp}-${fs[idx].name}`);
+                uploadRef.put(fs[idx]).then(function(snapshot) {
+                    snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                        db.collection('profile').doc(profileId).update({"uploads": 
+                            firebase.firestore.FieldValue.arrayUnion({
+                                name : fs[idx].name,
+                                url : downloadURL
+                            })
+                        });
+                        $scope.uploading_file = false;
+                        if(fs.length !== (idx + 1) ){
+                            upload_file(idx + 1);
+                        }
+                        if($scope.attachment_select_index==-1){
+                            $scope.new_application.attachments.push({
+                                name: fs[idx].name,
+                                url : downloadURL
+                            });
+                        }else {
+                            $scope.add_attachment(downloadURL);
+                        }
+                        $scope.$apply();
+                    });
+                }).catch(()=>{
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'Upload Failed',
+                        footer: 'Please try again'
+                    });
+                    $scope.uploading_file = false;
+                    $scope.$apply();
+                });
+            }else {
+                location.reload();
+            }
+            // Upload.upload({
+            //     url: api_address,
+            //     data: {
+            //         action:"applicant/account/upload_attachments",
+            //         file: fs[idx],
+            //         user_id : $scope.user.id
+            //     }
+            // }).then(function (data) {
+            //     $scope.uploading_file = false;
+            //     if(fs.length == (idx + 1) ){
+            //         $scope.user = $localStorage.brain_app_user = data.data.data.user;
+            //         if($scope.attachment_select_index==-1){
+            //             $scope.new_application.attachments.push({
+            //                 name: data.data.data.file_name,
+            //                 url : data.data.data.url
+            //             })
+            //         }else {
+            //             $scope.add_attachment(data.data.data.url);
+            //         }
                     
-                }else {
-                    upload_file(idx + 1);
-                }
-            });
+            //     }else {
+            //         upload_file(idx + 1);
+            //     }
+            // });
         };
         if(fs.length > 0 ) upload_file(0);
     };
