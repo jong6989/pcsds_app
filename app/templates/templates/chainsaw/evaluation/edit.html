@@ -4,7 +4,7 @@
     }
 </style>
 <!-- <div style="width:90%" ng-controller="ChainsawEvaluationController" ng-init="currentItem=n"> -->
-    <div style="width:90%">
+<div style="width:90%">
     <div ng-include="'./app/templates/application/style.html'"></div>
     <DIV><strong>{{ currentitem.line1 }}</strong></DIV>
     <div><i>Application for Chainsaw {{currentItem.application_type}}</i></div>
@@ -35,15 +35,15 @@
                             <td>Application Type</td>
                             <td>:</td>
                             <td>
-                                    <input ng-model="currentItem.application_type"
-                                        ng-blur="updateDocument(currentItem.id, {'applicant.address': currentItem.application_type})">
+                                <input ng-model="currentItem.application_type"
+                                    ng-blur="updateDocument(currentItem.id, {'applicant.address': currentItem.application_type})">
                             </td>
                         </tr>
                         <tr>
                             <td>Brand</td>
                             <td>:</td>
                             <td>
-                                <input ng-model="currentItem.chainsaw.brand" 
+                                <input ng-model="currentItem.chainsaw.brand"
                                     ng-blur="updateDocument(currentItem.id, {'chainsaw.brand': currentItem.chainsaw.brand})">
                             </td>
                         </tr>
@@ -53,7 +53,7 @@
                             <td>
                                 <input ng-model="currentItem.chainsaw.serial_number"
                                     ng-blur="updateDocument(currentItem.id, {'chainsaw.serial_number': currentItem.chainsaw.serial_number})">
-                                </td>
+                            </td>
                         </tr>
                         <tr>
                             <td>Metal Seal Number</td>
@@ -61,7 +61,7 @@
                             <td>
                                 <input ng-model="currentItem.chainsaw.metal_seal_number"
                                     ng-blur="updateDocument(currentItem.id, {'chainsaw.metal_seal_number': currentItem.chainsaw.metal_seal_number})">
-                                </td>
+                            </td>
                         </tr>
                         <tr>
                             <td>Engine Type</td>
@@ -69,7 +69,7 @@
                             <td>
                                 <input ng-model="currentItem.chainsaw.engine_type"
                                     ng-blur="updateDocument(currentItem.id, {'chainsaw.engine_type': currentItem.chainsaw.engine_type})">
-                                </td>
+                            </td>
                         </tr>
                         <tr>
                             <td>Horsepower</td>
@@ -77,19 +77,20 @@
                             <td>
                                 <input ng-model="currentItem.chainsaw.horsepower"
                                     ng-blur="updateDocument(currentItem.id, {'chainsaw.horsepower':currentItem.chainsaw.horsepower})">
-                                </td>
+                            </td>
                         </tr>
                         <tr ng-repeat="item in n.items[n.application_type]">
                             <td>{{item.label}}</td>
                             <td>:</td>
                             <td>
-                                <textarea ng-if="currentItem[item.model_name].length >= 75" ng-model="currentItem[item.model_name]" >
+                                <textarea ng-if="currentItem[item.model_name].length >= 75"
+                                    ng-model="currentItem[item.model_name]">
 
                                 </textarea>
-                                <input ng-if="currentItem[item.model_name].length<75" 
-                                    ng-model="currentItem[item.model_name]" 
+                                <input ng-if="currentItem[item.model_name].length<75"
+                                    ng-model="currentItem[item.model_name]"
                                     ng-blur="x[item.model_name]=currentItem[item.model_name];updateDocument(currentItem.id, x)">
-                                </td>
+                            </td>
                         </tr>
                     </table>
                 </p>
