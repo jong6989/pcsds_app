@@ -189,7 +189,7 @@ myAppModule.controller('profile_controller', function ($scope, $timeout, $utils,
     };
 
     $scope.update_data_to_profile = (updatable)=>{
-        delete(updatable['$$hashKey']); alert(JSON.stringify(updatable));
+        delete(updatable['$$hashKey']);
         let profileId = localData.get('profileId');
         if(profileId){
             db.collection('profile').doc(profileId).update(updatable);

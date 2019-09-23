@@ -568,24 +568,25 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
         localData.set('brainStarted',true);
         $location.path("/pages/dashboard");
       }
-    }
+    };
     //check for user profile
-    if($localStorage.brain_app_user != undefined){
-      $scope.user = $localStorage.brain_app_user;
+    // if($localStorage.brain_app_user != undefined){
+    //   $scope.user = $localStorage.brain_app_user;
+    //   startUp(id);
+    // }
+    db.collection('profile').doc(id).onSnapshot( (doc)=>{
+      let d = doc.data();
+      d.id = doc.id;
+      let user = {data : d, "id": id};
+      $scope.user = user;
+      if(!$localStorage.brain_app_user){
+        setTimeout(()=>{ location.reload();},500);
+      }
+      $localStorage.brain_app_user = user;
+      $scope.$apply();
       startUp(id);
-    }else {
-      // $scope.user = {"id": id, data: {}};
-      db.collection('profile').doc(id).onSnapshot( (doc)=>{
-        let d = doc.data();
-        d.id = doc.id;
-        let user = {data : d, "id": id};
-        $scope.user = user;
-        $localStorage.brain_app_user = user;
-        $scope.$apply();
-        startUp(id);
-      } );
-    }
-  }
+    } );
+  };
 
   var profileId = localData.get('profileId');
   if(profileId != undefined){

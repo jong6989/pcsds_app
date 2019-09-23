@@ -2,41 +2,16 @@
 
     <h3 class="font-14">Select Method of registration</h3>
     <hr>
-    <div layout layout-align="center center">
-        <md-button class="md-fab md-mini bg-green" aria-label="Email" 
-            ng-disabled="registerMethod == 'email'" ng-click="registerMethod = 'email'">
-            <i class="fa fa-envelope "></i>
-        </md-button>
-
-        <md-button class="md-fab md-mini bg-red" aria-label="Gmail"
-            ng-disabled="registerMethod == 'gmail'" ng-click="registerMethod = 'gmail'">
-            <i class="fa fa-google"></i>
-        </md-button>
-
-        <md-button class="md-fab md-mini" aria-label="phone"
-            ng-disabled="registerMethod == 'phone'" ng-click="registerMethod = 'phone'">
-            <i class="fa fa-mobile"></i>
-        </md-button>
-
-        <md-button class="md-fab md-mini bg-blue" aria-label="facebook"
-            ng-disabled="registerMethod == 'facebook'" ng-click="registerMethod = 'facebook'">
-            <i class="fa fa-facebook-square"></i>
-        </md-button>
-    </div>
-
     <div layout="row" layout-sm="column" layout-align="space-around" ng-show="is_loading">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
     
     <div ng-hide="is_loading">
-        <md-card ng-show="registerMethod == 'email'">
+        <!-- email -->
+        <md-card >
             <md-card-content>
                 <form name="form_send_via_email" ng-init="regViaEmail = {}" >
-                    <h3 class="font-12 col-grey">Via Email</h3>
-                    <hr>
-                    <!-- <cite>
-                        We will send an email containing a link to activate account.
-                    </cite> -->
+                    
                     <br>
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>email</label>
@@ -65,5 +40,6 @@
                 </form>
             </md-card-content>
         </md-card>
+
     </div>
 </div>

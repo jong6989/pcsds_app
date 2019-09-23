@@ -5,6 +5,7 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $utils, $
     $scope.i_agree = false;
     $scope.user_id = 0;
     $scope.is_loading = false;
+    $scope.viaMobile = false;
     $scope.gov_ids = ["Passport","Drivers License","PRC","GSIS","SSS","Postal ID","Voter's ID","School ID"];
 
     $scope.registerMethod = 'email';
@@ -52,32 +53,12 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $utils, $
     };
 
     $scope.isumbong = (sumbong)=>{
-        $scope.is_loading = true;
-        db.collection('sumbong').add({"time": Date.now(),"from":'Unknown',"source":'online',"content":sumbong})
-        .then(()=>{
-            Swal.fire(
-                'Salamat sa iyong sumbong!',
-                'Patuloy lang na subaybayan ang mga ilegal na operasyon sa ating kalikasan.',
-                'success'
-              )
-        });
-        // var q = { 
-        //     data : {
-        //         action : "database/intel/add",
-        //         data : { report : sumbong, source : "online sumbong" }
-        //     },
-        //     callBack : function(data){
-        //         $scope.is_loading = false;
-        //         if(data.data.status == 0){
-        //             $scope.toast(data.data.error + "  : " + data.data.hint);
-        //         }else {
-        //             $scope.sumbong = "";
-        //             $mdDialog.cancel();
-        //             $scope.toast("Salamat sa inyong sumbong, ito ay aming iimbestigahan agad.");
-        //         }
-        //     }
-        // };
-        // $utils.api(q);
+        db.collection('sumbong').add({"time": Date.now(),"from":'Unknown',"source":'online',"content":sumbong});
+        Swal.fire(
+            'Salamat sa iyong sumbong!',
+            'Patuloy lang na subaybayan ang mga ilegal na operasyon sa ating kalikasan.',
+            'success'
+          );
     }
 
     $scope.myDate = new Date();
@@ -138,6 +119,70 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $utils, $
               });
             $scope.reg_view = "app/templates/modals/registration/firebase.html";
         }
+    };
+
+    $scope.google_login = ()=>{
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            // ...
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+          });
+    };
+
+    $scope.phone_login = ()=>{
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+        Swal.fire({
+            title: 'Enter your mobile number',
+            input: 'text',
+            inputAttributes: {
+              autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Send a code',
+            showLoaderOnConfirm: false,
+          }).then((result) => {
+            if (result.value) {
+                $scope.viaMobile = true;
+                var phoneNumber = result.value;
+                var appVerifier = window.recaptchaVerifier;
+                firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+                    .then(function (confirmationResult) {
+                        window.confirmationResult = confirmationResult;
+                    }).catch(function (error) {
+                    });
+            }
+          });
+    };
+
+    $scope.submit_phone_verification_code = (code)=>{
+        $scope.viaMobile = false;
+        $scope.is_loading = true;
+        window.confirmationResult.confirm(code).then(function (result) {
+            // User signed in successfully.
+            var user = result.user;
+            // ...  
+        }).catch(function (error) {
+            $scope.viaMobile = true;
+            $scope.is_loading = false;
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Verification code is not valid',
+                footer: 'Try again'
+              })
+        });
     };
 
 });
