@@ -1,0 +1,21 @@
+<div ng-init="n.subject = 'Certificate of no-pending case'; n.keywords = []; application_template='renewal.html'">
+	<h3 class="align-center">CHAINSAW APPLICATION EVALUATION</h3>
+    
+    <md-input-container class="md-block" >
+		<label>Type of Application</label>
+        <md-select ng-model="application_template" 
+            md-change="templateToUse="
+            required>
+            <md-option 
+            ng-repeat="application_type in [
+                { title: 'Renewal', template: 'renewal.html'}, 
+                { title: 'Special Use Permit', template: 'special_use.html'}]" 
+                value="{{application_type.template}}">
+			{{application_type.title}}
+			</md-option>
+		</md-select>
+    </md-input-container>
+    <br>
+    <div ng-include="'./app/templates/templates/chainsaw/evaluation/templates/common.html'"></div>
+    <div ng-include="'./app/templates/templates/chainsaw/evaluation/templates/'+application_template"></div>
+</div>
