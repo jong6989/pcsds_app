@@ -397,13 +397,12 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
 
     // for application sync
     var appNumber = 0;
-    var appSnapshot;
     $scope.getApplicationDocuments = (applicationNumber)=>{
         if(appNumber != applicationNumber){
-            appSnapshot = doc.db.collection(documents)
+            doc.db.collection(documents)
             .where("application_no","==",applicationNumber)
-            .where("status","==","published")
-            .onSnapshot(qs => {
+            // .where("status","==","published")
+            .get().then(qs => {
                 if(!qs.empty) {
                     let r = qs.docs.map(d => {
                         let o = d.data();

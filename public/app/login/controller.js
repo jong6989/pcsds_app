@@ -142,6 +142,7 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $utils, $
     };
 
     $scope.phone_login = ()=>{
+        $scope.viaMobile = true;
         window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
         Swal.fire({
             title: 'Enter your mobile number',
@@ -154,7 +155,6 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $utils, $
             showLoaderOnConfirm: false,
           }).then((result) => {
             if (result.value) {
-                $scope.viaMobile = true;
                 var phoneNumber = result.value;
                 var appVerifier = window.recaptchaVerifier;
                 firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
