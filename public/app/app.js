@@ -579,12 +579,13 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
       d.id = doc.id;
       let user = {data : d, "id": id};
       $scope.user = user;
+      startUp(id);
       if(!$localStorage.brain_app_user){
+        $location.path("/pages/dashboard");
         setTimeout(()=>{ location.reload();},500);
       }
       $localStorage.brain_app_user = user;
       $scope.$apply();
-      startUp(id);
     } );
   };
 
