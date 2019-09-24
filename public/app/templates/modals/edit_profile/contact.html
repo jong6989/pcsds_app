@@ -10,13 +10,6 @@
                 
                 <md-dialog-content layout-padding="20">
     
-                    <div layout-padding>
-                        <md-input-container class="md-block" flex-gt-sm>
-                            <label>Password</label>
-                            <input ng-model="editProfilePassword" type="password" required>
-                        </md-input-container>
-                    </div>
-    
                     <div layout-gt-sm="row" ng-init="edit_contact = user.data.current_phone">
     
                         <md-input-container class="md-block" flex-gt-sm>
@@ -36,7 +29,7 @@
                 <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>
-                <md-button type="submit" ng-disabled="form_edit_contact.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="edit_profile('current_contact',edit_contact,editProfilePassword)">
+                <md-button type="submit" ng-disabled="form_edit_contact.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="update_data_to_profile({'current_phone':edit_contact});close_dialog();">
                     save
                 </md-button>
                 </md-dialog-actions>

@@ -1,7 +1,7 @@
 <div  class="md-dialog-container" id="gID_modal" > 
 
         <md-dialog aria-label="Government ID">
-            <form name="form_edit_gID" ng-controller="login_controller">
+            <form name="form_edit_gID" >
                 <md-toolbar class="bg-blue-grey">
                 <div class="md-toolbar-tools m-t-10">
                     <strong> Edit Government ID  </strong>
@@ -9,13 +9,6 @@
                 </md-toolbar>
                 
                 <md-dialog-content layout-padding="20" ng-init="edit_gID = { tin_no : user.data.tin_no, gov_id : user.data.gov_id }">
-    
-                    <div layout-padding>
-                        <md-input-container class="md-block" flex-gt-sm>
-                            <label>Password</label>
-                            <input ng-model="editProfilePassword" type="password" required>
-                        </md-input-container>
-                    </div>
     
                     <div layout-gt-sm="row" >
     
@@ -70,7 +63,7 @@
                 <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>
-                <md-button type="submit" ng-disabled="form_edit_gID.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="edit_profile('gID',edit_gID,editProfilePassword)">
+                <md-button type="submit" ng-disabled="form_edit_gID.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="update_data_to_profile(edit_gID);close_dialog();">
                     save
                 </md-button>
                 </md-dialog-actions>

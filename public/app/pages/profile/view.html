@@ -10,7 +10,7 @@
             ngf-pattern="image/*"
             >
 
-            <img ng-hide="is_croping_image()" ng-src="{{ (user.data.profile_picture == undefined)? 'images/user.png' : api_address + user.data.profile_picture }}" alt="use" width="100%" md-whiteframe="3">
+            <img ng-hide="is_croping_image()" ng-src="{{ (user.data.profile_picture == undefined)? 'images/user.png' : user.data.profile_picture }}" alt="use" width="100%" md-whiteframe="3">
 
             <img class="align-center" ng-show="is_croping_image()" ng-src="{{croppedDataUrl}}" />
 
@@ -18,7 +18,7 @@
                 result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
             </img-crop>
 
-            <md-progress-linear ng-show="upload_process()" md-mode="determinate" value="{{profile_uploading_rate}}"></md-progress-linear>
+            <md-progress-linear ng-show="is_uploading" md-mode="indeterminate" ></md-progress-linear>
             <hr>
 
             <md-button ng-hide="is_croping_image()" ngf-capture="'camera'" 
@@ -31,8 +31,8 @@
                 Use Camera
             </md-button>
 
-            <md-button ng-show="is_croping_image() && !upload_process()" ng-click="change_profile(croppedDataUrl, picFile.name)">Save</md-button> 
-            <md-button ng-show="is_croping_image() && !upload_process()" ng-click="clear_cropping_image()" >Cancel</md-button>
+            <md-button ng-show="is_croping_image() && !is_uploading" ng-click="change_profile(croppedDataUrl, picFile.name)">Save</md-button> 
+            <md-button ng-show="is_croping_image() && !is_uploading" ng-click="clear_cropping_image()" >Cancel</md-button>
             
 
         </div>
@@ -71,7 +71,7 @@
         <!-- Profile details -->
         <div flex-gt-xs class="p-l-20">
             <hr>
-                <strong class="col-grey" >User Name :</strong> {{user.user_name}}
+                <strong class="col-grey" >Profile ID :</strong> {{user.data.id}}
             <hr>
                 <div>
                     <i class="fa fa-edit pointer col-blue" ng-click="showPrerenderedDialog($event,'fullname_modal');clear_edit_pass();">
@@ -105,13 +105,13 @@
                         </i>
                         <strong class="col-grey">Personal Information </strong> <br>
                         <small>Birth Day</small> : {{user.data.birth_day}} ({{date_from_now(user.data.birth_day).split(' ')[0]}} years old this year) <br>
-                        <small>Birth Place Address :</small> : {{user.data.place_of_birth}} <br>
+                        <small>Birth Place Address</small> : {{user.data.place_of_birth}} <br>
                             <small>Nationality</small> : {{user.data.nationality}} <br>
                             <small>Gender</small> : {{user.data.gender}} <br>
                             <small>Civil Status</small> : {{user.data.civil_status}} 
                             <div ng-if="user.data.civil_status == 'married'">
                                 <small>Spouse Name</small> : {{user.data.spouse_name}} <br>
-                            </div>
+                            </div><br>
                             <small>Father</small> : {{user.data.father}} <br>
                             <small>Mother</small> : {{user.data.mother}} <br>
                     </md-card-content>
@@ -156,7 +156,7 @@
                     <ol ng-if="user.data.uploads != undefined">
                         <li ng-repeat="x in user.data.uploads" > {{x.name}} - 
                         <i class="fa fa-trash col-red pointer" 
-                            ng-dblclick="user.data.uploads.splice($index,1);update_profile('uploads',user.data.uploads)">
+                            ng-dblclick="user.data.uploads.splice($index,1);remove_array_from_profile('uploads',x)">
                                 <md-tooltip md-direction="top">
                                     double click to remove file
                                 </md-tooltip>

@@ -1,0 +1,45 @@
+<div >
+
+    <h3 class="font-14">Select Method of registration</h3>
+    <hr>
+    <div layout="row" layout-sm="column" layout-align="space-around" ng-show="is_loading">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    
+    <div ng-hide="is_loading">
+        <!-- email -->
+        <md-card >
+            <md-card-content>
+                <form name="form_send_via_email" ng-init="regViaEmail = {}" >
+                    
+                    <br>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>email</label>
+                        <input type="email" ng-model="regViaEmail.email" required>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>password (6 characters minimum) </label>
+                        <input type="password" ng-model="regViaEmail.password" minlength="6" required>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>repeat password</label>
+                        <input type="password" ng-model="passwordCheck" minlength="6" required>
+                    </md-input-container>
+
+                    <cite class="font-10 col-red" ng-show="passwordCheck != undefined && regViaEmail.password != ''">
+                        <div ng-if="regViaEmail.password != passwordCheck">
+                            password did not match
+                        </div>
+                    </cite>
+
+                    <md-button type="submit" ng-disabled="form_send_via_email.$invalid || regViaEmail.password != passwordCheck" ng-click="register_via_email(regViaEmail)" class="md-raised md-block md-primary" >
+                        Next
+                    </md-button>
+                </form>
+            </md-card-content>
+        </md-card>
+
+    </div>
+</div>

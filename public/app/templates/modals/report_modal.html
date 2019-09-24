@@ -17,7 +17,7 @@
 					<textarea ng-model="sumbong" md-maxlength="1000" rows="8" md-select-on-focus required></textarea>
 				</md-input-container>
 
-				<md-button type="submit" class="md-raised md-primary" ng-disabled="sumbong_form.$invalid" ng-click="isumbong(sumbong)">i-sumbong</md-button>
+				<md-button type="submit" class="md-raised md-primary" ng-disabled="sumbong_form.$invalid" ng-click="isumbong(sumbong);close_dialog();sumbong = '';">i-sumbong</md-button>
 
 			</form>
 		</md-dialog-content>

@@ -1,5 +1,5 @@
 
-<div layout="column" style="height:{{get_window_height()}}px;" >
+<div layout="column" style="height:{{get_window_height()}}px;">
 
 	<md-toolbar md-scroll-shrink="" ng-if="true" class="bg-blue-grey"  >
 	    <div class="md-toolbar-tools">
@@ -24,11 +24,11 @@
 				<div  layout="row" class="bg-black" layout-padding="20">
 					<div flex="30">
 						<!-- <img src="images/brain_logo.png" width="100%" alt="PCSD BRAIN"> -->
-						<img ng-src="{{ (user.data.profile_picture == undefined)? 'images/user.png' : api_address + user.data.profile_picture }}" alt="user profile picture" width="100%" >
+						<img ng-src="{{ (user.data.profile_picture == undefined)? 'images/user.png' : user.data.profile_picture }}" alt="user profile picture" width="100%" >
 					</div>
 					<div flex="70" layout="column">
 						<div class="font-16">{{ user.data.first_name }} {{ user.data.middle_name }} {{ user.data.last_name }}</div>
-						<div class="font-14">{{ getUserType(user.user_level) }}</div>
+						<div class="font-14">{{ getUserType(user.data.user_level) }}</div>
 						<i class="fa fa-gear" ng-click="toggleRight()"></i>
 						<md-button ng-click="logout()" class="font-10 m-b--10 col-yellow" aria-label="Log-out">
 							<strong>Log-out</strong>
@@ -53,11 +53,12 @@
 		<!-- main content -->
 		<div flex layout-padding class="bg-light-grey" >
 			<md-content md-whiteframe="3" layout-padding="20" layout="column" ng-style="{ height: (iframeHeight - 80) + 'px' }">
-				<div ng-view></div>
+				<md-progress-linear ng-show="user == undefined" md-mode="indeterminate" ></md-progress-linear>
+				<div ng-if="user != undefined" ng-view></div>
 			</md-content>
 		</div>
 
-		<div style="position: absolute;bottom:20px;right: 20px;" ng-init="run_chat()">
+		<div style="position: absolute;bottom:20px;right: 20px;" >
 			<md-button class="md-fab md-mini md-primary" aria-label="chat" ng-click="showPrerenderedDialog($event,'chat_modal');reset_chat_fab();">
 					<md-tooltip md-direction="top">Live Chat with PCSD Staff</md-tooltip>
 				<i class="fa fa-comment-o"></i>
@@ -75,9 +76,9 @@
 					</div>
 			</md-toolbar>
 
-			<div layout-padding="10"  class="m-t--15" ng-init="load_notifs();" style="height:{{get_window_height() - 160}}px">
+			<div layout-padding="10"  class="m-t--15" style="height:{{get_window_height() - 160}}px">
 				
-				<md-tabs md-dynamic-height md-border-bottom md-selected="0" ng-init="">
+				<md-tabs md-dynamic-height md-border-bottom md-selected="0" >
 						<md-tab label="Notifications">
 							<!-- <md-content class="md-padding" layout="column">
 									<p ng-if="false"> 

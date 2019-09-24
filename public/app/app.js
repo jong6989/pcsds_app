@@ -5,20 +5,9 @@ const config = {
                     }
                 };
 
-//set camera
-function hasGetUserMedia() {
-  return !!(navigator.mediaDevices &&
-    navigator.mediaDevices.getUserMedia);
-}
-
-if (hasGetUserMedia()) {
-  // Good to go!
-} else {
-  alert('getUserMedia() is not supported by your browser');
-}
 
 var myAppModule = {};
-if(window.localStorage["ngStorage-brain_app_user"] == undefined){
+if( !localData.get('profileId') ){
   myAppModule = angular.module('brain_app', ['ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngTable','ngRoute']);
 }else {
   myAppModule = angular.module('brain_app', ['ngMaterial','ngAnimate', 'ngMessages','ngFileUpload','ngImgCrop','ngStorage','ngTable','ngRoute','camera']);
@@ -127,6 +116,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
   $scope.chat_list = [];
   $scope.newChat = '';
   $scope.chatFAB = {};
+  $scope.user = undefined;
 
   $scope.toggleLeft = buildDelayedToggler('left');
   $scope.toggleRight = buildToggler('right');
@@ -289,37 +279,35 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
     );
   };
 
-  $scope.login_attempt = function(d){
-    var q = { 
-      data : { 
-        action : "applicant/account/login",
-        name : d.name,
-        password : d.password
-      },
-      callBack : function(data){
-        if(data.data.status == 0){
-          $scope.toast(data.data.error + "  : " + data.data.hint);
-        }else {
-          $scope.current_view = $localStorage.brain_current_view = data.data.data.main_view;
-          $localStorage.brain_content_page = data.data.data.page_content;
-          $scope.user = $localStorage.brain_app_user = data.data.data.user;
-          $localStorage.brain_menus = data.data.data.menus;
-          $scope.menus = data.data.data.menus;
-          $location.path("/"+ data.data.data.page_content);
-          location.href = base_url;
-        }
-      }
-    };
-    $utils.api(q);
+  $scope.login_attempt = (d)=> {
+    
+    // var q = { 
+    //   data : { 
+    //     action : "applicant/account/login",
+    //     name : d.name,
+    //     password : d.password
+    //   },
+    //   callBack : function(data){
+    //     if(data.data.status == 0){
+    //       $scope.toast(data.data.error + "  : " + data.data.hint);
+    //     }else {
+    //       $scope.current_view = $localStorage.brain_current_view = data.data.data.main_view;
+    //       $localStorage.brain_content_page = data.data.data.page_content;
+    //       $scope.user = $localStorage.brain_app_user = data.data.data.user;
+    //       $localStorage.brain_menus = data.data.data.menus;
+    //       $scope.menus = data.data.data.menus;
+    //       $location.path("/"+ data.data.data.page_content);
+    //       location.href = base_url;
+    //     }
+    //   }
+    // };
+    // $utils.api(q);
   };
 
   $scope.logout = function(){
-    // $scope.current_view = "app/login/view.html";
-    $scope.content_page = "";
-    $localStorage.brain_current_view = undefined;
-    $localStorage.brain_content_page = undefined;
-    $localStorage.brain_app_user = undefined;
-    location.href = base_url;
+    firebase.auth().signOut().catch(function(error) {
+          console.log(error)
+    });
   };
 
   $scope.set_page_title = function(t){
@@ -393,20 +381,20 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
   };
 
   $scope.update_user_data = ()=>{
-    var q = { 
-        data : {
-            action : "applicant/account/get_user",
-            key : $scope.user.user_pass,
-            id : $scope.user.id
-        },
-        callBack : function(data){
-            if(data.data.status == 1){
-              $scope.user = data.data.data;
-              $localStorage.brain_app_user = data.data.data;
-            }
-        }
-    };
-    $utils.api(q);
+    // var q = { 
+    //     data : {
+    //         action : "applicant/account/get_user",
+    //         key : $scope.user.user_pass,
+    //         id : $scope.user.id
+    //     },
+    //     callBack : function(data){
+    //         if(data.data.status == 1){
+    //           $scope.user = data.data.data;
+    //           $localStorage.brain_app_user = data.data.data;
+    //         }
+    //     }
+    // };
+    // $utils.api(q);
   }
 
   $scope.notif_seen = (id)=>{
@@ -435,17 +423,19 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
     $scope.selectedData = x;
   }
 
-  $scope.run_initials = function(){
-    if($localStorage.brain_app_user !== undefined && $localStorage.brain_current_view !== undefined && $localStorage.brain_content_page !== undefined){
-      $scope.current_view = $localStorage.brain_current_view;
-      $scope.user = $localStorage.brain_app_user;
-      $scope.menus = $localStorage.brain_menus;
-      $location.path("/"+ $localStorage.brain_content_page);
-      $scope.update_user_data();
-    }else{
-      $scope.current_view = "app/login/view.html";
-    }
-  };
+  // $scope.run_initials = function(){
+    
+  //   if($localStorage.brain_app_user !== undefined && $localStorage.brain_current_view !== undefined && $localStorage.brain_content_page !== undefined){
+      
+  //     $scope.current_view = $localStorage.brain_current_view;
+  //     $scope.user = $localStorage.brain_app_user;
+  //     $scope.menus = $localStorage.brain_menus;
+  //     $location.path("/"+ $localStorage.brain_content_page);
+  //     $scope.update_user_data();
+  //   }else{
+  //     $scope.current_view = "app/login/view.html";
+  //   }
+  // };
 
   $scope.iframeHeight = $scope.get_window_height();
   angular.element($window).bind('resize',function(){
@@ -481,9 +471,8 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
     );
   }
 
-
-  $scope.load_notifs = ()=>{
-    fire.db.notifications.query.where("type","==","applicant").where("user","==",$scope.user.id).orderBy("date","desc").limit(100).onSnapshot(qs=>{
+  $scope.load_notifs = (id)=>{
+    fire.db.notifications.query.where("type","==","applicant").where("user","==",id).orderBy("date","desc").limit(100).onSnapshot(qs=>{
       let x = {};
       qs.forEach(doc=>{
           x[doc.id] = doc.data();
@@ -515,10 +504,10 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
     fire.db.chats.update($scope.user.id,{received: 0});
   };
 
-  $scope.run_chat = ()=>{
-    fire.db.chats.when($scope.user.id,(res)=>{
+  $scope.run_chat = (id)=>{
+    fire.db.chats.when(id,(res)=>{
       if(res === undefined){
-        fire.db.chats.set($scope.user.id,{
+        fire.db.chats.set(id,{
           name: $scope.user.data.first_name + ' ' + $scope.user.data.last_name,
           count: 0,
           received: 0,
@@ -529,7 +518,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
       }
     });
   
-    fire.db.chats.query.doc($scope.user.id).collection('treads').orderBy('date').onSnapshot(qs => {
+    fire.db.chats.query.doc(id).collection('treads').orderBy('date').onSnapshot(qs => {
       let li = [];
       qs.forEach(doc => {
         li.push(doc.data());
@@ -557,8 +546,54 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
     });
   };
   
+  $scope.current_view = window.localStorage['current_view'];
 
-  if($localStorage.brain_app_user == undefined){
+  function profileSync(id){
+    function startUp(id){
+      $scope.run_chat(id);
+      $scope.load_notifs(id);
+      $scope.menus = [
+        {
+          name: 'Dashboard',
+          url: 'pages/dashboard',
+          icon: 'fa-tachometer'
+        },
+        {
+          name: 'My Profile',
+          url: 'pages/profile',
+          icon: 'fa-user'
+        }
+      ];
+      if(localData.get('brainStarted')){
+        localData.set('brainStarted',true);
+        $location.path("/pages/dashboard");
+      }
+    };
+    //check for user profile
+    // if($localStorage.brain_app_user != undefined){
+    //   $scope.user = $localStorage.brain_app_user;
+    //   startUp(id);
+    // }
+    db.collection('profile').doc(id).onSnapshot( (doc)=>{
+      let d = doc.data();
+      d.id = doc.id;
+      let user = {data : d, "id": id};
+      $scope.user = user;
+      if(!$localStorage.brain_app_user){
+        setTimeout(()=>{ location.reload();},500);
+      }
+      $localStorage.brain_app_user = user;
+      $scope.$apply();
+      startUp(id);
+    } );
+  };
+
+  var profileId = localData.get('profileId');
+  if(profileId != undefined){
+    profileSync(profileId);
+  }
+
+  if(!localData.get('profileId')){
     $timeout(()=> {
       start_particles(); 
     }, 100);

@@ -13,8 +13,8 @@
 			<form name="form_login" ng-init="login = {}" >
 					
 				<md-input-container class="md-block" flex-gt-sm>
-					<label>User Name</label>
-					<input ng-model="login.name" required>
+					<label>Email</label>
+					<input type="email" ng-model="login.name" required>
 				</md-input-container>
 				<md-input-container class="md-block" flex-gt-sm>
 					<label>Password</label>
@@ -25,15 +25,44 @@
 
 		</md-dialog-content>
 
-		<md-dialog-actions layout="row">
-		  <span flex></span>
-		  <md-button type="submit" ng-disabled="form_login.$invalid" ng-click="login_attempt(login)" class="md-raised md-block md-primary" >
-	           Login
-			</md-button>
-		</form>
-		  <md-button ng-click="close_dialog()">
-		   close
-		  </md-button>
+		<md-dialog-actions layout="column">
+		  	<div layout>
+				<span flex></span>
+				  <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+					  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+				  </div>
+				  <md-button ng-hide=" is_loading " type="submit" ng-disabled="form_login.$invalid" ng-click="userLogin(login);" class="md-raised md-block md-primary" >
+					 Login
+				  </md-button>
+				  </form>
+	  
+				  <md-button class="md-fab md-mini bg-red" aria-label="Gmail" ng-click="google_login()">
+					  <i class="fa fa-google"></i>
+				  </md-button>
+	  
+				  <md-button ng-click="close_dialog()">
+					  close
+				  </md-button>
+			</div>	
+
+			<div layout>
+				<md-button ng-hide="viaMobile" class="md-fab md-mini" aria-label="phone" ng-click="phone_login();">
+					<i class="fa fa-mobile"></i>
+				</md-button>
+
+				<form ng-show="viaMobile" layout name="form_phone_verification" ng-init="login = {}" >
+					<md-input-container class="md-block m-r-10" flex-gt-sm>
+						<label>Verification code</label>
+						<input ng-model="verificationCode" minlength="6" required />
+					</md-input-container>
+					<md-button type="submit" ng-disabled="form_phone_verification.$invalid" ng-click="submit_phone_verification_code(verificationCode)" class="md-raised md-block md-primary m-r-10" >
+						Submit Verification Code
+					</md-button>
+				</form>
+				
+				<div id="recaptcha-container"></div>
+			</div>
+			<cite ng-show="viaMobile" class="font-11">Complete captcha to send SMS verification code.</cite>
 		</md-dialog-actions>
 	</md-dialog>
 </div>
