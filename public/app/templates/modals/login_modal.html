@@ -46,7 +46,7 @@
 			</div>	
 
 			<div layout>
-				<md-button ng-hide="viaMobile" class="md-fab md-mini" aria-label="phone" ng-click="phone_login();">
+				<md-button ng-hide="viaMobile" class="md-fab md-mini bg-green" aria-label="phone" ng-click="phone_login();">
 					<i class="fa fa-mobile"></i>
 				</md-button>
 
@@ -63,6 +63,30 @@
 				<div id="recaptcha-container"></div>
 			</div>
 			<cite ng-show="viaMobile" class="font-11">Complete captcha to send SMS verification code.</cite>
+			<br>
+			<hr>
+			<strong>Guide:</strong>
+			<hr>
+			<cite>
+				You can choose either <br>
+				"email password", "Gmail", <br>		
+				or "SMS" authentication.
+			</cite>
+			<br>
+			<p>
+				<strong>email password</strong> - click register and enter your email with desired <br>
+				password and continue to your profile.
+			</p>
+			<p>
+				<strong>Gmail</strong> - click the red "G" button, a pop-up will apear redirecting you <br>
+				to google account login.
+			</p>
+			<p>
+				<strong>SMS</strong> - click the green "phone icon" button, <br>
+				submit your mobile phone number, <br>
+				complete captcha and wait for SMS containing a verification code, <br>
+				submit the received code and complete your profile.
+			</p>
 		</md-dialog-actions>
 	</md-dialog>
 </div>
