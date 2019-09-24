@@ -1,4 +1,4 @@
-<div ng-init="n.subject = 'Certificate of no-pending case'; n.keywords = []; 
+<div ng-init="n.subject = 'CHAINSAW APPLICATION EVALUATION'; n.keywords = []; 
     application_types={'Renewal':'renewal.html','Special Use Permit':'special_use.html'};
     n.application_type='Renewal';
     n.application_template='renewal.html';
@@ -105,7 +105,7 @@
                             <td>:</td>
                             <td>{{n.chainsaw.horsepower}}</td>
                         </tr>
-                        <tr  ng-repeat="item in currentItem.items[n.application_type]">
+                        <tr  ng-repeat="item in n.items[n.application_type]">
                             <td>{{item.label}}</td>
                             <td>:</td>
                             <td>{{

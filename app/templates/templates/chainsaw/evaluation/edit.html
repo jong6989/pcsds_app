@@ -79,7 +79,7 @@
                                     ng-blur="updateDocument(currentItem.id, {'chainsaw.horsepower':currentItem.chainsaw.horsepower})">
                             </td>
                         </tr>
-                        <tr ng-repeat="item in n.items[n.application_type]">
+                        <tr ng-repeat="item in currentItem.items[currentItem.application_type]">
                             <td>{{item.label}}</td>
                             <td>:</td>
                             <td>

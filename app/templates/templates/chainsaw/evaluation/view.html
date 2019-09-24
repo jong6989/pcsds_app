@@ -62,7 +62,7 @@
 							<td>{{item.label}}</td>
 							<td>:</td>
 							<td>{{
-										n[item.model_name]
+										currentItem[item.model_name]
 									}}</td>
 						</tr>
 					</table>
@@ -96,7 +96,7 @@
 		<div>Noted by:</div>
 	</div>
 
-	<div layout>
+	<div layout ng-controller="doc_ctrl_draft">
 		<div flex style="padding: 10px"
 			ng-init="currentItem.sign1 = (currentItem.sign1 == undefined)? { name:'',designation:''}:currentItem.sign1;">
 			<div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center">
@@ -114,10 +114,11 @@
 			<div layout="column" layout-align="center center" ng-if="currentItem.sign1.signature == undefined;"
 				id="sign1" ng-init="generate_signature_field('sign1',0);" style="border: black dashed 1px;">
 				<canvas></canvas>
-				<button ng-click="signclear(0)">Clear Signature</button>
+				<button ng-click="signclear(0);">Clear Signature</button>
 				<button
-					ng-click=" updateDocument(currentItem.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">Save
-					Signature</button>
+					ng-click=" updateDocument(currentItem.id,{'sign1.signature': signed(0), 'sign1.user' : userId });
+						currentItem.sign1.signature=signed(0)">
+					Save Signature</button>
 				<md-input-container md-no-float class="md-block" ng-if="currentItem.sign1.signature == undefined;">
 					<input ng-model="currentItem.sign1.name"
 						ng-blur="updateDocument(currentItem.id,{'sign1.name' : currentItem.sign1.name })" type="text"
@@ -146,11 +147,11 @@
 			</div>
 
 			<div layout="column" layout-align="center center" ng-if="currentItem.sign2.signature == undefined;"
-				id="sign2" ng-init="generate_signature_field('sign2',0);" style="border: black dashed 1px;">
+				id="sign2" ng-init="generate_signature_field('sign2',1);" style="border: black dashed 1px;">
 				<canvas></canvas>
-				<button ng-click="signclear(0)">Clear Signature</button>
+				<button ng-click="signclear(1)">Clear Signature</button>
 				<button
-					ng-click=" updateDocument(currentItem.id,{'sign2.signature': signed(0), 'sign2.user' : userId }) ">Save
+					ng-click=" updateDocument(currentItem.id,{'sign2.signature': signed(1), 'sign2.user' : userId }) ">Save
 					Signature</button>
 				<md-input-container md-no-float class="md-block" ng-if="currentItem.sign2.signature == undefined;">
 					<input ng-model="currentItem.sign2.name"
