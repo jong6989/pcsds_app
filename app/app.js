@@ -575,11 +575,11 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
         $scope.current_view = "app/login/view.html";
       }
 
-      $scope.content_page = "app/doc/view.html";
+      // $scope.content_page = "app/doc/view.html";
       // $scope.current_view = "app/login/view.html";
       // $scope.content_page = "app/pages/database/view.html";
       // $scope.current_view = "app/templates/main.html";
-      // $scope.content_page = "app/templates/templates/chainsaw/dealership_permit/view.html";
+      // $scope.content_page = "app/templates/templates/gratuitous/permit/print.html";
     };
 
     $scope.iframeHeight = $scope.get_window_height();
