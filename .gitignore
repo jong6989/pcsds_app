@@ -69,12 +69,12 @@ dist/
 downloads/
 functions/node_modules/
 orig.git/
-plugins/
+# plugins/
 build/
-css/
+# css/
 DB/
-functions/
-images/
-js/
-images/
-json/
+# functions/
+# images/
+# js/
+# images/
+# json/
