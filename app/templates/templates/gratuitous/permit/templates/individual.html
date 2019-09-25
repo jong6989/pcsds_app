@@ -1,0 +1,46 @@
+<strong>Applicant Information</strong>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>Last Name</label>
+			<input ng-model="n.applicant.last_name" ng-blur="n.keywords[1]=n.applicant.last_name" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>First Name</label>
+			<input ng-model="n.applicant.first_name" ng-blur="n.keywords[2]=n.applicant.fist_name" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Middle Name</label>
+			<input ng-model="n.applicant.middle_name" ng-blur="n.keywords[3]=n.applicant.middle_name" required>
+        </md-input-container>
+        <input ng-model="n.applicant.full_name" ng-value="n.applicant.first_name+' '+n.applicant.middle_name[0]+' '+n.applicant.last_name" type="hidden">
+		<md-input-container class="md-block" flex>
+			<label>Address</label>
+			<input ng-model="n.applicant.address" ng-blur="n.keywords[4]=n.applicant.address" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Nationality</label>
+			<input ng-model="n.applicant.nationality" ng-blur="n.keywords[5]=n.applicant.nationality">
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Degree</label>
+			<input ng-model="n.applicant.degree" ng-blur="n.keywordsk[6]=n.applicant.degree">
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>Nature of Employment</label>
+			<md-select ng-init="n.applicant.employment.nature='Government'" ng-model="n.applicant.employment.nature">
+				<md-option ng-repeat="employment in ['Government', 'Private']" value="{{employment}}">
+					{{employment}}
+				</md-option>
+			</md-select>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Present Position/Official Designation</label>
+			<input ng-model="n.applicant.employment.designation">
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>School/Institution/Agency</label>
+			<input ng-model="n.applicant.employment.agency_name" ng-blur="n.keywordsk[4]=n.applicant.degree">
+		</md-input-container>
+	</div>
