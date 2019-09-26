@@ -33,15 +33,17 @@
                 ngf-pattern="image/*"
                 >
     
-                <img ng-hide="picFile !== null" ng-src="{{ (new_application.applicant_photo == undefined)? 'images/user.png' : api_address  + new_application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3">
+                <img ng-hide="picFile !== null" ng-src="{{ (new_application.applicant_photo == undefined)? 'images/user.png' : new_application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3">
     
                 <img class="align-center" ng-show="picFile !== null" ng-src="{{croppedDataUrl}}" />
     
                 <img-crop ng-show="picFile !== null" image="picFile  | ngfDataUrl"                 
                     result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
                 </img-crop>
-    
-                <md-progress-linear ng-show="upload_process()" md-mode="determinate" value="{{photo_uploading_rate}}"></md-progress-linear>
+
+
+                <md-progress-linear ng-show="is_uploading" md-mode="indeterminate" ></md-progress-linear>
+                <hr>
                 <hr>
     
                 <md-button ng-hide="picFile !== null"
@@ -52,19 +54,19 @@
                 <md-button ng-click="toggle_using_camera()">
                     Use Camera
                 </md-button>
-    
-                <md-button ng-show="(picFile !== null) && !upload_process()" ng-click="upload_photo(croppedDataUrl, 'gp_photo.jpg');picFile=null;">Save</md-button> 
-                <md-button ng-show="(picFile !== null) && !upload_process()" ng-click="clear_cropping_image()" >Cancel</md-button>
+
+                <md-button ng-show="(picFile !== null) && !is_uploading" ng-click="upload_photo(croppedDataUrl, 'gp_photo.jpg');picFile=null;">Save</md-button> 
+                <md-button ng-show="(picFile !== null) && !is_uploading" ng-click="clear_cropping_image()" >Cancel</md-button>
  
     
             </div>
+
+                <div layout="column" ng-if="is_using_camera">
     
-            <div layout="column" ng-if="is_using_camera">
-    
-                <div ng-hide="fromCamera == undefined" class="align-center"><img ng-src="{{croppedDataUrl}}" /></div>
-                <md-button ng-if="fromCamera != undefined" ng-click="upload_photo(croppedDataUrl, 'gp_photo.jpg')" >
-                    Save Image
-                </md-button>
+                    <div ng-hide="fromCamera == undefined" class="align-center"><img ng-src="{{croppedDataUrl}}" /></div>
+                    <md-button ng-if="fromCamera != undefined" ng-click="upload_photo(croppedDataUrl, 'gp_photo.jpg')" >
+                        Save Image
+                    </md-button>
                 
                 <img-crop ng-hide="fromCamera == undefined" image="fromCamera"                 
                     result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
