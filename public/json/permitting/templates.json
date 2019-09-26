@@ -7,6 +7,7 @@
         { "name" : "Application for Wildlife Collectors Permit" , "url" : "app/templates/application/wcp.html" , "action" : "app/templates/actions/generic.html" },
         { "name" : "Application for Wildlife Farm Permit" , "url" : "app/templates/application/wfp.html" , "action" : "app/templates/actions/generic.html" },
         { "name" : "Application for Chainsaw Registration" , "url" : "app/templates/application/cr.html" , "action" : "app/templates/actions/generic.html" },
-        { "name" : "Application for permit to purchase/import of chainsaw" , "url" : "app/templates/application/ptp.html" , "action" : "app/templates/actions/generic.html" }
+        { "name" : "Application for permit to purchase/import of chainsaw" , "url" : "app/templates/application/ptp.html" , "action" : "app/templates/actions/generic.html" },
+        { "name" : "Application for Gratuitous Permit" , "url" : "app/templates/application/gp.html" , "action" : "app/templates/actions/generic.html" }
     ]
 }
