@@ -1,0 +1,110 @@
+<style type="text/css">
+    .roman {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
+<div ng-init="currentItem = render_params.data;print(5000);" class="roman">
+<!-- <div ng-controller="GratuitousPermitController" ng-init="currentItem=n"> -->
+    <!-- header -->
+    <div ng-include="'https://document-network.web.app/pcsd/templates/header3.html'"></div>
+    <hr>
+    <p>
+        <div class="align-center">
+            {{ n.line1 }}<br>
+            {{	n.line2 }}
+        </div>
+
+    </p>
+    <br>
+    <div ng-if="n.application_type=='Individual'">
+        <p>
+            <table>
+                <tr>
+                    <td>Grantee:</td>
+                    <td>{{n.applicant.full_name}}</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>{{n.applicant.employment.designation}}</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>{{n.applicant.employment.agency_name}}</td>
+                </tr>
+            </table>
+        </p>
+    </div>
+    <div ng-if="n.application_type=='Company'">
+        <p>
+            <table>
+                <tr>
+                    <td>Grantee:</td>
+                    <td>{{n.applicant.name}}</td>
+                </tr>
+            </table>
+        </p>
+    </div>
+
+    <p>
+        <div class="align-center">
+            <strong>{{n.line3}}</strong>
+        </div>
+    </p>
+    <p>
+        {{n.line4}}
+    </p>
+    <br>
+    <div class="align-center">
+        <p>
+            {{n.line5}}
+        </p>
+    </div>
+    <br>
+    <div>{{n.line6 }}</div>
+    <!-- Terms and Conditions -->
+
+    <!--end of terms and conditions-->
+    <p>
+        {{n.line7 }}
+    </p>
+    <p>
+        {{n.line8}}
+    </p>
+    <div layout ng-controller="doc_ctrl_draft">
+        <div style="width:60%">
+            &nbsp;
+        </div>
+        <div flex style="padding: 10px"
+            ng-init="currentItem.sign1 = (currentItem.sign1 == undefined) ? {} : currentItem.sign1;">
+            <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center">
+                <img ng-if="currentItem.sign1.signature != undefined" src="{{currentItem.sign1.signature}}"
+                    alt="Signature2" width="auto" style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong> </div>
+                <div class="align-center"> {{currentItem.sign1.designation}} </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <p>
+        <div class="align-center">CONFORME</div>
+    </p>
+    <P>
+        {{n.line9 }}
+    </P>
+    <br><br>
+    <div layout>
+        <div style="width:60%"></div>
+        <div>
+            {{n.line10}}<br>
+            {{n.line11}}<br>
+            {{n.line12}}
+        </div>
+    </div>
+    <p>
+        Paid the amount of Php {{currentItem.paid_amount | number:2}}<br>
+        Under O.R. No. {{currentItem.paid_or_number}}<br>
+        Date: {{currentItem.paid_date}}
+    </p>
+    <!-- footer -->
+    <div ng-include="'https://document-network.web.app/pcsd/templates/footer3.html'"></div>
+</div>

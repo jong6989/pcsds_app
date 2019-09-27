@@ -62,7 +62,8 @@
 
     <br>
     <div ng-repeat="line in [9,10,11]">
-        <input style="width: 100%" ng-model="currentItem['line'+line]" ng-blur="lines={};lines['line'+line]=currentItem['line'+line];
+        <input style="width: 100%" ng-model="currentItem['line'+line]" 
+        ng-blur="lines={};lines['line'+line]=currentItem['line'+line];
                 updateDocument(currentItem.id, lines)"><br>
     </div>
     <hr>

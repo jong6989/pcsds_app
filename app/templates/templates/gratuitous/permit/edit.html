@@ -1,0 +1,97 @@
+<style>
+    textarea {
+        width: 100%
+    }
+</style>
+<!-- <div ng-controller="GratuitousPermitController" ng-init="currentItem=n"> -->
+<div style="width:90%">
+    <div ng-include="'./app/templates/application/style.html'"></div>
+    <div>WILDLIFE GRATUITOUS PERMIT (GP)</div>
+    <div><input ng-model="currentItem.line2" ng-blur="updateDocument(currentItem.id, {line2:currentItem.line2})">
+    </div>
+    <div ng-if="n.application_type=='Individual'">
+        <p>
+            <table>
+                <tr>
+                    <td>Grantee:</td>
+                    <td>
+                        <input ng-model="currentItem.applicant.full_name"
+                            ng-blur="updateDocument(currentItem.id, {'applicant.full_name':currentItem.applicant.full_name})">
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <input ng-model="currentItem.applicant.employment.designation"
+                            ng-blur="updateDocument(currentItem.id, {'applicant.employment.designation': currentItem.applicant.employment.designation})">
+                    <td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <input ng-model="currentItem.applicant.employment.agency_name"
+                            ng-blur="updateDocument(currentItem.id, {'applicant.employment.agency_name': currentItem.employment.agency_name})">
+                    </td>
+                </tr>
+            </table>
+        </p>
+    </div>
+    <div ng-if="n.application_type=='Company'">
+        <p>
+            <table>
+                <tr>
+                    <td>Grantee:</td>
+                    <td>
+                        <input ng-model="currentItem.applicant.name"
+                            ng-blur="updateDocument(currentItem.id, {'applicant.name': currentItem.applicant.name})">
+                    </td>
+                </tr>
+            </table>
+        </p>
+    </div>
+    <p>
+        <div class="align-center">
+            <strong>
+                <textarea ng-model="currentItem.line3"
+                    ng-blur="updateDocument(currentItem.id, {line3:currentItem.line3})">
+                </textarea>
+            </strong>
+        </div>
+    </p>
+    <p>
+        <textarea ng-model="currentItem.line4"
+            ng-blur="updateDocument(currentItem.id, {line4:currentItem.line4})"></textarea>
+    </p>
+    <br>
+    <p>
+        <div class="align-center">
+            <input ng-model="currentItem.line5" ng-blur="updateDocument(currentItem.id, {line5: currentItem.line5})">
+        </div>
+    </p>
+    <p>
+        <input ng-model="currentItem.line6" ng-blur="updateDocument(currentItem.id, {line6:currentItem.line6})">
+    </p>
+    <!-- Terms and Conditions -->
+
+    <!--end of terms and conditions-->
+    <div ng-repeat="lineNumber in [7,8,9,10,11,12]">
+        <p><textarea ng-model="currentItem['line'+lineNumber]"
+                ng-blur="line={};line['line'+lineNumber];lines[updateDocument(currentItem.id, line)"></textarea></p>
+    </div>
+    <strong>Payment</strong>
+    <div layout>
+        <md-input-container flex>
+            <label>Paid amount</label>
+            <input ng-model="n.paid_amount" type="number">
+        </md-input-container>
+        <md-input-container flex>
+            <label>OR Number</label>
+            <input ng-model="n.paid_or_number">
+        </md-input-container>
+        <md-input-container flex>
+            <md-datepicker ng-init="paid_date=n.paid_date" ng-model="paid_date"
+                ng-change="n.paid_date=to_date(paid_date)" md-placeholder="Date of Payment" md-open-on-focus>
+            </md-datepicker>
+        </md-input-container>
+    </div>
+</div>

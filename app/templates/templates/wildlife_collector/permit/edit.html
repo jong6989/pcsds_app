@@ -1,0 +1,70 @@
+<style>
+    textarea {
+        width: 100%
+    }
+</style>
+<!-- <div style="width:90%" ng-controller="WildlifeCollectorController" ng-init="currentItem=n"> -->
+    <div style="width:90%">
+    <div ng-include="'./app/templates/application/style.html'"></div>
+
+    <p>
+        <div class="align-center">
+            WILDLIFE COLLECTOR'S PERMIT<br>
+            <input ng-model="currentItem.line2" ng-blur="updateDocument(currentItem.id,{'line2': currentItem.line2})">
+        </div>
+
+    </p>
+    <br>
+    <p>
+        <textarea ng-model="currentItem.line3" ng-blur="updateDocument(currentItem.id,{'line3': currentItem.line3})">
+        </textarea>
+    </p>
+    <p>
+        <span class="m-l-50"></span>
+        <div ng-init="titles=['Name of Proponent', 'Name of Project/Undertaking', 'Address of Proponent']"></div>
+        <div class="align-center" ng-repeat="x in [1, 3, 5]">
+            <div>
+                <input ng-model="currentItem['line'+(x+3)]" ng-blur="lines={}; lines['line'+(x+3)]=currentItem['line'+(x+3)];
+                    updateDocument(currentItem.id, lines)">
+            </div>
+            <div>
+                <input ng-model="currentItem['line'+(x+4)]" ng-blur="lines={}; lines['line'+(x+4)]=currentItem['line'+(x+4)];
+                    updateDocument(currentItem.id, lines)">
+            </div>
+            <br>
+        </div>
+
+    </p>
+    <p>
+        <textarea ng-model="currentItem.line10" ng-blur="updateDocument(currentItem.id, {line12:currentItem.line10})">
+
+        </textarea>
+    </p>
+    <div layout>
+        <md-input-container class="md-block m-t-40" flex>
+            <label>Paid amount</label>
+            <input type="number" ng-model="currentItem.paid_amount"
+                ng-blur="updateDocument(currentItem.id,{'paid_amount': currentItem.paid_amount})">
+        </md-input-container>
+        <md-input-container class="md-block m-t-40" flex>
+            <label>OR Number</label>
+            <input ng-model="currentItem.paid_or_number"
+                ng-blur="updateDocument(currentItem.id,{'paid_or_number': currentItem.paid_or_number})">
+        </md-input-container>
+        <md-imput-container class="md-block m-t-40" flex>
+            <label>Date Paid</label>
+            <md-datepicker ng-init="paid_date=to_date(currentItem.paid_date)" ng-model="paid_date"
+                ng-change="currentItem.paid_date = to_date(paid_date); updateDocument(currentItem.id,{'paid_date': currentItem.paid_date})"
+                md-placeholder="Date Paid" md-open-on-focus>
+            </md-datepicker>
+        </md-imput-container>
+    </div>
+    <br>
+    <p>
+        <div class="align-center">
+            {{n.line16='Not valid without PCSD official seal.'}}<br>
+            {{n.line17='(PLEASE SEE AT THE BACK PAGE THE TERMS AND CONDITIONS OF THIS CERTIFICATE OF REGISTRATION)'}}
+        </div>
+
+    </p>
+</div>

@@ -1,0 +1,161 @@
+<div ng-init="n.subject = 'GRATUITOUS PERMIT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }"">
+<!-- <div ng-controller="GratuitousPermitController" ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE EXPORT';  
+		titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; 
+		application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }">-->
+
+	<h3 class="align-center">GRATUITOUS PERMIT</h3>
+	<hr>
+	<md-input-container class="md-block m-t-40">
+		<label>Permit Number</label>
+		<input ng-model="n.permit_number" ng-blur="n.keywords[0]=n.permit_number" required>
+	</md-input-container>
+	<br>
+	<md-input-container class="md-block" flex>
+		<label>Applicant Type</label>
+		<md-select ng-init="n.application_type='Individual'" ng-model="n.application_type">
+			<md-option ng-repeat="applicant_type in ['Individual', 'Company']" value="{{applicant_type}}">
+				{{applicant_type}}
+			</md-option>
+		</md-select>
+	</md-input-container>
+	<div ng-include="'./app/templates/templates/gratuitous/permit/templates/' + application_types[n.application_type]">
+	</div>
+	<br>
+	<div>
+		<md-input-container class="md-block" flex>
+			<label>Species/Specimen, Kind and Number/Quantity to be Collected</label>
+			<textarea ng-model="n.species_to_collect"></textarea>
+		</md-input-container>
+	</div>
+	<div>
+		<md-input-container class="md-block" flex>
+			<label>Purpose of Collection</label>
+			<textarea ng-model="n.purpose_of_collection"></textarea>
+		</md-input-container>
+	</div>
+	<strong>Terms and Conditions</strong>
+
+	<!--WYSIWYG editor here-->
+
+	<div layout>
+		<md-input-container>
+			<md-datepicker ng-model="date_issued" ng-change="n.date_issued=to_date(date_issued)"
+				md-placeholder="Date Issued" required>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+			<label>Paid amount</label>
+			<input ng-model="n.paid_amount" type="number">
+		</md-input-container>
+		<md-input-container flex>
+			<label>OR Number</label>
+			<input ng-model="n.paid_or_number">
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker ng-model="paid_date" ng-change="n.paid_date=to_date(paid_date)"
+				md-placeholder="Date of Payment" md-open-on-focus>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+
+	<strong>PREVIEW</strong>
+	<br>
+	<p>
+		<div class="align-center">
+			{{ n.line1 = 'WILDLIFE GRATUITOUS PERMIT'}}<br>
+			{{	n.line2 = 'No.: ' + n.permit_number}}
+		</div>
+
+	</p>
+	<br>
+	<div ng-if="n.application_type=='Individual'">
+		<p>
+			<table>
+				<tr>
+					<td>Grantee:</td>
+					<td>{{n.applicant.full_name}}</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>{{n.applicant.employment.designation}}</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>{{n.applicant.employment.agency_name}}</td>
+				</tr>
+			</table>
+		</p>
+	</div>
+	<div ng-if="n.application_type=='Company'">
+		<p>
+			<table>
+				<tr>
+					<td>Grantee:</td>
+					<td>{{n.applicant.name}}</td>
+				</tr>
+			</table>
+		</p>
+	</div>
+
+	<p>
+		<div class="align-center">
+			<strong>{{n.line3='Wildlife Gratuitous Permit for the ' + n.purpose_of_collection}}</strong>
+		</div>
+	</p>
+	<p>
+		{{n.line4='Pursuant to the provisions of PCSD Resolution No. 11-423 or PCSD Administrative ' +
+			'Order No. 12 "Detailed Guidelines in the Implementation of Republic Act 9147 and Joint " ' +
+			'DENR-DA-PCSD Administrative Order No. 01 as may be made Applicable in the Province ' +
+			'of Palawan"., a Wildlife Gratuitous Permit (GP) is hereby granted to: '}}
+	</p>
+	<br>
+	<div class="align-center">
+		<p ng-if="n.application_type=='Individual'">
+			{{n.line5=n.applicant.full_name.toUpperCase()}}
+		</p>
+		<p ng-if="n.application_type=='Company'">
+			{{n.line5=n.applicant.name.toUpperCase()}}
+		</p>
+	</div>
+	<br>
+	<div>{{n.line6='Subject to the terms and conditions herein stated: '}}</div>
+	<!-- Terms and Conditions -->
+
+	<!--end of terms and conditions-->
+	<p>
+		{{n.line7 = 'Non-compliance with any of the above conditions or the relevant provisions of PCSD Admin Order  No. 12 ' +
+			', series of 2011 shall be sufficient cause for the suspension or cancellation of this Permit and the imposition ' +
+			'of appropriate penalty provided under the said Admin. Order.'}}
+	</p>
+	<p>
+		{{n.line8 = 'Issued this ' + to_day_of_month(n.date_issued) + ' day of ' + get_full_month_name(n.date_issued) +
+			' ' + to_year(n.date_issued) + ' at Brgy. Sta. Monica, Puerto Princesa City, Palawan Philippines. '}}
+	</p>
+	<p>
+		{{pcsd.head.full_name}}<br>
+		{{pcsd.head.position}}
+	</p>
+	<hr>
+	<p>
+		<div class="align-center">CONFORME</div>
+	</p>
+	<P>
+		{{n.line9 = 'I, ' + (n.application_type == 'Individual' ? n.applicant.full_name : n.applicant.representative_name) + 
+			', holder of the foregoing permit, hereby certify that I have read and understood ' +
+			'the Terms and Conditions for which this permit was issued and I hereby express my conformity thereto and my ' +
+			'commitment to abide by the provisions of PCSD AO 12, series of 2011.'}}
+	</P>
+	<p>
+		<div ng-if="n.application_type=='Company'">{{n.line10 = n.applicant.representative_name}}</div>
+		<div ng-if="n.application_type=='Individual'">{{n.line10 = n.applicant.full_name}}</div>
+		{{n.line11 = 'Signature over Printed Name'}}<br>
+		{{n.line12 = 'Date: ' + n.date_issued}}
+	</p>
+</div>
