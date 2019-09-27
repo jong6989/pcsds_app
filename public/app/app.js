@@ -546,7 +546,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
     });
   };
   
-  $scope.current_view = window.localStorage['current_view'];
+  $scope.current_view = localData.get('current_view');
 
   function profileSync(id){
     function startUp(id){
