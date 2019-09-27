@@ -12,7 +12,14 @@ var XLSX = require('xlsx');
 let mainWindow
 
 function createWindow () {
-  mainWindow = new BrowserWindow({show: false,width: 1020, height: 780,minWidth: 400, icon: path.join(__dirname, 'images/pcsdlogo.png')})
+  mainWindow = new BrowserWindow({
+    show: false,
+    width: 1020, 
+    height: 780,
+    minWidth: 400, 
+    icon: path.join(__dirname, 'images/pcsdlogo.png'),
+    webPreferences: { nodeIntegration: true}
+  })
 
   mainWindow.loadFile('index.html')
 

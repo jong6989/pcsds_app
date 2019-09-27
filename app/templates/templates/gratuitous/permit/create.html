@@ -1,7 +1,7 @@
-<div ng-init="n.subject = 'GRATUITOUS PERMIT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }"">
-<!-- <div ng-controller="GratuitousPermitController" ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE EXPORT';  
-		titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; 
-		application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }">-->
+<!-- <div ng-init="n.subject = 'GRATUITOUS PERMIT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }""> -->
+<div ng-controller="GratuitousPermitController" ng-init="n.subject = 'GRATUITOUS PERMIT';  
+		n.keywords = []; 
+		application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }">
 
 	<h3 class="align-center">GRATUITOUS PERMIT</h3>
 	<hr>
@@ -36,7 +36,8 @@
 	<strong>Terms and Conditions</strong>
 
 	<!--WYSIWYG editor here-->
-
+	<div ng-include="'./app/templates/templates/text_editor/quill.html'"></div>
+	
 	<div layout>
 		<md-input-container>
 			<md-datepicker ng-model="date_issued" ng-change="n.date_issued=to_date(date_issued)"
@@ -127,7 +128,10 @@
 	<br>
 	<div>{{n.line6='Subject to the terms and conditions herein stated: '}}</div>
 	<!-- Terms and Conditions -->
-
+	<div id="terms_and_conditions">
+		<div id="empty_toolbar"></div>
+		<div id="preview_editor"></div>
+	</div>
 	<!--end of terms and conditions-->
 	<p>
 		{{n.line7 = 'Non-compliance with any of the above conditions or the relevant provisions of PCSD Admin Order  No. 12 ' +
