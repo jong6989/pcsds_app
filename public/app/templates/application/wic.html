@@ -1,0 +1,198 @@
+
+<div class="p-t-20 p-l-10">
+    <md-button class="md-raised md-primary" ng-click="openQrPage('wic',application.id,application.date)">
+        <md-tooltip md-direction="top">Click to view your digital transantion receipt via Quick Responce (QR) Code.</md-tooltip>
+        OPEN QR CODE
+    </md-button>
+    <hr>
+    <br>
+    <div layout-gt-xs="row" layout-xs="column" layout-align="center center">
+        <div flex-gt-xs="20" flex-xs > 
+            <img src="images/pcsd_logo.png" alt="Palawan Counsil for Sustainable Development" width="80%">
+        </div>
+        <div flex>
+            <h4 class="col-grey md-display-1">Palawan Council for Sustainable Development</h4>
+            <h6 class="col-green md-subtitle"><cite>Online Application</cite></h6>
+        </div>
+    </div>
+    <div layout="row">
+        <div flex-xs="10" flex-sm="15" flex-md="20" flex-lg="25" flex-gt-lg="30"></div>
+        <div flex><img  ng-src="{{ api_address + application.data.application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3"></div>
+        <div flex-xs="10" flex-sm="15" flex-md="20" flex-lg="25" flex-gt-lg="30"></div>
+    </div>
+
+    <h3 class="align-center m-t-20 m-b-10">APPLICATION FOR WILDLIFE IMPORT CERTIFICATION</h3>
+        
+         
+    <div layout="row" layout-align="end">
+            <div layout="column" layout-align="center center">
+                <div><strong style="text-decoration: underline"> {{application.date.split(' ')[0] | date : 'MMMM d, yyyy'}} </strong></div>
+                <div>(date)</div>
+            </div>
+            <div class="p-r-50"></div>
+        </div>
+
+    <h4>
+        NELSON P. DEVANADERA <br>
+        <small>Executive Director</small><br>
+        <small>Palawan Council for Sustainable Development Staff</small>
+    </h4>
+
+    Sir: 
+    
+    <br>
+            <div>
+                <p> I would like to request for the issuance of permit/certification for the following species 
+                /items/articles of wildife(fauna/flora) intended for import for porpuses  {{application.data.application.porpuses}}  (commercial/non-commercial/scientific reseach,etc. </p>
+            </div>
+
+            <div>
+                    <ul ng-if="application.data.application.species.length > 0">
+                        <li ng-repeat="x in application.data.application.species"> 
+                             Common Name/Scientific Name : {{x.scientific_name}}, Description of Parts/derivatives : {{x.derivatives}} of {{x.species_qty}} {{x.species_unit}} in {{x.species_boxes}} {{(x.species_boxes > 1)?'boxes':'box'}}
+                        </li>
+                    </ul>
+            </div>
+
+
+            <div layout>
+                <b style="margin-left: 10%">Air Cargo</b>
+
+                <b style="margin-left: 35%">Sea Cargo</b>
+
+                <b style="margin-left: 31%">Postal Cargo</b>
+         </div>
+
+
+            <div layout="row">
+                        <div flex-gt-sm>Plane.: {{application.data.application.plane}}</div>
+                        <div flex-gt-sm>Flt. No.: {{application.data.application.flt_no}}</div>
+                        <div flex-gt-sm>Vessel.: {{application.data.application.vessel}}</div>
+                        <div flex-gt-sm>Voyage. No.: {{application.data.application.voyage_no}}</div>
+                        <div flex-gt-sm>Carrier.: {{application.data.application.carrier}}</div>
+            </div>
+
+            <div layout="row">
+                <div layout="column">
+                        <div >Port of Loading.: {{application.data.application.port_air}}</div>
+                        <div >Date of Loading.: {{application.data.application.date_air}}</div>
+                </div>
+
+                <div layout="column" style="margin-left: 30%">
+                        <div flex-gt-sm>Port of Loading.: {{application.data.application.port_sea}}</div>
+                        <div flex-gt-sm>Date of Loading.: {{application.data.application.date_sea}}</div>
+                </div>
+
+                
+                <div layout="column" style="margin-left: 29%">
+                            <div flex-gt-sm>Port of Loading.: {{application.data.application.port_postal}}</div>
+                            <div flex-gt-sm>Date of Loading.: {{application.data.application.date_postal}}</div>
+                </div>
+
+            </div>
+         
+            <hr>
+
+            <div layout="row">
+                    <div flex-gt-sm>Name of Exporter.: {{application.data.application.name_exporter}}</div>
+                    <div flex-gt-sm>Address.: {{application.data.application.address_exporter}}</div>
+            </div>
+
+            <div flex-gt-sm>Tax Identification Number.: {{application.data.application.tin_exporter}}</div>
+        
+            <div layout="row">
+                    <div flex-gt-sm>Exporter Contact Number.: {{application.data.application.exporter_contact}}</div>
+                    <div flex-gt-sm>Fax No.: {{application.data.application.exporter_fax}}</div>
+            </div> 
+
+            <hr>
+         
+            <div class="m-l-10" layout-gt-sm="row">
+                <div flex-gt-sm>Name of Importer.: {{application.data.application.applicant}}</div>
+                <div flex-gt-sm>Applicant's Contact Number.: {{application.data.application.contact}}</div>
+            </div>
+
+            <div class="m-l-10" layout-gt-sm="row">
+                    <div flex-gt-sm>Address.: {{application.data.application.applicant_address}}</div>
+                    <div flex-gt-sm>Fax No.: {{application.data.application.fax_no}}</div>
+            </div>
+
+            <div>
+                    <div flex-gt-sm>Tax Identification Number.: {{application.data.application.tin_no}}</div>
+            </div>
+
+    
+
+
+    <hr>
+    
+    <!-- Received Stamp -->
+    <div ng-if="application.status > 0" >
+        <md-card>
+            <md-card-content>
+                Received by : <strong>{{ application.data.received.staff }}</strong> 
+                , on <strong>{{application.data.received.date}}</strong>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Rejected Stamp -->
+    <div ng-if="application.data.rejected != undefined " >
+        <md-card>
+            <md-card-content>
+                Rejected by : <strong>{{ application.data.rejected.staff }} </strong> 
+                Reason : <strong>{{ application.data.rejected.message }} </strong> 
+                , on <strong>{{application.data.rejected.date}}</strong>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Accepted Stamp -->
+    <div ng-if="application.data.accepted != undefined " >
+        <md-card>
+            <md-card-content>
+                Processed by : <strong>{{ application.data.accepted.staff }} </strong> 
+                , on  <strong>{{application.data.accepted.date}}</strong>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Approved Stamp -->
+    <div ng-if="application.data.approved != undefined " >
+        <md-card>
+            <md-card-content>
+                Reviewed by : <strong>{{ application.data.approved.staff }} </strong> 
+                , on  <strong>{{application.data.approved.date}}</strong>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Recommended Stamp -->
+    <div ng-if="application.data.recommended != undefined " >
+        <md-card>
+            <md-card-content>
+                Recommended by : <strong>{{ application.data.recommended.staff }} </strong> 
+                , on  <strong>{{application.data.recommended.date}}</strong>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Acknowledged Stamp -->
+    <div ng-if="application.data.acknowledged != undefined " >
+        <md-card>
+            <md-card-content>
+                Approved by : <strong>{{ application.data.acknowledged.staff }} </strong>
+                , on  <strong>{{application.data.acknowledged.date}}</strong>
+                <br>
+                Expiration : <strong>{{application.expiration | date}}</strong>
+            </md-card-content>
+        </md-card>
+    <md-divider class="m-t-20 m-b-20"></md-divider>
+
+</div>
+
+
+
+<md-button ng-click="close_dialog()">
+    close
+</md-button>
