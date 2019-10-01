@@ -33,7 +33,7 @@
                 ngf-pattern="image/*"
                 >
     
-                <img ng-hide="picFile !== null" ng-src="{{ (new_application.applicant_photo == undefined)? 'images/user.png' : api_address  + new_application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3">
+                <img ng-hide="picFile !== null" ng-src="{{ (new_application.applicant_photo == undefined)? 'images/user.png' : new_application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3">
     
                 <img class="align-center" ng-show="picFile !== null" ng-src="{{croppedDataUrl}}" />
     
@@ -120,51 +120,51 @@
                        <br>  
 
 
-                    <h4 class="col-blue-grey" ng-init="new_application.specimen = [{}]" flex>
-                         Specimen: <md-button class="md-raised" ng-click="new_application.specimen.push({});">Add Specimen</md-button>
-                    </h4>
+                       <h4 class="col-blue-grey" ng-init="new_application.species = [{}]" flex>
+                        Specimen: <md-button class="md-raised" ng-click="new_application.species.push({});">Add Specimen</md-button>
+                   </h4>
 
-                  <div>
-                        <div ng-repeat="x in new_application.specimen"  flex layout-gt-sm="row" >
-                            <div flex-gt-sm="5">
-                                <i ng-if="new_application.specimen.length > 1" class="fa fa-trash pointer col-red" ng-click="new_application.specimen.splice(new_application.specimen.indexOf(x),1);"></i>
-                                {{$index + 1}}.
-                            </div>
-        
-                            
-                            <md-input-container class="md-block m-r-10" flex-gt-sm>
-                                    <label>Common Name/Scientific Name</label>
-                                    <input ng-model="new_application.specimen[new_application.specimen.indexOf(x)].scientific_name" required>
-                                 </md-input-container>
-             
-                                 <md-input-container class="md-block" flex-gt-sm=>
-                                    <label>Description of Parts/derivatives </label>
-                                    <input ng-model="new_application.specimen[new_application.specimen.indexOf(x)].derivatives" required>
-                                 </md-input-container>
+                 <div>
+                       <div ng-repeat="x in new_application.species"  flex layout-gt-sm="row" >
+                           <div flex-gt-sm="5">
+                               <i ng-if="new_application.species.length > 1" class="fa fa-trash pointer col-red" ng-click="new_application.species.splice(new_application.species.indexOf(x),1);"></i>
+                               {{$index + 1}}.
+                           </div>
+       
+                           
+                               <md-input-container class="md-block m-r-10" flex-gt-sm>
+                                   <label>Common Name/Scientific Name</label>
+                                   <input ng-model="new_application.species[new_application.species.indexOf(x)].scientific_name" required>
+                                </md-input-container>
+            
+                                <md-input-container class="md-block" flex-gt-sm=>
+                                   <label>Description of Parts/derivatives </label>
+                                   <input ng-model="new_application.species[new_application.species.indexOf(x)].derivatives" required>
+                                </md-input-container>
 
-                                <md-input-container class="md-block" flex-gt-sm="10">
-                                    <label>Quantity</label>
-                                    <input type="number" min="1" max="9999" ng-model="new_application.specimen[new_application.specimen.indexOf(x)].species_qty" required>
-                                </md-input-container>
-            
-                                <md-input-container>
-                                <label>Unit</label>
-                                <md-select ng-model="new_application.specimen[new_application.specimen.indexOf(x)].species_unit" required>
-                                    <md-option value="pcs">pcs</md-option>
-                                    <md-option value="kg">kg</md-option>
-                                    <md-option value="cm">cm</md-option>
-                                    <md-option value="dozen">dozen</md-option>
-                                </md-select>
-                                </md-input-container>
-            
-                                <md-input-container class="md-block" flex-gt-sm="10">
-                                <label>Boxes</label>
-                                <input type="number" min="1" max="9999" ng-model="new_application.species[new_application.species.indexOf(x)].species_boxes" required>
-                                </md-input-container>
-            
-            
-                        </div>
-                    </div>
+                               <md-input-container class="md-block" flex-gt-sm="10">
+                                   <label>Quantity</label>
+                                   <input type="number" min="1" max="9999" ng-model="new_application.species[new_application.species.indexOf(x)].species_qty" required>
+                               </md-input-container>
+           
+                               <md-input-container>
+                               <label>Unit</label>
+                               <md-select ng-model="new_application.species[new_application.species.indexOf(x)].species_unit" required>
+                                   <md-option value="pcs">pcs</md-option>
+                                   <md-option value="kg">kg</md-option>
+                                   <md-option value="cm">cm</md-option>
+                                   <md-option value="dozen">dozen</md-option>
+                               </md-select>
+                               </md-input-container>
+           
+                               <md-input-container class="md-block" flex-gt-sm="10">
+                               <label>Boxes</label>
+                               <input type="number" min="1" max="9999" ng-model="new_application.species[new_application.species.indexOf(x)].species_boxes" required>
+                               </md-input-container>
+           
+           
+                       </div>
+                   </div>
 
                     <br>
 
@@ -219,8 +219,10 @@
                                         </md-input-container>
                          
                                         <md-input-container>
-                                            <label>Date of Loading:</label>
-                                            <input ng-model="new_application.date_air"required>         
+                                            <!-- <label>Date of Loading:</label>
+                                            <input ng-model="new_application.date_air"required>          -->
+                                            <md-datepicker ng-model="new_application.date_air" md-placeholder="Enter date"></md-datepicker>
+                                            Date: {{new_application.date_air | date:shortDate}}
                                         </md-input-container>
                              </div>
                                    
@@ -231,8 +233,10 @@
                                             </md-input-container>
                              
                                             <md-input-container>
-                                                <label>Date of Loading</label>
-                                                <input ng-model="new_application.date_sea"required>         
+                                                <!-- <label>Date of Loading</label>
+                                                <input ng-model="new_application.date_sea"required>          -->
+                                                <md-datepicker ng-model="new_application.date_sea" md-placeholder="Enter date"></md-datepicker>
+                                                Date: {{new_application.date_sea | date:shortDate}}
                                             </md-input-container>
 
                             </div>
@@ -247,11 +251,9 @@
                                             <label>Date of Loading</label>
                                             <input ng-model="new_application.date_postal"required>
                                     </md-input-container> -->
-                                    <md-content ng-app="MyApp" ng-controller="AppCtrl as ctrl" layout-padding layout-margin>
-                                                    <md-datepicker ng-model="new_application.date_postal" ng-change="ctrl.onDateChanged()"
-                                                    md-placeholder="Enter date"></md-datepicker>
-                                                    Date: {{ctrl.myDate | date:shortDate}}
-                                    </md-content>
+                                                    <md-datepicker ng-model="new_application.date_postal" md-placeholder="Enter date"></md-datepicker>
+                                                    Date: {{new_application.date_postal | date:shortDate}}
+                                    
                             </div>
                          </div>
 
@@ -380,7 +382,7 @@
             <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
-            <md-button ng-hide=" is_loading " ng-disabled="form_online_application.$invalid" ng-click="submit_application(new_application,' APPLICATION FOR WILDLIFE IMPORT CERTIFICATION','wic')" 
+            <md-button ng-hide=" is_loading " ng-disabled="form_online_application.$invalid" ng-click="submit_application(new_application,'Application for Wildlife Import Certification','wic')" 
                 class="md-primary md-raised md-block" >
                 <strong class="font-16">Submit Application</strong>
             </md-button>
