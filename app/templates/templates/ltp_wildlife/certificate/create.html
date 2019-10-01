@@ -1,5 +1,5 @@
 <div ng-init="n.subject = 'CERTIFICATION OF INSPECTION'; 
-titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
+titles = ['Ms.','Mrs.','Mr.']; n.keywords = ((n.keywords)? n.keywords :[]); c_type='inspection'">
 
 	<h3 class="align-center">CERTIFICATION OF INSPECTION</h3>
 	<hr>
@@ -95,7 +95,7 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 			<input ng-model="n.recipient_name" ng-blur="n.keywords[3]=n.recipient_name" required>
 		</md-input-container>
 		<md-input-container flex>
-			<label>Date of Transport</label>
+			<label>Date of Transport </label>
 			<md-datepicker ng-model="transport_date" ng-change="n.transport_date = to_date(transport_date)" required>
 			</md-datepicker>
 		</md-input-container>
@@ -179,4 +179,11 @@ titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; c_type='inspection'">
 			' in Palawan Council for Sustainable Development Staff (PCSDS) Office, Sta. Monica, Puerto Princesa City.'
 		}}
 	</p>
+
+	<br>
+	<strong>Keywords</strong>
+
+    <md-chips ng-model="n.keywords" md-add-on-blur="true" readonly="false"
+        input-aria-label="Keywords" placeholder="add keywords" md-removable="true"></md-chips>
+    <br>
 </div>

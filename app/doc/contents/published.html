@@ -89,7 +89,7 @@
             <i class="fa fa-paper-plane m-r-5"></i>
              {{ (currentClicked == 'received') ? 'Forward' : 'Send' }}
         </md-button>
-        <md-button ng-if="currentItem.template != undefined" class="md-fab md-mini" aria-label="Print Document" ng-click="open_window_view(currentItem.template.print, currentItem)">
+        <md-button ng-if="currentItem.template != undefined" class="md-fab md-mini" aria-label="Print Document" ng-click="print_document(currentItem.id);">
             <md-tooltip md-direction="left">Print this document</md-tooltip>
             <i class="fa fa-print" ></i>
         </md-button> 
