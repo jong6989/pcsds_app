@@ -697,5 +697,5 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
           position: "PCSDS Executive Director"
       }
     }
-})
-;
+});
+document.write(`<script src="./app/doc/controllers/gratuitous.js"></script>`);
