@@ -6,16 +6,16 @@
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>First Name</label>
-			<input ng-model="n.applicant.first_name" ng-blur="n.keywords[2]=n.applicant.fist_name" required>
+			<input ng-model="n.applicant.first_name" ng-blur="n.keywords[2]=n.applicant.first_name" required>
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Middle Name</label>
-			<input ng-model="n.applicant.middle_name" ng-blur="n.keywords[3]=n.applicant.middle_name" required>
+			<input ng-model="n.applicant.middle_name" ng-blur="n.keywords[3]=n.applicant.middle_name">
         </md-input-container>
-        <input ng-model="n.applicant.full_name" ng-value="n.applicant.first_name+' '+n.applicant.middle_name[0]+' '+n.applicant.last_name" type="hidden">
+        <input ng-value="n.applicant.full_name=n.applicant.first_name+' '+n.applicant.middle_name[0]+' '+n.applicant.last_name" ng-model="n.applicant.full_name" type="hidden">
 		<md-input-container class="md-block" flex>
 			<label>Address</label>
-			<input ng-model="n.applicant.address" ng-blur="n.keywords[4]=n.applicant.address" required>
+			<input ng-model="n.applicant.address" ng-blur="n.keywords[4]=n.applicant.address">
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Nationality</label>
@@ -23,7 +23,7 @@
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Degree</label>
-			<input ng-model="n.applicant.degree" ng-blur="n.keywordsk[6]=n.applicant.degree">
+			<input ng-model="n.applicant.degree" ng-blur="n.keywords[6]=n.applicant.degree">
 		</md-input-container>
 	</div>
 	<div layout>
@@ -41,6 +41,6 @@
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>School/Institution/Agency</label>
-			<input ng-model="n.applicant.employment.agency_name" ng-blur="n.keywordsk[4]=n.applicant.degree">
+			<input ng-model="n.applicant.employment.agency_name" ng-blur="n.keywords[4]=n.applicant.degree">
 		</md-input-container>
 	</div>

@@ -78,6 +78,7 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
     };
 
     $scope.publishDraft = (item,ev) => {
+        $scope.printpd();
         if($scope.doc_user_agencies.length > 0){
             var confirm = $mdDialog.confirm()
             .title(`Publish this Draft Document?`)
@@ -100,7 +101,9 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
         }
         
     };
-
+    $scope.printpd = () => { 
+        console.log("print pd")
+        console.log($scope.publishDraft);}
     $scope.openFile = (id,path,cF) => {
         $scope.updateCleanDocFiles(id,cF);
         shell.openItem(storageFolder + path);

@@ -580,7 +580,8 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
       // $scope.current_view = "app/login/view.html";
       // $scope.content_page = "app/pages/database/view.html";
       // $scope.current_view = "app/templates/main.html";
-      // $scope.content_page = "app/templates/templates/gratuitous/permit/print.html";
+      // $scope.content_page = "app/templates/templates/gratuitous/permit/create.html";
+      // $scope.content_page = "app/templates/test/editor.html";
     };
 
     $scope.iframeHeight = $scope.get_window_height();
@@ -697,5 +698,5 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
           position: "PCSDS Executive Director"
       }
     }
-})
-;
+});
+document.write(`<script src="./app/doc/controllers/gratuitous.js"></script>`);

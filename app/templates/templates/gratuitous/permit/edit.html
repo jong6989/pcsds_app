@@ -71,12 +71,11 @@
     <p>
         <input ng-model="currentItem.line6" ng-blur="updateDocument(currentItem.id, {line6:currentItem.line6})">
     </p>
-    <!-- Terms and Conditions -->
-
-    <!--end of terms and conditions-->
+	<textarea ng-model="currentItem.terms" ckeditor></textarea>
+    <br>
     <div ng-repeat="lineNumber in [7,8,9,10,11,12]">
         <p><textarea ng-model="currentItem['line'+lineNumber]"
-                ng-blur="line={};line['line'+lineNumber];lines[updateDocument(currentItem.id, line)"></textarea></p>
+                ng-blur="line={};line['line'+lineNumber];updateDocument(currentItem.id, line)"></textarea></p>
     </div>
     <strong>Payment</strong>
     <div layout>
