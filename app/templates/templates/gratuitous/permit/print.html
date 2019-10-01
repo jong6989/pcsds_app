@@ -3,43 +3,43 @@
         font-family: 'Times New Roman', Times, serif;
     }
 </style>
-<div ng-init="currentItem = render_params.data;print(5000);" class="roman">
-<!-- <div ng-controller="GratuitousPermitController" ng-init="currentItem=n"> -->
+<div ng-init="currentItem = render_params.data;" class="roman">
+<!-- <div  ng-controller="GratuitousPermitController"  ng-init="currentItem=n"> -->
     <!-- header -->
     <div ng-include="'https://document-network.web.app/pcsd/templates/header3.html'"></div>
     <hr>
     <p>
         <div class="align-center">
-            {{ n.line1 }}<br>
-            {{	n.line2 }}
+            {{ currentItem.line1 }}<br>
+            {{	currentItem.line2 }}
         </div>
 
     </p>
     <br>
-    <div ng-if="n.application_type=='Individual'">
+    <div ng-if="currentItem.application_type=='Individual'">
         <p>
             <table>
                 <tr>
                     <td>Grantee:</td>
-                    <td>{{n.applicant.full_name}}</td>
+                    <td>{{currentItem.applicant.full_name}}</td>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td>{{n.applicant.employment.designation}}</td>
+                    <td>{{currentItem.applicant.employment.designation}}</td>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td>{{n.applicant.employment.agency_name}}</td>
+                    <td>{{currentItem.applicant.employment.agency_name}}</td>
                 </tr>
             </table>
         </p>
     </div>
-    <div ng-if="n.application_type=='Company'">
+    <div ng-if="currentItem.application_type=='Company'">
         <p>
             <table>
                 <tr>
                     <td>Grantee:</td>
-                    <td>{{n.applicant.name}}</td>
+                    <td>{{currentItem.applicant.name}}</td>
                 </tr>
             </table>
         </p>
@@ -47,28 +47,30 @@
 
     <p>
         <div class="align-center">
-            <strong>{{n.line3}}</strong>
+            <strong>{{currentItem.line3}}</strong>
         </div>
     </p>
     <p>
-        {{n.line4}}
+        {{currentItem.line4}}
     </p>
     <br>
     <div class="align-center">
         <p>
-            {{n.line5}}
+            {{currentItem.line5}}
         </p>
     </div>
     <br>
-    <div>{{n.line6 }}</div>
+    <div>{{currentItem.line6 }}</div>
+    <br>
     <!-- Terms and Conditions -->
-
+	<textarea ng-model="currentItem.terms" ckeditor class='no-toolbar' disabled></textarea>
     <!--end of terms and conditions-->
+    <br>
     <p>
-        {{n.line7 }}
+        {{currentItem.line7 }}
     </p>
     <p>
-        {{n.line8}}
+        {{currentItem.line8}}
     </p>
     <div layout ng-controller="doc_ctrl_draft">
         <div style="width:60%">
@@ -89,15 +91,15 @@
         <div class="align-center">CONFORME</div>
     </p>
     <P>
-        {{n.line9 }}
+        {{currentItem.line9 }}
     </P>
     <br><br>
     <div layout>
         <div style="width:60%"></div>
         <div>
-            {{n.line10}}<br>
-            {{n.line11}}<br>
-            {{n.line12}}
+            {{currentItem.line10}}<br>
+            {{currentItem.line11}}<br>
+            {{currentItem.line12}}
         </div>
     </div>
     <p>

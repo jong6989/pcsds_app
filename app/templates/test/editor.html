@@ -1,10 +1,12 @@
 <div ng-controller="ckeditorController" flex>
-    <textarea name="content" id="editor">
+    <!-- <textarea name="content" id="editor">
         <p>This is the editor content.</p>
-    </textarea>
+    </textarea> -->
+    <textarea ng-model="vm.article.Body" ckeditor></textarea>
+    <textarea ng-model="terms" ckeditor></textarea>
 </div>
 
-<!-- <div ng-controller="quillController">
+<!-- <div ng-controller="quillController" >
 
     <div id="editor">
         <div id="toolbar-container">
@@ -62,5 +64,5 @@
     <div id="output-container">
         
     </div>
-    <button ng-click="getContents()">Get Contents</button> -->
-</div>
+    <button ng-click="getContents()">Get Contents</button>
+</div>-->

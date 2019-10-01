@@ -80,6 +80,7 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
     };
 
     $scope.publishDraft = (item,ev) => {
+        $scope.printpd();
         var confirm = $mdDialog.confirm()
           .title(`Publish this Draft Document?`)
           .textContent('are you sure?')
@@ -96,7 +97,9 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
             $scope.setCurrentItem($scope.currentItem,'published');
         },()=>{});
     };
-
+    $scope.printpd = () => { 
+        console.log("print pd")
+        console.log($scope.publishDraft);}
     $scope.openFile = (id,path,cF) => {
         $scope.updateCleanDocFiles(id,cF);
         shell.openItem(storageFolder + path);

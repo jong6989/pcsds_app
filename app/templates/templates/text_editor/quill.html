@@ -1,6 +1,6 @@
-<div ng-controller="quillController" ng-init="n.terms={};">
+<div ng-controller="quillController">
     <div id="editor">
-        <div id="toolbar-container">
+        <div id="{{toolbar_container}}">
             <span class="ql-formats">
                 <select class="ql-font"></select>
                 <select class="ql-size"></select>
@@ -45,8 +45,8 @@
                 <button class="ql-clean"></button>
             </span>
         </div>
-        <div id="editor-container">
+        <div id="{{editor_container}}">
+            
         </div>
     </div>
-
 </div>
