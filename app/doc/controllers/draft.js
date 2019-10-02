@@ -81,7 +81,6 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
     };
 
     $scope.publishDraft = (item,ev) => {
-<<<<<<< HEAD
         var confirm = $mdDialog.confirm()
           .title(`Publish this Draft Document?`)
           .textContent('are you sure?')
@@ -97,30 +96,6 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
             $scope.currentItem.meta = meta;
             $scope.setCurrentItem($scope.currentItem,'published');
         },()=>{});
-=======
-        $scope.printpd();
-        if($scope.doc_user_agencies.length > 0){
-            var confirm = $mdDialog.confirm()
-            .title(`Publish this Draft Document?`)
-            .textContent('are you sure?')
-            .ariaLabel('sure')
-            .targetEvent(ev)
-            .ok('Yes, Publish now')
-            .cancel('Cancel');
-          $mdDialog.show(confirm).then( () => {
-              let meta = {'published_date': $scope.date_now('YYYY-MM-DD'), 'published_time': Date.now() };
-              let u = {'status':'published', 'meta': meta, 'agency': (item.agency)? item.agency : $scope.doc_user_agencies[0]};
-              
-              doc.db.collection(documents).doc(item.id).update(u);
-              $scope.currentItem.status = 'published';
-              $scope.currentItem.meta = meta;
-              $scope.setCurrentItem($scope.currentItem,'published');
-          },()=>{}); 
-        }else {
-            $scope.toast("system error, account not activated.");
-        }
-        
->>>>>>> dfec47aedc235b887b547ddbd6778132131be03f
     };
     
     $scope.openFile = (id,path,cF) => {
