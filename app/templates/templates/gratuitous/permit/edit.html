@@ -7,7 +7,7 @@
 <div style="width:90%">
     <div ng-include="'./app/templates/application/style.html'"></div>
     <div>WILDLIFE GRATUITOUS PERMIT (GP)</div>
-    <div><input ng-model="currentItem.line2" ng-blur="updateDocument(currentItem.id, {line2:currentItem.line2})">
+    <div><input ng-model="currentItem.gratuitous_permit.line2" ng-blur="updateDocument(currentItem.gratuitous_permit.id, {line2:currentItem.gratuitous_permit.line2})">
     </div>
     <div ng-if="n.application_type=='Individual'">
         <p>
@@ -15,22 +15,22 @@
                 <tr>
                     <td>Grantee:</td>
                     <td>
-                        <input ng-model="currentItem.applicant.full_name"
-                            ng-blur="updateDocument(currentItem.id, {'applicant.full_name':currentItem.applicant.full_name})">
+                        <input ng-model="currentItem.gratuitous_permit.applicant.full_name"
+                            ng-blur="updateDocument(currentItem.gratuitous_permit.id, {'applicant.full_name':currentItem.gratuitous_permit.applicant.full_name})">
                     </td>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        <input ng-model="currentItem.applicant.employment.designation"
-                            ng-blur="updateDocument(currentItem.id, {'applicant.employment.designation': currentItem.applicant.employment.designation})">
+                        <input ng-model="currentItem.gratuitous_permit.applicant.employment.designation"
+                            ng-blur="updateDocument(currentItem.gratuitous_permit.id, {'applicant.employment.designation': currentItem.gratuitous_permit.applicant.employment.designation})">
                     <td>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        <input ng-model="currentItem.applicant.employment.agency_name"
-                            ng-blur="updateDocument(currentItem.id, {'applicant.employment.agency_name': currentItem.employment.agency_name})">
+                        <input ng-model="currentItem.gratuitous_permit.applicant.employment.agency_name"
+                            ng-blur="updateDocument(currentItem.gratuitous_permit.id, {'applicant.employment.agency_name': currentItem.gratuitous_permit.employment.agency_name})">
                     </td>
                 </tr>
             </table>
@@ -42,8 +42,8 @@
                 <tr>
                     <td>Grantee:</td>
                     <td>
-                        <input ng-model="currentItem.applicant.name"
-                            ng-blur="updateDocument(currentItem.id, {'applicant.name': currentItem.applicant.name})">
+                        <input ng-model="currentItem.gratuitous_permit.applicant.name"
+                            ng-blur="updateDocument(currentItem.gratuitous_permit.id, {'applicant.name': currentItem.gratuitous_permit.applicant.name})">
                     </td>
                 </tr>
             </table>
@@ -52,44 +52,50 @@
     <p>
         <div class="align-center">
             <strong>
-                <textarea ng-model="currentItem.line3"
-                    ng-blur="updateDocument(currentItem.id, {line3:currentItem.line3})">
+                <textarea ng-model="currentItem.gratuitous_permit.line3"
+                    ng-blur="updateDocument(currentItem.gratuitous_permit.id, {line3:currentItem.gratuitous_permit.line3})">
                 </textarea>
             </strong>
         </div>
     </p>
     <p>
-        <textarea ng-model="currentItem.line4"
-            ng-blur="updateDocument(currentItem.id, {line4:currentItem.line4})"></textarea>
+        <textarea ng-model="currentItem.gratuitous_permit.line4"
+            ng-blur="updateDocument(currentItem.gratuitous_permit.id, {line4:currentItem.gratuitous_permit.line4})"></textarea>
     </p>
     <br>
     <p>
         <div class="align-center">
-            <input ng-model="currentItem.line5" ng-blur="updateDocument(currentItem.id, {line5: currentItem.line5})">
+            <input ng-model="currentItem.gratuitous_permit.line5" ng-blur="updateDocument(currentItem.gratuitous_permit.id, {line5: currentItem.gratuitous_permit.line5})">
         </div>
     </p>
     <p>
-        <input ng-model="currentItem.line6" ng-blur="updateDocument(currentItem.id, {line6:currentItem.line6})">
+        <input ng-model="currentItem.gratuitous_permit.line6" ng-blur="updateDocument(currentItem.gratuitous_permit.id, {line6:currentItem.gratuitous_permit.line6})">
     </p>
-	<textarea ng-model="currentItem.terms" ckeditor></textarea>
+
+    <div ng-controller="EditGratuitousPermitController">
+        <textarea id="gratuitous_permit_terms_edit" ng-model="currentItem.gratuitous_permit.gratuitous_permit_terms" ckeditor></textarea>
+        <!-- <textarea id="edit_terms_editor" ng-model="currentItem.gratuitous_permit.gratuitous_permit_terms"></textarea> -->
+    </div>
+    
     <br>
     <div ng-repeat="lineNumber in [7,8,9,10,11,12]">
-        <p><textarea ng-model="currentItem['line'+lineNumber]"
-                ng-blur="line={};line['line'+lineNumber];updateDocument(currentItem.id, line)"></textarea></p>
+        <p><textarea ng-model="currentItem.gratuitous_permit['line'+lineNumber]"
+                ng-blur="line={};line['line'+lineNumber]=currentItem.gratuitous_permit['line'+lineNumber];
+                updateDocument(currentItem.gratuitous_permit.id, line)"></textarea></p>
     </div>
     <strong>Payment</strong>
     <div layout>
         <md-input-container flex>
             <label>Paid amount</label>
-            <input ng-model="n.paid_amount" type="number">
+            <input ng-model="currentItem.gratuitous_permit.paid_amount" type="number">
         </md-input-container>
         <md-input-container flex>
             <label>OR Number</label>
-            <input ng-model="n.paid_or_number">
+            <input ng-model="currentItem.gratuitous_permit.paid_or_number">
         </md-input-container>
         <md-input-container flex>
             <md-datepicker ng-init="paid_date=n.paid_date" ng-model="paid_date"
-                ng-change="n.paid_date=to_date(paid_date)" md-placeholder="Date of Payment" md-open-on-focus>
+                ng-change="currentItem.gratuitous_permit.paid_date=to_date(paid_date)" md-placeholder="Date of Payment" md-open-on-focus>
             </md-datepicker>
         </md-input-container>
     </div>

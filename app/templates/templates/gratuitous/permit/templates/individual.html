@@ -2,34 +2,34 @@
 	<div layout>
 		<md-input-container class="md-block" flex>
 			<label>Last Name</label>
-			<input ng-model="n.applicant.last_name" ng-blur="n.keywords[1]=n.applicant.last_name" required>
+			<input ng-model="n.gratuitous_permit.applicant.last_name" ng-blur="n.gratuitous_permit.keywords[1]=n.gratuitous_permit.applicant.last_name" required>
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>First Name</label>
-			<input ng-model="n.applicant.first_name" ng-blur="n.keywords[2]=n.applicant.first_name" required>
+			<input ng-model="n.gratuitous_permit.applicant.first_name" ng-blur="n.gratuitous_permit.keywords[2]=n.gratuitous_permit.applicant.first_name" required>
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Middle Name</label>
-			<input ng-model="n.applicant.middle_name" ng-blur="n.keywords[3]=n.applicant.middle_name">
+			<input ng-model="n.gratuitous_permit.applicant.middle_name" ng-blur="n.gratuitous_permit.keywords[3]=n.gratuitous_permit.applicant.middle_name">
         </md-input-container>
-        <input ng-value="n.applicant.full_name=n.applicant.first_name+' '+n.applicant.middle_name[0]+' '+n.applicant.last_name" ng-model="n.applicant.full_name" type="hidden">
+        <input ng-value="n.gratuitous_permit.applicant.full_name=n.gratuitous_permit.applicant.first_name+' '+n.gratuitous_permit.applicant.middle_name[0]+' '+n.gratuitous_permit.applicant.last_name" ng-model="n.gratuitous_permit.applicant.full_name" type="hidden">
 		<md-input-container class="md-block" flex>
 			<label>Address</label>
-			<input ng-model="n.applicant.address" ng-blur="n.keywords[4]=n.applicant.address">
+			<input ng-model="n.gratuitous_permit.applicant.address" ng-blur="n.gratuitous_permit.keywords[4]=n.gratuitous_permit.applicant.address">
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Nationality</label>
-			<input ng-model="n.applicant.nationality" ng-blur="n.keywords[5]=n.applicant.nationality">
+			<input ng-model="n.gratuitous_permit.applicant.nationality" ng-blur="n.gratuitous_permit.keywords[5]=n.gratuitous_permit.applicant.nationality">
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Degree</label>
-			<input ng-model="n.applicant.degree" ng-blur="n.keywords[6]=n.applicant.degree">
+			<input ng-model="n.gratuitous_permit.applicant.degree" ng-blur="n.gratuitous_permit.keywords[6]=n.gratuitous_permit.applicant.degree">
 		</md-input-container>
 	</div>
 	<div layout>
 		<md-input-container class="md-block" flex>
 			<label>Nature of Employment</label>
-			<md-select ng-init="n.applicant.employment.nature='Government'" ng-model="n.applicant.employment.nature">
+			<md-select ng-init="n.gratuitous_permit.applicant.employment.nature='Government'" ng-model="n.gratuitous_permit.applicant.employment.nature">
 				<md-option ng-repeat="employment in ['Government', 'Private']" value="{{employment}}">
 					{{employment}}
 				</md-option>
@@ -37,10 +37,10 @@
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>Present Position/Official Designation</label>
-			<input ng-model="n.applicant.employment.designation">
+			<input ng-model="n.gratuitous_permit.applicant.employment.designation">
 		</md-input-container>
 		<md-input-container class="md-block" flex>
 			<label>School/Institution/Agency</label>
-			<input ng-model="n.applicant.employment.agency_name" ng-blur="n.keywords[4]=n.applicant.degree">
+			<input ng-model="n.gratuitous_permit.applicant.employment.agency_name" ng-blur="n.gratuitous_permit.keywords[4]=n.gratuitous_permit.applicant.degree">
 		</md-input-container>
 	</div>
