@@ -2,36 +2,29 @@
 
 myAppModule.
     controller('profile_management_controller',
-        function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
-            $scope.is_loading = false;
-            $scope.alert = () => {
-                Swal.fire(
-                    'Good job!',
-                    'You clicked the button!',
-                    'success'
-                )
-            }
+        function ($scope, $profileService) {
+            $scope.get_profile = $profileService.get_profile;
         }).
-        controller('dumm_profile_management_controller', function($scope, $http){
+        controller('dummy_profile_management_controller', function($scope, $http){
             $http.get("/json/profile/nationalities.json").
             then(function(data){
                 $scope.nationalities = data.data.data; 
             });
 
-            $scope.account = {
+            $scope.profile = {
                 data: {
                     first_name: "Arlan",
                     middle_name: "Ticke",
                     last_name: "Asutilla",
                     extension_name: '',
-                    bday: "1984-05-05",
+                    birth_day: "1984-05-05",
                     current_address: "Brgy. Sta. Monica, Puerto Princesa City",
                     current_phone: "09213183376",
                     tin_no: "123456",
                     place_of_birth: "Puerto Princesa City",
-                    nationality: "Philippines - Philippine, Filipino",
-                    gender: "Male",
-                    civil_status: "Married",
+                    nationality: "Philippine, Filipino",
+                    gender: "male",
+                    civil_status: "married",
                     spouse_name: "Gigi Hadid",
                     father: "Nelson T. Asutilla",
                     mother: "Cynthia P. Asutilla",
@@ -40,8 +33,36 @@ myAppModule.
                         number: "123456",
                         date_issued: "2008-01-01",
                         place_issued: "Puerto Princesa City",
-                        date_value: ""
-                    }
+                        valid_until: "2028-01-01"
+                    },
+                    status: 'active'
                 }
+            }
+
+            $scope.save_profile = (profile) => {
+                console.log(profile);
+            }
+
+            $scope.activate_profile = (id) => {
+                $scope.profile.data.status = 'active';
+            }
+
+            $scope.deactivate_profile = (id) => {
+                $scope.profile.data.status = 'deactivated';
+            }
+        }).
+        controller('testController', function($scope, $profileService){
+            $scope.get_profile = () =>
+            {
+                $profileService.get_profile('uMef3AncF1QgITnD51MvD0pFvTD3').then(result => {
+                    console.log(profile);
+                })
+            }
+            $scope.get_profile();
+        }).
+        service('$profileService', function(){
+            this.get_profile = async(id) => {
+                let profile = await db.collection('profile').doc(id);
+                return profile;
             }
         });

@@ -41,6 +41,6 @@ var scripts_js_plugins = {
 let profileModule = script_angular + scripts_controllers.main + scripts_controllers.profile;
 let v = localData.get('current_view');
     // if(!v){
-        localData.set('current_view','app/profile_management/view.html');
+        localData.set('current_view','app/profile_management/edit.html');
     // }
 document.write(profileModule);
