@@ -3,7 +3,7 @@
         font-family: 'Times New Roman', Times, serif;
     }
 </style>
-<div ng-init="currentItem = render_params.data;" class="roman">
+<div  ng-controller="PrintGratuitousPermitController" ng-init="currentItem = render_params.data;" class="roman">
     <!-- <div  ng-controller="GratuitousPermitController"  ng-init="currentItem=n"> -->
     <!-- header -->
     <div ng-include="'https://document-network.web.app/pcsd/templates/header3.html'"></div>
@@ -63,9 +63,9 @@
     <div>{{currentItem.gratuitous_permit.line6 }}</div>
     <br>
     <!-- Terms and Conditions -->
-    <div ng-controller="ViewGratuitousPermitController">
-        <textarea id="gratuitous_permit_terms_print" ng-model="currentItem.gratuitous_permit.gratuitous_permit_terms" ckeditor class='no-toolbar'
-            disabled></textarea>
+    <div>
+        <textarea id="gratuitous_permit_terms_print" ng-model="currentItem.gratuitous_permit.gratuitous_permit_terms"
+            class='no-toolbar' ckeditor disabled></textarea>
     </div>
     <!--end of terms and conditions-->
     <br>
@@ -81,10 +81,13 @@
         </div>
         <div flex style="padding: 10px"
             ng-init="currentItem.gratuitous_permit.sign1 = (currentItem.gratuitous_permit.sign1 == undefined) ? {} : currentItem.gratuitous_permit.sign1;">
-            <div ng-if="currentItem.gratuitous_permit.sign1.signature != undefined;" layout="column" layout-align="center center">
-                <img ng-if="currentItem.gratuitous_permit.sign1.signature != undefined" src="{{currentItem.gratuitous_permit.sign1.signature}}"
-                    alt="Signature2" width="auto" style="margin-bottom: -35px;">
-                <div class="align-center"> <strong> <ins>{{currentItem.gratuitous_permit.sign1.name}}</ins> </strong> </div>
+            <div ng-if="currentItem.gratuitous_permit.sign1.signature != undefined;" layout="column"
+                layout-align="center center">
+                <img ng-if="currentItem.gratuitous_permit.sign1.signature != undefined"
+                    src="{{currentItem.gratuitous_permit.sign1.signature}}" alt="Signature2" width="auto"
+                    style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.gratuitous_permit.sign1.name}}</ins> </strong>
+                </div>
                 <div class="align-center"> {{currentItem.gratuitous_permit.sign1.designation}} </div>
             </div>
         </div>

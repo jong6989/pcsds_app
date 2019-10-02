@@ -1,0 +1,74 @@
+<div ng-controller="dummy_profile_management_controller">
+        
+                <!-- <md-toolbar class="bg-teal">
+                  <h1 class="md-toolbar-tools">
+                    <md-button class="md-raised" ng-click="openForm($event)">
+                      <i class="fa fa-plus col-green"></i>
+                      add new criminal cases
+                    </md-button>
+                    <md-button class="md-raised" ng-click="refreshList()">
+                      <i class="fa fa-refresh col-green"></i>
+                        refresh
+                    </md-button>
+                  </h1>
+                </md-toolbar> -->
+              
+                <md-content
+                  style="height: {{ iframeHeight - 150 }}px;"
+                  layout-sm="coulumn"
+                  layout-gt-sm
+                  ng-init=""
+                >
+                  <div flex>
+                    <table ng-table="profileTable" class="table" show-filter="true">
+                      <tr ng-repeat="profile in $data">
+                        <td
+                          title="'First Name'"
+                          sortable="'first_name'"
+                          filter="{first_name: 'text'}"
+                        >
+                          {{ profile.first_name }}
+                        </td>
+                        <td
+                          title="'Middle Name'"
+                          sortable="'middle_name'"
+                          filter="{middle_name: 'text'}"
+                        >
+                          {{ profile.middle_name }}
+                        </td>
+                        <td
+                          title="'Last Name'"
+                          sortable="'last_name'"
+                          filter="{last_name: 'text'}"
+                        >
+                          {{ profile.last_name }}
+                        </td>
+                        <td
+                          title="'Address'"
+                          sortable="'current_address'"
+                          filter="{current_address: 'text'}"
+                        >
+                          {{ profile.current_address }}
+                        </td>
+                        <td
+                          title="'Phone Number'"
+                          sortable="'current_phone'"
+                          filter="{current_phone: 'text'}"
+                        >
+                          {{ profile.current_phone }}
+                        </td>
+                        
+                        <td title="''">
+                          <md-button
+                            class="md-raised"
+                            ng-click="openProfileFormForUpdating(profile.id)"
+                          >
+                            <i class="fa fa-plus col-green"></i>
+                            EDIT
+                          </md-button>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </md-content>              
+</div>

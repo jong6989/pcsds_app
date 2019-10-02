@@ -3,8 +3,8 @@
         width: 100%
     }
 </style>
-<!-- <div ng-controller="GratuitousPermitController" ng-init="currentItem=n"> -->
-<div style="width:90%">
+<div ng-controller="EditGratuitousPermitController" ng-init="currentItem=n">
+<!-- <div style="width:90%"> -->
     <div ng-include="'./app/templates/application/style.html'"></div>
     <div>WILDLIFE GRATUITOUS PERMIT (GP)</div>
     <div><input ng-model="currentItem.gratuitous_permit.line2" ng-blur="updateDocument(currentItem.gratuitous_permit.id, {line2:currentItem.gratuitous_permit.line2})">
@@ -72,8 +72,9 @@
         <input ng-model="currentItem.gratuitous_permit.line6" ng-blur="updateDocument(currentItem.gratuitous_permit.id, {line6:currentItem.gratuitous_permit.line6})">
     </p>
 
-    <div ng-controller="EditGratuitousPermitController">
-        <textarea id="gratuitous_permit_terms_edit" ng-model="currentItem.gratuitous_permit.gratuitous_permit_terms" ckeditor></textarea>
+    <div>
+        <textarea id="gratuitous_permit_terms_edit" 
+            ng-model="currentItem.gratuitous_permit.gratuitous_permit_terms" ckeditor></textarea>
         <!-- <textarea id="edit_terms_editor" ng-model="currentItem.gratuitous_permit.gratuitous_permit_terms"></textarea> -->
     </div>
     

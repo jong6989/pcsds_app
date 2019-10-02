@@ -7,17 +7,25 @@
         
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>First name</label>
-                        <input ng-model="profile.data.first_name" required>
+                        <input ng-model="profile.data.first_name" 
+                            ng-blur="profile.data.keywords[0]=new_account.data.first_name"
+                            required>
                     </md-input-container>
         
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Middle Name</label>
-                        <input ng-model="profile.data.middle_name">
+                        <input ng-model="profile.data.middle_name" 
+                        
+                        ng-blur="profile.data.keywords[1]=new_account.data.middle_name||''"
+                        >
                     </md-input-container>
         
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Last Name</label>
-                        <input ng-model="profile.data.last_name" required>
+                        <input ng-model="profile.data.last_name"
+                        ng-blur="profile.data.keywords[2]=new_account.data.last_name"
+                        
+                        required>
                     </md-input-container>
         
                     <md-input-container class="md-block" flex-gt-sm>

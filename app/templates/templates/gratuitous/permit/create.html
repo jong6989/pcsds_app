@@ -36,7 +36,8 @@ n.gratuitous_permit.keywords = []; application_types={ 'Individual': 'individual
 	<strong>Terms and Conditions</strong>
 
 	<!--WYSIWYG editor here-->
-	<textarea ng-model="n.gratuitous_permit.gratuitous_permit_terms" id="gratuitous_permit_terms_create" ckeditor></textarea>
+	<textarea ng-model="n.gratuitous_permit.gratuitous_permit_terms" 
+		id="gratuitous_permit_terms_create" ckeditor></textarea>
 	<div layout>
 		<md-input-container>
 			<md-datepicker ng-model="date_issued" ng-change="n.gratuitous_permit.date_issued=to_date(date_issued)"
@@ -129,7 +130,7 @@ n.gratuitous_permit.keywords = []; application_types={ 'Individual': 'individual
 	<br>
 	<!-- Terms and Conditions -->
 	<textarea ng-model="n.gratuitous_permit.gratuitous_permit_terms" id="gratuitous_permit_terms_preview" 
-		ckeditor class="no-toolbar" disabled></textarea>
+		class="no-toolbar" ckeditor disabled></textarea>
 	<!--end of terms and conditions-->
 	<br>
 	<p>

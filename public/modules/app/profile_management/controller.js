@@ -1,11 +1,12 @@
 'use strict';
-
+myAppModule.requires.push('ngTable');
 myAppModule.
     controller('profile_management_controller',
         function ($scope, $profileService) {
             $scope.get_profile = $profileService.get_profile;
         }).
-        controller('dummy_profile_management_controller', function($scope, $http){
+        controller('dummy_profile_management_controller', function($scope, $http, NgTableParams){
+            
             $http.get("/json/profile/nationalities.json").
             then(function(data){
                 $scope.nationalities = data.data.data; 
@@ -50,6 +51,8 @@ myAppModule.
             $scope.deactivate_profile = (id) => {
                 $scope.profile.data.status = 'deactivated';
             }
+
+            $scope.profileTable = new NgTableParams({}, {dataset: []});
         }).
         controller('testController', function($scope, $profileService){
             $scope.get_profile = () =>

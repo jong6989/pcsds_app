@@ -10,6 +10,7 @@ var script_angular = `
     <script src="/js/angular-messages.min.js"></script>
     <script src="/js/angular-material.min.js"></script>
     <script src="/js/ngStorage.min.js"></script>
+    
     `;
 //angularjs plugins
 var script_ng_plugins = {
@@ -38,9 +39,9 @@ var scripts_js_plugins = {
 }
 
 //scripts for login user
-let profileModule = script_angular + scripts_controllers.main + scripts_controllers.profile;
+let profileModule = script_angular + scripts_controllers.main + scripts_controllers.profile + script_ng_plugins.ngTable;
 let v = localData.get('current_view');
     // if(!v){
-        localData.set('current_view','app/profile_management/edit.html');
+        localData.set('current_view','app/profile_management/test.html');
     // }
 document.write(profileModule);

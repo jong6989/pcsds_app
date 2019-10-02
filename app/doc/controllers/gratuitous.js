@@ -1,6 +1,5 @@
 myAppModule.
     controller('CreateGratuitousPermitController', function ($scope, $ckeditorService, $localStorage) {
-        console.log('CreateGratuitousPermitController')
         $localStorage.currentDocTemplate = {};
         $ckeditorService.editorHasCreated = (editor) => {
             if(editor.name === "gratuitous_permit_terms_preview"){
@@ -12,7 +11,6 @@ myAppModule.
     }).controller('EditGratuitousPermitController', function ($scope, $ckeditorService, $localStorage) {
         var editorHasInitialized = false;
         $localStorage.currentDocTemplate = {};
-        console.log('EditGratuitousPermitController')
 
         $ckeditorService.editorHasCreated = (edit_terms_editor) => {
             $scope.$watch('currentItem.gratuitous_permit.gratuitous_permit_terms', function (newValue, oldValue, scope) {
@@ -32,7 +30,6 @@ myAppModule.
     }).
     controller('ViewGratuitousPermitController', function($scope, $ckeditorService, $localStorage){
         $localStorage.currentDocTemplate = {};
-        console.log('ViewGratuitousPermitController')
         $ckeditorService.editorHasCreated = (editor) => {
             $scope.$watch('currentItem.gratuitous_permit.gratuitous_permit_terms', function (newValue, oldValue, scope) {
                 editor.setData($scope.currentItem.gratuitous_permit.gratuitous_permit_terms);
