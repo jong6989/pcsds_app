@@ -84,6 +84,11 @@
         </div>
     </div>
 
+    <br><br>
+    <strong>Keywords</strong>
+
+    <md-chips ng-init="currentItem.keywords = ((currentItem.keywords)? currentItem.keywords : [])" ng-model="currentItem.keywords" md-add-on-blur="true" readonly="false"
+        input-aria-label="Keywords" placeholder="add keywords" ng-change="updateDocument(currentItem.id,{'keywords':currentItem.keywords});" md-removable="true"></md-chips>
     <br>
     <br>
     <br>

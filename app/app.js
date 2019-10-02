@@ -68,11 +68,11 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
           if(q.errorCallBack!==undefined){
             return q.errorCallBack(err);
           }else {
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent("You are OFFLINE!")
-                .hideDelay(4000)
-            );
+            // $mdToast.show(
+            //   $mdToast.simple()
+            //     .textContent("You are OFFLINE!")
+            //     .hideDelay(4000)
+            // );
           }
         }else {
           if(httpResponse.statusCode == 200){
@@ -97,7 +97,8 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
 .config(function($sceDelegateProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
     'self',
-    'https://document-network.web.app/**'
+    'https://document-network.web.app/**',
+    'https://pcsd-app.web.app/**'
   ]);
 })
 .factory('Excel',function($window){

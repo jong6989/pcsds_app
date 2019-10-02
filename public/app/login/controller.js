@@ -147,6 +147,7 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $utils, $
         Swal.fire({
             title: 'Enter your mobile number',
             input: 'text',
+            inputValue : '+63',
             inputAttributes: {
               autocapitalize: 'off'
             },

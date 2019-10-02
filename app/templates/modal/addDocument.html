@@ -1,7 +1,7 @@
 <div style="visibility: hidden">
     <div class="md-dialog-container" id="addDocument">
         <md-dialog layout="column" layout-align="center center">
-            <form ng-cloak name="form_add_draft" ng-controller="doc_ctrl_draft">
+            <form ng-cloak name="form_add_draft" >
                 <md-toolbar class="bg-teal">
                     <div class="md-toolbar-tools">
                         <h2>Add document to application</h2>
@@ -27,7 +27,7 @@
                 </md-button>
                 <md-button class="md-primary md-raised" 
                 ng-disabled="form_add_draft.$invalid || n.template == {} || n.template == undefined" 
-                    ng-click="addDrafttoApplication(n);">
+                    ng-click="addDrafttoApplication(n,$event);">
                     Save
                 </md-button>
                 </md-dialog-actions>

@@ -126,7 +126,7 @@
 			"print" : "./app/templates/templates/sep/clearance/print.html"
 		},
 		{
-			"name" : "Chainsaw Appliation Evaluation",
+			"name" : "Chainsaw Application Evaluation",
 			"type" : "evaluation",
 			"permit" : true,
 			"create" : "./app/templates/templates/chainsaw/evaluation/create.html",

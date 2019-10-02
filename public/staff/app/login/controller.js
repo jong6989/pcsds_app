@@ -5,7 +5,7 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $mdDialog
     
     $scope.staffLogin = async (phone,event)=>{
         $scope.is_loading = true;
-        let d = await fire.db.collection('staffs').where('phone','==',phone).limit(1).get();
+        let d = await db.collection('staffs').where('phone','==',phone).limit(1).get();
         if(d.empty){
             $scope.is_loading = false;
             Swal.fire({
@@ -43,11 +43,8 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $mdDialog
                                 type: 'error',
                                 title: 'Oops...',
                                 text: 'Verification code is not valid',
-                                footer: 'You will be redirected to applicant site.'
+                                footer: 'Try agian...'
                               });
-                            setTimeout(()=>{
-                                location.href('/');
-                            }, 5000);
                         });
                     }
                     

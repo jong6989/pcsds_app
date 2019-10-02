@@ -348,8 +348,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         
     };
 
-
-
     $scope.uploadFiles = async () => {
         $scope.filesTobeUploaded = await func.getFilesTobeUploaded();
         if($scope.filesTobeUploaded.length > 0){
@@ -396,27 +394,61 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
         
     };
 
-    // for application sync
-    var appNumber = 0;
-    $scope.getApplicationDocuments = (applicationNumber)=>{
-        if(appNumber != applicationNumber){
-            doc.db.collection(documents)
-            .where("application_no","==",applicationNumber)
-            // .where("status","==","published")
-            .get().then(qs => {
-                if(!qs.empty) {
-                    let r = qs.docs.map(d => {
-                        let o = d.data();
-                        o.id = d.id;
-                        return o;
-                    });
-                    $scope.application_documents = r;
-                    $scope.$apply();
-                }
-            });
-        }
-        appNumber = applicationNumber;
+
+    $scope.print_document = (id)=>{
+        console.log('to print: ', id);
+        func.refreshDocItem(id, (a) => {
+            $scope.open_window_view(a.template.print, a);
+        });
     };
+
+    // for application sync
+    $scope.getApplicationDocuments = async ()=>{
+        let applicationNumber = $scope.application.date;
+        let qs = await doc.db.collection(documents)
+        .where("application_no","==",applicationNumber)
+        .get();
+        
+        if(!qs.empty) {
+            let r = qs.docs.map(d => {
+                let o = d.data();
+                o.id = d.id;
+                return o;
+            });
+            $scope.application_documents = r;
+            $scope.$apply();
+        }else {
+            $scope.application_documents = [];
+        }
+        
+        $timeout(()=>{
+            $scope.getApplicationDocuments();
+        },1500);
+    };
+
+    $scope.application_view_modal = '';
+    $scope.select_document_for_application = (ev,x)=>{
+        $scope.setCurrentItem(x,'draft');
+        console.log('selected item: ',x);
+        if(x.status == 'draft'){
+            $scope.application_view_modal = './app/templates/modal/edit_document.html';
+            $timeout(()=>{
+                $scope.showPrerenderedDialog(ev,'editDocument');
+            },300);
+        }else if(x.status == 'published'){
+            $scope.application_view_modal = './app/templates/modal/view_document.html';
+            $timeout(()=>{
+                $scope.showPrerenderedDialog(ev,'viewDocument');
+            },300);
+        }
+    };
+
+    $scope.name_spliter = (name)=>{
+        let s = name.split(' ');
+        s.reduce(o => o != '');
+        return s;
+    };
+
     // end for application sync
 
 });
