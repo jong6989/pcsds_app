@@ -9,19 +9,16 @@ myAppModule.
             }
         }
     }).controller('EditGratuitousPermitController', function ($scope, $ckeditorService, $localStorage) {
-        var editorHasInitialized = false;
+        // var editorHasInitialized = false;
         $localStorage.currentDocTemplate = {};
-
         $ckeditorService.editorHasCreated = (edit_terms_editor) => {
-            $scope.$watch('currentItem.gratuitous_permit.gratuitous_permit_terms', function (newValue, oldValue, scope) {
-                if (!editorHasInitialized && $scope.currentItem.gratuitous_permit.gratuitous_permit_terms) {
-                    edit_terms_editor.setData($scope.currentItem.gratuitous_permit.gratuitous_permit_terms);
-                    editorHasInitialized = true;
-                }
-    
+            var deregisterWatcher = $scope.$watch('currentItem.gratuitous_permit.gratuitous_permit_terms', function (newValue, oldValue, scope) {
+                if($scope.currentItem && $scope.currentItem.gratuitous_permit)
+                    edit_terms_editor.setData($scope.currentItem.gratuitous_permit.gratuitous_permit_terms);    
             });
     
             edit_terms_editor.on('change', function () {
+                deregisterWatcher();
                 $scope.currentItem.gratuitous_permit.gratuitous_permit_terms = this.getData();
                 $scope.updateDocument($scope.currentItem.id, 
                     { 'gratuitous_permit.gratuitous_permit_terms': $scope.currentItem.gratuitous_permit.gratuitous_permit_terms})

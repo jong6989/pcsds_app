@@ -26,10 +26,6 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
     };
 
     $scope.updateDocument = async (id,data) => {
-<<<<<<< HEAD
-=======
-        console.log(id,data);
->>>>>>> dfec47aedc235b887b547ddbd6778132131be03f
         if(id !== undefined) {
             doc.db.collection(documents).doc(id).update(data).then(() => {
                 func.refreshDocItem(id, (a) => {
