@@ -98,6 +98,7 @@ async function authenticateUser(){
     });
 }
 //run
+
 if(localData.get('profileId')){
     //load dashboard
     document.write(userPage);

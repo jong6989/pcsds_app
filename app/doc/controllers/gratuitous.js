@@ -1,15 +1,72 @@
 myAppModule.
-    controller('GratuitousPermitController', function ($scope, $quillService) {
-        var preview = CKEDITOR.replace('terms_preview');
-            preview.on('instanceReady', function(event){
-                document.getElementById(event.editor.id + '_top').style.display = "none";
-                document.getElementById(event.editor.id + '_bottom').style.display = "none";
+    controller('CreateGratuitousPermitController', function ($scope, $ckeditorService, $localStorage) {
+        $localStorage.currentDocTemplate = {};
+        $ckeditorService.editorHasCreated = (editor) => {
+            if(editor.name === "gratuitous_permit_terms_preview"){
+                $scope.$watch('n.gratuitous_permit.gratuitous_permit_terms', function (newValue, oldValue, scope) {
+                    editor.setData(newValue);
+                });
+            }
+        }
+    }).controller('EditGratuitousPermitController', function ($scope, $ckeditorService, $localStorage) {
+        // var editorHasInitialized = false;
+        $localStorage.currentDocTemplate = {};
+        $ckeditorService.editorHasCreated = (edit_terms_editor) => {
+            var deregisterWatcher = $scope.$watch('currentItem.gratuitous_permit.gratuitous_permit_terms', function (newValue, oldValue, scope) {
+                if($scope.currentItem && $scope.currentItem.gratuitous_permit)
+                    edit_terms_editor.setData($scope.currentItem.gratuitous_permit.gratuitous_permit_terms);    
             });
+    
+            edit_terms_editor.on('change', function () {
+                deregisterWatcher();
+                $scope.currentItem.gratuitous_permit.gratuitous_permit_terms = this.getData();
+                $scope.updateDocument($scope.currentItem.id, 
+                    { 'gratuitous_permit.gratuitous_permit_terms': $scope.currentItem.gratuitous_permit.gratuitous_permit_terms})
+            });
+        }
+    }).
+    controller('ViewGratuitousPermitController', function($scope, $ckeditorService, $localStorage){
+        $localStorage.currentDocTemplate = {};
+        $ckeditorService.editorHasCreated = (editor) => {
+            $scope.$watch('currentItem.gratuitous_permit.gratuitous_permit_terms', function (newValue, oldValue, scope) {
+                editor.setData($scope.currentItem.gratuitous_permit.gratuitous_permit_terms);
+            });
+        }
+        
+    }).
+    controller('testController', function ($scope) {
+        $scope.createDraft = (n) => {
+            $scope.currentItem = n;
+        }
+    }).
+    service('$ckeditorService', function(){
+        this.fireInstanceCreatedListener = (editor) =>{
+            this.editorHasCreated(editor);
+        }
+        this.editorHasCreated = (editor) => {}
+    }).
+    directive('ckeditor', function ($ckeditorService) {
+        return {
+            require: 'ngModel',
+            link: function (scope, element, attr, ngModel) {
+                var ckeditor = CKEDITOR.replace(element[0]);
+                if (attr.class && attr.class === "no-toolbar") {
+                    ckeditor.on('instanceReady', function (event) {
+                        document.getElementById(event.editor.id + '_top').style.display = "none";
+                        document.getElementById(event.editor.id + '_bottom').style.display = "none";
+                    })
+                }
 
-            $scope.$watch('n.terms', function(newValue, oldValue, scope){
-                preview.setData(newValue);
-            });
-    })
+                if(!attr.disabled){
+                    ckeditor.on('change', function () {
+                        ngModel.$setViewValue(this.getData());
+                    });
+                }
+                
+                $ckeditorService.fireInstanceCreatedListener(ckeditor);
+            }
+        };
+    });
     // controller('EditGratuitousPermitController', function ($scope, $quillService, $controller) {
     //     $quillService.onEditorCreated = (quillEditor) => {
     //         angular.extend(this, $controller('doc_ctrl_draft', { $scope: $scope }));
@@ -17,10 +74,10 @@ myAppModule.
     //         var parentPublishDraft = $scope.publishDraft;
     //         $scope.publishDraft = (item, ev) => {
     //             var contents = quillEditor.getContents();
-    //             $scope.currentItem.terms = contents.ops;
+    //             $scope.currentItem.gratuitous_permit.terms = contents.ops;
     //             parentPublishDraft($scope.currentItem, ev);
     //         }
-    //         $scope.$watch('currentItem.terms', function (newValue, oldValue, scope) {
+    //         $scope.$watch('currentItem.gratuitous_permit.terms', function (newValue, oldValue, scope) {
     //             var contents = newValue || [];
     //             contents.push({ insert: "\n" });
     //             quillEditor.setContents(contents);
@@ -34,7 +91,7 @@ myAppModule.
 
     //     $quillService.onEditorCreated = (quillEditor) => {
     //         quillEditor.disable();
-    //         $scope.$watch('currentItem.terms', function (newValue, oldValue, scope) {
+    //         $scope.$watch('currentItem.gratuitous_permit.terms', function (newValue, oldValue, scope) {
     //             var contents = newValue || [];
     //             contents.push({ insert: "\n" });
     //             quillEditor.setContents(contents);
@@ -48,7 +105,7 @@ myAppModule.
 
     //     $quillService.onEditorCreated = (quillEditor) => {
     //         quillEditor.disable();
-    //         $scope.$watch('currentItem.terms', function (newValue, oldValue, scope) {
+    //         $scope.$watch('currentItem.gratuitous_permit.terms', function (newValue, oldValue, scope) {
     //             var contents = newValue || [] ;
     //             contents.push({ insert: "\n" });
     //             quillEditor.setContents(contents);

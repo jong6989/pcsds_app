@@ -7,6 +7,8 @@
         { "name" : "Application for Wildlife Farm Permit" , "url" : "app/templates/application/wfp.html"  },
         { "name" : "Application for Chainsaw Registration" , "url" : "app/templates/application/cr.html"  },
         { "name" : "Application for permit to purchase/import of chainsaw" , "url" : "app/templates/application/ptp.html"  },
-        { "name" : "Application for Local Transport Permit AO12" , "url" : "app/templates/application/ltp_ao12.html"  }
+        { "name" : "Application for Local Transport Permit AO12" , "url" : "app/templates/application/ltp_ao12.html"  },
+        { "name" : "Application for Gratuitous Permit" , "url" : "app/templates/application/gp.html"  },
+        { "name" : "Application for Wildlife Import Certification" , "url" : "app/templates/application/wic.html"  }
     ]
 }

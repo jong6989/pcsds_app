@@ -450,23 +450,23 @@ myAppModule.
             $scope.createDraft = (n) => {
                 console.log(n);
             }
-    }).
-    directive('ckeditor', function(){
-        return {
-            require: 'ngModel',
-            link: function (scope, element, attr, ngModel) {
-                var ckeditor = CKEDITOR.replace(element[0]);
+    })
+    // directive('ckeditor', function(){
+    //     return {
+    //         require: 'ngModel',
+    //         link: function (scope, element, attr, ngModel) {
+    //             var ckeditor = CKEDITOR.replace(element[0]);
 
-                if(attr.class && attr.class === "no-toolbar"){
-                    ckeditor.on('instanceReady', function(event){
-                        document.getElementById(event.editor.id + '_top').style.display = "none";
-                        document.getElementById(event.editor.id + '_bottom').style.display = "none";
-                    })
-                } 
+    //             if(attr.class && attr.class === "no-toolbar"){
+    //                 ckeditor.on('instanceReady', function(event){
+    //                     document.getElementById(event.editor.id + '_top').style.display = "none";
+    //                     document.getElementById(event.editor.id + '_bottom').style.display = "none";
+    //                 })
+    //             } 
                 
-                ckeditor.on('change', function () {
-                    ngModel.$setViewValue(this.getData());
-                });
-            }
-        };
-    });
+    //             ckeditor.on('change', function () {
+    //                 ngModel.$setViewValue(this.getData());
+    //             });
+    //         }
+    //     };
+    // });

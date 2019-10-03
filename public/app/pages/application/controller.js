@@ -1,6 +1,11 @@
 'use strict';
 
-myAppModule.controller('application_controller', function ($scope, $http, $location, $utils, $mdDialog, $interval, Upload, $localStorage) {
+myAppModule.controller('application_controller', function ($scope,$filter, $http, $location, $utils, $mdDialog, $interval, Upload, $localStorage) {
+    
+    // $scope.to_date = function(d){
+    //     return $filter('date')(d, "yyyy-MM-dd");
+    //   };
+    
     $scope.selectedIndex = 0;
     $scope.mun = [];
     $scope.places_of_transport = [];
@@ -104,6 +109,10 @@ myAppModule.controller('application_controller', function ($scope, $http, $locat
         $scope.permit_types = data.data.data;
     });
 
+    $http.get( "json/permitting/gp_specimen.json").then(function(data){
+        $scope.permit_types = data.data.data;
+    });
+
     $scope.change_current_index = (n)=>{
         $scope.selectedIndex = n;
     };
@@ -164,6 +173,15 @@ myAppModule.controller('application_controller', function ($scope, $http, $locat
     };
 
     $scope.submit_application = function(application,key,type){
+
+        
+
+
+        
+        // application.date_postal = $scope.to_date(application.date_postal);
+        // application.date_sea = $scope.to_date(application.date_sea);
+        // application.date_air = $scope.to_date(application.date_air);
+
         //required a 2 x 2 Photo
         if($scope.new_application.applicant_photo == 'images/user.png'){
             $scope.toast("Please upload a photo!");

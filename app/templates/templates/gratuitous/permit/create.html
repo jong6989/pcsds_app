@@ -1,45 +1,46 @@
-<!-- <div ng-init="n.subject = 'GRATUITOUS PERMIT'; titles = ['Ms.','Mrs.','Mr.']; 
-n.keywords = []; application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }"> -->
-	<div ng-controller="GratuitousPermitController" 	ng-init="n.subject = 'GRATUITOUS PERMIT';  
-		n.keywords = []; 
+<!-- <div ng-init="n.gratuitous_permit.subject = 'GRATUITOUS PERMIT'; titles = ['Ms.','Mrs.','Mr.']; 
+n.gratuitous_permit.keywords = []; application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }"> -->
+	<div ng-controller="CreateGratuitousPermitController" 	ng-init="n.subject = 'GRATUITOUS PERMIT';  
+		n.gratuitous_permit.keywords = []; 
 		application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }">
 	<h3 class="align-center">GRATUITOUS PERMIT</h3>
 	<hr>
 	<md-input-container class="md-block m-t-40">
 		<label>Permit Number</label>
-		<input ng-model="n.permit_number" ng-blur="n.keywords[0]=n.permit_number" required>
+		<input ng-model="n.gratuitous_permit.permit_number" ng-blur="n.gratuitous_permit.keywords[0]=n.gratuitous_permit.permit_number" required>
 	</md-input-container>
 	<br>
 	<md-input-container class="md-block" flex>
 		<label>Applicant Type</label>
-		<md-select ng-init="n.application_type='Individual'" ng-model="n.application_type">
+		<md-select ng-init="n.gratuitous_permit.application_type='Individual'" ng-model="n.gratuitous_permit.application_type">
 			<md-option ng-repeat="applicant_type in ['Individual', 'Company']" value="{{applicant_type}}">
 				{{applicant_type}}
 			</md-option>
 		</md-select>
 	</md-input-container>
-	<div ng-include="'./app/templates/templates/gratuitous/permit/templates/' + application_types[n.application_type]">
+	<div ng-include="'./app/templates/templates/gratuitous/permit/templates/' + application_types[n.gratuitous_permit.application_type]">
 	</div>
 	<br>
 	<div>
 		<md-input-container class="md-block" flex>
 			<label>Species/Specimen, Kind and Number/Quantity to be Collected</label>
-			<textarea ng-model="n.species_to_collect"></textarea>
+			<textarea ng-model="n.gratuitous_permit.species_to_collect"></textarea>
 		</md-input-container>
 	</div>
 	<div>
 		<md-input-container class="md-block" flex>
 			<label>Purpose of Collection</label>
-			<textarea ng-model="n.purpose_of_collection"></textarea>
+			<textarea ng-model="n.gratuitous_permit.purpose_of_collection"></textarea>
 		</md-input-container>
 	</div>
 	<strong>Terms and Conditions</strong>
 
 	<!--WYSIWYG editor here-->
-	<textarea ng-model="n.terms" ckeditor></textarea>
+	<textarea ng-model="n.gratuitous_permit.gratuitous_permit_terms" 
+		id="gratuitous_permit_terms_create" ckeditor></textarea>
 	<div layout>
 		<md-input-container>
-			<md-datepicker ng-model="date_issued" ng-change="n.date_issued=to_date(date_issued)"
+			<md-datepicker ng-model="date_issued" ng-change="n.gratuitous_permit.date_issued=to_date(date_issued)"
 				md-placeholder="Date Issued" required>
 			</md-datepicker>
 		</md-input-container>
@@ -50,14 +51,14 @@ n.keywords = []; application_types={ 'Individual': 'individual.html', 'Company':
 	<div layout>
 		<md-input-container flex>
 			<label>Paid amount</label>
-			<input ng-model="n.paid_amount" type="number">
+			<input ng-model="n.gratuitous_permit.paid_amount" type="number">
 		</md-input-container>
 		<md-input-container flex>
 			<label>OR Number</label>
-			<input ng-model="n.paid_or_number">
+			<input ng-model="n.gratuitous_permit.paid_or_number">
 		</md-input-container>
 		<md-input-container flex>
-			<md-datepicker ng-model="paid_date" ng-change="n.paid_date=to_date(paid_date)"
+			<md-datepicker ng-model="paid_date" ng-change="n.gratuitous_permit.paid_date=to_date(paid_date)"
 				md-placeholder="Date of Payment" md-open-on-focus>
 			</md-datepicker>
 		</md-input-container>
@@ -69,36 +70,36 @@ n.keywords = []; application_types={ 'Individual': 'individual.html', 'Company':
 	<br>
 	<p>
 		<div class="align-center">
-			{{ n.line1 = 'WILDLIFE GRATUITOUS PERMIT'}}<br>
-			{{	n.line2 = 'No.: ' + n.permit_number}}
+			{{ n.gratuitous_permit.line1 = 'WILDLIFE GRATUITOUS PERMIT'}}<br>
+			{{	n.gratuitous_permit.line2 = 'No.: ' + n.gratuitous_permit.permit_number}}
 		</div>
 
 	</p>
 	<br>
-	<div ng-if="n.application_type=='Individual'">
+	<div ng-if="n.gratuitous_permit.application_type=='Individual'">
 		<p>
 			<table>
 				<tr>
 					<td>Grantee:</td>
-					<td>{{n.applicant.full_name}}</td>
+					<td>{{n.gratuitous_permit.applicant.full_name}}</td>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
-					<td>{{n.applicant.employment.designation}}</td>
+					<td>{{n.gratuitous_permit.applicant.employment.designation}}</td>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
-					<td>{{n.applicant.employment.agency_name}}</td>
+					<td>{{n.gratuitous_permit.applicant.employment.agency_name}}</td>
 				</tr>
 			</table>
 		</p>
 	</div>
-	<div ng-if="n.application_type=='Company'">
+	<div ng-if="n.gratuitous_permit.application_type=='Company'">
 		<p>
 			<table>
 				<tr>
 					<td>Grantee:</td>
-					<td>{{n.applicant.name}}</td>
+					<td>{{n.gratuitous_permit.applicant.name}}</td>
 				</tr>
 			</table>
 		</p>
@@ -106,39 +107,40 @@ n.keywords = []; application_types={ 'Individual': 'individual.html', 'Company':
 
 	<p>
 		<div class="align-center">
-			<strong>{{n.line3='Wildlife Gratuitous Permit for the ' + n.purpose_of_collection}}</strong>
+			<strong>{{n.gratuitous_permit.line3='Wildlife Gratuitous Permit for the ' + n.gratuitous_permit.purpose_of_collection}}</strong>
 		</div>
 	</p>
 	<p>
-		{{n.line4='Pursuant to the provisions of PCSD Resolution No. 11-423 or PCSD Administrative ' +
+		{{n.gratuitous_permit.line4='Pursuant to the provisions of PCSD Resolution No. 11-423 or PCSD Administrative ' +
 			'Order No. 12 "Detailed Guidelines in the Implementation of Republic Act 9147 and Joint " ' +
 			'DENR-DA-PCSD Administrative Order No. 01 as may be made Applicable in the Province ' +
 			'of Palawan"., a Wildlife Gratuitous Permit (GP) is hereby granted to: '}}
 	</p>
 	<br>
 	<div class="align-center">
-		<p ng-if="n.application_type=='Individual'">
-			{{n.line5=n.applicant.full_name.toUpperCase()}}
+		<p ng-if="n.gratuitous_permit.application_type=='Individual'">
+			{{n.gratuitous_permit.line5=n.gratuitous_permit.applicant.full_name.toUpperCase()}}
 		</p>
-		<p ng-if="n.application_type=='Company'">
-			{{n.line5=n.applicant.name.toUpperCase()}}
+		<p ng-if="n.gratuitous_permit.application_type=='Company'">
+			{{n.gratuitous_permit.line5=n.gratuitous_permit.applicant.name.toUpperCase()}}
 		</p>
 	</div>
 	<br>
-	<div>{{n.line6='Subject to the terms and conditions herein stated: '}}</div>
+	<div>{{n.gratuitous_permit.line6='Subject to the terms and conditions herein stated: '}}</div>
 	<br>
 	<!-- Terms and Conditions -->
-	<textarea id="terms_preview" disabled></textarea>
+	<textarea ng-model="n.gratuitous_permit.gratuitous_permit_terms" id="gratuitous_permit_terms_preview" 
+		class="no-toolbar" ckeditor disabled></textarea>
 	<!--end of terms and conditions-->
 	<br>
 	<p>
-		{{n.line7 = 'Non-compliance with any of the above conditions or the relevant provisions of PCSD Admin Order  No. 12 ' +
+		{{n.gratuitous_permit.line7 = 'Non-compliance with any of the above conditions or the relevant provisions of PCSD Admin Order  No. 12 ' +
 			', series of 2011 shall be sufficient cause for the suspension or cancellation of this Permit and the imposition ' +
-			'of appropriate penalty provided under the said Admin. Order.'}}
+			'of appropriate penalty provided under the said Admin.gratuitous_permit. Order.'}}
 	</p>
 	<p>
-		{{n.line8 = 'Issued this ' + to_day_of_month(n.date_issued) + ' day of ' + get_full_month_name(n.date_issued) +
-			' ' + to_year(n.date_issued) + ' at Brgy. Sta. Monica, Puerto Princesa City, Palawan Philippines. '}}
+		{{n.gratuitous_permit.line8 = 'Issued this ' + to_day_of_month(n.gratuitous_permit.date_issued) + ' day of ' + get_full_month_name(n.gratuitous_permit.date_issued) +
+			' ' + to_year(n.gratuitous_permit.date_issued) + ' at Brgy. Sta. Monica, Puerto Princesa City, Palawan Philippines. '}}
 	</p>
 	<p>
 		{{pcsd.head.full_name}}<br>
@@ -149,15 +151,15 @@ n.keywords = []; application_types={ 'Individual': 'individual.html', 'Company':
 		<div class="align-center">CONFORME</div>
 	</p>
 	<P>
-		{{n.line9 = 'I, ' + (n.application_type == 'Individual' ? n.applicant.full_name : n.applicant.representative_name) + 
+		{{n.gratuitous_permit.line9 = 'I, ' + (n.gratuitous_permit.application_type == 'Individual' ? n.gratuitous_permit.applicant.full_name : n.gratuitous_permit.applicant.representative_name) + 
 			', holder of the foregoing permit, hereby certify that I have read and understood ' +
 			'the Terms and Conditions for which this permit was issued and I hereby express my conformity thereto and my ' +
 			'commitment to abide by the provisions of PCSD AO 12, series of 2011.'}}
 	</P>
 	<p>
-		<div ng-if="n.application_type=='Company'">{{n.line10 = n.applicant.representative_name}}</div>
-		<div ng-if="n.application_type=='Individual'">{{n.line10 = n.applicant.full_name}}</div>
-		{{n.line11 = 'Signature over Printed Name'}}<br>
-		{{n.line12 = 'Date: ' + n.date_issued}}
+		<div ng-if="n.gratuitous_permit.application_type=='Company'">{{n.gratuitous_permit.line10 = n.gratuitous_permit.applicant.representative_name}}</div>
+		<div ng-if="n.gratuitous_permit.application_type=='Individual'">{{n.gratuitous_permit.line10 = n.gratuitous_permit.applicant.full_name}}</div>
+		{{n.gratuitous_permit.line11 = 'Signature over Printed Name'}}<br>
+		{{n.gratuitous_permit.line12 = 'Date: ' + n.gratuitous_permit.date_issued}}
 	</p>
 </div>
