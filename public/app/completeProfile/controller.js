@@ -57,5 +57,4 @@ myAppModule.controller('complete_profile_controller', function ($scope, $timeout
             
         }
     };
-
 });

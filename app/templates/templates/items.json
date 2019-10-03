@@ -124,6 +124,33 @@
 			"edit" : "./app/templates/templates/sep/clearance/edit.html",
 			"view" : "./app/templates/templates/sep/clearance/view.html",
 			"print" : "./app/templates/templates/sep/clearance/print.html"
+		},
+		{
+			"name" : "Chainsaw Application Evaluation",
+			"type" : "evaluation",
+			"permit" : true,
+			"create" : "./app/templates/templates/chainsaw/evaluation/create.html",
+			"edit" : "./app/templates/templates/chainsaw/evaluation/edit.html",
+			"view" : "./app/templates/templates/chainsaw/evaluation/view.html",
+			"print" : "./app/templates/templates/chainsaw/evaluation/print.html"
+		},
+		{
+			"name" : "Wildlife Collector's Permit",
+			"type" : "permit",
+			"permit" : true,
+			"create" : "./app/templates/templates/wildlife_collector/permit/create.html",
+			"edit" : "./app/templates/templates/wildlife_collector/permit/edit.html",
+			"view" : "./app/templates/templates/wildlife_collector/permit/view.html",
+			"print" : "./app/templates/templates/wildlife_collector/permit/print.html"
+		},
+		{
+			"name" : "Gratuitous Permit",
+			"type" : "permit",
+			"permit" : true,
+			"create" : 	"./app/templates/templates/gratuitous/permit/create.html",
+			"edit" : 	"./app/templates/templates/gratuitous/permit/edit.html",
+			"print" : 	"./app/templates/templates/gratuitous/permit/print.html",
+			"view" : 	"./app/templates/templates/gratuitous/permit/view.html"
 		}
 	]
 }

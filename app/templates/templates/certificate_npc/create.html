@@ -1,4 +1,4 @@
-<div ng-init="n.subject = 'Certificate of no-pending case'; n.keywords = []; titles = ['Ms.','Mrs.','Mr.']; n.c_type = 'empty'; 
+<div ng-init="n.subject = 'Certificate of no-pending case'; n.keywords = ((n.keywords)? n.keywords : []); titles = ['Ms.','Mrs.','Mr.']; n.c_type = 'empty'; 
 c_types = ['empty','wsup_ao5','wsup_ao12','wcp_ao5','sep','sup','sup+']; ">
 	
 	<h3 class="align-center">CERTIFICATION</h3>
@@ -36,17 +36,17 @@ c_types = ['empty','wsup_ao5','wsup_ao12','wcp_ao5','sep','sup','sup+']; ">
 			<md-input-container class="md-block m-t-40" flex>
 				<label>First Name</label>
 				<input ng-model="n.applicant_f_name" 
-				ng-blur="n.keywords.push(n.applicant_f_name)" required>
+				ng-blur="n.keywords[0] = n.applicant_f_name;" required>
 			</md-input-container>
 	
 			<md-input-container class="md-block m-t-40" flex>
 				<label>Middle Name</label>
-				<input ng-model="n.applicant_m_name" >
+				<input ng-model="n.applicant_m_name" ng-blur="n.keywords[2] = n.applicant_m_name;" >
 			</md-input-container>
 	
 			<md-input-container class="md-block m-t-40" flex>
 				<label>Last Name</label>
-				<input ng-model="n.applicant_l_name" ng-blur="n.keywords.push(n.applicant_l_name)" required>
+				<input ng-model="n.applicant_l_name" ng-blur="n.keywords[1] = n.applicant_l_name;" required>
 			</md-input-container>
 		</div>
 	
@@ -80,17 +80,17 @@ c_types = ['empty','wsup_ao5','wsup_ao12','wcp_ao5','sep','sup','sup+']; ">
 		
 				<md-input-container class="md-block m-t-40" flex>
 					<label>First Name</label>
-					<input ng-model="n.applicants[$index].f_name" ng-blur="n.keywords.push(n.applicants[$index].f_name)" required>
+					<input ng-model="n.applicants[$index].f_name" ng-blur="n.keywords[3 + $index] = n.applicants[$index].f_name;" required>
 				</md-input-container>
 		
 				<md-input-container class="md-block m-t-40" flex>
 					<label>Middle Name</label>
-					<input ng-model="n.applicants[$index].m_name" >
+					<input ng-model="n.applicants[$index].m_name" ng-blur="n.keywords[5 + $index] = n.applicants[$index].m_name;">
 				</md-input-container>
 		
 				<md-input-container class="md-block m-t-40" flex>
 					<label>Last Name</label>
-					<input ng-model="n.applicants[$index].l_name" ng-blur="n.keywords.push(n.applicants[$index].l_name)" required>
+					<input ng-model="n.applicants[$index].l_name" ng-blur="n.keywords[4 + $index] = n.applicants[$index].m_name;" required>
 				</md-input-container>
 				<div ng-hide="true">
 					{{
@@ -268,7 +268,11 @@ c_types = ['empty','wsup_ao5','wsup_ao12','wcp_ao5','sep','sup','sup+']; ">
 		</div>
 	</div>
 
-	<br>
+	<br><br>
+    <strong>Keywords</strong>
+    <md-chips ng-model="n.keywords" md-add-on-blur="true" readonly="false"
+        input-aria-label="Keywords" placeholder="add keywords" md-removable="true"></md-chips>
+    <br>
 	<br>
 	<br>
 

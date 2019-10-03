@@ -26,13 +26,10 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
     };
 
     $scope.updateDocument = async (id,data) => {
-        console.log(id);
-        console.log(data);
         if(id !== undefined) {
             doc.db.collection(documents).doc(id).update(data).then(() => {
                 func.refreshDocItem(id, (a) => {
                     $scope.currentItem = a;
-                    console.log(a);
                 });
             });
             // setTimeout(()=>{func.refreshDocItem(id, (a) => {
@@ -96,7 +93,7 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
             $scope.setCurrentItem($scope.currentItem,'published');
         },()=>{});
     };
-
+    
     $scope.openFile = (id,path,cF) => {
         $scope.updateCleanDocFiles(id,cF);
         shell.openItem(storageFolder + path);
@@ -110,25 +107,54 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
         $scope.upload_file(id,[newPath],true);
     };
 
-    $scope.addDrafttoApplication = (x) =>{
+    $scope.addDrafttoApplication = (x,ev) =>{
         if($scope.doc_user.id !== undefined) {
             x.publisher = $scope.doc_user.id;
             x.created_time = Date.now();
             x.status = 'draft';
 
             doc.db.collection(documents).add(x).then( ref => {
-                $scope.currentItem.id = ref.id;
+                x.id = ref.id;
                 doc.db.collection(documents).doc(ref.id).update({"id":ref.id});
+                console.log(x);
+                $scope.currentItem = x;
+                $scope.select_document_for_application(ev,x);
             });
             $scope.currentItem = x;
             if($scope.doc_user_agencies.length > 0 ){
                 $scope.currentItem.agency = $scope.doc_user_agencies[0];
             }
-            $scope.toast(`Document created. Please open Document Network for Publishing.`);
+            
             $scope.close_dialog();
         }else {
-            $scope.toast("system error, please activate your account for document network.")
+            $scope.toast("system error, please activate your account for document network.");
         }
+    };
+
+    $scope.application_draft_modal = '';
+    $scope.open_create_document_modal = (ev,object)=>{
+        $scope.application_draft_modal = './app/templates/modal/addDocument.html';
+        $scope.n = object;
+        $timeout(()=>{
+            $scope.showPrerenderedDialog(ev,'addDocument');
+        },300);
+    };
+
+    $scope.format_specimen = (species)=>{
+        let newArray = [];
+        if(species != undefined){
+            species.map( o => {
+                let item = {
+                    name : o.species_name,
+                    quantity : o.species_qty,
+                    description : o.species_des
+                };
+                if(o.species_boxes)
+                    item.remarks = `${o.species_boxes} box` + ((o.species_boxes.length > 1) ? `'es`:``);
+                newArray.push(item);
+            } );
+        }
+        return newArray;
     };
 
 });

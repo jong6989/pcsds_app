@@ -1,0 +1,188 @@
+<div ng-controller="dummy_profile_management_controller">
+        <form name="form_new_profile" ng-init="" >
+        
+                <h3>Profile Information</h3>
+                <hr>
+                <div layout-gt-sm="row">
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>First name</label>
+                        <input ng-model="profile.data.first_name" 
+                            ng-blur="profile.data.keywords[0]=new_account.data.first_name"
+                            required>
+                    </md-input-container>
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Middle Name</label>
+                        <input ng-model="profile.data.middle_name" 
+                        
+                        ng-blur="profile.data.keywords[1]=new_account.data.middle_name||''"
+                        >
+                    </md-input-container>
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Last Name</label>
+                        <input ng-model="profile.data.last_name"
+                        ng-blur="profile.data.keywords[2]=new_account.data.last_name"
+                        
+                        required>
+                    </md-input-container>
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Extension (JR., SR)</label>
+                        <input ng-model="profile.data.extension_name">
+                    </md-input-container>
+                    <div ng-hide="true">
+                        {{ profile.data.full_name = profile.data.first_name + ' ' + profile.data.middle_name + ' ' + profile.data.last_name + ' ' + profile.data.extension_name }}
+                    </div>
+                </div>
+        
+                <div layout-gt-sm="row">
+                    <div flex-gt-sm>
+                        <strong>Birth Day <cite class="font-10">(must be 18+)</cite></strong>
+                        <md-datepicker 
+                            ng-model="bday" 
+                            ng-init="bday=profile.data.birth_day"
+                            ng-change="profile.data.birth_day = to_date(bday)" 
+                            md-placeholder="Birth Date"
+                            md-min-date="minDate" md-max-date="maxDate" md-open-on-focus required></md-datepicker>
+                    </div>
+                    
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Current Address</label>
+                        <input ng-model="profile.data.current_address" required>
+                    </md-input-container>
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Current Phone Number</label>
+                        <input ng-model="profile.data.current_phone" type="phone" required>
+                    </md-input-container>
+                </div>
+        
+                <div layout-gt-sm="row">
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Tax Identification Number : </label>
+                        <input ng-model="profile.data.tin_no" required>
+                    </md-input-container>
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Birth Place Address</label>
+                        <input ng-model="profile.data.place_of_birth" required>
+                    </md-input-container>
+        
+                    <md-input-container>
+                        <label>Nationality</label>
+                        <md-select 
+
+                            ng-model="profile.data.nationality" required>
+                            <md-option><em>None</em></md-option>
+                            <md-option ng-repeat="x in nationalities" ng-value="x.nationality" >
+                                {{x.en_short_name}} - {{x.nationality}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+        
+                <div layout-gt-sm="row">
+                    <strong class="col-grey m-r-10">
+                        Gender: 
+                    </strong>
+                    <md-radio-group ng-model="profile.data.gender" required>
+                        <md-radio-button value="male" class="md-primary">Male</md-radio-button>
+                        <md-radio-button value="female"> Female</md-radio-button>
+                    </md-radio-group>
+        
+                    <strong class="col-grey m-r-10">
+                        Civil Status : 
+                    </strong>
+        
+                    <md-radio-group ng-model="profile.data.civil_status" required>
+                        <md-radio-button value="single" class="md-primary"> Single </md-radio-button>
+                        <md-radio-button value="married" class="md-primary"> Married </md-radio-button>
+                        <md-radio-button value="widowed" class="md-primary"> Widowed </md-radio-button>
+                        <md-radio-button value="separated" class="md-primary"> Separated </md-radio-button>
+                    </md-radio-group>
+        
+                    <md-input-container ng-if="profile.data.civil_status == 'married'" class="md-block" flex-gt-sm>
+                        <label>Spouse Name :</label>
+                        <input ng-model="profile.data.spouse_name" required>
+                    </md-input-container>
+                </div>
+        
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Father's Full Name : </label>
+                        <input ng-model="profile.data.father" required>
+                    </md-input-container>
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Mother's Maiden Name :</label>
+                        <input ng-model="profile.data.mother" required>
+                    </md-input-container>
+                </div>
+        
+                <h5>Government Issued Identification (Any of the following: Passport, SSS, GSIS, etc):</h5>
+                <div layout-gt-sm="row">
+        
+                    <md-autocomplete
+                        class="md-block" flex-gt-sm="30"
+                          md-selected-item="profile.data.gov_id.name"
+                          md-search-text="nadgin"
+                          md-search-text-change="profile.data.gov_id.name = nadgin"
+                          md-items="x in gov_ids"
+                          md-item-text="x"
+                          md-min-length="0"
+                          placeholder="ID NAME:">
+                        <md-item-template>
+                          {{x}}
+                        </md-item-template>
+                    </md-autocomplete>
+        
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>ID Number</label>
+                        <input ng-model="profile.data.gov_id.number" required>
+                    </md-input-container>
+        
+                    <div flex-gt-sm>
+                        <md-datepicker ng-model="dateIssued" 
+                            ng-init="dateIssued=profile.data.gov_id.date_issued"
+                            ng-change="profile.data.gov_id.date_issued = to_date(dateIssued)" md-placeholder="Date Issued" md-open-on-focus required></md-datepicker>
+                    </div>
+        
+                </div>
+        
+                <div layout-gt-sm="row">
+                    
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Place Issued</label>
+                        <input ng-model="profile.data.gov_id.place_issued" required>
+                    </md-input-container>
+        
+                    <div flex-gt-sm>
+                        <md-datepicker 
+                            ng-init="dateValid=profile.data.gov_id.valid_until"
+                            ng-model="dateValid" ng-change="profile.data.gov_id.valid_until = to_date(dateValid)" md-placeholder="Valid Until" md-open-on-focus required></md-datepicker>
+                    </div>
+                </div>
+        
+                <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+        
+                <md-button ng-hide=" is_loading " type="submit" ng-disabled="form_new_profile.$invalid " 
+                    ng-click="save_profile(profile.data)" class="md-raised md-block md-primary" >
+                    Save Profile
+                </md-button>
+                <md-button ng-if="profile.data.status=='active'" type="submit"
+                    ng-click="deactivate_profile(profile.data.id)" 
+                    class="md-raised md-block md-primary" >
+                    Deactivate Profile
+                </md-button>
+                <md-button ng-if="profile.data.status=='deactivated'" type="submit"
+                    ng-click="activate_profile(profile.data.id)" 
+                    class="md-raised md-block md-primary" >
+                    Activate Profile
+                </md-button>
+            </form>
+</div>

@@ -9,10 +9,10 @@
 
 	<div ng-include="'./app/templates/templates/header.html'"></div>
 	<hr>
-	<div>
+	<div class="align-center">
 		<strong>
-			<div>WILDLIFE SPECIAL USE PERMIT</div>
-			<div>WSUP No.: {{currentItem.wsup_no}}</div>
+				<div><h2>WILDLIFE SPECIAL USE PERMIT</h2></div>
+				<div><h4>WSUP No.: {{currentItem.wsup_no}}</h4></div>
 		</strong>
 	</div>
 	<br>
@@ -23,9 +23,12 @@
 	</p>
 	<br>
 	<br>
-	<div style="text-align:center; margin-left: 100px; margin-right: 100px" ng-repeat="lineNumber in [2, 4, 6, 8]">
-		<h2 style="border:solid 2px; padding:7px">{{currentItem['line'+lineNumber]}}</h2>
-		{{currentItem['line'+(lineNumber+1)]}}
+	<div style="text-align:center; margin-left: 100px; margin-right: 100px" 
+		ng-repeat="lineNumber in [2, 4, 6, 8]">
+		<div ng-if="currentItem['line'+lineNumber]">
+				<h2 style="border:solid 2px; padding:7px">{{currentItem['line'+lineNumber]}}</h2>
+				{{currentItem['line'+(lineNumber+1)]}}
+		</div>
 	</div>
 <br>
 	<p>
@@ -80,7 +83,7 @@
 	<hr>
 	<br>
 	<br>
-	<div style="text-align:center">TERMS AND CONDITIONS</div>
+	<!-- <div style="text-align:center">TERMS AND CONDITIONS</div>
 	This Permit is issued subject to the following terms and conditions:
 	<ol>
 		<li>The Permittee shall only be allowed to buy and sell the following marine wildlife species that are
@@ -182,7 +185,7 @@
 			<br>
 			Date Signed: <underlined>{{currentItem.date_signed}}</underlined>
 		</div>
-	</div>
+	</div> -->
 	<!-- footer -->
 	<div ng-include="'./app/templates/templates/footer.html'"></div>
 </div>

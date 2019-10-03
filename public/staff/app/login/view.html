@@ -1,0 +1,44 @@
+<div ng-controller="login_controller">
+    <md-toolbar class="bg-red">
+        <div class="md-toolbar-tools m-t-10">
+        <strong> BRAIN SYSTEM - Staff Login </strong>
+        </div>
+    </md-toolbar>
+
+    <md-content layout-padding class="p-t-20">
+            <form name="form_login" ng-init="phoneNumber = '+63';" >
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Phone Number</label>
+                    <input minlength="13" ng-model="phoneNumber" required>
+                </md-input-container>
+                <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+                <md-button ng-hide=" is_loading " type="submit" ng-disabled="form_login.$invalid" ng-click="staffLogin(phoneNumber,$event);" class="md-raised md-block md-primary" >
+                    Login
+                </md-button>
+            </form>
+    </md-content>
+
+    <div style="visibility: hidden">
+        <div class="md-dialog-container" id="phoneVerificationModal">
+                <md-dialog layout-padding layout="column" layout-align="center center">
+                    <md-dialog-content>
+                        <h4 class="align-center">Captcha Verification</h4>
+                        <hr>
+                        <div id="recaptcha-container"></div>
+                        
+        
+                        <hr>
+                        <div layout="row" layout-align="end">
+                            <md-button class="md-raised" ng-click="close_dialog()">
+                                Cancel
+                            </md-button>
+                        </div>
+                    </md-dialog-content>
+            
+                </md-dialog>
+            </div>
+    </div>
+    
+</div>
