@@ -71,7 +71,8 @@
     <md-list class="md-dense" >
         <md-list-item class="md-3-line" ng-repeat="x in application_list | orderBy:'-date' | filter : search_application track by $index" 
             ng-click="open_application_tab(x)">
-            <img ng-src="{{api_address}}/{{x.user.data.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
+            {{x.user.data}}----
+            <img ng-src="{{x.user.data.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
             <div class="md-list-item-text" layout="column">
                 <h3>{{ x.user.data.full_name }}</h3>
                 <h4>{{ x.name }}</h4>

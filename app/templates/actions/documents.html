@@ -1,7 +1,7 @@
 <div ng-if="application.status < 2" ng-controller="doc_controller" ng-init="
-    applicant_name = name_spliter(application.data.application.applicant); 
     doc_network_user = getLocal('doc_user'); application_documents = [];
     getApplicationDocuments();
+    load_data_requirements();
     ">
     
     <!-- all documents added -->
@@ -22,28 +22,7 @@
     
     
     <div ng-if="doc_network_user != undefined" ng-controller="doc_ctrl_draft" ng-init="
-        no_pending_case_data = {
-            template : {
-                'name' : 'Certificate of no-pending Case',
-                'type' : 'certificate_of_no_pending_case',
-                'create' : './app/templates/templates/certificate_npc/create.html',
-                'edit' : './app/templates/templates/certificate_npc/edit.html',
-                'view' : './app/templates/templates/certificate_npc/view.html',
-                'print' : './app/templates/templates/certificate_npc/print.html'
-            },
-            created : date_now('YYYY-MM-DD'),
-            published : date_now('YYYY-MM-DD'),
-            category : 'certificate_of_no_pending_case',
-            keywords : applicant_name,
-            application_no : application.date,
-            applicant_f_name : applicant_name[0],
-            applicant_m_name : (applicant_name.length > 2)? applicant_name[1] : '',
-            applicant_l_name : (applicant_name.length > 3)? applicant_name[2] : '',
-            address : application.data.application.applicant_address
-        };
-        day = date_now('DD');
-        month = date_now('MMMM');
-        year = date_now('YYYY');
+        
      ">
         
         <hr>
@@ -54,32 +33,7 @@
         </md-button>
         <!-- end of no pending case -->
         <!-- Certificate of Inspection (LTP) -->
-        <div ng-if="application.name == 'Application for Local Transport Permit RFF' || application.name == 'Application for Local Transport Permit AO12'" ng-init="certificate_of_inspection_data = {
-            template : {
-                'name' : 'Certificate of Inspection (LTP)',
-                'type' : 'certificate_of_inspection_ltp_ao12',
-                'permit' : true,
-                'create' : './app/templates/templates/ltp_wildlife/certificate/create.html',
-                'edit' : './app/templates/templates/ltp_wildlife/certificate/edit.html',
-                'view' : './app/templates/templates/ltp_wildlife/certificate/view.html',
-                'print' : './app/templates/templates/ltp_wildlife/certificate/print.html'
-            },
-            created : date_now('YYYY-MM-DD'),
-            published : date_now('YYYY-MM-DD'),
-            category : 'certificate_of_inspection_ltp_ao12',
-            keywords : applicant_name,
-            application_no : application.date,
-            applicant_f_name : applicant_name[0],
-            applicant_m_name : (applicant_name.length > 2)? applicant_name[1] : '',
-            applicant_l_name : (applicant_name.length > 3)? applicant_name[2] : '',
-            applicant_name : application.data.application.applicant,
-            species : format_specimen(application.data.application.specimen),
-            origin : application.data.application.place_of_origin.barangay + ', ' + application.data.application.place_of_origin.municipality,
-            recipient_name : application.data.application.recipient.name,
-            transportation_vessel : (application.data.application.via.aircraft)? 'aircraft': 'vessel'
-        };
-        transport_date = application.data.application.date_of_transport;
-        issuance_date = date_now();
+        <div ng-if="application.name == 'Application for Local Transport Permit RFF' || application.name == 'Application for Local Transport Permit AO12'" ng-init="
         ">
             <md-button class="md-button col-black" ng-click="open_create_document_modal($event,certificate_of_inspection_data)">
                 <i class="fa fa-plus col-black"></i>

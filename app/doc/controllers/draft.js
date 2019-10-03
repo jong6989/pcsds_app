@@ -150,21 +150,4 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $utils, $md
         },300);
     };
 
-    $scope.format_specimen = (species)=>{
-        let newArray = [];
-        if(species != undefined){
-            species.map( o => {
-                let item = {
-                    name : o.species_name,
-                    quantity : o.species_qty,
-                    description : o.species_des
-                };
-                if(o.species_boxes)
-                    item.remarks = `${o.species_boxes} box` + ((o.species_boxes.length > 1) ? `'es`:``);
-                newArray.push(item);
-            } );
-        }
-        return newArray;
-    };
-
 });

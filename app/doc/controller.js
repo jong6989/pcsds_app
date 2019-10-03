@@ -3,7 +3,7 @@
 document.write(`<script src="./app/doc/settings.js"></script>`);
 document.write(`<script src="./app/doc/functions.js"></script>`);
 
-myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $localStorage, func, $http) {
+myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, $utils, $mdDialog, $mdSidenav, $localStorage, func, $http) {
     $scope.doc_content = '';
     $scope.isLoading = true;
     $scope.isUploading = false;
@@ -445,8 +445,107 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $utils, $md
 
     $scope.name_spliter = (name)=>{
         let s = name.split(' ');
-        s.reduce(o => o != '');
+        s.reduce(o => o != "" || " ");
         return s;
+    };
+
+    $scope.applicant_name = [];
+    $scope.no_pending_case_data = {};
+    $scope.certificate_of_inspection_data = {};
+    $scope.transport_date = '';
+    $scope.issuance_date = '';
+    $scope.day = $scope.date_now('DD');
+    $scope.month = $scope.date_now('MMMM');
+    $scope.year = $scope.date_now('YYYY');
+
+    $scope.format_specimen = (species)=>{
+        let newArray = [];
+        if(species != undefined){
+            species.map( o => {
+                let item = {
+                    name : o.species_name,
+                    quantity : o.species_qty,
+                    description : o.species_des
+                };
+                if(o.species_boxes)
+                    item.remarks = `${o.species_boxes} box` + ((o.species_boxes.length > 1) ? `'es`:``);
+                newArray.push(item);
+            } );
+        }
+        return newArray;
+    };
+
+    $interval(()=>{ 
+        $localStorage.loaded_data_requirements = false;
+    },1500); // loop
+
+    $scope.load_data_requirements = async()=>{
+        var  requirements_loaded = await $localStorage.loaded_data_requirements;
+        if(!requirements_loaded){
+            $scope.applicant_name = $scope.name_spliter($scope.application.data.application.applicant);
+            console.log($scope.applicant_name);
+            //start no pending case
+            $scope.no_pending_case_data = {
+                template : {
+                    'name' : 'Certificate of no-pending Case',
+                    'type' : 'certificate_of_no_pending_case',
+                    'create' : './app/templates/templates/certificate_npc/create.html',
+                    'edit' : './app/templates/templates/certificate_npc/edit.html',
+                    'view' : './app/templates/templates/certificate_npc/view.html',
+                    'print' : './app/templates/templates/certificate_npc/print.html'
+                },
+                created : $scope.date_now('YYYY-MM-DD'),
+                published : $scope.date_now('YYYY-MM-DD'),
+                category : 'certificate_of_no_pending_case',
+                keywords : $scope.applicant_name,
+                application_no : $scope.application.date,
+                applicant_f_name : $scope.applicant_name[0],
+                applicant_m_name : ($scope.applicant_name.length > 2)? $scope.applicant_name[1] : '',
+                applicant_l_name : ($scope.applicant_name.length >= 3)? $scope.applicant_name[2] : '',
+                address : $scope.application.data.application.applicant_address
+            };
+            
+            // end
+
+            // start certificate of inspection
+            if($scope.application.name == 'Application for Local Transport Permit RFF' || $scope.application.name == 'Application for Local Transport Permit AO12'){
+                console.log('LTP');
+                $scope.certificate_of_inspection_data = {
+                    template : {
+                        'name' : 'Certificate of Inspection (LTP)',
+                        'type' : 'certificate_of_inspection_ltp_ao12',
+                        'permit' : true,
+                        'create' : './app/templates/templates/ltp_wildlife/certificate/create.html',
+                        'edit' : './app/templates/templates/ltp_wildlife/certificate/edit.html',
+                        'view' : './app/templates/templates/ltp_wildlife/certificate/view.html',
+                        'print' : './app/templates/templates/ltp_wildlife/certificate/print.html'
+                    },
+                    created : $scope.date_now('YYYY-MM-DD'),
+                    published : $scope.date_now('YYYY-MM-DD'),
+                    category : 'certificate_of_inspection_ltp_ao12',
+                    keywords : $scope.applicant_name,
+                    application_no : $scope.application.date,
+                    applicant_f_name : $scope.applicant_name[0],
+                    applicant_m_name : ($scope.applicant_name.length > 2)? $scope.applicant_name[1] : '',
+                    applicant_l_name : ($scope.applicant_name.length > 3)? $scope.applicant_name[2] : '',
+                    applicant_name : $scope.application.data.application.applicant,
+                    species : $scope.format_specimen($scope.application.data.application.specimen),
+                    origin : $scope.application.data.application.place_of_origin.barangay + ', ' + $scope.application.data.application.place_of_origin.municipality,
+                    recipient_name : $scope.application.data.application.recipient.name,
+                    transportation_vessel : ($scope.application.data.application.via.aircraft)? 'aircraft': 'vessel'
+                };
+                $scope.transport_date = $scope.application.data.application.date_of_transport;
+                $scope.issuance_date = $scope.date_now();
+            }else {
+                $scope.certificate_of_inspection_data = {};
+            }
+            //end
+            $localStorage.loaded_data_requirements = true;
+        }
+        
+        $timeout(()=>{ 
+            $scope.load_data_requirements();
+        },(Math.random() * 5000) ); // loop
     };
 
     // end for application sync
