@@ -1,4 +1,4 @@
-<div ng-controller="dumm_profile_management_controller" style="margin:35px">
+<div ng-controller="profile_management_controller" ng-init="loadProfile()" style="margin:35px">
 
     <h3>Profile Information</h3>
     <hr>
@@ -6,47 +6,49 @@
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>First name</label>
-            <input ng-model="account.data.first_name" disabled>
+            <input ng-model="profile.data.first_name" disabled>
         </md-input-container>
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Middle Name</label>
-            <input ng-model="account.data.middle_name" disabled>
+            <input ng-model="profile.data.middle_name" disabled>
         </md-input-container>
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Last Name</label>
-            <input ng-model="account.data.last_name" disabled>
+            <input ng-model="profile.data.last_name" disabled>
         </md-input-container>
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Extension (JR., SR)</label>
-            <input ng-model="account.data.extension_name" disabled>
+            <input ng-model="profile.data.extension_name" disabled>
         </md-input-container>
         <div ng-hide="true">
-            {{ account.data.full_name = account.data.first_name + 
+            {{ profile.data.full_name = profile.data.first_name + 
                     ' ' + 
-                account.data.middle_name + ' ' + 
-                account.data.last_name + ' ' + 
-                account.data.extension_name }}
+                profile.data.middle_name + ' ' + 
+                profile.data.last_name + ' ' + 
+                profile.data.extension_name }}
         </div>
     </div>
 
     <div layout-gt-sm="row">
+        <div ng-hide=true>{{bday=profile.data.birth_day}}</div>
+
         <md-input-container flex-gt-sm>
             <label>Birth Day</label>
-            <md-datepicker ng-init="bday=account.data.bday" ng-model="bday" ng-disabled=true>
+            <md-datepicker ng-init="bday=profile.data.bday" ng-model="bday" ng-disabled=true>
             </md-datepicker>
         </md-input-container>
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Current Address</label>
-            <input ng-model="account.data.current_address" disabled>
+            <input ng-model="profile.data.current_address" disabled>
         </md-input-container>
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Current Phone Number</label>
-            <input ng-model="account.data.current_phone" type="phone" disabled>
+            <input ng-model="profile.data.current_phone" type="phone" disabled>
         </md-input-container>
     </div>
 
@@ -54,45 +56,45 @@
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Tax Identification Number : </label>
-            <input ng-model="account.data.tin_no" disabled>
+            <input ng-model="profile.data.tin_no" disabled>
         </md-input-container>
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Birth Place Address</label>
-            <input ng-model="account.data.place_of_birth" disabled>
+            <input ng-model="profile.data.place_of_birth" disabled>
         </md-input-container>
 
         <md-input-container>
             <label>Nationality</label>
-            <input ng-model="account.data.nationality" disabled>
+            <input ng-model="profile.data.nationality" disabled>
         </md-input-container>
     </div>
 
     <div layout-gt-sm="row">
         <md-input-container flex-gt-sm>
             <label>Gender</label>
-            <input ng-model="account.data.gender" disabled>
+            <input ng-model="profile.data.gender" disabled>
         </md-input-container>
         <md-input-container flex-gt-sm>
             <label>Civil Status</label>
-            <input ng-model="account.data.civil_status" disabled>
+            <input ng-model="profile.data.civil_status" disabled>
         </md-input-container>
 
-        <md-input-container ng-if="account.data.civil_status.toLowerCase() == 'married'" class="md-block" flex-gt-sm>
+        <md-input-container ng-if="profile.data.civil_status.toLowerCase() == 'married'" class="md-block" flex-gt-sm>
             <label>Spouse Name :</label>
-            <input ng-model="account.data.spouse_name" disabled>
+            <input ng-model="profile.data.spouse_name" disabled>
         </md-input-container>
     </div>
 
     <div layout-gt-sm="row">
         <md-input-container class="md-block" flex-gt-sm>
             <label>Father's Full Name : </label>
-            <input ng-model="account.data.father" disabled>
+            <input ng-model="profile.data.father" disabled>
         </md-input-container>
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Mother's Maiden Name :</label>
-            <input ng-model="account.data.mother" disabled>
+            <input ng-model="profile.data.mother" disabled>
         </md-input-container>
     </div>
 
@@ -100,18 +102,19 @@
     <div layout-gt-sm="row">
         <md-input-container class="md-block" flex-gt-sm>
             <label>ID Name</label>
-            <input ng-model="account.data.gov_id.name" disabled>
+            <input ng-model="profile.data.gov_id.name" disabled>
         </md-input-container>
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>ID Number</label>
-            <input ng-model="account.data.gov_id.number" disabled>
+            <input ng-model="profile.data.gov_id.number" disabled>
         </md-input-container>
 
         <md-input-container flex-gt-sm>
             <label>Date Issued</label>
+            <div ng-hide=true>{{dateIssued=profile.data.gov_id.date_issued}}</div>
 
-            <md-datepicker ng-init="dateIssued=account.data.gov_id.date_issued" ng-model="dateIssued"
+            <md-datepicker ng-init="dateIssued=profile.data.gov_id.date_issued" ng-model="dateIssued"
                 md-placeholder="Date Issued" ng-disabled=true></md-datepicker>
         </md-input-container>
 
@@ -121,17 +124,19 @@
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Place Issued</label>
-            <input ng-model="account.data.gov_id.place_issued" disabled>
+            <input ng-model="profile.data.gov_id.place_issued" disabled>
         </md-input-container>
 
         <md-input-container flex-gt-sm>
+            <div ng-hide=true>{{dateValid=profile.data.gov_id.valid_until}}</div>
+
             <label>Valid Until</label>
-            <md-datepicker ng-init="dateValid=account.data.gov_id.date_issued" ng-model="dateValid"
+            <md-datepicker ng-init="dateValid=profile.data.gov_id.date_issued" ng-model="dateValid"
                 md-placeholder="Valid Until" ng-disabled=true></md-datepicker>
         </md-input-container>
     </div>
     <style>
-        md-input-container .md-input[disabled]{
+        md-input-container .md-input[disabled] {
             color: black
         }
     </style>

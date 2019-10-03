@@ -37,9 +37,9 @@ var scripts_js_plugins = {
 
 //scripts for login user
 let profileModule = script_angular + scripts_controllers.main + scripts_controllers.profile + script_ng_plugins.ngTable;
-let v = localData.get('current_view');
-    if(!v){
-        localData.set(v);
-    }
-// localData.set('current_view', 'app/profile_management/list.html');
+// let v = localData.get('current_view');
+//     if(!v){
+//         localData.set(v);
+//     }
+// localData.set('current_view', 'app/profile_management/view.html?id=1');
 document.write(profileModule);

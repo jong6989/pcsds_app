@@ -77,7 +77,7 @@ myAppModule.
             $scope.profile = {
                 data: {
                     first_name: "Arlan",
-                    middle_name: "Ticke",
+                    middle_name: "",
                     last_name: "Asutilla",
                     extension_name: '',
                     birth_day: "1984-05-05",

@@ -8,7 +8,7 @@
                 <div layout-gt-sm="row">
         
                     <md-input-container class="md-block" flex-gt-sm>
-                        <label>First name</label>
+                        <label>First Name</label>
                         <input ng-model="profile.data.first_name" 
                             ng-blur="profile.data.keywords[0]=new_account.data.first_name"
                             required>
@@ -147,7 +147,8 @@
                     <div ng-hide=true>{{dateIssued=profile.data.gov_id.date_issued}}</div>        
                     <div flex-gt-sm>
                         <md-datepicker ng-model="dateIssued" 
-                            ng-change="profile.data.gov_id.date_issued = to_date(dateIssued)" md-placeholder="Date Issued" md-open-on-focus required></md-datepicker>
+                            ng-change="profile.data.gov_id.date_issued = to_date(dateIssued)" 
+                            md-placeholder="Date Issued" md-open-on-focus required></md-datepicker>
                     </div>
         
                 </div>
@@ -161,7 +162,9 @@
                     <div ng-hide=true>{{dateValid=profile.data.gov_id.valid_until}}</div>
                     <div flex-gt-sm>
                         <md-datepicker 
-                            ng-model="dateValid" ng-change="profile.data.gov_id.valid_until = to_date(dateValid)" md-placeholder="Valid Until" md-open-on-focus required></md-datepicker>
+                            ng-model="dateValid" 
+                            ng-change="profile.data.gov_id.valid_until = to_date(dateValid)" 
+                            md-placeholder="Valid Until" md-open-on-focus required></md-datepicker>
                     </div>
                 </div>
         
