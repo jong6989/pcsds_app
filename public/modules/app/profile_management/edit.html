@@ -1,4 +1,6 @@
-<div ng-controller="dummy_profile_management_controller">
+<div ng-controller="profile_management_controller"
+    ng-init="loadProfile()"
+>
         <form name="form_new_profile" ng-init="" >
         
                 <h3>Profile Information</h3>
@@ -36,13 +38,12 @@
                         {{ profile.data.full_name = profile.data.first_name + ' ' + profile.data.middle_name + ' ' + profile.data.last_name + ' ' + profile.data.extension_name }}
                     </div>
                 </div>
-        
+                <div ng-hide=true>{{bday=profile.data.birth_day}}</div>
                 <div layout-gt-sm="row">
                     <div flex-gt-sm>
                         <strong>Birth Day <cite class="font-10">(must be 18+)</cite></strong>
-                        <md-datepicker 
+                        <md-datepicker
                             ng-model="bday" 
-                            ng-init="bday=profile.data.birth_day"
                             ng-change="profile.data.birth_day = to_date(bday)" 
                             md-placeholder="Birth Date"
                             md-min-date="minDate" md-max-date="maxDate" md-open-on-focus required></md-datepicker>
@@ -143,10 +144,9 @@
                         <label>ID Number</label>
                         <input ng-model="profile.data.gov_id.number" required>
                     </md-input-container>
-        
+                    <div ng-hide=true>{{dateIssued=profile.data.gov_id.date_issued}}</div>        
                     <div flex-gt-sm>
                         <md-datepicker ng-model="dateIssued" 
-                            ng-init="dateIssued=profile.data.gov_id.date_issued"
                             ng-change="profile.data.gov_id.date_issued = to_date(dateIssued)" md-placeholder="Date Issued" md-open-on-focus required></md-datepicker>
                     </div>
         
@@ -158,10 +158,9 @@
                         <label>Place Issued</label>
                         <input ng-model="profile.data.gov_id.place_issued" required>
                     </md-input-container>
-        
+                    <div ng-hide=true>{{dateValid=profile.data.gov_id.valid_until}}</div>
                     <div flex-gt-sm>
                         <md-datepicker 
-                            ng-init="dateValid=profile.data.gov_id.valid_until"
                             ng-model="dateValid" ng-change="profile.data.gov_id.valid_until = to_date(dateValid)" md-placeholder="Valid Until" md-open-on-focus required></md-datepicker>
                     </div>
                 </div>
@@ -183,6 +182,11 @@
                     ng-click="activate_profile(profile.data.id)" 
                     class="md-raised md-block md-primary" >
                     Activate Profile
+                </md-button>
+                <md-button type="submit"
+                    ng-click="loadPage('app/profile_management/list.html')" 
+                    class="md-raised md-block md-primary" >
+                    Back to List
                 </md-button>
             </form>
 </div>
