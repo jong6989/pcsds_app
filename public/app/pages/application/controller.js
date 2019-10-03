@@ -1,6 +1,11 @@
 'use strict';
 
-myAppModule.controller('application_controller', function ($scope, $http, $location, $utils, $mdDialog, $interval, Upload, $localStorage) {
+myAppModule.controller('application_controller', function ($scope,$filter, $http, $location, $utils, $mdDialog, $interval, Upload, $localStorage) {
+    
+    // $scope.to_date = function(d){
+    //     return $filter('date')(d, "yyyy-MM-dd");
+    //   };
+    
     $scope.selectedIndex = 0;
     $scope.mun = [];
     $scope.places_of_transport = [];
@@ -171,12 +176,9 @@ myAppModule.controller('application_controller', function ($scope, $http, $locat
 
         
 
-        // $scope.to_date = function(d){
-        //     return $filter('date')(d, "yyyy-MM-dd");
-        //   };
 
         
-        //   application.date_postal = $scope.to_date(application.date_postal);
+        // application.date_postal = $scope.to_date(application.date_postal);
         // application.date_sea = $scope.to_date(application.date_sea);
         // application.date_air = $scope.to_date(application.date_air);
 
