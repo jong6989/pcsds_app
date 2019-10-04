@@ -1,4 +1,6 @@
-<div ng-controller="dummy_profile_management_controller">
+<div ng-controller="profile_management_controller"
+  ng-init="loadProfileList()"
+>
         
                 <!-- <md-toolbar class="bg-teal">
                   <h1 class="md-toolbar-tools">
@@ -61,7 +63,7 @@
                         <td title="''">
                           <md-button
                             class="md-raised"
-                            ng-click="openProfileFormForUpdating(profile.id)"
+                            ng-click="loadPage('app/profile_management/edit.html?id='+profile.id)"
                           >
                             <i class="fa fa-plus col-green"></i>
                             EDIT

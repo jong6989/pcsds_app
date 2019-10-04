@@ -2,16 +2,13 @@
 // var cloud_function_api = "https://us-central1-pcsd-brain-systems.cloudfunctions.net/";
 var cloud_function_api = "https://us-central1-pcsd-app.cloudfunctions.net/"; 
 //angularjs main
-var script_angular = `
-    <script src="/js/angular.min.js"></script>
+var script_angular = `<script src="/js/angular.min.js"></script>
     <script src="/js/angular-route.js"></script>
     <script src="/js/angular-animate.min.js"></script>
     <script src="/js/angular-aria.min.js"></script>
     <script src="/js/angular-messages.min.js"></script>
     <script src="/js/angular-material.min.js"></script>
-    <script src="/js/ngStorage.min.js"></script>
-    
-    `;
+    <script src="/js/ngStorage.min.js"></script>`;
 //angularjs plugins
 var script_ng_plugins = {
     ngTable : `<script src="/js/ng-table.min.js"></script>`,
@@ -40,8 +37,9 @@ var scripts_js_plugins = {
 
 //scripts for login user
 let profileModule = script_angular + scripts_controllers.main + scripts_controllers.profile + script_ng_plugins.ngTable;
-let v = localData.get('current_view');
-    // if(!v){
-        localData.set('current_view','app/profile_management/test.html');
-    // }
+// let v = localData.get('current_view');
+//     if(!v){
+//         localData.set(v);
+//     }
+// localData.set('current_view', 'app/profile_management/view.html?id=1');
 document.write(profileModule);
