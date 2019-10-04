@@ -10,7 +10,8 @@ myAppModule.controller('applicant_dashboard_controller', function ($scope, $http
         { name : "Wildlife Collector's Permit", url : "#!/pages/application/wildlife/wcp" },
         { name : "Wildlife Farm Permit", url : "#!/pages/application/wildlife/wfp" },
         { name : "Wildlife Gratuitous Permit", url : "#!/pages/application/wildlife/gp" },
-        { name : "Wildlife Import Certification", url : "#!/pages/application/wildlife/wic" }
+        { name : "Wildlife Import Certification", url : "#!/pages/application/wildlife/wic" },
+        { name : "Application for Wildlife Export and Re Export Certification", url : "#!/pages/application/wildlife/wtf" }
     ];
 
     $scope.load_my_applications = ()=>{
