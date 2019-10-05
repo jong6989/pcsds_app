@@ -193,18 +193,21 @@
                 </md-button>
             </form>
 </div> -->
-<div ng-controller="profile_management_controller" ng-init="loadProfile(0);">
+<div ng-controller="profile_management_controller" ng-init="loadProfile();">
         <div layout-gt-xs="row" layout-xs="column">
             <!-- User Photo -->
             <div flex-gt-xs="35" layout-padding  
                 ng-show="!is_using_camera"
-                ngf-drop ng-model="profile.data.profile_picture"
+                ngf-drop 
+                ng-model="profile.data.profile_picture"
                 ngf-allow-dir="true"
                 ngf-drag-over-class="'dragover'"
                 ngf-multiple="false"
                 ngf-pattern="image/*"
                 >
-                
+                <md-content layout="row" layout-align="start center" layout-padding>
+                    <md-progress-circular md-mode="indeterminate" ng-show="is_page_loading"></md-progress-circular>
+                </md-content>
                 <img ng-hide="is_croping_image()" 
                     ng-src="{{ profile.data.profile_picture == null ? '../../images/user.png' : 
                         profile.data.profile_picture }}" 
@@ -212,7 +215,7 @@
                 
                 <img class="align-center" ng-show="is_croping_image()" ng-src="{{croppedDataUrl}}" />
     
-                <img-crop ng-show="is_croping_image()" image="profile.data.profile_picture | ngfDataUrl"                 
+                <img-crop ng-show="is_croping_image()" image="image_file | ngfDataUrl"                 
                     result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
                 </img-crop>
     
@@ -220,7 +223,7 @@
                 <hr>
     
                 <md-button ng-hide="is_croping_image()" ngf-capture="'camera'" 
-                    ngf-select ng-model="profile.data.profile_picture" accept="image/*">
+                    ngf-select ng-model="image_file" accept="image/*">
                     Upload Picture
                 </md-button>
     
@@ -230,7 +233,7 @@
                 </md-button>
     
                 <md-button ng-show="is_croping_image() && !is_uploading" 
-                    ng-click="upload_profile_picture(croppedDataUrl, profile.data.profile_picture)">Save</md-button> 
+                    ng-click="upload_profile_picture(croppedDataUrl, image_file.name)">Save</md-button> 
                 <md-button ng-show="is_croping_image() && !is_uploading" 
                     ng-click="clear_cropping_image()" >Cancel</md-button>
                 
@@ -240,7 +243,7 @@
             <div layout="column" ng-if="is_using_camera">
     
                 <div ng-hide="fromCamera == undefined" class="align-center"><img ng-src="{{croppedDataUrl}}" /></div>
-                <md-button ng-if="fromCamera != undefined" ng-click="change_profile(croppedDataUrl, 'camera_captured_image.jpg')" >
+                <md-button ng-if="fromCamera != undefined" ng-click="upload_profile_picture(croppedDataUrl, 'camera_captured_image.jpg')" >
                     Save Image
                 </md-button>
                 
@@ -270,52 +273,54 @@
     
             <!-- Profile details -->
             <div flex-gt-xs class="p-l-20">
-                <hr>
-                    <strong class="col-grey" >Profile ID :</strong> {{profile.data.id}}
-                <hr>
-                    <div>
-                        <i class="fa fa-edit pointer col-blue" 
-                            ng-click="showPrerenderedDialog($event,'fullname_modal');
-                            clear_edit_pass();">
+                    <div ng-hide=true>
+                        {{
+                            profile.data.full_name=profile.data.full_name=[profile.data.first_name, 
+                            profile.data.middle_name, 
+                            profile.data.last_name].join(' ')
+                        }}
+                    </div>
+                    <div ng-init="windowNames=['fullname_modal', 'address_modal', 'contact_modal']"></div>
+                    <div ng-init="toolTips=['Full Name', 'Address', 'Contact Number']"></div>
+                    <div ng-init="profileProperties=['full_name', 'current_address', 'current_phone']"></div>
+                    <div ng-repeat="windowName in windowNames track by $index">
+                        <hr>
+                        <i class="fa fa-edit pointer col-blue"
+                            ng-click="showPrerenderedDialog($event, windowName);clear_edit_pass();">
                             <md-tooltip md-direction="top">
-                                edit full name
+                               Edit {{toolTips[$index]}}
                             </md-tooltip>
                         </i>
-                        <strong class="col-grey">Full Name :</strong> {{profile.data.first_name}} {{profile.data.middle_name}} {{profile.data.last_name}} {{profile.data.extension_name}}
+                        <strong class="col-grey">{{toolTips[$index]}} :</strong>
+                        <div style="margin-left:10px">
+                            {{profile.data[profileProperties[$index]]}}
+                        </div>
+
                     </div>
-                <hr>
-                    <i class="fa fa-edit pointer col-blue" ng-click="showPrerenderedDialog($event,'address_modal');clear_edit_pass();">
-                        <md-tooltip md-direction="top">
-                            edit address
-                        </md-tooltip>
-                    </i>
-                    <strong class="col-grey">Address :</strong> {{profile.data.current_address}}
-                <hr>
-                    <i class="fa fa-edit pointer col-blue" ng-click="showPrerenderedDialog($event,'contact_modal');clear_edit_pass();">
-                        <md-tooltip md-direction="top">
-                            edit contact number
-                        </md-tooltip>
-                    </i>
-                    <strong class="col-grey">Phone :</strong> {{profile.data.current_phone}}
-                <hr>
+
                     <md-card>
                         <md-card-content>
                             <i class="fa fa-edit pointer col-blue" ng-click="showPrerenderedDialog($event,'personal_modal');clear_edit_pass();">
                                 <md-tooltip md-direction="top">
-                                    edit Personal Info
+                                    Edit Personal Info
                                 </md-tooltip>
                             </i>
                             <strong class="col-grey">Personal Information </strong> <br>
-                            <small>Birth Day</small> : {{profile.data.birth_day}} ({{date_from_now(profile.data.birth_day).split(' ')[0]}} years old this year) <br>
-                            <small>Birth Place Address</small> : {{profile.data.place_of_birth}} <br>
-                                <small>Nationality</small> : {{profile.data.nationality}} <br>
-                                <small>Gender</small> : {{profile.data.gender}} <br>
-                                <small>Civil Status</small> : {{profile.data.civil_status}} 
-                                <div ng-if="profile.data.civil_status == 'married'">
-                                    <small>Spouse Name</small> : {{profile.data.spouse_name}} <br>
-                                </div><br>
-                                <small>Father</small> : {{profile.data.father}} <br>
-                                <small>Mother</small> : {{profile.data.mother}} <br>
+                            <div ng-init="personalInformations=[
+                                {'Birth Day': 'birth_day'},
+                                {'Birth Place': 'place_of_birth'},
+                                {'Nationality': 'nationality'},
+                                {'Gender': 'gender'},
+                                {'Civil Status': 'civil_status'},
+                                {'Spouse Name': 'spouse_name'},
+                                {'Father': 'father'},
+                                {'Mother': 'mother'}
+                                ]"></div>
+                            <div ng-repeat="personalInformation in personalInformations">
+                                <div ng-repeat="(key, value) in personalInformation">
+                                    <small>{{key}} : </small>{{profile.data[value]}}
+                                </div>
+                            </div>
                         </md-card-content>
                     </md-card>
             </div>
@@ -350,9 +355,9 @@
                         multiple
                         ngf-drag-over-class="'dragover'"
                         ngf-multiple="true">
-                        <h5 class="col-blue-grey">
-                            My Uploads : 
-                        </h5>
+                        <strong class="col-grey">
+                            Uploaded Files
+                        </strong>
                         <ol ng-if="profile.data.uploads != undefined">
                             <li ng-repeat="x in profile.data.uploads" > {{x.name}} - 
                             <i class="fa fa-trash col-red pointer" 
@@ -363,10 +368,6 @@
                                 </i>
                             </li>
                         </ol>
-                        <md-progress-linear md-mode="indeterminate" ng-show="uploading_file"></md-progress-linear>
-                        <md-button class="md-raised" ngf-select="upload_files($files)">
-                            Select Upload
-                        </md-button>
                     </div>
                 </md-card-content>
             </md-card>
@@ -374,12 +375,7 @@
             <!-- Chainsaw -->
             <md-card>
                 <md-card-content>
-                    <i class="fa fa-plus pointer col-blue" ng-click="showPrerenderedDialog($event,'add_chainsaw_modal')">
-                        <md-tooltip md-direction="top">
-                            Add Chainsaw
-                        </md-tooltip>
-                    </i>
-                    <strong class="col-grey">My Chainsaw List</strong> <br>
+                    <strong class="col-grey">Chainsaw List</strong> <br>
                     <div>
                         <ol>
                             <li ng-repeat="x in profile.data.chainsaws" class="pointer" ng-click="open_chainsaw(x,$event)">

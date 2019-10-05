@@ -24,8 +24,9 @@ myAppModule.
                 $scope.is_using_camera = false;
                 $scope.profile = { data: {} };
 
+                
                 $scope.clear_cropping_image = () => {
-                    $scope.profile.data.profile_picture = null;
+                    $scope.image_file = null;
                 }
 
                 $scope.toggle_using_camera = () => {
@@ -33,7 +34,7 @@ myAppModule.
                 }
 
                 $scope.is_croping_image = () => {
-                    return $scope.profile.data.profile_picture != null;
+                    return $scope.image_file != null;
                 };
 
                 $http.get("/json/profile/nationalities.json").
@@ -43,6 +44,7 @@ myAppModule.
 
                 $scope.loadProfile = async (id) => {
                     var profileID;
+                    $scope.is_page_loading = true;
                     if (id == null) {
                         var url_relative_path = localData.get('current_view');
                         var url = new URL(url_relative_path, location.href);
@@ -53,7 +55,8 @@ myAppModule.
                     }
 
                     $scope.profile.data = await $profileService.getProfile(profileID);
-                    $scope.profile.id = profileID;
+                    $scope.is_page_loading = false;
+
                 }
 
                 $scope.loadPage = (url) => {
@@ -95,54 +98,37 @@ myAppModule.
 
                 $scope.loadProfileList = async () => {
                     var profileList = await $profileService.getProfileList();
-                    
-                    $scope.profileTable = new NgTableParams({}, { dataset: profileList });
+
+                    $scope.profileTable = new NgTableParams({ sorting: { first_name: 'asc' } }, { dataset: profileList });
+                    // $scope.profileTable.$invalidate();
                 }
 
                 $scope.update_profile_property = (updatedProperty) => {
                     var success = $profileService.updateProfile($scope.profile.id, updatedProperty);
                 }
 
-                $scope.upload_profile_picture = function (dataUrl, imageFileName) {
+                $scope.upload_profile_picture = async function (dataUrl, imageFileName) {
                     $scope.is_using_camera = false;
-                    var success = $profileService.uploadProfilePicture($scope.profile.data.id, imageFileName, '');
-                    $scope.is_uploading = false;
-                    $scope.$apply();
+                    $scope.is_uploading = true;
 
-                    if (success) {
-
-                    } else {
+                    try{
+                        var imageUrl = await $profileService.uploadProfilePicture(
+                            $scope.profile.data.id, 
+                            imageFileName, 
+                            dataUrl);  
+                        $scope.profile.data.profile_picture = imageUrl;                      
+                    }catch(error){
                         Swal.fire({
                             type: 'error',
                             title: 'Oops...',
                             text: 'Upload Failed',
                             footer: 'Please try again'
                         });
+                    }finally{
+                        $scope.is_uploading = false;
+                        $scope.clear_cropping_image();
+                        $scope.$apply();
                     }
-                    // let profileId = localData.get('profileId');
-                    // if(profileId){
-                    //     $scope.is_uploading = true;
-                    //     let profileImage = storageRef.child(`profile_image/${profileId}-${name}`);
-                    //     profileImage.putString(dataUrl, 'data_url').then(function(snapshot) {
-                    //         snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                    //         db.collection('profile').doc(profileId).update({"profile_picture":downloadURL});
-                    //         $scope.picFile = null;
-                    //         $scope.is_uploading =false;
-                    //         $scope.$apply();
-                    //         });
-                    //     }).catch(()=>{
-                    //         Swal.fire({
-                    //             type: 'error',
-                    //             title: 'Oops...',
-                    //             text: 'Upload Failed',
-                    //             footer: 'Please try again'
-                    //           });
-                    //           $scope.is_uploading = false;
-                    //           $scope.$apply();
-                    //     });
-                    // }else {
-                    //     location.reload();
-                    // }
                 };
 
             }]).
@@ -182,7 +168,8 @@ myAppModule.
                         place_issued: "Puerto Princesa City",
                         valid_until: "2028-01-01"
                     },
-                    status: 'active'
+                    status: 'active',
+                    profile_picture: 'https://firebasestorage.googleapis.com/v0/b/pcsd-app.appspot.com/o/profile_image%2FNIofduXoq4Aar5Em88E4-?alt=media&token=ec559967-413d-4f1a-891a-93efa5033212'
                 }
             }
 
@@ -227,28 +214,27 @@ myAppModule.
             return profile;
         }
 
-        this.addProfile = async(newProfile) => {
+        this.addProfile = async (newProfile) => {
             var promise = new Promise((resolve, reject) => {
                 db.collection('profile').
-                add(newProfile).
-                then(result => {
-                    resolve(true);
-                },
-                    error => { 
-                        reject(error);
-                });
+                    add(newProfile).
+                    then(result => {
+                        resolve(true);
+                    },
+                        error => {
+                            reject(error);
+                        });
             });
 
             return promise;
         }
 
-        this.getProfileList = async() => {
+        this.getProfileList = async () => {
             var promise = new Promise((resolve, reject) => {
                 collection.onSnapshot(snapshot => {
                     var profileList = snapshot.docs.map(documentSnapshot => {
                         var profile = documentSnapshot.data();
                         profile.id = documentSnapshot.id;
-                        console.log(documentSnapshot);
                         return profile;
                     });
                     resolve(profileList);
@@ -256,6 +242,45 @@ myAppModule.
             });
 
             return promise;
+        }
+
+        this.getProfile = (id) => {
+            return new Promise((resolve, reject) => {
+                collection.doc(id).onSnapshot(snapshot => {
+                    var profile = snapshot.data();
+                    profile.id = snapshot.id;
+                    resolve(profile);
+                })
+            });
+        }
+        
+        this.uploadProfilePicture = async(id, fileName, dataUrl) => {
+            if (id) {
+                let profileImage = storageRef.child(`profile_image/${id}-${name}`);
+                var snapshot = await profileImage.putString(dataUrl, 'data_url');
+                var profilePictureUrl = await snapshot.ref.getDownloadURL();
+                collection.doc(id).update({'profile_picture': profilePictureUrl});
+
+                // profileImage.putString(dataUrl, 'data_url').then(function (snapshot) {
+                //     snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                //         db.collection('profile').doc(id).update({ "profile_picture": downloadURL });
+                //         $scope.picFile = null;
+                //         $scope.is_uploading = false;
+                //         $scope.$apply();
+                //     });
+                // }).catch(() => {
+                //     Swal.fire({
+                //         type: 'error',
+                //         title: 'Oops...',
+                //         text: 'Upload Failed',
+                //         footer: 'Please try again'
+                //     });
+                //     $scope.is_uploading = false;
+                //     $scope.$apply();
+                // });
+            } 
+
+            return new Promise((resolve, reject) => { resolve(profilePictureUrl)});
         }
     }).
     service('dummyProfileService', function () {

@@ -23,7 +23,7 @@
                 >
                   <div flex>
                     <table ng-table="profileTable" class="table" show-filter="true">
-                      <tr ng-repeat="profile in $data">
+                      <tr ng-repeat="profile in $data track by profile.id" >
                         <td
                           title="'First Name'"
                           sortable="'first_name'"
