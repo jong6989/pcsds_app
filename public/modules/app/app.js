@@ -1,6 +1,7 @@
 'use strict';
 var myAppModule = {};
-myAppModule = angular.module('brain_app', ['ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute']);
+myAppModule = angular.module('brain_app', 
+  ['ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute']);
 
 myAppModule
 .config(function($routeProvider, $locationProvider) {
