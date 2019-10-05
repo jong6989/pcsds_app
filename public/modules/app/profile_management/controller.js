@@ -24,11 +24,22 @@ myAppModule.
                 $scope.is_using_camera = false;
                 $scope.profile = { data: {} };
 
-                
+                $scope.print = () => { 
+                    setTimeout(function(){
+                        window.print();
+                    }, 3000);
+                }
+                $scope.currentUserShouldSee = () => {
+                    return $scope.profile.data.created_by == localData.get('authUser');
+                }
+
                 $scope.clear_cropping_image = () => {
                     $scope.image_file = null;
                 }
 
+                $scope.printProfile = (event) => {
+                    
+                }
                 $scope.toggle_using_camera = () => {
                     $scope.is_using_camera = !$scope.is_using_camera;
                 }
@@ -42,6 +53,7 @@ myAppModule.
                         $scope.nationalities = data.data.data;
                     });
 
+                $scope.onProfileLoad = () => {}
                 $scope.loadProfile = async (id) => {
                     var profileID;
                     $scope.is_page_loading = true;
@@ -56,7 +68,8 @@ myAppModule.
 
                     $scope.profile.data = await $profileService.getProfile(profileID);
                     $scope.is_page_loading = false;
-
+                    
+                    $scope.onProfileLoad();
                 }
 
                 $scope.loadPage = (url) => {
@@ -311,7 +324,9 @@ myAppModule.
                     valid_until: "2028-01-01"
                 },
                 status: 'active',
-                profile_picture: null
+                // profile_picture: 'https://firebasestorage.googleapis.com/v0/b/pcsd-app.appspot.com/o/profile_image%2FNIofduXoq4Aar5Em88E4-?alt=media&token=ec559967-413d-4f1a-891a-93efa5033212',
+                created_by: "DeTxDiJfxOOhTS94umfchr489o730"
+                // created_by: "DeTxDiJfxOOhTS94umfchr489o73"
                 // }
             },
             {
@@ -340,8 +355,8 @@ myAppModule.
                     valid_until: "2028-03-31"
                 },
                 status: 'active',
-                profile_picture: ''
-
+                profile_picture: '',
+                created_by: "DeTxDiJfxOOhTS94umfchr489o73"
                 // }
             },
             {
@@ -370,7 +385,8 @@ myAppModule.
                     valid_until: "2028-03-31"
                 },
                 status: 'active',
-                profile_picture: ''
+                profile_picture: '',
+                created_by: "DeTxDiJfxOOhTS94umfchr489o73"
 
                 // }
             }

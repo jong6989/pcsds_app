@@ -1,19 +1,6 @@
 <div ng-controller="profile_management_controller"
   ng-init="loadProfileList()"
 >
-        
-                <!-- <md-toolbar class="bg-teal">
-                  <h1 class="md-toolbar-tools">
-                    <md-button class="md-raised" ng-click="openForm($event)">
-                      <i class="fa fa-plus col-green"></i>
-                      add new criminal cases
-                    </md-button>
-                    <md-button class="md-raised" ng-click="refreshList()">
-                      <i class="fa fa-refresh col-green"></i>
-                        refresh
-                    </md-button>
-                  </h1>
-                </md-toolbar> -->
               
                 <md-content
                   style="height: {{ iframeHeight - 150 }}px;"
@@ -63,7 +50,7 @@
                         <td title="''">
                           <md-button
                             class="md-raised"
-                            ng-click="loadPage('app/profile_management/edit.html?id='+profile.id)"
+                            ng-click="loadPage('app/profile_management/view.html?id='+profile.id)"
                           >
                             <i class="fa fa-plus col-green"></i>
                             EDIT
