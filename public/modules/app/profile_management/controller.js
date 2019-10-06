@@ -7,8 +7,8 @@ myAppModule.
     controller('profile_management_controller',
         ['$scope',
             '$http',
-            'dummyProfileService',
-            // '$profileService',
+            // 'dummyProfileService',
+            '$profileService',
             'NgTableParams',
             '$location',
             function (
@@ -128,6 +128,7 @@ myAppModule.
 
                 $scope.update_profile_property = (updatedProperty) => {
                     var success = $profileService.updateProfile($scope.profile.data.id, updatedProperty);
+                    
                 }
 
                 $scope.upload_profile_picture = async function (dataUrl, imageFileName) {
@@ -289,7 +290,7 @@ myAppModule.
         }
 
         this.updateProfile = async(profileID,  updatedProperty) => {
-            await collection.id(profileID).update(updatedProperty);
+            await collection.doc(profileID).update(updatedProperty);
             return new Promise((resolve, reject) => { resolve(true); })
         }
     }).
