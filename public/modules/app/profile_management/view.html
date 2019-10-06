@@ -2,9 +2,9 @@
     <div layout-gt-xs="row" layout-xs="column">
         <div flex-gt-xs="35" layout-padding ng-show="!is_using_camera" ngf-drop ng-model="profile.data.profile_picture"
             ngf-allow-dir="true" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-pattern="image/*">
-            <md-content layout="row" layout-align="start center" layout-padding>
-                <md-progress-circular md-mode="indeterminate" ng-show="is_page_loading"></md-progress-circular>
-            </md-content>
+            <div ng-show=" is_page_loading " layout="row" layout-sm="column" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
             <img ng-hide="is_croping_image()" ng-src="{{ profile.data.profile_picture == null ? '../../images/user.png' : 
                         profile.data.profile_picture }}" alt="use" width="70%" md-whiteframe="3">
 
@@ -62,7 +62,9 @@
                 {{
                             profile.data.full_name=profile.data.full_name=[profile.data.first_name, 
                             profile.data.middle_name, 
-                            profile.data.last_name].join(' ')
+                            profile.data.last_name,
+                            profile.data.extension_name                            
+                            ].join(' ')
                         }}
             </div>
             <div ng-init="windowNames=['', 'fullname_modal', 'address_modal', 'contact_modal']"></div>
@@ -104,11 +106,25 @@
                                 {'Father': 'father'},
                                 {'Mother': 'mother'}
                                 ]"></div>
-                    <div ng-repeat="personalInformation in personalInformations">
-                        <div ng-repeat="(key, value) in personalInformation">
-                            <small>{{key}} : </small>{{profile.data[value]}}
+                    <div layout>
+                        <div>
+                            <div ng-repeat="personalInformation in personalInformations">
+                                <div ng-repeat="(key, value) in personalInformation">
+                                    <small>{{key}} </small>
+        
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-left:5px;">
+                            <div ng-repeat="personalInformation in personalInformations">
+                                <div ng-repeat="(key, value) in personalInformation">
+                                    {{profile.data[value]}}
+        
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    
                 </md-card-content>
             </md-card>
         </div>
@@ -125,13 +141,21 @@
                         Edit Government ID
                     </md-tooltip>
                 </i>
-                <strong class="col-grey">Government Issued Identification </strong> <br>
-                <small>Tax Identification Number</small> : {{profile.data.tin_no}} <br>
-                <small>ID Name</small> : {{profile.data.gov_id.name}} <br>
-                <small>ID Number</small> : {{profile.data.gov_id.number}} <br>
-                <small>Date Issued</small> : {{profile.data.gov_id.date_issued}} <br>
-                <small>Place Issued</small> : {{profile.data.gov_id.place_issued}} <br>
-                <small>Valid Until</small> : {{profile.data.gov_id.valid_until}} <br>
+                <strong class="col-grey">Government Issued Identification </strong>
+                <div layout>
+                    <div>
+                        <small ng-repeat="label in ['Tax Identification Number', 'ID Name', 'ID Number', 'Date Issued',
+                            'Place Issued', 'Valid Until']">{{label}}<br></small>
+                    </div>
+                    <div style="padding-left:5px">
+                        {{profile.data.gov_id.number}}<br>
+                        {{profile.data.gov_id.name}}<br>
+                        {{profile.data.gov_id.number}}<br>
+                        {{profile.data.gov_id.date_issued}}<br>
+                        {{profile.data.gov_id.place_issued}}<br>
+                        {{profile.data.gov_id.valid_until}}<br>
+                    </div>
+                </div>
             </md-card-content>
         </md-card>
 

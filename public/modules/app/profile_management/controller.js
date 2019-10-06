@@ -7,7 +7,8 @@ myAppModule.
     controller('profile_management_controller',
         ['$scope',
             '$http',
-            '$profileService',
+            'dummyProfileService',
+            // '$profileService',
             'NgTableParams',
             '$location',
             function (
@@ -25,9 +26,10 @@ myAppModule.
                 $scope.profile = { data: {} };
 
                 $scope.print = () => { 
-                    setTimeout(function(){
-                        window.print();
-                    }, 3000);
+                    window.print();
+
+                    // setTimeout(function(){
+                    // }, 3000);
                 }
                 $scope.currentUserShouldSee = () => {
                     return $scope.profile.data.created_by == localData.get('authUser');
@@ -47,6 +49,12 @@ myAppModule.
                 $scope.is_croping_image = () => {
                     return $scope.image_file != null;
                 };
+
+                // $scope.$watch('updatedProperty.first_name', function(newval, oldval, scope){
+                //     console.log(newval);
+                //     console.log(oldval);
+                //     console.log(scope);
+                // })
 
                 $http.get("/json/profile/nationalities.json").
                     then(function (data) {
@@ -68,6 +76,7 @@ myAppModule.
 
                     $scope.profile.data = await $profileService.getProfile(profileID);
                     $scope.is_page_loading = false;
+                    $scope.$apply();
                     
                     $scope.onProfileLoad();
                 }
@@ -114,10 +123,11 @@ myAppModule.
 
                     $scope.profileTable = new NgTableParams({ sorting: { first_name: 'asc' } }, { dataset: profileList });
                     // $scope.profileTable.$invalidate();
+                    $scope.$apply();
                 }
 
                 $scope.update_profile_property = (updatedProperty) => {
-                    var success = $profileService.updateProfile($scope.profile.id, updatedProperty);
+                    var success = $profileService.updateProfile($scope.profile.data.id, updatedProperty);
                 }
 
                 $scope.upload_profile_picture = async function (dataUrl, imageFileName) {
@@ -273,34 +283,22 @@ myAppModule.
                 var snapshot = await profileImage.putString(dataUrl, 'data_url');
                 var profilePictureUrl = await snapshot.ref.getDownloadURL();
                 collection.doc(id).update({'profile_picture': profilePictureUrl});
-
-                // profileImage.putString(dataUrl, 'data_url').then(function (snapshot) {
-                //     snapshot.ref.getDownloadURL().then(function (downloadURL) {
-                //         db.collection('profile').doc(id).update({ "profile_picture": downloadURL });
-                //         $scope.picFile = null;
-                //         $scope.is_uploading = false;
-                //         $scope.$apply();
-                //     });
-                // }).catch(() => {
-                //     Swal.fire({
-                //         type: 'error',
-                //         title: 'Oops...',
-                //         text: 'Upload Failed',
-                //         footer: 'Please try again'
-                //     });
-                //     $scope.is_uploading = false;
-                //     $scope.$apply();
-                // });
             } 
 
             return new Promise((resolve, reject) => { resolve(profilePictureUrl)});
         }
+
+        this.updateProfile = async(profileID,  updatedProperty) => {
+            await collection.id(profileID).update(updatedProperty);
+            return new Promise((resolve, reject) => { resolve(true); })
+        }
     }).
     service('dummyProfileService', function () {
-        var profileList = [
+        var profileList = {          
+            "NIofduXoq4Aar5Em88E4":
             {
                 // data: {
-                id: 0,
+                id: "NIofduXoq4Aar5Em88E4",
                 first_name: "Arlan",
                 middle_name: "Ticke",
                 last_name: "Asutilla",
@@ -325,13 +323,14 @@ myAppModule.
                 },
                 status: 'active',
                 // profile_picture: 'https://firebasestorage.googleapis.com/v0/b/pcsd-app.appspot.com/o/profile_image%2FNIofduXoq4Aar5Em88E4-?alt=media&token=ec559967-413d-4f1a-891a-93efa5033212',
-                created_by: "DeTxDiJfxOOhTS94umfchr489o730"
+                created_by: "DeTxDiJfxOOhTS94umfchr489o73"
                 // created_by: "DeTxDiJfxOOhTS94umfchr489o73"
                 // }
             },
+            "12Ut9pTSZcgXOQPc2dkRYXYQv6t1":
             {
                 // data: {
-                id: 1,
+                id: "12Ut9pTSZcgXOQPc2dkRYXYQv6t1",
                 first_name: "John",
                 middle_name: "Smith",
                 last_name: "Doe",
@@ -359,9 +358,10 @@ myAppModule.
                 created_by: "DeTxDiJfxOOhTS94umfchr489o73"
                 // }
             },
+            "4orLzVctIWbKgG1FrzPj4WxYIva2" :
             {
                 // data: {
-                id: 2,
+                id: "4orLzVctIWbKgG1FrzPj4WxYIva2",
                 first_name: "Jong",
                 middle_name: "",
                 last_name: "Bautista",
@@ -387,10 +387,8 @@ myAppModule.
                 status: 'active',
                 profile_picture: '',
                 created_by: "DeTxDiJfxOOhTS94umfchr489o73"
-
-                // }
             }
-        ]
+        }
 
 
 
