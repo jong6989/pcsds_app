@@ -483,7 +483,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
         var  requirements_loaded = await $localStorage.loaded_data_requirements;
         if(!requirements_loaded){
             $scope.applicant_name = $scope.name_spliter($scope.application.data.application.applicant);
-            console.log($scope.applicant_name);
             //start no pending case
             $scope.no_pending_case_data = {
                 template : {
@@ -509,7 +508,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
 
             // start certificate of inspection
             if($scope.application.name == 'Application for Local Transport Permit RFF' || $scope.application.name == 'Application for Local Transport Permit AO12'){
-                console.log('LTP');
                 $scope.certificate_of_inspection_data = {
                     template : {
                         'name' : 'Certificate of Inspection (LTP)',
