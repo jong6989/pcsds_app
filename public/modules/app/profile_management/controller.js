@@ -25,7 +25,7 @@ myAppModule.
                 $scope.is_using_camera = false;
                 $scope.profile = { data: {} };
 
-                $scope.print = () => { 
+                $scope.print = () => {
                     window.print();
 
                     // setTimeout(function(){
@@ -40,7 +40,7 @@ myAppModule.
                 }
 
                 $scope.printProfile = (event) => {
-                    
+
                 }
                 $scope.toggle_using_camera = () => {
                     $scope.is_using_camera = !$scope.is_using_camera;
@@ -61,7 +61,7 @@ myAppModule.
                         $scope.nationalities = data.data.data;
                     });
 
-                $scope.onProfileLoad = () => {}
+                $scope.onProfileLoad = () => { }
                 $scope.loadProfile = async (id) => {
                     var profileID;
                     $scope.is_page_loading = true;
@@ -77,17 +77,63 @@ myAppModule.
                     $scope.profile.data = await $profileService.getProfile(profileID);
                     $scope.is_page_loading = false;
                     $scope.$apply();
-                    
                     $scope.onProfileLoad();
                 }
 
-                $scope.loadPage = (url) => {
-                    localData.set('current_view', url);
-                    location.reload();
+                $scope.init = () => {
+                    $scope.updatedProperty = {
+                        first_name: $scope.profile.data.first_name,
+                        middle_name: $scope.profile.data.middle_name,
+                        last_name: $scope.profile.data.last_name
+                    }
                 }
-                $scope.clear_edit_pass = () => {
-                    $scope.editProfilePassword = '';
+                $scope.initUpdatePropertyCallbacks = {
+                    'id': () => { },
+                    'full_name': () => {
+                        $scope.updatedProperty = {
+                            first_name: $scope.profile.data.first_name,
+                            middle_name: $scope.profile.data.middle_name,
+                            last_name: $scope.profile.data.last_name
+                        }
+                    },
+                    'current_address': () => {
+                        $scope.updatedProperty = {
+                            current_address: $scope.profile.data.current_address
+                        }
+                    },
+                    'current_phone': () => {
+                        $scope.updatedProperty = {
+                            current_phone: $scope.profile.data.current_phone
+                        }
+                    },
+                    'personal_information': () => {
+                        $scope.updatedProperty = {
+                            place_of_birth: $scope.profile.data.place_of_birth,
+                            nationality: $scope.profile.data.nationality,
+                            gender: $scope.profile.data.gender,
+                            civil_status: $scope.profile.data.civil_status,
+                            spouse_name: (($scope.profile.data.spouse_name) ? $scope.profile.data.spouse_name : ''),
+                            father: $scope.profile.data.father,
+                            mother: $scope.profile.data.mother,
+                            birth_day: $scope.profile.data.birth_day
+                        }
+                    },
+                    'government_id': () => {
+                        //  console.log($scope.profile.data.gov_id);
+                        $scope.updatedProperty = {
+                            tin_no: $scope.profile.data.tin_no,
+                            gov_id: $scope.profile.data.gov_id
+                        }
+                        //  console.log($scope.updatedProperty);
+                    }
                 }
+
+                $scope.$watch('updatedProperty.gov_id', function (newval, oldval, scope) {
+                    console.log(newval);
+                    console.log(oldval);
+                    console.log(scope);
+                })
+               
                 $scope.save_profile = async (profile) => {
                     profile.created_by = localData.get('authUser');
                     var success = await $profileService.addProfile(profile);
@@ -128,27 +174,40 @@ myAppModule.
 
                 $scope.update_profile_property = (updatedProperty) => {
                     var success = $profileService.updateProfile($scope.profile.data.id, updatedProperty);
-                    
+                    if (success) {
+                        refreshProfileWith(updatedProperty);
+                    }
                 }
 
+                function refreshProfileWith(updatedProperty) {
+                    var keys = Object.keys(updatedProperty);
+                    keys.forEach(key => {
+                        $scope.profile.data[key] = updatedProperty[key];
+                    })
+                }
+
+                $scope.loadPage = (url) => {
+                    localData.set('current_view', url);
+                    location.reload();
+                }
                 $scope.upload_profile_picture = async function (dataUrl, imageFileName) {
                     $scope.is_using_camera = false;
                     $scope.is_uploading = true;
 
-                    try{
+                    try {
                         var imageUrl = await $profileService.uploadProfilePicture(
-                            $scope.profile.data.id, 
-                            imageFileName, 
-                            dataUrl);  
-                        $scope.profile.data.profile_picture = imageUrl;                      
-                    }catch(error){
+                            $scope.profile.data.id,
+                            imageFileName,
+                            dataUrl);
+                        $scope.profile.data.profile_picture = imageUrl;
+                    } catch (error) {
                         Swal.fire({
                             type: 'error',
                             title: 'Oops...',
                             text: 'Upload Failed',
                             footer: 'Please try again'
                         });
-                    }finally{
+                    } finally {
                         $scope.is_uploading = false;
                         $scope.clear_cropping_image();
                         $scope.$apply();
@@ -277,25 +336,32 @@ myAppModule.
                 })
             });
         }
-        
-        this.uploadProfilePicture = async(id, fileName, dataUrl) => {
+        function convertToProfileObject(snapshotData) {
+            var keys = Object.keys(snapshotData);
+            keys.forEach(key => {
+                profile[key] = snapshotData[key];
+            })
+
+            return profile;
+        }
+        this.uploadProfilePicture = async (id, fileName, dataUrl) => {
             if (id) {
                 let profileImage = storageRef.child(`profile_image/${id}-${name}`);
                 var snapshot = await profileImage.putString(dataUrl, 'data_url');
                 var profilePictureUrl = await snapshot.ref.getDownloadURL();
-                collection.doc(id).update({'profile_picture': profilePictureUrl});
-            } 
+                collection.doc(id).update({ 'profile_picture': profilePictureUrl });
+            }
 
-            return new Promise((resolve, reject) => { resolve(profilePictureUrl)});
+            return new Promise((resolve, reject) => { resolve(profilePictureUrl) });
         }
 
-        this.updateProfile = async(profileID,  updatedProperty) => {
+        this.updateProfile = async (profileID, updatedProperty) => {
             await collection.doc(profileID).update(updatedProperty);
             return new Promise((resolve, reject) => { resolve(true); })
         }
     }).
     service('dummyProfileService', function () {
-        var profileList = {          
+        var profileList = {
             "NIofduXoq4Aar5Em88E4":
             {
                 // data: {
@@ -359,7 +425,7 @@ myAppModule.
                 created_by: "DeTxDiJfxOOhTS94umfchr489o73"
                 // }
             },
-            "4orLzVctIWbKgG1FrzPj4WxYIva2" :
+            "4orLzVctIWbKgG1FrzPj4WxYIva2":
             {
                 // data: {
                 id: "4orLzVctIWbKgG1FrzPj4WxYIva2",
@@ -402,8 +468,12 @@ myAppModule.
         }
 
         this.getProfile = async (id) => {
+
             return new Promise((resolve, reject) => {
-                resolve(profileList[id]);
+
+                setTimeout(function () {
+                    resolve(profileList[id]);
+                }, 300);
             });
         }
 

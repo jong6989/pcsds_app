@@ -1,42 +1,31 @@
 <div  class="md-dialog-container" id="personal_modal" > 
-
+    
         <md-dialog aria-label="Personal Data">
             <form name="form_edit_personal">
                 <md-toolbar class="bg-blue-grey">
                 <div class="md-toolbar-tools m-t-10">
-                    <strong> Edit Personal Data  </strong>
+                    <strong> Edit Personal Data </strong>
                 </div>
                 </md-toolbar>
-                
-                <md-dialog-content layout-padding="20"  
-                    ng-init="edit_personal = { 
-                            place_of_birth : profile.data.place_of_birth, 
-                            nationality : profile.data.nationality , 
-                            gender : profile.data.gender , 
-                            civil_status : profile.data.civil_status, 
-                            spouse_name : ((profile.data.spouse_name)? profile.data.spouse_name : '') , 
-                            father : profile.data.father , 
-                            mother : profile.data.mother,
-                            birth_day: profile.data.birth_day
-                            }">
+                <md-dialog-content layout-padding="20">
     
                     <div layout-gt-sm="row">
                         <md-input-container class="md-block" flex-gt-sm>
                             <md-datepicker
-                                ng-init="birth_day=edit_personal.birth_day"
+                                ng-init="birth_day=updatedProperty.birth_day"
                                 ng-model="birth_day"
-                                ng-change="edit_personal.birth_day=to_date(birth_day)"
+                                ng-change="updatedProperty.birth_day=to_date(birth_day)"
                                 required>
                             </md-datepicker>
                         </md-input-container>
                         <md-input-container class="md-block" flex-gt-sm>
-                            <label>Birth Place Address</label>
-                            <input ng-model="edit_personal.place_of_birth" required>
+                            <label>Place of Birth</label>
+                            <input ng-model="updatedProperty.place_of_birth" required>
                         </md-input-container>
             
                         <md-input-container>
                             <label>Nationality</label>
-                            <md-select ng-model="edit_personal.nationality" required>
+                            <md-select ng-model="updatedProperty.nationality" required>
                                 <md-option><em>None</em></md-option>
                                 <md-option ng-repeat="x in nationalities" ng-value="x.nationality" >
                                     {{x.en_short_name}} - {{x.nationality}}
@@ -50,7 +39,7 @@
                         <strong class="col-grey m-r-10">
                             Gender: 
                         </strong>
-                        <md-radio-group ng-model="edit_personal.gender" required>
+                        <md-radio-group ng-model="updatedProperty.gender" required>
                             <md-radio-button value="male" class="md-primary">Male</md-radio-button>
                             <md-radio-button value="female"> Female</md-radio-button>
                         </md-radio-group>
@@ -59,28 +48,28 @@
                             Civil Status : 
                         </strong>
             
-                        <md-radio-group ng-model="edit_personal.civil_status" required>
+                        <md-radio-group ng-model="updatedProperty.civil_status" required>
                             <md-radio-button value="single" class="md-primary"> Single </md-radio-button>
                             <md-radio-button value="married" class="md-primary"> Married </md-radio-button>
                             <md-radio-button value="widowed" class="md-primary"> Widowed </md-radio-button>
                             <md-radio-button value="separated" class="md-primary"> Separated </md-radio-button>
                         </md-radio-group>
             
-                        <md-input-container ng-if="edit_personal.civil_status == 'married'" class="md-block" flex-gt-sm>
+                        <md-input-container ng-if="updatedProperty.civil_status == 'married'" class="md-block" flex-gt-sm>
                             <label>Spouse Name :</label>
-                            <input ng-model="edit_personal.spouse_name" required>
+                            <input ng-model="updatedProperty.spouse_name" required>
                         </md-input-container>
                     </div>
 
                     <div layout-gt-sm="row">
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Father's Full Name : </label>
-                            <input ng-model="edit_personal.father" required>
+                            <input ng-model="updatedProperty.father" required>
                         </md-input-container>
             
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Mother's Maiden Name :</label>
-                            <input ng-model="edit_personal.mother" required>
+                            <input ng-model="updatedProperty.mother" required>
                         </md-input-container>
                     </div>
     
@@ -97,7 +86,7 @@
                 <md-button type="submit" 
                 ng-disabled="form_edit_personal.$invalid" 
                 ng-hide="is_loading" class="md-primary md-raised" 
-                ng-click="update_profile_property(edit_personal);close_dialog();">
+                ng-click="update_profile_property(updatedProperty);close_dialog();">
                     save
                 </md-button>
                 </md-dialog-actions>
