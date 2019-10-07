@@ -1,0 +1,27 @@
+<div class="md-dialog-container" id="single_sup_item">
+    <md-dialog layout-padding layout="column" layout-align="center center">
+        <md-dialog-content>
+            <h4 class="align-center">DETAILS APPLICATION</h4>
+            <hr>
+            <div>
+                Chainsaw Owner: <strong>{{single_sup.owner}}</strong><br>
+                Address of Chainsaw Owner: <strong>{{single_sup.address}}</strong><br>
+               Place where Chainsaw is Registered: <strong>{{single_sup.registered}}</strong><br>
+                Certificate of Registration No: <strong>{{single_sup.certification_registration}}</strong><br>
+                Place of Destination: <strong>{{single_sup.place_destination}}</strong><br>
+                Porpuse: <strong>{{single_sup.purpose}}</strong><br>
+            </div>
+            <hr>
+            <div layout="row" layout-align="end">
+                <md-button class="md-raised" ng-click="close_dialog()">
+                    Close
+                </md-button>
+                <md-button class="md-raised md-warn" ng-dblclick="remove_application(single_sup)">
+                    <md-tooltip md-direction="top"> Double Click to Remove Application </md-tooltip>
+                    Remove
+                </md-button>
+            </div>
+        </md-dialog-content>
+
+    </md-dialog>
+</div>

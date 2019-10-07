@@ -1,0 +1,155 @@
+<div flex layout="column" md-whiteframe="3" ng-init=" initData('sup') " layout-padding="50" layout-margin class="md-card p-l-20 p-r-20">
+    <form name="form_online_application" >
+        <div flex layout-gt-xs="row" layout-xs="column">
+            <div flex flex-gt-xs="15" layout-align="center center">
+                <img src="images/pcsd_logo.png" class="p-t-5" style="width:100%;">
+            </div>
+            <div flex layout-align="center" class="m-l-20">
+                <h4><strong>Republic of the Philippines</strong> <br>
+                    <small>Republic Act 7611</small><br>
+                    <small>PALAWAN COUNCIL for SUSTAINABLE DEVELOPMENT</small>
+                </h4>
+                Date: {{ date_now() | date : 'MMMM d, yyyy'}}
+            </div>
+        </div>
+
+        <md-divider></md-divider>
+
+        <!-- title -->
+        <div flex class="p-t-10 p-b-10">
+            <h3 class="col-blue-grey m-t-20 m-b-20">ONLINE APPLICATION FOR SPECIAL USE PERMIT</h3>
+            <div layout-gt-sm="row" ng-init="new_application.application_type = 'new';">
+                <md-radio-group ng-model="new_application.application_type">
+                    <md-radio-button value="new" class="md-primary">New</md-radio-button>
+                    <md-radio-button value="renew"> Renew </md-radio-button>
+                </md-radio-group>
+            </div>
+        </div>
+        
+        <md-divider></md-divider>
+
+        <div class="m-t-20" >
+
+            <div flex>
+                <h4>
+                    NELSON P. DEVANADERA <br>
+                    <small>Executive Director</small><br>
+                    <small>Palawan Council for Sustainable Development Staff</small>
+                </h4>
+                 
+                <br>
+                <div layout>
+                     <p ng-init="new_application.applicant = user.data.full_name; new_application.applicant_address = user.data.current_address;     new_application.nature = '';">
+                        <span class="m-r-20"></span>
+                        I <input style="width: 30%" type="text" placeholder="applicant name" ng-model="new_application.applicant" required>, resident of 
+                        <input style="width: 30%" type="text" placeholder="applicant address" ng-model="new_application.applicant_address" required>
+                        , applies permit to transport chainsaw and use chainsaw unit with  
+                    
+                    
+                        <md-input-container>
+                                <label>Serial No. </label>
+                                <input ng-model="new_application.serial_no" required>
+                        </md-input-container>
+                    </p> 
+                </div>
+                  
+                
+
+                <hr>
+
+                <p class="col-grey align-center">
+                    Guide : Choose from existing Application list, if none, click "Add Application" Butoon to add Application Details.
+                </p>
+                
+                <div layout-gt-sm="row" layout-align="center center">
+                    <md-input-container>
+                        <md-select ng-model="new_application.sup" required>
+                            <md-option ng-value="undefined"><em>No Application</em></md-option>
+                            <md-option ng-repeat="x in user.data.application" ng-value="x" >
+                            {{x.brad}},{{x.model}}, {{x.engine}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <div>
+                        <md-button class="md-raised " ng-click="showPrerenderedDialog($event,'add_sup_modal')">
+                            Add Application
+                        </md-button>
+                    </div>
+                </div>
+
+                <div ng-if="new_application.sup !== undefined" layout="row" layout-align="center center">
+                    <md-card>
+                        <md-card-content>   
+                            <h4 class="align-center">DETAILS APPLICATION</h4>
+                            <hr>
+                            <div>
+                                Chainsaw Owner: <strong>{{new_application.application.owner}}</strong><br>
+                                Address of Chainsaw Owner: <strong>{{new_application.application.address}}</strong><br>
+                               Place where Chainsaw is Registered: <strong>{{new_application.application.registered}}</strong><br>
+                                Certificate of Registration No: <strong>{{new_application.application.certification_registration}}</strong><br>
+                                Place of Destination: <strong>{{new_application.application.place_destination}}</strong><br>
+                                Porpuse: <strong>{{new_application.application.purpose}}</strong><br>
+                            </div>
+                        </md-card-content>
+                    </md-card>
+                </div>
+
+    
+                <hr>
+    
+                
+                <strong>Required Attachments :</strong>
+                <div ng-init="new_application.attachments = [
+                        {name:'Affidavit of Legal Use'},
+                        {name:'Business Permit from LGU(Mayors Permit)'},
+                        {name:'Copy of Chainsaw Registration (COR)'},
+                        {name:'Barangay Certificate/Clearance'},
+                        {name:'Permit to Operate (PCA/DENR)'},
+                        {name:'Barangay Resolution'},
+                        {name:'Certificate from Head Office'},
+                        {name:'Picture of Area'},
+                        {name:'Copy of Land Title'},
+                    ]
+                    ">
+                    <ol>
+                        <li ng-repeat="x in new_application.attachments">
+                            <cite ng-class="{'col-green':(x.url !== undefined)}">{{x.name}}</cite>
+                            <i ng-hide="x.url == undefined" class="fa fa-check col-green"></i>
+                            <i ng-show="x.url == undefined" class="fa fa-times col-red"></i>
+                            <button class="col-blue" ng-click="change_attachment_index($index);showPrerenderedDialog($event,'upload_modal')">upload</button>
+                        </li>
+                    </ol>
+
+                    <strong ng-init="ia = new_application.attachments.length;ib = new_application.attachments.length + 1;ic = new_application.attachments.length + 2">
+                        Other attachments </strong>
+                        <cite class="col-grey">(Optional for attachments not stated above)</cite>
+                    <div>
+                        <input placeholder="File name" ng-model="new_application.attachments[ia].name" > 
+                    </div>
+                    <div>
+                        <input placeholder="File name" ng-model="new_application.attachments[ib].name" > 
+                    </div>
+                    <div>
+                        <input placeholder="File name" ng-model="new_application.attachments[ic].name" > 
+                    </div>
+
+                </div>
+    
+            </div>
+    
+            <hr class="m-t-20">
+            <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <md-button ng-hide=" is_loading " ng-disabled="form_online_application.$invalid" ng-click="submit_application(new_application,'Application for Chainsaw Registration','cr')" 
+                class="md-primary md-raised md-block" >
+                <strong class="font-16">Submit Application</strong>
+            </md-button>
+        </div>
+
+    </form>
+
+    <!-- modals -->
+    <div style="visibility: hidden" ng-include="'app/templates/modals/sup/add.html'" ></div>
+    <div style="visibility: hidden" ng-include="'app/templates/modals/select/upload.html'" ></div>
+</div>
