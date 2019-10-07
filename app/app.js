@@ -700,3 +700,6 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     }
 });
 document.write(`<script src="./app/doc/controllers/gratuitous.js"></script>`);
+document.write(`<script src="./node_modules/ckeditor/ckeditor.js"></script>`);
+
+

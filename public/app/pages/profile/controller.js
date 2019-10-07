@@ -1,6 +1,7 @@
 'use strict';
 
-myAppModule.controller('profile_controller', function ($scope, $timeout, $utils, $mdDialog, $interval, Upload, $localStorage, $http) {
+myAppModule.controller('profile_controller', function ($scope, $timeout, $utils, 
+    $mdDialog, $interval, Upload, $localStorage, $http) {
     $scope.is_uploading = false;
     $scope.is_loading = false;
     $scope.profile_uploading_rate = 0;

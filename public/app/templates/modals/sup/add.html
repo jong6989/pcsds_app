@@ -1,0 +1,61 @@
+<div  class="md-dialog-container" id="add_sup_modal" > 
+    <md-dialog aria-label="Add sup">
+        <form name="form_add_sup" ng-controller="profile_controller">
+            <md-toolbar class="bg-blue-grey">
+            <div class="md-toolbar-tools m-t-10">
+                <strong> Add New Application  </strong>
+            </div>
+            </md-toolbar>
+            
+            <md-dialog-content layout-padding="20"  
+                ng-init="sup = {}">
+            
+                <h3 class="align-center">DETAILS OF APPLICATION</h3>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Chainsaw Owner</label>
+                    <input ng-model="sup.owner" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Address of Chainsaw Owner</label>
+                    <input ng-model="sup.address" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Place where Chainsaw is Registered:</label>
+                    <input ng-model="sup.registered" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Certificate of Registration:</label>
+                    <input ng-model="sup.certification_registration" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Place of Destination</label>
+                    <input ng-model="sup.place_destination" required>
+                </md-input-container>
+                
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Purpose</label>
+                    <input ng-model="sup.purpose" required>
+                </md-input-container>
+
+            </md-dialog-content>
+
+            <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="close_dialog()">
+                close
+            </md-button>
+            <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <md-button type="submit" ng-disabled="form_add_sup.$invalid" ng-hide="is_loading" class="md-primary md-raised" ng-click="add_sup(sup)">
+                save
+            </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</div>

@@ -1,17 +1,6 @@
-<div ng-controller="dummy_profile_management_controller">
-        
-                <!-- <md-toolbar class="bg-teal">
-                  <h1 class="md-toolbar-tools">
-                    <md-button class="md-raised" ng-click="openForm($event)">
-                      <i class="fa fa-plus col-green"></i>
-                      add new criminal cases
-                    </md-button>
-                    <md-button class="md-raised" ng-click="refreshList()">
-                      <i class="fa fa-refresh col-green"></i>
-                        refresh
-                    </md-button>
-                  </h1>
-                </md-toolbar> -->
+<div ng-controller="profile_management_controller"
+  ng-init="loadProfileList()"
+>
               
                 <md-content
                   style="height: {{ iframeHeight - 150 }}px;"
@@ -21,7 +10,7 @@
                 >
                   <div flex>
                     <table ng-table="profileTable" class="table" show-filter="true">
-                      <tr ng-repeat="profile in $data">
+                      <tr ng-repeat="profile in $data track by profile.id" >
                         <td
                           title="'First Name'"
                           sortable="'first_name'"
@@ -61,7 +50,7 @@
                         <td title="''">
                           <md-button
                             class="md-raised"
-                            ng-click="openProfileFormForUpdating(profile.id)"
+                            ng-click="loadPage('app/profile_management/view.html?id='+profile.id)"
                           >
                             <i class="fa fa-plus col-green"></i>
                             EDIT

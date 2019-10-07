@@ -31,8 +31,10 @@
                 Use Camera
             </md-button>
 
-            <md-button ng-show="is_croping_image() && !is_uploading" ng-click="change_profile(croppedDataUrl, picFile.name)">Save</md-button> 
-            <md-button ng-show="is_croping_image() && !is_uploading" ng-click="clear_cropping_image()" >Cancel</md-button>
+            <md-button ng-show="is_croping_image() && !is_uploading" 
+                ng-click="change_profile(croppedDataUrl, picFile.name)">Save</md-button> 
+            <md-button ng-show="is_croping_image() && !is_uploading" 
+                ng-click="clear_cropping_image()" >Cancel</md-button>
             
 
         </div>

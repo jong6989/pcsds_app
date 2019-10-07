@@ -1,4 +1,6 @@
-<div ng-controller="dummy_profile_management_controller">
+<!-- <div ng-controller="profile_management_controller"
+    ng-init="loadProfile()"
+>
         <form name="form_new_profile" ng-init="" >
         
                 <h3>Profile Information</h3>
@@ -6,7 +8,7 @@
                 <div layout-gt-sm="row">
         
                     <md-input-container class="md-block" flex-gt-sm>
-                        <label>First name</label>
+                        <label>First Name</label>
                         <input ng-model="profile.data.first_name" 
                             ng-blur="profile.data.keywords[0]=new_account.data.first_name"
                             required>
@@ -36,13 +38,12 @@
                         {{ profile.data.full_name = profile.data.first_name + ' ' + profile.data.middle_name + ' ' + profile.data.last_name + ' ' + profile.data.extension_name }}
                     </div>
                 </div>
-        
+                <div ng-hide=true>{{bday=profile.data.birth_day}}</div>
                 <div layout-gt-sm="row">
                     <div flex-gt-sm>
                         <strong>Birth Day <cite class="font-10">(must be 18+)</cite></strong>
-                        <md-datepicker 
+                        <md-datepicker
                             ng-model="bday" 
-                            ng-init="bday=profile.data.birth_day"
                             ng-change="profile.data.birth_day = to_date(bday)" 
                             md-placeholder="Birth Date"
                             md-min-date="minDate" md-max-date="maxDate" md-open-on-focus required></md-datepicker>
@@ -143,11 +144,11 @@
                         <label>ID Number</label>
                         <input ng-model="profile.data.gov_id.number" required>
                     </md-input-container>
-        
+                    <div ng-hide=true>{{dateIssued=profile.data.gov_id.date_issued}}</div>        
                     <div flex-gt-sm>
                         <md-datepicker ng-model="dateIssued" 
-                            ng-init="dateIssued=profile.data.gov_id.date_issued"
-                            ng-change="profile.data.gov_id.date_issued = to_date(dateIssued)" md-placeholder="Date Issued" md-open-on-focus required></md-datepicker>
+                            ng-change="profile.data.gov_id.date_issued = to_date(dateIssued)" 
+                            md-placeholder="Date Issued" md-open-on-focus required></md-datepicker>
                     </div>
         
                 </div>
@@ -158,11 +159,12 @@
                         <label>Place Issued</label>
                         <input ng-model="profile.data.gov_id.place_issued" required>
                     </md-input-container>
-        
+                    <div ng-hide=true>{{dateValid=profile.data.gov_id.valid_until}}</div>
                     <div flex-gt-sm>
                         <md-datepicker 
-                            ng-init="dateValid=profile.data.gov_id.valid_until"
-                            ng-model="dateValid" ng-change="profile.data.gov_id.valid_until = to_date(dateValid)" md-placeholder="Valid Until" md-open-on-focus required></md-datepicker>
+                            ng-model="dateValid" 
+                            ng-change="profile.data.gov_id.valid_until = to_date(dateValid)" 
+                            md-placeholder="Valid Until" md-open-on-focus required></md-datepicker>
                     </div>
                 </div>
         
@@ -184,5 +186,197 @@
                     class="md-raised md-block md-primary" >
                     Activate Profile
                 </md-button>
+                <md-button type="submit"
+                    ng-click="loadPage('app/profile_management/list.html')" 
+                    class="md-raised md-block md-primary" >
+                    Back to List
+                </md-button>
             </form>
+</div> -->
+<div ng-controller="profile_management_controller" ng-init="loadProfile();">
+    <div layout-gt-xs="row" layout-xs="column">
+        <!-- User Photo -->
+        <div flex-gt-xs="35" layout-padding ng-show="!is_using_camera" ngf-drop ng-model="profile.data.profile_picture"
+            ngf-allow-dir="true" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-pattern="image/*">
+            <md-content layout="row" layout-align="start center" layout-padding>
+                <md-progress-circular md-mode="indeterminate" ng-show="is_page_loading"></md-progress-circular>
+            </md-content>
+            <img ng-hide="is_croping_image()" ng-src="{{ profile.data.profile_picture == null ? '../../images/user.png' : 
+                        profile.data.profile_picture }}" alt="use" width="70%" md-whiteframe="3">
+
+            <img class="align-center" ng-show="is_croping_image()" ng-src="{{croppedDataUrl}}" />
+
+            <img-crop ng-show="is_croping_image()" image="image_file | ngfDataUrl" result-image="croppedDataUrl"
+                ng-init="croppedDataUrl=''">
+            </img-crop>
+
+            <md-progress-linear ng-show="is_uploading" md-mode="indeterminate"></md-progress-linear>
+            <hr>
+
+            <md-button ng-hide="is_croping_image()" ngf-capture="'camera'" ngf-select ng-model="image_file"
+                accept="image/*">
+                Upload Picture
+            </md-button>
+
+
+            <md-button ng-click="toggle_using_camera()">
+                Use Camera
+            </md-button>
+
+            <md-button ng-show="is_croping_image() && !is_uploading"
+                ng-click="upload_profile_picture(croppedDataUrl, image_file.name)">Save</md-button>
+            <md-button ng-show="is_croping_image() && !is_uploading" ng-click="clear_cropping_image()">Cancel
+            </md-button>
+
+
+        </div>
+
+        <div layout="column" ng-if="is_using_camera">
+
+            <div ng-hide="fromCamera == undefined" class="align-center"><img ng-src="{{croppedDataUrl}}" /></div>
+            <md-button ng-if="fromCamera != undefined"
+                ng-click="upload_profile_picture(croppedDataUrl, 'camera_captured_image.jpg')">
+                Save Image
+            </md-button>
+
+            <img-crop ng-hide="fromCamera == undefined" image="fromCamera" result-image="croppedDataUrl"
+                ng-init="croppedDataUrl=''">
+            </img-crop>
+
+            <ng-camera capture-message="Captured!" countdown="3" viewer-height="375" viewer-width="500"
+                crop-height="375" crop-width="500" output-height="525" output-width="700" image-format="jpeg"
+                jpeg-quality="100" action-message="Use this image" snapshot="fromCamera" shutter-url="shutter.mp3">
+            </ng-camera>
+            <md-button ng-click="toggle_using_camera();profile.data.profile_picture = null">
+                Cancel
+            </md-button>
+        </div>
+
+        <!-- Profile details -->
+        <div flex-gt-xs class="p-l-20">
+            <div ng-hide=true>
+                {{
+                            profile.data.full_name=profile.data.full_name=[profile.data.first_name, 
+                            profile.data.middle_name, 
+                            profile.data.last_name].join(' ')
+                        }}
+            </div>
+            <div ng-init="windowNames=['fullname_modal', 'address_modal', 'contact_modal']"></div>
+            <div ng-init="toolTips=['Full Name', 'Address', 'Contact Number']"></div>
+            <div ng-init="profileProperties=['full_name', 'current_address', 'current_phone']"></div>
+            <div ng-repeat="windowName in windowNames track by $index">
+                <hr>
+                <i class="fa fa-edit pointer col-blue"
+                    ng-click="showPrerenderedDialog($event, windowName);clear_edit_pass();">
+                    <md-tooltip md-direction="top">
+                        Edit {{toolTips[$index]}}
+                    </md-tooltip>
+                </i>
+                <strong class="col-grey">{{toolTips[$index]}} :</strong>
+                <div style="margin-left:10px">
+                    {{profile.data[profileProperties[$index]]}}
+                </div>
+
+            </div>
+
+            <md-card>
+                <md-card-content>
+                    <i class="fa fa-edit pointer col-blue"
+                        ng-click="showPrerenderedDialog($event,'personal_modal');clear_edit_pass();">
+                        <md-tooltip md-direction="top">
+                            Edit Personal Info
+                        </md-tooltip>
+                    </i>
+                    <strong class="col-grey">Personal Information </strong> <br>
+                    <div ng-init="personalInformations=[
+                                {'Birth Day': 'birth_day'},
+                                {'Birth Place': 'place_of_birth'},
+                                {'Nationality': 'nationality'},
+                                {'Gender': 'gender'},
+                                {'Civil Status': 'civil_status'},
+                                {'Spouse Name': 'spouse_name'},
+                                {'Father': 'father'},
+                                {'Mother': 'mother'}
+                                ]"></div>
+                    <div ng-repeat="personalInformation in personalInformations">
+                        <div ng-repeat="(key, value) in personalInformation">
+                            <small>{{key}} : </small>{{profile.data[value]}}
+                        </div>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+    <div layout-gt-sm="row">
+
+        <!-- Edit Profile Data -->
+        <md-card>
+            <md-card-content>
+                <i class="fa fa-edit pointer col-blue"
+                    ng-click="showPrerenderedDialog($event,'gID_modal');clear_edit_pass();">
+                    <md-tooltip md-direction="top">
+                        edit Government ID
+                    </md-tooltip>
+                </i>
+                <strong class="col-grey">Government Issued Identification </strong> <br>
+                <small>Tax Identification Number</small> : {{profile.data.tin_no}} <br>
+                <small>ID Name</small> : {{profile.data.gov_id.name}} <br>
+                <small>ID Number</small> : {{profile.data.gov_id.number}} <br>
+                <small>Date Issued</small> : {{profile.data.gov_id.date_issued}} <br>
+                <small>Place Issued</small> : {{profile.data.gov_id.place_issued}} <br>
+                <small>Valid Until</small> : {{profile.data.gov_id.valid_until}} <br>
+            </md-card-content>
+        </md-card>
+
+        <!-- Uploads -->
+        <md-card>
+            <md-card-content>
+                <div flex ng-change="upload_files(file_drop)" ngf-drop ng-model="file_drop" ngf-allow-dir="true"
+                    multiple ngf-drag-over-class="'dragover'" ngf-multiple="true">
+                    <strong class="col-grey">
+                        Uploaded Files
+                    </strong>
+                    <ol ng-if="profile.data.uploads != undefined">
+                        <li ng-repeat="x in profile.data.uploads"> {{x.name}} -
+                            <i class="fa fa-trash col-red pointer"
+                                ng-dblclick="profile.data.uploads.splice($index,1);remove_array_from_profile('uploads',x)">
+                                <md-tooltip md-direction="top">
+                                    double click to remove file
+                                </md-tooltip>
+                            </i>
+                        </li>
+                    </ol>
+                </div>
+            </md-card-content>
+        </md-card>
+
+        <!-- Chainsaw -->
+        <md-card>
+            <md-card-content>
+                <strong class="col-grey">Chainsaw List</strong> <br>
+                <div>
+                    <ol>
+                        <li ng-repeat="x in profile.data.chainsaws" class="pointer" ng-click="open_chainsaw(x,$event)">
+                            {{x.brand}},{{x.model}}, {{x.engine}}
+                        </li>
+                    </ol>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <!-- Edit Modals -->
+    <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/fullname.html'"></div>
+    <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/address.html'"></div>
+    <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/contact.html'"></div>
+    <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/gID.html'"></div>
+    <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/personal.html'"></div>
+
+    <!-- Add Modals -->
+    <div style="visibility: hidden" ng-include="'app/templates/modals/chainsaw/add.html'"></div>
+
+    <!-- View Modals -->
+    <div style="visibility: hidden" ng-include="'app/templates/modals/chainsaw/item.html'"></div>
+
+    
 </div>

@@ -1,4 +1,4 @@
-    <div flex layout="column" md-whiteframe="3" ng-init=" initData('wic') " layout-padding="50" layout-margin class="md-card p-l-20 p-r-20">
+    <div flex layout="column" md-whiteframe="3" ng-init=" initData(wtf) " layout-padding="50" layout-margin class="md-card p-l-20 p-r-20">
     <form name="form_online_application" >
         <div flex layout-gt-xs="row" layout-xs="column">
             <div flex flex-gt-xs="15" layout-align="center center">
@@ -18,7 +18,7 @@
 
         <!-- title -->
         <div flex class="p-t-10 p-b-10">
-            <h3 class="col-blue-grey">ONLINE APPLICATION FOR WILDLIFE IMPORT CERTIFICATION</h3>
+            <h3 class="col-blue-grey">ONLINE APPLICATION FOR WILDLIFE EXPORT CERTIFICATION/RE-EXPORT CERTIFICATION</h3>
         </div>
         
         <md-divider></md-divider>
@@ -53,7 +53,7 @@
                     Use Camera
                 </md-button>
     
-                <md-button ng-show="(picFile !== null) && !upload_process()" ng-click="upload_photo(croppedDataUrl, 'wic_photo.jpg');picFile=null;">Save</md-button> 
+                <md-button ng-show="(picFile !== null) && !upload_process()" ng-click="upload_photo(croppedDataUrl, 'wtf_photo.jpg');picFile=null;">Save</md-button> 
                 <md-button ng-show="(picFile !== null) && !upload_process()" ng-click="clear_cropping_image()" >Cancel</md-button>
  
     
@@ -62,7 +62,7 @@
             <div layout="column" ng-if="is_using_camera">
     
                 <div ng-hide="fromCamera == undefined" class="align-center"><img ng-src="{{croppedDataUrl}}" /></div>
-                <md-button ng-if="fromCamera != undefined" ng-click="upload_photo(croppedDataUrl, 'wic_photo.jpg')" >
+                <md-button ng-if="fromCamera != undefined" ng-click="upload_photo(croppedDataUrl, 'wtf_photo.jpg')" >
                     Save Image
                 </md-button>
                 
@@ -120,56 +120,56 @@
                        <br>  
 
 
-                       <h4 class="col-blue-grey" ng-init="new_application.species = [{}]" flex>
-                        Specimen: <md-button class="md-raised" ng-click="new_application.species.push({});">Add Specimen</md-button>
-                   </h4>
+                    <h4 class="col-blue-grey" ng-init="new_application.species = [{}]" flex>
+                         Specimen: <md-button class="md-raised" ng-click="new_application.species.push({});">Add Specimen</md-button>
+                    </h4>
 
-                 <div>
-                       <div ng-repeat="x in new_application.species"  flex layout-gt-sm="row" >
-                           <div flex-gt-sm="5">
-                               <i ng-if="new_application.species.length > 1" class="fa fa-trash pointer col-red" ng-click="new_application.species.splice(new_application.species.indexOf(x),1);"></i>
-                               {{$index + 1}}.
-                           </div>
-       
-                           
-                               <md-input-container class="md-block m-r-10" flex-gt-sm>
-                                   <label>Common Name/Scientific Name</label>
-                                   <input ng-model="new_application.species[new_application.species.indexOf(x)].scientific_name" required>
+                  <div>
+                        <div ng-repeat="x in new_application.species"  flex layout-gt-sm="row" >
+                            <div flex-gt-sm="5">
+                                <i ng-if="new_application.species.length > 1" class="fa fa-trash pointer col-red" ng-click="new_application.species.splice(new_application.species.indexOf(x),1);"></i>
+                                {{$index + 1}}.
+                            </div>
+        
+                            
+                                <md-input-container class="md-block m-r-10" flex-gt-sm>
+                                    <label>Common Name/Scientific Name</label>
+                                    <input ng-model="new_application.species[new_application.species.indexOf(x)].scientific_name" required>
+                                 </md-input-container>
+             
+                                 <md-input-container class="md-block" flex-gt-sm=>
+                                    <label>Description of Parts/derivatives </label>
+                                    <input ng-model="new_application.species[new_application.species.indexOf(x)].derivatives" required>
+                                 </md-input-container>
+
+                                <md-input-container class="md-block" flex-gt-sm="10">
+                                    <label>Quantity</label>
+                                    <input type="number" min="1" max="9999" ng-model="new_application.species[new_application.species.indexOf(x)].species_qty" required>
                                 </md-input-container>
             
-                                <md-input-container class="md-block" flex-gt-sm=>
-                                   <label>Description of Parts/derivatives </label>
-                                   <input ng-model="new_application.species[new_application.species.indexOf(x)].derivatives" required>
+                                <md-input-container>
+                                <label>Unit</label>
+                                <md-select ng-model="new_application.species[new_application.species.indexOf(x)].species_unit" required>
+                                    <md-option value="pcs">pcs</md-option>
+                                    <md-option value="kg">kg</md-option>
+                                    <md-option value="cm">cm</md-option>
+                                    <md-option value="dozen">dozen</md-option>
+                                </md-select>
                                 </md-input-container>
-
-                               <md-input-container class="md-block" flex-gt-sm="10">
-                                   <label>Quantity</label>
-                                   <input type="number" min="1" max="9999" ng-model="new_application.species[new_application.species.indexOf(x)].species_qty" required>
-                               </md-input-container>
-           
-                               <md-input-container>
-                               <label>Unit</label>
-                               <md-select ng-model="new_application.species[new_application.species.indexOf(x)].species_unit" required>
-                                   <md-option value="pcs">pcs</md-option>
-                                   <md-option value="kg">kg</md-option>
-                                   <md-option value="cm">cm</md-option>
-                                   <md-option value="dozen">dozen</md-option>
-                               </md-select>
-                               </md-input-container>
-           
-                               <md-input-container class="md-block" flex-gt-sm="10">
-                               <label>Boxes</label>
-                               <input type="number" min="1" max="9999" ng-model="new_application.species[new_application.species.indexOf(x)].species_boxes" required>
-                               </md-input-container>
-           
-           
-                       </div>
-                   </div>
+            
+                                <md-input-container class="md-block" flex-gt-sm="10">
+                                <label>Boxes</label>
+                                <input type="number" min="1" max="9999" ng-model="new_application.species[new_application.species.indexOf(x)].species_boxes" required>
+                                </md-input-container>
+            
+            
+                        </div>
+                    </div>
 
                     <br>
 
                     <p>The aforemetioned specimen will be imported on or before</p>
-
+                                            
                 <div>
                      <div layout>
                             <b style="margin-left: 70px">Air Cargo</b>
@@ -178,12 +178,12 @@
 
                             <b style="margin-left: 230px">Postal Cargo</b>
                      </div>
-                           
+<!---------------------------------------------->
                   <div layout >
                         <div layout="row">
                                         <md-input-container style="width: 150px">
                                             <label>Plane:</label>
-                                            <input ng-model="new_application.plane">
+                                            <input ng-model="new_application.plane" >
                                         </md-input-container>
                                         
                                         <md-input-container style="width: 150px">
@@ -193,7 +193,7 @@
                                
                                         <md-input-container style="width: 150px">
                                             <label>Vessel:</label>
-                                            <input ng-model="new_application.vessel">
+                                            <input ng-model="new_application.vessel" >
                                         </md-input-container>
                                         
                                         <md-input-container style="width: 150px">
@@ -203,7 +203,7 @@
 
                                         <md-input-container>
                                             <label>Carrier</label>
-                                            <input ng-model="new_application.carrier">
+                                            <input ng-model="new_application.carrier" >
                                         </md-input-container>
                                 
                              </div>
@@ -217,46 +217,44 @@
                                             <label>Port of Loading:</label>
                                             <input ng-model="new_application.port_air">
                                         </md-input-container>
-                         
-                                        <md-input-container>
-                                            <!-- <label>Date of Loading:</label>
-                                            <input ng-model="new_application.date_air"required>          -->
-                                            <md-datepicker ng-model="new_application.date_air" md-placeholder="Enter date"></md-datepicker>
-                                            Date: {{new_application.date_air | date:shortDate}}
-                                        </md-input-container>
+                  
+                                        <div layout-gt-xs="row">
+                                                <div flex-gt-xs>
+                                                <md-datepicker ng-model="new_application.date_air" md-placeholder="Date of Loading"></md-datepicker>
+                                                </div>
+                                            </div>              
                              </div>
                                    
                             <div layout="column" style="margin-left: 100px">
                                         <md-input-container>
                                                 <label>Port of Loading</label>
-                                                <input ng-model="new_application.port_sea">
-                                            </md-input-container>
-                             
-                                            <md-input-container>
-                                                <!-- <label>Date of Loading</label>
-                                                <input ng-model="new_application.date_sea"required>          -->
-                                                <md-datepicker ng-model="new_application.date_sea" md-placeholder="Enter date"></md-datepicker>
-                                                Date: {{new_application.date_sea | date:shortDate}}
-                                            </md-input-container>
+                                                <input ng-model="new_application.port_sea" >
+                                        </md-input-container>
+                                        
+                                        <div layout-gt-xs="row">
+                                                <div flex-gt-xs>
+                                                <md-datepicker ng-model="new_application.date_sea" md-placeholder="Date of Loading"></md-datepicker>
+                                                </div>
+                                        </div>
+                                           
 
                             </div>
                             
                             <div layout="column" style="margin-left: 100px">
                                     <md-input-container>
                                         <label>Port of Loading</label>
-                                        <input ng-model="new_application.port_postal"required>
+                                        <input ng-model="new_application.port_postal" >
                                     </md-input-container>
-
-                                    <!-- <md-input-container>
-                                            <label>Date of Loading</label>
-                                            <input ng-model="new_application.date_postal"required>
-                                    </md-input-container> -->
-                                                    <md-datepicker ng-model="new_application.date_postal" md-placeholder="Enter date"></md-datepicker>
-                                                    Date: {{new_application.date_postal | date:shortDate}}
                                     
+                                    <div layout-gt-xs="row">
+                                            <div flex-gt-xs>
+                                             <md-datepicker ng-model="new_application.date_postal" md-placeholder="Date of Loading"></md-datepicker>
+                                            </div>
+                                    </div>
+                                   
                             </div>
                          </div>
-
+ <!---------------------------------------------------->
                                         <!-- Exporter -->
 
                     <div layout="row" ng-init="new_application.tin_no = user.data.tin_no; new_application.applicant_address = user.data.current_address;">
@@ -290,7 +288,7 @@
                       </md-input-container>
                   </div>
 
-                                          <!-- Applicant -->
+                                          <!-- Applicant/importer -->
 
                 <hr class="m-t-40">
                 
@@ -382,7 +380,7 @@
             <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
-            <md-button ng-hide=" is_loading " ng-disabled="form_online_application.$invalid" ng-click="submit_application(new_application,'Application for Wildlife Import Certification','wic')" 
+            <md-button ng-hide=" is_loading " ng-disabled="form_online_application.$invalid" ng-click="submit_application(new_application,'Application for Wildlife Export/Re Export Certification','wtf')" 
                 class="md-primary md-raised md-block" >
                 <strong class="font-16">Submit Application</strong>
             </md-button>
@@ -391,4 +389,4 @@
     </form>
     <!-- modals -->
     <div style="visibility: hidden" ng-include="'app/templates/modals/select/upload.html'" ></div>
-</div>
+</div> 
