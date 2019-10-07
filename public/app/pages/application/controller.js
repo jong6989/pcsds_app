@@ -171,9 +171,9 @@ myAppModule.controller('application_controller', function ($scope,$filter, $http
 
     $scope.submit_application = function(application,key,type){
 
-        // $scope.to_date = function(d){
-        //     return $filter('date')(d, "yyyy-MM-dd");
-        //   };
+        $scope.to_date = function(d){
+            return $filter('date')(d, "yyyy-MM-dd");
+          };
         
         // application.date_postal = $scope.to_date(application.date_postal);
         // application.date_sea = $scope.to_date(application.date_sea);
