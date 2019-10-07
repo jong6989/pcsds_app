@@ -220,6 +220,23 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
   }
 
   $scope.current_view = localData.get('staff_current_view');
+  let storedAccount = localData.get('STAFF_ACCOUNT');
+  if(storedAccount){
+    //staff account
+    $scope.account = JSON.parse(storedAccount);
+    if($location.path() == '/'){
+      $location.path($scope.account.menu[0].path);
+    }
+  }
+
+  $scope.set_path = (path)=>{
+    $location.path(path);
+    $scope.close_left_side();
+  };
+
+  $scope.is_path = (path)=>{
+    return ($location.path() == path);
+  };
 
 })
 

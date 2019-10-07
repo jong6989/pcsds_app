@@ -15,6 +15,7 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $mdDialog
                 footer: 'Visit PCSD HR Department for your account'
               })
         }else {
+            var account_id = d.docs[0].id;
             $scope.showPrerenderedDialog(event,'phoneVerificationModal');
             window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
             firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifier)
@@ -36,8 +37,8 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $mdDialog
                         let code = result.value;
                         window.confirmationResult.confirm(code).then(function (result) {
                             // User signed in successfully.
-                            var user = result.user;
-                            // ...  
+                            localData.set('BRAIN_STAFF_ID',account_id);
+                            location.reload();
                         }).catch(function (error) {
                             Swal.fire({
                                 type: 'error',

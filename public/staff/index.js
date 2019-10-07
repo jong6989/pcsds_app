@@ -40,14 +40,59 @@ var scripts_js_plugins = {
 //scripts for login user
 let loginPage = script_angular + scripts_controllers.main + scripts_controllers.login;
 
+function setJson(obj) {
+    return JSON.stringify(obj);
+}
+function getJson(string) {
+    return JSON.parse(string);
+}
+
 async function authenticateStaff(){
     let v = localData.get('staff_current_view');
     if(!v){
         localData.set('staff_current_view','app/login/view.html');
     }
 
-    if(localData.get('BRAIN_STAFF_ID')){
-        alert(localData.get('BRAIN_STAFF_ID'));
+    var account_id = localData.get('BRAIN_STAFF_ID');
+    if(account_id){
+
+        //get stored staff json data
+        let storedAccountData = localData.get('STAFF_ACCOUNT');
+        if(storedAccountData){
+            var account = getJson(storedAccountData);
+            try {
+                //render controllers
+                let controllers = '';
+                account.menu.map(o => {
+                    controllers += o.controller;
+                });
+                
+                localData.set('staff_current_view','app/main.html');
+                // localData.set('staff_current_view','app/account_management/view.html');
+                let dashboardPage = script_angular + scripts_controllers.main + controllers;
+                document.write(dashboardPage);
+            } catch (error) {
+                alert(error);
+            }
+        }
+
+        //firebase authentication checker
+        await firebase.auth().onAuthStateChanged( async (user)=> {
+            if (!user) {
+                localData.remove('BRAIN_STAFF_ID');
+                localData.remove('STAFF_ACCOUNT');
+                localData.remove('staff_current_view');
+                location.reload();
+            }else {
+                //get account data
+                let q = await db.collection('staffs').doc(account_id).get();
+                let acc = q.data();
+                acc.id = q.id;
+
+                localData.set('STAFF_ACCOUNT',setJson(acc));
+                if(!storedAccountData) location.reload();
+            }
+        });
     }else {
         document.write(loginPage);
     }
