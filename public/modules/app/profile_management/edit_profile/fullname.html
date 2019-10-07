@@ -1,4 +1,4 @@
-<div  class="md-dialog-container" id="fullname_modal" > 
+<div  class="md-dialog-container" id="fullname_modal"> 
 
 	<md-dialog aria-label="Full Name">
         <form name="form_edit_fullname">
@@ -7,29 +7,27 @@
                 <strong> Edit Full Name  </strong>
             </div>
             </md-toolbar>
-            
             <md-dialog-content layout-padding="20">
-
-                <div layout-gt-sm="row" ng-init="edit_f_name = { first_name : user.data.first_name, middle_name : user.data.middle_name , last_name : user.data.last_name , extension_name : user.data.extension_name }">
+                <div layout-gt-sm="row">
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>First name</label>
-                        <input ng-model="edit_f_name.first_name" required>
+                        <input ng-model="updatedProperty.first_name" ng-value="profile.data.first_name" required>
                     </md-input-container>
         
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Middle Name</label>
-                        <input ng-model="edit_f_name.middle_name">
+                        <input ng-model="updatedProperty.middle_name" ng-value="profile.data.middle_name">
                     </md-input-container>
         
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Last Name</label>
-                        <input ng-model="edit_f_name.last_name" required>
+                        <input ng-model="updatedProperty.last_name" ng-value="profile.data.last_name" required>
                     </md-input-container>
         
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Extension (JR., SR)</label>
-                        <input ng-model="edit_f_name.extension_name">
+                        <input ng-model="updatedProperty.extension_name" ng-value="profile.data.extension_name">
                     </md-input-container>
                 </div>
 
@@ -37,7 +35,7 @@
 
             <md-dialog-actions layout="row">
             <span flex></span>
-            <md-button ng-click="close_dialog()">
+            <md-button ng-click=";close_dialog()">
                 close
             </md-button>
             <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
@@ -46,7 +44,7 @@
             <md-button type="submit" 
                 ng-disabled="form_edit_fullname.$invalid" 
                 ng-hide="is_loading" class="md-primary md-raised" 
-                ng-click="update_data_to_profile(edit_f_name);
+                ng-click="update_profile_property(updatedProperty);
                 close_dialog();">
                 save
             </md-button>

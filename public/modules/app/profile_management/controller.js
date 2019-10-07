@@ -1,67 +1,161 @@
 'use strict';
 myAppModule.requires.push('ngTable');
+myAppModule.requires.push('camera');
+myAppModule.requires.push('ngFileUpload');
+myAppModule.requires.push('ngImgCrop');
 myAppModule.
     controller('profile_management_controller',
-        ['$scope', '$http', 'dummyProfileService', 'NgTableParams', '$location', function ($scope,
-            $http,
-            $profileService,
-            NgTableParams) {
+        ['$scope',
+            '$http',
+            // 'dummyProfileService',
+            '$profileService',
+            'NgTableParams',
+            '$location',
+            function (
+                $scope,
+                $http,
+                $profileService,
+                NgTableParams
+            ) {
 
-            $http.get("/json/profile/nationalities.json").
-                then(function (data) {
-                    $scope.nationalities = data.data.data;
-                });
+                $scope.is_uploading = false;
+                $scope.is_loading = false;
+                $scope.profile_uploading_rate = 0;
+                $scope.picFile = null;
+                $scope.is_using_camera = false;
+                $scope.profile = { data: {} };
 
-            $scope.loadProfile = async () => {
-                var url_relative_path = localData.get('current_view');
-                var url = new URL(url_relative_path, location.href);
-                var parameters = url.searchParams;
-                var profileID = parameters.get("id");
-                $scope.profile = {};
-                $scope.profile.data = await $profileService.getProfile(profileID);
-            }
+                $scope.print = () => { 
+                    window.print();
 
-            $scope.loadPage = (url) => {
-                localData.set('current_view', url);
-                location.reload();
-            }
-
-            $scope.save_profile = async (profile) => {
-                profile.created_by = localData.get('authUser');
-                var success = await $profileService.addProfile(profile);
-                if (success) {
-                    Swal.fire(
-                        'Profile Saved!',
-                        'We will redirect you to ONLINE PERMITING DASHBOARD',
-                        'success'
-                    ).then((result) => {
-                    });
-                    $scope.profile.data = {};
-                    $scope.bday = '';
-                    $scope.dateIssued = '';
-                    $scope.dateValid = '';
-
+                    // setTimeout(function(){
+                    // }, 3000);
                 }
-            }
+                $scope.currentUserShouldSee = () => {
+                    return $scope.profile.data.created_by == localData.get('authUser');
+                }
 
-            $scope.activate_profile = (id) => {
-                var success = $profileService.activateProfile(id);
-                if (success)
-                    $scope.profile.data.status = 'active';
-            }
+                $scope.clear_cropping_image = () => {
+                    $scope.image_file = null;
+                }
 
-            $scope.deactivate_profile = (id) => {
-                var success = $profileService.deactivateProfile(id);
-                if (success)
-                    $scope.profile.data.status = 'deactivated';
-            }
+                $scope.printProfile = (event) => {
+                    
+                }
+                $scope.toggle_using_camera = () => {
+                    $scope.is_using_camera = !$scope.is_using_camera;
+                }
 
-            $scope.loadProfileList = async () => {
-                var profileList = await $profileService.getProfileList();
-                $scope.profileTable = new NgTableParams({}, { dataset: profileList });
-            }
+                $scope.is_croping_image = () => {
+                    return $scope.image_file != null;
+                };
 
-        }]).
+                // $scope.$watch('updatedProperty.first_name', function(newval, oldval, scope){
+                //     console.log(newval);
+                //     console.log(oldval);
+                //     console.log(scope);
+                // })
+
+                $http.get("/json/profile/nationalities.json").
+                    then(function (data) {
+                        $scope.nationalities = data.data.data;
+                    });
+
+                $scope.onProfileLoad = () => {}
+                $scope.loadProfile = async (id) => {
+                    var profileID;
+                    $scope.is_page_loading = true;
+                    if (id == null) {
+                        var url_relative_path = localData.get('current_view');
+                        var url = new URL(url_relative_path, location.href);
+                        var parameters = url.searchParams;
+                        var profileID = parameters.get("id");
+                    } else {
+                        profileID = id;
+                    }
+
+                    $scope.profile.data = await $profileService.getProfile(profileID);
+                    $scope.is_page_loading = false;
+                    $scope.$apply();
+                    
+                    $scope.onProfileLoad();
+                }
+
+                $scope.loadPage = (url) => {
+                    localData.set('current_view', url);
+                    location.reload();
+                }
+                $scope.clear_edit_pass = () => {
+                    $scope.editProfilePassword = '';
+                }
+                $scope.save_profile = async (profile) => {
+                    profile.created_by = localData.get('authUser');
+                    var success = await $profileService.addProfile(profile);
+                    if (success) {
+                        Swal.fire(
+                            'Profile Saved!',
+                            'We will redirect you to ONLINE PERMITING DASHBOARD',
+                            'success'
+                        ).then((result) => {
+                        });
+                        $scope.profile.data = {};
+                        $scope.bday = '';
+                        $scope.dateIssued = '';
+                        $scope.dateValid = '';
+
+                    }
+                }
+
+                $scope.activate_profile = (id) => {
+                    var success = $profileService.activateProfile(id);
+                    if (success)
+                        $scope.profile.data.status = 'active';
+                }
+
+                $scope.deactivate_profile = (id) => {
+                    var success = $profileService.deactivateProfile(id);
+                    if (success)
+                        $scope.profile.data.status = 'deactivated';
+                }
+
+                $scope.loadProfileList = async () => {
+                    var profileList = await $profileService.getProfileList();
+
+                    $scope.profileTable = new NgTableParams({ sorting: { first_name: 'asc' } }, { dataset: profileList });
+                    // $scope.profileTable.$invalidate();
+                    $scope.$apply();
+                }
+
+                $scope.update_profile_property = (updatedProperty) => {
+                    var success = $profileService.updateProfile($scope.profile.data.id, updatedProperty);
+                    
+                }
+
+                $scope.upload_profile_picture = async function (dataUrl, imageFileName) {
+                    $scope.is_using_camera = false;
+                    $scope.is_uploading = true;
+
+                    try{
+                        var imageUrl = await $profileService.uploadProfilePicture(
+                            $scope.profile.data.id, 
+                            imageFileName, 
+                            dataUrl);  
+                        $scope.profile.data.profile_picture = imageUrl;                      
+                    }catch(error){
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'Upload Failed',
+                            footer: 'Please try again'
+                        });
+                    }finally{
+                        $scope.is_uploading = false;
+                        $scope.clear_cropping_image();
+                        $scope.$apply();
+                    }
+                };
+
+            }]).
     controller('dummy_profile_management_controller', [
         '$scope', '$http', 'NgTableParams', 'dummyProfileService', function (
             $scope,
@@ -98,7 +192,8 @@ myAppModule.
                         place_issued: "Puerto Princesa City",
                         valid_until: "2028-01-01"
                     },
-                    status: 'active'
+                    status: 'active',
+                    profile_picture: 'https://firebasestorage.googleapis.com/v0/b/pcsd-app.appspot.com/o/profile_image%2FNIofduXoq4Aar5Em88E4-?alt=media&token=ec559967-413d-4f1a-891a-93efa5033212'
                 }
             }
 
@@ -137,16 +232,74 @@ myAppModule.
         $scope.get_profile();
     }).
     service('$profileService', function () {
+        var collection = db.collection('profile');
         this.get_profile = async (id) => {
             let profile = await db.collection('profile').doc(id);
             return profile;
         }
+
+        this.addProfile = async (newProfile) => {
+            var promise = new Promise((resolve, reject) => {
+                db.collection('profile').
+                    add(newProfile).
+                    then(result => {
+                        resolve(true);
+                    },
+                        error => {
+                            reject(error);
+                        });
+            });
+
+            return promise;
+        }
+
+        this.getProfileList = async () => {
+            var promise = new Promise((resolve, reject) => {
+                collection.onSnapshot(snapshot => {
+                    var profileList = snapshot.docs.map(documentSnapshot => {
+                        var profile = documentSnapshot.data();
+                        profile.id = documentSnapshot.id;
+                        return profile;
+                    });
+                    resolve(profileList);
+                });
+            });
+
+            return promise;
+        }
+
+        this.getProfile = (id) => {
+            return new Promise((resolve, reject) => {
+                collection.doc(id).onSnapshot(snapshot => {
+                    var profile = snapshot.data();
+                    profile.id = snapshot.id;
+                    resolve(profile);
+                })
+            });
+        }
+        
+        this.uploadProfilePicture = async(id, fileName, dataUrl) => {
+            if (id) {
+                let profileImage = storageRef.child(`profile_image/${id}-${name}`);
+                var snapshot = await profileImage.putString(dataUrl, 'data_url');
+                var profilePictureUrl = await snapshot.ref.getDownloadURL();
+                collection.doc(id).update({'profile_picture': profilePictureUrl});
+            } 
+
+            return new Promise((resolve, reject) => { resolve(profilePictureUrl)});
+        }
+
+        this.updateProfile = async(profileID,  updatedProperty) => {
+            await collection.doc(profileID).update(updatedProperty);
+            return new Promise((resolve, reject) => { resolve(true); })
+        }
     }).
     service('dummyProfileService', function () {
-        var profileList = [
+        var profileList = {          
+            "NIofduXoq4Aar5Em88E4":
             {
                 // data: {
-                id: 0,
+                id: "NIofduXoq4Aar5Em88E4",
                 first_name: "Arlan",
                 middle_name: "Ticke",
                 last_name: "Asutilla",
@@ -169,12 +322,16 @@ myAppModule.
                     place_issued: "Puerto Princesa City",
                     valid_until: "2028-01-01"
                 },
-                status: 'active'
+                status: 'active',
+                // profile_picture: 'https://firebasestorage.googleapis.com/v0/b/pcsd-app.appspot.com/o/profile_image%2FNIofduXoq4Aar5Em88E4-?alt=media&token=ec559967-413d-4f1a-891a-93efa5033212',
+                created_by: "DeTxDiJfxOOhTS94umfchr489o73"
+                // created_by: "DeTxDiJfxOOhTS94umfchr489o73"
                 // }
             },
+            "12Ut9pTSZcgXOQPc2dkRYXYQv6t1":
             {
                 // data: {
-                id: 1,
+                id: "12Ut9pTSZcgXOQPc2dkRYXYQv6t1",
                 first_name: "John",
                 middle_name: "Smith",
                 last_name: "Doe",
@@ -197,12 +354,15 @@ myAppModule.
                     place_issued: "Puerto Princesa City",
                     valid_until: "2028-03-31"
                 },
-                status: 'active'
+                status: 'active',
+                profile_picture: '',
+                created_by: "DeTxDiJfxOOhTS94umfchr489o73"
                 // }
             },
+            "4orLzVctIWbKgG1FrzPj4WxYIva2" :
             {
                 // data: {
-                id: 2,
+                id: "4orLzVctIWbKgG1FrzPj4WxYIva2",
                 first_name: "Jong",
                 middle_name: "",
                 last_name: "Bautista",
@@ -225,10 +385,15 @@ myAppModule.
                     place_issued: "Puerto Princesa City",
                     valid_until: "2028-03-31"
                 },
-                status: 'active'
-                // }
+                status: 'active',
+                profile_picture: '',
+                created_by: "DeTxDiJfxOOhTS94umfchr489o73"
             }
-        ]
+        }
+
+
+
+
         this.getProfileList = async () => {
 
             return new Promise((resolve, reject) => {
@@ -256,8 +421,12 @@ myAppModule.
             return new Promise((resolve, reject) => { resolve(true); });
         }
 
-        this.updateProfile = async (id, updatedProfile) => {
-            profileList[id] = updatedProfile;
+        this.updateProfile = async (id, updatedProperty) => {
+            var keys = Object.keys(updatedProperty);
+            keys.forEach(key => {
+                profileList[id][key] = updatedProperty[key];
+            });
+
             return new Promise((resolve, reject) => { resolve(true); });
         }
 
@@ -269,4 +438,11 @@ myAppModule.
             profileList[id].status = 'deactivated';
             return new Promise((resolve, reject) => { resolve(true); });
         }
+
+        this.uploadProfilePicture = async (profileID, imageFileName, data) => {
+            profileList[profileID].profile_picture = imageFileName;
+
+            return new Promise((resolve, reject) => { resolve(true); });
+        }
     });
+

@@ -1,10 +1,9 @@
-<div ng-controller="profile_management_controller" ng-init="loadProfile()" style="margin:35px">
-        <style>
-                md-input-container label {
-                    color:black
-                }
-            </style>
-    <div ng-include="'../../header.html'"></div>
+<div ng-controller="profile_management_controller" ng-init="onProfileLoad=print;loadProfile()" style="margin:35px">
+    <div layout>
+        <div ng-include="'../../header.html'" style="width:70%"></div>
+            <img ng-src="{{ profile.data.profile_picture == null ? '../../images/user.png' : 
+            profile.data.profile_picture }}" alt="use" width="15%" md-whiteframe="3">
+    </div>
     <br>
     <h5>Profile Information</h5>
     <br>
@@ -37,11 +36,11 @@
         </md-input-container>
         <md-input-container class="md-block" flex-gt-sm>
             <label>Birth Place</label>
-            <input ng-model="profile.data.place_of_birth" readonly>
+            <textarea ng-model="profile.data.place_of_birth" readonly></textarea>
         </md-input-container>
         <md-input-container class="md-block" flex-gt-sm>
             <label>Current Address</label>
-            <input ng-model="profile.data.current_address" readonly>
+            <textarea ng-model="profile.data.current_address" readonly><textarea></textarea>
         </md-input-container>
 
         <md-input-container class="md-block" flex-gt-sm>
@@ -114,5 +113,14 @@
         </md-input-container>
 
     </div>
-    
+    <md-button type="submit" 
+        ng-click="print()"
+        ng-hide="!currentUserShouldSee()"
+        class="md-raised md-block md-primary">
+        Print
+    </md-button>
+    <md-button type="submit" ng-click="loadPage('app/profile_management/view.html?id='+profile.data.id)"
+        class="md-raised md-block md-primary">
+        Back to View
+    </md-button>
 </div>
