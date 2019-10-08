@@ -1,0 +1,146 @@
+<div ng-init="n.subject = 'WILDLIFE SPECIAL USE PERMIT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = [];" 
+class="roman">
+	<h3 class="align-center">WILDLIFE SPECIAL USE PERMIT</h3>
+	<hr>
+	<md-input-container class="md-block m-t-40">
+		<label>WSUP No.</label>
+		<input ng-model="n.wsup_no" required>
+	</md-input-container>
+	<br>
+	<strong>Project/Activity Information</strong>
+	<div layout>
+		<md-input-container flex>
+			<label>Name of Project/Undertaking/Activity</label>
+			<input ng-model="n.project.name" ng-blur="n.keywords[0]=n.project.name" required>
+		</md-input-container>
+		<md-input-container flex>
+			<label>Project Location (Street, Sitio, Barangay, Municipality)</label>
+			<input ng-model="n.project.location">
+		</md-input-container>
+	</div>
+	<strong>Proponent Information</strong>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>Name</label>
+			<input ng-model="n.proponent.name" ng-blur="n.keywords[1]=n.proponent.name" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Address</label>
+			<input ng-model="n.proponent.address" ng-blur="n.keywords[2]=n.proponent.address">
+		</md-input-container>
+	</div>
+	<div>
+
+	</div>
+	<div>
+		<md-input-container>
+			<label>Date of Issuance of Certificate</label>
+			<md-tooltip direction="left">Date of Issuance of Certificate</md-tooltip>
+			<md-datepicker ng-model="issuance_date" ng-change="n.issuance_date=to_date(issuance_date)">
+
+			</md-datepicker>
+		</md-input-container>
+		<md-input-container>
+			<label>Date of Expiration of Certificate</label>
+			<md-tooltip direction="left">Date of Expiration of Certificate</md-tooltip>
+			<md-datepicker ng-model="expiration_date" ng-change="n.expiration_date=to_date(expiration_date)">
+			</md-datepicker>
+		</md-input-container>
+	</div>
+
+	<hr>
+	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+			<label>Paid amount</label>
+			<input ng-model="n.paid_amount" type="number">
+		</md-input-container>
+		<md-input-container flex>
+			<label>OR Number</label>
+			<input ng-model="n.paid_or_number">
+		</md-input-container>
+		<md-input-container flex>
+			<label>Date of Payment</label>
+			<md-datepicker ng-model="paid_date" md-change="n.paid_date=to_date(paid_date)" md-open-on-focus>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<br>
+	<strong>PREVIEW</strong>
+	<br>
+	<p>
+		<span class="m-l-50"></span>
+		{{ n.line1 = 
+			'Pursuant to Republic Act 9147, otherwise known as the “Wildlife Resources Conservation and Protection Act” 
+			dated July 30, 2001; Joint DENR-DA-PCSD Administrative Order No. 1 
+			(“Joint Implementing Rules and Regulations Pursuant to RA 9147”), s. 2004; 
+			and section 19 of the PCSD Administrative Order No. 12, this Wildlife Special Use Permit is hereby granted to: '
+		}}
+	</p>
+
+	<p>
+		<div style="text-align: center">
+			<h2>
+				{{ 
+					n.line2 = n.project.name.toUpperCase() 
+				}}
+			</h2>
+
+			<div>
+				{{
+					n.line3 = 'Name of Project/Undertaking/Activity/Purpose'
+				}}
+			</div>
+		</div>
+
+	</p>
+
+	<div style="text-align: center">
+		<h4>
+			{{
+					n.line4 = n.project.location
+				}}
+		</h4>
+
+		<div></div>
+		{{
+			n.line5 = 'Project Location (Street, Sitio, Barangay, Municipality)'
+		}}
+	</div>
+	<br>
+	<div style="text-align: center">
+		<h4>
+			{{
+					n.line6 = n.proponent.name
+				}}
+		</h4>
+
+		<div></div>
+		{{
+			n.line7 = 'Name of Proponent'
+		}}
+	</div>
+	<br>
+	<div style="text-align: center">
+		<h4>
+			{{
+					n.line8 = n.proponent.address
+				}}
+		</h4>
+
+		<div></div>
+		{{
+			n.line9 = 'Address of Proponent'
+		}}
+	</div>
+	<br>
+	<p>
+		{{
+			n.line10 = 'Issued on ' + get_full_date(n.issuance_date) + ' in Puerto Princesa City, Palawan valid until ' +
+			get_full_date(n.expiration_date)
+		}}
+	</p>
+</div>

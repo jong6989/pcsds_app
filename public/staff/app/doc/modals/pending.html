@@ -1,0 +1,29 @@
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="pendingDocument" ng-controller="doc_ctrl_pending">
+        <md-dialog layout="column" layout-align="center center">
+            
+            <md-toolbar class="p--10">
+                <div class="md-toolbar-tools bg-teal">
+                    Pending documents to be received
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+        
+            <md-dialog-content layout-padding class="p-b-20">
+                <div ng-include="'./app/doc/views/list/pending.html'"></div>
+            </md-dialog-content>
+        
+            <md-dialog-actions >
+                <span flex></span>
+                <md-button ng-click="close_dialog()">
+                    Close
+                </md-button>
+            </md-dialog-actions>
+            
+
+        </md-dialog>
+    </div>
+</div>

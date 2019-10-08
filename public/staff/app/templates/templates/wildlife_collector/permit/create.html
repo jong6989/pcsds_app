@@ -1,0 +1,131 @@
+<div ng-init="n.subject = 'WILDLIFE COLLECTOR\'S PERMIT';n.keywords = []; ">
+<!-- <div ng-controller="WildlifeCollectorController" ng-init="n.subject = 'WILDLIFE COLLECTOR';  "> -->
+
+	<h3 class="align-center">WILDLIFE COLLECTOR'S PERMIT</h3>
+	<hr>
+	<md-input-container class="md-block m-t-40">
+		<label>Permit Number</label>
+		<input ng-model="n.permit_number" ng-blur="n.keywords[0]=n.permit_number" required>
+	</md-input-container>
+	<br>
+
+	<div layout>
+		<md-input-container flex>
+			<label>Name of Project/Undertaking</label>
+			<input ng-model="n.project.name" ng-blur="n.keywords[2]=n.project.name" required>
+		</md-input-container>
+
+	</div>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>Name of Proponent</label>
+			<input ng-model="n.proponent.name" ng-blur="n.keywords[1]=n.proponent.name" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Address of Proponent</label>
+			<input ng-model="n.proponent.address" ng-blur="n.keywords[3]=n.proponent.address" required>
+		</md-input-container>
+	</div>
+
+	<div layout>
+		<md-input-container>
+			<md-datepicker ng-model="date_issued" ng-change="n.date_issued=to_date(date_issued)"
+				md-placeholder="Date Issued" required>
+			</md-datepicker>
+		</md-input-container>
+		<md-input-container>
+			<md-datepicker ng-model="expiry_date" ng-change="n.expiry_date=to_date(expiry_date)"
+				md-placeholder="Expiration Date" required>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+			<label>Paid amount</label>
+			<input type="number" ng-model="n.paid_amount">
+		</md-input-container>
+		<md-input-container flex>
+			<label>OR Number</label>
+			<input ng-model="n.paid_or_number">
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker ng-model="paid_date" ng-change="n.paid_date=to_date(paid_date)"
+				md-placeholder="Date of Payment" md-open-on-focus>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+
+	<strong>PREVIEW</strong>
+	<br>
+	<p>
+		<div class="align-center">
+			{{ n.line1 = 'WILDLIFE COLLECTOR\'S PERMIT'}}<br>
+			{{n.line2 = n.permit_number}}
+		</div>
+
+	</p>
+	<br>
+	<p>
+		{{ n.line3 = 'Pursuant to RA 9147 or the Wildlife Act, PCSD Revised Administrative Order No. 05 "Guidelines for"' +
+			'the Regulation and Monitoring of the Catching, Trading, Culturing, Transporting and Exporting of Reef-fish-for-food' +
+			'in Palawan" and Section 18 of PCSD AO # 12, this Wildlife Collector\'s Permit is hereby granted tot he hereunder-named ' +
+			'individuality/entity, subject to the terms and conditions specified at the back hereof: '
+	
+	}}
+	</p>
+	<p>
+		<span class="m-l-50"></span>
+		<div ng-init="titles=['Name of Proponent', 'Name of Project/Undertaking', 'Address of Proponent']"></div>
+		<div class="align-center" ng-repeat="x in [1, 3, 5]">
+			<div
+				style="border:1px solid; padding-top:25px; padding-bottom: 25px; margin-left:100px; margin-right: 100px">
+				{{n['line'+(x+3)] = n.keywords[$index+1].toUpperCase()}}
+			</div>
+			<div>{{n['line'+(x+4)] = titles[$index]}}</div><br>
+		</div>
+	</p>
+	<p>
+		{{
+			n.line10 = 'Issued this ' + to_day_of_month(n.date_issued) + ' day of ' + 
+			get_full_month_name(n.date_issued) + ', ' + to_year(n.date_issued) + ' in Puerto Princesa City ' +
+			'valid until the ' + to_day_of_month(n.expiry_date) + ' day of ' + get_full_month_name(n.expiry_date) +
+			', ' + to_year(n.expiry_date) + '.'
+		}}
+	</p>
+	<p>
+		<div layout>
+			<div style="width:60%"></div>
+			<div>APPROVED:</div>
+		</div>
+	</p>
+	<p>
+		<div layout>
+			<div style="width:60%"></div>
+			<div>
+				<br><br><br>
+				{{n.line11=pcsd.head.full_name.toUpperCase()}}<br>
+				{{n.line12=pcsd.head.position.toUpperCase()}}
+			</div>
+		</div>
+	</p>
+	<p>
+		<div>
+			{{n.line13 = 'PAID UNDER O.R. NO. ' + n.paid_or_number}}<br>
+			{{n.line14 = 'AMOUNT PAID: Php ' + (n.paid_amount | number:2) }}<br>
+			{{n.line15 = 'DATE OF PAYMENT: ' + get_full_date(n.paid_date)}}
+		</div>
+	</p>
+	<br>
+	<p>
+		<div class="align-center">
+			{{n.line16='Not valid without PCSD official seal.'}}<br>
+			{{n.line17='(PLEASE SEE AT THE BACK PAGE THE TERMS AND CONDITIONS OF THIS CERTIFICATE OF REGISTRATION)'}}
+		</div>
+
+	</p>
+</div>

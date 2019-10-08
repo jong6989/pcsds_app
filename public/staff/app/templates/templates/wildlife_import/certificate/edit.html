@@ -1,0 +1,74 @@
+<div>
+	<br>
+	<br>
+	<div layout layout-align="center end">
+		<strong>Wildlife Import<strong>
+				<strong>Certification No.: {{currentItem.application_no}}</strong>
+	</div>
+	<br>
+	<br>
+	<h3 class="align-center">CERTIFICATION</h3>
+	<hr>
+
+	<!-- with template -->
+	<div ng-if="currentItem.c_type != 'empty'">
+	<!-- <div ng-controller="WildlifeImportCertificationController" ng-init="currentItem=render_params.data" ng-if="currentItem.c_type != 'empty'"> -->
+
+		<br>
+		<div ng-repeat="line in ['line1', 'line2', 'line3', 'line4', 'line5']">
+			<textarea 
+			style="width: 100%"
+			rows="6" flex name="line" 
+			ng-model="currentItem[line]"
+			ng-blur="lines={};lines[line]=currentItem[line];updateDocument(currentItem.id, lines)">
+			</textarea>
+			<div ng-if="line==='line1'">
+				<style>
+					.borderedTable tr td {
+						border: 1px solid
+					}
+				</style>
+				<table class="borderedTable" style="width: 100%">
+					<tr style="text-align: center">
+						<td>Species (Scientific Name/Common Name)</td>
+						<td>Quantity</td>
+					</tr>
+					<tr ng-repeat="specimen in currentItem.species">
+						<td><textarea ng-model="specimen.name"
+							ng-blur="updateDocument(currentItem.id, { species: currentItem.species})"
+							>{{specimen.name}}</textarea></td>
+						<td style="text-align:right">
+							<textarea ng-model="specimen.quantity" 
+								ng-blur="updateDocument(currentItem.id, { species: currentItem.species})">{{specimen.quantity}}
+							</textarea></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<hr>
+		<br>
+		<strong>Payment</strong>
+		<div layout>
+			<md-input-container class="md-block m-t-40" flex>
+				<label>Paid amount</label>
+				<input ng-model="currentItem.paid_amount"
+					ng-blur="updateDocument(currentItem.id,{'paid_amount': currentItem.paid_amount})">
+			</md-input-container>
+			<md-input-container class="md-block m-t-40" flex>
+				<label>OR Number</label>
+				<input ng-model="currentItem.paid_or_number"
+					ng-blur="updateDocument(currentItem.id,{'paid_or_number': currentItem.paid_or_number})">
+			</md-input-container>
+			<div flex-gt-sm ng-init="paid_date = currentItem.paid_date">
+				<strong>Date Paid</strong>
+				<md-datepicker ng-model="paid_date"
+					ng-change="currentItem.paid_date = to_date(paid_date); updateDocument(currentItem.id,{'paid_date': currentItem.paid_date})"
+					md-placeholder="Date" md-open-on-focus>
+				</md-datepicker>
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>
+	<br>
+</div>

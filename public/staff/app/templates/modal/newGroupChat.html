@@ -1,0 +1,47 @@
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="createGroupChat">
+        <md-dialog layout="column" layout-align="center center">
+            <form ng-cloak name="form_create_group_chat" ng-init="newGroupChat = {type:'group',name:'',member:[user.id]}">
+                <md-toolbar class="bg-teal">
+                    <div class="md-toolbar-tools">
+                        <h2>Create Group Chat</h2>
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-click="close_dialog()">
+                            <i class="fa fa-cross col-red"></i>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+            
+                <md-dialog-content layout-padding>
+                
+                    <md-input-container md-no-float class="md-block">
+                        <input ng-model="newGroupChat.name" placeholder="Group Name" required>
+                    </md-input-container>
+
+                    <fieldset class="standard" ng-controller="user_management_controller" ng-init="download_users();">
+                        <legend>Select Members</legend>
+                        <div layout="row" layout-wrap flex>
+                            <div flex="50" ng-repeat="x in get_users()">
+                            <md-checkbox ng-checked="exists(x.id, newGroupChat.member)" ng-click="toggle_select(x.id, newGroupChat.member)" ng-hide="user.id == x.id">
+                                {{ x.data.first_name }} {{ x.data.last_name }} 
+                            </md-checkbox>
+                            </div>
+                        </div>
+                    </fieldset>
+        
+                </md-dialog-content>
+            
+                <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="close_dialog()">
+                    Close
+                </md-button>
+                <md-button class="md-primary md-raised" ng-disabled="form_create_group_chat.$invalid || newGroupChat.member.length < 2" ng-click="create_group_chat(newGroupChat)">
+                    Create
+                </md-button>
+                </md-dialog-actions>
+            </form>
+
+        </md-dialog>
+    </div>
+</div>

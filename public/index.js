@@ -98,7 +98,7 @@ async function authenticateUser(){
     });
 }
 //run
-localData.set('profileId', '12Ut9pTSZcgXOQPc2dkRYXYQv6t1')
+// localData.set('profileId', '12Ut9pTSZcgXOQPc2dkRYXYQv6t1')
 if(localData.get('profileId')){
     //load dashboard
     document.write(userPage);

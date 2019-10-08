@@ -1,0 +1,101 @@
+<div ng-include="'./app/templates/application/style.html'"></div>
+<style type="text/css">
+    .roman {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
+<div ng-init="currentItem = render_params.data; print(3000)" class="roman" style="margin:0.5in">
+<!-- <div ng-controller="ChainsawDealershipPermitController" ng-init="currentItem=n;" class="roman" style="margin:0.5in"> -->
+
+    <div ng-include="'./app/templates/templates/header.html'"></div>
+    <p>
+        <div class="align-center">
+            <strong>{{ currentItem.line1}}</strong><br>
+
+        </div>
+    </p>
+    <div>
+        {{currentItem.line2}}
+    </div>
+    <br>
+
+    <div>
+        {{currentItem.line3}}
+    </div>
+
+    <br>
+    <p>
+        <div class="align-center" style="padding:0.5in; border:1px solid; margin-left:1in; margin-right: 1in">
+            <div ng-repeat="line in [4,5,6]">
+                <div ng-if="line===5&&currentItem['line5']">{{currentItem['line5']}}</div>
+                <div ng-if="line!=5">{{currentItem['line'+line]}}</div>
+            </div>
+
+        </div>
+    </p>
+    <br><br>
+
+    <p>
+        <div ng-repeat="line in [7,8,9]">
+            {{currentItem['line'+line]}}
+            <br ng-if="line===7">
+        </div>
+    </p>
+    <div layout>
+        <div style="width:60%">&nbsp;</div>
+        <div>APPROVED:</div>
+    </div>
+    <div layout ng-controller="doc_ctrl_draft">
+        <div style="width:60%">&nbsp;</div>
+
+        <div>
+            <div flex
+                ng-init="currentItem.sign1 = (currentItem.sign1 == undefined) ? { name:'',designation:''} : currentItem.sign1;">
+                <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center">
+                    <img ng-if="currentItem.sign1.signature != undefined" src="{{currentItem.sign1.signature}}"
+                        alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                    <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong> </div>
+                    <div class="align-center"> {{currentItem.sign1.designation}} </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div>
+        <div ng-repeat="line in [12,13,14,15,16]">
+            {{currentItem['line'+line]}}
+        </div>
+    </div>
+    <hr>
+    <div class="align-center">TERMS AND CONDITIONS</div>
+    <ol>
+        <li ng-repeat="line in [17,18,19,20,21]">
+                {{currentItem['line'+line]}}
+        </li>
+    </ol>
+    <br>
+    <div>
+        {{currentItem.line22}}
+    </div>
+    <br>
+    <hr>
+    <div class='align-center'>CONFROME</div><BR>
+    {{currentItem.line23}}
+    <div layout ng-controller="doc_ctrl_draft">
+        <div style="width:60%">&nbsp;</div>
+
+        <div>
+            <div flex
+                ng-init="currentItem.sign2 = (currentItem.sign2 == undefined) ? { name:'',designation:''} : currentItem.sign2;">
+                <div ng-if="currentItem.sign2.signature != undefined;" layout="column" layout-align="center center">
+                    <img ng-if="currentItem.sign2.signature != undefined" src="{{currentItem.sign2.signature}}"
+                        alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                    <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong> </div>
+                    <div>Grantee's Signature Over Printed Name</div>
+                    <div class="align-center"> Date signed: {{get_full_date(currentItem.sign2.date_signed)}} </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-include="'./app/templates/templates/footer.html'"></div>
+</div>

@@ -1,0 +1,33 @@
+<style type="text/css">
+	.roman {
+		font-family: 'Times New Roman', Times, serif;
+	}
+</style>
+<div class="roman">
+	<!-- header -->
+	<div ng-include="'https://document-network.web.app/pcsd/templates/header.html'"></div>
+	<hr>
+	<br>
+	<div class="align-center m-t-20 m-b-10">
+        <h3 >{{currentItem.subject}} from {{currentItem.source}}</h3>
+        <h5>Category: {{currentItem.category}} </h5>
+    </div>
+    <br>
+    <hr>
+    <br>
+	<h5>
+	    <small> Correspondence Date</small> 
+	    : <strong class="col-teal">{{currentItem.created}}</strong> </h5>
+
+	<h5>
+	    <small> Date Received</small> 
+	    : <strong class="col-teal">{{currentItem.published}}</strong> </h5>
+
+
+	<h5 ><small> Source</small> : <strong class="col-teal">{{currentItem.source}}</strong> </h5>
+	<h5><small> Subject</small> : <strong class="col-teal">{{currentItem.subject}}</strong> </h5>
+	<hr>
+	<br>
+	<!-- footer -->
+	<div ng-include="'https://document-network.web.app/pcsd/templates/footer.html'"></div>
+</div>

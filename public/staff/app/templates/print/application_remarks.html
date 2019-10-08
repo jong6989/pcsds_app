@@ -1,0 +1,26 @@
+<div ng-init="set_application($localStorage.params);print(4000);" layout-padding>
+    <md-card class="m-t-30 m-l-30 m-r-30" >
+        <md-card-title>
+            <img src="./images/pcsdlogo.png" alt="pcsd" height="30px" class="m-r-5">
+            <h5 class="col-grey">Remarks Receipt #{{application.date}} </h5>
+            <div flex></div>                
+        </md-card-title>
+        <md-divider></md-divider>
+        <md-card-content>
+            <h4> <small>Applicant:</small> {{application.data.application.applicant}} </h4>
+            <h5> <small>Title:</small> {{application.name}}  </h5>
+            <hr>
+            <div ng-if="application.actions.length > 0" ng-repeat="x in application.actions track by $index ">
+                <strong class="m-l-20 col-grey"> {{x.staff}} | <span class="m-l-20 font-9"> {{x.date | date: 'yyyy-MM-dd HH:mm:ss'}} </span> </strong>
+                <div class="m-l-40"><span class="{{'convo_' + $index }}" ></span></div>
+                <div class="{{'image_holder_'+$index}}"></div>
+                <i ng-init="load_html(x.message,'convo_'+$index);extract_images_from_html('convo_'+$index,'image_holder_'+$index,1500);"></i>
+                <hr>
+            </div>
+        </md-card-content>
+        <md-divider></md-divider>
+        <md-card-action layout="row">
+            <p class="font-10 col-grey m-l-5">Date printed : {{date_now()}}, Application No.: {{application.date}}, Staff: {{user.id_number}} </p>
+        </md-card-action>
+    </md-card>
+</div>

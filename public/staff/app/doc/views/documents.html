@@ -1,0 +1,55 @@
+<div flex layout>
+    <!-- DRAFT -->
+    <div flex ng-show="currentDocSelected == 'draft'" ng-include="'./app/doc/views/list/draft.html'"></div>
+    <!-- PUBLISHED -->
+    <div flex ng-show="currentDocSelected == 'published'" ng-include="'./app/doc/views/list/published.html'"></div>
+    <!-- SENT -->
+    <div flex ng-show="currentDocSelected == 'sent'" ng-include="'./app/doc/views/list/sent.html'"></div>
+    <!-- RECEIVED -->
+    <div flex ng-show="currentDocSelected == 'received'" ng-include="'./app/doc/views/list/received.html'"></div>
+    <!-- PENDING -->
+    <div flex ng-show="currentDocSelected == 'pending'" ng-include="'./app/doc/views/list/pending.html'"></div>
+
+    <!--  -->
+
+    <div class="bg-teal" layout="column" layout-align="center center">
+
+        <md-button class="md-fab md-mini bg-blue-grey" aria-label="Draft" 
+            ng-disabled="currentDocSelected == 'draft'" ng-click="changeCurrentDocType('draft')">
+            <md-tooltip md-direction="left">Draft</md-tooltip>
+            <i class="fa fa-save "></i>
+        </md-button>
+
+        <md-button class="md-fab md-mini bg-amber" aria-label="Published"
+            ng-disabled="currentDocSelected == 'published'" ng-click="changeCurrentDocType('published')">
+            <md-tooltip md-direction="left">Published</md-tooltip>
+            <i class="fa fa-file-zip-o"></i>
+        </md-button>
+
+        <md-button class="md-fab md-mini bg-deep-purple" aria-label="Sent"
+            ng-disabled="currentDocSelected == 'sent'" ng-click="changeCurrentDocType('sent')">
+            <md-tooltip md-direction="left">Sent</md-tooltip>
+            <i class="fa fa-share"></i>
+        </md-button>
+
+        <md-button class="md-fab md-mini bg-cyan" aria-label="Received"
+            ng-disabled="currentDocSelected == 'received'" ng-click="changeCurrentDocType('received')">
+            <md-tooltip md-direction="left">Received</md-tooltip>
+            <i class="fa fa-inbox "></i>
+        </md-button>
+
+        <md-button class="md-fab md-mini bg-lime" aria-label="Pending"
+            ng-disabled="currentDocSelected == 'pending'" ng-click="changeCurrentDocType('pending')">
+            <md-tooltip md-direction="left">Pending</md-tooltip>
+            <span class="badge badge-light" ng-if="myPending.length > 0"> {{myPending.length}} </span>
+            <i class="fa fa-hourglass-o col-black"></i>
+        </md-button>
+
+        <!--    <md-button class="md-fab md-mini bg-brown" aria-label="Trash">
+            <md-tooltip md-direction="left">Archive</md-tooltip>
+            <i class="fa fa-archive "></i>
+        </md-button>
+
+        </md-nav-bar>
+    </div> -->
+</div>

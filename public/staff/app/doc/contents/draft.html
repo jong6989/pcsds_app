@@ -1,0 +1,236 @@
+<style>
+.fileDropDiv {
+    background-color: rgba(151, 150, 150, 0.712);
+    padding: 10px;
+}
+</style>
+<div layout-padding flex ng-controller="doc_ctrl_draft">
+    <div ng-if="(currentItem == null)" >
+        <h5>Welcome to Document Network!</h5>
+        <h6>To start saving your document, click the button below!</h6>
+        <md-button flex
+            class=" m-t-20 col-white bg-green md-raised p-t-20 p-b-20 p-l-10 p-r-10" 
+            ng-click="openAddDraft($event)">
+                <i class="fa fa-plus col-white"></i>
+            Create Document
+        </md-button>
+    </div>
+    
+    <div ng-if="currentItem !== null">
+        <form name="formPublishDocument" >
+
+            <div ng-if="currentItem.template == undefined">No template.. Please Choose a Document Template.</div>
+
+            <strong>Document Template</strong>
+
+            <md-autocomplete
+                class="md-block" 
+                md-selected-item="currentItem.template"
+                md-selected-item-change="setLocal('currentDocTemplate', x);"
+                md-search-text="doc_create_template"
+                md-items="x in document_templates | filter : doc_create_template"
+                md-item-text="x.name"
+                md-min-length="0"
+                placeholder="Search Template">
+                <md-item-template ng-click="updateDocument(currentItem.id,{'template': currentItem.template })">
+                    {{x.name}}
+                </md-item-template>
+            </md-autocomplete>
+            <div ng-if="currentItem.keywords == undefined" ng-init="currentItem.keywords = []"></div>
+            <div ng-if="currentItem.template != undefined" ng-include="currentItem.template.edit"></div>
+
+            <!-- Template -->
+            <!-- <div ng-repeat="x in document_templates" ng-if="currentItem.template == undefined || currentItem.type == undefined">
+                <div  ng-if="currentItem.type == undefined && currentItem.template == undefined && document_templates.length > 0" >
+                    <div ng-if="x.type == document_templates[0].type" ng-include="document_templates[0].edit"></div>
+                </div>
+                <div  ng-if="x.type == currentItem.type" ng-include="x.edit"></div>
+            </div> -->
+            
+            
+            
+            <!-- <div flex-gt-sm ng-init="createdDate = currentItem.created" ng-if="currentItem.type != 'request'">
+                <strong ng-if="currentItem.type == undefined || currentItem.type == 'generic'"> Date A</strong> 
+                <strong ng-if="currentItem.type == 'incoming'"> Correspondence Date</strong> 
+                <strong ng-if="currentItem.type == 'outgoing'"> Date Requested</strong> 
+                <strong ng-if="currentItem.type == 'Back-To-Office-Report'"> Date of Travel</strong> 
+                <strong ng-if="currentItem.type == 'acommplishments'"> Start Date</strong> 
+                <strong ng-if="currentItem.type == 'report'"> Start Date</strong> 
+                <md-datepicker ng-blur="updateDocument(currentItem.id,{'created': to_date(createdDate)})" ng-model="createdDate"
+                    md-placeholder="Date"
+                    md-open-on-focus required>
+                </md-datepicker>
+            </div>
+
+            <div flex-gt-sm ng-init="pdate = currentItem.published">
+                <strong ng-if="currentItem.type == undefined || currentItem.type == 'generic'"> Date B</strong> 
+                <strong ng-if="currentItem.type == 'incoming'"> Date Received</strong> 
+                <strong ng-if="currentItem.type == 'outgoing'"> Date Filed</strong> 
+                <strong ng-if="currentItem.type == 'Back-To-Office-Report'"> Date Returned</strong> 
+                <strong ng-if="currentItem.type == 'acommplishments'"> End Date</strong> 
+                <strong ng-if="currentItem.type == 'report'"> End Date</strong> 
+                <strong ng-if="currentItem.type == 'request'"> Deadline</strong> 
+                <md-datepicker ng-blur="updateDocument(currentItem.id,{'published': to_date(pdate)})" ng-model="pdate"
+                    md-placeholder="Date"
+                    md-open-on-focus required>
+                </md-datepicker>
+            </div>
+
+            <md-input-container class="md-block m-t-40" flex ng-if="currentItem.type == 'incoming'">
+                <label>Source</label>
+                <input ng-blur="updateDocument(currentItem.id,{'source':currentItem.source})" ng-model="currentItem.source" required>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex>
+                <label>Subject</label>
+                <input ng-blur="updateDocument(currentItem.id,{'subject':currentItem.subject})" ng-model="currentItem.subject" required>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex ng-if="currentItem.type == 'request'">
+                <label>Purpose of request</label>
+                <input ng-blur="updateDocument(currentItem.id,{'request_purpose':currentItem.request_purpose})" ng-model="currentItem.request_purpose" required>
+            </md-input-container>
+
+            <div ng-if="currentItem.type == 'request'">
+                <strong> Request Type </strong>
+                <md-autocomplete
+                    class="md-block" flex-gt-sm="100"
+                    md-selected-item="currentItem.request_type"
+                    md-search-text="request_type"
+                    md-search-text-change="currentItem.request_type = request_type"
+                    ng-blur="updateDocument(currentItem.id,{'request_type':currentItem.request_type})"
+                    md-items="x in request_types"
+                    md-item-text="x"
+                    md-min-length="0"
+                    placeholder="Type of request">
+                    <md-item-template>
+                    {{x}}
+                    </md-item-template>
+                </md-autocomplete>
+            </div>
+            <br>
+            <md-input-container class="md-block" flex ng-if="currentItem.type == 'request'">
+                <label>Request Target</label>
+                <input ng-model="currentItem.request_target" ng-blur="updateDocument(currentItem.id,{'request_target':currentItem.request_target})" placeholder="name of person or item" required>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Category</label>
+                <md-select ng-model="currentItem.category">
+                    <md-option ng-repeat="x in doc_user.categories" value="{{x}}" ng-click="updateDocument(currentItem.id,{'category': x})">
+                    {{x}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            
+            <br>
+            <hr>
+
+            <md-input-container class="md-block" ng-if="
+                currentItem.type == 'report' || 
+                currentItem.type == 'Back-To-Office-Report'|| 
+                currentItem.type == 'generic'|| 
+                currentItem.type == 'acommplishments'|| 
+                currentItem.type == undefined|| 
+                currentItem.type == 'request'">
+                <label>Content</label>
+                <textarea  ng-blur="updateDocument(currentItem.id,{'description':currentItem.description})" ng-model="currentItem.description" md-maxlength="5000" rows="6" md-select-on-focus></textarea>
+            </md-input-container>
+
+            <br>
+
+            <strong ng-init="currentItem.keywords = (currentItem.keywords)? currentItem.keywords : []">Keywords</strong>
+            
+            <md-chips ng-model="currentItem.keywords" md-add-on-blur="true" readonly="false"
+                input-aria-label="Keywords" placeholder="add keywords"
+                ng-change="updateDocument(currentItem.id,{'keywords':currentItem.keywords});" md-removable="true"></md-chips> -->
+
+            <hr>
+            <strong>Files</strong>
+
+            <div class="fileDropDiv" layout="column" layout-align="center center"
+                ng-change="upload_file(currentItem.id,file_drop)"
+                ngf-drop ng-model="file_drop"
+                ngf-allow-dir="true"
+                ngf-drag-over-class="'dragover'"
+                multiple="multiple"
+                ngf-multiple="true">
+                
+                <div>
+                    <ol>
+                        <li ng-repeat="x in currentItem.files">
+                            <input ng-model="x.name" ng-blur="updateCleanDocFiles(currentItem.id,currentItem.files)"  type="text" style="width: 90%">
+                            <i class="fa fa-trash col-red pointer" ng-click="deleteDocFile(currentItem.id,x,$event);">
+                                <md-tooltip md-direction="top">Delete File</md-tooltip>
+                            </i>
+                            <i ng-hide="x.opened" class="fa fa-file col-blue pointer" ng-click="x.opened = true;openFile(currentItem.id,x.path,currentItem.files)">
+                                <md-tooltip md-direction="top">Open File</md-tooltip>
+                            </i>
+                            <i ng-show="x.opened" class="fa fa-refresh col-yellow pointer" ng-click="x.opened = false;refreshFile(currentItem.id,x,currentItem.files)">
+                                <md-tooltip md-direction="top">Refresh File</md-tooltip>
+                            </i>
+                            <span class="ellipse font-9 col-white">{{x.url}}</span>
+                            <span ng-hide="checkIfUploaded(x.path)" class="font-10 col-red">not yet uploaded...</span>
+                            <i class="fa fa-check col-green" ng-show="checkIfUploaded(x.path)"></i>
+                        </li>
+                    </ol>
+                </div>
+                
+                <div>
+                    <md-button class="md-button" multiple="multiple" ngf-select="upload_file(currentItem.id,$files)">
+                        <i class="fa fa-upload col-white"></i>
+                        <span class="col-white">Click or Drag files here</span>
+                    </md-button>
+                </div>
+
+            </div>
+
+            <hr>
+            <br>
+            <!-- activated -->
+            
+            <div ng-if="doc_user_agencies.length > 0" 
+                ng-init="currentItem.agency = (currentItem.agency)? currentItem.agency : ((doc_user_agencies.length > 0)? doc_user_agencies[0] : null);
+                current_agency = currentItem.agency.id;">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Agency</label>
+                    <md-select ng-model="current_agency">
+                        <md-option ng-repeat="x in doc_user_agencies" value="{{x.id}}" ng-click="currentItem.agency = x">
+                        {{x.name}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <cite class="col-pink">Published document cannot be edited.</cite>
+            <br>
+            <!-- <cite ng-hide="filesTobeUploaded.length == 0" class="col-red">Publishing will be available after upload complete. {{filesTobeUploaded.length}}</cite> -->
+            <br>
+            <div layout>
+                <!-- not activated -->
+                <span flex ng-if="doc_user_agencies.length == 0">Publishing not Available... Account not yet activated</span>
+                <!-- activated  --> 
+                <div flex ng-if="doc_user_agencies.length > 0 && filesTobeUploaded.length == 0 && currentItem.template != undefined" layout>
+                    <md-button flex ng-class="{'bg-green col-white': (filesTobeUploaded.length == 0) }"  class="md-button" 
+                        ng-click="currentItem.agency = (currentItem.agency)? currentItem.agency : doc_user_agencies[0];publishDraft(currentItem, $event)" layout-sm="column" layout-gt-sm>
+                        <div>
+                            <i class="fa fa-save"></i>
+                            Publish
+                        </div>
+                        <div class="m-l-10">Document</div>
+                    </md-button>
+                </div>
+                <md-button flex=40 class="md-button bg-red col-white" ng-click="deleteDraft(currentItem.id, $event)" layout-gt-sm>
+                    <div>
+                        <i class="fa fa-trash"></i>
+                        Delete
+                    </div> 
+                    <div class="m-l-10">Draft</div>
+                </md-button>
+            </div>
+            
+        </form>
+    </div>
+    <br>
+    <br>
+    <br>
+</div>

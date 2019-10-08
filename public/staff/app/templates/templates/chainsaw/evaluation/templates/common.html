@@ -1,0 +1,36 @@
+
+<strong>Chainsaw Owner/Applicant Information</strong>
+<div layout>
+    <md-input-container flex>
+        <label>Name</label>
+        <input ng-model="n.applicant.name"  ng-blur="n.keywords[0]=n.applicant.name" required>
+    </md-input-container>
+    <md-input-container flex>
+        <label>Address</label>
+        <input ng-model="n.applicant.address" required>
+    </md-input-container>
+</div>
+<strong>Chainsaw Information</strong>
+<div layout>
+    <md-input-container flex>
+        <label>Brand</label>
+        <input ng-model="n.chainsaw.brand" ng-blur="n.keywords[1]=n.chainsaw.brand">
+    </md-input-container>
+    <md-input-container flex>
+        <label>Serial Number</label>
+        <input ng-model='n.chainsaw.serial_number' ng-blur="n.keywords[2]=n.chainsaw.serial_number">
+    </md-input-container>
+    <md-input-container flex>
+        <label>Metal Seal Number</label>
+        <input ng-model="n.chainsaw.metal_seal_number" ng-blur="n.keywords[3]=n.chainsaw.metal_seal_number">
+    </md-input-container><br>
+    <md-input-container flex>
+        <label>Engine Type</label>
+        <input ng-model="n.chainsaw.engine_type" ng-blur="n.keywords[4]=n.chainsaw.engine_type">
+    </md-input-container>
+    <md-input-container flex>
+        <label>Horsepower</label>
+        <input ng-model="n.chainsaw.horsepower" ng-blur="n.keywords[5].horsepower">
+    </md-input-container>
+
+</div>

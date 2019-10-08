@@ -1,0 +1,50 @@
+<div ng-if="application.status < 2" ng-controller="doc_controller" ng-init="
+    doc_network_user = getLocal('doc_user'); application_documents = [];
+    getApplicationDocuments();
+    load_data_requirements();
+    ">
+    
+    <!-- all documents added -->
+    
+    <div ng-if="application_documents.length > 0">
+        
+        <strong>Added Documents</strong>
+        <div>
+            <ol>
+                <li class="pointer " ng-repeat="x in application_documents" ng-click="select_document_for_application($event,x);" ng-if="!x.id || x.status == 'draft' || x.status == 'published'">
+                    <div ng-class="{'col-brown': (x.status == 'draft'), 'col-green': (x.status == 'published')}" >
+                        {{x.subject}} - {{x.status}} 
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+    
+    
+    <div ng-if="doc_network_user != undefined" ng-controller="doc_ctrl_draft" ng-init="
+        
+     ">
+        
+        <hr>
+        <!-- no pending case -->
+        <md-button class="md-button col-black" ng-click="open_create_document_modal($event,no_pending_case_data)">
+            <i class="fa fa-plus col-black"></i>
+            Create Certificate of no-pending case
+        </md-button>
+        <!-- end of no pending case -->
+        <!-- Certificate of Inspection (LTP) -->
+        <div ng-if="application.name == 'Application for Local Transport Permit RFF' || application.name == 'Application for Local Transport Permit AO12'" ng-init="
+        ">
+            <md-button class="md-button col-black" ng-click="open_create_document_modal($event,certificate_of_inspection_data)">
+                <i class="fa fa-plus col-black"></i>
+                Certificate of Inspection (LTP)
+            </md-button>
+        </div>
+        <!-- end Certificate of Inspection (LTP) -->
+        <hr>
+        <!-- modal for creating document -->
+        <div ng-include="application_draft_modal"></div>
+    </div>
+    
+    <div ng-include="application_view_modal"></div>
+</div>

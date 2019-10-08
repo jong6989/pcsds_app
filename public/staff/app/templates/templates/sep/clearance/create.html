@@ -1,0 +1,140 @@
+<div ng-init="n.subject = 'SEP CLEARANCE'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
+<!-- <div ng-controller="SEPController" -->
+	<!-- ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE EXPORT';  	titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; "> -->
+
+	<h3 class="align-center">SEP CLEARANCE</h3>
+	<hr>
+	<md-input-container class="md-block m-t-40">
+		<label>Clearance Number</label>
+		<input ng-model="n.clearance_number" ng-blur="n.keywords[0]=n.clearance_number" required>
+	</md-input-container>
+	<br>
+
+	<div layout>
+		<md-input-container flex>
+			<label>Name of Project</label>
+			<input ng-model="n.project.name" ng-blur="n.keywords[1]=n.project.name" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Project Location (Street, Sitio, Barangay, Municipality)</label>
+			<input ng-model="n.project.location" ng-blur="n.keywords[2]=n.project.location" required>
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>Name of Proponent</label>
+			<input ng-model="n.proponent.name" ng-blur="n.keywords[3]=n.proponent.name" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Address of Proponent</label>
+			<input ng-model="n.proponent.address" ng-blur="n.keywords[4]=n.proponent.address" required>
+		</md-input-container>
+	</div>
+
+
+	<div layout>
+		<md-input-container>
+			<md-datepicker ng-model="date_issued" ng-change="n.date_issued=to_date(date_issued)"
+				md-placeholder="Date Issued" required>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+			<label>Paid amount</label>
+			<input ng-model="n.paid_amount">
+		</md-input-container>
+		<md-input-container flex>
+			<label>OR Number</label>
+			<input ng-model="n.paid_or_number">
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker ng-model="paid_date" ng-change="n.paid_date=to_date(paid_date)"
+				md-placeholder="Date of Payment" md-open-on-focus>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<br>
+	<div class="align-center">TERMS AND CONDITIONS</div>
+	<ol ng-init="n.terms=['']">
+		<li ng-repeat="term in n.terms track by $index">
+			<md-input-container flex>
+				<textarea ng-model="n.terms[$index]" style="width:1000px" required></textarea>
+			</md-input-container>
+			<md-button class="md-fab md-mini" aria-label="Remove this row" ng-click="n.terms.splice($index, 1)"
+				ng-if="n.terms.length > 1">
+				<md-tooltip md-direction="left">Remove</md-tooltip>
+				<i class="fa fa-remove"></i>
+			</md-button>
+		</li>
+	</ol>
+	<md-button ng-click="n.terms.push('')" class="md-primary md-raised">Add Term/Condition</md-button>
+	<br>
+	<strong>PREVIEW</strong>
+	<br>
+	<p>
+		<div class="align-center">
+			{{ n.line1 = 'SEP CLERANCE'}}<br>
+			{{n.line2 = n.clearance_number}}
+		</div>
+
+	</p>
+	<br>
+	<p>
+		{{ n.line3 = 'Pursuant to the mandate of the Palawan Council for Sustainable Development (PCSD) under ' +
+		'Republic Act 7611 and concurred by the Department of Environment and Natural Resources (DENR) as provided' + 
+		'in its Memorandum of Agreement with PCSD dated 29 December 1994, this SEP Clearance is issued to: '}}
+	</p>
+	<p>
+		<span class="m-l-50"></span>
+		<div ng-init="titles=['Name of Project', 'Project Location (Street, Sitio, Barangay, Municipality)',
+			'Name of Proponents', 'Address of Proponent']"></div>
+		<div class="align-center" ng-repeat="x in [1, 3, 5, 7]">
+			<div
+				style="border:1px solid; padding-top:25px; padding-bottom: 25px; margin-left:100px; margin-right: 100px">
+				{{n['line'+(x+3)] = n.keywords[$index+1]}}
+			</div>
+			<div>{{n['line'+(x+4)] = titles[$index]}}</div><br>
+		</div>
+
+	</p>
+	<p>
+		{{
+			n.line12 = 'This Clearance is issued this ' + to_day_of_month(n.date_issued) + ' day of ' + 
+			get_full_month_name(n.date_issued) + ', ' + to_year(n.date_issued) + ' in Puerto Princesa City.'
+		}}
+	</p>
+	<p>
+		<div layout>
+			<div style="width:60%">&nbsp;</div>
+			<div>
+				<br><br><br>
+				{{n.line13=pcsd.head.full_name.toUpperCase()}}<br>
+				{{n.line14=pcsd.head.position.toUpperCase()}}
+			</div>
+		</div>
+	</p>
+	<p>
+		<div>
+			{{n.line15 = 'PAID UNDER O.R. NO. ' + n.paid_or_number}}<br>
+			{{n.line16 = 'AMOUNT PAID: Php ' + (n.paid_amount | number:2) }}<br>
+			{{n.line17 = 'DATE OF PAYMENT: ' + get_full_date(n.paid_date)}}
+		</div>
+	</p>
+	<br>
+	<p>
+		{{n.line18='This Clearance is issued this ' +  to_day_of_month(n.date_issued) + ' day of ' + 
+		get_full_month_name(n.date_issued) + ' ' + to_year(n.date_issued) + ' in Puerto Princesa City.'}}
+	</p>
+	<p>
+		<div class="align-center">
+			{{n.line19='Not valid without PCSD official seal.'}}<br>
+			{{n.line20='(PLEASE SEE AT THE BACK PAGE THE TERMS AND CONDITIONS OF THIS CERTIFICATE OF REGISTRATION)'}}
+		</div>
+
+	</p>
+</div>

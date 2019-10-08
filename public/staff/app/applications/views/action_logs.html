@@ -1,0 +1,19 @@
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="search_log_box"> <i class="fa fa-search"></i> </span>
+    </div>
+    <input class="form-control" ng-model="search_log" placeholder="Search Log" aria-label="Search Log" aria-describedby="search_log_box">
+</div>
+<md-list class="md-dense" >
+<md-list-item class="md-3-line" ng-repeat="x in log_list | orderBy:'-date' | filter : search_log track by x.date" 
+    ng-click="open_receipt_tab(x.message,x.date);closeChatNav();">
+    <div class="md-list-item-text" layout="column">
+        <p>
+            {{x.message}}
+        </p>
+        <h4>{{ x.date | date }}</h4>
+        <md-divider></md-divider>
+    </div>
+</md-list-item>
+<hr>
+</md-list>

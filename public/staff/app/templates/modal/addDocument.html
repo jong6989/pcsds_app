@@ -1,0 +1,38 @@
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="addDocument">
+        <md-dialog layout="column" layout-align="center center">
+            <form ng-cloak name="form_add_draft" >
+                <md-toolbar class="bg-teal">
+                    <div class="md-toolbar-tools">
+                        <h2>Add document to application</h2>
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-click="close_dialog()">
+                            <i class="fa fa-times col-white"></i>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                
+                <md-dialog-content layout-padding class="p-b-20">
+                    
+                    <hr>
+                    <div ng-include="n.template.create"></div>
+                    
+                    <hr>
+                </md-dialog-content>
+            
+                <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="close_dialog()">
+                    Close
+                </md-button>
+                <md-button class="md-primary md-raised" 
+                ng-disabled="form_add_draft.$invalid || n.template == {} || n.template == undefined" 
+                    ng-click="addDrafttoApplication(n,$event);">
+                    Save
+                </md-button>
+                </md-dialog-actions>
+            </form>
+
+        </md-dialog>
+    </div>
+</div>

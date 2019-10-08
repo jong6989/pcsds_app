@@ -1,0 +1,68 @@
+<div style="visibility: hidden">
+        <div class="md-dialog-container" id="editDocument">
+            <md-dialog layout="column" layout-align="center center">
+                <form ng-cloak name="form_add_draft" ng-controller="doc_ctrl_draft">
+                    <md-toolbar class="bg-teal">
+                        <div class="md-toolbar-tools">
+                            <h2>Edit and publish document</h2>
+                            <span flex></span>
+                            <md-button class="md-icon-button" ng-click="close_dialog()">
+                                <i class="fa fa-times col-white"></i>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
+                    
+                    <md-dialog-content layout-padding class="p-b-20">
+                        
+                        <hr>
+                        <div ng-include="currentItem.template.edit"></div>
+                        
+                        <hr>
+                        <div ng-if="doc_user_agencies.length > 0" 
+                            ng-init="currentItem.agency = (currentItem.agency)? currentItem.agency : ((doc_user_agencies.length > 0)? doc_user_agencies[0] : null);
+                            current_agency = currentItem.agency.id;">
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Agency</label>
+                                <md-select ng-model="current_agency">
+                                    <md-option ng-repeat="x in doc_user_agencies" value="{{x.id}}" ng-click="currentItem.agency = x">
+                                    {{x.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <hr>
+                        <div layout>
+                            <!-- not activated -->
+                            <span flex ng-if="doc_user_agencies.length == 0">Publishing not Available... Account not yet activated</span>
+                            <!-- activated  --> 
+                            <div flex ng-if="doc_user_agencies.length > 0 && filesTobeUploaded.length == 0 && currentItem.template != undefined" layout>
+                                <md-button flex ng-class="{'bg-green col-white': (filesTobeUploaded.length == 0) }"  class="md-button" 
+                                    ng-click="currentItem.agency = (currentItem.agency)? currentItem.agency : doc_user_agencies[0];publishDraft(currentItem, $event)" layout-sm="column" layout-gt-sm>
+                                    <div>
+                                        <i class="fa fa-save"></i>
+                                        Publish
+                                    </div>
+                                    <div class="m-l-10">Document</div>
+                                </md-button>
+                            </div>
+                            <md-button flex=40 class="md-button bg-red col-white" ng-click="deleteDraft(currentItem.id, $event)" layout-gt-sm>
+                                <div>
+                                    <i class="fa fa-trash"></i>
+                                    Delete
+                                </div> 
+                                <div class="m-l-10">Draft</div>
+                            </md-button>
+                        </div>
+                    </md-dialog-content>
+                
+                    <md-dialog-actions layout="row">
+                    <span flex></span>
+                    <md-button ng-click="close_dialog()">
+                        Close
+                    </md-button>
+                    </md-dialog-actions>
+                </form>
+    
+            </md-dialog>
+        </div>
+    </div>

@@ -224,6 +224,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
   if(storedAccount){
     //staff account
     $scope.account = JSON.parse(storedAccount);
+    $scope.user = $scope.account;
     if($location.path() == '/'){
       $location.path($scope.account.menu[0].path);
     }
