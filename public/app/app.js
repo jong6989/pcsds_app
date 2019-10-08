@@ -574,12 +574,16 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
     //   $scope.user = $localStorage.brain_app_user;
     //   startUp(id);
     // }
+    if($localStorage.brain_app_user){
+      $location.path("/pages/dashboard");
+    }
     db.collection('profile').doc(id).onSnapshot( (doc)=>{
       let d = doc.data();
       d.id = doc.id;
       let user = {data : d, "id": id};
       $scope.user = user;
       startUp(id);
+
       if(!$localStorage.brain_app_user){
         $location.path("/pages/dashboard");
         setTimeout(()=>{ location.reload();},500);

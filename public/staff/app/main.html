@@ -1,0 +1,91 @@
+
+<div layout="column" style="height:{{get_window_height()}}px;">
+
+	<md-toolbar md-scroll-shrink="" ng-if="true" class="bg-grey"  >
+	    <div class="md-toolbar-tools">
+	        <md-button ng-click="toggleLeft()" hide-gt-md class="md-icon-button" aria-label="RightSide" >
+	          <i class="fa fa-bars"></i>
+	        </md-button>
+			<h2 flex="" md-truncate="" class="">{{page_title}}</h2>
+					<md-button ng-click="toggleRight()" ng-hide="isOpenRight()" class="md-icon-button animated infinite " ng-class="{'swing' : false }" aria-label="Notifications and News">
+						<i class="fa fa-envelope"></i>
+	        </md-button>
+	    </div>
+	</md-toolbar>
+
+
+	<section layout="row" flex style="position: relative;">
+
+		<md-sidenav layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4" >
+
+			
+			<md-content flex layout="column" >
+
+				<div  layout="row" class="bg-black" layout-padding="20">
+					<div flex="70" layout="column">
+						<div class="font-16">{{ account.name }}, {{account.phone}}</div>
+						<div class="font-14">{{ account.designation }}</div>
+						<md-button ng-click="logout()" class="font-10 m-b--10 col-yellow" aria-label="Log-out">
+							<strong>Log-out</strong>
+						</md-button>
+					</div>
+				</div>
+				
+                <md-list flex>
+                    <div ng-repeat="x in account.menu" ng-init="account.menu[$index].toggle = false">
+                        <md-list-item ng-if="x.path" ng-click="set_path(x.path)" ng-disabled="is_path(x.path)">
+                            <i class="fa {{ 'fa-' + x.icon}} m-r-10"></i>
+                            <span flex ng-class="{ 'col-grey': is_path(x.path) }">{{x.title}}</span>
+                        </md-list-item>
+                        <md-list-item ng-if="!x.path" ng-click="account.menu[$index].toggle = !account.menu[$index].toggle">
+                            <i class="fa {{ 'fa-' + x.icon}} m-r-10"></i>
+                            <span flex>{{x.title}}</span>
+                            <md-icon ng-show="!account.menu[$index].toggle" >expand_more</md-icon>
+                            <md-icon ng-show="account.menu[$index].toggle" >expand_less</md-icon>
+                        </md-list-item>
+                        <div ng-show="account.menu[$index].toggle">
+                            <md-list-item ng-repeat="sub in x.menu" ng-click="set_path(sub.path)" ng-disabled="is_path(sub.path)" ng-class="{ 'col-grey': is_path(sub.path) }">
+                                <span flex-offset="5" >
+                                    <i class="fa {{ 'fa-' + x.icon}} m-r-20"></i>
+                                    {{sub.title}}
+                                </span>
+                            </md-list-item>
+                        </div>
+                        
+                    </div>
+
+                </md-list>
+
+			</md-content>
+
+		</md-sidenav>
+
+		<!-- main content -->
+		<div flex layout-padding class="bg-light-grey" >
+			<md-content md-whiteframe="3" layout-padding="20" layout="column" ng-style="{ height: (iframeHeight - 80) + 'px' }">
+				<div ng-view></div>
+			</md-content>
+		</div>
+
+			
+		<!-- right side bar -->
+
+		<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right" >
+
+			<md-toolbar md-scroll-shrink="" ng-if="true" >
+					<div class="md-toolbar-tools bg-black">
+							<h2 class="align-center" flex="" md-truncate="" >Notifications</h2>
+					</div>
+			</md-toolbar>
+
+			<div layout-padding="10"  class="m-t--15" style="height:{{get_window_height() - 160}}px">
+				
+				
+
+			</div>
+
+		</md-sidenav>
+	</section>
+
+
+</div>

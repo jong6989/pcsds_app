@@ -366,7 +366,7 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     $http.get("./json/permitting/templates.json").then(function(data){
         $scope.application_templates = data.data.data; 
     });
-    
+
     $scope.load_db = (status)=>{
         let s = `${status}`;
         fire.db.transactions.query.where("status", "==", s)
