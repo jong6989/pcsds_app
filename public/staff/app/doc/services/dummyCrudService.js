@@ -1,4 +1,4 @@
-var XLSX = require('xlsx');
+// var XLSX = require('xlsx'); // not needed on web
 myAppModule.
 service('dummyCrudService', function(){
     let items = [];

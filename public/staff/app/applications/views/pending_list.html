@@ -1,0 +1,15 @@
+<strong class="md-title align-center bg-grey" layout-padding> My Pending </strong>
+<md-content flex ng-class="{'bg-pink':(pending_list.length > 0)}">
+    <md-list class="md-dense" >
+        <md-list-item class="md-3-line" ng-repeat="x in pending_list | orderBy:'-date' track by $index" 
+            ng-click="open_application_tab(x)">
+            <img ng-src="{{x.user.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
+            <div class="md-list-item-text" layout="column">
+                <h3 class="col-white">{{ x.user.full_name }}</h3>
+                <h4 class="col-white">{{ x.name }}</h4>
+                <p class="col-white">{{x.date | date}}, #{{x.date}} </p>
+            </div>
+            <md-divider></md-divider>
+        </md-list-item>
+    </md-list>
+</md-content>

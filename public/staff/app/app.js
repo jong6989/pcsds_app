@@ -1,6 +1,6 @@
 'use strict';
 var myAppModule = {};
-myAppModule = angular.module('brain_app', ['ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute']);
+myAppModule = angular.module('brain_app', ['ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute','ngFileUpload','ngTable']);
 
 myAppModule
 .config(function($routeProvider, $locationProvider) {
@@ -13,7 +13,7 @@ myAppModule
 
 })
 
-myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, $mdDialog, $route, $routeParams, $location) {
+myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, $mdDialog, $route, $routeParams, $location, NgTableParams) {
   $scope.$route = $route;
   $scope.$routeParams = $routeParams;
   $scope.$location = $location;
@@ -29,6 +29,11 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
 
   $scope.to_date = function(d){
     return $filter('date')(d, "yyyy-MM-dd");
+  };
+
+  $scope.ngTable = function(d,c){
+    if(c == undefined) c=100;
+    return new NgTableParams({count:c}, { dataset: d});
   };
 
   $scope.to_int = (n)=>{
@@ -221,14 +226,18 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
 
   $scope.current_view = localData.get('staff_current_view');
   let storedAccount = localData.get('STAFF_ACCOUNT');
-  if(storedAccount){
-    //staff account
-    $scope.account = JSON.parse(storedAccount);
-    $scope.user = $scope.account;
-    if($location.path() == '/'){
-      $location.path($scope.account.menu[0].path);
+  function load_dashboard_page(){
+    if(storedAccount){
+      //staff account
+      $scope.account = JSON.parse(storedAccount);
+      $scope.user = $scope.account;
+      if($location.path() == '/'){
+        $location.path($scope.account.menu[0].path);
+      }
     }
   }
+  load_dashboard_page();
+  $timeout( load_dashboard_page ,500);
 
   $scope.set_path = (path)=>{
     $location.path(path);

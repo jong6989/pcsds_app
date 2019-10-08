@@ -1,24 +1,33 @@
-<md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="update_user({'badges.personal_chat':0});toggleChatNav(1,'Personnal Chats');">
-    <md-tooltip md-direction="left">Personnal Chats</md-tooltip>
-<i class="fa fa-comments-o"></i>
-<span class="badge badge-pill badge-danger" ng-if="me.badges.personal_chat > 0">{{me.badges.personal_chat}}</span>
-</md-button>
-<md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="update_user({'badges.group_chat':0});toggleChatNav(2,'Group Chat');">
-<md-tooltip md-direction="left">Group Chat</md-tooltip>
-<i class="fa fa-users"></i>
-<span class="badge badge-pill badge-danger" ng-if="me.badges.group_chat > 0">{{me.badges.group_chat}}</span>
-</md-button>
-<md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="toggleChatNav(3,'Client Chats')">
-<md-tooltip md-direction="left">Client Chats</md-tooltip>
-<i class="fa fa-commenting-o"></i>
-<span class="badge badge-pill badge-danger" ng-if="client_chat_count > 0">{{client_chat_count}}</span>
-</md-button>
-<md-button class="md-fab md-mini bg-teal" aria-label="Logs" ng-click="toggleChatNav(4,'Action Logs')">
-<md-tooltip md-direction="left">Action Logs</md-tooltip>
-<i class="fa fa-history"></i>
+<md-button class="md-fab md-mini bg-blue" aria-label="Application List" ng-click="setContent('./app/applications/views/application_list.html')">
+    <md-tooltip md-direction="left">Application List</md-tooltip>
+    <i class="fa fa-list"></i>
 </md-button>
 
+<md-button class="md-fab md-mini bg-red" aria-label="Pending List" ng-click="setContent('./app/applications/views/pending_list.html')">
+    <md-tooltip md-direction="left">Pending Applications</md-tooltip>
+    <i class="fa fa-list"></i>
+</md-button>
+
+<md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="update_user({'badges.personal_chat':0});toggleChatNav(1,'Personnal Chats');">
+    <md-tooltip md-direction="left">Personnal Chats</md-tooltip>
+    <i class="fa fa-comments-o"></i>
+    <span class="badge badge-pill badge-danger" ng-if="me.badges.personal_chat > 0">{{me.badges.personal_chat}}</span>
+</md-button>
+
+<md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="toggleChatNav(3,'Client Chats')">
+    <md-tooltip md-direction="left">Client Chats</md-tooltip>
+    <i class="fa fa-commenting-o"></i>
+    <span class="badge badge-pill badge-danger" ng-if="client_chat_count > 0">{{client_chat_count}}</span>
+</md-button>
+
+<md-button class="md-fab md-mini bg-teal" aria-label="Logs" ng-click="toggleChatNav(4,'Action Logs')">
+    <md-tooltip md-direction="left">Action Logs</md-tooltip>
+    <i class="fa fa-history"></i>
+</md-button>
+
+
 <!-- datasets -->
+<!-- 
 <md-menu-bar ng-controller="database_permit_controller" ng-show="validate_user([4,5,6,7,8])">
 <md-menu>
     <md-button class="md-fab md-mini bg-teal" aria-label="Datasets" ng-click="$mdMenu.open($event)">
@@ -51,5 +60,5 @@
             </md-button>
         </md-menu-item>
     </md-menu-content>
-</md-menu>
+</md-menu> -->
 </md-menu-bar>
