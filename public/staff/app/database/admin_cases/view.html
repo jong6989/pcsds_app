@@ -1,0 +1,31 @@
+
+<div ng-controller="database_admin_cases_controller" ng-init="set_page_title('PAB Admin Cases'); new_case = { data : { status : {} } }">
+    <form name="form_new_admin_case">
+        <md-input-container>
+            <label>Case No.</label>
+            <input ng-model="new_case.case_no" required>
+        </md-input-container>
+
+        <div flex-gt-xs>
+            <h4>Date Filed</h4>
+            <md-datepicker ng-model="new_case.date_filed" md-placeholder="Enter date" md-open-on-focus  required></md-datepicker>
+        </div>
+
+        <md-input-container>
+            <label>Violation</label>
+            <md-autocomplete
+                md-selected-item="new_case.data.violation"
+                md-items="item in list_admin_cases"
+                md-item-text="item.name"
+                md-min-length="1"
+                placeholder="Admin Order"
+                input-aria-labelledby="Admin Order"
+                required
+                >
+            <md-item-template>
+        </md-input-container>
+
+        <md-button type="submit" ng-disabled="form_new_admin_case.$invalid" class="md-raised md-primary">Add</md-button>
+
+    </form>
+</div>

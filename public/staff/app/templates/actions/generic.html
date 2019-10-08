@@ -1,0 +1,103 @@
+
+<md-card
+    ng-change="upload_attachments(file_drop)"
+    ngf-drop ng-model="file_drop"
+    ngf-allow-dir="true"
+    ngf-drag-over-class="'dragover'"
+    multiple="true"
+    >
+
+    <md-card-title>
+        <h5>Remarks</h5>
+        <md-divider></md-divider>
+    </md-card-title>
+    <md-card-content>
+        <div ng-if="application.actions.length > 0"  ng-repeat="x in application.actions track by $index ">
+            <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{x.date | date: 'yyyy-MM-dd HH:mm:ss'}} </cite> </strong>
+            <div class="m-l-40"><span class="{{'convo_' + $index }}" ></span></div>
+            <div class="{{'image_holder_'+$index}}"></div>
+            <i ng-init="load_html(x.message,'convo_'+$index);extract_images_from_html('convo_'+$index,'image_holder_'+$index,2000)"></i>
+            <hr>
+        </div>
+
+        <div>
+            <form name="form_add_tread">
+                <div layout="row">
+                    <textarea flex accept-charset="ISO-8859-1" ng-model="add_tread_message[''+application.id]" rows="2" placeholder="my action/remark"></textarea>
+                </div>
+                <md-button type="submit" ng-disabled="add_tread_message[''+application.id] == undefined || is_loading" ng-click="add_tread(application.id,add_tread_message[''+application.id]);" class="md-raised" >
+                    <cite class="font-12"> <i class="fa fa-send"></i> Send Action</cite>
+                </md-button>
+            </form>
+            <md-progress-linear md-mode="indeterminate" ng-show="uploading_file"></md-progress-linear>
+            <md-button class="md-raised font-12"  ng-hide="uploading_file" ngf-select="upload_attachments($files,application.id)">
+                <cite class="font-10"> <i class="fa fa-upload"></i> upload attachments</cite>
+            </md-button>
+        </div>
+        
+    </md-card-content>
+</md-card>
+
+<div ng-if="application.status == 0">
+        <md-button class="md-warn md-raised" ng-dblclick="rejectApplication(application,$event)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Reject
+        </md-button>
+        <md-button class="md-primary md-raised" ng-if="application.status == 0" ng-dblclick="receive_single(application)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Receive
+        </md-button>    
+    </div>
+    
+
+<div ng-if="validate_user([99,5]) && application.status == 1 ">
+    <md-button class="md-raised md-warn" ng-if="application.status == 1" ng-disabled="application_loading" ng-dblclick="rejectApplication(application,$event)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Reject
+    </md-button>
+    <md-button class="md-raised md-primary" ng-disabled=" application_loading "  ng-dblclick="acceptApplication(application,$event)">
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Process
+    </md-button>
+</div>
+
+<!-- approval -->
+<div ng-show="validate_user([99,7]) && application.status == 3">
+    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-dblclick="rejectApplication(application,$event)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Reject</md-button>
+    <md-button class="md-raised " ng-disabled="application_loading" ng-dblclick="returnApplication(application,$event,5,1)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Return</md-button>
+    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-dblclick="approveApplication(application,$event)">
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Reviewed</md-button>
+</div>
+
+<!-- Recomendation -->
+<div ng-if="validate_user([99,8]) && application.status == 4">
+    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-dblclick="rejectApplication(application,$event)" > 
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            <i class="fa fa-remove"></i> Reject</md-button>
+    <md-button class="md-raised " ng-disabled="application_loading" ng-dblclick="returnApplication(application,$event,7,3)" > 
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            <i class="fa fa-mail-reply"></i> Return</md-button>
+    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-dblclick="recommendApplication(application,$event)"> 
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            <i class="fa fa-mail-forward"></i> Recommend</md-button>
+</div>
+
+<!-- Acknowledgement -->
+<div ng-if="validate_user([99,4]) && application.status == 5">
+    <md-button class="md-raised md-warn" ng-disabled="application_loading" ng-dblclick="rejectApplication(application,$event)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Reject</md-button>
+    <md-button class="md-raised " ng-disabled="application_loading" ng-dblclick="returnApplication(application,$event,8,4)" >
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Return</md-button>
+    <md-button class="md-raised md-primary" ng-disabled="application_loading" ng-dblclick="acknowledgeApplication(application,$event)">
+            <md-tooltip md-direction="top">Double click</md-tooltip>
+            Approve</md-button>
+</div>
+
+<md-progress-circular ng-show="application_loading" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>

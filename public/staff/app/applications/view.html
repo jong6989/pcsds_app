@@ -1,0 +1,11 @@
+<md-content layout="row" style="padding: 5px; height:{{get_window_height() }}px; width: 100%; " ng-controller="applications_controller" 
+    ng-init="load_db(0);active_btn = 'New';load_pending(); set_page_title('Online Permitting');">
+    <!-- ng-style="{ height: (iframeHeight - 48) + 'px' }" -->
+    <div ng-include="activeContent" layout="column" flex ></div>
+
+    <div layout="column" layout-align="center center" ng-include="'./app/applications/views/sideFavs.html'"></div>
+
+    <div ng-include="'./app/applications/views/right_side.html'"></div>
+
+    <!-- modal -->
+</md-content>

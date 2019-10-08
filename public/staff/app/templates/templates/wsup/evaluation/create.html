@@ -1,0 +1,159 @@
+<div
+	ng-init="n.subject = 'WILDLIFE SPECIAL USE PERMIT EVALUATION FORM'; 
+	titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
+
+	<h3 class="align-center">WILDLIFE SPECIAL USE PERMIT EVALUATION FORM</h3>
+	<hr>
+
+	<strong>Applicant Information</strong>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>First Name</label>
+			<input ng-model="n.applicant.first_name" 
+				ng-blur="n.keywords[0]=n.applicant.first_name" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Middle Name</label>
+			<input ng-model="n.applicant.middle_name">
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Last Name</label>
+			<input ng-model="n.applicant.last_name" ng-blur="n.keywords[1]=n.applicant.first_name" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Residence Address</label>
+			<input ng-model="n.applicant.residence_address" ng-blur="n.keywords[2]=n.applicant.residence_address || ''">
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Business Address</label>
+			<input ng-model="n.applicant.business_address" ng-blur="n.keywords[3]=n.applicant.business_address || ''">
+		</md-input-container>
+		<input type="hidden"
+			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
+	</div>
+	<div>
+		<md-input-container class="md-block" >
+			<label>Application Type</label>
+			<md-select ng-model="n.application_type" required>
+				<md-option ng-repeat="x in ['AO5', 'AO12', 'SEP', 'SUP', 'SUP+']" value="{{x}}">
+				{{x}}
+				</md-option>
+			</md-select>
+		</md-input-container>
+	</div>
+	<strong>Submitted Requirements</strong>
+	<div ng-init="requirements=['Application form with 2”x2” photo of applicant',
+		'Letter of Commitment',
+		'Mayor\'s Permit',
+		'Barangay Business Clearance',
+		'Certification from PCSDS that aaplicant has no pending case',
+		'Permit Fee']; n.submitted_requirements=[]">
+		<div ng-repeat="requirement in requirements">
+			<md-checkbox  ng-click="toggle(requirement)" >
+				{{requirement}}
+			</md-checkbox><br>
+		</div>
+		
+	</div>
+	<div>
+		<md-input-container style="width:60%">
+			<label>Evaluation</label>
+			<textarea ng-model="n.evaluation" ></textarea>
+		</md-input-container><br>
+		<md-input-container style="width:60%">
+			<label>Recommendations</label>
+			<textarea ng-model="n.recommendation"></textarea>
+		</md-input-container>
+	</div>
+
+	<div>
+		<md-input-container>
+			<label>Date Prepared:</label>
+			<md-datepicker ng-model="n.date_prepared"></md-datepicker>
+		</md-input-container>
+	</div>
+	<div>
+		<md-input-container>
+			<label>Prepared by:</label>
+			<input ng-model="n.prepared_by.name">
+		</md-input-container>
+		<md-input-container>
+			<label>Designation</label>
+			<input ng-model="n.prepared_by.designation">
+		</md-input-container>
+	</div>
+	<div>
+		<md-input-container>
+			<label>Noted by:</label>
+			<input ng-model="n.noted_by.name">
+		</md-input-container>
+		<md-input-container>
+			<label>Designation</label>
+			<input ng-model="n.noted_by.designation">
+		</md-input-container>
+	</div>
+
+	<hr>
+	<br>
+	<strong>PREVIEW</strong>
+	<br><br>
+	<p style="text-align:center; font-size: 20px; background-color: dimgray">
+		{{ n.line1 = 
+			'EVALUATION FORM'
+		}}
+		<br>
+		{{ n.line2 = "Application for Wildlife Special Use Permit for Trader/s of Reef-Fish-for-Food"}}
+	</p>
+
+	<p>
+		{{ n.line3 = 'Applicant Name: ' + n.applicant.full_name }}
+	</p>
+	<p>
+		{{ n.line4 = 'Residence Address: ' + n.applicant.residence_address }}
+	</p>
+	<p>
+		{{ n.line5 = 'Business Address: ' + n.applicant.business_address }}
+	</p>
+	<p>
+		{{ n.line6 = 'Application Type: ' + n.application_type }}
+	</p>
+	<p>
+		{{ n.line7 = 'Submitted Requirements: '}}
+	</p>
+	<p>
+		<div ng-repeat="requirement in n.submitted_requirements">{{requirement}}</div>
+	</p>
+
+	<p>
+		{{n.line8 = 'Field and Technical Evaluation: '}}
+	</p>
+	<p>
+		{{ n.line9 = n.evaluation}}
+	</p>
+	<p>
+		{{n.line10 = 'Recommendations: '}}
+	</p>
+	<p>
+		{{n.line11 = n.recommendation}}
+	</p>
+	<p>
+		{{n.line12 = 'Date: ' + get_full_date(n.date_prepared)}}
+	</p>
+	<p>
+		{{n.line13 = 'Prepared by:'}}
+	</p>
+	<p>
+		{{n.line14 = n.prepared_by.name}}
+		<br>
+		{{n.line15 = n.prepared_by.designation}}
+	</p>
+	</p>
+	<p>
+		{{n.line16 = 'Noted by:'}}
+	</p>
+	<p>
+		{{n.line17 = n.noted_by.name}}
+		<br>
+		{{n.line18 = n.noted_by.designation}}
+	</p>
+</div>

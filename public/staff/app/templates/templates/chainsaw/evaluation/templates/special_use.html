@@ -1,0 +1,32 @@
+<div ng-init="
+    n.items['Special Use Permit']= [
+    { label: 'Owner of Planted Trees/Representative', model_name: 'borrower_name'},
+    { label: 'Chainsaw Registration Number', model_name: 'chainsaw_registration_number'},
+    { label: 'Place of Origin', model_name: 'place_of_origin', },
+    { label: 'Place of Destination', model_name: 'place_of_destination'},
+    { label: 'Purpose', model_name: 'purpose'}
+        ];
+"></div>
+<div layout>
+    <md-input-container flex>
+        <label>Owner of Planted Trees/Representative</label>
+        <input ng-model='n.borrower_name'>
+    </md-input-container>
+    <md-input-container flex>
+        <label>Chainsaw Registration Number</label>
+        <input ng-model="n.chainsaw_registration_number">
+    </md-input-container>
+
+    <md-input-container flex>
+        <label>Place of Origin</label>
+        <input ng-model="n.place_of_origin">
+    </md-input-container><br>
+    <md-input-container flex>
+        <label>Place of Destination</label>
+        <input ng-model="n.place_of_destination">
+    </md-input-container>
+    <md-input-container flex>
+        <label>Purpose</label>
+        <textarea ng-model="n.purpose"></textarea>
+    </md-input-container>
+</div>

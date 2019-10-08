@@ -1,0 +1,38 @@
+<div ng-controller="pcsd_database_controller" ng-init="set_page_title('Data Sets');" 
+    layout="column"  style="height: {{iframeHeight - 60}}px">
+
+    <md-nav-bar
+      md-no-ink-bar="true"
+      md-selected-nav-item="currentNavItem"
+      nav-bar-aria-label="navigation links">
+      <md-nav-item md-nav-click="null" name="Statistics">
+        Statistics
+      </md-nav-item>
+      <md-nav-item md-nav-click="null" name="WSUP">
+        WSUP
+      </md-nav-item>
+      <md-nav-item md-nav-click="null" name="Apprehension">
+        Apprehension
+      </md-nav-item>
+      <md-nav-item md-nav-click="null" name="Chainsaw Registration">
+        Chainsaw Registration
+      </md-nav-item>
+      <md-nav-item md-nav-click="null" name="ChainsawPermitToPurchase">
+        Permit to Purchase Chainsaw
+      </md-nav-item>
+      <md-nav-item md-nav-click="null" name="ChainsawPermitToSell">
+          Permit to Sell Chainsaw
+      </md-nav-item>
+      <md-nav-item md-nav-click="null" name="CriminalCases">
+          Criminal Cases
+      </md-nav-item>
+    </md-nav-bar>
+
+   <div flex ng-include="'./app/database/views/graphs.html'" ng-show="currentNavItem == 'Statistics'"></div>
+   <div flex ng-include="'./app/database/views/wsup.html'" ng-show="currentNavItem == 'WSUP'"></div>
+   <div flex ng-include="'./app/database/views/apprehension.html'" ng-show="currentNavItem == 'Apprehension'"></div>
+   <div flex ng-include="'./app/database/views/chainsaw.html'" ng-show="currentNavItem == 'Chainsaw Registration'"></div>
+   <div flex ng-include="'./app/database/views/chainsawPurchasePermit.html'" ng-show="currentNavItem == 'ChainsawPermitToPurchase'"></div>
+   <div flex ng-include="'./app/database/views/chainsawSellPermit.html'" ng-show="currentNavItem == 'ChainsawPermitToSell'"></div>
+   <div flex ng-include="'./app/database/views/criminalCases.html'" ng-show="currentNavItem == 'CriminalCases'"></div>
+</div>

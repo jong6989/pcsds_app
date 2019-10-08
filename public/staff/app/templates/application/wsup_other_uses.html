@@ -1,0 +1,161 @@
+<div ng-include="'./app/templates/application/style.html'"></div>
+
+<!-- <div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div> -->
+<div class="p-t-20 p-l-10" ng-controller="WSUPOtherUsesController" ng-init="set_application($localStorage.params);">
+        <div layout="row">
+            <div flex layout-gt-xs="row" layout-xs="column">
+                <div flex flex-gt-xs="15" layout-align="center center">
+                    <img src="/images/pcsdlogo.png" class="p-t-5" style="width:100%;">
+                </div>
+                <div flex layout-align="center" class="m-l-20">
+                    <h5><strong>Republic of the Philippines</strong> <br>
+                        <small>Republic Act 7611</small><br>
+                        <small>PALAWAN COUNCIL for SUSTAINABLE DEVELOPMENT STAFF</small>
+                    </h5>
+                </div>
+            </div>
+            <div>
+                <img  ng-src="{{ application.data.application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3">
+            </div>
+        </div>
+        <div class="align-center m-t-20 m-b-10">
+            <h4 >ANNEX C</h4>
+            <div>Republic of the Philippines</div>
+            <div>Palawan Council for Sustainable Development</div>
+        </div>
+        
+        <div class="align-center m-t-20 m-b-10" style="font-size: 18px"><b>APPLICATION FOR: PERMIT FOR OTHER USES OF WILDLIFE</b></div>
+        <br><br>
+        <div>
+            <table>
+                <tr><td>A. COMMERCIAL</td><td>B. RESEARCH</td></tr>
+                <tr>
+                    <td>
+                    EXHIBITION/SHOWS
+                </td>
+                <td>
+                    <b>{{getMark("RESEARCH", "","animal")}}</b>&nbsp;
+                    Animal&nbsp;&nbsp;
+                    <b>{{getMark("RESEARCH", "", "plant")}}</b>
+                    Plant
+                </td>
+            </tr>
+            <tr style="text-align: right">
+                <td>
+                    <b>{{getMark("COMMERCIAL", "EXHIBITION/SHOWS", "animal")}}</b>
+                    Animal 
+                    <b>{{getMark("COMMERCIAL", "EXHIBITION/SHOWS", "plant")}}</b>                    
+                    Plant</td><td>&nbsp;</td>
+            </tr>
+            <tr><td>&nbsp;</td><td></td></tr>
+
+            <tr>
+                <td>
+                    EDUCATIONAL/DOCUMENTATION</td><td>&nbsp;</td>
+            </tr>
+            <tr style="text-align: right">
+                <td>
+                    <b>{{getMark("COMMERCIAL", "EDUCATIONAL/DOCUMENTATION", "animal")}}</b>
+                    Animal 
+                    
+                    <b>{{getMark("COMMERCIAL", "EDUCATIONAL/DOCUMENTATION", "plant")}}</b>
+                    Plant</td>
+                <td></td>
+            </tr>
+            </table>
+        </div>        
+    
+    
+        <div layout="row" layout-align="end">
+            <div layout="column" style="width:15%;text-align: center">
+                    <div class="underlined">{{application.data.application.date_filed}}</div>
+                    <div>Date</div>
+            </div>
+        </div>
+        
+        The Executive Director<br>
+        Palawan Council for Sustainable Development staff<br><br>
+        Sir:<br><br>
+        In accordance with R.A. 9147 otherwise known as the Wildlife Resources Conservation and Protection
+        Act and other pertinent wildlife rules and regulations with which I shall familiarize myself and 
+        to which strict compliance of same is hereby promised,<br><br>
+        <ol start="22">
+            <li>I, {{application.data.application.applicant.full_name}} have the honor to apply for the above permit.</li>
+            <li>I am {{application.data.application.applicant.age}} years of age, citizen of 
+                {{application.data.application.applicant.country}}, by birth.<br>
+                Date of birth: <underlined>{{application.data.application.applicant.birthdate}}</underlined>&nbsp;&nbsp;
+                Place: <underlined>{{application.data.application.applicant.birthplace}}</underlined><br>
+                Residence: <underlined>{{application.data.application.applicant.address}}</underlined>&nbsp;
+                Tel.: <underlined>{{application.data.application.applicant.contact_number}}</underlined><br>
+                Business Address: <underlined>{{application.data.application.applicant.business.address}}</underlined>&nbsp;&nbsp;
+                Tel. No.: <underlined>{{application.data.application.business.applicant.contact_number}}</underlined><br>
+
+            </li>
+            <li>
+                My occupation/profession <underlined>{{application.data.application.applicant.occupation}}</underlined><br>
+            </li>
+            <li>
+                I am {{application.data.application.applicant.civil_status}} 
+                <underlined ng-if="application.data.application.applicant.civil_status === 'married'">
+                    and the name of my spouse is {{application.data.application.applicant.spouse.name}}.
+                </underlined>
+            </li>
+            <li>
+                I am <text ng-if="!isMemberOfAGroup(application.data.application.applicant)">not</text> 
+                member of a sportsmen and/or game club and/or scientific or conservation society
+                <text ng-if="isMemberOfAGroup(application.data.application.applicant)">
+                    :&nbsp;{{toString(application.data.application.applicant.group_membership)}}
+                </text>
+            </li>
+            <li>
+                I intend to use the following wildlife for exhibition/education/research:<br>
+                <table style="width:50%">
+                    <tr><td>Kind/Species</td><td>No.</td></tr>
+                    <tr ng-repeat="specy in application.data.application.species">
+                        <td>{{specy.kind}}</td>
+                        <td>{{specy.quantity}}</td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                Wildlife species to be used/collected under this permit shall be taken by 
+                {{application.data.application.collection_method}}<br>
+            </li>
+            <li>
+                I understand that the information stated in this application are true and correct and any
+                omission of fads herein shall cause the disapproval of this application and/or cancellation
+                of the permit that may be issued to me.
+            </li>
+            <li>
+                I understand that the filing of this application conveys no right to take, collect or possess any
+                wildlife until a permit is issued to me by the PCSD.
+            </li>
+            <li>
+                The application fee of Php {{application.data.application.payment.application_fee}} in 
+                {{application.data.application.payment.mode}} payable to the PCSDS with Official Receipt No.
+                {{application.data.application.official_receipt.number}} is herewith enclosed.  Non-approval
+                or non-issuance of the permit does not entitle me to a refund of the fee.
+            </li>
+        </ol>
+
+        <br><br>
+        <div layout="row" layout-align="end">
+            <div layout="column" >
+                <div class="underlined"></div>
+                <div>(Signature of applicant)</div>
+                <div>
+                        TIN: <underlined>{{application.data.application.applicant.TIN}}</underlined>
+                </div>
+            </div>
+            
+        </div>
+        <div layout="row"  layout-align="start">
+            <div layout="column" style="width:30%">
+                <div class="underlined">&nbsp;</div>
+                <div class="underlined">&nbsp;</div>
+                <div class="align-center">(Address)</div>
+            </div>
+        </div>
+        <div ng-include="'./app/templates/application/attachments_template.html'"></div>
+        <div ng-include="'./app/templates/application/stamp_template.html'"></div>
+</div>

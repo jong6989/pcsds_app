@@ -1,0 +1,148 @@
+<!-- <div ng-controller="DummyWSUPController" ng-init="currentItem=n"> -->
+<div class="roman">
+	<div ng-include="'./app/templates/application/style.html'"></div>
+
+	<br>
+	<br>
+	<div layout layout-align="center end">
+		<strong>WILDLIFE SPECIAL USE PERMIT<strong>
+				<div></div>
+	</div>
+	<br>
+	<br>
+	<hr>
+	<div>
+		<textarea ng-model="currentItem.line1" ng-blur="updateDocument(currentItem.id, {line1:currentItem.line1})">
+
+		</textarea>
+	</div>
+	<br>
+	<div ng-repeat="line in ['line2', 'line3', 'line4', 'line5', 'line6', 'line7', 'line8', 'line9']">
+		<input style="width: 100%" rows="6" flex name="{{line}}"
+			ng-blur="lines={};lines[line]=currentItem[line];updateDocument(currentItem.id, lines)"
+			ng-model="currentItem[line]"><br><br>
+	</div>
+	<br>
+	<hr>
+	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Paid amount</label>
+			<input ng-model="currentItem.paid_amount" type="number"
+				ng-blur="updateDocument(currentItem.id,{'paid_amount': currentItem.paid_amount})">
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>OR Number</label>
+			<input ng-model="currentItem.paid_or_number"
+				ng-blur="updateDocument(currentItem.id,{'paid_or_number': currentItem.paid_or_number})">
+		</md-input-container>
+		<div ng-init="paid_date = currentItem.paid_date">
+			<md-datepicker ng-model="paid_date"
+				ng-change="currentItem.paid_date = to_date(paid_date); updateDocument(currentItem.id,{'paid_date': currentItem.paid_date})"
+				md-placeholder="Date of Payment" md-open-on-focus>
+			</md-datepicker>
+		</div>
+	</div>
+
+	<br>
+	<!--<br>
+	<br>
+	<div style="text-align:center">TERMS AND CONDITIONS</div>
+	 This Permit is issued subject to the following terms and conditions:
+	<ol>
+		<li>The Permittee shall only be allowed to buy and sell the following marine wildlife species that are
+			non-threatened and economically important; </li>
+		<table>
+			<tr>
+				<td>Kind of Species</td>
+				<td>Scientific Name</td>
+				<td>Local Name</td>
+			</tr>
+			<tr ng-repeat="specy in currentItem.species">
+				<td ng-repeat="key in ['kind', 'scientific_name', 'local_name']">
+					<input ng-model="specy[key]"
+						ng-blur="updateDocument(currentItem.id, { species: currentItem.species})">
+				</td>
+			</tr>
+		</table>
+		<li>Collection of non-threatened marine wildlife listed in no. 1 condition must not include those individuals
+			classified as “young and juvenile” and adult female which have eggs or known as gravid/spawner/breeder.</li>
+		<li>Buy and sell of species must start only after the submission to PCSD of the Mayor’s Permit duly approved on
+			current year by the City Government which covers of business permit.</li>
+		<li>The transport of allowed species indicated in #1 above from Palawan to other places within the Philippines
+			shall be accompanied by a Local Transport Permit (LTP) to be secured from PCSDS prior to the scheduled date
+			of transport;</li>
+		<li>The Permittee shall only deal or transact to individuals with Wildlife Collector’s and/or Wildlife Special
+			Use Permit; </li>
+		<li>Collection of the above species must be done by the permittee and her authorized collectors; </li>
+		<li>In case of transport of live marine wildlife specimens (indicated in no. 1 condition) to other places within
+			the Philippines, the permittee must observe the applicable provision of the City Ordinance No. 110 (as
+			amended), if to be transported via Puerto Princesa City;</li>
+		<li>The permittee shall submit to the PCSDS a quarterly report using quarterly monitoring report for traders of
+			Fishery Products (attached hereto as Annex A). Failure to submit a quarterly report shall be a ground for
+			non-approval of the application for Local Transport Permit;</li>
+		<li>In case of incidental catches that can no longer be returned to the wild, the permittee shall submit an
+			inventory of incidental catches within fifteen (15) days after collection; </li>
+		<li>The permittee and/or her authorized collectors are allowed to collect aforementioned species. The methods of
+			collection with least or no detrimental effects to existing marine wild population and their habitats;</li>
+		<li>In case the location of the business establishment will be transferred, the Permittee shall inform the PCSDS
+			in writing;</li>
+		<li>Comply with the terms of the Letter of Commitment submitted to the PCSD.</li>
+		<li>Provide garbage bins in the buying station and aquarium for proper disposal of the waste generated during
+			project operation. </li>
+		<li>Provide a septic tank in the buying station and aquarium, if necessary. </li>
+		<li>Put a perimeter net that will serve as solid waste screener underneath the buying station and aquarium, if
+			necessary. </li>
+		<li>Do not let other person use PCSD permit for purposes of engaging in any of the RFF operations.</li>
+		<li>This permit must be posted at the office and/or where buying/selling station of the Permittee is located;
+		</li>
+		<li>The permittee shall observe cleanliness and sanitation in the maintenance of the aquarium facility/ies to
+			prevent possible contamination and/or spread of pest/diseases which may affect the survival of marine
+			wildlife populations and other species in the discharge area/s;</li>
+		<li>This permit must be posted at the office and/or where buying/selling station of the Permittee is located;
+		</li>
+		<li>In the exercise of visitorial powers, PCSDS officials and personnel shall be allowed to conduct
+			monitoring/inspection of activities without prior notice; </li>
+		<li>In case there is a need for additional condition(s) and/or amendment to this permit to ensure environmental
+			integrity or sustainability of lobster and fish harvest as a result of technical
+			assessment/evaluation/scientific studies and/or regular monitoring/inspection, the same shall be imposed by
+			PCSDS;</li>
+		<li>Allow PCSD staff to conduct random sampling of species subject of every transport for biometric purposes in
+			order to support a study on the population of said specimens;</li>
+		<li>Failure to comply with any of the terms and conditions herein specified shall be sufficient ground for the
+			cancellation of this permit and disqualification from renewal, subject to administrative due process;</li>
+		<li>Any alteration, erasure or obliteration in this permit shall be sufficient ground for the
+			cancellation/revocation of this permit without prejudice to criminal and other liabilities of the offender;
+		</li>
+		<li>This permit is non-transferable and shall be effective for ONE (1) YEAR from the date of the issuance
+			hereof, unless sooner revoked or cancelled for non-compliance with and/or violation of the terms and
+			conditions specified herein, or for violation of pertinent laws, rules and regulations; and</li>
+		<li>Non-compliance with any of the above conditions or the relevant provisions of PCSD Admin Order No. 12 series
+			of 2011 and other relevant laws, rules and regulations shall be sufficient cause for the suspension or
+			cancellation of this Permit and the imposition of appropriate penalty provided under the said Admin. Order.
+		</li>
+	</ol> 
+	<hr>
+	<div style="text-align:center">CONFORME</div>
+	<P>
+		I, <underlined>{{currentItem.line6}}</underlined>, grantee of the foregoing permit,
+		hereby certify that I have read and understood the Terms and Conditions for which this permit was
+		issued and I hereby express my conformity thereto and my commitment to abide by the provisions of RA 9147,
+		DENR-DA-PCSD Joint Admin. Order No. 1 s. 2004 as amended, PCSD Admin Order No. 12 and other PCSD policies
+		related thereto.
+	</P>
+	<div layout>
+		<div style="width:60%">&nbsp;</div>
+		<div style="text-align:center">
+			<underlined>{{currentItem.line6}}</underlined>
+			<br>
+			Signature Over Printed
+			<br>
+			<-- <div>{{currentItem</div> 
+			<div style="text-align:left">
+				Date Signed:
+			</div>
+		</div>
+	</div>-->
+</div>

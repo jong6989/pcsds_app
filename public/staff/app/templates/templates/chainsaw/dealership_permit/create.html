@@ -1,0 +1,180 @@
+<div ng-init="n.subject = 'CHAINSAW DEALERSHIP/DISTRIBUTION PERMIT'; 
+	n.keywords = []; 
+	n.c_type = 'permit'; "
+	>
+
+	<h3 class="align-center">CHAINSAW DEALERSHIP/DISTRIBUTION PERMIT</h3>
+	<hr>
+	<br>
+	<md-input-container class="md-block m-t-40">
+		<label>Permit Number</label>
+		<input ng-model="n.permit_number" ng-blur="n.keywords[0]=n.permit_number" required>
+	</md-input-container>
+	<hr>
+	<br>
+
+	<strong>Applicant Information</strong>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Person/Company Name</label>
+			<input ng-model="n.applicant.name" ng-blur="n.keywords[0]=n.applicant.name" required>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Company Owner (for non-individual applicant)</label>
+			<input ng-model="n.applicant.company_owner">
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Address</label>
+			<input ng-model="n.applicant.address" ng-blur="n.keywords[1]=n.applicant.address" required>
+		</md-input-container>
+	</div>
+
+	<div layout>
+		<md-input-container flex>
+			<label>Limitation of Use</label>
+			<textarea ng-model="n.limitation_of_use"></textarea>
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker 
+			ng-init="date_issued=n.date_issued"
+			ng-model="date_issued"
+			ng-change="n.date_issued=to_date(date_issued)"
+			md-placeholder="Issued Date"
+			md-open-on-focus
+			required
+			></md-datepicker>
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker 
+				ng-init="expiry_date=n.expiry_date"
+				ng-model="expiry_date"
+				ng-change="n.expiry_date=to_date(expiry_date)"
+				md-placeholder="Expiry Date"
+				md-open-on-focus
+				required
+			></md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+		    <label>Paid amount</label>
+		    <input ng-model="n.paid_amount" type="number" required>
+		</md-input-container>
+		<md-input-container flex>
+		    <label>OR Number</label>
+		    <input ng-model="n.paid_or_number" required>
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker 
+				ng-init="paid_date=n.paid_date"
+				ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
+				md-placeholder="Date of Payment"
+				md-open-on-focus 
+				required
+				>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<br>
+	<div><strong>PREVIEW</strong></div>
+	<p>
+		<div class="align-center">
+			<strong>{{ n.line1 = 'DEALERSHIP/DISTRIBUTION PERMIT'}}</strong><br>
+			{{ n.line2 = n.permit_number }}
+		</div>
+	</p>
+	<br>
+	<p>
+		<div class="align-center">
+			{{ n.line3 = 'After having complied with the provisions of PCSD Administrative Order No.7 Series of 2012' + 
+				'otherwise known as the Implementing Rules and Regulations of the Chainsaw Act of 2002 (R.A. No. 9175) ' + 
+				'entitled "AN ACT REGULATING THE POSSESSION, OWNERSHIP, SALE, IMPORTATION AND USE OF ' + 
+				'CHAINSAWS PENALIZING VIOLATIONS THEREOF AND FOR OTHER RELATED PURPOSES" ' +
+				'for the Province of Palawan, this Dealership Permit is hereby issued to: '
+			}}
+		</div>
+	</p>
+	<br>
+	<p>
+			<div class="align-center" style="padding:0.5in; border:1px solid; margin-left:1in; margin-right: 1in">
+				<b>{{ n.line4=n.applicant.name}}</b><br>
+				<div ng-if="n.applicant.company_owner">{{n.line5='Owned by: ' + n.applicant.company_owner}}</div>
+				{{ n.line6=n.applicant.address }}
+			</div>	
+	</p>
+	<p>
+		{{n.line7='Limitation of Use ' + n.limitation_of_use }}
+	</p>
+	<p>
+		{{n.line8='Issued on: ' + get_full_date(n.date_issued)}}<br>
+		{{n.line9='Expiry Date: ' + get_full_date(n.expiry_date)}}
+	</p>
+	<p>
+		<div layout>
+			<div style="width:60%">&nbsp;</div>
+			<div>
+				APPROVED:<br><br><br>
+				{{n.line10=pcsd.head.full_name.toUpperCase()}}<br>
+				{{n.line11=pcsd.head.position.toUpperCase()}}
+			</div>
+		</div>
+	</p>
+	<p>
+		{{n.line12='Not valid without PCSD official seal.'}}
+	</p>
+	<p>
+		<div class="align-center">
+			{{n.line13='(PLEASE SEE AT THE BACK PAGE THE TERMS AND CONDITIONS OF THIS CERTIFICATE OF REGISTRATION)'}}
+		</div>
+	</p>
+	<br>
+	<div>
+		{{n.line14='PAID UNDER O.R. NO. ' + n.paid_or_number}}<br>
+		{{n.line15 = 'AMOUNT PAID: Php ' + (n.paid_amount | number:2) }}<br>
+		{{n.line16 = 'DATE OF PAYMENT: ' + get_full_date(n.paid_date)}}
+	</div>
+	<hr>
+	<div class="align-center">TERMS AND CONDITIONS</div>
+	<input type="hidden" ng-value="n.line17='The dealer shall not sell any chainsaw unit without a Permit to Purchase 
+		issued by PCSD'">
+	<input type="hidden" ng-value="n.line18='The dealer shall keep a record of transaction regarding chainsaw sale and furnish 
+		PCSD of the same regulary.'">
+	<input type="hidden" ng-value="n.line19='Authorized dealers of chainsaw unit shall also submit a quarterly (March, June, 
+		September and December)  report of their transaction/activities during the quarter, which shall include the following 
+		details: number of chainsaw units purchased, engine serial numbers of the units purchased, supplier or source of 
+		the chainsaw units purchased, number of unit sold/disposed, engine serial number of the units sold, kind of spare 
+		parts sold, authorized persons whom the units were sold with the latter\'s addresses and place of delivery and photocopy 
+		of their Permit to Purchase.'">
+	<input type="hidden" ng-value="n.line20='PCSD officials/personnel shall regularly conduct monitoring activity.'">
+	<input type="hidden" ng-value="n.line21='In case there is a need for additional conditions to ensure environmental 
+		integrity and public safety as a result of regular monitoring/inspection, the same shall be imposed by PCSD.'">
+	<ol>
+		<li ng-repeat="line in [17,18,19,20,21]">{{n['line'+line]}}</li>
+	</ol>
+	<br>
+	{{n.line22='Violation of/non-compliance with the above conditions shall be a ground for the cancellation/revocation ' + 
+	'of this Certificate of Registration.'}}
+	<br>
+	<hr>
+	<div class='align-center'>CONFROME</div><BR>
+	<P>
+		{{n.line23='I, ' + (n.applicant.company_owner || n.applicant.name) + ', the grantee of the foregoing Dealership Permit, ' + 
+		'hereby certify that I have read and understood the terms and conditions for which ' +
+		'this Dealership Permit is issued and I hereby express my conformity thereto and my commitment ' +
+		'to abide by the provisions of PCSD Administrative Order No. 7, as amended, and other PCSD policies ' +
+		'similar or related thereto.'}}
+	</P>
+	<br><br><br>
+	<div layout>
+		<div style="width:60%">&nbsp;</div>
+		<div>
+			<div style="border-bottom:1px solid">&nbsp;</div>
+			<div>Grantee's Signature Over Printed Name</div>
+			<div>Date Signed:</div>
+		</div>
+	</div>
+
+	
+</div>

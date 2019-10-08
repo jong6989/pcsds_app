@@ -1,0 +1,136 @@
+<!-- <md-card md-whiteframe="3" flex layout="row">
+    <md-card-content flex layout="column"> -->
+
+        <md-button class="md-fab md-mini " aria-label="Logs" ng-click="setContent('./app/applications/views/application_list.html')">
+            <md-tooltip md-direction="left">Back</md-tooltip>
+            <i class="fa fa-chevron-left"></i>
+        </md-button>
+
+        <div layout="row" layout-align="center center"><md-progress-circular class="m-t-50" ng-show="is_loading" md-diameter="96"></md-progress-circular></div>
+            <md-tabs flex md-selected="selectedTab" md-border-bottom md-autoselect md-swipe-content>
+                <md-tab ng-repeat="(f,tab) in tabs" label="{{tab.title}} : {{tab.application.date || tab.staff.id_number || tab.date || tab.members.length || tab.count}}">
+                    
+                    <!-- Application Documents -->
+                    <div ng-show="f == 'application' || f == 'pending'">
+                        <div ng-hide="true"> {{application = tab.application}} </div>
+                        <!-- Templates -->
+                        <div ng-repeat=" x in application_templates" ng-show="application.name == x.name">
+                            <div ng-include="x.url"></div>
+                            <md-divider class="m-t-20 m-b-10"></md-divider>
+                            <div ng-include="'./app/templates/actions/documents.html'" ></div>
+                            <!-- <div ng-include="x.action" ></div> -->
+                        </div>
+                        
+                    </div>
+
+                    <!-- Action Receipt -->
+                    <div ng-show="f == 'receipt'" layout="column" layout-align="center center">
+                        
+                        <md-card class="m-t-100">
+                            <md-card-title>
+                                <img ng-src="{{imageDirectoryString}}pcsdlogo.png" alt="pcsd" height="30px" class="m-r-5">
+                                <strong class="col-grey">Action Receipt</strong>
+                                <div flex></div>
+                            </md-card-title>
+                            <md-divider></md-divider>
+                            <md-card-content>
+                                <p>
+                                    {{tab.message}}
+                                </p>
+                                <p>
+                                    Date : {{tab.date | date}}
+                                </p>
+                            </md-card-content>
+                            <md-divider></md-divider>
+                            <md-card-action layout="row">
+                                <div flex></div>
+                                <md-button class="md-primary" ng-click="removeTab('receipt')">
+                                    Close
+                                </md-button>
+
+                            </md-card-action>
+                        </md-card>
+                    </div>
+                    <!-- Personnal Chat -->
+                    <div ng-show="f == 'personal_chat'" >
+                        <strong class="md-title col-grey m-b-20 m-t-20">
+                            <i class="fa fa-circle" ng-class="{'col-green': calculate_if_online(tab.staff.last_seen) }"></i> 
+                            Last active : {{date_gap(now(),tab.staff.last_seen)}}
+                        </strong>
+                        <md-content id="spc_message_box" layout-padding ng-style="{ height: (iframeHeight - 290) + 'px' }">
+                            <div ng-if="tab.tread.length > 0"  ng-repeat="x in tab.tread track by x.date " ng-init="passTime = date_gap(now(),x.date)">
+                                <strong class="m-l-20 col-grey"> {{x.staff}} | <cite class="m-l-20 font-9"> {{passTime}} </cite> </strong>
+                                <div class="m-l-40"><span class="{{'personnal_chat_' + $index }}" ></span></div>
+                                <div class="{{'chat_image_holder_'+$index}}"></div>
+                                <i ng-init="load_html(x.message,'personnal_chat_'+$index);extract_images_from_html('personnal_chat_'+$index,'chat_image_holder_'+$index,2000)"></i>
+                                <i class="fa fa-trash col-red pointer" ng-click="remove_spc(tab.doc_id,x)" ng-show="is_online">
+                                    <md-tooltip md-direction="top">Double Click to remove this message</md-tooltip>
+                                </i>
+                                <hr>
+                            </div>
+                        </md-content>
+                        <!-- <p ng-hide="is_online">No internet connection...</p> -->
+                        <div ng-show="is_online">
+                            <form name="form_add_tread_pc">
+                                <div layout="row">
+                                    <textarea flex accept-charset="ISO-8859-1" ng-model="pc_tread_message[''+tab.staff.id]" rows="3" placeholder="message"></textarea>
+                                </div>
+                                <md-button type="submit" ng-disabled="pc_tread_message[''+tab.staff.id] == undefined" ng-click="pc_tread(tab.staff.id,pc_tread_message[''+tab.staff.id])" class="md-raised" >
+                                    <cite class="font-12"> <i class="fa fa-send"></i> Send Message</cite>
+                                </md-button>
+                                <md-progress-linear md-mode="indeterminate" ng-show="uploading_file"></md-progress-linear>
+                                <md-button class="md-raised font-12"  ng-hide="uploading_file" ngf-select="upload_attachments($files,tab.staff.id,'chat')">
+                                    <cite class="font-10"> <i class="fa fa-upload"></i> upload attachments</cite>
+                                </md-button>
+                            </form>
+                        </div>
+                        <md-divider></md-divider>
+                        <md-button class="md-primary" ng-click="removeTab('personal_chat')">
+                            Close
+                        </md-button>
+                    </div>
+
+                    <!-- Client Chat -->
+                    <div ng-show="f == 'client_chat'" >
+                        <md-content id="cc_message_box" layout-padding ng-style="{ height: (iframeHeight - 240) + 'px' }">
+                            <div ng-if="tab.tread.length > 0"  ng-repeat="x in tab.tread track by x.date " ng-init="passTime = date_gap(now(),x.date)">
+                                <div ng-if="x.deleted == undefined">
+                                    <strong class="m-l-20 col-grey"> {{x.user}} | <cite class="m-l-20 font-9"> {{passTime}} </cite> </strong>
+                                    <div class="m-l-40"><span class="{{'client_chat_' + $index }}" ></span></div>
+                                    <div class="{{'client_chat_image_holder_'+$index}}"></div>
+                                    <i ng-init="load_html(x.message,'client_chat_'+$index);extract_images_from_html('client_chat_'+$index,'client_chat_image_holder_'+$index,2000)"></i>
+                                    <i class="fa fa-trash col-red pointer" ng-click="remove_chat_from_client(tab.id,x.id,$index);" ng-show="is_online">
+                                        <md-tooltip md-direction="top">Double Click to remove this message</md-tooltip>
+                                    </i>
+                                </div>
+                                <div ng-if="x.deleted" class="font-10 col-grey">
+                                    {{x.removed_by}} removed a message...
+                                </div>
+                                <hr>
+                            </div>
+                        </md-content>
+                        <!-- <p ng-hide="is_online">No internet connection...</p> -->
+                        <div ng-show="is_online">
+                            <form name="form_add_tread_cc">
+                                <div layout="row">
+                                    <textarea flex accept-charset="ISO-8859-1" ng-model="cc_tread_message[''+tab.id]" rows="3" placeholder="message"></textarea>
+                                </div>
+                                <md-button type="submit" ng-disabled="cc_tread_message[''+tab.id] == undefined" ng-click="client_tread(cc_tread_message[''+tab.id]);cc_tread_message[''+tab.id] = undefined;tab.count = 0;" class="md-raised" >
+                                    <cite class="font-12"> <i class="fa fa-send"></i> Send Message</cite>
+                                </md-button>
+                                <md-progress-linear md-mode="indeterminate" ng-show="uploading_file"></md-progress-linear>
+                                <md-button class="md-raised font-12"  ng-hide="uploading_file" ngf-select="upload_attachments($files,tab.id,'client')">
+                                    <cite class="font-10"> <i class="fa fa-upload"></i> upload attachments</cite>
+                                </md-button>
+                            </form>
+                        </div>
+                        <md-divider></md-divider>
+                        <md-button class="md-primary" ng-click="removeTab('client_chat')">
+                            Close
+                        </md-button>
+                    </div>
+                    
+                </md-tab>
+            </md-tabs>
+    <!-- </md-card-content>
+</md-card> -->

@@ -1,0 +1,144 @@
+<div ng-init="n.subject = 'PERMIT TO PURCHASE/IMPORT'; 
+	n.keywords = []; 
+	titles = ['Ms.','Mrs.','Mr.']; 
+	n.c_type = 'permit'; "
+	>
+
+	<h3 class="align-center">PERMIT TO PURCHASE/IMPORT CHAINSAW</h3>
+	<hr>
+	<br>
+	<md-input-container class="md-block m-t-40">
+		<label>Permit No.</label>
+		<input ng-model="n.permit_no" ng-blur="n.keywords[0]=n.permit_no"  required>
+	</md-input-container>
+	<hr>
+	<br>
+
+	<strong>Applicant Information</strong>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Name</label>
+			<textarea ng-model="n.applicant.name" ng-blur="n.keywords[1]=n.applicant.name" required></textarea>
+		</md-input-container>
+
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Address</label>
+			<input ng-model="n.applicant.address" ng-blur="n.keywords[2]=n.applicant.address" required>
+		</md-input-container>
+	</div>
+
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Number of Chainsaw to Purchase/Import:</label>
+			<input type="number" min="1" ng-model="n.quantity_to_purchase" required>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Purpose</label>
+			<textarea ng-model="n.purpose" required></textarea>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Date Issued</label>
+			<md-datepicker ng-model="date_issued" ng-blur="n.date_issued=to_date(date_issued)"></md-datepicker>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Issued by</label>
+			<input ng-model="n.issued_by.name" required>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Designation</label>
+			<input ng-model="n.issued_by.designation" required>
+		</md-input-container>
+	</div>
+
+	<hr>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+		    <label>Paid amount</label>
+		    <input ng-model="n.paid_amount" type="number" required>
+		</md-input-container>
+		<md-input-container flex>
+		    <label>OR Number</label>
+		    <input ng-model="n.paid_or_number" required>
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
+				md-placeholder="Date of Payment"
+				md-open-on-focus 
+				required
+				>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<br>
+	<div><strong>PREVIEW</strong></div>
+	<p>
+		<div class="align-center">
+			<strong>{{ n.line1 = 'PERMIT TO PURCHASES/IMPORT'}}</strong><br>
+			{{ n.line2 = n.permit_no }}
+		</div>
+	</p>
+	<br>
+	<p>
+		{{ n.line3 = 'Having complied with the provisions of PCSD Administrative Order No. 07, as amended, ' + 
+		'otherwise known as the Implementing Rules and Regulations of the Chainsaw Act of 2002, and after evaluation ' + 
+		'conducted by the PCSDS, this permit to purchase ' + n.quantity_to_purchase + 
+		' UNIT(S) of chainsaw is hereby issued to:'}}
+	</p>
+	<p>
+		<table>
+			<tr>
+				<input type="hidden" ng-value="n.line4='Name: ' + n.applicant.name">
+				<td>Name:</td>
+				<td>{{n.applicant.name}}</td>
+			</tr>
+			<tr>
+					<input type="hidden" ng-value="n.line5='Address: ' + n.applicant.address">
+				<td>Address:</td>
+				<td>{{n.applicant.address}}</td>
+			</tr>
+			<tr>
+				<input type="hidden" ng-value="n.line6='Purpose:' + n.purpose">
+				<td>Purpose:</td>
+				<td>{{n.purpose}}</td>
+			</tr>
+
+			<tr>
+				<input type="hidden" ng-value="n.line7='Date Issued: ' + get_full_date(n.date_issued)">
+				<td>Date Issued:</td>
+				<td>{{n.date_issued}}</td>
+			</tr>
+		</table>
+	</p>
+	<div layout>
+		<div style="width:60%">&nbsp;</div>
+		<div>
+			{{n.line8 = 'Issued by: '}}<br><br><br>
+			{{n.line9 = n.issued_by.name}}<br>
+			{{n.line10 = n.issued_by.designation}}
+		</div>
+	</div>
+	<br><br>
+	<div style="margin-left:1in">
+		<div style="text-align:center">{{n.line11='TERMS AND CONDITIONS'}}</div>
+		<DIV>
+			<ul>
+				<li>{{n.line12='The grantee shall buy the chainsaw unit from an authorized person or entity possessing ' +
+					'a valid permit to sell.'}}</li>
+				<li>{{n.line13='The grantee shall upon, purchase of the chainsaw unit register the same with the ' +
+					'PCSD'}}</li>
+				<li>{{n.line14='This permit is non-transferable and shall be used solely by the grantee.'}}</li>
+				<li>{{n.line15='Only ' + n.quantity_to_purchase + ' units is allowed to be purchased under this permit.'}}</li>
+			</ul>
+		</DIV>
+	</div>
+	<div>
+		{{n.line16='PAID UNDER O.R. NO. ' + n.paid_or_number}}<br>
+		{{n.line17 = 'AMOUNT PAID: Php ' + n.paid_amount + '.00'}}<br>
+		{{n.line18 = 'DATE OF PAYMENT: ' + n.paid_date}}
+	</div>
+	<div>
+		{{n.line19 = 'This permit is valid only for three (3) months from date of issuance or upon permformance of the rest.'}}
+	</div>
+	
+</div>

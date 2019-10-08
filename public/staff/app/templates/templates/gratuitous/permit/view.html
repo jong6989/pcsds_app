@@ -1,0 +1,150 @@
+<style type="text/css">
+    .roman {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
+<!-- <div class="roman"> -->
+<div ng-controller="ViewGratuitousPermitController">
+    <!-- header -->
+    <div ng-include="'./app/templates/templates/header.html'"></div>
+    <hr>
+    <p>
+        <div class="align-center">
+            {{ currentItem.gratuitous_permit.line1 }}<br>
+            {{	currentItem.gratuitous_permit.line2 }}
+        </div>
+
+    </p>
+    <br>
+    <div ng-if="currentItem.gratuitous_permit.application_type=='Individual'">
+        <p>
+            <table>
+                <tr>
+                    <td>Grantee:</td>
+                    <td>{{currentItem.gratuitous_permit.applicant.full_name}}</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>{{currentItem.gratuitous_permit.applicant.employment.designation}}</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>{{currentItem.gratuitous_permit.applicant.employment.agency_name}}</td>
+                </tr>
+            </table>
+        </p>
+    </div>
+    <div ng-if="currentItem.gratuitous_permit.application_type=='Company'">
+        <p>
+            <table>
+                <tr>
+                    <td>Grantee:</td>
+                    <td>{{currentItem.gratuitous_permit.applicant.name}}</td>
+                </tr>
+            </table>
+        </p>
+    </div>
+
+    <p>
+        <div class="align-center">
+            <strong>{{currentItem.gratuitous_permit.line3}}</strong>
+        </div>
+    </p>
+    <p>
+        {{currentItem.gratuitous_permit.line4}}
+    </p>
+    <br>
+    <div class="align-center">
+        <p>
+            {{currentItem.gratuitous_permit.line5}}
+        </p>
+    </div>
+    <br>
+    <div>{{currentItem.gratuitous_permit.line6 }}</div>
+    <br>
+    <!-- Terms and Conditions -->
+    <div>
+
+        <textarea id="gratuitous_permit_terms_view" ng-model="currentItem.gratuitous_permit.gratuitous_permit_terms"
+            class='no-toolbar' ckeditor disabled></textarea>
+    </div>
+    <!--end of terms and conditions-->
+    <br>
+    <p>
+        {{currentItem.gratuitous_permit.line7 }}
+    </p>
+    <p>
+        {{currentItem.gratuitous_permit.line8}}
+    </p>
+    <!-- Signature -->
+    <div layout ng-controller="doc_ctrl_draft">
+        <div style="width:60%"></div>
+        <!-- sign 1 -->
+        <div flex style="padding: 10px"
+            ng-init="currentItem.gratuitous_permit.sign1 = (currentItem.gratuitous_permit.sign1 == undefined)? { name:'',designation:''}:currentItem.gratuitous_permit.sign1;">
+            <div ng-if="currentItem.gratuitous_permit.sign1.signature != undefined;" layout="column"
+                layout-align="center center">
+                <img ng-if="currentItem.gratuitous_permit.sign1.signature != undefined"
+                    src="{{currentItem.gratuitous_permit.sign1.signature}}" alt="Signature1" width="auto"
+                    style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.gratuitous_permit.sign1.name}}</ins> </strong>
+                </div>
+                <div class="align-center"> {{currentItem.gratuitous_permit.sign1.designation}} </div>
+                <md-button class="md-fab md-mini" aria-label="Remove Signature"
+                    ng-if="currentItem.gratuitous_permit.sign1.user == userId"
+                    ng-click="updateDocument(currentItem.gratuitous_permit.id,{'sign1' : {} })">
+                    <md-tooltip md-direction="left">Remove Signature</md-tooltip>
+                    <i class="fa fa-remove"></i>
+                </md-button>
+            </div>
+
+            <div layout="column" layout-align="center center"
+                ng-if="currentItem.gratuitous_permit.sign1.signature == undefined;" id="sign1"
+                ng-init="generate_signature_field('sign1',0);" style="border: black dashed 1px;">
+                <canvas></canvas>
+                <button ng-click="signclear(0)">Clear Signature</button>
+                <button
+                    ng-click=" updateDocument(currentItem.gratuitous_permit.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">Save
+                    Signature</button>
+                <md-input-container md-no-float class="md-block"
+                    ng-if="currentItem.gratuitous_permit.sign1.signature == undefined;">
+                    <input ng-init="currentItem.gratuitous_permit.sign1.name=pcsd.head.full_name"
+                        ng-model="currentItem.gratuitous_permit.sign1.name"
+                        ng-blur="updateDocument(currentItem.gratuitous_permit.id,{'sign1.name' : currentItem.gratuitous_permit.sign1.name })"
+                        type="text" placeholder="Name" aria-label="Name">
+                </md-input-container>
+                <md-input-container md-no-float class="md-block"
+                    ng-if="currentItem.gratuitous_permit.sign1.signature == undefined;">
+                    <input ng-init="currentItem.gratuitous_permit.sign1.designation=pcsd.head.position"
+                        ng-model="currentItem.gratuitous_permit.sign1.designation"
+                        ng-blur="updateDocument(currentItem.gratuitous_permit.id,{'sign1.designation' : currentItem.gratuitous_permit.sign1.designation })"
+                        type="text" placeholder="Designation" aria-label="designation">
+                </md-input-container>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <p>
+        <div class="align-center">CONFORME</div>
+    </p>
+    <P>
+        {{currentItem.gratuitous_permit.line9 }}
+    </P>
+    <br><br>
+    <div layout>
+        <div style="width:60%"></div>
+        <div>
+            {{currentItem.gratuitous_permit.line10}}<br>
+            {{currentItem.gratuitous_permit.line11}}<br>
+            {{currentItem.gratuitous_permit.line12}}
+        </div>
+    </div>
+    <p>
+        Paid the amount of Php {{currentItem.gratuitous_permit.paid_amount | number:2}}<br>
+        Under O.R. No. {{currentItem.gratuitous_permit.paid_or_number}}<br>
+        Date: {{currentItem.gratuitous_permit.paid_date}}
+    </p>
+    <!-- footer -->
+    <div ng-include="'./app/templates/templates/footer.html'"></div>
+</div>

@@ -1,0 +1,121 @@
+<div ng-init="n.subject = 'CHAINSAW PERMIT TO SELL'; 
+	n.c_type = 'permit'; 
+	n.keywords=[]"
+	>
+	
+	<h3 class="align-center">CHAINSAW PERMIT TO SELL</h3>
+	<hr>
+	<br>
+	<md-input-container class="md-block m-t-40">
+		<label>Permit No.</label>
+		<input ng-model="n.permit_number"  ng-blur="n.keywords[0]=n.permit_number" required>
+	</md-input-container>
+	<hr>
+	<br>
+
+	<strong>Applicant Information</strong>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Name</label>
+			<input ng-model="n.applicant.name" ng-blur="n.keywords[1]=n.applicant.name" required>
+		</md-input-container>
+
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Address</label>
+			<input ng-model="n.applicant.address"  ng-blur="n.keywords[2]=n.applicant.address" required>
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container flex>
+			<label>Quantity To Sell</label>
+			<input ng-model="n.quantity_to_sell" type="number">
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker 
+			ng-init="date_issued=n.date_issued"
+			ng-model="date_issued"
+			ng-change="n.date_issued=to_date(date_issued)"
+			md-placeholder="Date Issued"
+			md-open-on-focus
+			required
+			>
+				</md-datepicker>
+		</md-input-container>
+	</div>
+
+	<hr>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+		    <label>Paid amount</label>
+		    <input ng-model="n.paid_amount" type="number" required>
+		</md-input-container>
+		<md-input-container flex>
+		    <label>OR Number</label>
+		    <input ng-model="n.paid_or_number" required>
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker 
+				ng-init="paid_date=n.paid_date"
+				ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
+				md-placeholder="Date of Payment"
+				md-open-on-focus 
+				required
+				>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<br>
+	<div><strong>PREVIEW</strong></div>
+	<p>
+		<div class="align-center">
+			<strong>{{ n.line1 = 'PERMIT TO SELL'}}</strong><br>
+			{{ n.line2 = n.permit_number }}
+		</div>
+	</p>
+	<br>
+	<p>
+		<div>
+			{{ n.line3 = 'Having complied with the provisions of PCSD Administrative Order No 07, as amended, otherwise ' +
+			'known as the Implementing Rules of the Chainsaw Act of 2002, and after evaluation conducted by the PCSDS ' +
+			'this permit to sell ' + n.quantity_to_sell + ' unit of chainsaw is hereby issued to: '}}
+		</div>
+	</p>
+	<br>
+	<p>
+		<input type="hidden" ng-value="n.line4='Name: ' + n.applicant.name">
+		<input type="hidden" ng-value="n.line5='Address: ' + n.applicant.address">
+		<input type="hidden" ng-value="n.line6='Date Issued: ' + n.date_issued">
+		<table>
+			<tr><td>Name</td><td>:</td><td>{{n.applicant.name.toUpperCase()}}</td></tr>
+			<tr><td>Address</td><td>:</td><td>{{n.applicant.address}}</td></tr>
+			<tr><td>Date Issued</td><td>:</td><td>{{n.date_issued}}</td></tr>
+		</table>
+	</p>
+	<br><br><br>
+	<p>
+		<div layout>
+			<div style="width:60%">&nbsp;</div>
+			<div>
+				Issued by:<br><br><br>
+				{{n.line7=pcsd.head.full_name.toUpperCase()}}<br>
+				{{n.line8=pcsd.head.position.toUpperCase()}}
+			</div>
+		</div>
+	</p>
+	<br>
+	<div>
+		{{n.line9='PAID UNDER O.R. NO. ' + n.paid_or_number}}<br>
+		{{n.line10 = 'AMOUNT PAID: Php ' + (n.paid_amount | number:2) }}<br>
+		{{n.line11 = 'DATE OF PAYMENT: ' + get_full_date(n.paid_date)}}
+	</div>
+	<hr>
+	<div class="align-center">TERMS AND CONDITIONS</div>
+	<input type="hidden" ng-value="n.line12='The grantee shall sell the chainsaw unit entity possessing a valid permit to purchase.'">
+	<input type="hidden" ng-value="n.line13=n.quantity_to_sell + ' unit is/are allowed to be sell under this permit.'">
+	<input type="hidden" ng-value="n.line14='This permit is valid only for three (3) months from date of issuance.'">
+	
+	<ol>
+		<li ng-repeat="line in [12,13,14]">{{n['line'+line]}}</li>
+	</ol>
+</div>

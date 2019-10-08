@@ -1,0 +1,144 @@
+<div style="visibility: hidden">
+  <div class="md-dialog-container" id="chainsawRegistrationForm">
+    <md-dialog layout="column" layout-align="center center">
+      <md-toolbar class="bg-teal">
+        <div class="md-toolbar-tools">
+          <h2>{{registrationForm.title}} Chainsaw</h2>
+          <span flex></span>
+          <md-button class="md-icon-button" ng-click="closeRegistrationForm()">
+            <i class="fa fa-times col-white"></i>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <form ng-cloak name="formChainsaw">
+        <md-dialog-content layout-padding class="p-b-20">
+          <div layout-gt-sm layout-sm="column">
+            <div layout-gt-sm layout-sm="column">
+              <md-input-container class="md-block">
+                <label>COR No.</label>
+                <input ng-model="chainsawFormData.CORNumber" required />
+              </md-input-container>
+            </div>
+
+            <md-input-container class="md-block" flex>
+              <label>Agency</label>
+              <input ng-model="chainsawFormData.Agency" />
+            </md-input-container>
+          </div>
+
+          <div layout-gt-sm layout-sm="column">
+            <div>
+              <md-input-container>
+                <label>First Name</label>
+                <input ng-model="chainsawFormData.Owner.FirstName" />
+              </md-input-container>
+            </div>
+
+            <div>
+              <md-input-container class="md-block">
+                <label>Middle Initial</label>
+                <input ng-model="chainsawFormData.Owner.MiddleInitial" />
+              </md-input-container>
+            </div>
+
+            <div>
+              <md-input-container class="md-block">
+                <label>Last Name</label>
+                <input ng-model="chainsawFormData.Owner.LastName" />
+              </md-input-container>
+            </div>
+          </div>
+
+          <div layout-gt-sm layout-sm="column">
+            <div>
+              <md-input-container>
+                <label>Street</label>
+                <input ng-model="chainsawFormData.Owner.Street" />
+              </md-input-container>
+            </div>
+
+            <div>
+              <md-input-container class="md-block">
+                <label>Municipality</label>
+                <md-select
+                  ng-model="chainsawFormData.Owner.Municipality"
+                  ng-change="refreshBarangays()"
+                >
+                  <md-option
+                    ng-value="municipality"
+                    ng-repeat="municipality in municipalities"
+                  >
+                    {{ municipality }}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+            </div>
+            <div>
+              <md-input-container class="md-block">
+                <label>Barangay</label>
+                <md-select ng-model="chainsawFormData.Owner.Barangay">
+                  <md-option
+                    ng-value="barangay"
+                    ng-repeat="barangay in barangays"
+                  >
+                    {{ barangay }}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+            </div>
+          </div>
+
+          <div layout-gt-sm layout-sm="column">
+            <div>
+              <md-input-container class="md-block">
+                <label>Metal Seal Number</label>
+                <input ng-model="chainsawFormData.MetalSealNumber" />
+              </md-input-container>
+            </div>
+            <md-input-container>
+              <label>Serial Number</label>
+              <input ng-model="chainsawFormData.SerialNumber" />
+            </md-input-container>
+            <md-input-container class="md-block">
+              <label>Registration Date</label>
+              <md-datepicker ng-model="chainsawFormData.RegistrationDate">
+              </md-datepicker>
+            </md-input-container>
+          </div>
+
+          <div layout-gt-sm layout-sm="column">
+            <md-input-container class="md-block" flex>
+              <label>Expiration Date</label>
+              <md-datepicker
+                ng-model="chainsawFormData.ExpirationDate"
+              >
+              </md-datepicker>
+            </md-input-container>
+            <md-input-container class="md-block" flex>
+              <label>Limitaion of Use</label>
+              <input ng-model="chainsawFormData.LimitationOfUse" />
+            </md-input-container>
+            <md-input-container class="md-block" flex>
+              <label>Remarks</label>
+              <input ng-model="chainsawFormData.Remarks" />
+            </md-input-container>
+          </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+          <span flex></span>
+          <md-button ng-click="closeRegistrationForm()">
+            Close
+          </md-button>
+          <md-button
+            class="md-primary md-raised"
+            ng-click="saveChainsaw();"
+            ng-disabled="formChainsaw.$invalid"
+          >
+            {{registrationForm.saveButton.text}}
+          </md-button>
+        </md-dialog-actions>
+      </form>
+    </md-dialog>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="respondentsForm">
+            <md-dialog layout="column" layout-align="center center">
+                    <md-toolbar class="bg-teal">
+                        <div class="md-toolbar-tools">
+                            <h2>Respondents</h2>
+                            <span flex></span>
+                            <md-button class="md-icon-button" ng-click="closeRegistrationForm()">
+                                <i class="fa fa-times col-white"></i>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
+                        <md-content
+                          style="height: {{ iframeHeight - 150 }}px;"
+                          layout-sm="coulumn"
+                          layout-gt-sm
+                          ng-init=""
+                        >
+                          <div flex>
+                            <table ng-table="respondentsTable" class="table" show-filter="true">
+                              <tr ng-repeat="respondent in $data">
+                                <td
+                                  title="'First Name'"
+                                  sortable="'First_Name'"
+                                  filter="{First_Name: 'text'}"
+                                >
+                                  {{ respondent.First_Name }}
+                                </td>
+                                <td
+                                  title="'Middle Initial'"
+                                  sortable="'Middle_Initial'"
+                                  filter="{Middle_Initial: 'text'}"
+                                >
+                                  {{ respondent.Middle_Initial }}
+                                </td>
+                                <td
+                                  title="'Last Name'"
+                                  sortable="'respondent.Last_Name'"
+                                  filter="{ Last_Name:'text' }"
+                                >
+                                  {{ respondent.Last_Name}}
+                                </td>
+                                <td
+                                  title="'Address'"
+                                  sortable="'Address'"
+                                  filter="{Address:'text'}"
+                                >
+                                  {{ respondent.Address }}
+                                </td>
+                                <td
+                                  title="'Municipality'"
+                                  sortable="'Municipality'"
+                                  filter="{Municipality:'text'}"
+                                >
+                                  {{ respondent.Municipality }}
+                                </td>
+                                <td
+                                  title="'Province'"
+                                  sortable="'Province'"
+                                  filter="{Province:'text'}"
+                                >
+                                  {{ respondent.Province }}
+                                </td>
+                                <td
+                                  title="'Country'"
+                                  sortable="''"
+                                  filter="{Country:'text'}"
+                                >
+                                  {{ respondent.Country }}
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </md-content>
+            </md-dialog>
+    </div>
+</div>
+    
+
+  

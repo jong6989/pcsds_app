@@ -53,8 +53,8 @@ var download = (uri, filename, callback)=>{
 };
 
 
-const api_address = "https://brain.pcsd.gov.ph/api";
-// const api_address = "http://localhost/pcsds_api";
+// const api_address = "https://brain.pcsd.gov.ph/api";
+const api_address = "";
 //initialize moment
 moment().format("YYYY-MM-DD h:mm:ss");
 
