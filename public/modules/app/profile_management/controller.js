@@ -24,13 +24,49 @@ myAppModule.
                 $scope.picFile = null;
                 $scope.is_using_camera = false;
                 $scope.profile = { data: {} };
+                $scope.gov_ids = ["Passport", "Drivers License", "PRC", "GSIS", "SSS", "Postal ID", "Voter's ID", "School ID"];
 
+                $scope.search = async(keyword) => {
+                    if(keyword.trim() == '') return;
+                    var results = await $profileService.search(keyword);
+                    if(results.length > 0)
+                        {
+                            $scope.profileTable = new NgTableParams({ sorting : { first_name: 'asc'}}, { dataset: results});
+                            $scope.$apply();
+                        }
+                    else
+                        Swal.fire({
+                            title: 'Not found',
+                            text: `Sorry, we didn\' found "${keyword}"`,
+                            type: 'error',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK',
+                        });
+                }
                 $scope.print = () => {
                     window.print();
-
-                    // setTimeout(function(){
-                    // }, 3000);
                 }
+
+                $scope.refreshList = () => {
+                    $scope.loadProfileList();
+                }
+
+                $scope.backToList = () => {
+                    Swal.fire({
+                        title: 'Go back to list?',
+                        text: 'Are you sure you want to go back to profile list?',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No'
+                    }).then(result => {
+                        if(result.value)
+                            $scope.loadPage('app/profile_management/list.html');
+                    })
+                }
+
                 $scope.currentUserShouldSee = () => {
                     return $scope.profile.data.created_by == localData.get('authUser');
                 }
@@ -119,35 +155,37 @@ myAppModule.
                         }
                     },
                     'government_id': () => {
-                        //  console.log($scope.profile.data.gov_id);
                         $scope.updatedProperty = {
                             tin_no: $scope.profile.data.tin_no,
-                            gov_id: $scope.profile.data.gov_id
+                            gov_id: {
+                                name: $scope.profile.data.gov_id.name,
+                                number: $scope.profile.data.gov_id.number,
+                                date_issued: $scope.profile.data.gov_id.date_issued,
+                                place_issued: $scope.profile.data.gov_id.place_issued,
+                                valid_until: $scope.profile.data.gov_id.valid_until
+                            }
                         }
-                        //  console.log($scope.updatedProperty);
                     }
                 }
 
-                $scope.$watch('updatedProperty.gov_id', function (newval, oldval, scope) {
-                    console.log(newval);
-                    console.log(oldval);
-                    console.log(scope);
-                })
-               
                 $scope.save_profile = async (profile) => {
                     profile.created_by = localData.get('authUser');
                     var success = await $profileService.addProfile(profile);
                     if (success) {
                         Swal.fire(
                             'Profile Saved!',
-                            'We will redirect you to ONLINE PERMITING DASHBOARD',
+                            '',
                             'success'
                         ).then((result) => {
+                            $scope.profile.data = {};
+                            $scope.bday = '';
+                            $scope.dateIssued = '';
+                            $scope.dateValid = '';
+                            try{
+                                $scope.$apply();
+                            }catch(error){}
                         });
-                        $scope.profile.data = {};
-                        $scope.bday = '';
-                        $scope.dateIssued = '';
-                        $scope.dateValid = '';
+                        
 
                     }
                 }
@@ -297,6 +335,25 @@ myAppModule.
             return profile;
         }
 
+        this.search = async (keyword) => {
+            var result = [];
+            var promise = new Promise((resolve, reject) => {
+                var snapshot = collection.where('keywords','array-contains', keyword).get().
+                then(snapshot => {
+                    console.log(snapshot);
+                    snapshot.forEach(doc => {
+                        console.log(doc);
+                        var profile = doc.data();
+                        profile.id = doc.id;
+                        result.push(profile);
+                    })
+                    resolve(result);
+                });
+
+            })
+
+            return promise;
+        }
         this.addProfile = async (newProfile) => {
             var promise = new Promise((resolve, reject) => {
                 db.collection('profile').
@@ -357,6 +414,7 @@ myAppModule.
 
         this.updateProfile = async (profileID, updatedProperty) => {
             await collection.doc(profileID).update(updatedProperty);
+            // .then(success => {console.log('success')}, error => {console.log(error);});
             return new Promise((resolve, reject) => { resolve(true); })
         }
     }).
@@ -461,19 +519,25 @@ myAppModule.
 
 
         this.getProfileList = async () => {
+            var profileListInArray = [];
+            var keys = Object.keys(profileList);
+            keys.forEach(key => {
+                profileListInArray.push(profileList[key]);
 
+            })
             return new Promise((resolve, reject) => {
-                resolve(profileList);
+                resolve(profileListInArray);
             })
         }
 
         this.getProfile = async (id) => {
 
             return new Promise((resolve, reject) => {
+                // resolve(profileList[id]);
 
                 setTimeout(function () {
                     resolve(profileList[id]);
-                }, 300);
+                }, 3000);
             });
         }
 
@@ -487,7 +551,9 @@ myAppModule.
         }
 
         this.addProfile = async (profile) => {
-            profileList.push(profile);
+            // profileList.push(profile);
+            profileList['fknfgdj3099fnkgnsdlj'] = profile;
+            profile.id = 'fknfgdj3099fnkgnsdlj';
             return new Promise((resolve, reject) => { resolve(true); });
         }
 

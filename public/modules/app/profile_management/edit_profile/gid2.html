@@ -1,0 +1,155 @@
+<div class="md-dialog-container" id="government_id_window">
+    <md-dialog aria-label="Government ID">
+        <md-toolbar class="bg-blue-grey">
+            <div class="md-toolbar-tools m-t-10">
+                <strong> Edit Government ID </strong>
+            </div>
+        </md-toolbar>
+        <md-dialog-content layout-padding="20">
+            <md-input-container class="md-block m-r-10" flex-gt-sm>
+                <label>Tax Identification Number : </label>
+                <input ng-model="updatedProperty.tin_no" required>
+            </md-input-container>
+            <!-- <md-input-container class="md-block m-r-10" flex-gt-sm>
+                    <md-autocomplete class="md-block m-r-10" flex-gt-sm="30" 
+                    md-selected-item="id_name=updatedProperty.gov_id.name"
+                    md-search-text="sq" 
+                    md-search-text-change="updatedProperty.gov_id.name = sq" 
+                    md-items="x in gov_ids"
+                    md-item-text="x" md-min-length="0" placeholder="ID NAME:">
+                    <md-item-template>
+                        {{x}}
+                    </md-item-template>
+                </md-autocomplete>
+            </md-input-container >
+            
+            <md-input-container class="md-block" flex-gt-sm>
+                    <label>ID Number</label>
+                    <input ng-model="updatedProperty.gov_id.number" required>
+                </md-input-container> -->
+            <div ng-hide=true>
+                {{
+                    dateIssued = updatedProperty.gov_id.date_issued
+                }}
+            </div>
+            <md-datepicker aria-label="Date Issued" 
+                ng-init="dateIssued=updatedProperty.gov_id.date_issued"    
+                ng-model="dateIssued"
+                ng-change="updatedProperty.gov_id.date_issued = to_date(dateIssued)" md-placeholder="Date Issued"
+                md-open-on-focus required></md-datepicker>
+        </md-dialog-content>
+    </md-dialog>
+
+    <!-- <form name="form_government_id" >
+            
+<md-dialog-content layout-padding="20">
+            <md-dialog-content layout-padding="20">
+    
+
+                <div layout-gt-sm="row">
+
+                    <md-input-container class="md-block m-r-10" flex-gt-sm>
+                        <label>Tax Identification Number : </label>
+                        <input ng-model="updatedProperty.tin_no" required>
+                    </md-input-container>
+
+                    <md-autocomplete class="md-block m-r-10" flex-gt-sm="30" md-selected-item="updatedProperty.gov_id.name"
+                        md-search-text="sq" md-search-text-change="updatedProperty.gov_id.name = sq"
+                        md-items="x in gov_ids" md-item-text="x" md-min-length="0" placeholder="ID NAME:">
+                        <md-item-template>
+                            {{x}}
+                        </md-item-template>
+                    </md-autocomplete>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>ID Number</label>
+                        <input ng-model="updatedProperty.gov_id.number" required>
+                    </md-input-container>
+
+                </div>
+
+                <div layout-gt-sm="row">
+                    <div flex-gt-sm ng-init="dateIssued = updatedProperty.gov_id.date_issued" class=" m-r-10">
+                        <md-datepicker ng-model="dateIssued"
+                            ng-change="updatedProperty.gov_id.date_issued = to_date(dateIssued)"
+                            md-placeholder="Date Issued" md-open-on-focus required></md-datepicker>
+                    </div>
+
+                    <md-input-container class="md-block m-r-10" flex-gt-sm>
+                        <label>Place Issued</label>
+                        <input ng-model="updatedProperty.gov_id.place_issued" required>
+                    </md-input-container>
+
+                    <div flex-gt-sm ng-init="dateValid = updatedProperty.gov_id.valid_until">
+                        <md-datepicker ng-model="dateValid"
+                            ng-change="updatedProperty.gov_id.valid_until = to_date(dateValid)"
+                            md-placeholder="Valid Until" md-open-on-focus required></md-datepicker>
+                    </div>
+                </div>
+
+            </md-dialog-content>
+        </md-dialog-content>
+            <md-dialog-content layout-padding="20" >
+                <div layout-gt-sm="row" >
+
+                    <md-input-container class="md-block m-r-10" flex-gt-sm>
+                        <label>Tax Identification Number : </label>
+                        <input ng-model="updatedProperty.tin_no" required>
+                    </md-input-container>
+        
+                    <md-autocomplete
+                        class="md-block m-r-10" flex-gt-sm="30"
+                        md-selected-item="profile.data.gov_id.name"
+                        md-search-text="sq"
+                        md-search-text-change="profile.data.gov_id.name = sq"
+                        md-items="x in gov_ids"
+                        md-item-text="x"
+                        md-min-length="0"
+                        placeholder="ID NAME:">
+                        <md-item-template>
+                        {{x}}
+                        </md-item-template>
+                    </md-autocomplete>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>ID Number</label>
+                        <input ng-model="profile.data.gov_id.number" required>
+                    </md-input-container>
+                    
+                </div>
+
+                <div layout-gt-sm="row">
+                    <div flex-gt-sm ng-init="dateIssued = profile.data.gov_id.date_issued" class=" m-r-10">
+                        <md-datepicker ng-model="dateIssued" ng-change="profile.data.gov_id.date_issued = to_date(dateIssued)" md-placeholder="Date Issued" md-open-on-focus required></md-datepicker>
+                    </div>
+
+                    <md-input-container class="md-block m-r-10" flex-gt-sm>
+                        <label>Place Issued</label>
+                        <input ng-model="profile.data.gov_id.place_issued" required>
+                    </md-input-container>
+        
+                    <div flex-gt-sm ng-init="dateValid = profile.data.gov_id.valid_until">
+                        <md-datepicker ng-model="dateValid" ng-change="profile.data.gov_id.valid_until = to_date(dateValid)" md-placeholder="Valid Until" md-open-on-focus required></md-datepicker>
+                    </div>
+                </div>
+
+            </md-dialog-content>
+
+            <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="reloadOldData();close_dialog();">
+            close
+            </md-button>
+            <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <md-button type="submit" ng-disabled="form_edit_govID.$invalid" 
+            ng-hide="is_loading" class="md-primary md-raised" 
+            ng-click="update_profile_property({ tin_no: profile.data.tin_no, gov_id: profile.data.gov_id});
+                close_dialog();">
+                save
+            </md-button>
+            </md-dialog-actions>
+        </form> -->
+    </md-dialog>
+</div>

@@ -14,7 +14,7 @@
     
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Current Address</label>
-                            <input ng-model="updatedProperty.current_address" required>
+                            <textarea ng-model="updatedProperty.current_address" required></textarea>
                         </md-input-container>
 
                     </div>
@@ -32,7 +32,7 @@
                 <md-button type="submit" ng-disabled="form_edit_address.$invalid" 
                 ng-hide="is_loading" 
                 class="md-primary md-raised" 
-                ng-click="update_profile_property({'current_address':edit_address});close_dialog();">
+                ng-click="update_profile_property({current_address:updatedProperty.current_address});close_dialog();">
                     save
                 </md-button>
                 </md-dialog-actions>
