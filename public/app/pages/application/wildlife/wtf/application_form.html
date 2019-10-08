@@ -220,7 +220,7 @@
                   
                                         <div layout-gt-xs="row">
                                                 <div flex-gt-xs>
-                                                <md-datepicker ng-model="new_application.date_air" md-placeholder="Date of Loading"></md-datepicker>
+                                                <md-datepicker ng-model="date_air" ng-change="new_application.date_air = to_date(date_air)" md-placeholder="Date of Loading"></md-datepicker>
                                                 </div>
                                             </div>              
                              </div>
@@ -233,7 +233,7 @@
                                         
                                         <div layout-gt-xs="row">
                                                 <div flex-gt-xs>
-                                                <md-datepicker ng-model="new_application.date_sea" md-placeholder="Date of Loading"></md-datepicker>
+                                                <md-datepicker ng-model="date_sea" ng-change="new_application.date_sea = to_date(date_sea)" md-placeholder="Date of Loading"></md-datepicker>
                                                 </div>
                                         </div>
                                            
@@ -248,7 +248,7 @@
                                     
                                     <div layout-gt-xs="row">
                                             <div flex-gt-xs>
-                                             <md-datepicker ng-model="new_application.date_postal" md-placeholder="Date of Loading"></md-datepicker>
+                                             <md-datepicker ng-model="date_postal" ng-change="new_application.date_postal = to_date(date_postal)" md-placeholder="Date of Loading"></md-datepicker>
                                             </div>
                                     </div>
                                    

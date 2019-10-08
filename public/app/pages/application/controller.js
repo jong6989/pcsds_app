@@ -110,7 +110,7 @@ myAppModule.controller('application_controller', function ($scope,$filter, $http
         $scope.gp_specimen = data.data.data;
     });
 
-    $scope.change_current_index = (n)=>{
+    $scope.change_current_findex = (n)=>{
         $scope.selectedIndex = n;
     };
 
