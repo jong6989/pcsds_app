@@ -1,6 +1,6 @@
 'use strict';
 
-myAppModule.controller('applications_controller', function ($scope, $timeout, $utils, $mdDialog, $mdSidenav, $http) {
+myAppModule.controller('applications_controller', function ($scope, $timeout, $mdDialog, $mdSidenav, $http) {
     $scope.application_list = [];
     $scope.pending_list = [];
     $scope.staff_list = [];
@@ -466,37 +466,37 @@ myAppModule.controller('applications_controller', function ($scope, $timeout, $u
     }
 
     $scope.upload_attachments = (files,app_id,tab)=>{
-        var upload_file = (idx)=>{
-            $scope.uploading_file = true;
-            let f = files[idx];
-            var form = $utils.upload((data,code)=>{
-                $scope.uploading_file = false;
-                if(code == 200){
-                    if(files.length == (idx + 1) ){
-                        let m = `<a href="${api_address}/${data.data}" target="blank" download>${f.name}</a>`;
-                        if(tab == 'chat'){
-                            if($scope.pc_tread_message[`${app_id}`] == undefined) $scope.pc_tread_message[`${app_id}`] = "";
-                            $scope.pc_tread_message[`${app_id}`] += m + "<br>\n";
-                        }else if(tab == 'group'){
-                            if($scope.group_tread_message[`${app_id}`] == undefined) $scope.group_tread_message[`${app_id}`] = "";
-                            $scope.group_tread_message[`${app_id}`] += m + "<br>\n";
-                        }else if(tab == 'client'){
-                            if($scope.cc_tread_message[`${app_id}`] == undefined) $scope.cc_tread_message[`${app_id}`] = "";
-                            $scope.cc_tread_message[`${app_id}`] += m + "<br>\n";
-                        }else {
-                            if($scope.add_tread_message[`${app_id}`] == undefined) $scope.add_tread_message[`${app_id}`] = "";
-                            $scope.add_tread_message[`${app_id}`] += m + "<br>\n";
-                        }
-                    }else {
-                        upload_file(idx + 1);
-                    }
-                }
-            });
-            form.append('action', 'user/upload_file');
-            form.append('file',  fs.createReadStream(f.path), {filename: f.name});
-            form.append('user_id', $scope.user.id);
-        };
-        if(files.length > 0 ) upload_file(0);
+        // var upload_file = (idx)=>{
+        //     $scope.uploading_file = true;
+        //     let f = files[idx];
+        //     var form = $utils.upload((data,code)=>{
+        //         $scope.uploading_file = false;
+        //         if(code == 200){
+        //             if(files.length == (idx + 1) ){
+        //                 let m = `<a href="${api_address}/${data.data}" target="blank" download>${f.name}</a>`;
+        //                 if(tab == 'chat'){
+        //                     if($scope.pc_tread_message[`${app_id}`] == undefined) $scope.pc_tread_message[`${app_id}`] = "";
+        //                     $scope.pc_tread_message[`${app_id}`] += m + "<br>\n";
+        //                 }else if(tab == 'group'){
+        //                     if($scope.group_tread_message[`${app_id}`] == undefined) $scope.group_tread_message[`${app_id}`] = "";
+        //                     $scope.group_tread_message[`${app_id}`] += m + "<br>\n";
+        //                 }else if(tab == 'client'){
+        //                     if($scope.cc_tread_message[`${app_id}`] == undefined) $scope.cc_tread_message[`${app_id}`] = "";
+        //                     $scope.cc_tread_message[`${app_id}`] += m + "<br>\n";
+        //                 }else {
+        //                     if($scope.add_tread_message[`${app_id}`] == undefined) $scope.add_tread_message[`${app_id}`] = "";
+        //                     $scope.add_tread_message[`${app_id}`] += m + "<br>\n";
+        //                 }
+        //             }else {
+        //                 upload_file(idx + 1);
+        //             }
+        //         }
+        //     });
+        //     form.append('action', 'user/upload_file');
+        //     form.append('file',  fs.createReadStream(f.path), {filename: f.name});
+        //     form.append('user_id', $scope.user.id);
+        // };
+        // if(files.length > 0 ) upload_file(0);
     };
 
     // function notify_applicant(applicant_id,application_id,message){
