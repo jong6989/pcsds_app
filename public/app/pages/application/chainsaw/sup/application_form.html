@@ -43,20 +43,17 @@
                         <span class="m-r-20"></span>
                         I <input style="width: 30%" type="text" placeholder="applicant name" ng-model="new_application.applicant" required>, resident of 
                         <input style="width: 30%" type="text" placeholder="applicant address" ng-model="new_application.applicant_address" required>
-                        , applies permit to transport chainsaw and use chainsaw unit with  
+                        , applies permit to transport chainsaw and use chainsaw unit with Serial No.
                     
                     
-                        <md-input-container>
-                                <label>Serial No. </label>
-                                <input ng-model="new_application.serial_no" required>
-                        </md-input-container>
+                        
                     </p> 
                 </div>
                   
                 <p>The requirements needed for my application are hereby submitted for your evaluation.</p>
                 
-                <p>I understand the filing of this application does not authorize me to transport chainsaw</p>
-                <p>unit(s) until after the permit has been issued.</p>
+                <p>I understand the filing of this application does not authorize me to transport chainsaw
+                unit(s) until after the permit has been issued.</p>
 
                 <p>I further understood that any false representation or declaration embodied in this application or in 
                     the submitted requirements shall be a ground for the denial of this application without prejudice to
@@ -65,6 +62,71 @@
 
                 <hr>
                        <cite class="col-grey"><h2>Details of Application</h2></cite>
+
+
+                      
+                       <md-input-container  style="width: 50%">
+                            <label>Chainsaw Owner:</label>
+                            <input ng-model="new_application.details[new_application.details.indexOf(x)].scientific_owner" required>
+                         </md-input-container>
+
+                         <md-input-container class="md-block m-r-10" flex-gt-sm>
+                                <label>Purpose:</label>
+                                <input ng-model="new_application.details[new_application.details.indexOf(x)].purpose" required>
+                        </md-input-container>
+
+                        <p class="col-grey align-center">
+                                Guide : click "Add Details" Button to add Other Details.
+                            </p>
+
+
+                       <h4 class="col-blue-grey" ng-init="new_application.details = [{}]" flex>
+                        Application: <md-button class="md-raised" ng-click="new_application.details.push({});">Add Application</md-button>
+                   </h4>
+
+                 <div>
+                       <div ng-repeat="x in new_application.details"  flex layout-gt-sm="column" >
+                           <div flex-gt-sm="5">
+                               <i ng-if="new_application.details.length > 1" class="fa fa-trash pointer col-red" ng-click="new_application.details.splice(new_application.details.indexOf(x),1);"></i>
+                               {{$index + 1}}.
+                           </div>
+       
+                           
+                                
+                                <md-input-container class="md-block" flex-gt-sm=>
+                                   <label>Address of Chainsaw Owner: </label>
+                                   <input ng-model="new_application.details[new_application.details.indexOf(x)].address" required>
+                                </md-input-container>
+
+                                <md-input-container>
+                                  <label>Place where Chainsaw is Registered:</label>
+                                  <input ng-model="new_application.details[new_application.details.indexOf(x)].registered" required>
+                                </md-input-container>
+                                                  
+                                <md-input-container>
+                                    <label>Certificate of Registration No.:</label>
+                                    <input ng-model="new_application.details[new_application.details.indexOf(x)].registration_no" required>
+                                </md-input-container>
+
+                                <md-input-container>
+                                        <label>Expiration Date of Registration:</label>
+                                        <input ng-model="new_application.details[new_application.details.indexOf(x)].expiration" required>
+                                </md-input-container>
+
+                                <md-input-container>
+                                        <label>Place of Destination:</label>
+                                        <input ng-model="new_application.details[new_application.details.indexOf(x)].destination" required>
+                                </md-input-container>
+
+                                <md-input-container>
+                                        <label>Serial No.: </label>
+                                        <input ng-model="new_application.serial_no" required>
+                                </md-input-container>
+                                                    
+           
+                       </div>
+                   </div>
+
                 <!-- <p class="col-grey align-center">
                     Guide : Choose from existing Application list, if none, click "Add Application" Butoon to add Application Details.
                 </p>
