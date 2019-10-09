@@ -1,14 +1,10 @@
 
+<div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div>
 <div class="p-t-20 p-l-10">
-    <md-button class="md-raised md-primary" ng-click="openQrPage('gp',application.id,application.date)">
-        <md-tooltip md-direction="top">Click to view your digital transantion receipt via Quick Responce (QR) Code.</md-tooltip>
-        OPEN QR CODE
-    </md-button>
-    <hr>
-    <br>
+    
     <div layout-gt-xs="row" layout-xs="column" layout-align="center center">
         <div flex-gt-xs="20" flex-xs > 
-            <img src="images/pcsd_logo.png" alt="Palawan Counsil for Sustainable Development" width="80%">
+            <img src="/images/pcsd_logo.png" alt="Palawan Counsil for Sustainable Development" width="80%">
         </div>
         <div flex>
             <h4 class="col-grey md-display-1">Palawan Council for Sustainable Development</h4>
@@ -298,7 +294,3 @@
 
 </div>
 
-
-<md-button ng-click="close_dialog()">
-    close
-</md-button>

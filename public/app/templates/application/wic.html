@@ -15,18 +15,25 @@
             <h6 class="col-green md-subtitle"><cite>Online Application</cite></h6>
         </div>
     </div>
-    <div layout="row">
+    <!-- <div layout="row">
         <div flex-xs="10" flex-sm="15" flex-md="20" flex-lg="25" flex-gt-lg="30"></div>
         <div flex><img  ng-src="{{ application.data.application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3"></div>
         <div flex-xs="10" flex-sm="15" flex-md="20" flex-lg="25" flex-gt-lg="30"></div>
-    </div>
+    </div> -->
+    <div layout-gt-sm layout-sm="column" layout-xs="column" layout-align-gt-sm="end end" layout-align-sm="center center"  layout-align-xs="center center">
+            <div flex-gt-sm="15" flex-sm="40" flex-xs="60"><img  ng-src="{{application.data.application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3"></div>
+            
+        </div>
 
-    <h3 class="align-center m-t-20 m-b-10">APPLICATION FOR WILDLIFE IMPORT CERTIFICATION</h3>
+    <h3 class="align-center m-t-20 m-b-10">
+            No. {{application.date}}
+            <br>
+            APPLICATION FOR WILDLIFE IMPORT CERTIFICATION</h3>
         
          
     <div layout="row" layout-align="end">
             <div layout="column" layout-align="center center">
-                <div><strong style="text-decoration: underline"> {{application.date.split(' ')[0] | date : 'MMMM d, yyyy'}} </strong></div>
+                <div><strong style="text-decoration: underline"> {{application.date | date : 'MMMM d, yyyy'}} </strong></div>
                 <div>(date)</div>
             </div>
             <div class="p-r-50"></div>
