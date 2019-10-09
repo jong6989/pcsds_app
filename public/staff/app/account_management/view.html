@@ -1,6 +1,83 @@
 
-<div ng-controller="account_management_controller" ng-init="set_page_title('Account Management')">
-    <h1> ID : {{account.id}} </h1>
-    <hr>
-    {{account}} ---
+<div ng-controller="account_management_controller" ng-init="set_page_title('Account Management - Accounts')">
+    
+    <div layout>
+        <!-- user list -->
+        <div ng-hide=" (is_xs || is_sm) && is_user_selected " flex-gt-sm="30" flex-sm>  
+                <md-list class="md-dense" flex>
+                    <md-subheader class="col-white bg-grey">
+                        <div layout class=" pointer">
+                            <div ng-click="add_new_account($event)">
+                                <i class="fa fa-user-plus col-white">
+                                    <md-tooltip md-direction="buttom">Create New Account</md-tooltip> 
+                                </i> 
+                                <strong>Accounts </strong>
+                            </div>
+                            <input flex ng-model="search_user" placeholder="filter" class="m-l-10 m-r-10 m-t--5 p-t-5 p-b-5 p-l-5" style="border: none;border-bottom: #777 1px;">
+                        </div>
+                    </md-subheader>
+                    <md-content style="height : {{iframeHeight - 120}}px;">
+                        <md-list-item class="md-3-line" ng-repeat="x in users | filter : search_user" ng-click="select_user(x)">
+                            <div class="md-list-item-text" layout="column">
+                                <h3> {{x.name}} - {{x.phone}} </h3>
+                                <h4> {{ x.data.first_name }} {{ x.data.middle_name }} {{ x.data.last_name }} </h4>
+                                <p> {{x.access }}, {{x.data.designation}} </p>
+                            </div>
+                        </md-list-item>
+                    </md-content>
+                </md-list>
+        </div>
+        <!-- View user -->
+        <div flex  ng-hide=" (is_xs || is_sm) && !is_user_selected " class="p-l-10 p-r-10 m-l-10 p-t-10" md-whiteframe="2">
+            <md-content style="height : {{iframeHeight - 120}}px;">
+                
+                <div ng-show="is_user_selected">
+                    <md-button hide-gt-sm class="md-fab md-mini " aria-label="back" ng-click="clear_selected_user()">
+                        <i class="fa fa-chevron-left"></i>
+                    </md-button>
+
+                    <div class="md-display-1">
+                        Phone : <strong> {{selected_user.phone}} </strong>
+                        <i class="fa fa-edit pointer col-pink" ng-click="edit_phone_number(selected_user.id)">
+                            <md-tooltip md-direction="buttom">Edit Phone Number</md-tooltip> 
+                        </i>  
+                    </div> 
+                    
+                    <hr>
+                    
+                    Code Name : <strong>{{selected_user.name}} </strong>
+                    <md-divider></md-divider>
+
+                    Name : <strong> {{selected_user.data.first_name}} {{selected_user.data.middle_name}} {{selected_user.data.last_name}} </strong>
+                    <md-divider></md-divider>
+    
+                    Designation : <strong> {{selected_user.data.designation}} </strong>
+                    <md-divider></md-divider>
+    
+                    Email : <strong> {{selected_user.data.email}} </strong>
+                    <md-divider></md-divider>
+
+                    <md-button class="md-button md-warn" ng-click="delete_user(selected_user)"> 
+                        Delete
+                        <i class="fa fa-trash"></i>   
+                        <md-tooltip md-direction="buttom">Delete Account</md-tooltip> 
+                    </md-button>
+
+                    <md-button class="md-button md-primary" ng-click="open_edit_modal($event,selected_user)"> 
+                        Edit
+                        <i class="fa fa-edit"></i>   
+                        <md-tooltip md-direction="buttom">Edit Account</md-tooltip> 
+                    </md-button>
+
+                    
+                </div>
+                
+            </md-content>
+        </div>
+        
+    </div>
+    
+    <!--  edit modal -->
+    <div ng-include="'./app/account_management/modals/edit_user.html'" ></div>
+    <!-- end modal -->
 </div>
