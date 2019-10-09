@@ -1,0 +1,156 @@
+{
+	"data" : [
+		{
+			"name" : "Generic Template",
+			"type" : "generic",
+			"create" : "./app/templates/templates/generic/create.html",
+			"edit" : "./app/templates/templates/generic/edit.html",
+			"view" : "./app/templates/templates/generic/view.html",
+			"print" : "./app/templates/templates/generic/print.html"
+		},
+		{
+			"name" : "Incoming Communications",
+			"type" : "incoming",
+			"create" : "./app/templates/templates/incoming/create.html",
+			"edit" : "./app/templates/templates/incoming/edit.html",
+			"view" : "./app/templates/templates/incoming/view.html",
+			"print" : "./app/templates/templates/incoming/print.html"
+		},
+		{
+			"name" : "Certificate of no-pending Case",
+			"type" : "certificate_of_no_pending_case",
+			"permit" : true,
+			"create" : "./app/templates/templates/certificate_npc/create.html",
+			"edit" : "./app/templates/templates/certificate_npc/edit.html",
+			"view" : "./app/templates/templates/certificate_npc/view.html",
+			"print" : "./app/templates/templates/certificate_npc/print.html"
+		},
+		{
+			"name" : "Certificate of Inspection (LTP)",
+			"type" : "certificate_of_inspection_ltp_ao12",
+			"permit" : true,
+			"create" : "./app/templates/templates/ltp_wildlife/certificate/create.html",
+			"edit" : "./app/templates/templates/ltp_wildlife/certificate/edit.html",
+			"view" : "./app/templates/templates/ltp_wildlife/certificate/view.html",
+			"print" : "./app/templates/templates/ltp_wildlife/certificate/print.html"
+		},
+		{
+			"name" : "Wildlife Export Certificate",
+			"type" : "certificate_export",
+			"permit" : true,
+			"create" : "./app/templates/templates/wildlife_export/certificate/create.html",
+			"edit" : "./app/templates/templates/wildlife_export/certificate/edit.html",
+			"view" : "./app/templates/templates/wildlife_export/certificate/view.html",
+			"print" : "./app/templates/templates/wildlife_export/certificate/print.html"
+		},
+		{
+			"name" : "Wildlife Import Certificate",
+			"type" : "certificate_import",
+			"permit" : true,
+			"create" : "./app/templates/templates/wildlife_import/certificate/create.html",
+			"edit" : "./app/templates/templates/wildlife_import/certificate/edit.html",
+			"view" : "./app/templates/templates/wildlife_import/certificate/view.html",
+			"print" : "./app/templates/templates/wildlife_import/certificate/print.html"
+		},
+		{
+			"name" : "Wildlife Special Use Permit",
+			"type" : "permit_wsup",
+			"permit" : true,
+			"create" : "./app/templates/templates/wsup/certificate/create.html",
+			"edit" : "./app/templates/templates/wsup/certificate/edit.html",
+			"view" : "./app/templates/templates/wsup/certificate/view.html",
+			"print" : "./app/templates/templates/wsup/certificate/print.html"
+		},
+		{
+			"name" : "Wildlife Special Use Permit Evaluation",
+			"type" : "evaluation",
+			"permit" : true,
+			"create" : "./app/templates/templates/wsup/evaluation/create.html",
+			"edit" : "./app/templates/templates/wsup/evaluation/edit.html",
+			"view" : "./app/templates/templates/wsup/evaluation/view.html",
+			"print" : "./app/templates/templates/wsup/evaluation/print.html"
+		},
+		{
+			"name" : "Chainsaw Purchase/Import Permit",
+			"type" : "permit",
+			"permit" : true,
+			"create" : "./app/templates/templates/chainsaw/purchase_permit/create.html",
+			"edit" : "./app/templates/templates/chainsaw/purchase_permit/edit.html",
+			"view" : "./app/templates/templates/chainsaw/purchase_permit/view.html",
+			"print" : "./app/templates/templates/chainsaw/purchase_permit/print.html"
+		}
+		,
+		{
+			"name" : "Chainsaw Certificate of Registration",
+			"type" : "certificate",
+			"permit" : true,
+			"create" : "./app/templates/templates/chainsaw/certificate_of_registration/create.html",
+			"edit" : "./app/templates/templates/chainsaw/certificate_of_registration/edit.html",
+			"view" : "./app/templates/templates/chainsaw/certificate_of_registration/view.html",
+			"print" : "./app/templates/templates/chainsaw/certificate_of_registration/print.html"
+		},
+		{
+			"name" : "Chainsaw Permit To Sell",
+			"type" : "permit",
+			"permit" : true,
+			"create" : "./app/templates/templates/chainsaw/permit_to_sell/create.html",
+			"edit" : "./app/templates/templates/chainsaw/permit_to_sell/edit.html",
+			"view" : "./app/templates/templates/chainsaw/permit_to_sell/view.html",
+			"print" : "./app/templates/templates/chainsaw/permit_to_sell/print.html"
+		},
+		{
+			"name" : "Chainsaw Special Use Permit",
+			"type" : "permit",
+			"permit" : true,
+			"create" : "./app/templates/templates/chainsaw/special_use_permit/create.html",
+			"edit" : "./app/templates/templates/chainsaw/special_use_permit/edit.html",
+			"view" : "./app/templates/templates/chainsaw/special_use_permit/view.html",
+			"print" : "./app/templates/templates/chainsaw/special_use_permit/print.html"
+		},
+		{
+			"name" : "Chainsaw Dealership/Distribution Permit",
+			"type" : "permit",
+			"permit" : true,
+			"create" : "./app/templates/templates/chainsaw/dealership_permit/create.html",
+			"edit" : "./app/templates/templates/chainsaw/dealership_permit/edit.html",
+			"view" : "./app/templates/templates/chainsaw/dealership_permit/view.html",
+			"print" : "./app/templates/templates/chainsaw/dealership_permit/print.html"
+		},
+		{
+			"name" : "SEP Clerance",
+			"type" : "permit",
+			"permit" : true,
+			"create" : "./app/templates/templates/sep/clearance/create.html",
+			"edit" : "./app/templates/templates/sep/clearance/edit.html",
+			"view" : "./app/templates/templates/sep/clearance/view.html",
+			"print" : "./app/templates/templates/sep/clearance/print.html"
+		},
+		{
+			"name" : "Chainsaw Application Evaluation",
+			"type" : "evaluation",
+			"permit" : true,
+			"create" : "./app/templates/templates/chainsaw/evaluation/create.html",
+			"edit" : "./app/templates/templates/chainsaw/evaluation/edit.html",
+			"view" : "./app/templates/templates/chainsaw/evaluation/view.html",
+			"print" : "./app/templates/templates/chainsaw/evaluation/print.html"
+		},
+		{
+			"name" : "Wildlife Collector's Permit",
+			"type" : "permit",
+			"permit" : true,
+			"create" : "./app/templates/templates/wildlife_collector/permit/create.html",
+			"edit" : "./app/templates/templates/wildlife_collector/permit/edit.html",
+			"view" : "./app/templates/templates/wildlife_collector/permit/view.html",
+			"print" : "./app/templates/templates/wildlife_collector/permit/print.html"
+		},
+		{
+			"name" : "Gratuitous Permit",
+			"type" : "permit",
+			"permit" : true,
+			"create" : 	"./app/templates/templates/gratuitous/permit/create.html",
+			"edit" : 	"./app/templates/templates/gratuitous/permit/edit.html",
+			"print" : 	"./app/templates/templates/gratuitous/permit/print.html",
+			"view" : 	"./app/templates/templates/gratuitous/permit/view.html"
+		}
+	]
+}

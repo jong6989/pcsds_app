@@ -1,0 +1,82 @@
+<style>
+    textarea {
+        width: 100%
+    }
+</style>
+<!-- <div style="width:90%" ng-controller="DummyPermitToSellController" ng-init="currentItem=n"> -->
+<div style="width:90%">
+
+    <div class="align-center">
+        <strong>{{ currentItem.line1}}</strong><br>
+        <input ng-model="currentItem.line2" ng-blur="updateDocument(currentItem.id, {line2: currentItem.line2})">
+    </div>
+
+    <br>
+
+    <div>
+        <textarea ng-model="currentItem.line3" ng-blur="updateDocument(currentItem.id, {line3: currentItem.line3})">
+
+        </textarea>
+    </div>
+
+    <br>
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>:</td>
+            <td>
+                <input ng-model="currentItem.applicant.name"
+                    ng-blur="updateDocument(currentItem.id, {'applicant.name': currentItem.applicant.name})">
+            </td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>:</td>
+            <td>
+
+                <input ng-model="currentItem.applicant.address"
+                    ng-blur="updateDocument(currentItem.id, {'applicant.address': currentItem.applicant.address})">
+            </td>
+        </tr>
+        <tr>
+            <td>Date Issued</td>
+            <td>:</td>
+            <td>
+                <input ng-model="currentItem.date_issued"
+                    ng-blur="updateDocument(currentItem.id, {date_issued:  currentItem.date_issued})">
+
+            </td>
+        </tr>
+    </table>
+
+    <br><br><br>
+
+    <div layout>
+        <div style="width:60%">&nbsp;</div>
+        <div>
+            Issued by:<br><br><br>
+            <input ng-model="currentItem.line7" ng-blur="updateDocument(currentItem.id, {line7:  currentItem.line7})">
+            <input ng-model="currentItem.line8" ng-blur="updateDocument(currentItem.id, {line8:  currentItem.line8})">
+        </div>
+    </div>
+
+    <br>
+    <div ng-repeat="line in [9,10,11]">
+        <input style="width: 100%" ng-model="currentItem['line'+line]" 
+        ng-blur="lines={};lines['line'+line]=currentItem['line'+line];
+                updateDocument(currentItem.id, lines)"><br>
+    </div>
+    <hr>
+    <div class="align-center">TERMS AND CONDITIONS</div>
+
+    <ol>
+        <li ng-repeat="line in [12,13,14]">
+            <textarea ng-model="currentItem['line'+line]"
+                ng-blur="lines={};lines['line'+line]=currentItem['line'+line]; updateDocument(currentItem.id, lines)">
+        </textarea></li>
+
+    </ol>
+    <br>
+    <br>
+    <br>
+</div>

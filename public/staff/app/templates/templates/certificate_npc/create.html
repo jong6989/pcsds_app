@@ -1,0 +1,281 @@
+<div ng-init="n.subject = 'Certificate of no-pending case'; n.keywords = ((n.keywords)? n.keywords : []); titles = ['Ms.','Mrs.','Mr.']; n.c_type = 'empty'; 
+c_types = ['empty','wsup_ao5','wsup_ao12','wcp_ao5','sep','sup','sup+']; ">
+	
+	<h3 class="align-center">CERTIFICATION</h3>
+	<hr>
+	<br>
+	<!-- certification templates -->
+	<md-input-container class="md-block" >
+		<label>Type of Certificate</label>
+		<md-select ng-model="n.c_type" required>
+			<md-option ng-repeat="x in c_types" value="{{x}}">
+			{{x}}
+			</md-option>
+		</md-select>
+	</md-input-container>
+	<md-input-container class="md-block m-t-40">
+	    <label>Application No.</label>
+	    <input ng-model="n.application_no" required>
+	</md-input-container> 
+	<hr>
+	<br>
+
+	<!-- not empty -->
+	<div ng-if="n.c_type != 'empty'">
+		<strong>Applicant</strong>
+		<div layout>
+			<md-input-container class="md-block" flex="15">
+				<label>Title</label>
+				<md-select ng-model="n.name_title">
+					<md-option ng-repeat="x in titles" value="{{x}}">
+					{{x}}
+					</md-option>
+				</md-select>
+			</md-input-container>
+	
+			<md-input-container class="md-block m-t-40" flex>
+				<label>First Name</label>
+				<input ng-model="n.applicant_f_name" 
+				ng-blur="n.keywords[0] = n.applicant_f_name;" required>
+			</md-input-container>
+	
+			<md-input-container class="md-block m-t-40" flex>
+				<label>Middle Name</label>
+				<input ng-model="n.applicant_m_name" ng-blur="n.keywords[2] = n.applicant_m_name;" >
+			</md-input-container>
+	
+			<md-input-container class="md-block m-t-40" flex>
+				<label>Last Name</label>
+				<input ng-model="n.applicant_l_name" ng-blur="n.keywords[1] = n.applicant_l_name;" required>
+			</md-input-container>
+		</div>
+	
+		<md-input-container class="md-block m-t-40"  ng-if="n.c_type != 'sup+'">
+			<label>Address / Business Address</label>
+			<input ng-model="n.address" required>
+		</md-input-container>
+
+		<!-- for sup+ -->
+		<div ng-if="n.c_type == 'sup+'" ng-init="n.applicants = [{}];">
+			<md-input-container class="md-block m-t-40" >
+				<label>Address</label>
+				<input ng-model="n.address" required>
+			</md-input-container>
+			<br>
+			<strong>With</strong>
+			<div layout ng-repeat="x in n.applicants">
+				<md-button class="md-fab md-mini" 
+				aria-label="Remove Applicant" ng-click="n.applicants.splice($index,1)" ng-if="n.applicants.length > 1">
+					<md-tooltip md-direction="left">Remove Applicant</md-tooltip>
+					<i class="fa fa-remove" ></i>
+				</md-button> 
+				<md-input-container class="md-block" flex="15">
+					<label>Title</label>
+					<md-select ng-model="n.applicants[$index].title">
+						<md-option ng-repeat="x in titles" value="{{x}}">
+						{{x}}
+						</md-option>
+					</md-select>
+				</md-input-container>
+		
+				<md-input-container class="md-block m-t-40" flex>
+					<label>First Name</label>
+					<input ng-model="n.applicants[$index].f_name" ng-blur="n.keywords[3 + $index] = n.applicants[$index].f_name;" required>
+				</md-input-container>
+		
+				<md-input-container class="md-block m-t-40" flex>
+					<label>Middle Name</label>
+					<input ng-model="n.applicants[$index].m_name" ng-blur="n.keywords[5 + $index] = n.applicants[$index].m_name;">
+				</md-input-container>
+		
+				<md-input-container class="md-block m-t-40" flex>
+					<label>Last Name</label>
+					<input ng-model="n.applicants[$index].l_name" ng-blur="n.keywords[4 + $index] = n.applicants[$index].m_name;" required>
+				</md-input-container>
+				<div ng-hide="true">
+					{{
+						n.applicants[$index].full_name = n.applicants[$index].title + ' ' + n.applicants[$index].f_name + ' ' + n.applicants[$index].m_name + ' ' + n.applicants[$index].l_name;
+					}}
+				</div>
+			</div>
+			<md-button class="md-fab md-mini md-primary" aria-label="Add Applicant" 
+			ng-click="n.applicants.push({})" ng-if="n.applicants.length < 6">
+				<md-tooltip md-direction="left">Add Applicant</md-tooltip>
+				<i class="fa fa-plus" ></i>
+			</md-button> 
+			<hr>
+			<md-input-container class="md-block m-t-40" >
+				<label>Business Address</label>
+				<input ng-model="n.address2" required>
+			</md-input-container>
+		</div>
+	
+		<!-- end for sup+ -->
+		<hr>
+		<br>
+		<!-- for chainsaw -->
+		<div  ng-if="n.c_type == 'sup' || n.c_type == 'sup+'">
+			<md-input-container class="md-block m-t-40" flex>
+				<label>Bearing Serial Number </label>
+				<input ng-model="n.chainsaw_bearing_number" required>
+			</md-input-container>
+			<md-input-container class="md-block m-t-40" flex>
+				<label>Metal Seal Number  </label>
+				<input ng-model="n.chainsaw_metal_seal_number" required>
+			</md-input-container>
+		</div>
+	
+		<!-- end for chainsaw -->
+		<hr>
+		<strong>Date</strong>
+		<div layout>
+			<md-input-container class="md-block m-t-40" flex>
+				<label>Day</label>
+				<input ng-model="day" required>
+			</md-input-container>
+			<md-input-container class="md-block m-t-40" flex>
+				<label>Month</label>
+				<input ng-model="month" required>
+			</md-input-container>
+			<md-input-container class="md-block m-t-40" flex>
+				<label>Year</label>
+				<input ng-model="year" required>
+			</md-input-container>
+		</div>
+
+		<!-- paragraph builder -->
+		<div ng-if="n.c_type == 'wsup_ao5'" ng-hide="true">
+			{{ n.line1 = 
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
+					+ ', has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 05, series of 2014 (Guidelines for the Regulation and Monitoring of Catching, Culture, Trade, Transport and Export of Reef-Fish-For-Food in Palawan) or any other PCSD administrative orders.'
+			}}
+		</div>
+
+		<div ng-if="n.c_type == 'wsup_ao12'" ng-hide="true">
+			{{ n.line1 = 
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
+					+ ', has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 12, series of 2011 (Detailed Guidelines in the ' +
+					'Implementation of Republic Act No. 9147 and Joint DENR-DA-PCSD Administrative Order No. 01 as may be made Applicable in the Province of Palawan) or any other PCSD administrative orders.'
+			}}
+		</div>
+
+		<div ng-if="n.c_type == 'wsup_ao5' || n.c_type == 'wsup_ao12'" ng-hide="true">
+			{{ n.line2 = 
+				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name +
+				' for the purpose of applying for Wildlife Special Use Permit.'
+			}}
+		</div>
+
+		<div ng-if="n.c_type == 'wcp_ao5'" ng-hide="true">
+			{{ n.line1 = 
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', with business address located at ' + n.address 
+					+ ',  has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 05, series of 2014 (Guidelines for the Regulation and Monitoring of Catching, Culture, Trade, Transport and Export of Reef-Fish-For-Food in Palawan) or any other PCSD administrative orders.'
+			}}
+			{{ n.line2 = 
+				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name +
+				' for the purpose of applying for Wildlife Collector\’s Permit.'
+			}}
+		</div>
+
+		<div ng-if="n.c_type == 'sep'" ng-hide="true">
+			{{ n.line1 = 
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', whose Forest Land Use Agreement for other lawful purposes applied area is located at ' + n.address 
+					+ ',  has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 06, as amended, or any other PCSD administrative orders.'
+			}}
+			{{ n.line2 = 
+				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name +
+				' for the purpose of applying for SEP Clearance.'
+			}}
+		</div>
+
+		<div ng-if="n.c_type == 'sup'" ng-hide="true">
+			{{ n.line1 = 
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', resident of ' + n.address + ', owner of chainsaw unit bearing Serial Numbers ' + n.chainsaw_bearing_number
+					+ ' with Metal Seal Number ' + n.chainsaw_metal_seal_number
+					+ ',  has no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 07, as amended, or any other PCSD administrative orders.'
+			}}
+			{{ n.line2 = 
+				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name +
+				' for the purpose of applying for Special Use Permit. '
+			}}
+		</div>
+
+		<div ng-if="n.c_type == 'sup+'" ng-hide="true">
+			{{ n.line1 = 
+				'This is to certify that ' + n.name_title + ' ' + n.applicant_f_name + ' ' + n.applicant_m_name + ' ' + n.applicant_l_name + ', resident of ' + n.address + ', owner of chainsaw unit bearing Serial Numbers ' + n.chainsaw_bearing_number
+					+ ' with Metal Seal Number ' + n.chainsaw_metal_seal_number 
+					+ ( (n.applicants.length > 0)? ' and ' + n.applicants[0].full_name : '' )
+					+ ( (n.applicants.length > 1)? ' and ' + n.applicants[1].full_name : '' )
+					+ ( (n.applicants.length > 2)? ' and ' + n.applicants[2].full_name : '' )
+					+ ( (n.applicants.length > 3)? ' and ' + n.applicants[3].full_name : '' )
+					+ ( (n.applicants.length > 4)? ' and ' + n.applicants[4].full_name : '' )
+					+ ( (n.applicants.length > 5)? ' and ' + n.applicants[5].full_name : '' )
+					+ ', with business address at ' + n.address2 + ', applicants for issuance of Special Use Permit'
+					+ ', have no pending case before the PCSD Adjudication Board involving violation of PCSD Administrative Order No. 07, as amended, or any other PCSD administrative orders.'
+			}}
+			{{ n.line2 = 
+				'This Certification is being issued upon the request of ' + n.name_title + ' ' + n.applicant_l_name 
+				+ ( (n.applicants.length > 0)? ( (n.applicants.length > 1)? ', ' : ' and ' ) + n.applicants[0].title + ' ' +  n.applicants[0].l_name : '' ) 
+				+ ( (n.applicants.length > 1)? ( (n.applicants.length > 2)? ', ' : ' and ' ) + n.applicants[1].title + ' ' +  n.applicants[1].l_name : '' )
+				+ ( (n.applicants.length > 2)? ( (n.applicants.length > 3)? ', ' : ' and ' ) + n.applicants[2].title + ' ' +  n.applicants[2].l_name : '' )
+				+ ( (n.applicants.length > 3)? ( (n.applicants.length > 4)? ', ' : ' and ' ) + n.applicants[3].title + ' ' +  n.applicants[3].l_name : '' )
+				+ ( (n.applicants.length > 4)? ( (n.applicants.length > 5)? ', ' : ' and ' ) + n.applicants[4].title + ' ' +  n.applicants[4].l_name : '' )
+				+ ( (n.applicants.length > 5)? ( (n.applicants.length > 6)? ', ' : ' and ' ) + n.applicants[5].title + ' ' +  n.applicants[5].l_name : '' )
+				+ ' for the purpose of applying for Special Use Permit. '
+			}}
+		</div>
+
+		<div ng-hide="true">
+			{{
+				n.line3 = 
+				'Given this ' + day + 'th day of ' + month + ' ' + year + ' at PCSDS, Sta. Monica Heights, Puerto Princesa City, Palawan.'
+			}}
+		</div>
+		<!-- end paragraph builder -->
+
+	</div>
+	
+	<!-- empty template -->
+	<div ng-if="n.c_type == 'empty'" ng-init="n.lines = ['']; meta_lines = [];" layout="column">
+		<div ng-repeat="x in n.lines" layout="column">
+			<strong>Paragraph line {{$index + 1}} </strong>
+			<textarea name="line_{{$index}}" ng-blur="n.lines[$index] = meta_lines[$index]" ng-model="meta_lines[$index]" rows="10"></textarea>
+			<md-button class="md-button md-warn" ng-click="n.lines.splice($index,1)" ng-if="n.lines.length > 1">remove paragraph</md-button>
+			<hr>
+		</div>
+		<br>
+		<md-button class="md-button md-primary" ng-click="n.lines.push('')">add paragraph</md-button>
+	</div>
+
+	<hr>
+	<br>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Paid amount</label>
+			<input ng-model="n.paid_amount" >
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>OR Number</label>
+			<input ng-model="n.paid_or_number" >
+		</md-input-container>
+		<div flex-gt-sm>
+			<strong>Date Paid</strong>
+			<md-datepicker ng-model="paid_date" ng-change="n.paid_date = to_date(paid_date)" 
+				md-placeholder="Date"
+				md-open-on-focus>
+			</md-datepicker>
+		</div>
+	</div>
+
+	<br><br>
+    <strong>Keywords</strong> 
+    <md-chips ng-model="n.keywords" md-add-on-blur="true" readonly="false"
+        input-aria-label="Keywords" placeholder="add keywords" md-removable="true"></md-chips>
+    <br>
+	<br>
+	<br>
+
+</div>
+
+

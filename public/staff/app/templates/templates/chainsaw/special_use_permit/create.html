@@ -1,0 +1,217 @@
+<div ng-init="n.subject = 'CHAINSAW SPECIAL USE PERMIT'; 
+	n.keywords = []; 
+	titles = ['Ms.','Mrs.','Mr.']; 
+	n.c_type = 'permit'; ">
+	<h3 class="center-align">CHAINSAW SPECIAL USE PERMIT</h3>
+	<hr>
+	<br>
+	<md-input-container class="md-block m-t-40">
+		<label>Permit No.</label>
+		<input ng-model="n.permit_no" ng-blur="n.keywords[0]=n.permit_no" required>
+	</md-input-container>
+	<br>
+
+	<md-input-container class="md-block m-t-40" flex>
+		<label>Name of Chainsaw Owner/Applicant</label>
+		<textarea ng-model="n.owner_name" ng-blur="n.keywords[1]=n.owner_name" required></textarea>
+	</md-input-container>
+
+	<md-input-container class="md-block m-t-40" flex>
+		<label>Owner of Planted Trees/Representative</label>
+		<input ng-model="n.owner_of_planted_trees" ng-blur="n.keywords[2]=n.owner_of_planted_trees" required>
+	</md-input-container>
+	<md-input-container class="md-block m-t-40" flex>
+		<label>Address</label>
+		<input ng-model="n.address" required>
+	</md-input-container>
+
+
+	<div layout>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Chainsaw Registration Number</label>
+			<input ng-model="n.chainsaw.registration_number" ng-blur="n.keywords[3]=n.chainsaw.registration_number"
+				required>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Chainsaw Serial Number</label>
+			<input ng-model="n.chainsaw.serial_number" ng-blur="n.keywords[4]=n.chainsaw.serial_number" required>
+		</md-input-container>
+		<md-input-container class="md-block m-t-40" flex>
+			<label>Chainsaw Metal Seal Number</label>
+			<input ng-model="n.chainsaw.metal_seal_number" ng-blur="n.keywords[5]=n.chainsaw.metal_seal_number">
+		</md-input-container>
+	</div>
+
+	<div layout>
+		<md-input-container flex>
+			<label>Place of Origin</label>
+			<input ng-model="n.chainsaw.place_of_origin">
+		</md-input-container>
+		<md-input-container flex>
+			<label>Place of Destination</label>
+			<input ng-model="n.chainsaw.place_of_destination">
+		</md-input-container>
+		<md-input-container flex>
+			<label>Purpose</label>
+			<textarea ng-model="n.purpose"></textarea>
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container flex>
+			<md-datepicker md-placeholder="Date Issued" ng-init="date_issued=n.date_issued" ng-model="date_issued"
+				ng-blur="n.date_issued=to_date(date_issued)" md-open-on-focus required>
+			</md-datepicker>
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker md-placeholder="Expiry Date" ng-init="expiry_date=n.expiry_date" ng-model="expiry_date"
+				ng-blur="n.expiry_date=to_date(expiry_date)" md-open-on-focus required>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<hr>
+	<strong>Payment</strong>
+	<div layout>
+		<md-input-container flex>
+			<label>Paid amount</label>
+			<input ng-model="n.paid_amount" type="number" required>
+		</md-input-container>
+		<md-input-container flex>
+			<label>OR Number</label>
+			<input ng-model="n.paid_or_number" required>
+		</md-input-container>
+		<md-input-container flex>
+			<md-datepicker ng-init="paid_date=n.paid_date" ng-model="paid_date"
+				ng-change="n.paid_date = to_date(paid_date)" md-placeholder="Date of Payment" md-open-on-focus required>
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<br>
+	<hr>
+	<div class="center-align" ng-init="n.terms=[]">TERMS AND CONDITIONS</div>
+	<input type="hidden" ng-init="n.terms[0]=''">
+	<input type="hidden" ng-init="n.terms[1]='The permit should accompany the valid permit to cut or similar permits or authorization issued by the concerned government agencies.'">
+	<input type="hidden" ng-init="n.terms[2]='A report should be submitted to the PCSDS within seven (7) days from expiration of this permit containing details of use including the volume of cut and sliced coconut trees and mahogany tree.'">
+	<input type="hidden" ng-init="n.terms[3]='The permit is only valid within forty-five (45) days upon issuance.'" >
+	<ul>
+		<li ng-repeat="term in n.terms track by $index">
+			<textarea ng-model="n.terms[$index]" style="width:100%"></textarea>
+		</li>
+	</ul>
+	<md-button class="md-primary md-raised" ng-click="n.terms.push('')">
+		Add Paragraph
+	</md-button>
+	<div><strong>PREVIEW</strong></div>
+	<p>
+		<div class="center-align">
+			<strong>{{ n.line1 = 'SPECIAL USE PERMIT'}}</strong><br>
+			{{ n.line2 = n.permit_no }}
+		</div>
+	</p>
+	<br>
+	<p>
+		{{ n.line3 = 'Having complied with the provisions of PCSD Administrative Order No. 07, as amended, ' + 
+		'otherwise known as the Implementing Rules and Regulations of the Chainsaw Act of 2002, and after evaluation ' + 
+		'conducted by the PCSDS, this permit hereby issued to: '}}
+	</p>
+	<p>
+		<table>
+			<tr>
+				<td>Name of Chainsaw Owner/Applicant</td>
+				<td>:</td>
+				<td>{{n.owner_name.toUpperCase()}}</td>
+			</tr>
+			<tr>
+				<td>Owner of Planted Trees/Representative:</td>
+				<td>:</td>
+				<td>{{n.owner_of_planted_trees.toUpperCase()}}</td>
+			</tr>
+			<tr>
+				<td>Addres:</td>
+				<td>:</td>
+				<td>{{n.address}}</td>
+			</tr>
+
+			<tr>
+				<td>Chainsaw Registration Number</td>
+				<td>:</td>
+				<td>{{n.chainsaw.registration_number}}</td>
+			</tr>
+			<tr>
+				<td>Chainsaw Serial Number</td>
+				<td>:</td>
+				<td>{{n.chainsaw.serial_number}}</td>
+			</tr>
+			<tr>
+				<td>Chainsaw Metal Seal Number</td>
+				<td>:</td>
+				<td>{{n.chainsaw.metal_seal_number}}</td>
+			</tr>
+			<tr>
+				<td>Place of Origin</td>
+				<td>:</td>
+				<td>{{n.chainsaw.place_of_origin}}</td>
+			</tr>
+			<tr>
+				<td>Place of Destination</td>
+				<td>:</td>
+				<td>{{n.chainsaw.place_of_destination}}</td>
+			</tr>
+			<tr>
+				<td>Purpose</td>
+				<td>:</td>
+				<td>{{n.purpose}}</td>
+			</tr>
+			<tr>
+				<td>Date Issued</td>
+				<td>:</td>
+				<td>{{get_full_date(n.date_issued)}}</td>
+			</tr>
+			<tr>
+				<td>Expiry Date</td>
+				<td>:</td>
+				<td>{{get_full_date(n.expiry_date)}}</td>
+			</tr>
+		</table>
+	</p>
+	<div layout>
+		<div style="width:60%">&nbsp;</div>
+		<div>
+			{{n.line4 = 'By the Authority of the Council: '}}<br><br><br>
+			{{n.line5 = pcsd.head.full_name}}<br>
+			{{n.line6 = pcsd.head.position}}
+		</div>
+	</div>
+	<br><br>
+	<div>
+		{{n.line7='PAID UNDER O.R. NO. ' + n.paid_or_number}}<br>
+		{{n.line8 = 'AMOUNT PAID: Php ' + (n.paid_amount|number:2)}}<br>
+		{{n.line9 = 'DATE OF PAYMENT: ' + get_full_date(n.paid_date)}}
+	</div>
+	<hr>
+	<div class="center-align">
+		TERMS AND CONDITIONS
+	</div>
+	<ul>
+		<li ng-repeat="term in n.terms">
+			{{term}}
+		</li>
+	</ul>
+	<hr>
+	<br>
+	<div class="center-align">CONFORME</div>
+	<p>
+		{{n.line10 = 'I,' + n.owner_name + ' , the grantee of the foregoing Permit to Transfer and Use, hereby certify ' +
+			'that I have read and understood the terms and conditions for which this permit is issued and I hereby express ' +
+			'my conformity thereto and my commitment to abide by the provisions of PCSD Administrative Order No. 7, as ' +
+			'as amended, and other PCSD policies similar or related thereto.'
+		}}
+	</p>
+	<div layout>
+		<div style="width:70%">&nbsp;</div>
+		<div>
+			<div class="underlined">&nbsp;</div>
+			<div>{{n.line11="Grantee's signature Over Printed Name"}}</div>
+			<div>{{n.line12='Date Signed:'}}</div>
+		</div>
+	</div>
+</div>

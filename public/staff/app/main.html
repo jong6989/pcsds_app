@@ -37,9 +37,9 @@
                             <i class="fa {{ 'fa-' + x.icon}} m-r-10"></i>
                             <span flex ng-class="{ 'col-grey': is_path(x.path) }">{{x.title}}</span>
                         </md-list-item>
-                        <md-list-item ng-if="!x.path" ng-click="account.menu[$index].toggle = !account.menu[$index].toggle">
+                        <md-list-item ng-if="!x.path" ng-click="account.menu[$index].toggle = !account.menu[$index].toggle" >
                             <i class="fa {{ 'fa-' + x.icon}} m-r-10"></i>
-                            <span flex>{{x.title}}</span>
+                            <span flex ng-class="{ 'col-grey': account.menu[$index].toggle }">{{x.title}}</span>
                             <md-icon ng-show="!account.menu[$index].toggle" >expand_more</md-icon>
                             <md-icon ng-show="account.menu[$index].toggle" >expand_less</md-icon>
                         </md-list-item>

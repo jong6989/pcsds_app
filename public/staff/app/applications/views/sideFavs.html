@@ -1,0 +1,64 @@
+<md-button class="md-fab md-mini bg-blue" aria-label="Application List" ng-click="setContent('./app/applications/views/application_list.html')">
+    <md-tooltip md-direction="left">Application List</md-tooltip>
+    <i class="fa fa-list"></i>
+</md-button>
+
+<md-button class="md-fab md-mini bg-red" aria-label="Pending List" ng-click="setContent('./app/applications/views/pending_list.html')">
+    <md-tooltip md-direction="left">Pending Applications</md-tooltip>
+    <i class="fa fa-list"></i>
+</md-button>
+
+<md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="update_user({'badges.personal_chat':0});toggleChatNav(1,'Personnal Chats');">
+    <md-tooltip md-direction="left">Personnal Chats</md-tooltip>
+    <i class="fa fa-comments-o"></i>
+    <span class="badge badge-pill badge-danger" ng-if="me.badges.personal_chat > 0">{{me.badges.personal_chat}}</span>
+</md-button>
+
+<md-button class="md-fab md-mini bg-teal" aria-label="Chats" ng-click="toggleChatNav(3,'Client Chats')">
+    <md-tooltip md-direction="left">Client Chats</md-tooltip>
+    <i class="fa fa-commenting-o"></i>
+    <span class="badge badge-pill badge-danger" ng-if="client_chat_count > 0">{{client_chat_count}}</span>
+</md-button>
+
+<md-button class="md-fab md-mini bg-teal" aria-label="Logs" ng-click="toggleChatNav(4,'Action Logs')">
+    <md-tooltip md-direction="left">Action Logs</md-tooltip>
+    <i class="fa fa-history"></i>
+</md-button>
+
+
+<!-- datasets -->
+<!-- 
+<md-menu-bar ng-controller="database_permit_controller" ng-show="validate_user([4,5,6,7,8])">
+<md-menu>
+    <md-button class="md-fab md-mini bg-teal" aria-label="Datasets" ng-click="$mdMenu.open($event)">
+        <md-tooltip md-direction="left">Database Sets</md-tooltip>
+        <i class="fa fa-database"></i>
+    </md-button>
+    <md-menu-content>
+        <md-menu-item ng-if="!check_empty('wsup')">
+            <md-button aria-label="WSUP" 
+            ng-click="open_database('wsup')">
+                <small>WSUP</small>
+            </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!check_empty('sep')">
+            <md-button aria-label="SEP" 
+            ng-click="open_database('sep')">
+                <small>SEP</small>
+            </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!check_empty('apprehension')">
+            <md-button aria-label="APPREHENSION" 
+                ng-click="open_database('apprehension')">
+                    <small>APPREHENSION</small>
+            </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!check_empty('admin_cases')" >
+            <md-button aria-label="ADMIN_CASES" 
+            ng-click="open_database('admin_cases')">
+                <small>Admin Cases</small>
+            </md-button>
+        </md-menu-item>
+    </md-menu-content>
+</md-menu> -->
+</md-menu-bar>

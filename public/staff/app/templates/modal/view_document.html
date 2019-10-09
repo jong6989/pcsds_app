@@ -1,0 +1,42 @@
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="viewDocument" ng-controller="doc_ctrl_published" ng-init="loadReciepients(doc_user[currentItem.agency.id],currentItem.agency.id);init_publishing_receipients();">
+        <md-dialog layout="column" layout-align="center center">
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>{{currentItem.subject}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            
+            <md-dialog-content layout-padding class="p-b-20">
+                <hr>
+                <div ng-include="currentItem.template.view"></div>
+                <hr>
+                <div layout layout-align="center center">
+                    <md-button ng-if="currentItem.publisher == doc_user.id" class="md-button md-primary" ng-click="openSendDocument(currentItem, $event)" layout-gt-sm>
+                        <i class="fa fa-paper-plane m-r-5"></i>
+                        Send
+                        <div ng-include="'./app/doc/modals/sendDocument.html'" ></div>
+                    </md-button>
+                    <md-button ng-if="currentItem.template != undefined" class="md-button md-primary col-pink" aria-label="Print Document" ng-click="print_document(currentItem.id)">
+                        <md-tooltip md-direction="left">Print this document</md-tooltip>
+                        <i class="fa fa-print" ></i>
+                        Print
+                    </md-button> 
+                </div>
+                <hr>
+            </md-dialog-content>
+        
+            <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="close_dialog()">
+                Close
+            </md-button>
+            </md-dialog-actions>
+
+        </md-dialog>
+    </div>
+</div>

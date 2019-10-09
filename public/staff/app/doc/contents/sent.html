@@ -1,0 +1,69 @@
+<div ng-controller="doc_ctrl_published" ng-init="loadReciepients(doc_user[currentItem.agency.id],currentItem.agency.id)">
+    
+    <h5 class="col-grey">To</h5>
+    <p>
+        <span ng-if="currentTransaction.sentUser != undefined">
+            {{currentTransaction.sentUser.name}}, {{currentTransaction.sentUser.email}},
+            {{currentTransaction.sentUser.contact}}
+        </span>
+        <br>
+        <cite class="font-11 col-grey" ng-repeat="(a,b) in currentTransaction.sentUser[currentItem.agency.id]" ng-if="a != 'active' && b"> {{a}}, </cite>
+        <br>
+    </p>
+
+    <div ng-if="currentTransaction.status == 'received'">
+        <h5 class="col-green">Received</h5>
+        <p ng-init="received = date_gap(currentTransaction.received.time, currentTransaction.time).split(' ')">
+            <strong class="col-blue">within {{ received[0] }} {{ received[1] }}</strong>, 
+            ({{currentTransaction.date}} - {{currentTransaction.received.date}})
+        </p>
+    </div>
+    <hr>
+    <div ng-if="currentTransaction.status == 'pending'">
+        <h5 class="col-red">Sent</h5>
+        <p>
+            {{currentTransaction.date}}, 
+            {{ date_from_now(currentTransaction.time) }}
+        </p>
+    <hr>
+    </div>
+    <div ng-if="currentTransaction.status == 'declined'">
+        <h5 class="col-orange">Declined <cite> Reason : <strong>{{currentTransaction.declined.reason}}</strong> </cite></h5>
+        <p>
+            {{currentTransaction.declined.date}}, 
+            {{ date_from_now(currentTransaction.declined.time) }}
+        </p>
+        <hr>
+    </div>
+
+    <h5 class="col-grey">Remark</h5>
+    <p>
+        <strong class="col-red">{{currentTransaction.remarks}}</strong>
+    </p>
+
+    <hr>
+    <div ng-if="currentItem.template != undefined" style="border: #000 solid 1px; padding: 20px; box-shadow: #777 3-px 3px 1px;margin: 10px; background-color: #fff;">
+        <div ng-include="currentItem.template.view"></div>
+    </div>
+    <!-- <div ng-include="'./app/doc/contents/document.html'"></div> -->
+    
+    
+    <hr>
+    <h4>Files</h4>
+    <ol>
+        <li ng-repeat="x in currentItem.files">
+            <a ng-href="{{api_address + '/uploads/' + x.path}}" download="{{x.name}}">
+                {{x.name}}
+            </a>
+        </li>
+    </ol>
+
+
+    <br>
+    <hr>
+    <div ng-controller="doc_ctrl_actions" ng-include="'./app/doc/contents/actions.html'"></div>
+    <hr>
+    <h4></h4>
+    <br><br><br>
+
+</div>

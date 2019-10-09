@@ -1,0 +1,132 @@
+<style>
+    textarea {
+        width: 100%
+    }
+</style>
+<!-- <div style="width:90%" ng-controller="ChainsawEvaluationController" ng-init="currentItem=n"> -->
+<div style="width:90%">
+    <div ng-include="'./app/templates/application/style.html'"></div>
+    <DIV><strong>{{ currentitem.line1 }}</strong></DIV>
+    <div><i>Application for Chainsaw {{currentItem.application_type}}</i></div>
+    <div>
+        <ol>
+            <li>
+                <div>Background Information</div>
+                <p>
+                    The following information pertains to the applicant per se:<br>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:100px">Chainsaw Owner/Applicant Name</td>
+                            <td>:</td>
+                            <td>
+                                <input ng-model="currentItem.applicant.name"
+                                    ng-blur="updateDocument(currentItem.id, {'applicant.name': currentItem.applicant.name})">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>:</td>
+                            <td>
+                                <input ng-model="currentItem.applicant.address"
+                                    ng-blur="updateDocument(currentItem.id, {'applicant.address': currentItem.applicant.address})">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Application Type</td>
+                            <td>:</td>
+                            <td>
+                                <input ng-model="currentItem.application_type"
+                                    ng-blur="updateDocument(currentItem.id, {'applicant.address': currentItem.application_type})">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Brand</td>
+                            <td>:</td>
+                            <td>
+                                <input ng-model="currentItem.chainsaw.brand"
+                                    ng-blur="updateDocument(currentItem.id, {'chainsaw.brand': currentItem.chainsaw.brand})">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Serial Number</td>
+                            <td>:</td>
+                            <td>
+                                <input ng-model="currentItem.chainsaw.serial_number"
+                                    ng-blur="updateDocument(currentItem.id, {'chainsaw.serial_number': currentItem.chainsaw.serial_number})">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Metal Seal Number</td>
+                            <td>:</td>
+                            <td>
+                                <input ng-model="currentItem.chainsaw.metal_seal_number"
+                                    ng-blur="updateDocument(currentItem.id, {'chainsaw.metal_seal_number': currentItem.chainsaw.metal_seal_number})">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Engine Type</td>
+                            <td>:</td>
+                            <td>
+                                <input ng-model="currentItem.chainsaw.engine_type"
+                                    ng-blur="updateDocument(currentItem.id, {'chainsaw.engine_type': currentItem.chainsaw.engine_type})">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Horsepower</td>
+                            <td>:</td>
+                            <td>
+                                <input ng-model="currentItem.chainsaw.horsepower"
+                                    ng-blur="updateDocument(currentItem.id, {'chainsaw.horsepower':currentItem.chainsaw.horsepower})">
+                            </td>
+                        </tr>
+                        <tr ng-repeat="item in currentItem.items[currentItem.application_type]">
+                            <td>{{item.label}}</td>
+                            <td>:</td>
+                            <td>
+                                <textarea ng-if="currentItem[item.model_name].length >= 75"
+                                    ng-model="currentItem[item.model_name]">
+
+                                </textarea>
+                                <input ng-if="currentItem[item.model_name].length<75"
+                                    ng-model="currentItem[item.model_name]"
+                                    ng-blur="x[item.model_name]=currentItem[item.model_name];updateDocument(currentItem.id, x)">
+                            </td>
+                        </tr>
+                    </table>
+                </p>
+                <p>
+                    Requirements submitted for evaluation:
+                    <ul>
+                        <li ng-repeat="requirement in n.requirements_submitted track by $index">
+                            <input ng-model="n.requirements_submitted[$index]"
+                                ng-blur="updateDocument(currentItem.id, n.requirements_submitted)">
+                        </li>
+                    </ul>
+                </p>
+            </li>
+            <li>Evaluation
+                <p>
+                    <textarea ng-model="currentItem.evaluation"
+                        ng-blur="updateDocument(currentItem.id, {evaluation: currentItem.evaluation})">
+                        </textarea>
+                </p>
+            </li>
+            <li>Recommendation
+                <p>
+                    <textarea ng-model="currentItem.recommendation"
+                        ng-blur="updateDocument(currentItem.id, {recommendation: currentItem.recommendation})">
+                        </textarea>
+                </p>
+            </li>
+        </ol>
+        <div>Date:
+            <p>
+                <input ng-model="currentItem.date_evaluated"
+                    ng-blur="updateDocument(currentItem.id, { date_evaluated:currentItem.date_evaluated})">
+            </p>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+</div>

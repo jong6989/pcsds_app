@@ -1,0 +1,189 @@
+<div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div>
+<div class="p-t-20 p-l-10">
+
+    <div layout="row">
+        <div flex layout-gt-xs="row" layout-xs="column">
+            <div flex flex-gt-xs="15" layout-align="center center">
+                <img src="/images/pcsdlogo.png" class="p-t-5" style="width:100%;">
+            </div>
+            <div flex layout-align="center" class="m-l-20">
+                <h4><strong>Republic of the Philippines</strong> <br>
+                    <small>Republic Act 7611</small><br>
+                    <small>PALAWAN COUNCIL for SUSTAINABLE DEVELOPMENT</small>
+                </h4>
+            </div>
+        </div>
+        <div>
+            <img  ng-src="{{ application.data.application.applicant_photo }}" alt="Applicant Photo" width="100%" md-whiteframe="3">
+        </div>
+    </div>
+
+    <div class="align-center m-t-20 m-b-10">
+            <h3 ng-if="application.data.application.application_type == 'new'">APPLICATION FOR <span class="col-green">NEW</span> WILDLIFE COLLECTOR'S PERMIT (WCP)</h3>
+            <h3 ng-if="application.data.application.application_type == 'renew'" >APPLICATION FOR <span class="col-blue">RENEWAL</span> OF WILDLIFE COLLECTOR'S PERMIT (WCP)</h3>
+        <h4>Transaction No.: {{application.date}} </h4>
+    </div>
+        
+    <div layout="row" layout-align="end">
+        <div layout="column" layout-align="center center">
+            <div><strong style="text-decoration: underline"> {{application.date | date : 'MMMM d, yyyy'}} </strong></div>
+            <div>(date)</div>
+        </div>
+        <div class="p-r-50"></div>
+    </div>
+
+    <h4>
+        NELSON P. DEVANADERA <br>
+        <small>Executive Director</small><br>
+        <small>Palawan Council for Sustainable Development Staff</small>
+    </h4>
+
+    Sir: <br>
+        
+    <span class="p-l-40"></span>In accordance with R.A. 9147 otherwise known as the "Wildlife Resources Conservation and Protection Act", with which I shall familiarize myself and to which strict compliance of same is hereby promised,
+        
+    <div class="p-l-40">
+        <p>1. I, {{application.data.application.applicant}} have the honor to apply for a Wildlife Special Use Permit.
+        </p>
+        <p>2. I am {{application.data.application.age}} years of age, citizen of {{application.data.application.nationality}} by birth</p>
+
+        <div class="m-l-10" layout-gt-sm="row">
+            <div flex-gt-sm>Date of birth: {{application.data.application.birth_day}}</div>
+            <div flex-gt-sm>Place: {{application.data.application.place_of_birth}}</div>
+        </div>
+        <div class="m-l-10" layout-gt-sm="row">
+            <div flex-gt-sm>Residence: {{application.data.application.residence_address}}</div>
+            <div flex-gt-sm>Tel. No.: {{application.data.application.residence_tel_num}}</div>
+        </div>
+        <div class="m-l-10" layout-gt-sm="row">
+            <div flex-gt-sm>Business Address: {{application.data.application.business_address}}</div>
+            <div flex-gt-sm>Tel. No.: {{application.data.application.business_tel_num}}</div>
+        </div>
+
+        <p>3. My occupation is {{application.data.application.occupation}}.</p>
+
+        <p ng-if="application.data.application.civil_status !== 'married'">4. I am {{application.data.application.civil_status}}.</p>
+        <p ng-if="application.data.application.civil_status == 'married'">4. I am married and the name of my spouse/wife is {{application.data.application.spouse_name}}.</p>
+
+        <p>5. I am {{ (application.data.application.org_member == true) ? '' : 'not' }} a member of a sportsmen and/or game club and/or scientific or conservation society and/or live fish trader association or cooperative.</p>
+        <div ng-if="application.data.application.org_member">
+            <ul ng-if="application.data.application.organizations.length > 0">
+                <li ng-repeat="x in application.data.application.organizations"> Name :  {{x.name}}, Desc :  {{x.desc}}, Position :  {{x.position}} </li>
+            </ul>
+        </div>
+
+        <p>6. I intend to collect the following wildlife:</p>
+        <div>
+            <ul ng-if="application.data.application.species.length > 0">
+                <li ng-repeat="x in application.data.application.species"> 
+                    Kind/Species : {{x.name}} , Monthly Volume : {{x.monthly_volume}} , Source Area : {{x.source_area}} 
+                </li>
+            </ul>
+        </div>
+
+        <p>7. Wildlife species to be collected under this permit shall be taken by means of:</p>
+        <div>
+            <ul ng-if="application.data.application.techniques.length > 0">
+                <li ng-repeat="x in application.data.application.techniques"> 
+                    {{x.name}} 
+                </li>
+            </ul>
+        </div>
+
+        <p>8. I understand that the information stated in this application are all true and correct and any omission of facts therein shall cause the disapproval of this application and/or cancellation of the permit that may be issued to me.</p>
+
+        <p>9. I understand that the filing of this application conveys no right to take, collect or possess any wildlife until a permit is issued to me by the PCSD.</p>
+    
+        <p>10. The application fee in the amount of {{application.data.application.application_fee}} made payable to the PCSDS with Official Receipt No. {{application.data.application.or_no}} is herewith enclosed. Non- approval or non-issuance of the permit does not entitle me to a refund of the fee.</p>
+    
+        <br><br><br>
+        <div layout="row" layout-align="end">
+            <div layout="column" layout-align="center center">
+                <div><strong style="text-decoration: underline"> {{application.data.application.applicant}} </strong></div>
+                <div>(Applicant)</div>
+                <div class="m-t-20"> <strong>TIN : {{application.data.application.tin_no}}</strong> </div>
+                <div style="max-width: 300px">
+                    <p>{{application.data.application.applicant_address}}</p>
+                </div>
+            </div>
+            <div class="p-r-50"></div>
+        </div>
+            
+        
+
+    </div>
+
+    <div ng-if="!is_printing">
+        <strong><small>Attachments :</small> </strong> <md-button class="col-pink" ng-if="isFolderExist(application.date)" ng-click="openFolder(application.date)"> <i class="fa fa-folder-open-o"></i> Open Folder</md-button>
+        <ol ng-if="application.data.application.attachments.length > 0">
+            <li ng-repeat=" x in application.data.application.attachments" ng-if="x.url != undefined"> 
+                <a target="blank" ng-href="{{ +'/'+x.url}}" ng-init="download_attachment( +'/', x.url,application)"> {{x.name}} </a> 
+            </li>
+        </ol>
+        <hr>
+        
+        <!-- Received Stamp -->
+        <md-card ng-if="application.status != 0">
+            <md-card-content>
+                Received by : <strong>{{ application.data.received.staff }}</strong> 
+                , on <strong>{{application.data.received.date.split(' ')[0]}}</strong>
+            </md-card-content>
+        </md-card>
+        
+    
+        <!-- Rejected Stamp -->
+        <md-card ng-if="application.data.rejected != undefined ">
+            <md-card-content>
+                Rejected by : <strong>{{ application.data.rejected.staff }} </strong> 
+                , on <strong>{{application.data.rejected.date.split(' ')[0]}}</strong>
+            </md-card-content>
+        </md-card>
+        
+    
+        <!-- Accepted Stamp -->
+        <md-card ng-if="application.data.accepted != undefined ">
+            <md-card-content>
+                Processed by : <strong>{{ application.data.accepted.staff }} </strong> 
+                , on  <strong>{{application.data.accepted.date.split(' ')[0]}}</strong>
+            </md-card-content>
+        </md-card>
+        
+    
+        <!-- Approved Stamp -->
+        <md-card ng-if="application.data.approved != undefined ">
+            <md-card-content>
+                Reviewed by : <strong>{{ application.data.approved.staff }} </strong> 
+                , on  <strong>{{application.data.approved.date.split(' ')[0]}}</strong>
+            </md-card-content>
+        </md-card>
+        
+    
+        <!-- Recommended Stamp -->
+        <md-card ng-if="application.data.recommended != undefined ">
+            <md-card-content>
+                Recommended by : <strong>{{ application.data.recommended.staff }} </strong> 
+                , on  <strong>{{application.data.recommended.date.split(' ')[0]}}</strong>
+            </md-card-content>
+        </md-card>
+        
+    
+        <!-- Acknowledged Stamp -->
+        <md-card ng-if="application.data.acknowledged != undefined ">
+            <md-card-content>
+                Approved by : <strong>{{ application.data.acknowledged.staff }} </strong> 
+                , on  <strong>{{application.data.acknowledged.date.split(' ')[0]}}</strong>
+            </md-card-content>
+        </md-card>
+            
+        <!-- print stamp -->
+        <div ng-if="render_params.data != undefined" >
+            <hr>
+            <p class="font-10 col-grey italic">
+                Print Date : {{date_now()}} , Staff Number: {{user.id_number}}, Document Number: {{application.date}}
+            </p>
+        </div>
+    </div>
+    
+    
+        
+</div>

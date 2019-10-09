@@ -1,0 +1,12 @@
+<div class="md-dialog-container" id="notif_dialog">
+    <md-dialog layout-padding layout="column" layout-align="center center">
+        <md-dialog-content>
+            <div class="md-title col-grey">Notification for {{selected_notif.item_type}} </div>
+            <hr>
+            <p class="col-pink"> {{selected_notif.data.message}} </p>
+            <hr>
+            <cite class="font-12 col-teal"> {{selected_notif.date}} </cite>
+            <div layout="row" layout-align="end"><md-button class="md-raised" ng-click="close_dialog()">Close</md-button></div>
+        </md-dialog-content>
+    </md-dialog>
+</div>

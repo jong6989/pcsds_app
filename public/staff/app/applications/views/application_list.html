@@ -1,0 +1,86 @@
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="search_application_box"> <i class="fa fa-search"></i> </span>
+    </div>
+    <input class="form-control" ng-model="search_application" placeholder="Search Application" aria-label="Search Application" aria-describedby="search_application_box">
+</div>
+
+<div layout="row" layout-align="center center" >
+    <md-button class="md-icon-button" aria-label="New" 
+        ng-click="load_db(0);active_btn = 'New';">
+        <i class="fa fa-bolt col-green font-12"></i>
+    </md-button>
+
+    <md-button class="md-icon-button" aria-label="PROCESSING" 
+        ng-click="load_db(1);active_btn = 'PROCESSING';">
+        <i class="fa fa-hand-rock-o col-yellow font-12"></i>
+    </md-button>
+
+    <md-button class="md-icon-button" aria-label="REVIEWING" 
+    ng-click="load_db(3);active_btn = 'REVIEWING';">
+        <i class="fa fa-file-o col-pink font-12"></i>
+    </md-button>
+
+    <md-button class="md-icon-button" aria-label="RECOMMENDING" 
+    ng-click="load_db(4);active_btn = 'RECOMMENDING';">
+        <i class="fa fa-check-square col-orange font-12"></i>
+    </md-button>
+
+    <md-button class="md-icon-button" aria-label="APPROVAL" 
+    ng-click="load_db(5);active_btn = 'APPROVAL';">
+        <i class="fa fa-thumbs-o-up col-blue font-12"></i>
+    </md-button>
+
+    <md-button class="md-icon-button" aria-label="RELEASING" 
+    ng-click="load_db(6);active_btn = 'RELEASING';">
+        <i class="fa fa-file-text col-teal font-12"></i>
+    </md-button>
+
+    <md-button class="md-icon-button" aria-label="Used" 
+    ng-click="load_db(7);active_btn = 'Used';">
+        <i class="fa fa-signing font-12"></i>
+    </md-button>
+
+    <md-button class="md-icon-button" aria-label="Rejected" 
+    ng-click="load_db(2);active_btn = 'Rejected';">
+        <i class="fa fa-thumbs-o-down col-grey font-12"></i>
+    </md-button>
+
+</div>
+
+<strong class="align-center" 
+    ng-class="{'col-green': (active_btn == 'New'),
+                'col-yellow': (active_btn == 'PROCESSING'),
+                'col-orange': (active_btn == 'RECOMMENDING'),
+                'col-pink': (active_btn == 'REVIEWING'),
+                'col-blue': (active_btn == 'APPROVAL'),
+                'col-teal': (active_btn == 'RELEASING'),
+                'col-grey': (active_btn == 'Rejected')
+            }">
+    {{active_btn}} <small class="badge badge-info">{{application_list.length}}</small> 
+</strong>
+<md-content flex>
+    <md-list class="md-dense" >
+        <md-list-item class="md-3-line" ng-repeat="x in application_list | orderBy:'-date' | filter : search_application track by $index" 
+            ng-click="open_application_tab(x)">
+            <img ng-src="{{x.user.profile_picture}}" class="md-avatar" alt="{{x.name}}" />
+            <div class="md-list-item-text" layout="column">
+                <h3>{{ x.user.full_name }}</h3>
+                <h4>{{ x.name }}</h4>
+                <p>{{x.date | date}} 
+                    <i class="fa fa-circle" 
+                    ng-class="{'col-green': (x.status == '0'),
+                    'col-orange': (x.status == '4'),
+                    'col-yellow': (x.status == '1'),
+                    'col-pink': (x.status == '3'),
+                    'col-blue': (x.status == '5'),
+                    'col-teal': (x.status == '6'),
+                    'col-grey': (x.status == '7')}"></i> 
+                    #{{x.date}}
+                </p>
+                <md-divider></md-divider>
+            </div>
+        </md-list-item>
+        <hr>
+    </md-list>
+</md-content>

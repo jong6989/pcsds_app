@@ -1,0 +1,127 @@
+<div ng-controller="doc_ctrl_published" ng-init="loadReciepients(doc_user[currentItem.agency.id],currentItem.agency.id);init_publishing_receipients();">
+    
+    <div ng-if="currentClicked == 'received'">
+        <h5 class="col-grey">From</h5>
+        <p>
+            Name : <strong>{{currentTransaction.sender.name}}</strong> <br>
+            Email : <strong>{{currentTransaction.sender.email}}</strong> <br>
+            Contact : <strong>{{currentTransaction.sender.contact}}</strong> <br>
+            Access : <cite ng-repeat="a in currentTransaction.sender.access"> {{(a == 'active')?'':a}}, </cite> <br>
+        </p>
+        <hr>
+        <h5 class="col-grey">Sent</h5>
+        <p>
+            {{currentTransaction.date}}, 
+            {{ date_from_now(currentTransaction.time) }}
+        </p>
+        <hr>
+        <h5 class="col-grey">Received</h5>
+        <p ng-init="received = date_gap(currentTransaction.received.time, currentTransaction.time).split(' ')">
+            {{currentTransaction.received.date}}, 
+            <strong class="col-blue">within {{ received[0] }} {{ received[1] }}</strong>
+        </p>
+        <hr>
+        <h5 class="col-grey">Remark</h5>
+        <p>
+            <strong class="col-red">{{currentTransaction.remarks}}</strong>
+        </p>
+    </div>
+    
+    <div ng-if="currentItem.template == undefined">No template.. Please move to draft then choose a document template.</div>
+    <div ng-if="currentItem.template != undefined">
+        <h4><small>Document Template :</small> {{ currentItem.template.name }} </h4>
+        <h5><small>Document ID</small> : <strong class="col-teal">{{currentItem.id}}</strong> </h5>
+        <h5><small> Agency</small> : <strong class="col-teal">{{currentItem.agency.name}}</strong> </h5>
+        <h5><small> Date Published</small> : <strong class="col-teal">{{currentItem.meta.published_date}}</strong>
+            <cite class="font-12">, {{date_from_now(currentItem.meta.published_time)}}</cite> </h5>
+    </div>
+    <hr>
+    <br>
+    <div ng-if="currentItem.template != undefined" style="border: #000 solid 1px; padding: 20px; box-shadow: #777 3-px 3px 1px;margin: 10px; background-color: #fff;">
+        <div ng-include="currentItem.template.view"></div>
+    </div>
+    
+        
+    <hr>
+    
+    <!-- Template -->
+    <!-- <div ng-repeat="x in document_templates">
+        <div  ng-if="currentItem.type == undefined && currentItem.template == undefined && document_templates.length > 0" >
+            <md-button class="md-fab md-mini" aria-label="Print Document" ng-click="open_window_view(document_templates[0].print, currentItem)">
+                <md-tooltip md-direction="left">Print this document</md-tooltip>
+                <i class="fa fa-print" ></i>
+            </md-button> 
+            <div ng-if="x.type == document_templates[0].type" ng-include="document_templates[0].view"></div>
+        </div>
+        <div  ng-if="x.type == currentItem.type && currentItem.template == undefined">
+            <md-button class="md-fab md-mini" aria-label="Print Document" ng-click="open_window_view(x.print, currentItem)">
+                <md-tooltip md-direction="left">Print this document</md-tooltip>
+                <i class="fa fa-print" ></i>
+            </md-button> 
+            <div ng-include="x.view"></div>
+        </div>
+    </div> -->
+
+    
+    
+    
+    
+    <div ng-if="currentClicked == 'published'">
+        <hr>
+        <h4>Files</h4>
+        <ol>
+            <li ng-repeat="x in currentItem.files">
+                <a ng-href="{{api_address + '/uploads/' + x.path}}" download="{{x.name}}">
+                    {{x.name}}
+                </a>
+            </li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <div layout-gt-sm layout-sm="column">
+        <md-button ng-if="currentClicked == 'published'" class="md-button bg-red col-white" ng-click="backToDraft(currentItem, $event)" layout-gt-sm>
+            <i class="fa fa-undo m-r-5"></i>
+            Back to Draft 
+        </md-button>
+        <md-button class="md-button md-primary" ng-click="openSendDocument(currentItem, $event)" layout-gt-sm>
+            <i class="fa fa-paper-plane m-r-5"></i>
+             {{ (currentClicked == 'received') ? 'Forward' : 'Send' }}
+        </md-button>
+        <md-button ng-if="currentItem.template != undefined" class="md-fab md-mini" aria-label="Print Document" ng-click="print_document(currentItem.id);">
+            <md-tooltip md-direction="left">Print this document</md-tooltip>
+            <i class="fa fa-print" ></i>
+        </md-button> 
+        
+    </div>
+
+    <div ng-if="currentReciepients.length > 0">
+        <hr>
+        <h4>Receipients</h4>
+        <ol>
+            <li ng-repeat="x in currentReciepients">
+                <strong class="col-grey">{{x.name}}</strong>
+                <br>
+                <ul>
+                    <li ng-repeat="x in x.sentItems">
+                        {{x.date}} : 
+                        <strong ng-class="{ 'col-green' : (x.status == 'received'), 'col-orange' : (x.status == 'declined'), 'col-red' : (x.status == 'pending') }">
+                                {{x.status}}
+                        </strong> ,
+                        <cite>{{x.remarks}}</cite>
+                    </li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+    
+
+    <br>
+    <hr>
+    <div ng-controller="doc_ctrl_actions" ng-include="'./app/doc/contents/actions.html'"></div>
+    <hr>
+    <h4></h4>
+    <br><br><br>
+
+</div>

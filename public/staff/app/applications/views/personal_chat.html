@@ -1,0 +1,22 @@
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="search_staff_box"> <i class="fa fa-search"></i> </span>
+    </div>
+    <input class="form-control" ng-model="search_staff" placeholder="Search Staff" aria-label="Search Staff" aria-describedby="search_staff_box">
+</div>
+<md-list class="md-dense" >
+<md-list-item class="md-3-line" ng-repeat="x in staff_list | orderBy:'-last_seen' | filter : search_staff track by $index" 
+    ng-click="open_personal_chat(x)">
+    <img ng-src="./images/user.png" class="md-avatar" alt="{{x.data.fist_name}}" />
+    <div class="md-list-item-text" layout="column">
+        <h3>{{ x.data.first_name }} {{ x.data.last_name }}</h3>
+        <h4>{{ getUserType(x.user_level) }}</h4>
+        <p>
+            <i class="fa fa-circle" ng-class="{'col-green': calculate_if_online(x.last_seen) }"></i> 
+            #{{x.id_number}}
+        </p>
+        <span class="badge badge-pill badge-danger" ng-if="me.badges.group_chat > 0">{{my_chats.personal[x.id].data.tread.length}}</span>
+        <md-divider></md-divider>
+    </div>
+</md-list-item>
+</md-list>

@@ -1,0 +1,91 @@
+<div ng-include="'./app/templates/application/style.html'"></div>
+<style type="text/css">
+    .roman {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
+<div ng-init="currentItem = render_params.data;print(3000); " class="roman" style="margin:0.5in">
+<!-- <div ng-controller="DummyChainsawPurchasePermitController" ng-init="currentItem=n;" class="roman" style="margin:0.5in"> -->
+
+    <div ng-include="'./app/templates/templates/header.html'"></div>
+    <hr>
+    <p>
+        <div class="align-center">
+            <strong>{{ currentItem.line1}}</strong><br>
+            {{ currentItem.line2 }}
+        </div>
+    </p>
+    <br>
+    <p>
+        {{ currentItem.line3 }}
+    </p>
+    <p>
+        <table>
+            <tr>
+                <td>{{currentItem['line4'].split(':')[0]}}</td>
+                <td style="width:10%;text-align:center">:</td>
+                <td>{{currentItem['line4'].split(':').slice(1).join(' ')}}</td>
+            </tr>
+            <tr>
+                <td>{{currentItem['line5'].split(':')[0]}}</td>
+                <td style="text-align:center">:</td>
+                <td>{{currentItem['line5'].split(':')[1]}}</td>
+            </tr>
+            <tr>
+                <td>{{currentItem['line6'].split(':')[0]}}</td>
+                <td style="text-align:center">:</td>
+                <td>{{currentItem['line6'].split(':')[1]}}</td>
+            </tr>
+
+            <tr>
+                <td>{{currentItem['line7'].split(':')[0]}}</td>
+                <td style="text-align:center">:</td>
+                <td>{{currentItem['line7'].split(':')[1]}}</td>
+            </tr>
+        </table>
+    </p>
+    <div layout>
+        <div style="width:60%">&nbsp;</div>
+        <div>
+            {{currentItem.line8 }}
+        </div>
+    </div>
+
+    <br ng-repeat="i in [1,2]">
+    <div layout ng-controller="doc_ctrl_draft">
+            <div style="width:60%">&nbsp;</div>
+
+        <div>
+            <div flex
+                ng-init="currentItem.sign1 = (currentItem.sign1 == undefined) ? { name:'',designation:''} : currentItem.sign1;">
+                <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center">
+                    <img ng-if="currentItem.sign1.signature != undefined" src="{{currentItem.sign1.signature}}"
+                        alt="Signature1" width="auto" style="margin-bottom: -35px;">
+                    <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong> </div>
+                    <div class="align-center"> {{currentItem.sign1.designation}} </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div style="margin-left:0.5in;margin-right: 0.5in">
+        <div style="text-align:center">{{currentItem['line11']}}</div>
+        <DIV>
+            <ol>
+                <li ng-repeat="line in [12, 13, 14, 15]">
+                    {{currentItem['line'+line]}}
+                </li>
+            </ol>
+        </DIV>
+    </div>
+    <br>
+    <div>
+        <div ng-repeat="line in [16, 17, 18]">
+            <b>{{currentItem['line'+line]}}</b>
+        </div>
+    </div><br>
+    <div>
+        {{currentItem['line19']}}
+    </div>
+    <div ng-include="'./app/templates/templates/footer.html'"></div>
+</div>
