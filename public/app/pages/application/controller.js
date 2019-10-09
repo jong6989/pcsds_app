@@ -107,7 +107,7 @@ myAppModule.controller('application_controller', function ($scope,$filter, $http
     });
 
     $http.get( "json/permitting/gp_specimen.json").then(function(data){
-        $scope.gp_specimen = data.data.data;
+        $scope.gp_specimen_list = data.data.data;
     });
 
     $scope.change_current_findex = (n)=>{

@@ -159,7 +159,7 @@
            
                                <md-input-container class="md-block" flex-gt-sm="10">
                                <label>Boxes</label>
-                               <input type="number" min="1" max="9999" ng-model="new_application.species[new_application.species.indexOf(x)].species_boxes" required>
+                               <input type="number" min="1" max="9999" ng-model="new_application.species[new_application.species.indexOf(x)].species_boxes">
                                </md-input-container>
            
            
@@ -221,13 +221,14 @@
                                         <md-input-container>
                                             <!-- <label>Date of Loading:</label>
                                             <input ng-model="new_application.date_air"required>          -->
-                                            <md-datepicker ng-model="new_application.date_air" md-placeholder="Enter date"></md-datepicker>
-                                            Date: {{new_application.date_air | date:shortDate}}
+                                               
+                                                <md-datepicker ng-model="date_air" ng-change="new_application.date_air = to_date(date_air)" md-placeholder="Date of Loading"></md-datepicker>
+                                                
                                         </md-input-container>
                              </div>
                                    
                             <div layout="column" style="margin-left: 100px">
-                                        <md-input-container>
+                                            <md-input-container>
                                                 <label>Port of Loading</label>
                                                 <input ng-model="new_application.port_sea">
                                             </md-input-container>
@@ -235,10 +236,9 @@
                                             <md-input-container>
                                                 <!-- <label>Date of Loading</label>
                                                 <input ng-model="new_application.date_sea"required>          -->
-                                                <md-datepicker ng-model="new_application.date_sea" md-placeholder="Enter date"></md-datepicker>
-                                                Date: {{new_application.date_sea | date:shortDate}}
-                                            </md-input-container>
-
+                                                
+                                                    <md-datepicker ng-model="date_sea" ng-change="new_application.date_sea = to_date(date_sea)" md-placeholder="Date of Loading"></md-datepicker>
+                                                
                             </div>
                             
                             <div layout="column" style="margin-left: 100px">
@@ -251,8 +251,9 @@
                                             <label>Date of Loading</label>
                                             <input ng-model="new_application.date_postal"required>
                                     </md-input-container> -->
-                                                    <md-datepicker ng-model="new_application.date_postal" md-placeholder="Enter date"></md-datepicker>
-                                                    Date: {{new_application.date_postal | date:shortDate}}
+                                
+                                        <md-datepicker ng-model="date_portal" ng-change="new_application.date_portal = to_date(date_portal)" md-placeholder="Date of Loading"></md-datepicker>
+                                    
                                     
                             </div>
                          </div>
