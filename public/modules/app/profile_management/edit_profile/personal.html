@@ -11,6 +11,12 @@
     
                     <div layout-gt-sm="row">
                         <md-input-container class="md-block" flex-gt-sm>
+                            <div ng-hide=true>
+                                    {{
+                                        birth_day=updatedProperty.birth_day
+                                    }}
+                            </div>
+                            
                             <md-datepicker
                                 ng-init="birth_day=updatedProperty.birth_day"
                                 ng-model="birth_day"
@@ -18,6 +24,7 @@
                                 required>
                             </md-datepicker>
                         </md-input-container>
+                        
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Place of Birth</label>
                             <input ng-model="updatedProperty.place_of_birth" required>

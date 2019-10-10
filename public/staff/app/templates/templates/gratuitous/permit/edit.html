@@ -95,8 +95,10 @@
             <input ng-model="currentItem.gratuitous_permit.paid_or_number">
         </md-input-container>
         <md-input-container flex>
-            <md-datepicker ng-init="paid_date=n.paid_date" ng-model="paid_date"
-                ng-change="currentItem.gratuitous_permit.paid_date=to_date(paid_date)" md-placeholder="Date of Payment" md-open-on-focus>
+            
+            <md-datepicker ng-init="paid_date=currentItem.gratuitous_permit.paid_date" ng-model="paid_date"
+                ng-change="currentItem.gratuitous_permit.paid_date=to_date(paid_date)" 
+                md-placeholder="Date of Payment" md-open-on-focus>
             </md-datepicker>
         </md-input-container>
     </div>

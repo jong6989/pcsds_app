@@ -32,7 +32,7 @@
                 <md-button type="submit" ng-disabled="form_edit_contact.$invalid" 
                 ng-hide="is_loading" 
                 class="md-primary md-raised" 
-                ng-click="update_profile_property({'current_phone':edit_contact});close_dialog();">
+                ng-click="update_profile_property({current_phone:updatedProperty.current_phone});close_dialog();">
                     save
                 </md-button>
                 </md-dialog-actions>

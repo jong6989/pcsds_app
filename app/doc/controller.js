@@ -396,7 +396,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
 
 
     $scope.print_document = (id)=>{
-        console.log('to print: ', id);
         func.refreshDocItem(id, (a) => {
             $scope.open_window_view(a.template.print, a);
         });

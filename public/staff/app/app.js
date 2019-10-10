@@ -268,6 +268,31 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
     return ($location.path() == path);
   };
 
+  $scope.toString = (collection, key) => {
+    if(collection == null) return;
+    var values = key ? collection.map(item => item[key]) : collection;
+    var slicedElements = values.slice(0, values.length - 1);
+    var joined = slicedElements.join(', ') + ' and ' + values[values.length - 1];
+
+    return joined;
+  }
+
+  $scope.get_full_date = function(date){
+    return $filter('date')(date, "MMMM dd, yyyy");
+  }
+  $scope.get_full_month_name = function(date){
+    return $filter('date')(date, "MMMM");
+  }
+  $scope.to_day = function(d){
+    return $filter('date')(d, "dd");
+  }
+
+  $scope.pcsd = {
+    head: {
+        full_name: "Nelson P. Devandera",
+        position: "PCSDS Executive Director"
+    }
+  }
 })
 
 ;

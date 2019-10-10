@@ -29,7 +29,8 @@
 	<div layout>
 		<md-input-container flex>
 			<label>Intended Use of Chainsaw</label>
-			<input ng-value="'Legal Use'" ng-model="n.intended_use">
+			
+			<input ng-init="n.intended_use='Legal Use'" ng-model="n.intended_use">
 		</md-input-container>
 		<md-input-container flex>
 			<label>Limitation of Use</label>
@@ -134,10 +135,11 @@
 		{{n.line6='bearing the following information and descriptions: '}}
 	</p>
 	<p>
+		
 		{{n.line7='Intended Use of Chainsaw: ' + n.intended_use }}
 	</p>
 	<p>
-		{{n.line8='Limitation of Use ' + n.limitation_of_use }}
+		{{n.line8='Limitation of Use: ' + n.limitation_of_use }}
 	</p>
 	<p>
 		<input type="hidden" ng-value="n.line9='Brand: ' + n.chainsaw.brand + ' Serial/Engine No.: ' + 
