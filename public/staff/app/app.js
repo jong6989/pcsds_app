@@ -247,7 +247,12 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
       //staff account
       $scope.user = JSON.parse(storedAccount);
       if($location.path() == '/'){
-        $location.path($scope.user.menu[0].path);
+        if($scope.user.menu[0].path){
+          $location.path($scope.user.menu[0].path);
+        }else {
+          $location.path($scope.user.menu[0].menu[0].path);
+        }
+        
       }
     }
   }

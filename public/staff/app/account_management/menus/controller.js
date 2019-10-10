@@ -19,4 +19,8 @@ myAppModule.controller('menu_management_controller', function ($scope, $timeout,
         db.collection('module_menus').add({ title : '', icon : '', path: ''});
     };
 
+    $scope.update_user_field = (data,id)=>{
+        db.collection('module_menus').doc(id).update(data);
+    }
+
 });
