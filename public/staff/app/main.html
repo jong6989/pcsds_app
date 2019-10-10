@@ -24,8 +24,8 @@
 
 				<div  layout="row" class="bg-black" layout-padding="20">
 					<div flex="70" layout="column">
-						<div class="font-16">{{ account.name }}, {{account.phone}}</div>
-						<div class="font-14">{{ account.designation }}</div>
+						<div class="font-16">{{ user.name }}, {{user.phone}}</div>
+						<div class="font-14">{{ user.access }}</div>
 						<md-button ng-click="logout()" class="font-10 m-b--10 col-yellow" aria-label="Log-out">
 							<strong>Log-out</strong>
 						</md-button>
@@ -33,18 +33,18 @@
 				</div>
 				
                 <md-list flex>
-                    <div ng-repeat="x in account.menu" ng-init="account.menu[$index].toggle = false">
+                    <div ng-repeat="x in user.menu" ng-init="user.menu[$index].toggle = false">
                         <md-list-item ng-if="x.path" ng-click="set_path(x.path)" ng-disabled="is_path(x.path)">
                             <i class="fa {{ 'fa-' + x.icon}} m-r-10"></i>
                             <span flex ng-class="{ 'col-grey': is_path(x.path) }">{{x.title}}</span>
                         </md-list-item>
-                        <md-list-item ng-if="!x.path" ng-click="account.menu[$index].toggle = !account.menu[$index].toggle" >
+                        <md-list-item ng-if="!x.path" ng-click="user.menu[$index].toggle = !user.menu[$index].toggle" >
                             <i class="fa {{ 'fa-' + x.icon}} m-r-10"></i>
-                            <span flex ng-class="{ 'col-grey': account.menu[$index].toggle }">{{x.title}}</span>
-                            <md-icon ng-show="!account.menu[$index].toggle" >expand_more</md-icon>
-                            <md-icon ng-show="account.menu[$index].toggle" >expand_less</md-icon>
+                            <span flex ng-class="{ 'col-grey': user.menu[$index].toggle }">{{x.title}}</span>
+                            <md-icon ng-show="!user.menu[$index].toggle" >expand_more</md-icon>
+                            <md-icon ng-show="user.menu[$index].toggle" >expand_less</md-icon>
                         </md-list-item>
-                        <div ng-show="account.menu[$index].toggle">
+                        <div ng-show="user.menu[$index].toggle">
                             <md-list-item ng-repeat="sub in x.menu" ng-click="set_path(sub.path)" ng-disabled="is_path(sub.path)" ng-class="{ 'col-grey': is_path(sub.path) }">
                                 <span flex-offset="5" >
                                     <i class="fa {{ 'fa-' + x.icon}} m-r-20"></i>

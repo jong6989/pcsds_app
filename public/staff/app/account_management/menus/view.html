@@ -1,0 +1,25 @@
+
+<div ng-controller="menu_management_controller" ng-init="set_page_title('Account Management - Menus')" class="p-t-20 p-l-20 p-r-20">
+    
+    <h2 class="md-header"> Menu Modules </h2>
+    <hr>
+    <md-button class="md-raised" ng-click="add_menu_module()">Add Menu</md-button>
+    <hr>
+    <div>
+        <ol>
+            <li ng-repeat="x in menu_modules">
+                Title : {{x.title}}, Icon : {{x.icon}}, Controller : {{x.controller}} 
+                <span ng-if="x.path">
+                    Path : {{x.path}}
+                </span>
+                <br>
+                <ol ng-if="x.menu">
+                    <li ng-repeat="y in x.menu">
+                        Title : {{y.title}}, Icon : {{y.icon}}, Path : {{x.path}}
+                    </li>
+                </ol>
+            </li>
+        </ol>
+    </div>
+</div>
+    

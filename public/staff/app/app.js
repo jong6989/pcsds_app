@@ -13,7 +13,7 @@ myAppModule
 
 })
 
-myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, $mdDialog, $route, $routeParams, $location, NgTableParams) {
+myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, $mdDialog, $route, $routeParams, $location, NgTableParams) {
   $scope.$route = $route;
   $scope.$routeParams = $routeParams;
   $scope.$location = $location;
@@ -23,6 +23,21 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
   $scope.content_page = "";
   $scope.active_menu = "";
   $scope.menus = [];
+
+  $scope.$watch( 
+      ()=> { 
+          return $mdMedia('xs'); 
+      }, 
+      (xs)=> {
+      $scope.is_xs = xs;
+  });
+  $scope.$watch( 
+      ()=> { 
+          return $mdMedia('sm'); 
+      }, 
+      (sm)=> {
+      $scope.is_sm = sm;
+  });
 
   $scope.toggleLeft = buildDelayedToggler('left');
   $scope.toggleRight = buildToggler('right');
@@ -226,13 +241,13 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
 
   $scope.current_view = localData.get('staff_current_view');
   let storedAccount = localData.get('STAFF_ACCOUNT');
+
   function load_dashboard_page(){
     if(storedAccount){
       //staff account
-      $scope.account = JSON.parse(storedAccount);
-      $scope.user = $scope.account;
+      $scope.user = JSON.parse(storedAccount);
       if($location.path() == '/'){
-        $location.path($scope.account.menu[0].path);
+        $location.path($scope.user.menu[0].path);
       }
     }
   }

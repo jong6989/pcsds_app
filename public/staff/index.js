@@ -53,6 +53,14 @@ function getJson(string) {
     return JSON.parse(string);
 }
 
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'center',
+    showConfirmButton: false,
+    timer: 2000
+});
+
+
 async function authenticateStaff(){
     let v = localData.get('staff_current_view');
     if(!v){
@@ -112,11 +120,22 @@ localData.set('STAFF_ACCOUNT',`
     {"designation":"admin","id":"+639486601717","last_seen":1570521763344,
         "menu":[
             {
-                "controller":"<script src='app/account_management/controller.js'></script>",
+                "controller":"<script src='app/account_management/controller.js'></script><script src='app/account_management/menus/controller.js'></script>",
                 "functions":["create","update","assign_module","disable"],
-                "icon":"trash",
-                "path":"/account_management",
-                "title":"Account Management"
+                "icon":"user-md",
+                "title":"Account Management",
+                "menu" : [
+                    {
+                        "title" : "Accounts",
+                        "path" : "/account_management",
+                        "icon" : "users"
+                    },
+                    {
+                        "title" : "Menu Modules",
+                        "path" : "/account_management/menus",
+                        "icon" : "bars"
+                    }
+                ]
             },
             {
                 "controller":"<script src='app/doc/controller.js'></script>",

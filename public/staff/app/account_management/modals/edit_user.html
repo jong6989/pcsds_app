@@ -1,0 +1,64 @@
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="editUser">
+        <md-dialog layout="column" layout-align="center center">
+            
+            <md-toolbar class="bg-grey">
+                <div class="md-toolbar-tools">
+                    <h2>Edit Account</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            
+            <md-dialog-content layout-padding class="p-b-20">
+                
+                <div layout>
+                    <md-input-container>
+                        <label>Code Name</label>
+                        <input ng-model="editable_user.name" ng-blur="update_user_field({'name': editable_user.name },editable_user.id)">
+                    </md-input-container>
+                
+                    <md-input-container>
+                        <label>Email</label>
+                        <input ng-model="editable_user.data.email" type="email" ng-blur="update_user_field({'data.email': editable_user.data.email },editable_user.id)">
+                    </md-input-container>
+                    
+                    <md-input-container>
+                        <label>Designation</label>
+                        <input ng-model="editable_user.data.designation" ng-blur="update_user_field({'data.designation': editable_user.data.designation },editable_user.id)">
+                    </md-input-container>
+                
+                </div>
+                
+                <div layout>
+                    <md-input-container>
+                        <label>First Name</label>
+                        <input ng-model="editable_user.data.first_name" ng-blur="update_user_field({'data.first_name': editable_user.data.first_name },editable_user.id)">
+                    </md-input-container>
+                
+                    <md-input-container>
+                        <label>Middle Name</label>
+                        <input ng-model="editable_user.data.middle_name"  ng-blur="update_user_field({'data.middle_name': editable_user.data.middle_name },editable_user.id)">
+                    </md-input-container>
+                
+                    <md-input-container>
+                        <label>Last Name</label>
+                        <input ng-model="editable_user.data.last_name"  ng-blur="update_user_field({'data.last_name': editable_user.data.last_name },editable_user.id)">
+                    </md-input-container>
+                </div>
+                
+            </md-dialog-content>
+        
+            <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="close_dialog()">
+                    Close
+                </md-button>
+            </md-dialog-actions>
+        
+
+        </md-dialog>
+    </div>
+</div>
