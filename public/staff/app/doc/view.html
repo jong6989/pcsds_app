@@ -2,7 +2,9 @@
     ng-init="set_page_title('Document Network');doc_init();check_pending($event);">
 
     <div flex="100" layout-align="center center" ng-if="isLoading" layout>
-        <md-progress-circular md-mode="indeterminate" md-diameter="70"></md-progress-circular>
+        <md-progress-circular md-mode="indeterminate" md-diameter="70">
+            
+        </md-progress-circular>
     </div>
     
     <div ng-hide="isLoading" layout flex ng-include="doc_content"></div>
