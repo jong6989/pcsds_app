@@ -63,6 +63,7 @@ const Toast = Swal.mixin({
 
 async function authenticateStaff(){
     let v = localData.get('staff_current_view');
+    
     if(!v){
         localData.set('staff_current_view','app/login/view.html');
     }
@@ -91,7 +92,7 @@ async function authenticateStaff(){
                 alert(error);
             }
         }
-
+        
         //firebase authentication checker
         // await firebase.auth().onAuthStateChanged( async (user)=> {
         //     if (!user) {
@@ -152,12 +153,25 @@ localData.set('STAFF_ACCOUNT',`
             {
                 "controller":"<script src='app/database/controller.js'></script>",
                 "icon":"database",
-                "path":"/database",
-                "title":"Data Sets"
+                "title":"Data Sets",
+                "menu": [
+                    {
+                        "title": "Statistics",
+                        "path": "/database/views/statistics",
+                        "icon": "bars"
+                    }
+                ]
             }
         ],
             "name":"Admin",
             "phone":"+639486601717"
         }
 `)
-authenticateStaff();
+
+    authenticateStaff();
+
+    // var currentUrl = new URL(location.href);
+    // var view = currentUrl.searchParams.get('view');
+    // if(view){
+    //     localData.set('staff_current_view', view);
+    // }

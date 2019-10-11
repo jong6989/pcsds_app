@@ -182,6 +182,12 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
     };
   }
 
+  $scope.open_window_view = function(v,d){
+    $localStorage.params = d;
+    var x = {view: v,last_view : $scope.current_view, documentID: d.id};
+    window.open('index.html?'+ $.param(x), 'modal');
+  };
+
   function buildDelayedToggler(navID) {
     return debounce(function() {
       $mdSidenav(navID)
@@ -256,9 +262,11 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
 
   $scope.set_path = (path)=>{
     $location.path(path);
+    
     $scope.close_left_side();
   };
 
+  
   $scope.is_path = (path)=>{
     return ($location.path() == path);
   };
@@ -288,6 +296,9 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
         position: "PCSDS Executive Director"
     }
   }
+
+  // $scope.set_path('/database/views/statistics');
+
 })
 
 ;

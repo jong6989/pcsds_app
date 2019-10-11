@@ -385,9 +385,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
     };
 
     $scope.setCurrentItem = (x,t,c) => {
-        console.log(x);
-        console.log(t);
-        console.log(c);
         if($scope.currentNavItem == 'Documents'){
             setTimeout(()=>{func.refreshDocItem(x.id, (a) => {
                 $scope.currentItem = a;
@@ -416,10 +413,13 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
 
 
     $scope.print_document = (id)=>{
-        console.log('to print: ', id);
+        // console.log('to print: ', id);
         func.refreshDocItem(id, (a) => {
             $scope.open_window_view(a.template.print, a);
+            // var view = { view: a.template.print };
+            // window.open('app/templates/print/index.html?'+ $.param(view));
         });
+        
     };
 
     // for application sync

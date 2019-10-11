@@ -1,6 +1,5 @@
 'use strict';
 
-document.write(`<script src="/plugins/chartjs/Chart.min.js"></script>`);
 var graphOption = {
     responsive: true,
     title: {
@@ -45,19 +44,23 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
     $scope.n = {};
 
     //WSUP
-    fire.db.database.query.doc('WSUP').collection("database").onSnapshot(qs => {
-        let res = qs.docs.map( dx => {
-            let b = dx.data();
-            b.id = dx.id;
-            return b;
+    $scope.loadWSUP = () => {
+        fire.db.database.query.doc('WSUP').collection("database").onSnapshot(qs => {
+            let res = qs.docs.map( dx => {
+                let b = dx.data();
+                b.id = dx.id;
+                return b;
+            });
+            $scope.wsup_db.data = $localStorage.wsup_db_data = res;
+            $scope.invalidate_data_table($scope.wsup_db.data);
         });
-        $scope.wsup_db.data = $localStorage.wsup_db_data = res;
-        $scope.invalidate_data_table($scope.wsup_db.data);
-    });
-    fire.db.database.when("WSUP",(d) => {
-        $scope.wsup_db.summary = $localStorage.wsup_db_summary = d;
-        setTimeout($scope.loadGraph, 100);
-    });
+    
+        fire.db.database.when("WSUP",(d) => {
+            $scope.wsup_db.summary = $localStorage.wsup_db_summary = d;
+            setTimeout($scope.loadGraph, 100);
+        });
+    }
+    
 
     $scope.invalidate_data_table = (d)=>{
         $scope.data_table = $scope.ngTable(d);
@@ -321,6 +324,21 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
 
         
     }
+
+    
+    var url = new URL(location.href);
+    var template = url.searchParams.get('template');
+    console.log(url);
+    console.log(template);
+    switch(template){
+        case 'statistics':
+        document.write(`<script src="/plugins/chartjs/Chart.min.js"></script>`);
+        $scope.template = '/views/grahs.html';
+        $scope.graphYearlyPermit();
+        break;
+    }
+
+    
 });
 
 document.write(`<script src="./app/doc/services/crudService.js"></script>`);
@@ -329,16 +347,17 @@ document.write(`<script src="./app/doc/services/dateService.js"></script>`);
 document.write(`<script src="./app/doc/services/collection.js"></script>`);
 document.write(`<script src="./app/doc/services/addressService.js"></script>`);
 
-document.write(`<script src="./app/doc/controllers/Apprehension.js"></script>`);
-document.write(`<script src="./app/doc/controllers/ChainsawRegistration.js"></script>`);
-document.write(`<script src="./app/doc/controllers/CriminalCases.js"></script>`);
-document.write(`<script src="./app/doc/controllers/Permit.js"></script>`);
-document.write(`<script src="./app/doc/controllers/CaseRespondent.js"></script>`);
-document.write(`<script src="./app/doc/controllers/wildLifeImport.js"></script>`);
-document.write(`<script src="./app/doc/controllers/wildlifeExport.js"></script>`);
-document.write(`<script src="./app/doc/controllers/wildlifeInspection.js"></script>`);
-document.write(`<script src="./app/doc/controllers/wsup.js"></script>`);
 
-document.write(`<script src="./app/doc/services/dummyCrudService.js"></script>`);
-document.write(`<script src="./app/doc/controllers/dummyControllers.js"></script>`);
+document.write(`<script src="./app/database/views/statistics/controller.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/ChainsawRegistration.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/CriminalCases.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/Permit.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/CaseRespondent.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/wildLifeImport.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/wildlifeExport.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/wildlifeInspection.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/wsup.js"></script>`);
+
+// document.write(`<script src="./app/doc/services/dummyCrudService.js"></script>`);
+// document.write(`<script src="./app/doc/controllers/dummyControllers.js"></script>`);
 

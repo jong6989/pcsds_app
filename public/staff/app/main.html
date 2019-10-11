@@ -16,7 +16,7 @@
 
 	<section layout="row" flex style="position: relative;">
 
-		<md-sidenav layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-lg')" 
+		<md-sidenav layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" 
 		md-whiteframe="4" >
 
 			
@@ -45,7 +45,8 @@
                             <md-icon ng-show="user.menu[$index].toggle" >expand_less</md-icon>
                         </md-list-item>
                         <div ng-show="user.menu[$index].toggle">
-                            <md-list-item ng-repeat="sub in x.menu" ng-click="set_path(sub.path)" ng-disabled="is_path(sub.path)" ng-class="{ 'col-grey': is_path(sub.path) }">
+							<md-list-item ng-repeat="sub in x.menu" ng-click="set_path(sub.path)" 
+								ng-disabled="is_path(sub.path)" ng-class="{ 'col-grey': is_path(sub.path) }">
                                 <span flex-offset="5" >
                                     <i class="fa {{ 'fa-' + x.icon}} m-r-20"></i>
                                     {{sub.title}}
