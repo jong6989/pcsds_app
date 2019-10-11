@@ -338,10 +338,10 @@ document.write(`<script src="./app/doc/services/addressService.js"></script>`);
 document.write(`<script src="./app/database/views/statistics/controller.js"></script>`);
 document.write(`<script src="./app/database/views/apprehension/controller.js"></script>`);
 document.write(`<script src="./app/database/views/chainsaw_registration/controller.js"></script>`);
+document.write(`<script src="./app/database/views/chainsaw_purchase_permit/controller.js"></script>`);
 
 // document.write(`<script src="./app/doc/controllers/ChainsawRegistration.js"></script>`);
 // document.write(`<script src="./app/doc/controllers/CriminalCases.js"></script>`);
-// document.write(`<script src="./app/doc/controllers/Permit.js"></script>`);
 // document.write(`<script src="./app/doc/controllers/CaseRespondent.js"></script>`);
 // document.write(`<script src="./app/doc/controllers/wildLifeImport.js"></script>`);
 // document.write(`<script src="./app/doc/controllers/wildlifeExport.js"></script>`);

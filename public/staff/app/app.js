@@ -305,7 +305,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     }
   }
 
-  $scope.set_path('/database/views/chainsaw_registration');
+  // $scope.set_path('/database/views/chainsaw_purchase_permit');
 
 })
 
