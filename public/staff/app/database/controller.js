@@ -324,22 +324,9 @@ myAppModule.controller('pcsd_database_controller', function ($scope,
 
         
     }
-
-    
-    var url = new URL(location.href);
-    var template = url.searchParams.get('template');
-    console.log(url);
-    console.log(template);
-    switch(template){
-        case 'statistics':
-        document.write(`<script src="/plugins/chartjs/Chart.min.js"></script>`);
-        $scope.template = '/views/grahs.html';
-        $scope.graphYearlyPermit();
-        break;
-    }
-
     
 });
+document.write(`<script src="/plugins/momentjs/moment.js"></script>`);
 
 document.write(`<script src="./app/doc/services/crudService.js"></script>`);
 document.write(`<script src="./app/doc/services/municipalitiesService.js"></script>`);
@@ -349,6 +336,8 @@ document.write(`<script src="./app/doc/services/addressService.js"></script>`);
 
 
 document.write(`<script src="./app/database/views/statistics/controller.js"></script>`);
+document.write(`<script src="./app/database/views/apprehension/controller.js"></script>`);
+
 // document.write(`<script src="./app/doc/controllers/ChainsawRegistration.js"></script>`);
 // document.write(`<script src="./app/doc/controllers/CriminalCases.js"></script>`);
 // document.write(`<script src="./app/doc/controllers/Permit.js"></script>`);

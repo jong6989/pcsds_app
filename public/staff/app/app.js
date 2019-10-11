@@ -302,7 +302,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
     }
   }
 
-  // $scope.set_path('/database/views/statistics');
+  $scope.set_path('/database/views/apprehension');
 
 })
 

@@ -1,0 +1,112 @@
+<div ng-controller="ApprehensionController">
+    <md-toolbar class="bg-teal">
+      <h1 class="md-toolbar-tools">
+        <md-button class="md-raised" ng-click="openApprehensionForm($event)">
+          <i class="fa fa-plus col-green"></i>
+          add new apprehension
+        </md-button>
+        <md-button class="md-raised" ng-click="refreshList()">
+          <i class="fa fa-refresh col-green"></i>
+            clear filter
+        </md-button>
+      </h1>
+    </md-toolbar>
+  
+    <md-content
+      style="height: {{ iframeHeight - 150 }}px;"
+      layout-sm="coulumn"
+      layout-gt-sm
+      ng-init=""
+    >
+      <div flex>
+        <table ng-table="apprehensionsTable" class="table" show-filter="true">
+          <tr ng-repeat="apprehension in $data">
+            <td
+              title="'Control Number'"
+              sortable="'CONTROL_NO'"
+              filter="{CONTROL_NO: 'text'}"
+            >
+              {{ apprehension.CONTROL_NO }}
+            </td>
+            <td
+              title="'Control Title'"
+              sortable="'CASE_TITLE'"
+              filter="{CASE_TITLE: 'text'}"
+            >
+              {{ apprehension.CASE_TITLE }}
+            </td>
+            <td
+              title="'Violations '"
+              sortable="'VIOLATION'"
+              filter="{VIOLATION: 'text'}"
+            >
+              {{ apprehension.VIOLATION }}
+            </td>
+            <td
+              title="'Month'"
+              sortable="'Month'"
+              filter-data="monthDropDownOptions"
+              filter="{ MONTH:'select' }"
+            >
+              {{ Months[apprehension.MONTH - 1]}}
+            </td>
+            <td title="'Day'" sortable="'DAY'" filter="{DAY:'text'}">
+              {{ apprehension.DAY }}
+            </td>
+            <td title="'Year'" sortable="'YEAR'" filter="{YEAR:'text'}">
+              {{ apprehension.YEAR }}
+            </td>
+            <td
+              title="'AO Address'"
+              sortable="'AO_Address'"
+              filter="{AO_Address:'text'}"
+            >
+              {{ apprehension.AO_Address }}
+            </td>
+            <td
+              title="'AO Municipality'"
+              sortable="'AO_MUNICIPALITY'"
+              filter="{AO_Municipality:'text'}"
+            >
+              {{ apprehension.AO_MUNICIPALITY }}
+            </td>          
+            <td
+              title="'Address'"
+              sortable="'PA_Address'"
+              filter="{PA_Address:'text'}"
+            >
+              {{ apprehension.PA_Address }}
+            </td>
+            <td
+              title="'PA Municipality'"
+              sortable="'PA_MUNICIPALITY'"
+              filter="{PA_MUNICIPALITY:'text'}"
+            >
+              {{ apprehension.PA_MUNICIPALITY }}
+            </td>
+                      <td
+              title="'Apprehending Agency'"
+              sortable="'APP_AGENCY'"
+              filter="{APP_AGENCY:'text'}"
+            >
+              {{ apprehension.APP_AGENCY }}
+            </td>
+            <td title="'Remarks'" sortable="'REMARKS'" filter="{REMARKS:'text'}">
+              {{ apprehension.REMARKS }}
+            </td>
+            <td title="''">
+              <md-button
+                class="md-raised"
+                ng-click="openApprehensionFormForUpdating($event, apprehension.id)"
+              >
+                <i class="fa fa-edit col-green"></i>
+                EDIT
+              </md-button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </md-content>
+    <div ng-include="'./app/database/modals/addApprehension.html'"></div>
+  </div>
+  
