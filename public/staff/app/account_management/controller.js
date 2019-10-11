@@ -20,6 +20,7 @@ myAppModule.controller('account_management_controller', function ($scope, $timeo
 
     $scope.select_user = (user)=>{
         $scope.selected_user = user;
+        $scope.selected_user.menu = (user.menu)? user.menu : [];
         $scope.is_user_selected = true;
     };
 
@@ -107,7 +108,6 @@ myAppModule.controller('account_management_controller', function ($scope, $timeo
 
     };
 
-
     $scope.add_new_account = (ev)=> {
         Swal.fire({
             title: 'Enter a Mobile Number',
@@ -149,6 +149,93 @@ myAppModule.controller('account_management_controller', function ($scope, $timeo
             },
             allowOutsideClick: () => !Swal.isLoading()
           });
+    };
+
+    $scope.remove_array_from_user = (key,item,id)=>{ 
+        delete(item['$$hashKey']);
+        let updatable = {};
+        updatable[key] = firebase.firestore.FieldValue.arrayRemove(item);
+        db.collection('staffs').doc(id).update(updatable);
+    };
+
+    $scope.add_array_to_user = (key,item,id)=>{
+        delete(item['$$hashKey']);
+        let updatable = {};
+        updatable[key] = firebase.firestore.FieldValue.arrayUnion(item);
+        db.collection('staffs').doc(id).update(updatable);
+    };
+
+    $scope.adding_access_menu = (name,key,item,id)=>{
+        Swal.fire({
+            title: `Are you sure?`,
+            text: `Giving access to ${name}`,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, give Access!'
+          }).then( async (result) => {
+            if (result.value) {
+              if(item.menu){
+                let cb = '';
+                let i = 1;
+                item.menu.map( o => {
+                    cb += `<input id="xx_${i}" type="checkbox" checked> ${o.title} <br> `;
+                    i++;
+                } );
+                const { value: formValues } = await Swal.fire({
+                    title: 'Select Access',
+                    html: cb,
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        let ii = 1;
+                        let selectedAccess = [];
+                        item.menu.map( o => {
+                            if(document.getElementById('xx_'+ii).checked){
+                                selectedAccess.push(o);
+                            }
+                            ii++;
+                        } );
+                        return selectedAccess;
+                    }
+                  })
+                  
+                  if (formValues) {
+                    item.menu = formValues;
+                    $scope.add_array_to_user(key,item,id);
+                    $scope.selected_user.menu.push(item);
+                  }
+              }else {
+                $scope.add_array_to_user(key,item,id);
+                $scope.selected_user.menu.push(item);
+              }
+            }
+          });
+    };
+
+    $scope.removing_access = (name,key,item,id,index)=>{
+        Swal.fire({
+            title: `Are you sure?`,
+            text: `Removing access of ${name}`,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove Access!'
+          }).then( async (result) => {
+            if (result.value) {
+                $scope.remove_array_from_user(key,item,id);
+                $scope.selected_user.menu.splice(index,1);
+            }
+          });
+    };
+
+    $scope.check_menu_if_exist = (menu,title)=>{
+        let exist = false;
+        menu.map( o => { 
+            if( title == o.title) exist = true;
+        });
+        return exist;
     };
 
 });

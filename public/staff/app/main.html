@@ -48,7 +48,7 @@
 							<md-list-item ng-repeat="sub in x.menu" ng-click="set_path(sub.path)" 
 								ng-disabled="is_path(sub.path)" ng-class="{ 'col-grey': is_path(sub.path) }">
                                 <span flex-offset="5" >
-                                    <i class="fa {{ 'fa-' + x.icon}} m-r-20"></i>
+                                    <i class="fa {{ 'fa-' + sub.icon}} m-r-20"></i>
                                     {{sub.title}}
                                 </span>
                             </md-list-item>
