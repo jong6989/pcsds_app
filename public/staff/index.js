@@ -159,6 +159,31 @@ localData.set('STAFF_ACCOUNT',`
                         "title": "Statistics",
                         "path": "/database/views/statistics",
                         "icon": "bars"
+                    },
+                    {
+                        "title": "Apprehensions",
+                        "path": "/database/views/apprehension",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Chainsaw Permit To Purchase",
+                        "path": "/database/views/chainsaw_purchase_permit",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Chainsaw Registration",
+                        "path": "/database/views/chainsaw_registration",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Chainsaw Permit To Sell",
+                        "path": "/database/views/chainsaw_sell_permit",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Wildlife Special Use Permit",
+                        "path": "/database/views/wsup",
+                        "icon": "bars"
                     }
                 ]
             }
