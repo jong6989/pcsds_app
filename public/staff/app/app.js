@@ -13,7 +13,9 @@ myAppModule
 
 })
 
-myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, $mdDialog, $route, $routeParams, $location, NgTableParams) {
+myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, 
+  $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, 
+  $mdDialog, $route, $routeParams, $location, NgTableParams) {
   $scope.$route = $route;
   $scope.$routeParams = $routeParams;
   $scope.$location = $location;
@@ -155,15 +157,16 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
     return ($location.path().substr(0, path.length) === path) ? true : false;
   }
 
-  $scope.showPrerenderedDialog = function(ev,ID) {
+  $scope.showPrerenderedDialog = function(event,ID) {
     $mdDialog.show({
       contentElement: '#' + ID,
       parent: angular.element(document.body),
-      targetEvent: ev,
+      targetEvent: event,
       fullscreen : true,
       clickOutsideToClose: true
     });
   };
+
   $scope.close_dialog = function(){
     $mdDialog.cancel();
   };
@@ -302,7 +305,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
     }
   }
 
-  $scope.set_path('/database/views/apprehension');
+  $scope.set_path('/database/views/chainsaw_registration');
 
 })
 

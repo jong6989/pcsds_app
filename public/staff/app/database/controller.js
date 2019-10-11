@@ -337,6 +337,7 @@ document.write(`<script src="./app/doc/services/addressService.js"></script>`);
 
 document.write(`<script src="./app/database/views/statistics/controller.js"></script>`);
 document.write(`<script src="./app/database/views/apprehension/controller.js"></script>`);
+document.write(`<script src="./app/database/views/chainsaw_registration/controller.js"></script>`);
 
 // document.write(`<script src="./app/doc/controllers/ChainsawRegistration.js"></script>`);
 // document.write(`<script src="./app/doc/controllers/CriminalCases.js"></script>`);
