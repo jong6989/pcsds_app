@@ -213,7 +213,8 @@
                 <!-- activated  --> 
                 <div flex ng-if="doc_user_agencies.length > 0 && filesTobeUploaded.length == 0 && currentItem.template != undefined" layout>
                     <md-button flex ng-class="{'bg-green col-white': (filesTobeUploaded.length == 0) }"  class="md-button" 
-                        ng-click="currentItem.agency = (currentItem.agency)? currentItem.agency : doc_user_agencies[0];publishDraft(currentItem, $event)" layout-sm="column" layout-gt-sm>
+                        ng-click="currentItem.agency = (currentItem.agency) ? currentItem.agency : doc_user_agencies[0];
+                            publishDraft(currentItem, $event)" layout-sm="column" layout-gt-sm>
                         <div>
                             <i class="fa fa-save"></i>
                             Publish
