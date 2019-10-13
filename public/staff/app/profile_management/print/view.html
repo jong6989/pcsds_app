@@ -1,0 +1,125 @@
+<div ng-controller="profile_management_controller" ng-init="onProfileLoad=print;loadProfile('NIofduXoq4Aar5Em88E4')" style="margin:35px">
+    <div id="printableArea">
+        <div layout>
+            <div ng-include="'../../header.html'" style="width:70%"></div>
+            <img ng-src="{{ profile.data.profile_picture == null ? '../../images/user.png' : 
+                        profile.data.profile_picture }}" alt="use" width="20%" height="20%" md-whiteframe="3">
+        </div>
+        <br>
+        <h5>Profile Information</h5>
+        <br>
+        <div layout-gt-sm="row">
+
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>First name</label>
+                <input ng-model="profile.data.first_name" readonly>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm ng-show="profile.data.middle_name">
+                <label>Middle Name</label>
+                <input ng-model="profile.data.middle_name" readonly>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Last Name</label>
+                <input ng-model="profile.data.last_name" readonly>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm ng-show="profile.data.extension_name">
+                <label>Extension (JR., SR)</label>
+                <input ng-model="profile.data.extension_name" readonly>
+            </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+            <md-input-container flex-gt-sm>
+                <label>Birth Day</label>
+                <input ng-model="profile.data.birth_day" readonly>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Birth Place</label>
+                <textarea ng-model="profile.data.place_of_birth" readonly></textarea>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Current Address</label>
+                <textarea ng-model="profile.data.current_address" readonly><textarea></textarea>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Current Phone Number</label>
+                <input ng-model="profile.data.current_phone" type="phone" readonly>
+            </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Tax Identification Number : </label>
+                <input ng-model="profile.data.tin_no" readonly>
+            </md-input-container>
+
+            <md-input-container>
+                <label>Nationality</label>
+                <input ng-model="profile.data.nationality" readonly>
+            </md-input-container>
+            <md-input-container flex-gt-sm>
+                <label>Gender</label>
+                <input ng-model="profile.data.gender" readonly>
+            </md-input-container>
+            <md-input-container flex-gt-sm>
+                <label>Civil Status</label>
+                <input ng-model="profile.data.civil_status" readonly>
+            </md-input-container>
+
+            <md-input-container ng-if="profile.data.civil_status.toLowerCase() == 'married'" class="md-block"
+                flex-gt-sm>
+                <label>Spouse Name :</label>
+                <input ng-model="profile.data.spouse_name" readonly>
+            </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Father's Full Name : </label>
+                <input ng-model="profile.data.father" readonly>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Mother's Maiden Name :</label>
+                <input ng-model="profile.data.mother" readonly>
+            </md-input-container>
+        </div>
+        <h5>Government Issued Identification (Any of the following: Passport, SSS, GSIS, etc):</h5>
+        <br>
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>ID Name</label>
+                <input ng-model="profile.data.gov_id.name" readonly>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>ID Number</label>
+                <input ng-model="profile.data.gov_id.number" readonly>
+            </md-input-container>
+
+            <md-input-container flex-gt-sm>
+                <label>Date Issued</label>
+                <input ng-model="profile.data.gov_id.date_issued" readonly>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Issued at</label>
+                <input ng-model="profile.data.gov_id.place_issued" readonly>
+            </md-input-container>
+
+            <md-input-container flex-gt-sm>
+                <label>Valid Until</label>
+                <input ng-model="profile.data.gov_id.valid_until" readonly>
+            </md-input-container>
+        </div>
+    </div>
+    <md-button type="submit" ng-click="print()" ng-hide="!currentUserShouldSee()" class="md-raised md-block md-primary">
+        Print
+    </md-button>
+    <md-button type="submit" ng-click="loadPage('app/profile_management/view.html?id='+profile.data.id)"
+        class="md-raised md-block md-primary">
+        Back to View
+    </md-button>
+</div>

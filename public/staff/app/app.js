@@ -1,6 +1,8 @@
 'use strict';
 var myAppModule = {};
-myAppModule = angular.module('brain_app', ['ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute','ngFileUpload','ngTable']);
+myAppModule = angular.module('brain_app', [
+  'ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute',
+  'ngFileUpload','ngTable']);
 
 myAppModule
 .config(function($routeProvider, $locationProvider) {
@@ -305,7 +307,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     }
   }
 
-  $scope.set_path('/doc');
+  // $scope.set_path('/profile_management/print');
 
 })
 

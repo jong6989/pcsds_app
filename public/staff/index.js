@@ -36,13 +36,22 @@ var scripts_controllers = {
 var scripts_js_plugins = {
     particles : `<script src="/plugins/particlesjs/js/particles.min.js"></script>
                 <script src="/plugins/particlesjs/js/app.js"></script>`,
+    fileUpload : `<script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload-shim.js"></script>
+                    <script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload.min.js"></script>`,
     export : `<script src="/js/export/shim.min.js"></script>
                 <script src="/js/export/xlsx.core.min.js"></script>
                 <script src="/js/export/xls.core.min.js"></script>
                 <script src="/js/export/Blob.js"></script>
-                <script src="/js/export/FileSaver.js"></script>`
+                <script src="/js/export/FileSaver.js"></script>`,
+    html2canvas: `<script src="/js/html2canvas/html2canvas.min.js"></script>`
 }
 
+let profileModule = script_angular + scripts_controllers.main + 
+    scripts_controllers.profile + script_ng_plugins.ngTable +
+    script_ng_plugins.camera + script_ng_plugins.fileUpload +
+    scripts_js_plugins.html2canvas;
+
+document.write(profileModule);
 //scripts for login user
 let loginPage = script_angular + scripts_controllers.main + scripts_controllers.login;
 
@@ -186,6 +195,12 @@ localData.set('STAFF_ACCOUNT',`
                         "icon": "bars"
                     }
                 ]
+            },
+            {
+                "controller":"<script src='app/profile_management/controller.js'></script>",
+                "icon":"files-o",
+                "title":"Online Application",
+                "path": "/profile_management"
             }
         ],
             "name":"Admin",
