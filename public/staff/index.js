@@ -199,8 +199,14 @@ localData.set('STAFF_ACCOUNT',`
             {
                 "controller":"<script src='app/profile_management/controller.js'></script>",
                 "icon":"files-o",
-                "title":"Online Application",
-                "path": "/profile_management"
+                "title":"Profile Management",
+                "menu" : [
+                    {
+                        "title": "Profiles",
+                        "path": "/profile_management/list",
+                        "icon": "list"
+                    }
+                ]
             }
         ],
             "name":"Admin",

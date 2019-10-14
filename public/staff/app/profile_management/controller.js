@@ -11,11 +11,13 @@ myAppModule.
             // 'dummyProfileService',
             '$profileService',
             'NgTableParams',
+            '$location',
             function (
                 $scope,
                 $http,
                 $profileService,
-                NgTableParams
+                NgTableParams,
+                $location
             ) {
 
                 $scope.is_uploading = false;
@@ -43,42 +45,61 @@ myAppModule.
                         });
                 }
                 $scope.print = () => {
-                    setTimeout(function(){
-                        var header = "<html>";
-                        header += "<head>";
-                        header += "<title>";
-                        header += "Print";
-                        header += "</title>";
-                        header += '<link href="/css/angular-material.min.css" rel="stylesheet"></link>';
-                        header += '<script src="/js/angular.min.js"></script>';
-                        header += '<script src="/js/angular-material.min.js"></script>';
-                        header += '<script src="/js/ng-table.min.js"></script>';
-                        header += '<script src="/js/angular-route.js"></script>';
-                        header += '<script src="/js/angular-animate.min.js"></script>';
-                        header += '<script src="/js/angular-messages.min.js"></script>';
-                        header += '<script src="/js/ngStorage.min.js"></script>';
-                        header += '<script src="/js/ng-camera.js"></script>' + 
-                            '<script src="/js/ng-image-crop/ng-img-crop.js"></script>';
-                        header += '<script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload-shim.js">' +
-                            '</script><script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload.min.js"></script>';
-                        header += "<script src='app/app.js'></script>";
-                        header += "<script src='app/profile_management/controller.js'></script>";
-                        header += "</head>";
-                        var body = '<body ng-app="brain_app" ng-controller="AppCtrl">';
-                        var template = document.getElementById('printableArea');
-                        body += "<div ng-controller='profile_management_controller' ng-init='loadProfile(\"NIofduXoq4Aar5Em88E4\")'>"
-                        body += template.innerHTML;
-                        body += "</div>"
-                        // body += "<canvas id='canvas'></canvas>"
-                        body += "</body>";
-                        var footer = "</html>";
-                        var html = `${header} ${body} ${footer}`;
-                        var printWindow = window.open();
-                        printWindow.document.write(html);
-                        // printWindow.document.body.appendChild(canvas);
-                        // printWindow.print();
-                        // printWindow.close();
-                    }, 2000);
+                    var toolbar_main = document.getElementById('toolbar_main');
+                    var left_panel = document.getElementById('left_panel');
+                    var button_panel = document.getElementById('button_panel');
+                    button_panel.style.display = 'none';
+                    left_panel.style.display = 'none';
+                    toolbar_main.style.display = 'none';
+                    window.print();
+                    left_panel.style.display = '';
+                    toolbar_main.style.display = '';
+                    button_panel.style.display = '';
+                    // var header = "<html>";
+                    // header += "<head>";
+                    // header += "<title>";
+                    // header += "Print";
+                    // header += "</title>";
+                    // header += '<script src="/js/firebase/firebase-app.js"></script>';
+                    // header += '<script src="/js/firebase/firebase-auth.js"></script>';
+                    // header += '<script src="/js/firebase/firebase-firestore.js"></script>';
+                    // header += '<script src="/js/firebase/firebase-functions.js"></script>';
+                    // header += '<script src="/js/firebase/firebase-storage.js"></script>';
+                    // header += '<script src="/js/firebase/init-firebase.js"></script> ';
+                    // header += '<script src="/plugins/jquery/jquery.min.js"></script>';
+                    // header += '<script src="/js/angular.min.js"></script>';
+                    // header += '<script src="/js/angular-route.js"></script>';
+                    // header += '<script src="/js/angular-animate.min.js"></script>';
+                    // header += '<script src="/js/angular-aria.min.js"></script>';
+                    // header += '<script src="/js/angular-messages.min.js"></script>';
+                    // header += '<script src="/js/angular-material.min.js"></script>';
+                    // header += '<script src="/js/ng-table.min.js"></script>';
+                    // header += '<script src="/js/angular-animate.min.js"></script>';
+                    // header += '<script src="/js/ngStorage.min.js"></script>';
+                    // header += '<script src="/js/webcam.min.js"></script>';
+                    // header += '<script src="/js/ng-camera.js"></script>';
+                    // header += '<script src="/js/ng-image-crop/ng-img-crop.js"></script>';
+                    // header += '<script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload-shim.js">';
+                    // header += '</script><script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload.min.js"></script>';
+                    // header += "<script src='app/app.js'></script>";
+                    // header += "<script src='app/profile_management/controller.js'></script>";
+                    // header += '<link href="/css/angular-material.min.css" rel="stylesheet"></link>';
+                    // header += "</head>";
+                    // var body = '<body ng-app="brain_app" ng-controller="AppCtrl">';
+                    // var template = document.getElementById('printableArea');
+                    // body += "<div ng-controller='profile_management_controller' ng-init='loadProfile(\"NIofduXoq4Aar5Em88E4\")'>"
+                    // body += template.innerHTML;
+                    // body += "</div>"
+                    // body += "</body>";
+                    // var footer = "</html>";
+                    // var html = `${header} ${body} ${footer}`;
+                    // var printWindow = window.open();
+
+                    // printWindow.document.write(html);
+                    // setTimeout(function () {
+                    //     printWindow.print();
+                    //     printWindow.close();
+                    // }, 2000);
                 }
 
                 $scope.refreshList = () => {
@@ -97,7 +118,7 @@ myAppModule.
                         cancelButtonText: 'No'
                     }).then(result => {
                         if (result.value)
-                            $scope.loadPage('app/profile_management/list.html');
+                            $scope.loadPage('/profile_management/list');
                     })
                 }
 
@@ -136,10 +157,10 @@ myAppModule.
                     var profileID;
                     $scope.is_page_loading = true;
                     if (id == null) {
-                        var url_relative_path = localData.get('current_view');
-                        var url = new URL(url_relative_path, location.href);
-                        var parameters = url.searchParams;
-                        var profileID = parameters.get("id");
+                        // var url_relative_path = localData.get('current_view');
+                        // var url = new URL(url_relative_path, location.href);
+                        // var parameters = url.searchParams;
+                        profileID = localData.get('profileID');
                     } else {
                         profileID = id;
                     }
@@ -258,9 +279,17 @@ myAppModule.
                     })
                 }
 
-                $scope.loadPage = (url) => {
-                    localData.set('current_view', url);
-                    location.reload();
+                $scope.loadPage = (url, profileID) => {
+                    // localData.set('current_view', url);
+                    // location.reload();
+                    if (profileID)
+                        localData.set('profileID', profileID);
+                    $location.path(url);
+                }
+
+                $scope.loadViewPage = (profileID) => {
+                    localData.set('profileID', profileID);
+                    $scope.loadPage('/profile_management/view');
                 }
                 $scope.upload_profile_picture = async function (dataUrl, imageFileName) {
                     $scope.is_using_camera = false;
@@ -343,9 +372,9 @@ myAppModule.
                 }
             }
 
-            $scope.save_profile = (profile) => {
-                console.log(profile);
-            }
+            // $scope.save_profile = (profile) => {
+            //     console.log(profile);
+            // }
 
             $scope.profileTable = new NgTableParams({}, { dataset: [] });
             $scope.loadProfileList = async () => {

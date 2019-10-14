@@ -128,8 +128,8 @@
                                         {{profile.data[value]}}
                                     </div>
                                     <div ng-if="value != 'spouse_name'">
-                                            {{profile.data[value]}}
-                                        </div>
+                                        {{profile.data[value]}}
+                                    </div>
 
                                 </div>
                             </div>
@@ -206,22 +206,23 @@
             </md-card-content>
         </md-card>
     </div>
-    <md-button ng-if="profile.data.status=='active'" type="submit" ng-click="deactivate_profile(profile.data.id)"
-        class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
-        Deactivate Profile
-    </md-button>
-    <md-button ng-if="profile.data.status=='deactivated'" type="submit" ng-click="activate_profile(profile.data.id)"
-        class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
-        Activate Profile
-    </md-button>
-    <md-button type="submit" ng-click="loadPage('app/profile_management/print.html?id='+profile.data.id)"
-        class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
-        Print
-    </md-button>
-    <md-button type="submit" ng-click="loadPage('app/profile_management/list.html')"
-        class="md-raised md-block md-primary">
-        Back to List
-    </md-button>
+    
+        <md-button ng-if="profile.data.status=='active'" type="submit" ng-click="deactivate_profile(profile.data.id)"
+            class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
+            Deactivate Profile
+        </md-button>
+        <md-button ng-if="profile.data.status=='deactivated'" type="submit" ng-click="activate_profile(profile.data.id)"
+            class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
+            Activate Profile
+        </md-button>
+        <md-button type="submit" ng-click="loadPage('/profile_management/print')" class="md-raised md-block md-primary"
+            ng-hide="!currentUserShouldSee()">
+            Print
+        </md-button>
+        <md-button type="submit" ng-click="loadPage('/profile_management/list')" class="md-raised md-block md-primary">
+            Back to List
+        </md-button>
+
     <!-- Edit Modals -->
     <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/fullname.html'"></div>
     <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/address.html'"></div>

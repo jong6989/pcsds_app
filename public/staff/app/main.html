@@ -1,7 +1,7 @@
 
 <div layout="column" style="height:{{get_window_height()}}px;">
 
-	<md-toolbar md-scroll-shrink="" ng-if="true" class="bg-grey"  >
+	<md-toolbar md-scroll-shrink="" ng-show="true" class="bg-grey" id="toolbar_main" >
 	    <div class="md-toolbar-tools">
 	        <md-button ng-click="toggleLeft()" hide-gt-md class="md-icon-button" aria-label="RightSide" >
 	          <i class="fa fa-bars"></i>
@@ -17,7 +17,8 @@
 	<section layout="row" flex style="position: relative;">
 
 		<md-sidenav layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" 
-		md-whiteframe="4" >
+		md-whiteframe="4" 
+		id="left_panel">
 
 			
 			<md-content flex layout="column" >

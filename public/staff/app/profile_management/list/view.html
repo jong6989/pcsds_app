@@ -19,7 +19,7 @@
       <div ng-controller="profile_management_controller" ng-init="loadProfileList()">
         <md-toolbar class="bg-darkgreen">
           <h1 class="md-toolbar-tools">
-            <md-button class="md-raised" ng-click="loadPage('app/profile_management/create.html')">
+            <md-button class="md-raised" ng-click="loadPage('profile_management/create')">
               <i class="fa fa-plus col-green"></i>
               add new profile
             </md-button>
@@ -56,7 +56,7 @@
                 </td>
       
                 <td title="''">
-                  <md-button class="md-raised" ng-click="loadPage('app/profile_management/view.html?id='+profile.id)">
+                  <md-button class="md-raised" ng-click="loadViewPage(profile.id)">
                     <i class="fa fa-plus col-green"></i>
                     VIEW
                   </md-button>
