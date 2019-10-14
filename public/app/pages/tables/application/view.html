@@ -4,9 +4,9 @@
     <table ng-table="table_my_application" class="table" show-filter="true">
         <tr ng-repeat="x in $data "
             ng-click="set_application(x,$event)" class="pointer">
-            <td sortable="'id'"> {{x.date}} </td>
+            <td sortable="'id'" title="'Transaction Number'" > {{x.date}} </td>
             <td title="'Title'" sortable="'x.name'"> {{ x.name }} </td>
-            <td title="'Submittion Date'"> {{ x.date}} </td>
+            <td title="'Submittion Date'"> {{ x.date | date}} </td>
             <td title="'Status'" > 
                 <strong ng-class=" {'col-green' : (x.status == 0), 'col-blue' : (x.status == 1), 'col-red' : (x.status == 2),
                         'col-teal' : (x.status == 3),'col-brown' : (x.status == 4),'col-indigo' : (x.status == 5),'col-deep-orange' : (x.status == 6) } ">

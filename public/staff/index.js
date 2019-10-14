@@ -159,5 +159,5 @@ localData.set('STAFF_ACCOUNT',`
             "name":"Admin",
             "phone":"+639486601717"
         }
-`)
+`);
 authenticateStaff();
