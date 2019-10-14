@@ -9,7 +9,7 @@
         { "name" : "Application for Chainsaw Registration" , "url" : "app/templates/application/cr.html" , "action" : "app/templates/actions/generic.html" },
         { "name" : "Application for permit to purchase/import of chainsaw" , "url" : "app/templates/application/ptp.html" , "action" : "app/templates/actions/generic.html" },
         { "name" : "Application for Gratuitous Permit" , "url" : "app/templates/application/gp.html" , "action" : "app/templates/actions/generic.html" },
-        { "name" : "Application for Wildlife Import Certification" , "url" : "app/templates/application/wic.html" , "action" : "app/templates/actions/generic.html" },
+        { "name" : "Application for Wildlife Import Certification" , "url" : "app/templates/application/wic revise.html" , "action" : "app/templates/actions/generic.html" },
         { "name" : "Application for Wildlife Export/Re Export Certification" , "url" : "app/templates/application/wtf.html" , "action" : "app/templates/actions/generic.html"}
     ]
 }
