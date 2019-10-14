@@ -1,3 +1,4 @@
+<md-card-content>
 <div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div>
 <div class="p-t-20 p-l-10">
 
@@ -43,14 +44,19 @@
         <small>Palawan Council for Sustainable Development Staff</small>
         
         <br>
+        <br>
 
         
 
     
-                            <h2 class="align-center m-t-20 m-b-10">CERTIFICATION</h2>
-    <br>
-    <br>
-    <br>
+                            <h2 class="align-center m-t-20 m-b-10"> 
+                                <u> 
+                                    <i> 
+                                        C&nbsp;E&nbsp;R&nbsp;T&nbsp;I&nbsp;F&nbsp;I&nbsp;C&nbsp;A&nbsp;T&nbsp;I&nbsp;O&nbsp;N
+                                    </i>
+                                 </u>
+                            </h2>
+    <br><br><br>
     
 
             <!-- <div>
@@ -60,26 +66,26 @@
 
             
             <div>
-                <p>This is to certify that {{application.data.application.applicant}} of {{application.data.application.applicant_address}} is authorize to import from {{application.data.application.address_exporter}} the following for {{application.data.application.porpuses}} only, provided, that a Non-CITES Export Certifiaction or equivalent permit has been secured from CITES Management {{application.data.application.address_exporter}}  </p>
+                <p>This is to certify that <strong> {{application.data.application.applicant}} </strong> of <strong> {{application.data.application.applicant_address}}</strong> is authorize to import from <strong> {{application.data.application.address_exporter}} </strong> the following for <strong> {{application.data.application.porpuses}} </strong> only, provided, that a Non-CITES Export Certifiaction or equivalent permit has been secured from CITES Management <strong> {{application.data.application.address_exporter}} </strong> </p>
             </div>
            
-            <br>
-            <br>
-            x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x
+            <br><br>
+            x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x
             <div>
+                <b style="margin-left: 10%">SPECIES</b>
+                <b style="margin-left: 50%">QUANTITY</b>
                     
                     <ul ng-if="application.data.application.species.length > 0">
-                        <li ng-repeat="x in application.data.application.species"> 
-                             {{x.scientific_name}} &nbsp;&nbsp;&nbsp; {{x.species_qty}} {{x.species_unit}}  &nbsp;&nbsp;&nbsp; {{x.species_boxes}} {{(x.species_boxes > 1)?'boxes':'box'}}
+                        <li ng-repeat="x in application.data.application.species">
+                        
+                            <i> {{x.scientific_name}}</i> <italic style="margin-left: 60%"> {{x.species_qty}} {{x.species_unit}} {{x.species_boxes}} {{(x.species_boxes > 1)?'boxes':'box'}}</italic>
+                            
                         </li>
                     </ul>
                     
             </div>  
-            x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x
-            <br>
-            <br>
-            <br>
-            <br>
+            x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x
+            <br><br><br><br>
         
          <div>
           <p>  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; The above-mentioned {{x.scientific_name}} shall be imported by
@@ -105,6 +111,10 @@
                 </md-input-container>
                 dated {{application.date | date:shortDate }} </p>
         </div>
+
+        <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This Certification is not valid without the <i>dry seal</i> or <i>qr code</i> of the Palawan Council for Sustainable Development or if contains erasures or alteration.
+        </p>
             <!-- <div layout>
                 <b style="margin-left: 10%">Air Cargo</b>
 
@@ -175,4 +185,4 @@
 
 
     <hr>
-            
+</md-card-content>   
