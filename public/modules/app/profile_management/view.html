@@ -3,7 +3,7 @@
         <div flex-gt-xs="35" layout-padding ng-show="!is_using_camera" ngf-drop ng-model="profile.data.profile_picture"
             ngf-allow-dir="true" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-pattern="image/*">
             <div ng-show=" is_page_loading " layout="row" layout-sm="column" layout-align="space-around">
-                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
             <img ng-hide="is_croping_image()" ng-src="{{ profile.data.profile_picture == null ? '../../images/user.png' : 
                         profile.data.profile_picture }}" alt="use" width="70%" md-whiteframe="3">
@@ -72,8 +72,8 @@
             <div ng-init="profileProperties=['id', 'full_name', 'current_address', 'current_phone']"></div>
             <div ng-repeat="windowName in windowNames track by $index">
                 <hr>
-                <i class="fa fa-edit pointer col-blue"
-                    ng-click="initUpdatePropertyCallbacks[profileProperties[$index]]();showPrerenderedDialog($event, windowName);"
+                <i class="fa fa-edit pointer col-blue" ng-click="initUpdatePropertyCallbacks[profileProperties[$index]]();
+                        showPrerenderedDialog($event, windowName);"
                     ng-hide="!currentUserShouldSee() || windowName==''">
                     <md-tooltip md-direction="top">
                         Edit {{toolTips[$index]}}
@@ -110,21 +110,32 @@
                         <div>
                             <div ng-repeat="personalInformation in personalInformations">
                                 <div ng-repeat="(key, value) in personalInformation" ng-show="profile.data[value]">
-                                    <small>{{key}} </small>
-        
+                                    <div ng-if="value =='spouse_name' && 
+                                        profile.data.civil_status.toLowerCase() == 'married'">
+                                        <small>{{key}} </small>
+                                    </div>
+                                    <div ng-if="value != 'spouse_name'">
+                                        <small>{{key}} </small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div style="padding-left:5px;">
                             <div ng-repeat="personalInformation in personalInformations">
                                 <div ng-repeat="(key, value) in personalInformation">
-                                    {{profile.data[value]}}
-        
+                                    <div ng-if="value == 'spouse_name' && 
+                                        profile.data.civil_status.toLowerCase() == 'married'">
+                                        {{profile.data[value]}}
+                                    </div>
+                                    <div ng-if="value != 'spouse_name'">
+                                            {{profile.data[value]}}
+                                        </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                 </md-card-content>
             </md-card>
         </div>
@@ -134,11 +145,9 @@
         <!-- Edit Profile Data -->
         <md-card>
             <md-card-content>
-                <i class="fa fa-edit pointer col-blue"
-                    ng-click="initUpdatePropertyCallbacks['government_id']();
-                    showPrerenderedDialog($event,'gID_modal');
-                    "
-                    ng-hide="!currentUserShouldSee()">
+                <i class="fa fa-edit pointer col-blue" ng-click="initUpdatePropertyCallbacks['government_id']();
+                    showPrerenderedDialog($event,'government_id_window');
+                    " ng-hide="!currentUserShouldSee()">
                     <md-tooltip md-direction="top">
                         Edit Government ID
                     </md-tooltip>
@@ -150,7 +159,7 @@
                             'Place Issued', 'Valid Until']">{{label}}<br></small>
                     </div>
                     <div style="padding-left:5px">
-                        {{profile.data.gov_id.number}}<br>
+                        {{profile.data.tin_no}}<br>
                         {{profile.data.gov_id.name}}<br>
                         {{profile.data.gov_id.number}}<br>
                         {{profile.data.gov_id.date_issued}}<br>
@@ -170,13 +179,13 @@
                         Uploaded Files
                     </strong>
                     <ol ng-if="profile.data.uploads != undefined">
-                        <li ng-repeat="x in profile.data.uploads"> {{x.name}} -
-                            <i class="fa fa-trash col-red pointer"
+                        <li ng-repeat="x in profile.data.uploads"> {{x.name}}
+                            <!-- <i class="fa fa-trash col-red pointer"
                                 ng-dblclick="profile.data.uploads.splice($index,1);remove_array_from_profile('uploads',x)">
                                 <md-tooltip md-direction="top">
                                     double click to remove file
                                 </md-tooltip>
-                            </i>
+                            </i> -->
                         </li>
                     </ol>
                 </div>
@@ -205,8 +214,8 @@
         class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
         Activate Profile
     </md-button>
-    <md-button type="submit" ng-click="loadPage('app/profile_management/print.html?id='+profile.data.id)" class="md-raised md-block md-primary"
-        ng-hide="!currentUserShouldSee()">
+    <md-button type="submit" ng-click="loadPage('app/profile_management/print.html?id='+profile.data.id)"
+        class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
         Print
     </md-button>
     <md-button type="submit" ng-click="loadPage('app/profile_management/list.html')"
@@ -218,12 +227,7 @@
     <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/address.html'"></div>
     <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/contact.html'"></div>
     <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/gID.html'"></div>
+    <!-- <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/gid2.html'"></div> -->
     <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/personal.html'"></div>
-
-    <!-- Add Modals -->
-    <div style="visibility: hidden" ng-include="'app/templates/modals/chainsaw/add.html'"></div>
-
-    <!-- View Modals -->
-    <div style="visibility: hidden" ng-include="'app/templates/modals/chainsaw/item.html'"></div>
 
 </div>

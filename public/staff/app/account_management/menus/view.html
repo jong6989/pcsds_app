@@ -1,0 +1,47 @@
+
+<div ng-controller="menu_management_controller" ng-init="set_page_title('Account Management - Menus')" class="p-t-20 p-l-20 p-r-20">
+    
+    <h2 class="md-header"> Menu Modules </h2>
+    <hr>
+    <md-button class="md-raised" ng-click="add_menu_module()">Add Menu</md-button>
+    <hr>
+
+    <md-card  ng-repeat="x in menu_modules" ng-init="x.menu = (x.menu)? x.menu : [];">
+        <md-card-content>
+            <div layout>
+                <md-input-container md-no-float class="md-block">
+                    <input ng-model="x.title" ng-blur="update_user_field({'title': x.title },x.id)" placeholder="Title" aria-label="title">
+                </md-input-container> 
+                <md-input-container md-no-float class="md-block">
+                    <input ng-model="x.icon" ng-blur="update_user_field({'icon': x.icon },x.id)"  placeholder="Icon" aria-label="icon">
+                </md-input-container> 
+                <md-input-container md-no-float class="md-block">
+                    <input ng-model="x.path"  ng-blur="update_user_field({'path': x.path },x.id)" placeholder="Path" aria-label="path">
+                </md-input-container> 
+                <md-input-container md-no-float class="md-block" flex>
+                    <input ng-model="x.controller" ng-blur="update_user_field({'controller': x.controller },x.id)"  placeholder="Controller" aria-label="controller">
+                </md-input-container> 
+            </div>
+
+            <strong class="pointer" ng-click="x.menu.push({})">Sub Menu <i class="fa fa-plus"></i></strong>
+            <md-card ng-repeat="y in x.menu" md-offset="20">
+                <md-card-content>
+                    <div layout >
+                        <md-input-container md-no-float class="md-block">
+                            <input ng-model="y.title" ng-blur="update_user_field({'menu': x.menu },x.id)" placeholder="Title" aria-label="title">
+                        </md-input-container> ,
+                        <md-input-container md-no-float class="md-block">
+                            <input ng-model="y.path" ng-blur="update_user_field({'menu': x.menu },x.id)" placeholder="Path" aria-label="path">
+                        </md-input-container> ,
+                        <md-input-container md-no-float class="md-block">
+                            <input ng-model="y.icon" ng-blur="update_user_field({'menu': x.menu },x.id)" placeholder="Icon" aria-label="icon">
+                        </md-input-container> 
+                    </div>
+                </md-card-content>
+            </md-card>
+
+        </md-card-content>
+    </md-card>
+
+</div>
+    

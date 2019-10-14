@@ -13,7 +13,9 @@ myAppModule
 
 })
 
-myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, $mdDialog, $route, $routeParams, $location, NgTableParams) {
+myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, 
+  $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, 
+  $mdDialog, $route, $routeParams, $location, NgTableParams) {
   $scope.$route = $route;
   $scope.$routeParams = $routeParams;
   $scope.$location = $location;
@@ -23,6 +25,21 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
   $scope.content_page = "";
   $scope.active_menu = "";
   $scope.menus = [];
+
+  $scope.$watch( 
+      ()=> { 
+          return $mdMedia('xs'); 
+      }, 
+      (xs)=> {
+      $scope.is_xs = xs;
+  });
+  $scope.$watch( 
+      ()=> { 
+          return $mdMedia('sm'); 
+      }, 
+      (sm)=> {
+      $scope.is_sm = sm;
+  });
 
   $scope.toggleLeft = buildDelayedToggler('left');
   $scope.toggleRight = buildToggler('right');
@@ -140,15 +157,16 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
     return ($location.path().substr(0, path.length) === path) ? true : false;
   }
 
-  $scope.showPrerenderedDialog = function(ev,ID) {
+  $scope.showPrerenderedDialog = function(event,ID) {
     $mdDialog.show({
       contentElement: '#' + ID,
       parent: angular.element(document.body),
-      targetEvent: ev,
+      targetEvent: event,
       fullscreen : true,
       clickOutsideToClose: true
     });
   };
+
   $scope.close_dialog = function(){
     $mdDialog.cancel();
   };
@@ -166,6 +184,12 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
       }, wait || 10);
     };
   }
+
+  $scope.open_window_view = function(v,d){
+    $localStorage.params = d;
+    var x = {view: v,last_view : $scope.current_view, documentID: d.id};
+    window.open('index.html?'+ $.param(x), 'modal');
+  };
 
   function buildDelayedToggler(navID) {
     return debounce(function() {
@@ -226,13 +250,18 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
 
   $scope.current_view = localData.get('staff_current_view');
   let storedAccount = localData.get('STAFF_ACCOUNT');
+
   function load_dashboard_page(){
     if(storedAccount){
       //staff account
-      $scope.account = JSON.parse(storedAccount);
-      $scope.user = $scope.account;
+      $scope.user = JSON.parse(storedAccount);
       if($location.path() == '/'){
-        $location.path($scope.account.menu[0].path);
+        if($scope.user.menu[0].path){
+          $location.path($scope.user.menu[0].path);
+        }else {
+          $location.path($scope.user.menu[0].menu[0].path);
+        }
+        
       }
     }
   }
@@ -241,12 +270,42 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
 
   $scope.set_path = (path)=>{
     $location.path(path);
+    
     $scope.close_left_side();
   };
 
+  
   $scope.is_path = (path)=>{
     return ($location.path() == path);
   };
+
+  $scope.toString = (collection, key) => {
+    if(collection == null) return;
+    var values = key ? collection.map(item => item[key]) : collection;
+    var slicedElements = values.slice(0, values.length - 1);
+    var joined = slicedElements.join(', ') + ' and ' + values[values.length - 1];
+
+    return joined;
+  }
+
+  $scope.get_full_date = function(date){
+    return $filter('date')(date, "MMMM dd, yyyy");
+  }
+  $scope.get_full_month_name = function(date){
+    return $filter('date')(date, "MMMM");
+  }
+  $scope.to_day = function(d){
+    return $filter('date')(d, "dd");
+  }
+
+  $scope.pcsd = {
+    head: {
+        full_name: "Nelson P. Devandera",
+        position: "PCSDS Executive Director"
+    }
+  }
+
+  $scope.set_path('/doc');
 
 })
 

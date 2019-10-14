@@ -138,6 +138,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
 
     $scope.setLocal = (key,value) => {
         $localStorage[key] = value;
+        initN();
     };
 
     $scope.getLocal = (key) => {
@@ -313,10 +314,25 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
         let d = $scope.date_now('YYYY-MM-DD');
         $scope.dateA = d;
         $scope.dateB = d;
-        $scope.n = { created : d, published : d, keywords : [], category : 'none', template : ($localStorage.currentDocTemplate) ? $localStorage.currentDocTemplate: {} };
+        $scope.n = { created : d, published : d, keywords : [], category : 'none', 
+            template : ($localStorage.currentDocTemplate) ? $localStorage.currentDocTemplate: {} };
+        
         $scope.showPrerenderedDialog(evt,'addDraft');
+        
     };
 
+    function initN(){
+        let d = $scope.date_now('YYYY-MM-DD');
+        $scope.dateA = d;
+        $scope.dateB = d;
+        $scope.n = { created : d, published : d, keywords : [], category : 'none', 
+            template : ($localStorage.currentDocTemplate) ? $localStorage.currentDocTemplate: {} };
+        console.log($scope.n)
+    }
+
+    $scope.onDraftCreated = (draft) => {
+        
+    }
     $scope.createDraft = async (x) => {
         console.log(x);
         if($scope.doc_user.id !== undefined) {
@@ -342,6 +358,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
             $scope.toast(`Draft document created.`);
             $scope.myDrafts.push(x);
             $scope.myDrafts = $localStorage.myDrafts = await func.getMyDrafts();
+            
         }else {
             $scope.toast("system error, please re-boot this app.")
         }
@@ -396,10 +413,15 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
 
 
     $scope.print_document = (id)=>{
-        console.log('to print: ', id);
+        // console.log('to print: ', id);
         func.refreshDocItem(id, (a) => {
-            $scope.open_window_view(a.template.print, a);
+            $scope.render_params = { data: $scope.currentItem };
+            $scope.setCurrentItem($scope.currentItem, 'print');
+            // $scope.open_window_view(a.template.print, a);
+            // var view = { view: a.template.print };
+            // window.open('app/templates/print/index.html?'+ $.param(view));
         });
+        
     };
 
     // for application sync
@@ -547,7 +569,33 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
     };
 
     // end for application sync
+    $scope.setCurrentItem($scope.currentItem, 'published')
+}).
+controller('print_controller', function($scope) {
+    $scope.printTemplate = () => {
+        var header = "<html>";
+        header += "<head>";
+        header += "<title>";
+        header += "Print";
+        header += "</title>";
+        header += "</head>";
+        var body = "<body>";
+        var template = document.getElementById('printBody');
+        body += template.innerHTML;
+        body += "</body>";
+        var footer = "</html>";
+        var html = `${header} ${body} ${footer}`;
+        var printWindow = window.open();
+        printWindow.document.write(html);
+        printWindow.print();
+        printWindow.close();
+    }
 
+    angular.element(document).ready(function(){
+        setTimeout(function(){
+            $scope.printTemplate();
+        }, 1000);
+    })
 });
 
 document.write(`<script src="./app/doc/controllers/files.js"></script>`);
@@ -555,3 +603,5 @@ document.write(`<script src="./app/doc/controllers/draft.js"></script>`);
 document.write(`<script src="./app/doc/controllers/published.js"></script>`);
 document.write(`<script src="./app/doc/controllers/pending.js"></script>`);
 document.write(`<script src="./app/doc/controllers/actions.js"></script>`);
+document.write(`<script src="./app/doc/controllers/gratuitous.js"></script>`);
+

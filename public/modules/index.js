@@ -43,6 +43,6 @@ let v = localData.get('current_view');
 if(!v){
     localData.set(v);
 }
-// localData.set('authUser', 'DeTxDiJfxOOhTS94umfchr489o73');
-// localData.set('current_view', 'app/profile_management/list.html?id=NIofduXoq4Aar5Em88E4 ');
+localData.set('authUser', 'DeTxDiJfxOOhTS94umfchr489o73');
+// localData.set('current_view', 'app/profile_management/view.html?id=NIofduXoq4Aar5Em88E4 ');
 document.write(profileModule);

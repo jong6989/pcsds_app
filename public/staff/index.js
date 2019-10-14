@@ -53,8 +53,17 @@ function getJson(string) {
     return JSON.parse(string);
 }
 
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'center',
+    showConfirmButton: false,
+    timer: 2000
+});
+
+
 async function authenticateStaff(){
     let v = localData.get('staff_current_view');
+    
     if(!v){
         localData.set('staff_current_view','app/login/view.html');
     }
@@ -83,7 +92,7 @@ async function authenticateStaff(){
                 alert(error);
             }
         }
-
+        
         //firebase authentication checker
         // await firebase.auth().onAuthStateChanged( async (user)=> {
         //     if (!user) {
@@ -112,11 +121,22 @@ localData.set('STAFF_ACCOUNT',`
     {"designation":"admin","id":"+639486601717","last_seen":1570521763344,
         "menu":[
             {
-                "controller":"<script src='app/account_management/controller.js'></script>",
+                "controller":"<script src='app/account_management/controller.js'></script><script src='app/account_management/menus/controller.js'></script>",
                 "functions":["create","update","assign_module","disable"],
-                "icon":"trash",
-                "path":"/account_management",
-                "title":"Account Management"
+                "icon":"user-md",
+                "title":"Account Management",
+                "menu" : [
+                    {
+                        "title" : "Accounts",
+                        "path" : "/account_management",
+                        "icon" : "users"
+                    },
+                    {
+                        "title" : "Menu Modules",
+                        "path" : "/account_management/menus",
+                        "icon" : "bars"
+                    }
+                ]
             },
             {
                 "controller":"<script src='app/doc/controller.js'></script>",
@@ -133,12 +153,50 @@ localData.set('STAFF_ACCOUNT',`
             {
                 "controller":"<script src='app/database/controller.js'></script>",
                 "icon":"database",
-                "path":"/database",
-                "title":"Data Sets"
+                "title":"Data Sets",
+                "menu": [
+                    {
+                        "title": "Statistics",
+                        "path": "/database/views/statistics",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Apprehensions",
+                        "path": "/database/views/apprehension",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Chainsaw Permit To Purchase",
+                        "path": "/database/views/chainsaw_purchase_permit",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Chainsaw Registration",
+                        "path": "/database/views/chainsaw_registration",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Chainsaw Permit To Sell",
+                        "path": "/database/views/chainsaw_sell_permit",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Wildlife Special Use Permit",
+                        "path": "/database/views/wsup",
+                        "icon": "bars"
+                    }
+                ]
             }
         ],
             "name":"Admin",
             "phone":"+639486601717"
         }
 `)
-authenticateStaff();
+
+    authenticateStaff();
+
+    // var currentUrl = new URL(location.href);
+    // var view = currentUrl.searchParams.get('view');
+    // if(view){
+    //     localData.set('staff_current_view', view);
+    // }

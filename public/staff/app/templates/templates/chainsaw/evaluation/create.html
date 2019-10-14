@@ -36,16 +36,15 @@
     <div layout>
         <md-input-container flex>
             <label>Evaluation</label>
-            <textarea ng-model="n.evaluation"></textarea>
+            <textarea ng-model="n.evaluation" required></textarea>
         </md-input-container>
         <md-input-container flex>
             <label>Recommendation</label>
-            <textarea ng-model="n.recommendation"></textarea>
+            <textarea ng-model="n.recommendation" required></textarea>
         </md-input-container>
         <md-input-container flex>
             <label>Date Evaluated</label>
             <md-datepicker ng-model="date_evaluated" ng-change="n.date_evaluated=to_date(date_evaluated)">
-
             </md-datepicker>
         </md-input-container>
 

@@ -177,4 +177,5 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $mdToas
         }, 400);
     };
 
-});
+})
+;

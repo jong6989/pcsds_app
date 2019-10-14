@@ -37,8 +37,15 @@
 			<input ng-model="currentItem.paid_or_number"
 				ng-blur="updateDocument(currentItem.id,{'paid_or_number': currentItem.paid_or_number})">
 		</md-input-container>
-		<div ng-init="paid_date = currentItem.paid_date">
-			<md-datepicker ng-model="paid_date"
+		<div ng-hide=true>
+			{{
+				paid_date = currentItem.paid_date
+			}}
+		</div>
+		
+		<div >
+			<md-datepicker 
+				ng-model="paid_date"
 				ng-change="currentItem.paid_date = to_date(paid_date); updateDocument(currentItem.id,{'paid_date': currentItem.paid_date})"
 				md-placeholder="Date of Payment" md-open-on-focus>
 			</md-datepicker>

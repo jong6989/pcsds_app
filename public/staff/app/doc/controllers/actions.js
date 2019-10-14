@@ -1,10 +1,12 @@
 'use strict';
-
+document.write('<script src=""></script>')
 myAppModule.controller('doc_ctrl_actions', function ($scope, $timeout, $mdToast,$mdDialog, func, $localStorage) {
     var download_queue = {};
+    
     $scope.uploading_file = false;
     $scope.add_action = {};
-    $scope.fileDivider = (os.platform() == 'win32')? '\\': '/';
+    // $scope.fileDivider = (os.platform() == 'win32')? '\\': '/';
+    $scope.fileDivider = '/';
 
     var actionDocId = '';
 

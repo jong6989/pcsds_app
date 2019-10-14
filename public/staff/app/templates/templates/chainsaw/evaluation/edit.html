@@ -97,9 +97,9 @@
                 <p>
                     Requirements submitted for evaluation:
                     <ul>
-                        <li ng-repeat="requirement in n.requirements_submitted track by $index">
-                            <input ng-model="n.requirements_submitted[$index]"
-                                ng-blur="updateDocument(currentItem.id, n.requirements_submitted)">
+                        <li ng-repeat="requirement in currentItem.requirements_submitted track by $index">
+                            <input ng-model="currentItem.requirements_submitted[$index]"
+                                ng-blur="updateDocument(currentItem.id, currentItem.requirements_submitted)">
                         </li>
                     </ul>
                 </p>

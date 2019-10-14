@@ -1,7 +1,8 @@
 <div ng-controller="pcsd_database_controller" ng-init="set_page_title('Data Sets');" 
     layout="column"  style="height: {{iframeHeight - 60}}px">
 
-    <md-nav-bar
+    <div ng-include="template"></div>
+    <!-- <md-nav-bar
       md-no-ink-bar="true"
       md-selected-nav-item="currentNavItem"
       nav-bar-aria-label="navigation links">
@@ -34,5 +35,5 @@
    <div flex ng-include="'./app/database/views/chainsaw.html'" ng-show="currentNavItem == 'Chainsaw Registration'"></div>
    <div flex ng-include="'./app/database/views/chainsawPurchasePermit.html'" ng-show="currentNavItem == 'ChainsawPermitToPurchase'"></div>
    <div flex ng-include="'./app/database/views/chainsawSellPermit.html'" ng-show="currentNavItem == 'ChainsawPermitToSell'"></div>
-   <div flex ng-include="'./app/database/views/criminalCases.html'" ng-show="currentNavItem == 'CriminalCases'"></div>
+   <div flex ng-include="'./app/database/views/criminalCases.html'" ng-show="currentNavItem == 'CriminalCases'"></div> -->
 </div>
