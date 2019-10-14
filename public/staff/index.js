@@ -63,6 +63,7 @@ const Toast = Swal.mixin({
 
 async function authenticateStaff(){
     let v = localData.get('staff_current_view');
+    
     if(!v){
         localData.set('staff_current_view','app/login/view.html');
     }
@@ -91,7 +92,7 @@ async function authenticateStaff(){
                 alert(error);
             }
         }
-
+        
         //firebase authentication checker
         // await firebase.auth().onAuthStateChanged( async (user)=> {
         //     if (!user) {
@@ -152,8 +153,39 @@ localData.set('STAFF_ACCOUNT',`
             {
                 "controller":"<script src='app/database/controller.js'></script>",
                 "icon":"database",
-                "path":"/database",
-                "title":"Data Sets"
+                "title":"Data Sets",
+                "menu": [
+                    {
+                        "title": "Statistics",
+                        "path": "/database/views/statistics",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Apprehensions",
+                        "path": "/database/views/apprehension",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Chainsaw Permit To Purchase",
+                        "path": "/database/views/chainsaw_purchase_permit",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Chainsaw Registration",
+                        "path": "/database/views/chainsaw_registration",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Chainsaw Permit To Sell",
+                        "path": "/database/views/chainsaw_sell_permit",
+                        "icon": "bars"
+                    },
+                    {
+                        "title": "Wildlife Special Use Permit",
+                        "path": "/database/views/wsup",
+                        "icon": "bars"
+                    }
+                ]
             }
         ],
             "name":"Admin",

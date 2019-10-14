@@ -385,9 +385,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
     };
 
     $scope.setCurrentItem = (x,t,c) => {
-        console.log(x);
-        console.log(t);
-        console.log(c);
         if($scope.currentNavItem == 'Documents'){
             setTimeout(()=>{func.refreshDocItem(x.id, (a) => {
                 $scope.currentItem = a;
@@ -416,10 +413,15 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
 
 
     $scope.print_document = (id)=>{
-        console.log('to print: ', id);
+        // console.log('to print: ', id);
         func.refreshDocItem(id, (a) => {
-            $scope.open_window_view(a.template.print, a);
+            $scope.render_params = { data: $scope.currentItem };
+            $scope.setCurrentItem($scope.currentItem, 'print');
+            // $scope.open_window_view(a.template.print, a);
+            // var view = { view: a.template.print };
+            // window.open('app/templates/print/index.html?'+ $.param(view));
         });
+        
     };
 
     // for application sync
@@ -567,7 +569,33 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
     };
 
     // end for application sync
+    $scope.setCurrentItem($scope.currentItem, 'published')
+}).
+controller('print_controller', function($scope) {
+    $scope.printTemplate = () => {
+        var header = "<html>";
+        header += "<head>";
+        header += "<title>";
+        header += "Print";
+        header += "</title>";
+        header += "</head>";
+        var body = "<body>";
+        var template = document.getElementById('printBody');
+        body += template.innerHTML;
+        body += "</body>";
+        var footer = "</html>";
+        var html = `${header} ${body} ${footer}`;
+        var printWindow = window.open();
+        printWindow.document.write(html);
+        printWindow.print();
+        printWindow.close();
+    }
 
+    angular.element(document).ready(function(){
+        setTimeout(function(){
+            $scope.printTemplate();
+        }, 1000);
+    })
 });
 
 document.write(`<script src="./app/doc/controllers/files.js"></script>`);

@@ -205,15 +205,16 @@
             <br>
             <!-- <cite ng-hide="filesTobeUploaded.length == 0" class="col-red">Publishing will be available after upload complete. {{filesTobeUploaded.length}}</cite> -->
             <br>
-            <div layout>
-                <!-- <div layout ng-init="doc_user_agencies = ['dummy agency']"> -->
+            <!-- <div layout> -->
+                <div layout ng-init="doc_user_agencies = ['dummy agency']">
                 
                 <!-- not activated -->
                 <span flex ng-if="doc_user_agencies.length == 0">Publishing not Available... Account not yet activated</span>
                 <!-- activated  --> 
                 <div flex ng-if="doc_user_agencies.length > 0 && filesTobeUploaded.length == 0 && currentItem.template != undefined" layout>
                     <md-button flex ng-class="{'bg-green col-white': (filesTobeUploaded.length == 0) }"  class="md-button" 
-                        ng-click="currentItem.agency = (currentItem.agency)? currentItem.agency : doc_user_agencies[0];publishDraft(currentItem, $event)" layout-sm="column" layout-gt-sm>
+                        ng-click="currentItem.agency = (currentItem.agency) ? currentItem.agency : doc_user_agencies[0];
+                            publishDraft(currentItem, $event)" layout-sm="column" layout-gt-sm>
                         <div>
                             <i class="fa fa-save"></i>
                             Publish

@@ -294,8 +294,8 @@ var myAppModule = angular.module('pcsd_app', ['ngMaterial','ngAnimate', 'ngMessa
     }
 
     $scope.open_window_view = function(v,d){
-      console.log(v);
-      console.log(d);
+      // console.log(v);
+      // console.log(d);
       $localStorage.params = d;
       var x = {view: v,last_view : $scope.current_view};
       window.open('index.html?'+ $.param(x), 'modal');

@@ -16,7 +16,7 @@
                 <div ng-include="'./app/doc/contents/draft.html'" flex ng-if="currentClicked == 'draft'"></div>
                 <div ng-include="'./app/doc/contents/published.html'" flex ng-if="currentClicked == 'published' || currentClicked == 'received'"></div>
                 <div ng-include="'./app/doc/contents/pending.html'" flex ng-if="currentClicked == 'pending'"></div>
-                <!-- <div ng-include="'./app/doc/contents/received.html'" flex ng-if="currentClicked == 'received'"></div> -->
+                <div ng-include="'./app/doc/contents/print.html'" flex ng-if="currentClicked == 'print'"></div>
                 <div ng-include="'./app/doc/contents/sent.html'" flex ng-if="currentClicked == 'sent'"></div>
                 
             </md-content>

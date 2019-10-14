@@ -1,0 +1,18 @@
+<div ng-controller="print_controller">
+    <div ng-include="currentItem.template.print" id="printBody"></div>
+    <div layout>
+        <div style="width:60%"></div>
+        <md-button class="md-button bg-red col-white" 
+            ng-click="setCurrentItem(currentItem, 'published')" layout-gt-sm>
+            <i class="fa fa-undo m-r-5"></i>
+            Back 
+        </md-button>
+        <md-button ng-if="currentItem.template != undefined" class="bg-red col-white" 
+            aria-label="Print Document" 
+            ng-click="printTemplate();">
+            <i class="fa fa-print" ></i>
+            <!-- Print this document -->
+        </md-button> 
+        
+    </div>
+</div>

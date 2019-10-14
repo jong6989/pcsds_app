@@ -13,7 +13,9 @@ myAppModule
 
 })
 
-myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, $mdDialog, $route, $routeParams, $location, NgTableParams) {
+myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, 
+  $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, 
+  $mdDialog, $route, $routeParams, $location, NgTableParams) {
   $scope.$route = $route;
   $scope.$routeParams = $routeParams;
   $scope.$location = $location;
@@ -155,15 +157,16 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
     return ($location.path().substr(0, path.length) === path) ? true : false;
   }
 
-  $scope.showPrerenderedDialog = function(ev,ID) {
+  $scope.showPrerenderedDialog = function(event,ID) {
     $mdDialog.show({
       contentElement: '#' + ID,
       parent: angular.element(document.body),
-      targetEvent: ev,
+      targetEvent: event,
       fullscreen : true,
       clickOutsideToClose: true
     });
   };
+
   $scope.close_dialog = function(){
     $mdDialog.cancel();
   };
@@ -181,6 +184,12 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
       }, wait || 10);
     };
   }
+
+  $scope.open_window_view = function(v,d){
+    $localStorage.params = d;
+    var x = {view: v,last_view : $scope.current_view, documentID: d.id};
+    window.open('index.html?'+ $.param(x), 'modal');
+  };
 
   function buildDelayedToggler(navID) {
     return debounce(function() {
@@ -261,9 +270,11 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
 
   $scope.set_path = (path)=>{
     $location.path(path);
+    
     $scope.close_left_side();
   };
 
+  
   $scope.is_path = (path)=>{
     return ($location.path() == path);
   };
@@ -293,6 +304,9 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, $h
         position: "PCSDS Executive Director"
     }
   }
+
+  $scope.set_path('/doc');
+
 })
 
 ;
