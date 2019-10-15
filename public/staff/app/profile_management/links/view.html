@@ -1,6 +1,29 @@
+<style>
+    #searchBox {
+        padding: 7px;
+        font-size: 18px;
+        border: none;
+    }
+
+    #searchButton {
+        padding: 7px 10px;
+        margin-right: 16px;
+        background: #d7d7d7;
+        font-size: 18px;
+        border: none;
+        cursor: pointer;
+        border-radius: 1px;
+    }
+</style>
 <div ng-controller="profile_links_controller">
     <div ng-init="loadProfiles()">
-        <md-card ng-repeat="profile in profiles">
+        <div class='searchDiv'>
+            <input id='searchBox' ng-init='searchText=""' ng-model='searchText' placeholder="Type keywords here">
+            <button type='button' id='searchButton' ng-click="searchProfileLinks(searchText)">
+                <i class="fa fa-search col-green"></i>
+            </button>
+        </div>
+        <md-card ng-repeat="profileLink in profileLinks">
             <md-toolbar>
                 <div class="md-toolbar-tools">
                     <md-button class="md-icon-button" aria-label="View">
@@ -14,8 +37,8 @@
                 </div>
             </md-toolbar>
             <md-card-content>
-                <h3>{{profile.group_name}}</h3>
-                <small>{{profile.description}}</small>
+                <h3>{{profileLink.group_name}}</h3>
+                <small>{{profileLink.description}}</small>
             </md-card-content>
         </md-card>
     </div>
