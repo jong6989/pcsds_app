@@ -4,10 +4,26 @@ myAppModule.
         '$scope',
         '$profileService',
         'profileLinkService',
-        function ($scope, $profileService, $profileLinksService) {
+        '$location',
+        function ($scope, $profileService, $profileLinksService, $location) {
             $scope.profileLinks = [];
+            $scope.profileLink = {
+                profiles: [],
+                keywords: []
+            };
+            
             $scope.loadProfiles = async () => {
                 $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('authUser'));
+            }
+
+            $scope.loadProfileLink = async() => {
+                var profileLinkID  = localData.get('profileLinkID');
+                $scope.profileLink = await $profileLinksService.getProfileLink(profileLinkID);
+            }
+
+            $scope.updateProfileLink = async(profileLinkID) => {
+                localData.set('profileLinkID', profileLinkID);
+                $location.path('/profile_management/links/edit');
             }
 
             $scope.searchProfileLinks = async (keyword) => {
@@ -46,10 +62,6 @@ myAppModule.
                 })
             }
 
-            $scope.profileLink = {
-                profiles: [],
-                keywords: []
-            };
             $scope.addToProfileGroup = (profile) => {
                 if (isAlreadyAdded(profile)) {
                     return;
@@ -88,6 +100,21 @@ myAppModule.
                         })
                     });
             }
+
+            $scope.update = () => {
+                $scope.profileLink.modified_by = localData.get('authUser');
+                $profileLinksService.update($scope.profileLink).
+                then(result => {
+                    Swal.fire(
+                        'Profile link updated!',
+                        '',
+                        'success'
+                    ).then(result => {
+                        $location.path('/profile_management/links')
+                    })
+                });
+            }
+
             var removeFromProfiles = (profile) => {
                 var index = $scope.profiles.findIndex(p => p.id == profile.id);
                 $scope.profiles.splice(index, 1);
