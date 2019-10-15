@@ -47,8 +47,8 @@
                                     <tr>
                                         <td>Group Name</td>
                                         <td>
-                                            <md-input-container>
-                                                <input ng-model="profileLink.group_name" required>
+                                            <md-input-container >
+                                                <input ng-model="profileLink.group_name" flex required>
                                             </md-input-container>
                                         </td>
                                     </tr>
@@ -79,7 +79,7 @@
                                 
                             </div>
                             <md-list>
-                                Profiles
+                                <div ng-if="profileLink.profiles.length > 0">Profiles</div>
                                 <md-list-item ng-repeat="profile in profileLink.profiles">
                                         <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
                                     {{profile.full_name}}

@@ -1,42 +1,42 @@
 
 myAppModule.
     controller('profile_links_controller', [
-        '$scope', 
+        '$scope',
         '$profileService',
-        'profileLinkService', 
+        'profileLinkService',
         function ($scope, $profileService, $profileLinksService) {
             $scope.profileLinks = [];
-            $scope.loadProfiles = async() => {
-                $scope.profileLinks = await $profileLinksService.getProfileLinks();
+            $scope.loadProfiles = async () => {
+                $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('authUser'));
             }
 
-            $scope.searchProfileLinks = async(keyword) => {
-                if(keyword == ''){
-                    $scope.loadProfiles();return;
+            $scope.searchProfileLinks = async (keyword) => {
+                if (keyword == '') {
+                    $scope.loadProfiles(localData.get('authUser')); return;
                 }
                 var profileLinks = await $profileLinksService.searchProfileLinks(keyword);
-                if(profileLinks.length == 0){
+                if (profileLinks.length == 0) {
                     showNotFoundAlert(keyword);
-                }else{
+                } else {
                     $scope.profileLinks = profileLinks;
                     $scope.$apply();
                 }
             }
-            $scope.loadProfile = async(id)=>{
+            $scope.loadProfile = async (id) => {
                 $scope.profile = await $profileLinksService.getProfile(id);
             }
 
             $scope.profiles = [];
-            $scope.searchProfile = async(keyword) => {
+            $scope.searchProfile = async (keyword) => {
                 $scope.profiles = await $profileService.search(keyword);
-                if($scope.profiles.length == 0){
+                if ($scope.profiles.length == 0) {
                     showNotFoundAlert(keyword);
-                }else{
+                } else {
                     $scope.$apply();
                 }
             }
 
-            function showNotFoundAlert(searchText){
+            function showNotFoundAlert(searchText) {
                 Swal.fire({
                     title: 'Not found',
                     text: `Sorry, we didn\'t found ${searchText}`,
@@ -50,8 +50,8 @@ myAppModule.
                 profiles: [],
                 keywords: []
             };
-            $scope.addToProfileGroup = (profile) =>{
-                if(isAlreadyAdded(profile)){
+            $scope.addToProfileGroup = (profile) => {
+                if (isAlreadyAdded(profile)) {
                     return;
                 }
 
@@ -59,7 +59,7 @@ myAppModule.
                 removeFromProfiles(profile);
             }
 
-            function isAlreadyAdded(profile){
+            function isAlreadyAdded(profile) {
                 return $scope.profileLink.profiles.findIndex(p => p.id == profile.id) > -1;
             }
 
@@ -72,20 +72,21 @@ myAppModule.
             }
 
             $scope.saveProfileLink = () => {
+                $scope.profileLink.created_by = localData.get('authUser');
                 $profileLinksService.add($scope.profileLink).
-                then(result => {
-                    Swal.fire(
-                        'Profile Link Saved!',
-                        '',
-                        'success'
-                    ).then(result => {
-                        $scope.profileLink = {};
-                        $scope.profileLink.profiles =[];
-                        try{
-                            $scope.$apply();
-                        }catch(error){}
-                    })
-                });
+                    then(result => {
+                        Swal.fire(
+                            'Profile Link Saved!',
+                            '',
+                            'success'
+                        ).then(result => {
+                            $scope.profileLink = {};
+                            $scope.profileLink.profiles = [];
+                            try {
+                                $scope.$apply();
+                            } catch (error) { }
+                        })
+                    });
             }
             var removeFromProfiles = (profile) => {
                 var index = $scope.profiles.findIndex(p => p.id == profile.id);
@@ -95,11 +96,11 @@ myAppModule.
     ]).
     service('dummyProfileLinksService', function () {
         var hashes = [
-          '0Q91Z0cZFGsM87BszlFg',
-          '13uKRgKSMy0DxOATlX8e',
-          '13uKRgKSMy0DxOATlX8e',
-           '1XTUrP9zn56xdnJS6TA1',
-          '1bZa3tC432pqgXPyX4iG' 
+            '0Q91Z0cZFGsM87BszlFg',
+            '13uKRgKSMy0DxOATlX8e',
+            '13uKRgKSMy0DxOATlX8e',
+            '1XTUrP9zn56xdnJS6TA1',
+            '1bZa3tC432pqgXPyX4iG'
         ];
         var profileLinks = {};
 
@@ -149,24 +150,24 @@ myAppModule.
             }
         });
 
-        this.searchProfileLinks = async(keyword) => {
+        this.searchProfileLinks = async (keyword) => {
             var profileLinks = await this.getProfileLinks();
             return profileLinks.slice(0, 2);
         }
 
-        this.getProfileLinks = async() => {
-            return new Promise((resolve, reject) =>{
+        this.getProfileLinks = async () => {
+            return new Promise((resolve, reject) => {
                 resolve(Object.keys(profileLinks).map(key => profileLinks[key]));
             })
         }
 
         this.getProfileLink = (id) => {
-            return new Promise((resolve, reject)=>{
+            return new Promise((resolve, reject) => {
                 resolve(profileLinks[id]);
             })
         }
     }).
-    service('profileLinkService', function(){
+    service('profileLinkService', function () {
         var profileLinksCollection = db.collection('profile_links');
 
         this.searchProfileLinks = (keyword) => {
@@ -175,21 +176,23 @@ myAppModule.
             })
         }
 
-        this.getProfileLinks = async(creatorID) => {
+        this.getProfileLinks = async (creatorID) => {
             return new Promise((resolve, reject) => {
-                var profileLinks = [];
-                var snapshots = profileLinksCollection.where('created_by', '==', creatorID).get();
-                snapshots.forEach(snapshot => {
-                    var profileLink = snapshot.data();
-                    profileLink.id = snapshot.id;
-                    profileLinks.push(profileLink);
-                });
+                profileLinksCollection.where('created_by', '==', creatorID).
+                    onSnapshot(snapshot => {
 
-                resolve(profileLinks);
-            })  
+                        var profileLinks = snapshot.docs.map(document => {
+                            var profileLink = document.data();
+                            profileLink.id = document.id;
+                            return profileLink;
+                        });
+
+                        resolve(profileLinks);
+                    });
+            })
         }
 
-        this.add= (profileLink) => {
+        this.add = (profileLink) => {
             return profileLinksCollection.add(profileLink);
         }
 
