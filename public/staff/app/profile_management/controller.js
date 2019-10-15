@@ -401,11 +401,9 @@ myAppModule.
         this.search = async (keyword) => {
             var result = [];
             var promise = new Promise((resolve, reject) => {
-                var snapshot = collection.where('keywords', 'array-contains', keyword).get().
+                collection.where('keywords', 'array-contains', keyword).get().
                     then(snapshot => {
-                        console.log(snapshot);
                         snapshot.forEach(doc => {
-                            console.log(doc);
                             var profile = doc.data();
                             profile.id = doc.id;
                             result.push(profile);
@@ -644,4 +642,5 @@ myAppModule.
             return new Promise((resolve, reject) => { resolve(true); });
         }
     });
+    document.write('<script src="app/profile_management/links/controller.js"></script>')
 
