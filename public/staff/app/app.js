@@ -305,7 +305,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     }
   }
 
-  $scope.set_path('/doc');
+  $scope.set_path('/permit_application/view');
 
 })
 

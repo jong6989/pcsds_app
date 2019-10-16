@@ -151,6 +151,18 @@ localData.set('STAFF_ACCOUNT',`
                 "title":"Online Application"
             },
             {
+                "controller":"<script src='app/permit_application/view/controller.js'></script>",
+                "icon":"files-o",
+                "title":"Permit Applications",
+                "menu" : [
+                    {
+                        "title" : "View",
+                        "path" : "/permit_application/view",
+                        "icon" : "files-o"
+                    }
+                ]
+            },
+            {
                 "controller":"<script src='app/database/controller.js'></script>",
                 "icon":"database",
                 "title":"Data Sets",
