@@ -14,6 +14,7 @@ myAppModule.
             
             $scope.loadProfiles = async () => {
                 $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('authUser'));
+                $scope.$apply();
             }
 
             $scope.loadProfileLink = async() => {

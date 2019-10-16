@@ -167,32 +167,32 @@ localData.set('STAFF_ACCOUNT',`
                     {
                         "title": "Statistics",
                         "path": "/database/views/statistics",
-                        "icon": "bars"
+                        "icon": "line-chart"
                     },
                     {
                         "title": "Apprehensions",
                         "path": "/database/views/apprehension",
-                        "icon": "bars"
+                        "icon": "legal"
                     },
                     {
                         "title": "Chainsaw Permit To Purchase",
                         "path": "/database/views/chainsaw_purchase_permit",
-                        "icon": "bars"
+                        "icon": "file"
                     },
                     {
                         "title": "Chainsaw Registration",
                         "path": "/database/views/chainsaw_registration",
-                        "icon": "bars"
+                        "icon": "registered"
                     },
                     {
                         "title": "Chainsaw Permit To Sell",
                         "path": "/database/views/chainsaw_sell_permit",
-                        "icon": "bars"
+                        "icon": "file"
                     },
                     {
                         "title": "Wildlife Special Use Permit",
                         "path": "/database/views/wsup",
-                        "icon": "bars"
+                        "icon": "leaf"
                     }
                 ]
             },
@@ -205,6 +205,11 @@ localData.set('STAFF_ACCOUNT',`
                         "title": "Profiles",
                         "path": "/profile_management/list",
                         "icon": "list"
+                    },
+                    {
+                        "title": "Links",
+                        "path": "/profile_management/links",
+                        "icon": "group"
                     }
                 ]
             }
