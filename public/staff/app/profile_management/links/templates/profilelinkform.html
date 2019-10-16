@@ -48,7 +48,8 @@
                                         <td>Group Name</td>
                                         <td>
                                             <md-input-container >
-                                                <input ng-model="profileLink.group_name" flex required>
+                                                <input ng-model="profileLink.group_name" 
+                                                    ng-blur="profileLink.keywords[0]=profileLink.group_name.toLowerCase()" flex required>
                                             </md-input-container>
                                         </td>
                                     </tr>
@@ -64,7 +65,8 @@
                                         <td>Profiles Relationship</td>
                                         <td>
                                             <md-input-container>
-                                                    <input ng-model="profileLink.relationship" required>
+                                                    <input ng-model="profileLink.relationship" 
+                                                    ng-blur="profileLink.keywords[1]=profileLink.relationship.toLowerCase()" required>
                                             </md-input-container>
                                         </td>
                                     </tr>

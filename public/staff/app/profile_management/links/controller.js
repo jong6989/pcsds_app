@@ -130,7 +130,8 @@ myAppModule.
                             'success'
                         ).then(result => {
                             $scope.isDataLoading = false;
-                            $location.path('/profile_management/links')
+                            $scope.$apply();
+                            $location.path('/profile_management/links');
                         })
                     });
             }
