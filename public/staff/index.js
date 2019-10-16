@@ -46,10 +46,11 @@ var scripts_js_plugins = {
     html2canvas: `<script src="/js/html2canvas/html2canvas.min.js"></script>`
 }
 
-let profileModule = script_angular + scripts_controllers.main + 
-    scripts_controllers.profile + script_ng_plugins.ngTable +
-    script_ng_plugins.camera + script_ng_plugins.fileUpload +
-    scripts_js_plugins.html2canvas;
+let profileModule = script_angular + 
+    scripts_controllers.main + 
+    script_ng_plugins.ngTable +
+    script_ng_plugins.camera + 
+    script_ng_plugins.fileUpload;
 
 document.write(profileModule);
 //scripts for login user

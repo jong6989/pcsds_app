@@ -21,7 +21,7 @@ myAppModule.
             $scope.dataIsLoading = false;
             $scope.loadProfileLinks = async () => {
                 $scope.dataIsLoading = true;
-                $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('authUser'));
+                $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('BRAIN_STAFF_ID'));
                 $scope.dataIsLoading = false;
                 $scope.$apply();
             }
@@ -42,7 +42,7 @@ myAppModule.
             }
             $scope.searchProfileLinks = async (keyword) => {
                 if (keyword == '') {
-                    $scope.loadProfileLinks(localData.get('authUser')); return;
+                    $scope.loadProfileLinks(localData.get('BRAIN_STAFF_ID')); return;
                 }
                 $scope.dataIsLoading = true;
 
@@ -102,7 +102,7 @@ myAppModule.
 
             $scope.saveProfileLink = () => {
                 $scope.isDataLoading = true;
-                $scope.profileLink.created_by = localData.get('authUser');
+                $scope.profileLink.created_by = localData.get('BRAIN_STAFF_ID');
                 $profileLinksService.add($scope.profileLink).
                     then(result => {
                         Swal.fire(
@@ -121,7 +121,7 @@ myAppModule.
 
             $scope.update = () => {
                 $scope.isDataLoading = true;
-                $scope.profileLink.modified_by = localData.get('authUser');
+                $scope.profileLink.modified_by = localData.get('BRAIN_STAFF_ID');
                 $profileLinksService.update($scope.profileLink).
                     then(result => {
                         Swal.fire(
