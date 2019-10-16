@@ -1,0 +1,102 @@
+<div  class="md-dialog-container" id="personal_modal" > 
+    
+        <md-dialog aria-label="Personal Data">
+            <form name="form_edit_personal">
+                <md-toolbar class="bg-blue-grey">
+                <div class="md-toolbar-tools m-t-10">
+                    <strong> Edit Personal Data </strong>
+                </div>
+                </md-toolbar>
+                <md-dialog-content layout-padding="20">
+    
+                    <div layout-gt-sm="row">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <div ng-hide=true>
+                                    {{
+                                        birth_day=updatedProperty.birth_day
+                                    }}
+                            </div>
+                            
+                            <md-datepicker
+                                ng-init="birth_day=updatedProperty.birth_day"
+                                ng-model="birth_day"
+                                ng-change="updatedProperty.birth_day=to_date(birth_day)"
+                                required>
+                            </md-datepicker>
+                        </md-input-container>
+                        
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Place of Birth</label>
+                            <input ng-model="updatedProperty.place_of_birth" required>
+                        </md-input-container>
+            
+                        <md-input-container>
+                            <label>Nationality</label>
+                            <md-select ng-model="updatedProperty.nationality" required>
+                                <md-option><em>None</em></md-option>
+                                <md-option ng-repeat="x in nationalities" ng-value="x.nationality" >
+                                    {{x.en_short_name}} - {{x.nationality}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        
+                    </div>
+
+                    <div layout-gt-sm="row">
+                        <strong class="col-grey m-r-10">
+                            Gender: 
+                        </strong>
+                        <md-radio-group ng-model="updatedProperty.gender" required>
+                            <md-radio-button value="male" class="md-primary">Male</md-radio-button>
+                            <md-radio-button value="female"> Female</md-radio-button>
+                        </md-radio-group>
+            
+                        <strong class="col-grey m-r-10">
+                            Civil Status : 
+                        </strong>
+            
+                        <md-radio-group ng-model="updatedProperty.civil_status" required>
+                            <md-radio-button value="single" class="md-primary"> Single </md-radio-button>
+                            <md-radio-button value="married" class="md-primary"> Married </md-radio-button>
+                            <md-radio-button value="widowed" class="md-primary"> Widowed </md-radio-button>
+                            <md-radio-button value="separated" class="md-primary"> Separated </md-radio-button>
+                        </md-radio-group>
+            
+                        <md-input-container ng-if="updatedProperty.civil_status == 'married'" class="md-block" flex-gt-sm>
+                            <label>Spouse Name :</label>
+                            <input ng-model="updatedProperty.spouse_name" required>
+                        </md-input-container>
+                    </div>
+
+                    <div layout-gt-sm="row">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Father's Full Name : </label>
+                            <input ng-model="updatedProperty.father" required>
+                        </md-input-container>
+            
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Mother's Maiden Name :</label>
+                            <input ng-model="updatedProperty.mother" required>
+                        </md-input-container>
+                    </div>
+    
+                </md-dialog-content>
+    
+                <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="close_dialog()">
+                    close
+                </md-button>
+                <div ng-show=" is_loading " layout="row" layout-sm="column" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+                <md-button type="submit" 
+                ng-disabled="form_edit_personal.$invalid" 
+                ng-hide="is_loading" class="md-primary md-raised" 
+                ng-click="update_profile_property(updatedProperty);close_dialog();">
+                    save
+                </md-button>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
+    </div>

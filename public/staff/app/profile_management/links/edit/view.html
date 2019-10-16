@@ -1,0 +1,7 @@
+<div ng-controller="profile_links_controller" ng-init="loadProfileLink();saveProfileLink=update;showRemoveButton=true">
+        <div ng-show="isDataLoading">
+                <md-progress-circular md-mode="indeterminate" md-diameter="70"></md-progress-circular>
+        </div>
+        <div ng-show="!isDataLoading" ng-include="'/staff/app/profile_management/links/templates/profilelinkform.html'">
+        </div>
+</div>

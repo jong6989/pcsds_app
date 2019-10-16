@@ -1,0 +1,113 @@
+<style>
+    #searchBox {
+        padding: 7px;
+        font-size: 18px;
+        border: none;
+    }
+
+    #searchButton {
+        padding: 7px 10px;
+        margin-right: 16px;
+        background: #d7d7d7;
+        font-size: 18px;
+        border: none;
+        cursor: pointer;
+        border-radius: 1px;
+    }
+</style>
+<form  name="profileLinkForm">
+        <div>
+                <div layout>
+                    <md-card>
+                        <md-card-content>
+                            <div class='searchDiv' layout>
+                                <input id='searchBox' ng-init='searchText=""' ng-model='searchText'
+                                    placeholder="Type keywords here">
+                                <button id='searchButton' ng-disabled="searchText==''" ng-click="searchProfile(searchText)">
+                                    <i class="fa fa-search col-green"></i>
+                                </button>
+                            </div>
+                            <md-list>
+                                <md-list-item ng-repeat="profile in profiles">
+                                    <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
+                                    {{profile.full_name}}
+                                    <md-button class="md-fab md-mini" aria-label="Add to group"
+                                        ng-click="addToProfileGroup(profile)">
+                                        <md-tooltip md-direction="left">Add to group</md-tooltip>
+                                        <i class="fa fa-check"></i>
+                                    </md-button>
+                                </md-list-item>
+                            </md-list>
+                        </md-card-content>
+                    </md-card>
+                    <md-card flex>
+                        <md-card-content>
+                            <div layout>
+                                <table>
+                                    <tr>
+                                        <td>Group Name</td>
+                                        <td>
+                                            <md-input-container >
+                                                <input ng-model="profileLink.group_name" 
+                                                    ng-blur="profileLink.keywords[0]=profileLink.group_name.toLowerCase()" flex required>
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Description</td>
+                                        <td>
+                                            <md-input-container>
+                                                <textarea ng-model="profileLink.description" required></textarea>
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Profiles Relationship</td>
+                                        <td>
+                                            <md-input-container>
+                                                    <input ng-model="profileLink.relationship" 
+                                                    ng-blur="profileLink.keywords[1]=profileLink.relationship.toLowerCase()" required>
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Keywords</td>
+                                        <td>
+                                            <md-chips ng-model="profileLink.keywords" md-add-on-blur=true readonly=false
+                                            input-aria-label="Keywords" placeholder="Add keywords" md-removable="true"></md-chips>
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+                            </div>
+                            <md-list>
+                                <div ng-if="profileLink.profiles.length > 0">Profiles</div>
+                                <md-list-item ng-repeat="profile in profileLink.profiles">
+                                        <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
+                                    {{profile.full_name}}
+                                    <md-button class="md-fab md-mini" aria-label="Remove from group"
+                                        ng-click="removeFromProfileGroup(profile)">
+                                        <md-tooltip md-direction="left">Remove from group</md-tooltip>
+                                        <i class="fa fa-remove"></i>
+                                    </md-button>
+                                </md-list-item>
+                            </md-list>
+                        </md-card-content>
+                    </md-card>
+            
+                    <!-- </md-content> -->
+                </div>
+                <md-button 
+                    ng-click="saveProfileLink()" 
+                    class="md-raised md-block md-primary"
+                    ng-disabled="profileLinkForm.$invalid || profileLink.profiles.length == 0"
+                    >save link</md-button>
+                <md-button
+                ng-click="removeProfileLink(profileLink.id)"
+                class="md-raised md-block md-primary"
+                ng-if="showRemoveButton"
+                >
+                    Remove
+                </md-button>
+            </div>
+</form>
