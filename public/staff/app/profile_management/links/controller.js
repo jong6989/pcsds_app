@@ -21,9 +21,17 @@ myAppModule.
             $scope.dataIsLoading = false;
             $scope.loadProfileLinks = async () => {
                 $scope.dataIsLoading = true;
-                $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('authUser'));
-                $scope.dataIsLoading = false;
-                $scope.$apply();
+                let authUser = localData.get('authUser');
+                if(authUser){
+                    $scope.profileLinks = await $profileLinksService.getProfileLinks(authUser);
+                    $scope.dataIsLoading = false;
+                    $scope.$apply();
+                }else {
+                    Toast.fire({
+                        type: 'error',
+                        title: 'Auth User Not found!'
+                    });
+                }
             }
 
             $scope.loadProfileLink = async () => {

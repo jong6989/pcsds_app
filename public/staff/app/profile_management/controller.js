@@ -1,8 +1,8 @@
 'use strict';
-myAppModule.requires.push('ngTable');
-myAppModule.requires.push('camera');
-myAppModule.requires.push('ngFileUpload');
-myAppModule.requires.push('ngImgCrop');
+// myAppModule.requires.push('ngTable');
+// myAppModule.requires.push('camera');
+// myAppModule.requires.push('ngFileUpload');
+// myAppModule.requires.push('ngImgCrop');
 myAppModule.
     controller('profile_management_controller',
         [

@@ -13,6 +13,10 @@ var script_angular = `
         <script src="/js/ng-table.min.js"></script>
         <script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload-shim.js"></script>
         <script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload.min.js"></script>
+        <script src="/js/webcam.min.js"></script>
+        <script src="/js/ng-camera.js"></script>
+        <script src="/js/ng-image-crop/ng-img-crop.js"></script>
+        <script src="/js/html2canvas/html2canvas.min.js"></script>
     `;
 //angularjs plugins
 var script_ng_plugins = {
@@ -23,10 +27,7 @@ var script_ng_plugins = {
         <script src="/js/tinymce.min.js"></script>
         <script src="/js/xlsx/xlsx.min.js"></script>
         <script src="/js/qrcode.min.js"></script>
-    `,
-    camera : `<script src="/js/webcam.min.js"></script>
-                <script src="/js/ng-camera.js"></script>
-                <script src="/js/ng-image-crop/ng-img-crop.js"></script>`
+    `
 };
 //angularjs controllers 
 var scripts_controllers = {
@@ -42,16 +43,10 @@ var scripts_js_plugins = {
                 <script src="/js/export/xlsx.core.min.js"></script>
                 <script src="/js/export/xls.core.min.js"></script>
                 <script src="/js/export/Blob.js"></script>
-                <script src="/js/export/FileSaver.js"></script>`,
-    html2canvas: `<script src="/js/html2canvas/html2canvas.min.js"></script>`
+                <script src="/js/export/FileSaver.js"></script>`
 }
 
-let profileModule = script_angular + scripts_controllers.main + 
-    scripts_controllers.profile + script_ng_plugins.ngTable +
-    script_ng_plugins.camera + script_ng_plugins.fileUpload +
-    scripts_js_plugins.html2canvas;
 
-document.write(profileModule);
 //scripts for login user
 let loginPage = script_angular + scripts_controllers.main + scripts_controllers.login;
 
