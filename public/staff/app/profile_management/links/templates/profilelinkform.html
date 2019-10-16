@@ -100,5 +100,12 @@
                     class="md-raised md-block md-primary"
                     ng-disabled="profileLinkForm.$invalid || profileLink.profiles.length == 0"
                     >save link</md-button>
+                <md-button
+                ng-click="removeProfileLink(profileLink.id)"
+                class="md-raised md-block md-primary"
+                ng-if="showRemoveButton"
+                >
+                    Remove
+                </md-button>
             </div>
 </form>
