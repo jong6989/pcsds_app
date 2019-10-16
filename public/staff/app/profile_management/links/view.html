@@ -31,9 +31,14 @@
             <md-card ng-repeat="profileLink in profileLinks">
                 <md-toolbar>
                     <div class="md-toolbar-tools">
-                        <md-button class="md-icon-button" aria-label="View">
+                        <md-button ng-init="contentShouldExpand[$index]=false; viewProfileLink(profileLink, $index);" 
+                        ng-click="contentShouldExpand[$index]=!contentShouldExpand[$index];" 
+                        class="md-icon-button" aria-label="View">
                             <md-tooltip>View</md-tooltip>
-                            <i class="fa fa-eye"></i>
+                            <i ng-if="!contentShouldExpand[$index]" 
+                                class="fa fa-angle-down"></i>
+                            <i ng-if="contentShouldExpand[$index]"
+                                class="fa fa-angle-up"></i>
                         </md-button>
                         <md-button ng-click="updateProfileLink(profileLink.id)" class="md-icon-button"
                             aria-label="View">
@@ -42,9 +47,12 @@
                         </md-button>
                     </div>
                 </md-toolbar>
-                <md-card-content>
+                <md-card-content ng-show="!contentShouldExpand[$index]">
                     <h3>{{profileLink.group_name}}</h3>
                     <small>{{profileLink.description}}</small>
+                </md-card-content>
+                <md-card-content ng-show="contentShouldExpand[$index]">
+                    <div ng-include="'/staff/app/profile_management/links/templates/viewprofile.html'"></div>
                 </md-card-content>
             </md-card>
         </div>

@@ -4,6 +4,7 @@ myAppModule.
         '$scope',
         '$profileService',
         'profileLinkService',
+        // 'dummyProfileLinksService',
         '$location',
         function ($scope, $profileService, $profileLinksService, $location) {
             $scope.profileLinks = [];
@@ -11,6 +12,12 @@ myAppModule.
                 profiles: [],
                 keywords: []
             };
+            $scope.profileLinkViewModel = []
+
+            $scope.viewProfileLink = (profileLink, profileLinkIndex) =>{
+                $scope.profileLinkViewModel[profileLinkIndex] = profileLink;
+            }
+
             $scope.dataIsLoading = false;
             $scope.loadProfileLinks = async () => {
                 $scope.dataIsLoading = true;
@@ -19,13 +26,13 @@ myAppModule.
                 $scope.$apply();
             }
 
-            $scope.loadProfileLink = async() => {
-                var profileLinkID  = localData.get('profileLinkID');
+            $scope.loadProfileLink = async () => {
+                var profileLinkID = localData.get('profileLinkID');
                 $scope.profileLink = await $profileLinksService.getProfileLink(profileLinkID);
                 $scope.$apply();
             }
 
-            $scope.updateProfileLink = async(profileLinkID) => {
+            $scope.updateProfileLink = async (profileLinkID) => {
                 localData.set('profileLinkID', profileLinkID);
                 $location.path('/profile_management/links/edit');
             }
@@ -94,6 +101,7 @@ myAppModule.
             }
 
             $scope.saveProfileLink = () => {
+                $scope.isDataLoading = true;
                 $scope.profileLink.created_by = localData.get('authUser');
                 $profileLinksService.add($scope.profileLink).
                     then(result => {
@@ -104,25 +112,27 @@ myAppModule.
                         ).then(result => {
                             $scope.profileLink = {};
                             $scope.profileLink.profiles = [];
-                            try {
-                                $scope.$apply();
-                            } catch (error) { }
+                            $scope.isDataLoading = false;
+                            $scope.$apply();
                         })
                     });
+                
             }
 
             $scope.update = () => {
+                $scope.isDataLoading = true;
                 $scope.profileLink.modified_by = localData.get('authUser');
                 $profileLinksService.update($scope.profileLink).
-                then(result => {
-                    Swal.fire(
-                        'Profile link updated!',
-                        '',
-                        'success'
-                    ).then(result => {
-                        $location.path('/profile_management/links')
-                    })
-                });
+                    then(result => {
+                        Swal.fire(
+                            'Profile link updated!',
+                            '',
+                            'success'
+                        ).then(result => {
+                            $scope.isDataLoading = false;
+                            $location.path('/profile_management/links')
+                        })
+                    });
             }
 
             $scope.removeProfileLink = (profileLinkID) => {
@@ -134,19 +144,23 @@ myAppModule.
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
-                  }).then((result) => {
+                }).then((result) => {
+                    $scope.isDataLoading = true;
+
                     $profileLinksService.remove(profileLinkID).then(result => {
                         Swal.fire(
                             'Profile link removed!',
                             '',
                             'success'
                         ).then(result => {
+                            $scope.isDataLoading = false;
+
                             $location.path('/profile_management/links');
                         })
                     })
-                  });
+                });
 
-                
+
             }
             var removeFromProfiles = (profile) => {
                 var index = $scope.profiles.findIndex(p => p.id == profile.id);
@@ -226,12 +240,21 @@ myAppModule.
                 resolve(profileLinks[id]);
             })
         }
+
+        this.add = () => {
+            return new Promise((resolve, reject) => { 
+                setTimeout(function(){
+                    resolve(true);
+                }, 3000)
+
+            })
+        }
     }).
     service('profileLinkService', function () {
         var profileLinksCollection = db.collection('profile_links');
 
         this.remove = (profileLinkID) => {
-            return profileLinksCollection.doc(profileLinkID).update({ disabled: true});
+            return profileLinksCollection.doc(profileLinkID).update({ disabled: true });
         }
 
         this.getProfileLinks = async (creatorID) => {
@@ -241,12 +264,12 @@ myAppModule.
                     onSnapshot(snapshot => {
 
                         var profileLinks = snapshot.docs.filter(document => !document.data().disabled).
-                        map(document => {
-                            var profileLink = document.data();
-                            profileLink.id = document.id;
-                            // if(profileLink.disabled) return ;
-                            return profileLink;
-                        });
+                            map(document => {
+                                var profileLink = document.data();
+                                profileLink.id = document.id;
+                                // if(profileLink.disabled) return ;
+                                return profileLink;
+                            });
 
                         resolve(profileLinks);
                     });
@@ -265,10 +288,9 @@ myAppModule.
             return new Promise((resolve, reject) => {
                 profileLinksCollection.doc(profileLinkID).onSnapshot(snapshot => {
                     var profileLink = snapshot.data();
-                    if(profileLink.disabled)
-                        {
-                            resolve(null);return;
-                        }
+                    if (profileLink.disabled) {
+                        resolve(null); return;
+                    }
                     profileLink.id = snapshot.id;
                     resolve(profileLink);
                 });
@@ -279,20 +301,20 @@ myAppModule.
             var profileLinks = [];
             return new Promise((resolve, reject) => {
                 profileLinksCollection.
-                where('keywords', 'array-contains', keyword).get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(documentSnapshot => {
-                        var profileLink = documentSnapshot.data();
-                        profileLink.id = documentSnapshot.id;
-                        if(profileLink.disabled)
-                            return;
-                        
-                        profileLinks.push(profileLink);
-                    })
-                    resolve(profileLinks);
-                });
+                    where('keywords', 'array-contains', keyword).get()
+                    .then(snapshot => {
+                        snapshot.docs.forEach(documentSnapshot => {
+                            var profileLink = documentSnapshot.data();
+                            profileLink.id = documentSnapshot.id;
+                            if (profileLink.disabled)
+                                return;
 
-                
+                            profileLinks.push(profileLink);
+                        })
+                        resolve(profileLinks);
+                    });
+
+
             })
         }
     })
