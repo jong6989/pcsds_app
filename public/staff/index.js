@@ -128,7 +128,10 @@ async function authenticateStaff(){
 //debug user
 localData.set('BRAIN_STAFF_ID','+639486601717');
 localData.set('STAFF_ACCOUNT',`
-    {"designation":"admin","id":"+639486601717","last_seen":1570521763344,
+    {
+        "designation":"admin",
+        "id":"+639486601717",
+        "last_seen":1570521763344,
         "menu":[
             {
                 "controller":"<script src='app/account_management/controller.js'></script><script src='app/account_management/menus/controller.js'></script>",

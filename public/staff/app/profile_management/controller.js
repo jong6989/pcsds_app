@@ -9,7 +9,7 @@ myAppModule.
             '$scope',
             '$http',
             // 'dummyProfileService',
-            '$profileServiceForAdmin',
+            '$profileService',
             'NgTableParams',
             '$location',
             function (
@@ -391,7 +391,7 @@ myAppModule.
         }
         $scope.get_profile();
     }).
-    service('$profileService', function () {
+    service('$profileServiceDefault', function () {
         var collection = db.collection('profile');
         this.get_profile = async (id) => {
             let profile = await db.collection('profile').doc(id);
@@ -482,9 +482,9 @@ myAppModule.
             return new Promise((resolve, reject) => { resolve(true); })
         }
     }).
-    service('$profileServiceForAdmin', function($profileService){
+    service('$profileServiceForAdmin', function($profileServiceDefault){
         var collection = db.collection('profile');
-        this.get_profile = $profileService.get_profile;
+        this.get_profile = $profileServiceDefault.get_profile;
 
         this.search = async (keyword, created_by) => {
             var result = [];
@@ -504,7 +504,7 @@ myAppModule.
             return promise;
         }
 
-        this.addProfile = $profileService.addProfile;
+        this.addProfile = $profileServiceDefault.addProfile;
 
         this.getProfileList = async () => {
             var promise = new Promise((resolve, reject) => {
@@ -530,7 +530,7 @@ myAppModule.
             //         resolve(profile);
             //     })
             // });
-            var profile = await $profileService.getProfile(id, created_by);
+            var profile = await $profileServiceDefault.getProfile(id, created_by);
             profile.read_only = false;
             return new Promise((resolve, reject) => { resolve(profile)})
         }
@@ -544,9 +544,14 @@ myAppModule.
             return profile;
         }
 
-        this.uploadProfilePicture = $profileService.uploadProfilePicture;
+        this.uploadProfilePicture = $profileServiceDefault.uploadProfilePicture;
 
-        this.updateProfile = $profileService.updateProfile;
+        this.updateProfile = $profileServiceDefault.updateProfile;
+    }).
+    factory('$profileService', function($profileServiceDefault, $profileServiceForAdmin){
+        var currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
+        var profileService = currentUser.designation == 'admin' ? $profileServiceForAdmin : $profileServiceDefault;
+        return profileService;
     }).
     service('dummyProfileService', function () {
         var profileList = {
