@@ -89,7 +89,8 @@
             <md-card>
                 <md-card-content>
                     <i class="fa fa-edit pointer col-blue"
-                        ng-click="initUpdatePropertyCallbacks['personal_information']();showPrerenderedDialog($event,'personal_modal');"
+                        ng-click="initUpdatePropertyCallbacks['personal_information']();
+                        showPrerenderedDialog($event,'personal_modal');"
                         ng-hide="!currentUserShouldSee()">
                         <md-tooltip md-direction="top">
                             Edit Personal Info
@@ -110,8 +111,7 @@
                         <div>
                             <div ng-repeat="personalInformation in personalInformations">
                                 <div ng-repeat="(key, value) in personalInformation" ng-show="profile.data[value]">
-                                    <div ng-if="value =='spouse_name' && 
-                                        profile.data.civil_status.toLowerCase() == 'married'">
+                                    <div ng-if="value =='spouse_name' && profile.data.civil_status.toLowerCase() == married'">
                                         <small>{{key}} </small>
                                     </div>
                                     <div ng-if="value != 'spouse_name'">
@@ -224,11 +224,11 @@
         </md-button>
 
     <!-- Edit Modals -->
-    <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/fullname.html'"></div>
-    <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/address.html'"></div>
-    <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/contact.html'"></div>
-    <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/gID.html'"></div>
+    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/fullname.html'"></div>
+    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/address.html'"></div>
+    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/contact.html'"></div>
+    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/gID.html'"></div>
+    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/personal.html'"></div>
     <!-- <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/gid2.html'"></div> -->
-    <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/personal.html'"></div>
 
 </div>

@@ -9,7 +9,7 @@ myAppModule.
             '$scope',
             '$http',
             // 'dummyProfileService',
-            '$profileService',
+            '$profileServiceForAdmin',
             'NgTableParams',
             '$location',
             function (
@@ -30,7 +30,7 @@ myAppModule.
 
                 $scope.search = async (keyword) => {
                     if (keyword.trim() == '') return;
-                    var results = await $profileService.search(keyword);
+                    var results = await $profileService.search(keyword, localData.get('BRAIN_STAFF_ID'));
                     if (results.length > 0) {
                         $scope.profileTable = new NgTableParams({ sorting: { first_name: 'asc' } }, { dataset: results });
                         $scope.$apply();
@@ -123,7 +123,7 @@ myAppModule.
                 }
 
                 $scope.currentUserShouldSee = () => {
-                    return $scope.profile.data.created_by == localData.get('BRAIN_STAFF_ID');
+                    return !$scope.profile.read_only;
                 }
 
                 $scope.clear_cropping_image = () => {
@@ -165,7 +165,7 @@ myAppModule.
                         profileID = id;
                     }
 
-                    $scope.profile.data = await $profileService.getProfile(profileID);
+                    $scope.profile.data = await $profileService.getProfile(profileID, localData.get('BRAIN_STAFF_ID'));
                     $scope.is_page_loading = false;
                     $scope.$apply();
                     $scope.onProfileLoad();
@@ -258,7 +258,7 @@ myAppModule.
                 }
 
                 $scope.loadProfileList = async () => {
-                    var profileList = await $profileService.getProfileList();
+                    var profileList = await $profileService.getProfileList(localData.get('BRAIN_STAFF_ID'));
 
                     $scope.profileTable = new NgTableParams({ sorting: { first_name: 'asc' } }, { dataset: profileList });
                     // $scope.profileTable.$invalidate();
@@ -398,7 +398,7 @@ myAppModule.
             return profile;
         }
 
-        this.search = async (keyword) => {
+        this.search = async (keyword, created_by) => {
             var result = [];
             var promise = new Promise((resolve, reject) => {
                 collection.where('keywords', 'array-contains', keyword).get().
@@ -406,6 +406,7 @@ myAppModule.
                         snapshot.forEach(doc => {
                             var profile = doc.data();
                             profile.id = doc.id;
+                            profile.read_only = created_by && profile.created_by != created_by;
                             result.push(profile);
                         })
                         resolve(result);
@@ -430,12 +431,13 @@ myAppModule.
             return promise;
         }
 
-        this.getProfileList = async () => {
+        this.getProfileList = async (created_by) => {
             var promise = new Promise((resolve, reject) => {
                 collection.onSnapshot(snapshot => {
                     var profileList = snapshot.docs.map(documentSnapshot => {
                         var profile = documentSnapshot.data();
                         profile.id = documentSnapshot.id;
+                        profile.read_only = created_by && profile.created_by != created_by;
                         return profile;
                     });
                     resolve(profileList);
@@ -445,11 +447,12 @@ myAppModule.
             return promise;
         }
 
-        this.getProfile = (id) => {
+        this.getProfile = (id, created_by) => {
             return new Promise((resolve, reject) => {
                 collection.doc(id).onSnapshot(snapshot => {
                     var profile = snapshot.data();
                     profile.id = snapshot.id;
+                    profile.read_only =created_by && profile.created_by != created_by
                     resolve(profile);
                 })
             });
@@ -478,6 +481,72 @@ myAppModule.
             // .then(success => {console.log('success')}, error => {console.log(error);});
             return new Promise((resolve, reject) => { resolve(true); })
         }
+    }).
+    service('$profileServiceForAdmin', function($profileService){
+        var collection = db.collection('profile');
+        this.get_profile = $profileService.get_profile;
+
+        this.search = async (keyword, created_by) => {
+            var result = [];
+            var promise = new Promise((resolve, reject) => {
+                collection.where('keywords', 'array-contains', keyword).get().
+                    then(snapshot => {
+                        snapshot.forEach(doc => {
+                            var profile = doc.data();
+                            profile.id = doc.id;
+                            result.push(profile);
+                        })
+                        resolve(result);
+                    });
+
+            })
+
+            return promise;
+        }
+
+        this.addProfile = $profileService.addProfile;
+
+        this.getProfileList = async () => {
+            var promise = new Promise((resolve, reject) => {
+                collection.onSnapshot(snapshot => {
+                    var profileList = snapshot.docs.map(documentSnapshot => {
+                        var profile = documentSnapshot.data();
+                        profile.id = documentSnapshot.id;
+                        return profile;
+                    });
+                    resolve(profileList);
+                });
+            });
+
+            return promise;
+        }
+
+        this.getProfile = async(id, created_by) => {
+            // return new Promise((resolve, reject) => {
+            //     collection.doc(id).onSnapshot(snapshot => {
+            //         var profile = snapshot.data();
+            //         profile.id = snapshot.id;
+            //         profile.read_only = false;
+            //         resolve(profile);
+            //     })
+            // });
+            var profile = await $profileService.getProfile(id, created_by);
+            profile.read_only = false;
+            return new Promise((resolve, reject) => { resolve(profile)})
+        }
+
+        function convertToProfileObject(snapshotData) {
+            var keys = Object.keys(snapshotData);
+            keys.forEach(key => {
+                profile[key] = snapshotData[key];
+            })
+
+            return profile;
+        }
+
+        this.uploadProfilePicture = $profileService.uploadProfilePicture;
+
+        this.updateProfile = $profileService.updateProfile;
     }).
     service('dummyProfileService', function () {
         var profileList = {

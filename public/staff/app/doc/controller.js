@@ -570,6 +570,8 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
 
     // end for application sync
     $scope.setCurrentItem($scope.currentItem, 'published')
+    $scope.toggleLeft();
+
 }).
 controller('print_controller', function($scope) {
     $scope.printTemplate = () => {
@@ -590,7 +592,7 @@ controller('print_controller', function($scope) {
         printWindow.print();
         printWindow.close();
     }
-
+    
     angular.element(document).ready(function(){
         setTimeout(function(){
             $scope.printTemplate();

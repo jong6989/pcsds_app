@@ -46,13 +46,6 @@ var scripts_js_plugins = {
     html2canvas: `<script src="/js/html2canvas/html2canvas.min.js"></script>`
 }
 
-let profileModule = script_angular + 
-    scripts_controllers.main + 
-    script_ng_plugins.ngTable +
-    script_ng_plugins.camera + 
-    script_ng_plugins.fileUpload;
-
-document.write(profileModule);
 //scripts for login user
 let loginPage = script_angular + scripts_controllers.main + scripts_controllers.login;
 
@@ -96,7 +89,14 @@ async function authenticateStaff(){
                 });
                 
                 localData.set('staff_current_view','app/main.html');
-                let dashboardPage = script_ng_plugins.dashboard + script_angular  + scripts_controllers.main + controllers;
+                let dashboardPage = 
+                    script_ng_plugins.dashboard + 
+                    script_angular  + 
+                    scripts_controllers.main + 
+                    controllers +
+                    script_ng_plugins.ngTable +
+                    script_ng_plugins.camera + 
+                    script_ng_plugins.fileUpload;
                 document.write(dashboardPage);
             } catch (error) {
                 alert(error);
