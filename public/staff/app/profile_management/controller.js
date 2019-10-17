@@ -123,7 +123,7 @@ myAppModule.
                 }
 
                 $scope.currentUserShouldSee = () => {
-                    return !$scope.profile.read_only;
+                    return !$scope.profile.data.read_only;
                 }
 
                 $scope.clear_cropping_image = () => {
@@ -522,14 +522,6 @@ myAppModule.
         }
 
         this.getProfile = async(id, created_by) => {
-            // return new Promise((resolve, reject) => {
-            //     collection.doc(id).onSnapshot(snapshot => {
-            //         var profile = snapshot.data();
-            //         profile.id = snapshot.id;
-            //         profile.read_only = false;
-            //         resolve(profile);
-            //     })
-            // });
             var profile = await $profileServiceDefault.getProfile(id, created_by);
             profile.read_only = false;
             return new Promise((resolve, reject) => { resolve(profile)})
