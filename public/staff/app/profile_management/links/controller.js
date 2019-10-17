@@ -19,6 +19,7 @@ myAppModule.
             }
 
             $scope.dataIsLoading = false;
+            $scope.isSearching = false;
             $scope.loadProfileLinks = async () => {
                 $scope.dataIsLoading = true;
                 $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('BRAIN_STAFF_ID'));
@@ -61,12 +62,15 @@ myAppModule.
 
             $scope.profiles = [];
             $scope.searchProfile = async (keyword) => {
+                $scope.isSearching = true;
                 $scope.profiles = await $profileService.search(keyword);
+
                 if ($scope.profiles.length == 0) {
                     showNotFoundAlert(keyword);
                 } else {
-                    $scope.$apply();
                 }
+                $scope.isSearching = false;
+                $scope.$apply();
             }
 
             function showNotFoundAlert(searchText) {
