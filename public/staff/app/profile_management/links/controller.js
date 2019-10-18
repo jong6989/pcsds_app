@@ -21,23 +21,9 @@ myAppModule.
             $scope.dataIsLoading = false;
             $scope.loadProfileLinks = async () => {
                 $scope.dataIsLoading = true;
-<<<<<<< HEAD
-                let authUser = localData.get('authUser');
-                if(authUser){
-                    $scope.profileLinks = await $profileLinksService.getProfileLinks(authUser);
-                    $scope.dataIsLoading = false;
-                    $scope.$apply();
-                }else {
-                    Toast.fire({
-                        type: 'error',
-                        title: 'Auth User Not found!'
-                    });
-                }
-=======
                 $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('BRAIN_STAFF_ID'));
                 $scope.dataIsLoading = false;
                 $scope.$apply();
->>>>>>> 364f46867977080cfcdf6f3b932427cea4cf3d4a
             }
 
             $scope.loadProfileLink = async () => {
