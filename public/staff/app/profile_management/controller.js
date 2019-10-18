@@ -141,12 +141,6 @@ myAppModule.
                     return $scope.image_file != null;
                 };
 
-                // $scope.$watch('updatedProperty.first_name', function(newval, oldval, scope){
-                //     console.log(newval);
-                //     console.log(oldval);
-                //     console.log(scope);
-                // })
-
                 $http.get("/json/profile/nationalities.json").
                     then(function (data) {
                         $scope.nationalities = data.data.data;
@@ -156,15 +150,7 @@ myAppModule.
                 $scope.loadProfile = async (id) => {
                     var profileID;
                     $scope.is_page_loading = true;
-                    if (id == null) {
-                        // var url_relative_path = localData.get('current_view');
-                        // var url = new URL(url_relative_path, location.href);
-                        // var parameters = url.searchParams;
-                        profileID = localData.get('profileID');
-                    } else {
-                        profileID = id;
-                    }
-
+                    profileID = id || localData.get('profileID');
                     $scope.profile.data = await $profileService.getProfile(profileID, localData.get('BRAIN_STAFF_ID'));
                     $scope.is_page_loading = false;
                     $scope.$apply();

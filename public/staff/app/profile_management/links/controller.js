@@ -4,7 +4,6 @@ myAppModule.
         '$scope',
         '$profileService',
         'profileLinkService',
-        // 'dummyProfileLinksService',
         '$location',
         function ($scope, $profileService, $profileLinksService, $location) {
             $scope.profileLinks = [];
@@ -365,16 +364,3 @@ myAppModule.
         var profileService = currentUser.designation == 'admin' ? profileLinkServiceForAdmin : profileLinkServiceDefault;
         return profileService;
     })
-
-
-
-
-
-
-
-
-// NIofduXoq4Aar5Em88E4
-// PyiimOgFqSg4aweL1b71GlVBJ6n1
-
-
-
