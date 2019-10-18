@@ -580,6 +580,13 @@ controller('print_controller', function($scope) {
         header += "<title>";
         header += "Print";
         header += "</title>";
+        header += '<script src="/js/angular.min.js"></script>';
+        header += '<link href="/css/angular-material.min.css" rel="stylesheet">';
+        header += '<link href="/css/theme.css" rel="stylesheet" />';
+        header += '<link href="/css/angular-material.min.css" rel="stylesheet">';
+        header += '<link href="/css/ng-table.min.css" rel="stylesheet">';
+        header += '<link href="/plugins/bootstrap/4.1.1/bootstrap.min.css" rel="stylesheet"></link>';
+        header += '<script src="/plugins/ckeditor/ckeditor.js"></script>';
         header += "</head>";
         var body = "<body>";
         var template = document.getElementById('printBody');
@@ -589,8 +596,8 @@ controller('print_controller', function($scope) {
         var html = `${header} ${body} ${footer}`;
         var printWindow = window.open();
         printWindow.document.write(html);
-        printWindow.print();
-        printWindow.close();
+        // printWindow.print();
+        // printWindow.close();
     }
     
     angular.element(document).ready(function(){

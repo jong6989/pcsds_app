@@ -8,7 +8,7 @@
     style="margin:0.5in">
     <!-- <div  ng-controller="GratuitousPermitController"  ng-init="currentItem=n"> -->
     <!-- header -->
-    <div ng-include="'https://document-network.web.app/pcsd/templates/header3.html'"></div>
+    <div ng-include="'./app/templates/templates/header.html'"></div>
     <hr>
     <p>
         <div class="align-center">
@@ -82,15 +82,15 @@
             &nbsp;
         </div>
         <div flex style="padding: 10px"
-            ng-init="currentItem.gratuitous_permit.sign1 = (currentItem.gratuitous_permit.sign1 == undefined) ? {} : currentItem.gratuitous_permit.sign1;">
-            <div ng-if="currentItem.gratuitous_permit.sign1.signature != undefined;" layout="column"
+            ng-init="currentItem.gratuitous_permit.sign1 = (currentItem.sign1 == undefined) ? {} : currentItem.sign1;">
+            <div ng-if="currentItem.sign1.signature != undefined;" layout="column"
                 layout-align="center center">
-                <img ng-if="currentItem.gratuitous_permit.sign1.signature != undefined"
-                    src="{{currentItem.gratuitous_permit.sign1.signature}}" alt="Signature2" width="auto"
+                <img ng-if="currentItem.sign1.signature != undefined"
+                    src="{{currentItem.sign1.signature}}" alt="Signature2" width="auto"
                     style="margin-bottom: -35px;">
-                <div class="align-center"> <strong> <ins>{{currentItem.gratuitous_permit.sign1.name}}</ins> </strong>
+                <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong>
                 </div>
-                <div class="align-center"> {{currentItem.gratuitous_permit.sign1.designation}} </div>
+                <div class="align-center"> {{currentItem.sign1.designation}} </div>
             </div>
         </div>
     </div>
