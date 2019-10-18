@@ -163,6 +163,11 @@ localData.set('STAFF_ACCOUNT',`
                         "title" : "View",
                         "path" : "/permit_application/view",
                         "icon" : "files-o"
+                    },
+                    {
+                        "title" : "Legal Staff",
+                        "path" : "/permit_application/legal_staff",
+                        "icon" : "files-o"
                     }
                 ]
             },

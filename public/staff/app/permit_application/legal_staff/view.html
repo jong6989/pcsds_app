@@ -38,6 +38,19 @@
                                         </div>
                                     </div>
                                     <div ng-include="application_view_modal"></div>
+                                    <div  ng-controller="doc_ctrl_draft">
+                                            <!-- ng-if="doc_network_user != undefined"  -->
+                                        <hr>
+                                        <!-- no pending case -->
+                                        <md-button class="md-button col-black" ng-click="open_create_document_modal($event,no_pending_case_data)">
+                                            <i class="fa fa-plus col-black"></i>
+                                            Create Certificate of no-pending case
+                                        </md-button>
+                                        <!-- end of no pending case -->
+                                        <hr>
+                                        <!-- modal for creating document -->
+                                        <div ng-include="application_draft_modal"></div>
+                                    </div>
                             </div>
                             <!-- end -->
                         </div>
