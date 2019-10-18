@@ -123,7 +123,7 @@ myAppModule.
                 }
 
                 $scope.currentUserShouldSee = () => {
-                    return $scope.profile.data.created_by == localData.get('authUser');
+                    return $scope.profile.data.created_by == localData.get('BRAIN_STAFF_ID');
                 }
 
                 $scope.clear_cropping_image = () => {
@@ -224,7 +224,7 @@ myAppModule.
                 }
 
                 $scope.save_profile = async (profile) => {
-                    profile.created_by = localData.get('authUser');
+                    profile.created_by = localData.get('BRAIN_STAFF_ID');
                     var success = await $profileService.addProfile(profile);
                     if (success) {
                         Swal.fire(
@@ -365,7 +365,7 @@ myAppModule.
                         'We will redirect you to ONLINE PERMITING DASHBOARD',
                         'success'
                     ).then(() => {
-                        // $localStorage.brain_app_user = { "user" : authUser, "data" : data };
+                        // $localStorage.brain_app_user = { "user" : BRAIN_STAFF_ID, "data" : data };
                         // window.localStorage['current_view'] = 'app/templates/main.html';
                         // location.reload();
                     });

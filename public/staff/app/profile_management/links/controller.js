@@ -21,6 +21,7 @@ myAppModule.
             $scope.dataIsLoading = false;
             $scope.loadProfileLinks = async () => {
                 $scope.dataIsLoading = true;
+<<<<<<< HEAD
                 let authUser = localData.get('authUser');
                 if(authUser){
                     $scope.profileLinks = await $profileLinksService.getProfileLinks(authUser);
@@ -32,6 +33,11 @@ myAppModule.
                         title: 'Auth User Not found!'
                     });
                 }
+=======
+                $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('BRAIN_STAFF_ID'));
+                $scope.dataIsLoading = false;
+                $scope.$apply();
+>>>>>>> 364f46867977080cfcdf6f3b932427cea4cf3d4a
             }
 
             $scope.loadProfileLink = async () => {
@@ -50,7 +56,7 @@ myAppModule.
             }
             $scope.searchProfileLinks = async (keyword) => {
                 if (keyword == '') {
-                    $scope.loadProfileLinks(localData.get('authUser')); return;
+                    $scope.loadProfileLinks(localData.get('BRAIN_STAFF_ID')); return;
                 }
                 $scope.dataIsLoading = true;
 
@@ -110,7 +116,7 @@ myAppModule.
 
             $scope.saveProfileLink = () => {
                 $scope.isDataLoading = true;
-                $scope.profileLink.created_by = localData.get('authUser');
+                $scope.profileLink.created_by = localData.get('BRAIN_STAFF_ID');
                 $profileLinksService.add($scope.profileLink).
                     then(result => {
                         Swal.fire(
@@ -129,7 +135,7 @@ myAppModule.
 
             $scope.update = () => {
                 $scope.isDataLoading = true;
-                $scope.profileLink.modified_by = localData.get('authUser');
+                $scope.profileLink.modified_by = localData.get('BRAIN_STAFF_ID');
                 $profileLinksService.update($scope.profileLink).
                     then(result => {
                         Swal.fire(
