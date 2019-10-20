@@ -55,51 +55,6 @@ myAppModule.
                     left_panel.style.display = '';
                     toolbar_main.style.display = '';
                     button_panel.style.display = '';
-                    // var header = "<html>";
-                    // header += "<head>";
-                    // header += "<title>";
-                    // header += "Print";
-                    // header += "</title>";
-                    // header += '<script src="/js/firebase/firebase-app.js"></script>';
-                    // header += '<script src="/js/firebase/firebase-auth.js"></script>';
-                    // header += '<script src="/js/firebase/firebase-firestore.js"></script>';
-                    // header += '<script src="/js/firebase/firebase-functions.js"></script>';
-                    // header += '<script src="/js/firebase/firebase-storage.js"></script>';
-                    // header += '<script src="/js/firebase/init-firebase.js"></script> ';
-                    // header += '<script src="/plugins/jquery/jquery.min.js"></script>';
-                    // header += '<script src="/js/angular.min.js"></script>';
-                    // header += '<script src="/js/angular-route.js"></script>';
-                    // header += '<script src="/js/angular-animate.min.js"></script>';
-                    // header += '<script src="/js/angular-aria.min.js"></script>';
-                    // header += '<script src="/js/angular-messages.min.js"></script>';
-                    // header += '<script src="/js/angular-material.min.js"></script>';
-                    // header += '<script src="/js/ng-table.min.js"></script>';
-                    // header += '<script src="/js/angular-animate.min.js"></script>';
-                    // header += '<script src="/js/ngStorage.min.js"></script>';
-                    // header += '<script src="/js/webcam.min.js"></script>';
-                    // header += '<script src="/js/ng-camera.js"></script>';
-                    // header += '<script src="/js/ng-image-crop/ng-img-crop.js"></script>';
-                    // header += '<script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload-shim.js">';
-                    // header += '</script><script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload.min.js"></script>';
-                    // header += "<script src='app/app.js'></script>";
-                    // header += "<script src='app/profile_management/controller.js'></script>";
-                    // header += '<link href="/css/angular-material.min.css" rel="stylesheet"></link>';
-                    // header += "</head>";
-                    // var body = '<body ng-app="brain_app" ng-controller="AppCtrl">';
-                    // var template = document.getElementById('printableArea');
-                    // body += "<div ng-controller='profile_management_controller' ng-init='loadProfile(\"NIofduXoq4Aar5Em88E4\")'>"
-                    // body += template.innerHTML;
-                    // body += "</div>"
-                    // body += "</body>";
-                    // var footer = "</html>";
-                    // var html = `${header} ${body} ${footer}`;
-                    // var printWindow = window.open();
-
-                    // printWindow.document.write(html);
-                    // setTimeout(function () {
-                    //     printWindow.print();
-                    //     printWindow.close();
-                    // }, 2000);
                 }
 
                 $scope.refreshList = () => {
