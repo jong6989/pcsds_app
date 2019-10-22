@@ -8,7 +8,10 @@ myAppModule.service('func', function($localStorage) {
 
     //Drafts
     func.getMyDrafts = async () => {
-        let res = await doc.db.collection(documents).where("status","==","draft").where("publisher","==",func.$scope.userId).get();
+        let res = await doc.db.collection(documents).
+            where("status","==","draft").
+            where("publisher","==",func.$scope.userId).
+            get();
         let r = res.docs.map( doc => { let o = doc.data(); o.id = doc.id; return o; });
         return r;
     }

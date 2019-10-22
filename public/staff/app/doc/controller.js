@@ -384,20 +384,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
         return r;
     };
 
-    $scope.setCurrentItem = (x,t,c) => {
-        if($scope.currentNavItem == 'Documents'){
-            setTimeout(()=>{func.refreshDocItem(x.id, (a) => {
-                $scope.currentItem = a;
-                $scope.$apply();
-            });},300);
-        }
-        $scope.currentItem = x;
-        $scope.currentClicked = t;
-        $scope.currentTransaction = c;
-        $localStorage.currentItem = x;
-    }
-
-
     $scope.changeCurrentDocType = (t) => {
         $scope.currentDocSelected = t;
     }
@@ -411,17 +397,28 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
         
     };
 
+    $scope.setCurrentItem = (x,t,c) => {
+        if($scope.currentNavItem == 'Documents'){
+            setTimeout(()=>{func.refreshDocItem(x.id, (a) => {
+                $scope.currentItem = a;
+                $scope.$apply();
+            });},300);
+        }
+        $scope.currentItem = x;
+        $scope.currentClicked = t;
+        $scope.currentTransaction = c;
+        $localStorage.currentItem = x;
+    }
 
     $scope.print_document = (id)=>{
-        // console.log('to print: ', id);
-        func.refreshDocItem(id, (a) => {
+        doc.db.collection(documents).doc($scope.currentItem.id).get().
+            then(snapshot => {
+            $scope.currentItem = snapshot.data();
             $scope.render_params = { data: $scope.currentItem };
-            $scope.setCurrentItem($scope.currentItem, 'print');
-            // $scope.open_window_view(a.template.print, a);
-            // var view = { view: a.template.print };
-            // window.open('app/templates/print/index.html?'+ $.param(view));
+            $scope.currentClicked = 'print';
+            $localStorage.currentItem = $scope.currentItem;
+            $scope.$apply();
         });
-        
     };
 
     // for application sync
@@ -570,7 +567,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
 
     // end for application sync
     $scope.setCurrentItem($scope.currentItem, 'published')
-    $scope.toggleLeft();
+    // $scope.toggleLeft();
 
 }).
 controller('print_controller', function($scope) {
@@ -580,6 +577,13 @@ controller('print_controller', function($scope) {
         header += "<title>";
         header += "Print";
         header += "</title>";
+        header += '<script src="/js/angular.min.js"></script>';
+        header += '<link href="/css/angular-material.min.css" rel="stylesheet">';
+        header += '<link href="/css/theme.css" rel="stylesheet" />';
+        header += '<link href="/css/angular-material.min.css" rel="stylesheet">';
+        header += '<link href="/css/ng-table.min.css" rel="stylesheet">';
+        header += '<link href="/plugins/bootstrap/4.1.1/bootstrap.min.css" rel="stylesheet"></link>';
+        header += '<script src="/plugins/ckeditor/ckeditor.js"></script>';
         header += "</head>";
         var body = "<body>";
         var template = document.getElementById('printBody');

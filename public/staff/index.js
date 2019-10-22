@@ -43,7 +43,9 @@ var scripts_js_plugins = {
                 <script src="/js/export/xlsx.core.min.js"></script>
                 <script src="/js/export/xls.core.min.js"></script>
                 <script src="/js/export/Blob.js"></script>
-                <script src="/js/export/FileSaver.js"></script>`
+                <script src="/js/export/FileSaver.js"></script>`,
+    html2canvas: `<script src="/js/html2canvas/html2canvas.min.js"></script>`,
+    dot_object: `<script src="/plugins/dot-object.min.js"></script>`
 }
 
 //scripts for login user
@@ -93,7 +95,8 @@ async function authenticateStaff(){
                     script_ng_plugins.dashboard + 
                     script_angular  + 
                     scripts_controllers.main + 
-                    controllers;
+                    controllers +
+                    scripts_js_plugins.dot_object;
                 document.write(dashboardPage);
             } catch (error) {
                 alert(error);
