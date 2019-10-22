@@ -2,7 +2,7 @@
 var myAppModule = {};
 myAppModule = angular.module('brain_app', [
   'ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute',
-  'ngFileUpload','ngTable']);
+  'ngFileUpload','ngTable', 'camera', 'ngImgCrop']);
 
 myAppModule
 .config(function($routeProvider, $locationProvider) {

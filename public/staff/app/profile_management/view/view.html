@@ -111,7 +111,7 @@
                         <div>
                             <div ng-repeat="personalInformation in personalInformations">
                                 <div ng-repeat="(key, value) in personalInformation" ng-show="profile.data[value]">
-                                    <div ng-if="value =='spouse_name' && profile.data.civil_status.toLowerCase() == married'">
+                                    <div ng-if="value =='spouse_name' && profile.data.civil_status.toLowerCase() == 'married'">
                                         <small>{{key}} </small>
                                     </div>
                                     <div ng-if="value != 'spouse_name'">
