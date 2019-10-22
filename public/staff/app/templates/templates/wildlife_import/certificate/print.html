@@ -3,7 +3,7 @@
 		font-family: 'Times New Roman', Times, serif;
 	}
 </style>
-<div ng-init="currentItem = render_params.data;print(3000);" class="roman" style="margin:0.5in">
+<div ng-init="currentItem = $localStorage.params; printView(3000);" class="roman" style="margin:0.5in">
 	<!-- <div ng-controller="DummyLTPWildlifeController"  ng-init="currentItem = render_params.data;print(3000);" class="roman"> -->
 
 	<div ng-include="'./app/templates/templates/header.html'"></div>

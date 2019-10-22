@@ -1,18 +1,20 @@
-<div flex layout>
-    <!-- DRAFT -->
-    <div flex ng-show="currentDocSelected == 'draft'" ng-include="'./app/doc/views/list/draft.html'"></div>
-    <!-- PUBLISHED -->
-    <div flex ng-show="currentDocSelected == 'published'" ng-include="'./app/doc/views/list/published.html'"></div>
-    <!-- SENT -->
-    <div flex ng-show="currentDocSelected == 'sent'" ng-include="'./app/doc/views/list/sent.html'"></div>
-    <!-- RECEIVED -->
-    <div flex ng-show="currentDocSelected == 'received'" ng-include="'./app/doc/views/list/received.html'"></div>
-    <!-- PENDING -->
-    <div flex ng-show="currentDocSelected == 'pending'" ng-include="'./app/doc/views/list/pending.html'"></div>
+<div flex layout >
+    <div >
+        <!-- DRAFT -->
+        <div flex ng-show="currentDocSelected == 'draft'" ng-include="'./app/doc/views/list/draft.html'"></div>
+        <!-- PUBLISHED -->
+        <div flex ng-show="currentDocSelected == 'published'" ng-include="'./app/doc/views/list/published.html'"></div>
+        <!-- SENT -->
+        <div flex ng-show="currentDocSelected == 'sent'" ng-include="'./app/doc/views/list/sent.html'"></div>
+        <!-- RECEIVED -->
+        <div flex ng-show="currentDocSelected == 'received'" ng-include="'./app/doc/views/list/received.html'"></div>
+        <!-- PENDING -->
+        <div flex ng-show="currentDocSelected == 'pending'" ng-include="'./app/doc/views/list/pending.html'"></div>
 
-    <!--  -->
+    </div>
+    
 
-    <div class="bg-teal" layout="column" layout-align="center center">
+    <div class="bg-teal" layout="column" layout-align="center center" >
 
         <md-button class="md-fab md-mini bg-blue-grey" aria-label="Draft" 
             ng-disabled="currentDocSelected == 'draft'" ng-click="changeCurrentDocType('draft')">
