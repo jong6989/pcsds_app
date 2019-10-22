@@ -411,14 +411,16 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
     }
 
     $scope.print_document = (id)=>{
-        doc.db.collection(documents).doc($scope.currentItem.id).get().
-            then(snapshot => {
-            $scope.currentItem = snapshot.data();
-            $scope.render_params = { data: $scope.currentItem };
-            $scope.currentClicked = 'print';
-            $localStorage.currentItem = $scope.currentItem;
-            $scope.$apply();
-        });
+        $scope.render_params = { data: $scope.currentItem };
+        $scope.currentClicked = 'print';
+        // doc.db.collection(documents).doc($scope.currentItem.id).get().
+        //     then(snapshot => {
+        //     $scope.currentItem = snapshot.data();
+        //     $scope.render_params = { data: $scope.currentItem };
+        //     $scope.currentClicked = 'print';
+        //     $localStorage.currentItem = $scope.currentItem;
+        //     $scope.$apply();
+        // });
     };
 
     // for application sync
@@ -593,8 +595,11 @@ controller('print_controller', function($scope) {
         var html = `${header} ${body} ${footer}`;
         var printWindow = window.open();
         printWindow.document.write(html);
-        printWindow.print();
-        printWindow.close();
+        setTimeout(function(){
+            printWindow.print();
+            printWindow.close();
+        }, 2000);
+        // printWindow.close();
     }
     
     angular.element(document).ready(function(){

@@ -64,7 +64,7 @@
                                 <td>Description</td>
                                 <td>
                                     <md-input-container>
-                                        <textarea ng-model="profileLink.description" required></textarea>
+                                        <textarea ng-model="profileLink.description" ></textarea>
                                     </md-input-container>
                                 </td>
                             </tr>
@@ -74,8 +74,14 @@
                                     <md-input-container>
                                         <input ng-model="profileLink.relationship"
                                             ng-blur="profileLink.keywords[1]=profileLink.relationship.toLowerCase()"
-                                            required>
+                                            >
                                     </md-input-container>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Gallery</td>
+                                <td>
+                                    <div ng-include="'/staff/app/profile_management/links/templates/gallery.html'"></div>
                                 </td>
                             </tr>
                             <tr>
@@ -107,10 +113,14 @@
             <!-- </md-content> -->
         </div>
         <md-button ng-click="saveProfileLink()" class="md-raised md-block md-primary"
-            ng-disabled="profileLinkForm.$invalid || profileLink.profiles.length == 0">save link</md-button>
+            ng-disabled="profileLinkForm.$invalid">save link</md-button>
         <md-button ng-click="removeProfileLink(profileLink.id)" class="md-raised md-block md-primary"
             ng-if="showRemoveButton">
             Remove
+        </md-button>
+        <md-button ng-click="backToList()" class="md-raised md-block md-primary"
+            >
+            back to list
         </md-button>
     </div>
 </form>

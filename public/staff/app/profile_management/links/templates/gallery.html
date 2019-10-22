@@ -1,0 +1,25 @@
+<div ng-show="false" ng-repeat="svg in [
+        'close-inline.svg',
+        'close.svg',
+        'delete-inline.svg',
+        'edit-inline.svg',
+        'edit.svg',
+        'external-link-inline.svg',
+        'external-link.svg',
+        'next-inline.svg',
+        'next.svg',
+        'prev-inline.svg', 
+        'prev.svg'
+    ]" ng-include="'/plugins/ng-image-gallery/res/icons/'+svg"></div>
+<ng-image-gallery 
+    images="profileLink.images" 
+    thumbnails=true 
+    on-delete="removeFromGallery(img, cb)"></ng-image-gallery>
+<md-button 
+    ngf-capture="'camera'" 
+    ngf-select
+    ngf-change="addToGallery($files)"
+    ngf-multiple=true
+    accept="image/*">
+    Upload Picture
+</md-button>
