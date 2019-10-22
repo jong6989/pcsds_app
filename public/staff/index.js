@@ -93,16 +93,14 @@ async function authenticateStaff(){
                     script_ng_plugins.dashboard + 
                     script_angular  + 
                     scripts_controllers.main + 
-                    controllers +
-                    script_ng_plugins.ngTable +
-                    script_ng_plugins.camera + 
-                    script_ng_plugins.fileUpload;
+                    controllers;
                 document.write(dashboardPage);
             } catch (error) {
                 alert(error);
             }
         }
         
+       
         //firebase authentication checker
         // await firebase.auth().onAuthStateChanged( async (user)=> {
         //     if (!user) {
