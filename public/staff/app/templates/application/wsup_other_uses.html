@@ -1,7 +1,6 @@
 <div ng-include="'./app/templates/application/style.html'"></div>
-
-<!-- <div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div> -->
-<div class="p-t-20 p-l-10" ng-controller="WSUPOtherUsesController" ng-init="set_application($localStorage.params);">
+<div ng-if="is_path('/print')" ng-init="set_application($localStorage.params);printView();"></div>
+<div class="p-t-20 p-l-10" ng-controller="WSUPOtherUsesController" >
         <div layout="row">
             <div flex layout-gt-xs="row" layout-xs="column">
                 <div flex flex-gt-xs="15" layout-align="center center">

@@ -1,5 +1,5 @@
-<!-- <div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div> -->
-<div class="p-t-20 p-l-10" ng-controller="WildlifeImportCertificationController" ng-init="set_application($localStorage.params)">
+<div ng-if="is_path('/print')" ng-init="set_application($localStorage.params);printView();"></div>
+<div class="p-t-20 p-l-10" ng-controller="WildlifeImportCertificationController" >
 <div ng-include="'./app/templates/application/style.html'"></div>
 
         <div layout="row">

@@ -1,4 +1,4 @@
-<div ng-controller="profile_links_controller" ng-init="loadProfileLink();saveProfileLink=update;showRemoveButton=true">
+<div ng-controller="profile_links_controller" ng-init="set_page_title('Profile Management - Edit Link');loadProfileLink();saveProfileLink=update;showRemoveButton=true">
         <div layout="row" layout-align="center center" ng-show="isDataLoading" style="height: 250px">
                 <md-progress-circular md-mode="indeterminate" md-diameter="70"></md-progress-circular>
         </div>

@@ -1,0 +1,51 @@
+<!-- Application List -->
+
+        <md-list class="md-dense" flex>
+            <md-subheader class="col-white bg-grey">
+                <div layout >
+                    <div >
+                        <strong>Permit Applications </strong>
+                    </div>
+                    <div flex></div>
+                    <div ng-click="find_application()" class="pointer">
+                        <md-tooltip md-direction="buttom">Search by Transaction Number</md-tooltip> 
+                        <i class="fa fa-search"></i>
+                    </div>
+                </div>
+            </md-subheader>
+            <md-content style="height : {{iframeHeight - 225}}px;">
+                <md-list-item class="md-3-line" ng-repeat="x in permit_application_list track by x.id " ng-click="select_transaction(x)">
+                    
+                    <div class="md-list-item-text" layout="column">
+                        <h3>
+                            <i class="fa fa-circle" 
+                            ng-class="{'col-green': (x.status == '0'),
+                            'col-orange': (x.status == '4'),
+                            'col-yellow': (x.status == '1'),
+                            'col-pink': (x.status == '3'),
+                            'col-blue': (x.status == '5'),
+                            'col-teal': (x.status == '6'),
+                            'col-grey': (x.status == '7')}"></i> 
+                            #{{x.date}}
+                        </h3>
+                        <h4>{{ x.name }}</h4>
+                        <p>{{x.date | date}}, {{ x.user.full_name }}
+                            
+                        </p>
+                        <md-divider></md-divider>
+                    </div>
+                </md-list-item>
+            </md-content>
+            <md-subheader class="col-white bg-grey">
+                <div layout >
+                    <div flex></div>
+                    <div ng-click="previus_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length > 1">
+                        <i class="fa fa-chevron-left"></i>
+                    </div>
+                    <div class="font-10">{{pointer_query_array.length}}/{{total_query_size / query_limit}}</div>
+                    <div ng-click="next_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length < (total_query_size / query_limit) ">
+                        <i class="fa fa-chevron-right"></i>
+                    </div>
+                </div>
+            </md-subheader>
+        </md-list>

@@ -9,7 +9,7 @@
             </i>
         </div>
     </md-subheader>
-    <md-content style="height : {{iframeHeight - 130}}px;">
+    <md-content style="height : {{iframeHeight - 190}}px;">
         <md-list-item class="md-3-line" ng-repeat="x in myReceived | filter : search_received" ng-click="setCurrentItem(x.document,'received',x)">
             <div class="md-list-item-text" layout="column" ng-init="received = date_gap(x.received.time, x.time).split(' ')">
                 <h3>From {{x.sender.name}}, <cite class="font-11 col-grey" ng-repeat=" c in x.sender.access"> {{c}}, </cite></h3>

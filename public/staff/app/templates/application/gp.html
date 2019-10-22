@@ -1,5 +1,5 @@
 
-<div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div>
+<div ng-if="is_path('/print')" ng-init="set_application($localStorage.params);printView();"></div>
 <div class="p-t-20 p-l-10">
     
     <div layout-gt-xs="row" layout-xs="column" layout-align="center center">
@@ -152,81 +152,10 @@
             </div>
             <div class="p-r-50"></div>
         </div>
+    </div>
 
+    <div ng-include="'./app/templates/application/attachments_template.html'"></div>
+    <div ng-include="'./app/templates/application/stamp_template.html'"></div>
 
-
-        <!-- cut her -->
-
-        <!-- <p>4.	Places of Collection:</p> -->
-        <!-- <div class="p-l-20">
-            <div>Sitio: {{application.data.application.project_location.sitio}} </div>
-            <div>Brgy.: {{application.data.application.project_location.barangay}} </div>
-            <div>Municipality: {{application.data.application.project_location.municipality}} </div>
-            <div>Latitude: {{application.data.application.project_location.latitude}} </div>
-            <div>Longitude: {{application.data.application.project_location.longitude}} </div> -->
-
-         <!-- <p ng-if="application.data.application.civil_status !== 'married'">3. I am {{application.data.application.civil_status}}.</p>
-        <p ng-if="application.data.application.civil_status == 'married'">3. I am married and the name of my spouse/wife is {{application.data.application.spouse_name}}.</p>
-         <p>4. I am {{ (application.data.application.org_member == true) ? '' : 'not' }} a member of a sportsmen and/or game club and/or scientific or conservation society and/or live fish trader association or cooperative.</p> 
-        <div ng-if="application.data.application.org_member">
-            <ul ng-if="application.data.application.organizations.length > 0">
-                <li ng-repeat="x in application.data.application.organizations"> Name :  {{x.name}}, Desc :  {{x.desc}}, Position :  {{x.position}} </li>
-            </ul>
-        </div> 
-
-        <p>5. I intend to collect the following economically important wildlife species for direct trade/commercial purposes:</p>
-        <div>
-            <ul ng-if="application.data.application.species.length > 0">
-                <li ng-repeat="x in application.data.application.species"> 
-                    Kind/Species : {{x.name}} , Monthly Volume : {{x.monthly_volume}} , Source Area : {{x.source_area}} 
-                </li>
-            </ul>
-        </div>
-        <p>and will trade the species to {{application.data.application.market_outlet}} via {{application.data.application.via}}</p>
-
-        <p>6.	Wildlife species to be collected under this permit shall be taken by the following authorized collectors with Wildlife Collector’s Permit issued by the PCSDS:</p>
-        <div>
-            <ul ng-if="application.data.application.collectors.length > 0">
-                <li ng-repeat="x in application.data.application.collectors"> 
-                    Name : {{x.name}} , Address : {{x.address}} 
-                </li>
-            </ul>
-        </div>
-
-        <p>7.	The estimated cost of my project is  PhP {{application.data.application.project_cost}} .</p>
-        <p>8.	Places of Collection:</p>
-        <div class="p-l-20">
-            <div>Sitio: {{application.data.application.project_location.sitio}} </div>
-            <div>Brgy.: {{application.data.application.project_location.barangay}} </div>
-            <div>Municipality: {{application.data.application.project_location.municipality}} </div>
-            <div>Latitude: {{application.data.application.project_location.latitude}} </div>
-            <div>Longitude: {{application.data.application.project_location.longitude}} </div>
-        </div>
-
-        <p>9. I plan to use trading facilities such as {{application.data.application.trading_facilities}}. </p>
-
-        <p>10. I understand that the information stated in this application are all true and correct and any omission of facts therein shall cause the disapproval of this application and/or cancellation of the permit that may be issued to me.</p>
-
-        <p>11. I understand that the filing of this application conveys no right to take, collect or possess any wildlife until a permit is issued to me by the PCSD.</p>
-    
-        <p>12. The application fee in the amount of {{application.data.application.application_fee}} made payable to the PCSDS with Official Receipt No. {{application.data.application.or_no}} is herewith enclosed. Non- approval or non-issuance of the permit does not entitle me to a refund of the fee.</p>
-   
-        <br><br><br>
-        <div layout="row" layout-align="end">
-            <div layout="column" layout-align="center center">
-                <div><strong style="text-decoration: underline"> {{application.data.application.applicant}} </strong></div>
-                <div>(Applicant)</div>
-                <div class="m-t-20"> <strong>TIN : {{application.data.application.tin_no}}</strong> </div>
-            </div>
-            <div class="p-r-50"></div>
-        </div>
-            
-        <div style="max-width: 300px">
-            <p>{{application.data.application.applicant_address}}</p>
-        </div>
-
-    </div> -->
-
-    <hr>
-    
+</div>
     
