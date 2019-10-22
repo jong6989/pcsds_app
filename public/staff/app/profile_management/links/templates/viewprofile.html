@@ -1,0 +1,21 @@
+<div>
+    <md-card>
+        <md-card-content>
+            <table>
+                <tr><td>Group Name:</td><td>{{profileLinkViewModel[$index].group_name}}</td></tr>
+                <tr><td>Description:</td><td>{{profileLinkViewModel[$index].description}}</td></tr>
+                <tr><td>Profiles Relationship:</td><td>{{profileLinkViewModel[$index].relationship}}</td></tr>
+                <tr><td>Keywords:</td><td>
+                    <md-chips ng-model="profileLinkViewModel[$index].keywords" readonly=true></md-chip>
+                </td></tr>
+            </table>
+            <md-list>
+                    <div>Profiles</div>
+                    <md-list-item ng-repeat="profile in profileLinkViewModel[$index].profiles">
+                            <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
+                        {{profile.full_name}}
+                    </md-list-item>
+                </md-list>
+        </md-card-content>
+    </md-card>
+</div>

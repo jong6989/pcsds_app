@@ -36,11 +36,15 @@ var scripts_controllers = {
 var scripts_js_plugins = {
     particles : `<script src="/plugins/particlesjs/js/particles.min.js"></script>
                 <script src="/plugins/particlesjs/js/app.js"></script>`,
+    fileUpload : `<script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload-shim.js"></script>
+                    <script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload.min.js"></script>`,
     export : `<script src="/js/export/shim.min.js"></script>
                 <script src="/js/export/xlsx.core.min.js"></script>
                 <script src="/js/export/xls.core.min.js"></script>
                 <script src="/js/export/Blob.js"></script>
-                <script src="/js/export/FileSaver.js"></script>`
+                <script src="/js/export/FileSaver.js"></script>`,
+    html2canvas: `<script src="/js/html2canvas/html2canvas.min.js"></script>`,
+    dot_object: `<script src="/plugins/dot-object.min.js"></script>`
 }
 
 //scripts for login user
@@ -86,7 +90,15 @@ async function authenticateStaff(){
                 });
                 
                 localData.set('staff_current_view','app/main.html');
-                let dashboardPage = script_ng_plugins.dashboard + script_angular  + scripts_controllers.main + controllers;
+                let dashboardPage = 
+                    script_ng_plugins.dashboard + 
+                    script_angular  + 
+                    scripts_controllers.main + 
+                    controllers +
+                    script_ng_plugins.ngTable +
+                    script_ng_plugins.camera + 
+                    script_ng_plugins.fileUpload +
+                    scripts_js_plugins.dot_object;
                 document.write(dashboardPage);
             } catch (error) {
                 alert(error);
@@ -118,7 +130,10 @@ async function authenticateStaff(){
 //debug user
 localData.set('BRAIN_STAFF_ID','+639486601717');
 localData.set('STAFF_ACCOUNT',`
-    {"designation":"admin","id":"+639486601717","last_seen":1570521763344,
+    {
+        "designation":"admin",
+        "id":"+639486601717",
+        "last_seen":1570521763344,
         "menu":[
             {
                 "controller":"<script src='app/account_management/controller.js'></script><script src='app/account_management/menus/controller.js'></script>",
@@ -158,32 +173,49 @@ localData.set('STAFF_ACCOUNT',`
                     {
                         "title": "Statistics",
                         "path": "/database/views/statistics",
-                        "icon": "bars"
+                        "icon": "line-chart"
                     },
                     {
                         "title": "Apprehensions",
                         "path": "/database/views/apprehension",
-                        "icon": "bars"
+                        "icon": "legal"
                     },
                     {
                         "title": "Chainsaw Permit To Purchase",
                         "path": "/database/views/chainsaw_purchase_permit",
-                        "icon": "bars"
+                        "icon": "file"
                     },
                     {
                         "title": "Chainsaw Registration",
                         "path": "/database/views/chainsaw_registration",
-                        "icon": "bars"
+                        "icon": "registered"
                     },
                     {
                         "title": "Chainsaw Permit To Sell",
                         "path": "/database/views/chainsaw_sell_permit",
-                        "icon": "bars"
+                        "icon": "file"
                     },
                     {
                         "title": "Wildlife Special Use Permit",
                         "path": "/database/views/wsup",
-                        "icon": "bars"
+                        "icon": "leaf"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/profile_management/controller.js'></script>",
+                "icon":"files-o",
+                "title":"Profile Management",
+                "menu" : [
+                    {
+                        "title": "Profiles",
+                        "path": "/profile_management/list",
+                        "icon": "list"
+                    },
+                    {
+                        "title": "Links",
+                        "path": "/profile_management/links",
+                        "icon": "group"
                     }
                 ]
             }

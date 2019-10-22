@@ -81,17 +81,17 @@
         <div style="width:60%"></div>
         <!-- sign 1 -->
         <div flex style="padding: 10px"
-            ng-init="currentItem.gratuitous_permit.sign1 = (currentItem.gratuitous_permit.sign1 == undefined)? { name:'',designation:''}:currentItem.gratuitous_permit.sign1;">
-            <div ng-if="currentItem.gratuitous_permit.sign1.signature != undefined;" layout="column"
+            ng-init="currentItem.sign1 = (currentItem.sign1 == undefined)? { name:'',designation:''}:currentItem.sign1;">
+            <div ng-if="currentItem.sign1.signature != undefined;" layout="column"
                 layout-align="center center">
-                <img ng-if="currentItem.gratuitous_permit.sign1.signature != undefined"
-                    src="{{currentItem.gratuitous_permit.sign1.signature}}" alt="Signature1" width="auto"
+                <img ng-if="currentItem.sign1.signature != undefined"
+                    src="{{currentItem.sign1.signature}}" alt="Signature1" width="auto"
                     style="margin-bottom: -35px;">
-                <div class="align-center"> <strong> <ins>{{currentItem.gratuitous_permit.sign1.name}}</ins> </strong>
+                <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong>
                 </div>
-                <div class="align-center"> {{currentItem.gratuitous_permit.sign1.designation}} </div>
+                <div class="align-center"> {{currentItem.sign1.designation}} </div>
                 <md-button class="md-fab md-mini" aria-label="Remove Signature"
-                    ng-if="currentItem.gratuitous_permit.sign1.user == userId"
+                    ng-if="currentItem.sign1.user == userId"
                     ng-click="updateDocument(currentItem.gratuitous_permit.id,{'sign1' : {} })">
                     <md-tooltip md-direction="left">Remove Signature</md-tooltip>
                     <i class="fa fa-remove"></i>
@@ -99,25 +99,25 @@
             </div>
 
             <div layout="column" layout-align="center center"
-                ng-if="currentItem.gratuitous_permit.sign1.signature == undefined;" id="sign1"
+                ng-if="currentItem.sign1.signature == undefined;" id="sign1"
                 ng-init="generate_signature_field('sign1',0);" style="border: black dashed 1px;">
                 <canvas></canvas>
                 <button ng-click="signclear(0)">Clear Signature</button>
                 <button
-                    ng-click=" updateDocument(currentItem.gratuitous_permit.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">Save
+                    ng-click=" updateDocument(currentItem.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">Save
                     Signature</button>
                 <md-input-container md-no-float class="md-block"
-                    ng-if="currentItem.gratuitous_permit.sign1.signature == undefined;">
-                    <input ng-init="currentItem.gratuitous_permit.sign1.name=pcsd.head.full_name"
-                        ng-model="currentItem.gratuitous_permit.sign1.name"
-                        ng-blur="updateDocument(currentItem.gratuitous_permit.id,{'sign1.name' : currentItem.gratuitous_permit.sign1.name })"
+                    ng-if="currentItem.sign1.signature == undefined;">
+                    <input ng-init="currentItem.sign1.name=pcsd.head.full_name"
+                        ng-model="currentItem.sign1.name"
+                        ng-blur="updateDocument(currentItem.id,{'sign1.name' : currentItem.sign1.name })"
                         type="text" placeholder="Name" aria-label="Name">
                 </md-input-container>
                 <md-input-container md-no-float class="md-block"
-                    ng-if="currentItem.gratuitous_permit.sign1.signature == undefined;">
-                    <input ng-init="currentItem.gratuitous_permit.sign1.designation=pcsd.head.position"
-                        ng-model="currentItem.gratuitous_permit.sign1.designation"
-                        ng-blur="updateDocument(currentItem.gratuitous_permit.id,{'sign1.designation' : currentItem.gratuitous_permit.sign1.designation })"
+                    ng-if="currentItem.sign1.signature == undefined;">
+                    <input ng-init="currentItem.sign1.designation=pcsd.head.position"
+                        ng-model="currentItem.sign1.designation"
+                        ng-blur="updateDocument(currentItem.id,{'sign1.designation' : currentItem.sign1.designation })"
                         type="text" placeholder="Designation" aria-label="designation">
                 </md-input-container>
             </div>

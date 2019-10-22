@@ -1,0 +1,68 @@
+<style>
+        #searchBox {
+          padding: 7px;
+          font-size: 18px;
+          border: none;
+        }
+      
+        #searchButton {
+          float: right;
+          padding: 7px 10px;
+          margin-right: 16px;
+          background: #d7d7d7;
+          font-size: 18px;
+          border: none;
+          cursor: pointer;
+          border-radius: 1px;
+        }
+      </style>
+      <div ng-controller="profile_management_controller" ng-init="loadProfileList()">
+        <md-toolbar class="bg-darkgreen">
+          <h1 class="md-toolbar-tools">
+            <md-button class="md-raised" ng-click="loadPage('profile_management/create')">
+              <i class="fa fa-plus col-green"></i>
+              add new profile
+            </md-button>
+            <md-button class="md-raised" ng-click="refreshList()">
+              <i class="fa fa-refresh col-green"></i>
+              clear filter
+            </md-button>
+            <div class='searchDiv'>
+              <input id='searchBox' ng-init='searchText=""' ng-model='searchText' placeholder="Type keywords here">
+              <button type='button' ng-disabled='searchText == ""' id='searchButton' ng-click="search(searchText)">
+                <i class="fa fa-search col-green"></i>
+              </button>
+            </div>
+          </h1>
+        </md-toolbar>
+        <md-content style="height: {{ iframeHeight - 150 }}px;" layout-sm="column" layout-gt-sm ng-init="">
+          <div flex>
+            <table ng-table="profileTable" class="table" show-filter="true">
+              <tr ng-repeat="profile in $data track by profile.id">
+                <td title="'First Name'" sortable="'first_name'" filter="{first_name: 'text'}">
+                  {{ profile.first_name }}
+                </td>
+                <td title="'Middle Name'" sortable="'middle_name'" filter="{middle_name: 'text'}">
+                  {{ profile.middle_name }}
+                </td>
+                <td title="'Last Name'" sortable="'last_name'" filter="{last_name: 'text'}">
+                  {{ profile.last_name }}
+                </td>
+                <td title="'Address'" sortable="'current_address'" filter="{current_address: 'text'}">
+                  {{ profile.current_address }}
+                </td>
+                <td title="'Phone Number'" sortable="'current_phone'" filter="{current_phone: 'text'}">
+                  {{ profile.current_phone }}
+                </td>
+      
+                <td title="''">
+                  <md-button class="md-raised" ng-click="loadViewPage(profile.id)">
+                    <i class="fa fa-plus col-green"></i>
+                    VIEW
+                  </md-button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </md-content>
+      </div>
