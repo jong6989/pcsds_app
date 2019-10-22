@@ -1,4 +1,4 @@
-<md-card-content>
+
 <div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div>
 <div class="p-t-20 p-l-10">
 
@@ -106,9 +106,10 @@
         <br>
         <div>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Certification fee in the amount of PhP 360 was paid under the Palawan Council for Sustainable Development Staff Official Receipt No. 
-                <md-input-container  style="margin: 0px; width: 100px">    
-                    <input ng-model="new_application.receipt_no">         
-                </md-input-container>
+                <md-input-container style="margin: 0px; width: 90px">
+                    <label flex-gt-sm> </label>
+                    <input ng-model="new_application.receipt" required>
+            </md-input-container>
                 dated {{application.date | date:shortDate }} </p>
         </div>
 
@@ -185,4 +186,4 @@
 
 
     <hr>
-</md-card-content>   
+  
