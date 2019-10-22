@@ -30,7 +30,7 @@ myAppModule.
 
                 $scope.search = async (keyword) => {
                     if (keyword.trim() == '') return;
-                    var results = await $profileService.search(keyword);
+                    var results = await $profileService.search(keyword, localData.get('BRAIN_STAFF_ID'));
                     if (results.length > 0) {
                         $scope.profileTable = new NgTableParams({ sorting: { first_name: 'asc' } }, { dataset: results });
                         $scope.$apply();
@@ -123,7 +123,7 @@ myAppModule.
                 }
 
                 $scope.currentUserShouldSee = () => {
-                    return $scope.profile.data.created_by == localData.get('BRAIN_STAFF_ID');
+                    return !$scope.profile.data.read_only;
                 }
 
                 $scope.clear_cropping_image = () => {
@@ -141,12 +141,6 @@ myAppModule.
                     return $scope.image_file != null;
                 };
 
-                // $scope.$watch('updatedProperty.first_name', function(newval, oldval, scope){
-                //     console.log(newval);
-                //     console.log(oldval);
-                //     console.log(scope);
-                // })
-
                 $http.get("/json/profile/nationalities.json").
                     then(function (data) {
                         $scope.nationalities = data.data.data;
@@ -156,16 +150,8 @@ myAppModule.
                 $scope.loadProfile = async (id) => {
                     var profileID;
                     $scope.is_page_loading = true;
-                    if (id == null) {
-                        // var url_relative_path = localData.get('current_view');
-                        // var url = new URL(url_relative_path, location.href);
-                        // var parameters = url.searchParams;
-                        profileID = localData.get('profileID');
-                    } else {
-                        profileID = id;
-                    }
-
-                    $scope.profile.data = await $profileService.getProfile(profileID);
+                    profileID = id || localData.get('profileID');
+                    $scope.profile.data = await $profileService.getProfile(profileID, localData.get('BRAIN_STAFF_ID'));
                     $scope.is_page_loading = false;
                     $scope.$apply();
                     $scope.onProfileLoad();
@@ -258,7 +244,7 @@ myAppModule.
                 }
 
                 $scope.loadProfileList = async () => {
-                    var profileList = await $profileService.getProfileList();
+                    var profileList = await $profileService.getProfileList(localData.get('BRAIN_STAFF_ID'));
 
                     $scope.profileTable = new NgTableParams({ sorting: { first_name: 'asc' } }, { dataset: profileList });
                     // $scope.profileTable.$invalidate();
@@ -391,14 +377,14 @@ myAppModule.
         }
         $scope.get_profile();
     }).
-    service('$profileService', function () {
+    service('$profileServiceDefault', function () {
         var collection = db.collection('profile');
         this.get_profile = async (id) => {
             let profile = await db.collection('profile').doc(id);
             return profile;
         }
 
-        this.search = async (keyword) => {
+        this.search = async (keyword, created_by) => {
             var result = [];
             var promise = new Promise((resolve, reject) => {
                 collection.where('keywords', 'array-contains', keyword).get().
@@ -406,6 +392,7 @@ myAppModule.
                         snapshot.forEach(doc => {
                             var profile = doc.data();
                             profile.id = doc.id;
+                            profile.read_only = created_by && profile.created_by != created_by;
                             result.push(profile);
                         })
                         resolve(result);
@@ -430,12 +417,13 @@ myAppModule.
             return promise;
         }
 
-        this.getProfileList = async () => {
+        this.getProfileList = async (created_by) => {
             var promise = new Promise((resolve, reject) => {
                 collection.onSnapshot(snapshot => {
                     var profileList = snapshot.docs.map(documentSnapshot => {
                         var profile = documentSnapshot.data();
                         profile.id = documentSnapshot.id;
+                        profile.read_only = created_by && profile.created_by != created_by;
                         return profile;
                     });
                     resolve(profileList);
@@ -445,11 +433,12 @@ myAppModule.
             return promise;
         }
 
-        this.getProfile = (id) => {
+        this.getProfile = (id, created_by) => {
             return new Promise((resolve, reject) => {
                 collection.doc(id).onSnapshot(snapshot => {
                     var profile = snapshot.data();
                     profile.id = snapshot.id;
+                    profile.read_only =created_by && profile.created_by != created_by
                     resolve(profile);
                 })
             });
@@ -478,6 +467,69 @@ myAppModule.
             // .then(success => {console.log('success')}, error => {console.log(error);});
             return new Promise((resolve, reject) => { resolve(true); })
         }
+    }).
+    service('$profileServiceForAdmin', function($profileServiceDefault){
+        var collection = db.collection('profile');
+        this.get_profile = $profileServiceDefault.get_profile;
+
+        this.search = async (keyword, created_by) => {
+            var result = [];
+            var promise = new Promise((resolve, reject) => {
+                collection.where('keywords', 'array-contains', keyword).get().
+                    then(snapshot => {
+                        snapshot.forEach(doc => {
+                            var profile = doc.data();
+                            profile.id = doc.id;
+                            result.push(profile);
+                        })
+                        resolve(result);
+                    });
+
+            })
+
+            return promise;
+        }
+
+        this.addProfile = $profileServiceDefault.addProfile;
+
+        this.getProfileList = async () => {
+            var promise = new Promise((resolve, reject) => {
+                collection.onSnapshot(snapshot => {
+                    var profileList = snapshot.docs.map(documentSnapshot => {
+                        var profile = documentSnapshot.data();
+                        profile.id = documentSnapshot.id;
+                        return profile;
+                    });
+                    resolve(profileList);
+                });
+            });
+
+            return promise;
+        }
+
+        this.getProfile = async(id, created_by) => {
+            var profile = await $profileServiceDefault.getProfile(id, created_by);
+            profile.read_only = false;
+            return new Promise((resolve, reject) => { resolve(profile)})
+        }
+
+        function convertToProfileObject(snapshotData) {
+            var keys = Object.keys(snapshotData);
+            keys.forEach(key => {
+                profile[key] = snapshotData[key];
+            })
+
+            return profile;
+        }
+
+        this.uploadProfilePicture = $profileServiceDefault.uploadProfilePicture;
+
+        this.updateProfile = $profileServiceDefault.updateProfile;
+    }).
+    factory('$profileService', function($profileServiceDefault, $profileServiceForAdmin){
+        var currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
+        var profileService = currentUser.designation == 'admin' ? $profileServiceForAdmin : $profileServiceDefault;
+        return profileService;
     }).
     service('dummyProfileService', function () {
         var profileList = {

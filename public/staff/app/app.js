@@ -307,7 +307,28 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     }
   }
 
-  $scope.set_path('/permit_application/view');
+  // $scope.set_path('/profile_management/print');
+  var signaturePad = [];
+  $scope.generate_signature_field = (id,idx) => {
+    let wrapper = document.getElementById(id);
+    let canvas = wrapper.querySelector('canvas');
+    signaturePad[idx] = new SignaturePad(canvas);
+    $scope.signed = (i)=> {
+      return signaturePad[i].toDataURL();
+    }
+    $scope.signisEmpty = (i) => {
+      signaturePad[i].isEmpty();
+    }
+    $scope.signclear = (i) => {
+      signaturePad[i].clear();
+    }
+    $scope.signoff = (i) => {
+      signaturePad[i].off();
+    }
+    $scope.signon = (i) => {
+      signaturePad[i].on();
+    }
+  }
 
 })
 

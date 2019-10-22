@@ -46,7 +46,6 @@ var scripts_js_plugins = {
                 <script src="/js/export/FileSaver.js"></script>`
 }
 
-
 //scripts for login user
 let loginPage = script_angular + scripts_controllers.main + scripts_controllers.login;
 
@@ -90,7 +89,14 @@ async function authenticateStaff(){
                 });
                 
                 localData.set('staff_current_view','app/main.html');
-                let dashboardPage = script_ng_plugins.dashboard + script_angular  + scripts_controllers.main + controllers;
+                let dashboardPage = 
+                    script_ng_plugins.dashboard + 
+                    script_angular  + 
+                    scripts_controllers.main + 
+                    controllers +
+                    script_ng_plugins.ngTable +
+                    script_ng_plugins.camera + 
+                    script_ng_plugins.fileUpload;
                 document.write(dashboardPage);
             } catch (error) {
                 alert(error);
@@ -122,7 +128,10 @@ async function authenticateStaff(){
 //debug user
 localData.set('BRAIN_STAFF_ID','+639486601717');
 localData.set('STAFF_ACCOUNT',`
-    {"designation":"admin","id":"+639486601717","last_seen":1570521763344,
+    {
+        "designation":"admin",
+        "id":"+639486601717",
+        "last_seen":1570521763344,
         "menu":[
             {
                 "controller":"<script src='app/account_management/controller.js'></script><script src='app/account_management/menus/controller.js'></script>",

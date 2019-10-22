@@ -4,7 +4,6 @@ myAppModule.
         '$scope',
         '$profileService',
         'profileLinkService',
-        // 'dummyProfileLinksService',
         '$location',
         function ($scope, $profileService, $profileLinksService, $location) {
             $scope.profileLinks = [];
@@ -19,6 +18,7 @@ myAppModule.
             }
 
             $scope.dataIsLoading = false;
+            $scope.isSearching = false;
             $scope.loadProfileLinks = async () => {
                 $scope.dataIsLoading = true;
                 $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('BRAIN_STAFF_ID'));
@@ -61,12 +61,15 @@ myAppModule.
 
             $scope.profiles = [];
             $scope.searchProfile = async (keyword) => {
+                $scope.isSearching = true;
                 $scope.profiles = await $profileService.search(keyword);
+
                 if ($scope.profiles.length == 0) {
                     showNotFoundAlert(keyword);
                 } else {
-                    $scope.$apply();
                 }
+                $scope.isSearching = false;
+                $scope.$apply();
             }
 
             function showNotFoundAlert(searchText) {
@@ -251,23 +254,24 @@ myAppModule.
             })
         }
     }).
-    service('profileLinkService', function () {
+    service('profileLinkServiceDefault', function () {
         var profileLinksCollection = db.collection('profile_links');
 
         this.remove = (profileLinkID) => {
             return profileLinksCollection.doc(profileLinkID).update({ disabled: true });
         }
 
-        this.getProfileLinks = async (creatorID) => {
+        this.getProfileLinks = async (current_user_id) => {
             return new Promise((resolve, reject) => {
                 profileLinksCollection.
-                    where('created_by', '==', creatorID).
+                    // where('created_by', '==', creatorID).
                     onSnapshot(snapshot => {
 
                         var profileLinks = snapshot.docs.filter(document => !document.data().disabled).
                             map(document => {
                                 var profileLink = document.data();
                                 profileLink.id = document.id;
+                                profileLink.read_only = profileLink.created_by != current_user_id;
                                 // if(profileLink.disabled) return ;
                                 return profileLink;
                             });
@@ -285,7 +289,7 @@ myAppModule.
             return profileLinksCollection.doc(updatedProfileLink.id).update(updatedProfileLink);
         }
 
-        this.getProfileLink = (profileLinkID) => {
+        this.getProfileLink = (profileLinkID, current_user_id) => {
             return new Promise((resolve, reject) => {
                 profileLinksCollection.doc(profileLinkID).onSnapshot(snapshot => {
                     var profileLink = snapshot.data();
@@ -293,12 +297,13 @@ myAppModule.
                         resolve(null); return;
                     }
                     profileLink.id = snapshot.id;
+                    profileLink.read_only = profileLink.created_by != current_user_id;
                     resolve(profileLink);
                 });
             });
         }
 
-        this.searchProfileLinks = (keyword) => {
+        this.searchProfileLinks = (keyword, current_user_id) => {
             var profileLinks = [];
             return new Promise((resolve, reject) => {
                 profileLinksCollection.
@@ -309,7 +314,8 @@ myAppModule.
                             profileLink.id = documentSnapshot.id;
                             if (profileLink.disabled)
                                 return;
-
+                            
+                            profileLink.read_only = profileLink.created_by != current_user_id;
                             profileLinks.push(profileLink);
                         })
                         resolve(profileLinks);
@@ -318,17 +324,43 @@ myAppModule.
 
             })
         }
+    }).
+    service('profileLinkServiceForAdmin', function(profileLinkServiceDefault){
+        var profileLinksCollection = db.collection('profile_links');
+
+        this.remove = profileLinkServiceDefault.remove;
+
+        this.getProfileLinks = async (current_user_id) => {
+            var profileLinks = await profileLinkServiceDefault.getProfileLinks(current_user_id);
+            profileLinks.forEach(profileLink => {
+                profileLink.read_only = false;
+            });
+
+            return new Promise((resolve, reject) => { resolve(profileLinks)})
+        }
+
+        this.add = profileLinkServiceDefault.add;
+
+        this.update = profileLinkServiceDefault.update;
+
+        this.getProfileLink = async(profileLinkID, current_user_id) => {
+            var profileLink = await profileLinkServiceDefault.getProfileLink(profileLinkID,  current_user_id);
+            profileLink.read_only = false;
+
+            return new Promise((resolve, reject) => { resolve(profileLink)});
+        }
+
+        this.searchProfileLinks = async(keyword, current_user_id) => {
+            var profileLinks = await profileLinkServiceDefault.searchProfileLinks(keyword, current_user_id);
+            profileLinks.forEach(profileLink => {
+                profileLink.read_only = false;
+            })
+
+            return new Promise((resolve, reject) => {  resolve(profileLinks) });
+        }
+    }).
+    factory('profileLinkService', function(profileLinkServiceDefault, profileLinkServiceForAdmin){
+        var currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
+        var profileService = currentUser.designation == 'admin' ? profileLinkServiceForAdmin : profileLinkServiceDefault;
+        return profileService;
     })
-
-
-
-
-
-
-
-
-// NIofduXoq4Aar5Em88E4
-// PyiimOgFqSg4aweL1b71GlVBJ6n1
-
-
-

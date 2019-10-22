@@ -13,19 +13,19 @@
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>First name</label>
                         <input ng-model="new_account.data.first_name"
-                            ng-blur="new_account.data.keywords[0]=new_account.data.first_name" required>
+                            ng-blur="new_account.data.keywords[0]=new_account.data.first_name.toLowerCase()" required>
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Middle Name</label>
                         <input ng-model="new_account.data.middle_name"
-                            ng-blur="new_account.data.keywords[1]=new_account.data.middle_name || ''">
+                            ng-blur="new_account.data.keywords[1]=new_account.data.middle_name.toLowerCase() || ''">
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Last Name</label>
                         <input ng-model="new_account.data.last_name"
-                            ng-blur="new_account.data.keywords[2]=new_account.data.last_name" required>
+                            ng-blur="new_account.data.keywords[2]=new_account.data.last_name.toLowerCase()" required>
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm>
@@ -48,7 +48,7 @@
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Current Address</label>
                         <input ng-model="new_account.data.current_address"
-                            ng-blur="new_account.data.keywords[3]=new_account.data.current_address" required>
+                            ng-blur="new_account.data.keywords[3]=new_account.data.current_address.toLowerCase()" required>
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm>

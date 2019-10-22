@@ -16,7 +16,7 @@
     }
 </style>
 <div ng-controller="profile_links_controller">
-    <div flex="100" layout-align="center center" ng-show="dataIsLoading" layout>
+    <div flex="100" style="height:250px" layout-align="center center" ng-show="dataIsLoading" layout>
         <md-progress-circular md-mode="indeterminate" md-diameter="70"></md-progress-circular>
     </div>
     <div ng-show="!dataIsLoading">
@@ -40,7 +40,9 @@
                             <i ng-if="contentShouldExpand[$index]"
                                 class="fa fa-angle-up"></i>
                         </md-button>
-                        <md-button ng-click="updateProfileLink(profileLink.id)" class="md-icon-button"
+                        <md-button 
+                            ng-hide="profileLink.read_only"
+                            ng-click="updateProfileLink(profileLink.id)" class="md-icon-button"
                             aria-label="View">
                             <md-tooltip>Edit</md-tooltip>
                             <i class="fa fa-edit"></i>

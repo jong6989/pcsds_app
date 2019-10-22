@@ -71,7 +71,9 @@
                 </md-button> 
             </div>
             
-            <div layout="column" layout-align="center center" ng-if="currentItem.sign1.signature == undefined;" id="sign1" ng-init="generate_signature_field('sign1',0);" style="border: black dashed 1px;">
+            <div layout="column" layout-align="center center" 
+            ng-if="currentItem.sign1.signature == undefined;" 
+            id="sign1" ng-init="generate_signature_field('sign1',0);" style="border: black dashed 1px;">
                 <canvas></canvas>
                 <button ng-click="signclear(0)">Clear Signature</button>
                 <button ng-click=" updateDocument(currentItem.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">
