@@ -32,8 +32,10 @@
                 <md-list>
                     <div>Profiles</div>
                     <md-list-item ng-repeat="profile in profiles">
-                        <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
-                        {{profile.full_name}}
+                        <a target="blank" ng-click="viewProfile(profile.id)" >
+                            <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
+                            {{profile.full_name}}
+                        </a>
                     </md-list-item>
                 </md-list>
                 <md-button ng-click="goToPreviousPage()" class="md-raised md-block md-primary">Back</md-button>

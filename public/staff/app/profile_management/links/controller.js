@@ -14,6 +14,12 @@ myAppModule.
                 keywords: []
             };
             
+            $scope.viewProfile = (profileID) => {
+                localData.set('profileID', profileID);
+                $location.path('/profile_management/view');
+                $scope.$apply();
+            }
+
             $scope.profileLinkViewModel = []
 
             $scope.viewProfileLink = (profileLink, profileLinkIndex) => {
