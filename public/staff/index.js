@@ -13,6 +13,10 @@ var script_angular = `
         <script src="/js/ng-table.min.js"></script>
         <script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload-shim.js"></script>
         <script src="/js/ng-file-upload-bower-12.2.13/ng-file-upload.min.js"></script>
+        <script src="/js/webcam.min.js"></script>
+        <script src="/js/ng-camera.js"></script>
+        <script src="/js/ng-image-crop/ng-img-crop.js"></script>
+        <script src="/js/html2canvas/html2canvas.min.js"></script>
     `;
 //angularjs plugins
 var script_ng_plugins = {
@@ -23,10 +27,7 @@ var script_ng_plugins = {
         <script src="/js/tinymce.min.js"></script>
         <script src="/js/xlsx/xlsx.min.js"></script>
         <script src="/js/qrcode.min.js"></script>
-    `,
-    camera : `<script src="/js/webcam.min.js"></script>
-                <script src="/js/ng-camera.js"></script>
-                <script src="/js/ng-image-crop/ng-img-crop.js"></script>`
+    `
 };
 //angularjs controllers 
 var scripts_controllers = {
@@ -44,7 +45,10 @@ var scripts_js_plugins = {
                 <script src="/js/export/Blob.js"></script>
                 <script src="/js/export/FileSaver.js"></script>`,
     html2canvas: `<script src="/js/html2canvas/html2canvas.min.js"></script>`,
-    dot_object: `<script src="/plugins/dot-object.min.js"></script>`
+    dot_object: `<script src="/plugins/dot-object.min.js"></script>`,
+    image_gallery: '<script src="/plugins/ng-image-gallery/dist/ng-image-gallery.min.js"></script>' +  
+        '<script src="/plugins/hammer.min.js"></script>' +
+        '<link href="/plugins/ng-image-gallery/dist/ng-image-gallery.min.css" rel="stylesheet"/>'
 }
 
 //scripts for login user
@@ -98,6 +102,8 @@ async function authenticateStaff(){
                     script_ng_plugins.ngTable +
                     script_ng_plugins.camera + 
                     script_ng_plugins.fileUpload +
+                    scripts_js_plugins.dot_object +
+                    scripts_js_plugins.image_gallery;
                     scripts_js_plugins.dot_object;
                 document.write(dashboardPage);
             } catch (error) {
@@ -105,6 +111,7 @@ async function authenticateStaff(){
             }
         }
         
+       
         //firebase authentication checker
         // await firebase.auth().onAuthStateChanged( async (user)=> {
         //     if (!user) {
@@ -166,6 +173,33 @@ localData.set('STAFF_ACCOUNT',`
                 "title":"Online Application"
             },
             {
+                "controller":"<script src='app/permit_application/view/controller.js'></script>",
+                "icon":"files-o",
+                "title":"Permit Applications",
+                "menu" : [
+                    {
+                        "title" : "View",
+                        "path" : "/permit_application/view",
+                        "icon" : "files-o"
+                    },
+                    {
+                        "title" : "Legal Staff",
+                        "path" : "/permit_application/legal_staff",
+                        "icon" : "legal"
+                    },
+                    {
+                        "title" : "Enforcement Staff",
+                        "path" : "/permit_application/enforcement_staff",
+                        "icon" : "files-o"
+                    },
+                    {
+                        "title" : "Permitting Staff",
+                        "path" : "/permit_application/permitting_staff",
+                        "icon" : "files-o"
+                    }
+                ]
+            },
+            {
                 "controller":"<script src='app/database/controller.js'></script>",
                 "icon":"database",
                 "title":"Data Sets",
@@ -223,12 +257,5 @@ localData.set('STAFF_ACCOUNT',`
             "name":"Admin",
             "phone":"+639486601717"
         }
-`)
-
-    authenticateStaff();
-
-    // var currentUrl = new URL(location.href);
-    // var view = currentUrl.searchParams.get('view');
-    // if(view){
-    //     localData.set('staff_current_view', view);
-    // }
+`);
+authenticateStaff();

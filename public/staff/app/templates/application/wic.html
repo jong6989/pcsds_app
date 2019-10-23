@@ -1,4 +1,4 @@
-<div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div>
+<div ng-if="is_path('/print')" ng-init="set_application($localStorage.params);printView();"></div>
 <div class="p-t-20 p-l-10">
 
     <div layout-gt-xs="row" layout-xs="column" layout-align="center center">
@@ -43,88 +43,89 @@
     Sir: 
     
     <br>
-            <div>
-                <p> I would like to request for the issuance of permit/certification for the following species 
-                /items/articles of wildife(fauna/flora) intended for import for porpuses  {{application.data.application.porpuses}}  (commercial/non-commercial/scientific reseach,etc. </p>
-            </div>
+    <div>
+        <p> I would like to request for the issuance of permit/certification for the following species 
+        /items/articles of wildife(fauna/flora) intended for import for porpuses  {{application.data.application.porpuses}}  (commercial/non-commercial/scientific reseach,etc. </p>
+    </div>
 
-            <div>
-                    <ul ng-if="application.data.application.species.length > 0">
-                        <li ng-repeat="x in application.data.application.species"> 
-                             Common Name/Scientific Name : {{x.scientific_name}}, Description of Parts/derivatives : {{x.derivatives}} of {{x.species_qty}} {{x.species_unit}} in {{x.species_boxes}} {{(x.species_boxes > 1)?'boxes':'box'}}
-                        </li>
-                    </ul>
-            </div>
-
-
-            <div layout>
-                <b style="margin-left: 10%">Air Cargo</b>
-
-                <b style="margin-left: 35%">Sea Cargo</b>
-
-                <b style="margin-left: 31%">Postal Cargo</b>
-            </div>
+    <div>
+            <ul ng-if="application.data.application.species.length > 0">
+                <li ng-repeat="x in application.data.application.species"> 
+                        Common Name/Scientific Name : {{x.scientific_name}}, Description of Parts/derivatives : {{x.derivatives}} of {{x.species_qty}} {{x.species_unit}} in {{x.species_boxes}} {{(x.species_boxes > 1)?'boxes':'box'}}
+                </li>
+            </ul>
+    </div>
 
 
-            <div layout="row">
-                        <div flex-gt-sm>Plane.: {{application.data.application.plane}}</div>
-                        <div flex-gt-sm>Flt. No.: {{application.data.application.flt_no}}</div>
-                        <div flex-gt-sm>Vessel.: {{application.data.application.vessel}}</div>
-                        <div flex-gt-sm>Voyage. No.: {{application.data.application.voyage_no}}</div>
-                        <div flex-gt-sm>Carrier.: {{application.data.application.carrier}}</div>
-            </div>
+    <div layout>
+        <b style="margin-left: 10%">Air Cargo</b>
 
-            <div layout="row">
-                <div layout="column">
-                        <div >Port of Loading.: {{application.data.application.port_air}}</div>
-                        <div >Date of Loading.: {{application.data.application.date_air}}</div>
-                </div>
+        <b style="margin-left: 35%">Sea Cargo</b>
 
-                <div layout="column" style="margin-left: 25%">
-                        <div flex-gt-sm>Port of Loading.: {{application.data.application.port_sea}}</div>
-                        <div flex-gt-sm>Date of Loading.: {{application.data.application.date_sea}}</div>
-                </div>
+        <b style="margin-left: 31%">Postal Cargo</b>
+    </div>
 
-                
-                <div layout="column" style="margin-left: 29%">
-                            <div flex-gt-sm>Port of Loading.: {{application.data.application.port_postal}}</div>
-                            <div flex-gt-sm>Date of Loading.: {{application.data.application.date_postal}}</div>
-                </div>
 
-            </div>
-         
-            <hr>
+    <div layout="row">
+                <div flex-gt-sm>Plane.: {{application.data.application.plane}}</div>
+                <div flex-gt-sm>Flt. No.: {{application.data.application.flt_no}}</div>
+                <div flex-gt-sm>Vessel.: {{application.data.application.vessel}}</div>
+                <div flex-gt-sm>Voyage. No.: {{application.data.application.voyage_no}}</div>
+                <div flex-gt-sm>Carrier.: {{application.data.application.carrier}}</div>
+    </div>
 
-            <div layout="row">
-                    <div flex-gt-sm>Name of Exporter.: {{application.data.application.name_exporter}}</div>
-                    <div flex-gt-sm>Address.: {{application.data.application.address_exporter}}</div>
-            </div>
+    <div layout="row">
+        <div layout="column">
+                <div >Port of Loading.: {{application.data.application.port_air}}</div>
+                <div >Date of Loading.: {{application.data.application.date_air}}</div>
+        </div>
 
-            <div flex-gt-sm>Tax Identification Number.: {{application.data.application.tin_exporter}}</div>
+        <div layout="column" style="margin-left: 25%">
+                <div flex-gt-sm>Port of Loading.: {{application.data.application.port_sea}}</div>
+                <div flex-gt-sm>Date of Loading.: {{application.data.application.date_sea}}</div>
+        </div>
+
         
-            <div layout="row">
-                    <div flex-gt-sm>Exporter Contact Number.: {{application.data.application.exporter_contact}}</div>
-                    <div flex-gt-sm>Fax No.: {{application.data.application.exporter_fax}}</div>
-            </div> 
+        <div layout="column" style="margin-left: 29%">
+                    <div flex-gt-sm>Port of Loading.: {{application.data.application.port_postal}}</div>
+                    <div flex-gt-sm>Date of Loading.: {{application.data.application.date_postal}}</div>
+        </div>
 
-            <hr>
-         
-            <div class="m-l-10" layout-gt-sm="row">
-                <div flex-gt-sm>Name of Importer.: {{application.data.application.applicant}}</div>
-                <div flex-gt-sm>Applicant's Contact Number.: {{application.data.application.contact}}</div>
-            </div>
-
-            <div class="m-l-10" layout-gt-sm="row">
-                    <div flex-gt-sm>Address.: {{application.data.application.applicant_address}}</div>
-                    <div flex-gt-sm>Fax No.: {{application.data.application.fax_no}}</div>
-            </div>
-
-            <div>
-                    <div flex-gt-sm>Tax Identification Number.: {{application.data.application.tin_no}}</div>
-            </div>
-
+    </div>
     
+    <hr>
 
+    <div layout="row">
+            <div flex-gt-sm>Name of Exporter.: {{application.data.application.name_exporter}}</div>
+            <div flex-gt-sm>Address.: {{application.data.application.address_exporter}}</div>
+    </div>
+
+    <div flex-gt-sm>Tax Identification Number.: {{application.data.application.tin_exporter}}</div>
+
+    <div layout="row">
+            <div flex-gt-sm>Exporter Contact Number.: {{application.data.application.exporter_contact}}</div>
+            <div flex-gt-sm>Fax No.: {{application.data.application.exporter_fax}}</div>
+    </div> 
 
     <hr>
+    
+    <div class="m-l-10" layout-gt-sm="row">
+        <div flex-gt-sm>Name of Importer.: {{application.data.application.applicant}}</div>
+        <div flex-gt-sm>Applicant's Contact Number.: {{application.data.application.contact}}</div>
+    </div>
+
+    <div class="m-l-10" layout-gt-sm="row">
+            <div flex-gt-sm>Address.: {{application.data.application.applicant_address}}</div>
+            <div flex-gt-sm>Fax No.: {{application.data.application.fax_no}}</div>
+    </div>
+
+    <div>
+            <div flex-gt-sm>Tax Identification Number.: {{application.data.application.tin_no}}</div>
+    </div>
+
+    
+    <div ng-include="'./app/templates/application/attachments_template.html'"></div>
+    <div ng-include="'./app/templates/application/stamp_template.html'"></div>
+        
+</div>
    

@@ -1,6 +1,6 @@
 <div ng-include="'./app/templates/application/style.html'"></div>
-<!-- <div ng-if="render_params.data != undefined" ng-init="set_application($localStorage.params);print();"></div> -->
-<div class="p-t-20 p-l-10" ng-controller="GratuitousPermitController" ng-init="set_application($localStorage.params);">
+<div ng-if="is_path('/print')" ng-init="set_application($localStorage.params);printView();"></div>
+<div class="p-t-20 p-l-10" ng-controller="GratuitousPermitController">
     <div layout="row">
         <div flex layout-gt-xs="row" layout-xs="column">
             <div flex flex-gt-xs="15" layout-align="center center">
@@ -115,34 +115,8 @@
         <li>List of cooperating Filipino counterparts and their institutional affiliations (if applicable).</li>
         <div class="underlined">{{application.data.application.local_contact}}</div>
     </ol>
-    <!-- <br><br>
-    I certify that the statements made herein are correct and true and abide by the decision of the PCSD on this application
-    <br/>
-    <br/>
-    <div style="align-items: flex-end">
-        <div style="width: 15%">
-                <div class="underlined">&nbsp;</div>
-                <div style="text-align: center">Signature</div>
-                <div>&nbsp;</div>
-                <div class="underlined">&nbsp;</div>
-                <div style="text-align: center">Date</div>
-        </div>        
-    </div>
-    <br>
-    SUBSCRIBED AND SWORN BEFORE ME this {{date_now('DD')}} day of {{date_now('MMMM')}}, {{date_now('YYYY')}} at 
-    Residence Certificate No. <underlined>{{application.data.application.applicant.cedula.number}}</underlined> issued 
-    on <underlined>{{application.data.application.applicant.cedula.issuance_date}}</underlined> at 
-    <underlined>{{application.data.application.applicant.cedula.issuance_address}}</underlined> known to me to be the same
-    person who executed the foregoing instrument and acknowledge to me that the same is his/her voluntary act and deed.
+    
 
-    <br><br>
-    <br><br>
-    <div style="align-items: flex-end">
-        <div style="text-align: center; width: 15%">        
-                NOTARY PUBLIC
-        </div>
-    </div> -->
-
-    <div ng-include="'./app/templates/application/attacments_template.html'"></div>
+    <div ng-include="'./app/templates/application/attachments_template.html'"></div>
     <div ng-include="'./app/templates/application/stamp_template.html'"></div>
 </div>

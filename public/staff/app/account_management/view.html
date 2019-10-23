@@ -13,7 +13,7 @@
                                 </i> 
                                 <strong>Accounts </strong>
                             </div>
-                            <input flex ng-model="search_user" placeholder="filter" class="m-l-10 m-r-10 m-t--5 p-t-5 p-b-5 p-l-5" style="border: none;border-bottom: #777 1px;">
+                            <input flex ng-model="search_user" placeholder="search" class="m-l-10 m-r-10 m-t--5 p-t-5 p-b-5 p-l-5" style="border: none;border-bottom: #777 1px;">
                         </div>
                     </md-subheader>
                     <md-content style="height : {{iframeHeight - 185}}px;">
@@ -83,7 +83,9 @@
                                             <li ng-repeat="x in selected_user.menu">
                                                 {{x.title}}
                                                 <i class="fa fa-trash col-red pointer m-l-10" 
-                                                    ng-click="removing_access(x.title,'menu',x,selected_user.id,$index);"></i>
+                                                    ng-click="removing_access(x.title,'menu',x,selected_user.id,$index);">
+                                                    <md-tooltip md-direction="buttom">Remove access of {{x.title}}</md-tooltip> 
+                                                </i>
                                                 <br>
                                                 <div class="m-l-20" ng-if="x.menu">
                                                     <ul>
@@ -109,7 +111,9 @@
                                             <li ng-repeat="x in menu_modules" ng-if="!check_menu_if_exist(selected_user.menu,x.title)">
                                                 {{x.title}}
                                                 <i class="fa fa-plus col-green pointer m-l-10" 
-                                                    ng-click="adding_access_menu(x.title,'menu',x,selected_user.id);"></i>
+                                                    ng-click="adding_access_menu(x.title,'menu',x,selected_user.id);">
+                                                    <md-tooltip md-direction="buttom">Add access of {{x.title}}</md-tooltip> 
+                                                </i>
                                                 <br>
                                                 <div class="m-l-20" ng-if="x.menu">
                                                     <ul>

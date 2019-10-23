@@ -2,7 +2,7 @@
 var myAppModule = {};
 myAppModule = angular.module('brain_app', [
   'ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute',
-  'ngFileUpload','ngTable']);
+  'ngFileUpload','ngTable', 'camera', 'ngImgCrop']);
 
 myAppModule
 .config(function($routeProvider, $locationProvider) {
@@ -132,8 +132,8 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     return a.fromNow();
   };
 
-  $scope.date_now = function(){
-    return moment().format("YYYY-MM-DD");
+  $scope.date_now = function(format){
+    return moment().format( (format)?format :  "YYYY-MM-DD" );
   };
 
   $scope.toast = function(t){
@@ -187,11 +187,6 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     };
   }
 
-  $scope.open_window_view = function(v,d){
-    $localStorage.params = d;
-    var x = {view: v,last_view : $scope.current_view, documentID: d.id};
-    window.open('index.html?'+ $.param(x), 'modal');
-  };
 
   function buildDelayedToggler(navID) {
     return debounce(function() {
@@ -250,7 +245,34 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     },1500);
   }
 
-  $scope.current_view = localData.get('staff_current_view');
+  //setting data for application
+  $scope.set_application = (application)=>{
+    $scope.application = application;
+  };
+
+  $scope.printView = (timer)=>{
+    $timeout(()=>{
+      window.print();
+      window.close();
+    },(timer)?timer:2000);
+  };
+
+  $scope.open_print_view = function(view,data){
+    $localStorage.params = data;
+    $localStorage.print_view = view;
+    window.open('#!/print', 'modal');
+  };
+
+  //switch from dashboard to print view
+  if($location.path() == '/print'){
+    $scope.current_view = $localStorage.print_view;
+    $timeout( ()=>{
+      if($scope.current_view == undefined) location.reload();
+    },300 );
+  }else {
+    $scope.current_view = localData.get('staff_current_view');
+  }
+  
   let storedAccount = localData.get('STAFF_ACCOUNT');
 
   function load_dashboard_page(){

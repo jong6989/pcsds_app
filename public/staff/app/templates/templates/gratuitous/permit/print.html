@@ -4,7 +4,7 @@
     }
 </style>
 <div  ng-controller="ViewGratuitousPermitController" 
-    ng-init="currentItem = render_params.data;" class="roman"
+    ng-init="currentItem = $localStorage.params; printView(3000);" class="roman"
     style="margin:0.5in">
     <!-- <div  ng-controller="GratuitousPermitController"  ng-init="currentItem=n"> -->
     <!-- header -->

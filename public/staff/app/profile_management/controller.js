@@ -1,8 +1,4 @@
 'use strict';
-myAppModule.requires.push('ngTable');
-myAppModule.requires.push('camera');
-myAppModule.requires.push('ngFileUpload');
-myAppModule.requires.push('ngImgCrop');
 myAppModule.
     controller('profile_management_controller',
         [
@@ -43,18 +39,6 @@ myAppModule.
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'OK',
                         });
-                }
-                $scope.print = () => {
-                    var toolbar_main = document.getElementById('toolbar_main');
-                    var left_panel = document.getElementById('left_panel');
-                    var button_panel = document.getElementById('button_panel');
-                    button_panel.style.display = 'none';
-                    left_panel.style.display = 'none';
-                    toolbar_main.style.display = 'none';
-                    window.print();
-                    left_panel.style.display = '';
-                    toolbar_main.style.display = '';
-                    button_panel.style.display = '';
                 }
 
                 $scope.refreshList = () => {
@@ -421,6 +405,31 @@ myAppModule.
             await collection.doc(profileID).update(updatedProperty);
             // .then(success => {console.log('success')}, error => {console.log(error);});
             return new Promise((resolve, reject) => { resolve(true); })
+        }
+
+        this.getProfileLinks = (profileID) => {
+            var profileLinksCollection = db.collection('profile_links');
+
+            return new Promise((resolve, reject) => {
+                profileLinksCollection.
+                    onSnapshot(snapshot => {
+
+                        var profileLinks = snapshot.docs.
+                            filter(document => {
+                                var profileLink = document.data();
+                                if(profileLink.disabled || profileLink.profiles == undefined) return false;
+                                
+                                for(var i =0; i < profileLink.profiles.length; i++){
+                                    if(profileLink.profiles[i].id == profileID)
+                                        return true;
+                                }
+
+                                return false;
+                            });
+
+                        resolve(profileLinks);
+                    });
+            })
         }
     }).
     service('$profileServiceForAdmin', function($profileServiceDefault){

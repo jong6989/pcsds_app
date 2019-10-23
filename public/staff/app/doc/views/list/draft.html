@@ -4,7 +4,7 @@
         Add new draft
     </md-button>
 </md-toolbar>
-<md-list class="md-dense" flex>
+<md-list class="md-dense" flex >
     <md-subheader class="col-white bg-grey">
         <div layout>
             <strong>My Draft </strong>
@@ -14,7 +14,7 @@
             </i>
         </div>
     </md-subheader>
-    <md-content style="height : {{iframeHeight - 190}}px;">
+    <md-content style="height : {{iframeHeight - 250}}px;">
         <md-list-item class="md-3-line" ng-repeat="x in myDrafts | filter : search_draft" ng-click="setCurrentItem(x,'draft')">
             <div class="md-list-item-text" layout="column">
                 <h3>{{ x.created }}</h3>

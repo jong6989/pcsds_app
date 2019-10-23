@@ -10,17 +10,17 @@
 <div flex layout >
     <div flex layout="column">
         
-        <section layout flex>
+        <section layout flex  style="height : {{iframeHeight - 115}}px;">
             <md-content flex layout class="m-l-10" >
                 <div ng-include="'./app/doc/contents/agency.html'" flex ng-if="currentClicked == 'agency'"></div>
                 <div ng-include="'./app/doc/contents/draft.html'" flex ng-if="currentClicked == 'draft'"></div>
                 <div ng-include="'./app/doc/contents/published.html'" flex ng-if="currentClicked == 'published' || currentClicked == 'received'"></div>
                 <div ng-include="'./app/doc/contents/pending.html'" flex ng-if="currentClicked == 'pending'"></div>
-                <div ng-include="'./app/doc/contents/print.html'" flex ng-if="currentClicked == 'print'"></div>
+                <!-- <div ng-include="'./app/doc/contents/print.html'" flex ng-if="currentClicked == 'print'"></div> -->
                 <div ng-include="'./app/doc/contents/sent.html'" flex ng-if="currentClicked == 'sent'"></div>
                 
             </md-content>
-            <md-sidenav
+            <md-sidenav 
                 layout flex
                 class="md-sidenav-right"
                 md-component-id="dashSide"
@@ -45,18 +45,20 @@
                         <span class="m-l-5 font-10">Documents</span>
                     </div>
                 </md-nav-item>
+                
                 <!-- <md-nav-item md-nav-click="activeNav('Connections')" name="Connections">
                     <div layout-align="center center" layout-xs="column" layout-gt-xs="row">
                         <i class="fa fa-group col-green"></i>
                         <span class="m-l-5 font-10" >Connections</span>
                     </div>
                 </md-nav-item> -->
-                <md-nav-item md-nav-click="activeNav('Agencies')" name="Agencies">
+
+                <!-- <md-nav-item md-nav-click="activeNav('Agencies')" name="Agencies">
                     <div layout-align="center center" layout-xs="column" layout-gt-xs="row">
                         <i class="fa fa-building-o col-purple"></i>
                         <span class="m-l-5 font-10">Agencies</span>
                     </div>
-                </md-nav-item>
+                </md-nav-item> -->
             </md-nav-bar>
         </div>
         

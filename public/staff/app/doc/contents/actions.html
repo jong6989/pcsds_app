@@ -2,18 +2,11 @@
 <div ng-if="!getCurrentClicked('published') && !getCurrentClicked('sent')">
     <h4 class="col-grey">
         Files 
-        <md-button class="col-pink m-l-10" ng-if="isFolderExist(currentItem.id)" 
-            ng-click="openFolder(currentItem.id)"> 
-            <i class="fa fa-folder-open-o"></i> 
-            Open Folder
-        </md-button>
     </h4>
     <ol>
-        <li ng-repeat="x in currentItem.files" ng-init="a = x.path.split('/')">
-            <a ng-href="{{api_address + '/uploads/' + x.path}}" download="{{x.name}}" 
-                ng-init="dl_attachment(x.url,currentItem)">
+        <li ng-repeat="x in currentItem.files">
+            <a ng-href="{{x.path}}" download="{{x.name}}" >
                 {{x.name}}
-                <i class="fa fa-check col-green" ng-if="isFolderExist(currentItem.id + fileDivider + a[a.length -1])"></i>  
             </a>
         </li>
     </ol>
@@ -30,7 +23,7 @@
     >
 
     <md-card-title>
-        <h5>Actions</h5>
+        <h5>Remarks</h5>
         <md-divider></md-divider>
     </md-card-title>
     <md-card-content>
@@ -48,7 +41,7 @@
                     <textarea flex accept-charset="ISO-8859-1" ng-model="add_action[''+currentItem.id]" rows="2" placeholder="my action/remark"></textarea>
                 </div>
                 <md-button type="submit" ng-disabled="add_action[''+currentItem.id] == undefined || is_loading" ng-click="addAction(add_action[''+currentItem.id]);add_action[''+currentItem.id] = '';" class="md-raised" >
-                    <cite class="font-12"> <i class="fa fa-send"></i> Send Action</cite>
+                    <cite class="font-12"> <i class="fa fa-send"></i> Send Remark</cite>
                 </md-button>
             </form>
             <md-progress-linear md-mode="indeterminate" ng-show="uploading_file"></md-progress-linear>

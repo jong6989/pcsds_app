@@ -232,9 +232,11 @@ myAppModule.controller('account_management_controller', function ($scope, $timeo
 
     $scope.check_menu_if_exist = (menu,title)=>{
         let exist = false;
-        menu.map( o => { 
+        if(menu){
+          menu.map( o => { 
             if( title == o.title) exist = true;
-        });
+          });
+        }
         return exist;
     };
 

@@ -1,0 +1,60 @@
+<div ng-controller="permit_application_transaction_controller" ng-init="set_page_title('Permit Application')">
+
+        <div layout>
+            <div ng-hide=" (is_xs || is_sm) && is_transaction_selected " flex-gt-sm="30" flex-sm ng-include="'./app/permit_application/list_view.html'"></div>
+            <!-- View user -->
+            <div flex  ng-hide=" (is_xs || is_sm) && !is_transaction_selected " class="p-l-10 p-r-10 m-l-10 p-t-10" md-whiteframe="2">
+                <md-content style="height : {{iframeHeight - 130}}px;">
+                    <div ng-show="is_transaction_selected">
+
+                        <md-button hide-gt-sm class="md-fab md-mini " aria-label="back" ng-click="clear_selected_transaction()">
+                            <i class="fa fa-chevron-left"></i>
+                        </md-button>
+
+                        <md-divider></md-divider>
+                        
+                        <div ng-repeat=" x in application_templates" ng-show="application.name == x.name">
+
+                            <div layout layout-align="center end">
+                                <md-button class="md-fab md-mini" aria-label="Print Document" ng-click="open_print_view(x.url, application)">
+                                    <md-tooltip md-direction="left">Print this document</md-tooltip>
+                                    <i class="fa fa-print" ></i>
+                                </md-button> 
+                            </div>
+                            <hr>
+                            <div ng-include="x.url"></div>
+                            <md-divider class="m-t-20 m-b-10"></md-divider>
+                            <!-- <div ng-include="'./app/templates/actions/documents.html'" ></div> -->
+
+                            <div ng-if="application.status < 2" ng-controller="doc_controller" ng-init="
+                                    doc_network_user = getLocal('doc_user'); application_documents = [];
+                                    getApplicationDocuments();
+                                    ">
+                                    
+                                    <!-- all documents added -->
+                                    <div ng-if="application_documents.length > 0">
+                                        
+                                        <strong>Added Documents</strong>
+                                        <div>
+                                            <ol>
+                                                <li class="pointer " ng-repeat="x in application_documents" ng-click="select_document_for_application($event,x);" ng-if="!x.id || x.status == 'draft' || x.status == 'published'">
+                                                    <div ng-class="{'col-brown': (x.status == 'draft'), 'col-green': (x.status == 'published')}" >
+                                                        {{x.subject}} - {{x.status}} 
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                    <div ng-include="application_view_modal"></div>
+                            </div>
+                            <!-- end -->
+                        </div>
+                        
+                    </div>
+                    
+                </md-content>
+            </div>
+            
+        </div>
+        
+</div>

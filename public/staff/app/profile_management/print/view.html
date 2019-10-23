@@ -1,5 +1,5 @@
 
-<div ng-controller="profile_management_controller" ng-init="loadProfile()"
+<div ng-controller="profile_management_controller" ng-init="profile.data=$localStorage.params;printView(3000)"
     style="margin:35px">
     <div id="printableArea">
         <div layout>
@@ -116,16 +116,6 @@
                 <input ng-model="profile.data.gov_id.valid_until" readonly>
             </md-input-container>
         </div>
-    </div>
-    <div id="button_panel">
-        <md-button type="submit" ng-click="print()" ng-hide="!currentUserShouldSee()" class="md-raised md-block md-primary">
-            Print
-        </md-button>
-        <md-button type="submit" ng-click="loadPage('/profile_management/view')"
-            class="md-raised md-block md-primary">
-            Back to View
-        </md-button>
-
     </div>
     
 </div>

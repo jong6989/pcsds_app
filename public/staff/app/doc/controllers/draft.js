@@ -27,7 +27,7 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $mdToast,$m
 
     $scope.updateDocument = async (id, data) => {
         if(id !== undefined) {
-            doc.db.collection(documents).doc(id).update(data).then(() => {
+            doc.db.collection(documents).doc(id).update(data).then((result) => {
                 // func.refreshDocItem(id, (a) => {
                 //     $scope.currentItem = a;
                 // });
@@ -38,6 +38,11 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $mdToast,$m
                     dot.copy(key, key, data, $scope.currentItem);
                 });
                 $scope.$apply();
+            },
+            error => {
+            }).
+            catch(reason => {
+                console.log(reason);
             });
             // setTimeout(()=>{func.refreshDocItem(id, (a) => {
             //     $scope.currentItem = a;
