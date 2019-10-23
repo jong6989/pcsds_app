@@ -245,6 +245,9 @@ myAppModule.
                     });
             }
 
+            $scope.goToPreviousPage = () => {
+                history.back();
+            }
             var removeFromSearchedProfiles = (profile) => {
                 var index = $scope.profilesFromSearch.findIndex(p => p.id == profile.id);
                 $scope.profilesFromSearch.splice(index, 1);
