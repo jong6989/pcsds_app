@@ -34,7 +34,7 @@
 
                             </md-progress-circular>
                         </div>
-                        <md-list-item ng-repeat="profile in profiles">
+                        <md-list-item ng-repeat="profile in profilesFromSearch">
                             <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
                             {{profile.full_name}}
                             <md-button class="md-fab md-mini" aria-label="Add to group"
@@ -96,8 +96,8 @@
 
                     </div>
                     <md-list>
-                        <div ng-if="profileLink.profiles.length > 0">Profiles</div>
-                        <md-list-item ng-repeat="profile in profileLink.profiles">
+                        <div ng-if="profiles.length > 0">Profiles</div>
+                        <md-list-item ng-repeat="profile in profiles">
                             <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
                             {{profile.full_name}}
                             <md-button class="md-fab md-mini" aria-label="Remove from group"

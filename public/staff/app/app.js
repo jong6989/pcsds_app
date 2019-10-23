@@ -253,6 +253,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   $scope.printView = (timer)=>{
     $timeout(()=>{
       window.print();
+      window.close();
     },(timer)?timer:2000);
   };
 

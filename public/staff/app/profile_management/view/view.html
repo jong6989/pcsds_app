@@ -215,7 +215,7 @@
             class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
             Activate Profile
         </md-button>
-        <md-button type="submit" ng-click="loadPage('/profile_management/print')" class="md-raised md-block md-primary"
+        <md-button type="submit" ng-click="open_print_view('/staff/app/profile_management/print/view.html', profile.data)" class="md-raised md-block md-primary"
             ng-hide="!currentUserShouldSee()">
             Print
         </md-button>
