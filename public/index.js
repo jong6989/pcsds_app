@@ -5,7 +5,7 @@ var api_address = "https://brain.pcsd.gov.ph/api/";
 var cloud_function_api = "https://us-central1-pcsd-app.cloudfunctions.net/"; 
 //angularjs main
 var script_angular = `
-    <script src="js/"></script>
+    <script src="js/angular.min.js"></script>
     <script src="js/angular-route.js"></script>
     <script src="js/angular-animate.min.js"></script>
     <script src="js/angular-aria.min.js"></script>

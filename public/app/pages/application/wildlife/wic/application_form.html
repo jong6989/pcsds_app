@@ -12,7 +12,7 @@
                 Date: {{ date_now() | date : 'MMMM d, yyyy'}}
             </div>
         </div>
-        <="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
 
         <md-divider></md-divider>
 
@@ -244,7 +244,7 @@
                             <div layout="column" style="margin-left: 100px">
                                     <md-input-container>
                                         <label>Port of Loading</label>
-                                        <input ng-model="new_application.port_postal">
+                                        <input ng-model="new_application.port_postal"required>
                                     </md-input-container>
 
                                     <!-- <md-input-container>
@@ -287,7 +287,7 @@
 
                       <md-input-container class="md-block" flex-gt-sm>
                           <label>Fax No</label>
-                          <input ng-model="new_application.exporter_fax">
+                          <input ng-model="new_application.exporter_fax"required>
                       </md-input-container>
                   </div>
 
@@ -318,7 +318,7 @@
 
                     <md-input-container class="md-block" flex-gt-sm>
                        <label>Fax No: </label>
-                       <input ng-model="new_application.fax_no" >
+                       <input ng-model="new_application.fax_no" required>
                     </md-input-container>
 
                 </div>
