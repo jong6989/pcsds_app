@@ -185,9 +185,9 @@ $scope.showSwal=()=>{
 
         (async () => {
 
-            const ipfirebase = '' 
+            const apifirebase = '' 
             
-            const inputValue = fetch(ipfirebase)
+            const inputValue = fetch(apifirebase)
               .then(response => text())
               .then(data => data)
             
@@ -196,9 +196,12 @@ $scope.showSwal=()=>{
               input: 'text',
               inputValue: inputValue,
               showCancelButton: true,
+              confirmButtonText: 'Search',
+              animation: false,
+              showLoaderOnConfirm: true,
               inputValidator: (value) => {
                 if (!value) {
-                  return 'You need to write something!'
+                  return 'You need Input Application Number!'
                 }
               }
             })
