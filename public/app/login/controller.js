@@ -167,6 +167,52 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $utils, $
           });
     };
 
+$scope.showSwal=()=>{
+
+        // var inputValue = '';
+
+        // Swal.fire({
+        //     title: 'Search Application Number',
+        //     input: 'text',
+        //     footer: 'Try again',
+        //     inputValue: inputValue
+           
+        // })
+
+        // if(inputValue){
+        //     swal.fire(+ text)
+        // }
+
+        (async () => {
+
+            const apifirebase = '' 
+            
+            const inputValue = fetch(apifirebase)
+              .then(response => text())
+              .then(data => data)
+            
+            const { value: text } = await Swal.fire({
+              title: 'Application Tracker',
+              input: 'text',
+              inputValue: inputValue,
+              showCancelButton: true,
+              confirmButtonText: 'Search',
+              animation: false,
+              showLoaderOnConfirm: true,
+              inputValidator: (value) => {
+                if (!value) {
+                  return 'You need Input Application Number!'
+                }
+              }
+            })
+            if (text) {
+              Swal.fire(` ${text}`)
+            }
+            })()
+    };
+    
+
+
     $scope.submit_phone_verification_code = (code)=>{
         $scope.viaMobile = false;
         $scope.is_loading = true;
