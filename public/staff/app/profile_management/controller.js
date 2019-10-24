@@ -91,9 +91,20 @@ myAppModule.
                     $scope.is_page_loading = true;
                     profileID = id || localData.get('profileID');
                     $scope.profile.data = await $profileService.getProfile(profileID, localData.get('BRAIN_STAFF_ID'));
+                    $profileService.getProfileLinks(profileID).
+                    then(profileLinks => {
+                        $scope.profileLinks = profileLinks;
+                        $scope.$apply();
+                    })
+
                     $scope.is_page_loading = false;
                     $scope.$apply();
                     $scope.onProfileLoad();
+                }
+
+                $scope.loadProfileLink = (profileLinkID) => {
+                    localData.set('profileLinkID', profileLinkID);
+                    $location.path('/profile_management/links/view');
                 }
 
                 $scope.init = () => {
@@ -409,26 +420,22 @@ myAppModule.
 
         this.getProfileLinks = (profileID) => {
             var profileLinksCollection = db.collection('profile_links');
-
+            var profileLinks = [];
             return new Promise((resolve, reject) => {
                 profileLinksCollection.
-                    onSnapshot(snapshot => {
-
-                        var profileLinks = snapshot.docs.
-                            filter(document => {
-                                var profileLink = document.data();
-                                if(profileLink.disabled || profileLink.profiles == undefined) return false;
-                                
-                                for(var i =0; i < profileLink.profiles.length; i++){
-                                    if(profileLink.profiles[i].id == profileID)
-                                        return true;
-                                }
-
-                                return false;
-                            });
-
+                    where('profiles', 'array-contains', profileID).get()
+                    .then(snapshot => {
+                        snapshot.docs.forEach(documentSnapshot => {
+                            var profileLink = documentSnapshot.data();
+                            profileLink.id = documentSnapshot.id;
+                            if (profileLink.disabled)
+                                return;
+                            profileLinks.push(profileLink);
+                        })
                         resolve(profileLinks);
                     });
+
+
             })
         }
     }).
@@ -489,6 +496,8 @@ myAppModule.
         this.uploadProfilePicture = $profileServiceDefault.uploadProfilePicture;
 
         this.updateProfile = $profileServiceDefault.updateProfile;
+
+        this.getProfileLinks = $profileServiceDefault.getProfileLinks;
     }).
     factory('$profileService', function($profileServiceDefault, $profileServiceForAdmin){
         var currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));

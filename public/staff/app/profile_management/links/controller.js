@@ -14,6 +14,12 @@ myAppModule.
                 keywords: []
             };
             
+            $scope.viewProfile = (profileID) => {
+                localData.set('profileID', profileID);
+                $location.path('/profile_management/view');
+                $scope.$apply();
+            }
+
             $scope.profileLinkViewModel = []
 
             $scope.viewProfileLink = (profileLink, profileLinkIndex) => {
@@ -245,6 +251,9 @@ myAppModule.
                     });
             }
 
+            $scope.goToPreviousPage = () => {
+                history.back();
+            }
             var removeFromSearchedProfiles = (profile) => {
                 var index = $scope.profilesFromSearch.findIndex(p => p.id == profile.id);
                 $scope.profilesFromSearch.splice(index, 1);
