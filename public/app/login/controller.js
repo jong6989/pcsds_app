@@ -205,13 +205,12 @@ $scope.showSwal=()=>{
                 }
               }
             })
-            
             if (text) {
               Swal.fire(` ${text}`)
             }
-            
             })()
     };
+    
 
 
     $scope.submit_phone_verification_code = (code)=>{
