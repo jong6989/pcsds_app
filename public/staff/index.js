@@ -45,7 +45,10 @@ var scripts_js_plugins = {
                 <script src="/js/export/Blob.js"></script>
                 <script src="/js/export/FileSaver.js"></script>`,
     html2canvas: `<script src="/js/html2canvas/html2canvas.min.js"></script>`,
-    dot_object: `<script src="/plugins/dot-object.min.js"></script>`
+    dot_object: `<script src="/plugins/dot-object.min.js"></script>`,
+    image_gallery: '<script src="/plugins/ng-image-gallery/dist/ng-image-gallery.min.js"></script>' +  
+        '<script src="/plugins/hammer.min.js"></script>' +
+        '<link href="/plugins/ng-image-gallery/dist/ng-image-gallery.min.css" rel="stylesheet"/>'
 }
 
 //scripts for login user
@@ -96,6 +99,11 @@ async function authenticateStaff(){
                     script_angular  + 
                     scripts_controllers.main + 
                     controllers +
+                    script_ng_plugins.ngTable +
+                    script_ng_plugins.camera + 
+                    script_ng_plugins.fileUpload +
+                    scripts_js_plugins.dot_object +
+                    scripts_js_plugins.image_gallery;
                     scripts_js_plugins.dot_object;
                 document.write(dashboardPage);
             } catch (error) {

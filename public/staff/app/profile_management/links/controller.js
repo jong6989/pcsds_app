@@ -1,20 +1,37 @@
-
+myAppModule.requires.push('thatisuday.ng-image-gallery');
 myAppModule.
     controller('profile_links_controller', [
         '$scope',
         '$profileService',
         'profileLinkService',
         '$location',
-        function ($scope, $profileService, $profileLinksService, $location) {
+        'Upload',
+        function ($scope, $profileService, $profileLinksService, $location, Upload) {
             $scope.profileLinks = [];
+            $scope.profiles = [];
             $scope.profileLink = {
                 profiles: [],
                 keywords: []
             };
+            
+            $scope.viewProfile = (profileID) => {
+                localData.set('profileID', profileID);
+                $location.path('/profile_management/view');
+                $scope.$apply();
+            }
+
             $scope.profileLinkViewModel = []
 
-            $scope.viewProfileLink = (profileLink, profileLinkIndex) =>{
+            $scope.viewProfileLink = (profileLink, profileLinkIndex) => {
                 $scope.profileLinkViewModel[profileLinkIndex] = profileLink;
+                $scope.profileLinkViewModel[profileLinkIndex].profilesView = [];
+                profileLink.profiles.forEach(profileID => {
+                    $profileService.getProfile(profileID, localData.get('BRAIN_STAFF_ID')).
+                    then(profile => {
+                        $scope.profileLinkViewModel[profileLinkIndex].profilesView.push(profile);
+                        $scope.$apply();
+                    })
+                })
             }
 
             $scope.dataIsLoading = false;
@@ -22,6 +39,9 @@ myAppModule.
             $scope.loadProfileLinks = async () => {
                 $scope.dataIsLoading = true;
                 $scope.profileLinks = await $profileLinksService.getProfileLinks(localData.get('BRAIN_STAFF_ID'));
+                // $scope.profileLinks.forEach(profileLink => {
+                //     profileLink.profiles.forEach(profile)
+                // })
                 $scope.dataIsLoading = false;
                 $scope.$apply();
             }
@@ -29,6 +49,18 @@ myAppModule.
             $scope.loadProfileLink = async () => {
                 var profileLinkID = localData.get('profileLinkID');
                 $scope.profileLink = await $profileLinksService.getProfileLink(profileLinkID);
+                $scope.profileLink.profiles.forEach(profileID => {
+                    $profileService.getProfile(profileID, localData.get('BRAIN_STAFF_ID')).
+                    then(profile => {
+                        $scope.profiles.push(profile);
+                        $scope.$apply();
+                    });
+                    
+                });
+
+                if (!$scope.profileLink.images)
+                    $scope.profileLink.images = [];
+                imageID = $scope.profileLink.images.length;
                 $scope.$apply();
             }
 
@@ -55,16 +87,48 @@ myAppModule.
                 $scope.dataIsLoading = false;
                 $scope.$apply();
             }
+
             $scope.loadProfile = async (id) => {
                 $scope.profile = await $profileLinksService.getProfile(id);
             }
 
-            $scope.profiles = [];
+            $scope.profilesFromSearch = [];
+
+            var imageID = 0;
+            $scope.profileLink.images = [];
+            $scope.addToGallery = (files) => {
+                // files.forEach(file => {
+                //     
+                // });
+                Upload.
+                    base64DataUrl(files).
+                    then(urls => {
+                        urls.forEach(url => {
+                            var image = {
+                                id: imageID,
+                                url: url,
+                                deletable: true
+                            }
+
+                            $scope.profileLink.images.push(image);
+                            imageID++;
+                        })
+                    })
+            }
+
+            $scope.removeFromGallery = (imageToRemove, onDelete) => {
+                var index = $scope.profileLink.images.findIndex(image => image.id == imageToRemove.id);
+                if (index > -1) {
+                    $scope.profileLink.images.splice(index, 0);
+                    onDelete();
+                }
+            }
+
             $scope.searchProfile = async (keyword) => {
                 $scope.isSearching = true;
-                $scope.profiles = await $profileService.search(keyword);
+                $scope.profilesFromSearch = await $profileService.search(keyword);
 
-                if ($scope.profiles.length == 0) {
+                if ($scope.profilesFromSearch.length == 0) {
                     showNotFoundAlert(keyword);
                 } else {
                 }
@@ -87,18 +151,18 @@ myAppModule.
                     return;
                 }
 
-                $scope.profileLink.profiles.push(profile);
-                removeFromProfiles(profile);
+                $scope.profiles.push(profile);
+                removeFromSearchedProfiles(profile);
             }
 
             function isAlreadyAdded(profile) {
-                return $scope.profileLink.profiles.findIndex(p => p.id == profile.id) > -1;
+                return $scope.profiles.findIndex(p => p.id == profile.id) > -1;
             }
 
             $scope.removeFromProfileGroup = (profile) => {
-                var index = $scope.profileLink.profiles.findIndex(p => p.id == profile.id);
-                $scope.profileLink.profiles.splice(index, 1);
-                $scope.profiles.push(profile);
+                var index = $scope.profiles.findIndex(p => p.id == profile.id);
+                $scope.profiles.splice(index, 1);
+                $scope.profilesFromSearch.push(profile);
                 $scope.$apply();
 
             }
@@ -106,25 +170,27 @@ myAppModule.
             $scope.saveProfileLink = () => {
                 $scope.isDataLoading = true;
                 $scope.profileLink.created_by = localData.get('BRAIN_STAFF_ID');
+                $scope.profileLink.profiles = $scope.profiles.map(profile => profile.id);
                 $profileLinksService.add($scope.profileLink).
                     then(result => {
                         Swal.fire(
                             'Profile Link Saved!',
                             '',
                             'success'
-                        ).then(result => {
-                            $scope.profileLink = {};
-                            $scope.profileLink.profiles = [];
-                            $scope.isDataLoading = false;
+                        ).then(userResponse => {
+                            $scope.saveProfileLink = $scope.update;
+                            $scope.updateProfileLink(result.id)
                             $scope.$apply();
                         })
                     });
-                
+
             }
 
             $scope.update = () => {
                 $scope.isDataLoading = true;
                 $scope.profileLink.modified_by = localData.get('BRAIN_STAFF_ID');
+                $scope.profileLink.profiles = $scope.profiles.map(profile => profile.id);
+
                 $profileLinksService.update($scope.profileLink).
                     then(result => {
                         Swal.fire(
@@ -134,7 +200,6 @@ myAppModule.
                         ).then(result => {
                             $scope.isDataLoading = false;
                             $scope.$apply();
-                            $location.path('/profile_management/links');
                         })
                     });
             }
@@ -166,9 +231,32 @@ myAppModule.
 
 
             }
-            var removeFromProfiles = (profile) => {
-                var index = $scope.profiles.findIndex(p => p.id == profile.id);
-                $scope.profiles.splice(index, 1);
+
+            $scope.backToList = () => {
+                Swal.fire({
+                    title: 'Go back to list?',
+                    text: 'Are you sure you want to go back?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No',
+                    confirmButtonColor: '#3085d6',
+
+                }).
+                    then(result => {
+                        if (result.value) {
+                            $location.path('/profile_management/links');
+                            $scope.$apply();
+                        }
+                    });
+            }
+
+            $scope.goToPreviousPage = () => {
+                history.back();
+            }
+            var removeFromSearchedProfiles = (profile) => {
+                var index = $scope.profilesFromSearch.findIndex(p => p.id == profile.id);
+                $scope.profilesFromSearch.splice(index, 1);
             }
         }
     ]).
@@ -246,8 +334,8 @@ myAppModule.
         }
 
         this.add = () => {
-            return new Promise((resolve, reject) => { 
-                setTimeout(function(){
+            return new Promise((resolve, reject) => {
+                setTimeout(function () {
                     resolve(true);
                 }, 3000)
 
@@ -314,7 +402,7 @@ myAppModule.
                             profileLink.id = documentSnapshot.id;
                             if (profileLink.disabled)
                                 return;
-                            
+
                             profileLink.read_only = profileLink.created_by != current_user_id;
                             profileLinks.push(profileLink);
                         })
@@ -325,7 +413,7 @@ myAppModule.
             })
         }
     }).
-    service('profileLinkServiceForAdmin', function(profileLinkServiceDefault){
+    service('profileLinkServiceForAdmin', function (profileLinkServiceDefault) {
         var profileLinksCollection = db.collection('profile_links');
 
         this.remove = profileLinkServiceDefault.remove;
@@ -336,30 +424,30 @@ myAppModule.
                 profileLink.read_only = false;
             });
 
-            return new Promise((resolve, reject) => { resolve(profileLinks)})
+            return new Promise((resolve, reject) => { resolve(profileLinks) })
         }
 
         this.add = profileLinkServiceDefault.add;
 
         this.update = profileLinkServiceDefault.update;
 
-        this.getProfileLink = async(profileLinkID, current_user_id) => {
-            var profileLink = await profileLinkServiceDefault.getProfileLink(profileLinkID,  current_user_id);
+        this.getProfileLink = async (profileLinkID, current_user_id) => {
+            var profileLink = await profileLinkServiceDefault.getProfileLink(profileLinkID, current_user_id);
             profileLink.read_only = false;
 
-            return new Promise((resolve, reject) => { resolve(profileLink)});
+            return new Promise((resolve, reject) => { resolve(profileLink) });
         }
 
-        this.searchProfileLinks = async(keyword, current_user_id) => {
+        this.searchProfileLinks = async (keyword, current_user_id) => {
             var profileLinks = await profileLinkServiceDefault.searchProfileLinks(keyword, current_user_id);
             profileLinks.forEach(profileLink => {
                 profileLink.read_only = false;
             })
 
-            return new Promise((resolve, reject) => {  resolve(profileLinks) });
+            return new Promise((resolve, reject) => { resolve(profileLinks) });
         }
     }).
-    factory('profileLinkService', function(profileLinkServiceDefault, profileLinkServiceForAdmin){
+    factory('profileLinkService', function (profileLinkServiceDefault, profileLinkServiceForAdmin) {
         var currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
         var profileService = currentUser.designation == 'admin' ? profileLinkServiceForAdmin : profileLinkServiceDefault;
         return profileService;

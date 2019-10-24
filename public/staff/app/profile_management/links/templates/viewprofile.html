@@ -8,10 +8,19 @@
                 <tr><td>Keywords:</td><td>
                     <md-chips ng-model="profileLinkViewModel[$index].keywords" readonly=true></md-chip>
                 </td></tr>
+                <tr>
+                    <td>Gallery</td>
+                    <td>
+                        <ng-image-gallery 
+                            images="profileLinkViewModel[$index].images" 
+                            thumbnails=true
+                        ></ng-image-gallery>
+                    </td>
+                </tr>
             </table>
             <md-list>
                     <div>Profiles</div>
-                    <md-list-item ng-repeat="profile in profileLinkViewModel[$index].profiles">
+                    <md-list-item ng-repeat="profile in profileLinkViewModel[$index].profilesView">
                             <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
                         {{profile.full_name}}
                     </md-list-item>

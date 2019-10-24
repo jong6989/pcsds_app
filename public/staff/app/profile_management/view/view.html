@@ -88,10 +88,8 @@
 
             <md-card>
                 <md-card-content>
-                    <i class="fa fa-edit pointer col-blue"
-                        ng-click="initUpdatePropertyCallbacks['personal_information']();
-                        showPrerenderedDialog($event,'personal_modal');"
-                        ng-hide="!currentUserShouldSee()">
+                    <i class="fa fa-edit pointer col-blue" ng-click="initUpdatePropertyCallbacks['personal_information']();
+                        showPrerenderedDialog($event,'personal_modal');" ng-hide="!currentUserShouldSee()">
                         <md-tooltip md-direction="top">
                             Edit Personal Info
                         </md-tooltip>
@@ -111,7 +109,8 @@
                         <div>
                             <div ng-repeat="personalInformation in personalInformations">
                                 <div ng-repeat="(key, value) in personalInformation" ng-show="profile.data[value]">
-                                    <div ng-if="value =='spouse_name' && profile.data.civil_status.toLowerCase() == married'">
+                                    <div
+                                        ng-if="value =='spouse_name' && profile.data.civil_status.toLowerCase() == 'married'">
                                         <small>{{key}} </small>
                                     </div>
                                     <div ng-if="value != 'spouse_name'">
@@ -205,30 +204,49 @@
                 </div>
             </md-card-content>
         </md-card>
+
+        <md-card>
+            <md-card-content>
+                <strong class="col-grey">Links</strong> <br>
+                <md-list>
+                    <md-list-item ng-repeat="profileLink in profileLinks">
+                        <a ng-click="loadProfileLink(profileLink.id)">
+                            <div>{{profileLink.group_name}}</div>
+                            <div><small>{{profileLink.description}}</small></div>
+                        </a>
+                        <hr>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
     </div>
-    
-        <md-button ng-if="profile.data.status=='active'" type="submit" ng-click="deactivate_profile(profile.data.id)"
-            class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
-            Deactivate Profile
-        </md-button>
-        <md-button ng-if="profile.data.status=='deactivated'" type="submit" ng-click="activate_profile(profile.data.id)"
-            class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
-            Activate Profile
-        </md-button>
-        <md-button type="submit" ng-click="loadPage('/profile_management/print')" class="md-raised md-block md-primary"
-            ng-hide="!currentUserShouldSee()">
-            Print
-        </md-button>
-        <md-button type="submit" ng-click="loadPage('/profile_management/list')" class="md-raised md-block md-primary">
-            Back to List
-        </md-button>
+
+    <md-button ng-if="profile.data.status=='active'" type="submit" ng-click="deactivate_profile(profile.data.id)"
+        class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
+        Deactivate Profile
+    </md-button>
+    <md-button ng-if="profile.data.status=='deactivated'" type="submit" ng-click="activate_profile(profile.data.id)"
+        class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
+        Activate Profile
+    </md-button>
+    <md-button type="submit" ng-click="open_print_view('/staff/app/profile_management/print/view.html', profile.data)"
+        class="md-raised md-block md-primary" ng-hide="!currentUserShouldSee()">
+        Print
+    </md-button>
+    <md-button type="submit" ng-click="loadPage('/profile_management/list')" class="md-raised md-block md-primary">
+        Back to List
+    </md-button>
 
     <!-- Edit Modals -->
-    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/fullname.html'"></div>
-    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/address.html'"></div>
-    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/contact.html'"></div>
+    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/fullname.html'">
+    </div>
+    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/address.html'">
+    </div>
+    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/contact.html'">
+    </div>
     <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/gID.html'"></div>
-    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/personal.html'"></div>
+    <div style="visibility: hidden" ng-include="'/staff/app/profile_management/templates/edit_profile/personal.html'">
+    </div>
     <!-- <div style="visibility: hidden" ng-include="'app/profile_management/edit_profile/gid2.html'"></div> -->
 
 </div>

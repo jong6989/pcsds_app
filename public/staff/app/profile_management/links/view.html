@@ -15,14 +15,28 @@
         border-radius: 1px;
     }
 </style>
-<div ng-controller="profile_links_controller"  ng-init="set_page_title('Profile Management - Link')">
+
+<div ng-controller="profile_links_controller" ng-init="set_page_title('Profile Management - Link')">
+    <div ng-show="false" ng-repeat="svg in [
+        'close-inline.svg',
+        'close.svg',
+        'delete-inline.svg',
+        'edit-inline.svg',
+        'edit.svg',
+        'external-link-inline.svg',
+        'external-link.svg',
+        'next-inline.svg',
+        'next.svg',
+        'prev-inline.svg', 
+        'prev.svg'
+        ]" ng-include="'/plugins/ng-image-gallery/res/icons/'+svg"></div>
     <div flex="100" style="height:250px" layout-align="center center" ng-show="dataIsLoading" layout>
         <md-progress-circular md-mode="indeterminate" md-diameter="70"></md-progress-circular>
     </div>
     <div ng-show="!dataIsLoading">
         <div ng-init="loadProfileLinks()">
             <div class='searchDiv'>
-            <md-button class="md-raised md-block md-primary" ng-click="addProfileLink()">Add</md-button>
+                <md-button class="md-raised md-block md-primary" ng-click="addProfileLink()">Add</md-button>
                 <input id='searchBox' ng-init='searchText=""' ng-model='searchText' placeholder="Type keywords here">
                 <button type='button' id='searchButton' ng-click="searchProfileLinks(searchText)">
                     <i class="fa fa-search col-green"></i>
@@ -31,19 +45,15 @@
             <md-card ng-repeat="profileLink in profileLinks">
                 <md-toolbar>
                     <div class="md-toolbar-tools">
-                        <md-button ng-init="contentShouldExpand[$index]=false; viewProfileLink(profileLink, $index);" 
-                        ng-click="contentShouldExpand[$index]=!contentShouldExpand[$index];" 
-                        class="md-icon-button" aria-label="View">
-                            <md-tooltip>View</md-tooltip>
-                            <i ng-if="!contentShouldExpand[$index]" 
-                                class="fa fa-angle-down"></i>
-                            <i ng-if="contentShouldExpand[$index]"
-                                class="fa fa-angle-up"></i>
-                        </md-button>
-                        <md-button 
-                            ng-hide="profileLink.read_only"
-                            ng-click="updateProfileLink(profileLink.id)" class="md-icon-button"
+                        <md-button ng-init="contentShouldExpand[$index]=false; viewProfileLink(profileLink, $index);"
+                            ng-click="contentShouldExpand[$index]=!contentShouldExpand[$index];" class="md-icon-button"
                             aria-label="View">
+                            <md-tooltip>View</md-tooltip>
+                            <i ng-if="!contentShouldExpand[$index]" class="fa fa-angle-down"></i>
+                            <i ng-if="contentShouldExpand[$index]" class="fa fa-angle-up"></i>
+                        </md-button>
+                        <md-button ng-hide="profileLink.read_only" ng-click="updateProfileLink(profileLink.id)"
+                            class="md-icon-button" aria-label="View">
                             <md-tooltip>Edit</md-tooltip>
                             <i class="fa fa-edit"></i>
                         </md-button>

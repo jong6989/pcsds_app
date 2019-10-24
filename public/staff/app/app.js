@@ -2,7 +2,7 @@
 var myAppModule = {};
 myAppModule = angular.module('brain_app', [
   'ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute',
-  'ngFileUpload','ngTable']);
+  'ngFileUpload','ngTable', 'camera', 'ngImgCrop']);
 
 myAppModule
 .config(function($routeProvider, $locationProvider) {
@@ -253,6 +253,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   $scope.printView = (timer)=>{
     $timeout(()=>{
       window.print();
+      window.close();
     },(timer)?timer:2000);
   };
 

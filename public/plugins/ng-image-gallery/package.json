@@ -1,0 +1,64 @@
+{
+  "_from": "ng-image-gallery",
+  "_id": "ng-image-gallery@2.1.4",
+  "_inBundle": false,
+  "_integrity": "sha512-ohgMYHwvNE65fi2HUZ3RIZVtzsu18hBElnvwzDmgMAcTsEr2VbMp+qfadhTBxfaYntoJXeY3owJnqGkNzViE4Q==",
+  "_location": "/ng-image-gallery",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "ng-image-gallery",
+    "name": "ng-image-gallery",
+    "escapedName": "ng-image-gallery",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/ng-image-gallery/-/ng-image-gallery-2.1.4.tgz",
+  "_shasum": "4e18ded3eb1a3f95915f48d9955b15ad54db2d14",
+  "_spec": "ng-image-gallery",
+  "_where": "/home/saintpaper/Desktop/pcsds_app",
+  "author": {
+    "name": "Uday Hiwarale",
+    "email": "uhiwarale@gmail.com",
+    "url": "https://github.com/thatisuday"
+  },
+  "bugs": {
+    "url": "https://github.com/thatisuday/ng-image-gallery/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Probably the best angular inline and modal image gallery combined...",
+  "devDependencies": {
+    "express": "^4.15.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssmin": "^0.1.7",
+    "gulp-gzip": "^1.4.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.4"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "homepage": "https://github.com/thatisuday/ng-image-gallery#readme",
+  "license": "ISC",
+  "main": "dist/ng-image-gallery.js",
+  "name": "ng-image-gallery",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thatisuday/ng-image-gallery.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "2.1.4"
+}

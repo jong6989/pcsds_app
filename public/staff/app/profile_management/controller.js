@@ -1,8 +1,4 @@
 'use strict';
-// myAppModule.requires.push('ngTable');
-// myAppModule.requires.push('camera');
-// myAppModule.requires.push('ngFileUpload');
-// myAppModule.requires.push('ngImgCrop');
 myAppModule.
     controller('profile_management_controller',
         [
@@ -43,18 +39,6 @@ myAppModule.
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'OK',
                         });
-                }
-                $scope.print = () => {
-                    var toolbar_main = document.getElementById('toolbar_main');
-                    var left_panel = document.getElementById('left_panel');
-                    var button_panel = document.getElementById('button_panel');
-                    button_panel.style.display = 'none';
-                    left_panel.style.display = 'none';
-                    toolbar_main.style.display = 'none';
-                    window.print();
-                    left_panel.style.display = '';
-                    toolbar_main.style.display = '';
-                    button_panel.style.display = '';
                 }
 
                 $scope.refreshList = () => {
@@ -107,9 +91,20 @@ myAppModule.
                     $scope.is_page_loading = true;
                     profileID = id || localData.get('profileID');
                     $scope.profile.data = await $profileService.getProfile(profileID, localData.get('BRAIN_STAFF_ID'));
+                    $profileService.getProfileLinks(profileID).
+                    then(profileLinks => {
+                        $scope.profileLinks = profileLinks;
+                        $scope.$apply();
+                    })
+
                     $scope.is_page_loading = false;
                     $scope.$apply();
                     $scope.onProfileLoad();
+                }
+
+                $scope.loadProfileLink = (profileLinkID) => {
+                    localData.set('profileLinkID', profileLinkID);
+                    $location.path('/profile_management/links/view');
                 }
 
                 $scope.init = () => {
@@ -422,6 +417,27 @@ myAppModule.
             // .then(success => {console.log('success')}, error => {console.log(error);});
             return new Promise((resolve, reject) => { resolve(true); })
         }
+
+        this.getProfileLinks = (profileID) => {
+            var profileLinksCollection = db.collection('profile_links');
+            var profileLinks = [];
+            return new Promise((resolve, reject) => {
+                profileLinksCollection.
+                    where('profiles', 'array-contains', profileID).get()
+                    .then(snapshot => {
+                        snapshot.docs.forEach(documentSnapshot => {
+                            var profileLink = documentSnapshot.data();
+                            profileLink.id = documentSnapshot.id;
+                            if (profileLink.disabled)
+                                return;
+                            profileLinks.push(profileLink);
+                        })
+                        resolve(profileLinks);
+                    });
+
+
+            })
+        }
     }).
     service('$profileServiceForAdmin', function($profileServiceDefault){
         var collection = db.collection('profile');
@@ -480,6 +496,8 @@ myAppModule.
         this.uploadProfilePicture = $profileServiceDefault.uploadProfilePicture;
 
         this.updateProfile = $profileServiceDefault.updateProfile;
+
+        this.getProfileLinks = $profileServiceDefault.getProfileLinks;
     }).
     factory('$profileService', function($profileServiceDefault, $profileServiceForAdmin){
         var currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
