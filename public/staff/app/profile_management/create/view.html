@@ -1,4 +1,6 @@
-<div ng-controller="profile_management_controller" style="margin:10px;" ng-init="set_page_title('Profile Management - Create Profile')">
+<div ng-controller="profile_management_controller" 
+    style="margin:10px;" 
+    ng-init="set_page_title('Profile Management - Create Profile')">
     <!-- <md-content layout-sm="column" layout-gt-sm ng-init=""> -->
 
     <md-card>
@@ -12,8 +14,11 @@
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>First name</label>
-                        <input ng-model="new_account.data.first_name"
-                            ng-blur="new_account.data.keywords[0]=new_account.data.first_name.toLowerCase()" required>
+                        <input ng-model="new_account.data.first_name" 
+                            ng-init="new_account.data.first_name = 'John'; 
+                                new_account.data.keywords[0]='john'"
+                            ng-blur="setDefaultValueIfEmpty('first_name', 'John');
+                                new_account.data.keywords[0]=new_account.data.first_name.toLowerCase()" >
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm>
@@ -24,8 +29,9 @@
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Last Name</label>
-                        <input ng-model="new_account.data.last_name"
-                            ng-blur="new_account.data.keywords[2]=new_account.data.last_name.toLowerCase()" required>
+                        <input ng-model="new_account.data.last_name" n
+                            ng-init="new_account.data.last_name = 'Doe'; new_account.data.keywords[2]='doe'"
+                            ng-blur="setDefaultValueIfEmpty('last_name', 'Doe');new_account.data.keywords[2]=new_account.data.last_name.toLowerCase()" >
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm>
@@ -42,18 +48,18 @@
                         Birth Day <cite class="font-10">(must be 18+)</cite>
                         <md-datepicker ng-init="bday=new_account.data.birth_day" ng-model="bday"
                             ng-change="new_account.data.birth_day = to_date(bday)" md-placeholder="Birth Date"
-                            md-min-date="minDate" md-max-date="maxDate" md-open-on-focus required></md-datepicker>
+                            md-min-date="minDate" md-max-date="maxDate" md-open-on-focus ></md-datepicker>
                     </div>
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Current Address</label>
                         <input ng-model="new_account.data.current_address"
-                            ng-blur="new_account.data.keywords[3]=new_account.data.current_address.toLowerCase()" required>
+                            ng-blur="new_account.data.keywords[3]=new_account.data.current_address.toLowerCase()" >
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Current Phone Number</label>
-                        <input ng-model="new_account.data.current_phone" type="phone" required>
+                        <input ng-model="new_account.data.current_phone" type="phone" >
                     </md-input-container>
                 </div>
 
@@ -61,17 +67,17 @@
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Tax Identification Number : </label>
-                        <input ng-model="new_account.data.tin_no" required>
+                        <input ng-model="new_account.data.tin_no" >
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Birth Place Address</label>
-                        <input ng-model="new_account.data.place_of_birth" required>
+                        <input ng-model="new_account.data.place_of_birth" >
                     </md-input-container>
 
                     <md-input-container>
                         <label>Nationality</label>
-                        <md-select ng-model="new_account.data.nationality" required>
+                        <md-select ng-model="new_account.data.nationality" >
                             <md-option><em>None</em></md-option>
                             <md-option ng-repeat="x in nationalities" ng-value="x.nationality">
                                 {{x.en_short_name}} - {{x.nationality}}
@@ -84,7 +90,7 @@
                     <strong class="col-grey m-r-10">
                         Gender:
                     </strong>
-                    <md-radio-group ng-model="new_account.data.gender" required>
+                    <md-radio-group ng-model="new_account.data.gender" >
                         <md-radio-button value="male" class="md-primary">Male</md-radio-button>
                         <md-radio-button value="female"> Female</md-radio-button>
                     </md-radio-group>
@@ -93,7 +99,7 @@
                         Civil Status :
                     </strong>
 
-                    <md-radio-group ng-model="new_account.data.civil_status" required>
+                    <md-radio-group ng-model="new_account.data.civil_status" >
                         <md-radio-button value="single" class="md-primary"> Single </md-radio-button>
                         <md-radio-button value="married" class="md-primary"> Married </md-radio-button>
                         <md-radio-button value="widowed" class="md-primary"> Widowed </md-radio-button>
@@ -102,19 +108,19 @@
 
                     <md-input-container ng-if="new_account.data.civil_status == 'married'" class="md-block" flex-gt-sm>
                         <label>Spouse Name :</label>
-                        <input ng-model="new_account.data.spouse_name" required>
+                        <input ng-model="new_account.data.spouse_name" >
                     </md-input-container>
                 </div>
 
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Father's Full Name : </label>
-                        <input ng-model="new_account.data.father" required>
+                        <input ng-model="new_account.data.father" >
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Mother's Maiden Name :</label>
-                        <input ng-model="new_account.data.mother" required>
+                        <input ng-model="new_account.data.mother" >
                     </md-input-container>
                 </div>
 
@@ -123,7 +129,9 @@
 
                     <md-autocomplete class="md-block" flex-gt-sm="30" md-selected-item="new_account.data.gov_id.name"
                         md-search-text="nadgin" md-search-text-change="new_account.data.gov_id.name = nadgin"
-                        md-items="x in gov_ids" md-item-text="x" md-min-length="0" placeholder="ID NAME:">
+                        md-items="x in gov_ids" md-item-text="x" md-min-length="0" placeholder="ID NAME:"
+                        ng-init="profile.data.gov_id.name=''"
+                        ng-blur="setDefaultValueIfEmpty('gov_id.name', '');">
                         <md-item-template>
                             {{x}}
                         </md-item-template>
@@ -131,13 +139,13 @@
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>ID Number</label>
-                        <input ng-model="new_account.data.gov_id.number" required>
+                        <input ng-model="new_account.data.gov_id.number" >
                     </md-input-container>
 
                     <div flex-gt-sm>
                         <md-datepicker ng-init="dateIssued=new_account.data.gov_id.date_issued" ng-model="dateIssued"
                             ng-change="new_account.data.gov_id.date_issued = to_date(dateIssued)"
-                            md-placeholder="Date Issued" md-open-on-focus required></md-datepicker>
+                            md-placeholder="Date Issued" md-open-on-focus ></md-datepicker>
                     </div>
 
                 </div>
@@ -146,13 +154,13 @@
 
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Place Issued</label>
-                        <input ng-model="new_account.data.gov_id.place_issued" required>
+                        <input ng-model="new_account.data.gov_id.place_issued" >
                     </md-input-container>
 
                     <div flex-gt-sm>
                         <md-datepicker ng-init="dateValid=new_account.data.gov_id.valid_until" ng-model="dateValid"
                             ng-change="new_account.data.gov_id.valid_until = to_date(dateValid)"
-                            md-placeholder="Valid Until" md-open-on-focus required></md-datepicker>
+                            md-placeholder="Valid Until" md-open-on-focus ></md-datepicker>
                     </div>
                 </div>
 

@@ -231,6 +231,17 @@ myAppModule.
                     localData.set('profileID', profileID);
                     $scope.loadPage('/profile_management/view');
                 }
+
+                $scope.setDefaultValueIfEmpty = (propertyName, defaultValue) => {
+                    var defaultObject = {};
+                    defaultObject[propertyName] = defaultValue;
+                    var dotToObject = new DotObject()
+
+                    if(!$scope.profile.data[propertyName]){
+                        dotToObject.copy(propertyName, propertyName, defaultObject, $scope.profile.data)
+                    }
+                }
+
                 $scope.upload_profile_picture = async function (dataUrl, imageFileName) {
                     $scope.is_using_camera = false;
                     $scope.is_uploading = true;
