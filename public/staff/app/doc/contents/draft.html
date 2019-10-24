@@ -41,13 +41,14 @@
 
             <hr>
             <strong>Files</strong>
-
+            <md-progress-linear md-mode="indeterminate" ng-show="uploading_file"></md-progress-linear>
             <div class="fileDropDiv" layout="column" layout-align="center center"
                 ng-change="upload_file(currentItem.id,file_drop)"
                 ngf-drop ng-model="file_drop"
                 ngf-allow-dir="true"
                 ngf-drag-over-class="'dragover'"
                 multiple="multiple"
+                ng-show="!uploading_file"
                 ngf-multiple="true">
                 
                 <div>
@@ -92,7 +93,6 @@
             
             <br>
             <!-- <div layout> -->
-                <div layout ng-init="doc_user_agencies = ['dummy agency']"></div>
                 
                 <!-- not activated -->
                 <span flex ng-if="doc_user_agencies.length == 0">Publishing not Available... Account not yet activated</span>

@@ -135,7 +135,7 @@ localData.set('STAFF_ACCOUNT',`
         "last_seen":1570521763344,
         "menu":[
             {
-                "controller":"<script src='app/account_management/controller.js'></script><script src='app/account_management/menus/controller.js'></script>",
+                "controller":"<script src='app/account_management/controller.js'></script><script src='app/account_management/menus/controller.js'></script><script src='app/account_management/document_network/controller.js'></script>",
                 "functions":["create","update","assign_module","disable"],
                 "icon":"user-md",
                 "title":"Account Management",
@@ -149,6 +149,11 @@ localData.set('STAFF_ACCOUNT',`
                         "title" : "Menu Modules",
                         "path" : "/account_management/menus",
                         "icon" : "bars"
+                    },
+                    {
+                        "title" : "DocNet Offices",
+                        "path" : "/account_management/document_network/create_office",
+                        "icon" : "users"
                     }
                 ]
             },

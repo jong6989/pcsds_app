@@ -29,7 +29,7 @@
         </div>
         <!-- View user -->
         <div flex  ng-hide=" (is_xs || is_sm) && !is_user_selected " class="p-l-10 p-r-10 m-l-10 p-t-10" md-whiteframe="2">
-            <md-content style="height : {{iframeHeight - 195}}px;">
+            <md-content style="height : {{iframeHeight - 165}}px;">
                 
                 <div ng-show="is_user_selected">
                     <md-button hide-gt-sm class="md-fab md-mini " aria-label="back" ng-click="clear_selected_user()">
@@ -71,7 +71,7 @@
 
                     <hr>
 
-                    <div layout>
+                    <div layout-gt-sm layout-sm="column">
                         <div flex>
                             <md-card>
                                 <md-card-title>
@@ -129,7 +129,70 @@
                             </md-card>
                         </div>
                     </div>
+
+                    <hr>
+                    <h3 class="md-title col-green">Document Network </h3>
+                    <hr>
                     
+                    <div layout-gt-sm layout-sm="column" ng-controller="document_network_management_controller">
+                        <div flex>
+                            <md-card>
+                                <md-card-title>
+                                    <strong> Current Offices </strong>
+                                </md-card-title>
+                                <md-card-content >
+                                    <md-button ng-if="!is_doc_activated(selected_user.id)" ng-click="activate_docnet(selected_user)" class="md-raised md-primary">Activate</md-button>
+                                    
+                                    <div ng-if="is_doc_activated(selected_user.id)" >
+                                        <ol>
+                                            <li ng-repeat="x in currentSelectedAccount.agencies">
+                                                <div ng-init="office = get_office(x)">
+                                                    <strong>
+                                                        {{office.short_name}} as
+                                                    </strong>
+                                                    <span ng-if="currentSelectedAccount[x].office_head">Office Head,</span>
+                                                    <span ng-if="currentSelectedAccount[x].division_head">Division Head,</span>
+                                                    <span ng-if="currentSelectedAccount[x].department_head">Department Head,</span>
+                                                    <span ng-if="currentSelectedAccount[x].front_office">Receiving Staff,</span>
+                                                    <span ng-if="currentSelectedAccount[x].staff">Staff,</span>
+                                                    
+                                                    <i class="fa fa-minus col-red pointer m-l-10" 
+                                                    ng-click="removeAgency(currentSelectedAccount.id,x)">
+                                                        <md-tooltip md-direction="buttom">Remove office to account</md-tooltip> 
+                                                    </i>
+                                                </div>
+                                            </li>
+                                        </ol>
+                                    </div>
+
+                                </md-card-content>
+                            </md-card>
+                        </div>
+
+                        <div flex ng-if="is_doc_activated(selected_user.id)">
+                            <md-card>
+                                <md-card-title>
+                                    <strong> Available Offices </strong>
+                                </md-card-title>
+                                <md-card-content ng-controller="document_network_management_controller" >
+                                    
+                                    <div>
+                                        <ol>
+                                            <li ng-repeat="x in network_offices" ng-if="!check_office_if_exist(currentSelectedAccount.agencies,x.id)">
+                                                {{x.name}}
+                                                <i class="fa fa-plus col-green pointer m-l-10" 
+                                                    ng-click="openAddOfficeModal(x,$event);">
+                                                    <md-tooltip md-direction="buttom">Add office to account</md-tooltip> 
+                                                </i>
+                                            </li>
+                                        </ol>
+                                        <div ng-include="'./app/doc/modals/addToAgency.html'" ></div>
+                                    </div>
+
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
 
                     
                 </div>
