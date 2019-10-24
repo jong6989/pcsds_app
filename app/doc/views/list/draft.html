@@ -16,7 +16,7 @@
     </md-subheader>
     <md-content style="height : {{iframeHeight - 190}}px;">
         <md-list-item class="md-3-line" ng-repeat="x in myDrafts | filter : search_draft" ng-click="setCurrentItem(x,'draft')">
-            <div class="md-list-item-text" layout="column">
+            <div class="md-list-item-text" layout="row">
                 <h3>{{ x.created }}</h3>
                 <h4>{{ x.source }} - {{ x.subject }}</h4>
                 <p>{{ x.published }}</p>

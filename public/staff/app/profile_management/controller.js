@@ -61,6 +61,10 @@ myAppModule.
                     })
                 }
 
+                $scope.backToPreviousPage = () =>{
+                    history.back();
+                }
+
                 $scope.currentUserShouldSee = () => {
                     return !$scope.profile.data.read_only;
                 }

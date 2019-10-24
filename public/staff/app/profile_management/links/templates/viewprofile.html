@@ -2,29 +2,45 @@
     <md-card>
         <md-card-content>
             <table>
-                <tr><td>Group Name:</td><td>{{profileLinkViewModel[$index].group_name}}</td></tr>
-                <tr><td>Description:</td><td>{{profileLinkViewModel[$index].description}}</td></tr>
-                <tr><td>Profiles Relationship:</td><td>{{profileLinkViewModel[$index].relationship}}</td></tr>
-                <tr><td>Keywords:</td><td>
-                    <md-chips ng-model="profileLinkViewModel[$index].keywords" readonly=true></md-chip>
-                </td></tr>
+                <tr>
+                    <td>Group Name:</td>
+                    <td>{{profileLinkViewModel[$index].group_name}}</td>
+                </tr>
+                <tr>
+                    <td>Description:</td>
+                    <td>{{profileLinkViewModel[$index].description}}</td>
+                </tr>
+                <tr>
+                    <td>Profiles Relationship:</td>
+                    <td>{{profileLinkViewModel[$index].relationship}}</td>
+                </tr>
+                <tr>
+                    <td>Keywords:</td>
+                    <td>
+                        <md-chips ng-model="profileLinkViewModel[$index].keywords" readonly=true>
+                            </md-chip>
+                    </td>
+                </tr>
                 <tr>
                     <td>Gallery</td>
                     <td>
-                        <ng-image-gallery 
-                            images="profileLinkViewModel[$index].images" 
-                            thumbnails=true
-                        ></ng-image-gallery>
+                        <ng-image-gallery images="profileLinkViewModel[$index].images" thumbnails=true>
+                        </ng-image-gallery>
                     </td>
                 </tr>
             </table>
-            <md-list>
-                    <div>Profiles</div>
-                    <md-list-item ng-repeat="profile in profileLinkViewModel[$index].profilesView">
-                            <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
+            <md-list style="width: 30%">
+                <div>Profiles</div>
+                <md-list-item 
+                    class="md-3-line"
+                    ng-repeat="profile in profileLinkViewModel[$index].profilesView" 
+                    ng-click="viewProfile(profile.id)">
+                    <div class="md-list-item-text" layout="row">
+                        <img ng-src="{{profile.profile_picture}}" class="md-avatar" />
                         {{profile.full_name}}
-                    </md-list-item>
-                </md-list>
+                    </div>
+                </md-list-item>
+            </md-list>
         </md-card-content>
     </md-card>
 </div>
