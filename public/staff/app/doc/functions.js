@@ -100,38 +100,40 @@ myAppModule.service('func', function($localStorage) {
     };
     //Create a directory to "My Downloads" and make a copy of the selected file
     func.upload = (files,callBack,userId) => {
-        let dateNow = new Date();
-        const divider = (os.platform() == 'win32')? '\\' : '/';
-        const saveFolder = dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider + userId + divider;
-        if(!fs.existsSync(storageFolder)){
-            fs.mkdirSync(storageFolder);
-        }
-        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider)){
-            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider);
-        }
-        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider)){
-            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider);
-        }
-        if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider)){
-            fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider);
-        }
-        if(!fs.existsSync(storageFolder + saveFolder)){
-            fs.mkdirSync(storageFolder + saveFolder);
-        }
-        files.forEach(f => {
-            setTimeout( () => {
-                let path = storageFolder + saveFolder + f.name;
-                fs.copyFile(f.path, path, (err) => {
-                    if (err) throw err;
-                    doc.db.collection(acc).doc(userId).collection(offlineFiles).add({"name":f.name,"path": saveFolder + f.name, "uploaded": false});
-                    callBack(saveFolder + f.name,f.name);
-                });
-            },500);
-        });
+        // let dateNow = new Date();
+        // const divider = (os.platform() == 'win32')? '\\' : '/';
+        // const saveFolder = dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider + userId + divider;
+        // if(!fs.existsSync(storageFolder)){
+        //     fs.mkdirSync(storageFolder);
+        // }
+        // if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider)){
+        //     fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider);
+        // }
+        // if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider)){
+        //     fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider);
+        // }
+        // if(!fs.existsSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider)){
+        //     fs.mkdirSync(storageFolder + dateNow.getFullYear()+divider+ ( dateNow.getMonth() + 1 ) + divider + dateNow.getDate() + divider);
+        // }
+        // if(!fs.existsSync(storageFolder + saveFolder)){
+        //     fs.mkdirSync(storageFolder + saveFolder);
+        // }
+        // files.forEach(f => {
+        //     setTimeout( () => {
+        //         let path = storageFolder + saveFolder + f.name;
+        //         fs.copyFile(f.path, path, (err) => {
+        //             if (err) throw err;
+        //             doc.db.collection(acc).doc(userId).collection(offlineFiles).add({"name":f.name,"path": saveFolder + f.name, "uploaded": false});
+        //             callBack(saveFolder + f.name,f.name);
+        //         });
+        //     },500);
+        // });
     }
 
-    //uploads are to PCSD website , pcsd.gov.ph , with unlimited storage
+    //
     func.uploadFile = (f,callback) => {
+
+
         // if(fs.existsSync(storageFolder + f.path)){
         //     console.log(`uploading ${f.name}:`)
         //     let form = $utils.upload((data,code)=>{

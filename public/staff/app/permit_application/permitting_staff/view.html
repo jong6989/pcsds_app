@@ -4,7 +4,7 @@
             <div ng-hide=" (is_xs || is_sm) && is_transaction_selected " flex-gt-sm="30" flex-sm ng-include="'./app/permit_application/list_view.html'"></div>
             <!-- View user -->
             <div flex  ng-hide=" (is_xs || is_sm) && !is_transaction_selected " class="p-l-10 p-r-10 m-l-10 p-t-10" md-whiteframe="2">
-                <md-content style="height : {{iframeHeight - 130}}px;">
+                <md-content style="height : {{iframeHeight - 200}}px;">
                     <div ng-show="is_transaction_selected">
 
                         <md-button hide-gt-sm class="md-fab md-mini " aria-label="back" ng-click="clear_selected_transaction()">
@@ -18,40 +18,43 @@
                             <md-divider class="m-t-20 m-b-10"></md-divider>
                             <!-- <div ng-include="'./app/templates/actions/documents.html'" ></div> -->
 
-                            <div ng-if="application.status < 2" ng-controller="doc_controller" ng-init="
-                                    doc_network_user = getLocal('doc_user'); application_documents = [];
-                                    getApplicationDocuments();
-                                    ">
-                                    
-                                    <!-- all documents added -->
-                                    <div ng-if="application_documents.length > 0">
-                                        
-                                        <strong>Added Documents</strong>
-                                        <div>
-                                            <ol>
-                                                <li class="pointer " ng-repeat="x in application_documents" ng-click="select_document_for_application($event,x);" ng-if="!x.id || x.status == 'draft' || x.status == 'published'">
-                                                    <div ng-class="{'col-brown': (x.status == 'draft'), 'col-green': (x.status == 'published')}" >
-                                                        {{x.subject}} - {{x.status}} 
-                                                    </div>
-                                                </li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                    <div ng-include="application_view_modal"></div>
-                                    <div  ng-controller="doc_ctrl_draft">
-                                            <!-- ng-if="doc_network_user != undefined"  -->
-                                       
-                                            
-
-                                        <div ng-include="application_draft_modal"></div>
-                                    </div>
-                            </div>
-                            <!-- end -->
+                            
                         </div>
                         
                     </div>
                     
                 </md-content>
+
+                <div ng-if="application.status < 2" class="m-t-10 p-l-10 p-b-10" mg-whiteframe="2" ng-controller="doc_controller" ng-init="
+                        doc_init();
+                        doc_network_user = getLocal('doc_user'); application_documents = [];
+                        getApplicationDocuments(); load_data_requirements();
+                        ">
+                        
+                        <!-- all documents added -->
+                        <div ng-if="application_documents.length > 0">
+                            
+                            <strong>Added Documents</strong>
+                            <div>
+                                <ol>
+                                    <li class="pointer " ng-repeat="x in application_documents" ng-click="select_document_for_application($event,x);" ng-if="!x.id || x.status == 'draft' || x.status == 'published'">
+                                        <div ng-class="{'col-brown': (x.status == 'draft'), 'col-green': (x.status == 'published')}" >
+                                            {{x.subject}} - {{x.status}} 
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div ng-include="application_view_modal"></div>
+                        <div  ng-controller="doc_ctrl_draft">
+                                <!-- ng-if="doc_network_user != undefined"  -->
+                            
+                                
+
+                            <div ng-include="application_draft_modal"></div>
+                        </div>
+                </div>
+                <!-- end -->
             </div>
             
         </div>

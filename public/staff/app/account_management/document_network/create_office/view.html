@@ -1,0 +1,18 @@
+<div  ng-controller="document_network_management_controller" ng-init="set_page_title('Account Management - Create Office')" class="p-t-20 p-l-20 p-r-20">
+    <h2 class="md-header"> Document Network Offices </h2>
+    <hr>
+    <md-button class="md-raised" ng-click="create_group()">Create Office</md-button>
+    <hr>
+
+    <md-card  ng-repeat="x in network_offices" >
+            <md-card-content>
+                <strong class="md-title"> {{x.short_name}} </strong>
+                <hr>
+                <h5> {{x.name}} </h5>
+                <hr> 
+                <cite>
+                    {{x.accounts}} accounts
+                </cite>
+            </md-card-content>
+    </md-card>
+</div>

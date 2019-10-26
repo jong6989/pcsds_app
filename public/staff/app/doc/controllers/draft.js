@@ -5,24 +5,61 @@ myAppModule.controller('doc_ctrl_draft', function ($scope, $timeout, $mdToast,$m
     func.$scope = $scope;
     $scope.createdDate = undefined;
     $scope.pdate = undefined;
+    $scope.uploading_file = false;
     
-    $scope.upload_file = (id,files,isRefresh)=>{
-        if(files !== undefined && id !== undefined){
-            func.upload(files, (url,fileName) => {
-                $scope.uploadFiles();
-                const fileObject = {"name": fileName, "url": api_address + '/uploads/' + url,"path": url, "opened": false};
-                if($scope.currentItem.files == undefined) {
-                    $scope.currentItem.files = [];
-                    $scope.currentItem.files.push(fileObject);
-                    $scope.updateDocument(id,{'files': $scope.currentItem.files});
-                }else {
-                    if(!isRefresh){
+    $scope.upload_file = (id,fs)=>{
+        var upload_file = (idx)=>{
+            $scope.uploading_file = true;
+            let dateStamp = Date.now();
+            let uploadRef = storageRef.child(`docs/${id}/${dateStamp}-${fs[idx].name}`);
+            uploadRef.put(fs[idx]).then(function(snapshot) {
+                snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    const fileObject = {"name": fs[idx].name, "url": downloadURL};
+
+                    if($scope.currentItem.files == undefined) {
+                        $scope.currentItem.files = [];
+                        $scope.currentItem.files.push(fileObject);
+                        $scope.updateDocument(id,{'files': $scope.currentItem.files});
+                    }else {
                         $scope.currentItem.files.push(fileObject);
                         $scope.updateDocument(id,{'files': $scope.currentItem.files});
                     }
-                }
-            }, $scope.userId);
-        }
+                    $scope.uploading_file = false;
+                    if(fs.length !== (idx + 1) ){
+                        upload_file(idx + 1);
+                    }
+                    $scope.$apply();
+                });
+            }).catch((error)=>{
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Upload Failed. ' + JSON.stringify(error),
+                    footer: 'Please try again'
+                });
+                $scope.uploading_file = false;
+                $scope.$apply();
+            });
+        };
+        if(fs.length > 0 ) upload_file(0);
+
+
+            // func.upload(files, (url,fileName) => {
+            //     $scope.uploadFiles();
+            //     const fileObject = {"name": fileName, "url": api_address + '/uploads/' + url,"path": url, "opened": false};
+            //     if($scope.currentItem.files == undefined) {
+            //         $scope.currentItem.files = [];
+            //         $scope.currentItem.files.push(fileObject);
+            //         $scope.updateDocument(id,{'files': $scope.currentItem.files});
+            //     }else {
+            //         if(!isRefresh){
+            //             $scope.currentItem.files.push(fileObject);
+            //             $scope.updateDocument(id,{'files': $scope.currentItem.files});
+            //         }
+            //     }
+            // }, $scope.userId);
+            // }
+    
     };
 
     $scope.updateDocument = async (id, data) => {

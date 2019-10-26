@@ -174,12 +174,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
                     });
                     return null;
                 });
-                // func.checkDraft((a,b) => {
-                //     $scope.myDrafts = a;
-                //     $scope.currentItem = b;
-                //     $scope.currentClicked = 'draft';
-                //     $scope.currentDocSelected = 'draft';
-                // });
             }
         } ).catch( ()=> {
             setTimeout($scope.doc_init, 3000);
@@ -371,8 +365,8 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
             func.uploadFile($scope.filesTobeUploaded[0], () => { $scope.uploadFiles(); });
         }
     };
-    $scope.uploadFiles();
-    setTimeout($scope.uploadFiles,10000);
+    // $scope.uploadFiles();
+    // setTimeout($scope.uploadFiles,10000);
 
     $scope.checkIfUploaded = (path) => {
         let r = true;
