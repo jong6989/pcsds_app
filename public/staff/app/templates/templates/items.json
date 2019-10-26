@@ -151,6 +151,15 @@
 			"edit" : 	"./app/templates/templates/gratuitous/permit/edit.html",
 			"print" : 	"./app/templates/templates/gratuitous/permit/print.html",
 			"view" : 	"./app/templates/templates/gratuitous/permit/view.html"
+		},
+		{
+			"name" : "Surveillance Report",
+			"type" : "report",
+			"permit" : true,
+			"create" : 	"./app/templates/templates/intelligence/surveillance/create.html",
+			"edit" : 	"./app/templates/templates/intelligence/surveillance/edit.html",
+			"print" : 	"./app/templates/templates/intelligence/surveillance/print.html",
+			"view" : 	"./app/templates/templates/intelligence/surveillance/view.html"
 		}
 	]
 }

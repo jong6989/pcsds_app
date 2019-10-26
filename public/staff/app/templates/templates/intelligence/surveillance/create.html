@@ -1,0 +1,78 @@
+<div ng-init="n.subject = 'SURVEILLANCE REPORT'; 
+    n.keywords = [];" class="roman">
+    <h3 class="align-center">{{n.subject}}</h3>
+    <hr>
+    <md-input-container class="md-block m-t-40">
+        <label>Subject</label>
+        <input ng-model="n.report_subject" required>
+    </md-input-container>
+    <br>
+    <div layout>
+        <md-input-container flex>
+            <label>Control No.:</label>
+            <input ng-model="n.control_number" ng-blur="n.keywords[0]=n.control_number" required>
+        </md-input-container>
+        <md-input-container flex>
+            <label>SOI Number</label>
+            <input ng-model="n.soi_number" ng-blur="n.keywords[1]=n.soi_number">
+        </md-input-container>
+    </div>
+    <md-input-container class="md-block m-t-40">
+            <label>Evaluation</label>
+            <textarea ng-model="n.evaluation"></textarea>
+        </md-input-container>
+    <div layout>
+        <md-input-container>
+            <label>Date of Report</label>
+            <md-datepicker ng-model="report_date" ng-change="n.report_date=to_date(report_date)">
+            </md-datepicker>
+        </md-input-container>
+        <md-input-container>
+            <label>Date Received</label>
+            <md-datepicker ng-model="date_received" ng-change="n.date_received=to_date(date_received)">
+            </md-datepicker>
+        </md-input-container>
+        <md-input-container>
+            <label>Date of Information</label>
+            <md-datepicker ng-model="information_date" ng-change="n.information_date=to_date(information_date)">
+            </md-datepicker>
+        </md-input-container>
+    </div>
+    <div layout>
+        <md-input-container class="md-block" flex>
+            <label>Name</label>
+            <input ng-model="n.name" ng-blur="n.keywords[1]=n.name" ng-blur="n.keywords[2]=n.name" required>
+        </md-input-container>
+        <md-input-container class="md-block" flex>
+            <label>Physical Description</label>
+            <textarea ng-model="n.physical_description"></textarea>
+        </md-input-container>
+        <md-input-container class="md-block" flex>
+            <label>Address and Location of Person(s) Involved:</label>
+            <textarea ng-model="n.address_of_person_involved"></textarea>
+        </md-input-container>
+    </div>
+    <div>
+
+    </div>
+    <div layout>
+        <md-input-container class="md-block" flex>
+            <label>Description of Target Items:</label>
+            <textarea ng-model="n.target_items_description"></textarea>
+        </md-input-container>
+        <md-input-container class="md-block" flex>
+            <label>Alleged Violations:</label>
+            <textarea ng-model="n.alleged_violations"></textarea>
+        </md-input-container>
+    </div>
+    <div layout>
+        <md-input-container class="md-block" flex>
+            <label>Risk and Threat Assessment:</label>
+            <textarea ng-model="n.risk_assessment"></textarea>
+        </md-input-container>
+        <md-input-container class="md-block" flex>
+            <label>Recommended Type of Operation:</label>
+            <textarea ng-model="n.recommended_operation_type"></textarea>
+        </md-input-container>
+    </div>
+</div>
