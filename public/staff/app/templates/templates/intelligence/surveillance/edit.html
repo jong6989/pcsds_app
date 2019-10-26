@@ -1,0 +1,105 @@
+<!-- <div ng-controller="DummyWSUPController" ng-init="currentItem=n"> -->
+<div class="roman">
+	<div ng-include="'./app/templates/application/style.html'"></div>
+	<div layout layout-align="center end">
+		<strong>{{currentItem.subject}}<strong>
+				<div></div>
+	</div>
+	<br>
+	<br>
+	<hr>
+	<md-input-container class="md-block m-t-40">
+		<label>Subject</label>
+		<input ng-model="currentItem.report_subject" 
+			ng-blur="updateDocument(currentItem.id, {report_subject: currentItem.report_subject})"
+			required>
+	</md-input-container>
+	<br>
+	<div layout>
+		<md-input-container flex>
+			<label>Control No.:</label>
+			<input ng-model="currentItem.control_number" 
+				ng-blur="updateDocument(currentItem.id, {control_number: currentItem.control_number})" required>
+		</md-input-container>
+		<md-input-container flex>
+			<label>SOI Number</label>
+			<input ng-model="currentItem.soi_number" 
+				ng-blur="updateDocument(currentItem.id, {soi_number: currentItem.soi_number})">
+		</md-input-container>
+		
+	</div>
+	<md-input-container flex>
+			<label>Evaluation</label>
+			<textarea ng-model="currentItem.evaluation" 
+				ng-blur="updateDocument(currentItem.id, {evaluation: currentItem.evaluation})"></textarea>
+		</md-input-container>
+	<div layout>
+		<md-input-container>
+			<label>Date of Report</label>
+			<md-datepicker 
+				ng-init="report_date=to_date(currentItem.report_date)"
+				ng-model="report_date" 
+				ng-change="currentItem.report_date=to_date(report_date); 
+					updateDocument(currentItem.id, {report_date: currentItem.report_subject})">
+			</md-datepicker>
+		</md-input-container>
+		<md-input-container>
+			<label>Date Received</label>
+			<md-datepicker 
+			ng-init="date_received=to_date(currentItem.date_received)"
+			ng-model="date_received" 
+				ng-change="currentItem.date_received=to_date(date_received);
+				updateDocument(currentItem.id, {date_received: currentItem.date_received})">
+			</md-datepicker>
+		</md-input-container>
+		<md-input-container>
+			<label>Date of Information</label>
+			<md-datepicker
+				ng-init="information_date=to_date(currentItem.information_date)"
+			 	ng-model="information_date" ng-change="currentItem.information_date=to_date(information_date)
+			updateDocument(currentItem.id, {information_date: currentItem.information_date})">
+			</md-datepicker>
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>Name</label>
+			<input ng-model="currentItem.name" ng-blur="updateDocument(currentItem.id, {name: currentItem.name})" required>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Physical Description</label>
+			<textarea ng-model="currentItem.physical_description" ng-blur="updateDocument(currentItem.id, {physical_description: currentItem.physical_description})"></textarea>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Address and Location of Person(s) Involved:</label>
+			<textarea ng-model="currentItem.address_of_person_involved" ng-blur="updateDocument(currentItem.id, {address_of_person_involved: currentItem.address_of_person_involved})"></textarea>
+		</md-input-container>
+	</div>
+	<div>
+
+	</div>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>Description of Target Items:</label>
+			<textarea ng-model="currentItem.target_items_description" 
+				ng-blur="updateDocument(currentItem.id, {target_items_description: currentItem.target_items_description})"></textarea>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Alleged Violations:</label>
+			<textarea ng-model="currentItem.target_items_description" 
+				ng-blur="updateDocument(currentItem.id, {alleged_violations: currentItem.alleged_violations})"></textarea>
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>Risk and Threat Assessment:</label>
+			<textarea ng-model="currentItem.risk_assessment" 
+				ng-blur="updateDocument(currentItem.id, {risk_assessment: currentItem.risk_assessment})"></textarea>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Recommended Type of Operation:</label>
+			<textarea ng-model="currentItem.recommended_operation_type"
+				ng-blur="updateDocument(currentItem.id, {recommended_operation_type: currentItem.recommended_operation_type})"></textarea>
+		</md-input-container>
+	</div>	
+</div>

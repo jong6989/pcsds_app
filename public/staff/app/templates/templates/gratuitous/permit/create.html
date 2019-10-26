@@ -1,24 +1,27 @@
 <!-- <div ng-init="n.gratuitous_permit.subject = 'GRATUITOUS PERMIT'; titles = ['Ms.','Mrs.','Mr.']; 
 n.gratuitous_permit.keywords = []; application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }"> -->
-	<div ng-controller="CreateGratuitousPermitController" 	ng-init="n.subject = 'GRATUITOUS PERMIT';  
+<div ng-controller="CreateGratuitousPermitController" ng-init="n.subject = 'GRATUITOUS PERMIT';  
 		n.gratuitous_permit.keywords = []; 
 		application_types={ 'Individual': 'individual.html', 'Company': 'company.html' }">
 	<h3 class="align-center">GRATUITOUS PERMIT</h3>
 	<hr>
 	<md-input-container class="md-block m-t-40">
 		<label>Permit Number</label>
-		<input ng-model="n.gratuitous_permit.permit_number" ng-blur="n.gratuitous_permit.keywords[0]=n.gratuitous_permit.permit_number" required>
+		<input ng-model="n.gratuitous_permit.permit_number"
+			ng-blur="n.gratuitous_permit.keywords[0]=n.gratuitous_permit.permit_number" required>
 	</md-input-container>
 	<br>
 	<md-input-container class="md-block" flex>
 		<label>Applicant Type</label>
-		<md-select ng-init="n.gratuitous_permit.application_type='Individual'" ng-model="n.gratuitous_permit.application_type">
+		<md-select ng-init="n.gratuitous_permit.application_type='Individual'"
+			ng-model="n.gratuitous_permit.application_type">
 			<md-option ng-repeat="applicant_type in ['Individual', 'Company']" value="{{applicant_type}}">
 				{{applicant_type}}
 			</md-option>
 		</md-select>
 	</md-input-container>
-	<div ng-include="'./app/templates/templates/gratuitous/permit/templates/' + application_types[n.gratuitous_permit.application_type]">
+	<div
+		ng-include="'./app/templates/templates/gratuitous/permit/templates/' + application_types[n.gratuitous_permit.application_type]">
 	</div>
 	<br>
 	<div>
@@ -36,8 +39,8 @@ n.gratuitous_permit.keywords = []; application_types={ 'Individual': 'individual
 	<strong>Terms and Conditions</strong>
 
 	<!--WYSIWYG editor here-->
-	<textarea ng-model="n.gratuitous_permit.gratuitous_permit_terms" 
-		id="gratuitous_permit_terms_create" ckeditor></textarea>
+	<textarea ng-model="n.gratuitous_permit.gratuitous_permit_terms" id="gratuitous_permit_terms_create"
+		ckeditor></textarea>
 	<div layout>
 		<md-input-container>
 			<md-datepicker ng-model="date_issued" ng-change="n.gratuitous_permit.date_issued=to_date(date_issued)"
@@ -129,7 +132,7 @@ n.gratuitous_permit.keywords = []; application_types={ 'Individual': 'individual
 	<div>{{n.gratuitous_permit.line6='Subject to the terms and conditions herein stated: '}}</div>
 	<br>
 	<!-- Terms and Conditions -->
-	<textarea ng-model="n.gratuitous_permit.gratuitous_permit_terms" id="gratuitous_permit_terms_preview" 
+	<textarea ng-model="n.gratuitous_permit.gratuitous_permit_terms" id="gratuitous_permit_terms_preview"
 		class="no-toolbar" ckeditor disabled></textarea>
 	<!--end of terms and conditions-->
 	<br>
@@ -157,8 +160,10 @@ n.gratuitous_permit.keywords = []; application_types={ 'Individual': 'individual
 			'commitment to abide by the provisions of PCSD AO 12, series of 2011.'}}
 	</P>
 	<p>
-		<div ng-if="n.gratuitous_permit.application_type=='Company'">{{n.gratuitous_permit.line10 = n.gratuitous_permit.applicant.representative_name}}</div>
-		<div ng-if="n.gratuitous_permit.application_type=='Individual'">{{n.gratuitous_permit.line10 = n.gratuitous_permit.applicant.full_name}}</div>
+		<div ng-if="n.gratuitous_permit.application_type=='Company'">
+			{{n.gratuitous_permit.line10 = n.gratuitous_permit.applicant.representative_name}}</div>
+		<div ng-if="n.gratuitous_permit.application_type=='Individual'">
+			{{n.gratuitous_permit.line10 = n.gratuitous_permit.applicant.full_name}}</div>
 		{{n.gratuitous_permit.line11 = 'Signature over Printed Name'}}<br>
 		{{n.gratuitous_permit.line12 = 'Date: ' + n.gratuitous_permit.date_issued}}
 	</p>

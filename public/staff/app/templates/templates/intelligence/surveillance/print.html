@@ -1,0 +1,109 @@
+<style type="text/css">
+    .roman {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
+<div ng-include="'./app/templates/application/style.html'"></div>
+
+<div
+    ng-init="currentItem = $localStorage.params; printView(3000);" class="roman"
+    style="margin:0.5in">
+    <!-- <div  ng-controller="GratuitousPermitController"  ng-init="currentItem=n"> -->
+    <!-- header -->
+    <div ng-include="'./app/templates/templates/header.html'"></div>
+    <hr>
+    <p>
+        <div class="align-center">
+            {{currentItem.subject.toUpperCase()}}
+        </div>
+    </p>
+    <br>
+    <div layout>
+        SUBJECT : &nbsp;<div class='underlined' flex>{{currentItem.report_subject}}</div>
+    </div>
+    <br>
+    <div>
+        <table style="width: 60%">
+            <tr>
+                <td>Date of Report:</td>
+                <td class="underlined">{{currentItem.report_date}}</td>
+                <td>Control No.:</td>
+                <td class="underlined">{{currentItem.control_number}}</td>
+            </tr>
+            <tr>
+                <td>Date Received:</td>
+                <td class="underlined">{{currentItem.date_received}}</td>
+                <td>SOI No.:</td>
+                <td class="underlined">{{currentItem.soi_number}}</td>
+            </tr>
+            <tr>
+                <td>Date of Information:</td>
+                <td class="underlined">{{currentItem.information_date}}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="4">Evaluation:</td>
+            </tr>
+            <tr>
+                <td colspan="4"><div class="underlined">{{currentItem.evaluation}}</div></td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    <ol start="I">
+        <li>
+            Name: <div class='underlined' flex>{{currentItem.name}}</div>
+        </li>
+        <li>
+            Physical Description: <div class='underlined' flex>{{currentItem.physical_description}}</div>
+        </li>
+        <li>
+            Address & Locatin of Person/s Involved: <div class='underlined' flex>{{currentItem.address_of_person_involved}}</div>
+        </li>
+        <li>
+            Description of Target Items/s: <div class="underlined">{{currentItem.target_items_description}}</div>
+        </li>
+        <li>
+            Alleged Violation/s: <div class='underlined'>{{currentItem.alleged_violations}}</div>
+        </li>
+        <li>
+            Risk & Threat Assessment: <div class='underlined'>{{currentItem.risk_assessment}}</div>
+        </li>
+        <lis>
+            Recommended Type of Operation <i>(PCSD only, joint-operaton etc):</i>
+            <div class='underlined'>{{currentItem.recommended_operation_type}}</div>
+        </lis>
+    </ol>
+    <!-- Signature -->
+    <div layout>
+        <div style="width:50%">Recommended by:</div>
+        <div>Noted by:</div>
+    </div>
+    <div layout ng-controller="doc_ctrl_draft"  
+        ng-init="currentItem.sign1 = (currentItem.sign1 == undefined) ? {} : currentItem.sign1;">
+        
+            <div ng-if="currentItem.sign1.signature != undefined;" layout="column"
+                layout-align="center center"
+                style="width:50%">
+                <img ng-if="currentItem.sign1.signature != undefined"
+                    src="{{currentItem.sign1.signature}}" alt="Signature2" width="auto"
+                    style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong>
+                </div>
+                <div class="align-center"> {{currentItem.sign1.designation}} </div>
+            </div>
+
+            <div ng-if="currentItem.sign2.signature != undefined;" layout="column"
+                layout-align="center center">
+                <img ng-if="currentItem.sign2.signature != undefined"
+                    src="{{currentItem.sign2.signature}}" alt="Signature2" width="auto"
+                    style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong>
+                </div>
+                <div class="align-center"> {{currentItem.sign2.designation}} </div>
+            </div>
+    </div>
+    <!-- footer -->
+    <div ng-include="'https://document-network.web.app/pcsd/templates/footer3.html'"></div>
+</div>
