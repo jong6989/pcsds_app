@@ -1,0 +1,132 @@
+<div ng-init="n.subject = 'SUMMARY OF INFORMATION'; 
+    n.keywords = [];">
+    <h3 class="align-center">{{n.subject}}</h3>
+    <hr>
+    <md-input-container>
+        <label>Date</label>
+        <md-datepicker md-hide-icons="calendar" ng-model="date" ng-change="n.date=to_date(date)">
+        </md-datepicker>
+    </md-input-container>
+    <br>
+    <md-input-container flex>
+        <label>Control No.:</label>
+        <input ng-model="n.control_number" ng-blur="n.keywords[0]=n.control_number" required>
+    </md-input-container>
+    <br>
+
+    <table>
+        <tr>
+            <td>Subject <i>(What)</i></td>
+            <td>:</td>
+            <td>
+                <md-input-container flex>
+                    <input ng-model="n.summary_subject" ng-blur="n.keywords[1]=n.summary_subject">
+                </md-input-container>
+            </td>
+        </tr>
+        <tr>
+            <td>Reference No. <i>(Investigation or Monitoring)</i></td>
+            <td>:</td>
+            <td>
+                <md-input-container flex>
+                    <input ng-model="n.reference_number" ng-blur="n.keywords[2]=n.reference_number">
+                </md-input-container>
+            </td>
+        </tr>
+        <tr>
+            <td>Date Acquired <i>(When)</i></td>
+            <td>:</td>
+            <td>
+                <md-input container flex>
+                    <md-datepicker md-hide-icons="calendar" ng-model="date_acquired" 
+                        ng-change="n.date_acquired=to_date(date_acquired)">
+                    </md-datepicker>
+                </md-input>
+            </td>
+        </tr>
+        <tr>
+            <td>Alleged Violations <i>(Why)</i></td>
+            <td>:</td>
+            <td>
+                <md-input-container flex>
+                    <textarea ng-model="n.alleged_violations"></textarea>
+                </md-input-container>
+            </td>
+        </tr>
+        <tr>
+            <td>Person/s Invovled <i>(Who)</i></td>
+            <td>:</td>
+            <td>
+                <md-input-container flex>
+                    <input ng-model="n.persons_involved">
+                </md-input-container>
+            </td>
+        </tr>
+        <tr>
+            <td>Place <i>(Where)</i></td>
+            <td>:</td>
+            <td>
+                <md-input-container flex>
+                    <input ng-model="n.place">
+                </md-input-container>
+            </td>
+        </tr>
+        <tr>
+            <td>Received By <i>(Enforcer's name)</i></td>
+            <td>:</td>
+            <td>
+                <md-input-container flex>
+                    <input ng-model="n.received_by">
+                </md-input-container>
+            </td>
+        </tr>
+        <tr>
+            <td>Mode <i>(How information is acquired)</i></td>
+            <td>:</td>
+            <td>
+                <md-input-container flex>
+                    <input ng-model="n.mode">
+                </md-input-container>
+            </td>
+        </tr>
+        <tr>
+            <td>Report <i>(How)</i></td>
+            <td>:</td>
+            <td>
+                <md-input-container flex>
+                    <textarea ng-model="n.report"></textarea>
+                </md-input-container>
+            </td>
+        </tr>
+    </table>
+
+
+    <div layout>
+        <md-input-container flex>
+            <label>Recommendation:</label>
+            <md-select ng-model="n.recommendation">
+                <md-option ng-repeat="recommendation in [
+                    'Compile',
+                    'Include in Monitoring',
+                    'Conduct Investigation',
+                    'Conduct Pre-raid surveillance',
+                    'Include in Intelligence Projects'
+                ]" value="{{recommendation}}">
+                    {{recommendation}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container flex>
+            <label>Report Classification:</label>
+            <md-select ng-model="n.report_classification">
+                <md-option ng-repeat="classification in [
+                        'Restricted',
+                        'Classified',
+                        'Accessible to Other Operators'
+                    ]" value="{{classification}}">
+                    {{classification}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+</div>

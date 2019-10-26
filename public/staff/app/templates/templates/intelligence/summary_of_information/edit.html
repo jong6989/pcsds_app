@@ -1,0 +1,147 @@
+<!-- <div ng-controller="DummyWSUPController" ng-init="currentItem=n"> -->
+<div class="roman">
+	<div ng-include="'./app/templates/application/style.html'"></div>
+	<br>
+	<h3>{{currentItem.subject}}</h3>
+	<md-input-container>
+		<label>Date</label>
+		<md-datepicker md-hide-icons="calendar" ng-init="date=to_date(currentItem.date)" ng-model="date"
+			ng-change="currentItem.date=to_date(date);updateDocument(currentItem.id, { date: currentItem.date})">
+		</md-datepicker>
+	</md-input-container>
+	<br>
+	<md-input-container flex>
+		<label>Control No.:</label>
+		<input ng-model="currentItem.control_number"
+			ng-blur="updateDocument(currentItem.id, {control_number: currentItem.control_number})" required>
+	</md-input-container>
+	<br>
+
+	<table>
+		<tr>
+			<td>Subject <i>(What)</i></td>
+			<td>:</td>
+			<td>
+				<md-input-container flex>
+					<input ng-model="currentItem.summary_subject"
+						ng-blur="updateDocument(currentItem.id, {summary_subject: currentItem.summary_subject})">
+				</md-input-container>
+			</td>
+		</tr>
+		<tr>
+			<td>Reference No. <i>(Investigation or Monitoring)</i></td>
+			<td>:</td>
+			<td>
+				<md-input-container flex>
+					<input ng-model="currentItem.reference_number"
+						ng-blur="updateDocument(currentItem.id, {reference_number: currentItem.reference_number})">
+				</md-input-container>
+			</td>
+		</tr>
+		<tr>
+			<td>Date Acquired <i>(When)</i></td>
+			<td>:</td>
+			<td>
+				<md-input container flex>
+					<md-datepicker md-hide-icons="calendar" ng-init="date_acquired=to_date(currentItem.date_acquired)"
+						ng-model="date_acquired"
+						ng-change="updateDocument(currentItem.id, {date_acquired: currentItem.date_acquired})">
+					</md-datepicker>
+				</md-input>
+			</td>
+		</tr>
+		<tr>
+			<td>Alleged Violations <i>(Why)</i></td>
+			<td>:</td>
+			<td>
+				<md-input-container flex>
+					<textarea ng-model="currentItem.alleged_violations"
+						ng-blur="updateDocument(currentItem.id, {alleged_violations: currentItem.alleged_violations})"></textarea>
+				</md-input-container>
+			</td>
+		</tr>
+		<tr>
+			<td>Person/s Invovled <i>(Who)</i></td>
+			<td>:</td>
+			<td>
+				<md-input-container flex>
+					<input ng-model="currentItem.persons_involved"
+						ng-blur="updateDocument(currentItem.id, {persons_involved: currentItem.persons_involved})">
+				</md-input-container>
+			</td>
+		</tr>
+		<tr>
+			<td>Place <i>(Where)</i></td>
+			<td>:</td>
+			<td>
+				<md-input-container flex>
+					<input ng-model="currentItem.place"
+						ng-blur="updateDocument(currentItem.id, {place: currentItem.place})">
+				</md-input-container>
+			</td>
+		</tr>
+		<tr>
+			<td>Received By <i>Enforcer's name)</i></td>
+			<td>:</td>
+			<td>
+				<md-input-container flex>
+					<input ng-model="currentItem.received_by"
+						ng-blur="updateDocument(currentItem.id, {received_by: currentItem.received_by})">
+				</md-input-container>
+			</td>
+		</tr>
+		<tr>
+			<td>Mode <i>(How information is acquired)</i></td>
+			<td>:</td>
+			<td>
+				<md-input-container flex>
+					<input ng-model="currentItem.mode"
+						ng-blur="updateDocument(currentItem.id, {mode: currentItem.mode})">
+				</md-input-container>
+			</td>
+		</tr>
+		<tr>
+			<td>Report <i>(How)</i></td>
+			<td>:</td>
+			<td>
+				<md-input-container flex>
+					<textarea ng-model="currentItem.report"
+						ng-blur="updateDocument(currentItem.id, {report: currentItem.report})"></textarea>
+				</md-input-container>
+			</td>
+		</tr>
+	</table>
+
+
+	<div layout>
+		<md-input-container flex>
+			<label>Recommendation:</label>
+			<md-select ng-model="currentItem.recommendation"
+				ng-blur="updateDocument(currentItem.id, {recommendation: currentItem.recommendation})">
+				<md-option ng-repeat="recommendation in [
+						'Compile',
+						'Include in Monitoring',
+						'Conduct Investigation',
+						'Conduct Pre-raid surveillance',
+						'Include in Intelligence Projects'
+					]" value="{{recommendation}}">
+					{{recommendation}}
+				</md-option>
+			</md-select>
+		</md-input-container>
+		<md-input-container flex>
+			<label>Report Classification:</label>
+			<md-select
+				ng-blur="updateDocument(currentItem.id, {report_classification: currentItem.report_classification})"
+				ng-model="currentItem.report_classification">
+				<md-option ng-repeat="classification in [
+							'Restricted',
+							'Classified',
+							'Accessible to Other Operators'
+						]" value="{{classification}}">
+					{{classification}}
+				</md-option>
+			</md-select>
+		</md-input-container>
+	</div>
+</div>

@@ -12,67 +12,91 @@
     <hr>
     <p>
         <div class="align-center">
-            {{currentItem.subject.toUpperCase()}}
+            <h3>SUMMARY OF INFORMATION</h3>
         </div>
     </p>
     <br>
     <div layout>
-        SUBJECT : &nbsp;<div class='underlined' flex>{{currentItem.report_subject}}</div>
+        <div style="width:60%"></div>
+        <div style="width:89px">Date :&nbsp;</div>
+        <div class="underlined">
+            {{currentItem.date}}
+        </div>
+    </div>
+    <div layout>
+        <div style="width:60%"></div>
+        <div>Control No :&nbsp;</div>
+        <div class="underlined">
+            {{currentItem.control_number}}
+        </div>
     </div>
     <br>
-    <div>
-        <table style="width: 60%">
-            <tr>
-                <td>Date of Report:</td>
-                <td class="underlined">{{currentItem.report_date}}</td>
-                <td>Control No.:</td>
-                <td class="underlined">{{currentItem.control_number}}</td>
-            </tr>
-            <tr>
-                <td>Date Received:</td>
-                <td class="underlined">{{currentItem.date_received}}</td>
-                <td>SOI No.:</td>
-                <td class="underlined">{{currentItem.soi_number}}</td>
-            </tr>
-            <tr>
-                <td>Date of Information:</td>
-                <td class="underlined">{{currentItem.information_date}}</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td colspan="4">Evaluation:</td>
-            </tr>
-            <tr>
-                <td colspan="4"><div class="underlined">{{currentItem.evaluation}}</div></td>
-            </tr>
-        </table>
-    </div>
-    <br>
-    <ol start="I">
-        <li>
-            Name: <div class='underlined' flex>{{currentItem.name}}</div>
-        </li>
-        <li>
-            Physical Description: <div class='underlined' flex>{{currentItem.physical_description}}</div>
-        </li>
-        <li>
-            Address & Locatin of Person/s Involved: <div class='underlined' flex>{{currentItem.address_of_person_involved}}</div>
-        </li>
-        <li>
-            Description of Target Items/s: <div class="underlined">{{currentItem.target_items_description}}</div>
-        </li>
-        <li>
-            Alleged Violation/s: <div class='underlined'>{{currentItem.alleged_violations}}</div>
-        </li>
-        <li>
-            Risk & Threat Assessment: <div class='underlined'>{{currentItem.risk_assessment}}</div>
-        </li>
-        <lis>
-            Recommended Type of Operation <i>(PCSD only, joint-operaton etc):</i>
-            <div class='underlined'>{{currentItem.recommended_operation_type}}</div>
-        </lis>
-    </ol>
+    <table>
+        <tr>
+            <td >Subject <i>(What)</i></td>
+            <td>:</td>
+            <td class="underlined">
+                {{currentItem.summary_subject}}
+            </td>
+        </tr>
+        <tr>
+            <td>Reference No. <i>(Investigation or Monitoring)</i></td>
+            <td>:</td>
+            <td class="underlined">
+                {{currentItem.reference_number}}
+            </td>
+        </tr>
+        <tr>
+            <td>Date Acquired <i>(When)</i></td>
+            <td>:</td>
+            <td class="underlined">
+                {{currentItem.date_acquired}}
+            </td>
+        </tr>
+        <tr>
+            <td>Alleged Violation <i>(Why)</i></td>
+            <td>:</td>
+            <td class="underlined">
+                {{currentItem.alleged_violations}}
+            </td>
+        </tr>
+        <tr>
+            <td>Person/s Invovled <i>(Who)</i></td>
+            <td>:</td>
+            <td class="underlined">
+                {{currentItem.persons_involved}}
+            </td>
+        </tr>
+        <tr>
+            <td>Place <i>(Where)</i></td>
+            <td>:</td>
+            <td class="underlined">
+                {{currentItem.place}}
+            </td>
+        </tr>
+        <tr>
+            <td>Received By <i>(Enforcer's Name)</i></td>
+            <td>:</td>
+            <td class="underlined">
+                {{currentItem.received_by}}
+            </td>
+        </tr>
+        <tr>
+            <td>Mode <i>(How information is acquired)</i></td>
+            <td>:</td>
+            <td class="underlined">
+                {{currentItem.mode}}
+            </td>
+        </tr>
+        <tr>
+            <td>Report <i>(How)</i></td>
+            <td>:</td>
+            <td class="underlined">
+                {{currentItem.report}}
+            </td>
+        </tr>
+    </table>
+    <br><br>
     <!-- Signature -->
     <div layout>
         <div style="width:50%">Recommended by:</div>
@@ -100,15 +124,15 @@
                 <canvas></canvas>
                 <button ng-click="signclear(0)">Clear Signature</button>
                 <button
-                    ng-click=" updateDocument(currentItem.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">Save
-                    Signature</button>
+                    ng-click="updateDocument(currentItem.id,{'sign1.signature': signed(0), 'sign1.user' : userId }) ">
+                    Save Signature</button>
                 <md-input-container md-no-float class="md-block" ng-if="currentItem.sign1.signature == undefined;">
                     <input ng-model="currentItem.sign1.name"
                         ng-blur="updateDocument(currentItem.id,{'sign1.name' : currentItem.sign1.name })" type="text"
                         placeholder="Name" aria-label="Name">
                 </md-input-container>
                 <md-input-container md-no-float class="md-block" ng-if="currentItem.sign1.signature == undefined;">
-                    <input ng-init="currentItem.sign1.designation='Command Center Officer'"
+                    <input
                         ng-model="currentItem.sign1.designation"
                         ng-blur="updateDocument(currentItem.id,{'sign1.designation' : currentItem.sign1.designation })"
                         type="text" placeholder="Designation" aria-label="designation">
@@ -125,7 +149,7 @@
                 </div>
                 <div class="align-center"> {{currentItem.sign2.designation}} </div>
                 <md-button class="md-fab md-mini" aria-label="Remove Signature" ng-if="currentItem.sign2.user == userId"
-                    ng-click="updateDocument(currentItem.gratuitous_permit.id,{'sign2' : {} })">
+                    ng-click="updateDocument(currentItem.id,{'sign2' : {} })">
                     <md-tooltip md-direction="left">Remove Signature</md-tooltip>
                     <i class="fa fa-remove"></i>
                 </md-button>
@@ -136,16 +160,15 @@
                 <canvas></canvas>
                 <button ng-click="signclear(1)">Clear Signature</button>
                 <button
-                    ng-click=" updateDocument(currentItem.id,{'sign2.signature': signed(1), 'sign2.user' : userId }) ">Save
-                    Signature</button>
+                    ng-click=" updateDocument(currentItem.id,{'sign2.signature': signed(1), 'sign2.user' : userId }) ">
+                    Save Signature</button>
                 <md-input-container md-no-float class="md-block" ng-if="currentItem.sign2.signature == undefined;">
                     <input ng-model="currentItem.sign2.name"
                         ng-blur="updateDocument(currentItem.id,{'sign2.name' : currentItem.sign2.name })" type="text"
                         placeholder="Name" aria-label="Name">
                 </md-input-container>
                 <md-input-container md-no-float class="md-block" ng-if="currentItem.sign2.signature == undefined;">
-                    <input ng-init="currentItem.sign2.designation='ERED-PCSDS'"
-                        ng-model="currentItem.sign2.designation"
+                    <input ng-model="currentItem.sign2.designation"
                         ng-blur="updateDocument(currentItem.id,{'sign2.designation' : currentItem.sign2.designation })"
                         type="text" placeholder="Designation" aria-label="designation">
                 </md-input-container>

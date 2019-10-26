@@ -155,11 +155,20 @@
 		{
 			"name" : "Surveillance Report",
 			"type" : "report",
-			"permit" : true,
+			"permit" : false,
 			"create" : 	"./app/templates/templates/intelligence/surveillance/create.html",
 			"edit" : 	"./app/templates/templates/intelligence/surveillance/edit.html",
 			"print" : 	"./app/templates/templates/intelligence/surveillance/print.html",
 			"view" : 	"./app/templates/templates/intelligence/surveillance/view.html"
+		},
+		{
+			"name" : "Summary of Information",
+			"type" : "report",
+			"permit" : false,
+			"create" : 	"./app/templates/templates/intelligence/summary_of_information/create.html",
+			"edit" : 	"./app/templates/templates/intelligence/summary_of_information/edit.html",
+			"print" : 	"./app/templates/templates/intelligence/summary_of_information/print.html",
+			"view" : 	"./app/templates/templates/intelligence/summary_of_information/view.html"
 		}
 	]
 }
