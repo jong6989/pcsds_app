@@ -1,0 +1,181 @@
+<!-- <div ng-controller="DummyWSUPController" ng-init="currentItem=n"> -->
+<div class="roman">
+	<div ng-include="'./app/templates/application/style.html'"></div>
+	<div layout layout-align="center end">
+		<strong>{{currentItem.subject}}<strong>
+				<div></div>
+	</div>
+	<br>
+	<hr>
+	<br>
+	<div layout>
+		<md-input-container>
+			<label>Subject:</label>
+			<input ng-model="currentItem.report_subject">
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container>
+			<label>Date of Report</label>
+			<md-datepicker 
+				ng-init="report_date=to_date(currentItem.report_date)"
+				ng-model="report_date" 
+				ng-change="currentItem.report_date=to_date(report_date);
+					updateDocument(currentItem.id, {report_date: currentItem.report_date})">
+			</md-datepicker>
+		</md-input-container>
+		<md-input-container>
+			<label>Date Received</label>
+			<md-datepicker 
+				ng-init="date_received=currentItem.date_received"
+				ng-model="date_received" 
+				ng-change="currentItem.date_received=to_date(date_received);
+					updateDocument(currentItem.id, {date_received:currentItem.date_received})">
+			</md-datepicker>
+		</md-input-container>
+		<md-input-container>
+			<label>References</label>
+			<textarea ng-model="currentItem.references" 
+				ng-blur="updateDocument(currentItem.id, {references: currentItem.references})"></textarea>
+		</md-input-container>
+	</div>
+	<div>
+		<md-input-container>
+			<label>Control No.</label>
+			<input 
+				ng-model="currentItem.control_number" 
+				ng-blur="currentItem.keywords[0]=currentItem.control_number; 
+					updateDocument(currentItem.id, {control_number:currentItem.control_number})">
+		</md-input-container>
+		<md-input-container>
+			<label>Reference No.</label>
+			<input ng-model="currentItem.reference_number" 
+				ng-blur="currentItem.keywords[1]=currentItem.control_number;
+					updateDocument(currentItem.id, {reference_number: currentItem.reference_number})">
+		</md-input-container>
+	</div>
+	<md-input-container>
+		<label>Evaluation</label>
+		<textarea ng-model="currentItem.evaluation" 
+			ng-blur="updateDocument(currentItem.id, {evaluation: currentItem.evaluation}"></textarea>
+	</md-input-container>
+	<div layout>
+		<table ng-init="currentItem.persons_involved=[{}]">
+			<tr>
+				<td>Name of suspected person</td>
+				<td>Physical description</td>
+				<td>Character disposition</td>
+				<td>Address</td>
+				<td>Contact information</td>
+				<td>Alleged activities</td>
+			</tr>
+			<tr ng-repeat="person_involved in currentItem.persons_involved">
+				<td>
+					<md-input-container>
+						<input ng-model="currentItem.persons_involved[$index].name"
+							ng-blur="currentItem.keywords[$index+2]=currentItem.persons_involved[$index].name;
+								updateDocument(currentItem.id, {persons_involved: currentItem.persons_involved})">
+					</md-input-container>
+				</td>
+				<td>
+					<md-input-container>
+						<textarea ng-model="currentItem.persons_involved[$index].physical_description"
+							ng-blur="updateDocument(currentItem.id, {persons_involved: currentItem.persons_involved})"></textarea>
+					</md-input-container>
+				</td>
+				<td>
+					<md-input-container>
+						<textarea ng-model="currentItem.persons_involved[$index].character_disposition"
+							ng-blur="updateDocument(currentItem.id, {persons_involved: currentItem.persons_involved})"></textarea>
+					</md-input-container>
+				</td>
+				<td>
+					<md-input-container>
+						<textarea ng-model="currentItem.persons_involved[$index].address"
+							ng-blur="updateDocument(currentItem.id, {persons_involved: currentItem.persons_involved})"></textarea>
+					</md-input-container>
+				</td>
+				<td>
+					<md-input-container>
+						<textarea ng-model="currentItem.persons_involved[$index].contact_information"
+						ng-blur="updateDocument(currentItem.id, {persons_involved: currentItem.persons_involved})"></textarea>
+					</md-input-container>
+				</td>
+				<td>
+					<md-input-container>
+						<textarea ng-model="currentItem.persons_involved[$index].alleged_activities"
+							ng-blur="updateDocument(currentItem.id, {persons_involved: currentItem.persons_involved})"></textarea>
+					</md-input-container>
+				</td>
+				<td>
+					<md-button class="md-fab md-mini" aria-label="Remove this row"
+						ng-click="currentItem.persons_involved.splice($index, 1)" ng-if="currentItem.persons_involved.length > 1">
+						<md-tooltip md-direction="left">Remove this person</md-tooltip>
+						<i class="fa fa-remove"></i>
+					</md-button>
+				</td>
+			</tr>
+		</table>
+		<md-button ng-click="currentItem.persons_involved.push({})" class="md-primary md-raised">
+			Add Row
+		</md-button>
+	</div>
+	<div layout>
+		<md-input-container class="md-block" flex>
+			<label>Description of target items:</label>
+			<textarea ng-model="currentItem.target_items_description"
+				ng-blur="updateDocument(currentItem.id, {target_items_description: currentItem.target_items_description})"></textarea>
+		</md-input-container>
+		<md-input-container class="md-block" flex>
+			<label>Relationship and connections of each suspected persons involved:</label>
+			<textarea ng-model="currentItem.relationship"
+				ng-blur="updateDocument(currentItem.id, {relationship: currentItem.relationship})"></textarea>
+		</md-input-container>
+		<md-input-container>
+			<label>Support group/system</label>
+			<textarea ng-mode="currentItem.support_group"
+			ng-blur="updateDocument(currentItem.id, {support_group: currentItem.support_group})"></textarea>
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container>
+			<label>Last known area of operation:</label>
+			<textarea ng-model="currentItem.last_known_operation_area"
+			ng-blur="updateDocument(currentItem.id, {last_known_operation_area: currentItem.last_known_operation_area})"></textarea>
+		</md-input-container>
+		<md-input-container>
+			<label>Last known modes of trafficking:</label>
+			<textarea ng-model="currentItem.last_trafficking_modes"
+			ng-blur="updateDocument(currentItem.id, {last_trafficking_modes: currentItem.last_trafficking_modes})"></textarea>
+		</md-input-container>
+		<md-input-container>
+			<label>Financial transaction:</label>
+			<textarea ng-model="currentItem.financial_transaction" 
+			ng-blur="updateDocument(currentItem.id, {financial_transaction: currentItem.financial_transaction})"></textarea>
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container>
+			<label>Information available from other enforcement agencies:</label>
+			<textarea ng-model="currentItem.info_from_other_agencies"
+			ng-blur="updateDocument(currentItem.id, {info_from_other_agencies: currentItem.info_from_other_agencies})"></textarea>
+		</md-input-container>
+		<md-input-container>
+			<label>Risk & threat assessment:</label>
+			<textarea ng-model="currentItem.risk_assessment"
+			ng-blur="updateDocument(currentItem.id, {risk_assessment: currentItem.risk_assessment})"></textarea>
+		</md-input-container>
+		<md-input-container>
+			<label>Recommendations:</label>
+			<textarea ng-model="currentItem.recommendations"
+			ng-blur="updateDocument(currentItem.id, {recommendations: currentItem.recommendations})"></textarea>
+		</md-input-container>
+	</div>
+	<div layout>
+		<md-input-container>
+			<label>Suggested distribution:</label>
+			<textarea ng-model="currentItem.suggested_distribution"
+			ng-blur="updateDocument(currentItem.id, {suggested_distribution: currentItem.suggested_distribution})"></textarea>
+		</md-input-container>
+	</div>
+</div>
