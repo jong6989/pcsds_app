@@ -15,14 +15,14 @@
             <h3>{{currentItem.subject}}</h3>
         </div>
     </p>
-    <br><br>
+    <br>
     <div layout>
         <div style="padding-right:5px"><b>SUBJECT:</b></div>
         <div class="underlined" flex>{{currentItem.report_subject}}</div>
     </div>
     <br>
     <br>
-    <table style="width:65%">
+    <table style="width:100%">
         <tr>
             <td>
                 <b>DATE OF REPORT:</b>
@@ -59,13 +59,16 @@
                 {{currentItem.references}}
             </td>
             <td>
-                <b>EVALUATION:</b>
+                
             </td>
             <td>
-                {{currentItem.evaluation}}
             </td>
         </tr>
     </table>
+    <div><b>EVALUATION:</b></div>
+    <div class="underlined">
+        {{currentItem.evaluation}}
+    </div>
     <br>
     <ol>
         <li>
