@@ -2,38 +2,45 @@
     n.keywords = [];" class="roman">
     <h3 class="align-center">{{n.subject}}</h3>
     <hr>
+    <div layout>
+        <div style="width:80%"></div>
+        <md-input-container>
+            <label>Date of Report</label>
+            <md-datepicker md-hide-icons="calendar" ng-model="report_date"
+                ng-change="n.report_date=to_date(report_date)">
+            </md-datepicker>
+        </md-input-container>
+    </div>
+    <div layout>
+        <div style="width:80%"></div>
+        <md-input-container>
+            <label>Date Received</label>
+            <md-datepicker md-hide-icons="calendar" ng-model="date_received" 
+                ng-change="n.date_received=to_date(date_received)">
+            </md-datepicker>
+        </md-input-container>
+    </div>
+
     <md-input-container class="md-block m-t-40">
         <label>Subject</label>
         <input ng-model="n.report_subject" required>
     </md-input-container>
     <br>
-    <div layout>
-        <md-input-container>
-            <label>Date of Report</label>
-            <md-datepicker ng-model="report_date" ng-change="n.report_date=to_date(report_date)">
-            </md-datepicker>
-        </md-input-container>
-        <md-input-container>
-            <label>Date Received</label>
-            <md-datepicker ng-model="date_received" ng-change="n.date_received=to_date(date_received)">
-            </md-datepicker>
-        </md-input-container>
-        <md-input-container>
+    <div layout flex>
+        <md-input-container flex>
             <label>References</label>
             <textarea ng-model="n.references"></textarea>
         </md-input-container>
-    </div>
-    <div>
-        <md-input-container>
+        <md-input-container flex>
             <label>Control No.</label>
-            <input ng-model="n.control_number" ng-blur="n.keywords[0]=n.control_number">
+            <input ng-init="n.keywords[0]=''" ng-model="n.control_number" ng-blur="n.keywords[0]=n.control_number">
         </md-input-container>
-        <md-input-container>
+        <md-input-container flex>
             <label>Reference No.</label>
-            <input ng-model="n.reference_number" ng-blur="n.keywords[1]=n.control_number">
+            <input ng-init="n.keywords[1]=''" ng-model="n.reference_number" ng-blur="n.keywords[1]=n.reference_number">
         </md-input-container>
     </div>
-    <md-input-container>
+    <md-input-container class="md-block" flex>
         <label>Evaluation</label>
         <textarea ng-model="n.evaluation"></textarea>
     </md-input-container>
@@ -47,15 +54,15 @@
                 <td>Contact information</td>
                 <td>Alleged activities</td>
             </tr>
-            <tr ng-repeat="person_involved in n.persons_involved">
+            <tr ng-repeat="person_involved in n.persons_involved track by $index">
                 <td>
                     <md-input-container>
-                        <input ng-model="n.persons_involved[$index].name" 
+                        <input ng-model="n.persons_involved[$index].name"
                             ng-blur="n.keywords[$index+2]=n.persons_involved[$index].name">
                     </md-input-container>
                 </td>
                 <td>
-                    <md-input-container >
+                    <md-input-container>
                         <textarea ng-model="n.persons_involved[$index].physical_description"></textarea>
                     </md-input-container>
                 </td>
@@ -66,7 +73,7 @@
                 </td>
                 <td>
                     <md-input-container>
-                        <textarea  ng-model="n.persons_involved[$index].address"></textarea>
+                        <textarea ng-model="n.persons_involved[$index].address"></textarea>
                     </md-input-container>
                 </td>
                 <td>
@@ -80,18 +87,18 @@
                     </md-input-container>
                 </td>
                 <td>
-                    <md-button class="md-fab md-mini" aria-label="Remove this row" 
-							ng-click="n.persons_involved.splice($index, 1)" ng-if="n.persons_involved.length > 1">
-							<md-tooltip md-direction="left">Remove this person</md-tooltip>
-							<i class="fa fa-remove" ></i>
-						</md-button> 
+                    <md-button class="md-fab md-mini" aria-label="Remove this row"
+                        ng-click="n.persons_involved.splice($index, 1)" ng-if="n.persons_involved.length > 1">
+                        <md-tooltip md-direction="left">Remove this person</md-tooltip>
+                        <i class="fa fa-remove"></i>
+                    </md-button>
                 </td>
             </tr>
         </table>
-        <md-button ng-click="n.persons_involved.push({})" class="md-primary md-raised">
-            Add Row
-        </md-button>
     </div>
+    <md-button ng-click="n.persons_involved.push({})" class="md-primary md-raised">
+        Add Row
+    </md-button>
     <div layout>
         <md-input-container class="md-block" flex>
             <label>Description of target items:</label>
@@ -103,39 +110,39 @@
         </md-input-container>
         <md-input-container>
             <label>Support group/system</label>
-            <textarea ng-mode="n.support_group"></textarea>
+            <textarea ng-model="n.support_group"></textarea>
         </md-input-container>
     </div>
     <div layout>
-        <md-input-container>
+        <md-input-container flex>
             <label>Last known area of operation:</label>
             <textarea ng-model="n.last_known_operation_area"></textarea>
         </md-input-container>
-        <md-input-container>
+        <md-input-container flex>
             <label>Last known modes of trafficking:</label>
             <textarea ng-model="n.last_trafficking_modes"></textarea>
         </md-input-container>
-        <md-input-container>
+        <md-input-container flex>
             <label>Financial transaction:</label>
             <textarea ng-model="n.financial_transaction"></textarea>
         </md-input-container>
     </div>
     <div layout>
-        <md-input-container>
+        <md-input-container flex>
             <label>Information available from other enforcement agencies:</label>
             <textarea ng-model="n.info_from_other_agencies"></textarea>
         </md-input-container>
-        <md-input-container>
+        <md-input-container flex>
             <label>Risk & threat assessment:</label>
             <textarea ng-model="n.risk_assessment"></textarea>
         </md-input-container>
-        <md-input-container>
+        <md-input-container flex>
             <label>Recommendations:</label>
             <textarea ng-model="n.recommendations"></textarea>
         </md-input-container>
     </div>
     <div layout>
-        <md-input-container>
+        <md-input-container flex>
             <label>Suggested distribution:</label>
             <textarea ng-model="n.suggested_distribution"></textarea>
         </md-input-container>

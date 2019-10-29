@@ -169,6 +169,15 @@
 			"edit" : 	"./app/templates/templates/intelligence/summary_of_information/edit.html",
 			"print" : 	"./app/templates/templates/intelligence/summary_of_information/print.html",
 			"view" : 	"./app/templates/templates/intelligence/summary_of_information/view.html"
+		},
+		{
+			"name" : "Intelligence Report",
+			"type" : "report",
+			"permit" : false,
+			"create" : 	"./app/templates/templates/intelligence/intelligence/create.html",
+			"edit" : 	"./app/templates/templates/intelligence/intelligence/edit.html",
+			"print" : 	"./app/templates/templates/intelligence/intelligence/print.html",
+			"view" : 	"./app/templates/templates/intelligence/intelligence/view.html"
 		}
 	]
 }

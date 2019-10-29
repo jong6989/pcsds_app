@@ -13,68 +13,181 @@
     <div ng-include="'./app/templates/templates/header.html'"></div>
     <hr>
     <p>
-        <div class="align-center">
-            {{currentItem.subject.toUpperCase()}}
+            <div class="align-center">
+                <h3>{{currentItem.subject}}</h3>
+            </div>
+        </p>
+        <br>
+        <div layout>
+            <div>SUBJECT:</div>
+            <div class="underlined" flex></div>
         </div>
-    </p>
-    <br>
-    <div layout>
-        SUBJECT : &nbsp;<div class='underlined' flex>{{currentItem.report_subject}}</div>
-    </div>
-    <br>
-    <div>
-        <table style="width: 60%">
+        <table>
             <tr>
-                <td>Date of Report:</td>
-                <td class="underlined">{{currentItem.report_date}}</td>
-                <td>Control No.:</td>
-                <td class="underlined">{{currentItem.control_number}}</td>
+                <td>
+                    <b>DATE OF REPORT:</b>
+                </td>
+                <td>
+                    {{currentItem.report_date}}
+                </td>
+                <td>
+                    <b>CONTROL NO:</b>
+                </td>
+                <td>
+                    {{currentItem.control_number}}
+                </td>
             </tr>
             <tr>
-                <td>Date Received:</td>
-                <td class="underlined">{{currentItem.date_received}}</td>
-                <td>SOI No.:</td>
-                <td class="underlined">{{currentItem.soi_number}}</td>
+                <td>
+                    <b>DATE RECEIVED:</b>
+                </td>
+                <td>
+                    {{currentItem.date_received}}
+                </td>
+                <td>
+                    <b>REFERENCE NO:</b>
+                </td>
+                <td>
+                    {{currentItem.reference_number}}
+                </td>
             </tr>
             <tr>
-                <td>Date of Information:</td>
-                <td class="underlined">{{currentItem.information_date}}</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td colspan="4">Evaluation:</td>
-            </tr>
-            <tr>
-                <td colspan="4"><div class="underlined">{{currentItem.evaluation}}</div></td>
+                <td>
+                    <b>REFERENCES:</b>
+                </td>
+                <td>
+                    {{currentItem.references}}
+                </td>
+                <td>
+                    <b>EVALUATION:</b>
+                </td>
+                <td>
+                    {{currentItem.evaluation}}
+                </td>
             </tr>
         </table>
-    </div>
     <br>
-    <ol start="I">
-        <li>
-            Name: <div class='underlined' flex>{{currentItem.name}}</div>
-        </li>
-        <li>
-            Physical Description: <div class='underlined' flex>{{currentItem.physical_description}}</div>
-        </li>
-        <li>
-            Address & Locatin of Person/s Involved: <div class='underlined' flex>{{currentItem.address_of_person_involved}}</div>
-        </li>
-        <li>
-            Description of Target Items/s: <div class="underlined">{{currentItem.target_items_description}}</div>
-        </li>
-        <li>
-            Alleged Violation/s: <div class='underlined'>{{currentItem.alleged_violations}}</div>
-        </li>
-        <li>
-            Risk & Threat Assessment: <div class='underlined'>{{currentItem.risk_assessment}}</div>
-        </li>
-        <lis>
-            Recommended Type of Operation <i>(PCSD only, joint-operaton etc):</i>
-            <div class='underlined'>{{currentItem.recommended_operation_type}}</div>
-        </lis>
-    </ol>
+    fuck
+        <ol>
+            <li>
+                NAMES OF SUSPECTED PERSONS INVOLVED:<br>
+                <div ng-repeat="person_involved in currentItem.persons_involved track by $index">
+                    <div class="underlined" flex>{{currentItem.persons_involved[$index].name}</div>
+                </div>
+            </li>
+            <li>
+                PHYSICAL DESCRIPTION OF EACH SUSPECTED PERSONS INVOLVED:<br>
+                <table>
+                    <tr ng-repeat="person_involved in currentItem.persons_involved">
+                        <td class="underlined">{{person_involved.name}}</td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td class="underlined">{{person_involved.physical_description}}</td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                CHARACTER DISPOSITION:<br>
+                <table>
+                    <tr ng-repeat="person_involved in currentItem.persons_involved">
+                        <td class="underlined">{{person_involved.name}}</td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td class="underlined">
+                            {{person_involved.character_disposition}}
+                        </td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                ADDRESSES & LOCATIONS OF PERSON/S INVOLVED: <br>
+                <table>
+                    <tr ng-repeat="person_involved in currentItem.persons_involved">
+                        <td class="underlined">{{person_involved.name}}</td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td class="underlined">
+                            {{person_involved.address}}
+                        </td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                CONTACT DETAILS OF EACH SUSPECTED PERSONS INVOLVED: <br>
+                <table>
+                    <tr ng-repeat="person_involved in currentItem.persons_involved">
+                        <td class="underlined">{{person_involved.name}}</td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td class="underlined">
+                            {{person_involved.contact_information}}
+                        </td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                ALLEGED ACTIVITIES & PARTICIPATION OF EACH SUSPECTED PERSONS INVOLVED: <br>
+                <table>
+                    <tr ng-repeat="person_involved in currentItem.persons_involved">
+                        <td class="underlined">{{person_involved.name}}</td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td class="underlined">
+                            {{person_involved.alleged_activities}}
+                        </td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                DESCRIPTION OF TARGET ITEMS:<br>
+                <div class="underlined" flex>
+                    {{currentItem.target_items_description}}
+                </div>
+            </li>
+            <li>
+                RELATIONSHIPS AND CONNECTIONS OF EACH SUSPECTED PERSONS INVOLVED:<br>
+                <div class="underlined" flex>
+                    {{currentItem.relationship}}
+                </div>
+            </li>
+            <li>
+                SUPPORT GROUP/SYSTEM:<br>
+                <div class="underlined" flex>
+                    {{currentItem.support_system}}
+                </div>
+            </li>
+            <li>
+                LAST KNOWN AREA OF OPERATION:<br>
+                <div class="underlined" flex>
+                    {{currentItem.last_known_operation_area}}
+                </div>
+            </li>
+            <li>
+                LAST KNOWN MODES OF TRAFFICKING:<br>
+                <div class="underlined" flex>
+                    {{currentItem.last_trafficking_modes}}
+                </div>
+            </li>
+            <li>
+                FINANCIAL TRANSACTION:<br>
+                <div class="underlined" flex>
+                    {{currentItem.last_known_operation_area}}
+                </div>
+            </li>
+            <li>
+                INFORMATION AVAILABLE FROM OTHER ENFORCEMENT AGENCIES:<br>
+                <div class="underlined" flex>
+                    {{currentItem.info_from_other_agencies}}
+                </div>
+            </li>
+            <li>
+                RISK & THREAT ASSESSMENTS:<br>
+                <div class="underlined" flex>
+                        {{currentItem.risk_assessment}}
+                    </div>
+            </li>
+            <li>
+                SUGGESTED DISTRIBUTION:<br>
+                <div class="underlined" flex>
+                    {{currentItem.suggested_distribution}}
+                </div>
+            </li>
+        </ol>
     <!-- Signature -->
     <div layout>
         <div style="width:50%">Recommended by:</div>

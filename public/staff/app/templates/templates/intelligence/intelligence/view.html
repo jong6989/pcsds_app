@@ -15,12 +15,14 @@
             <h3>{{currentItem.subject}}</h3>
         </div>
     </p>
-    <br>
+    <br><br>
     <div layout>
-        <div>SUBJECT:</div>
-        <div class="underlined" flex></div>
+        <div style="padding-right:5px"><b>SUBJECT:</b></div>
+        <div class="underlined" flex>{{currentItem.report_subject}}</div>
     </div>
-    <table>
+    <br>
+    <br>
+    <table style="width:65%">
         <tr>
             <td>
                 <b>DATE OF REPORT:</b>
@@ -64,18 +66,18 @@
             </td>
         </tr>
     </table>
-
+    <br>
     <ol>
         <li>
             NAMES OF SUSPECTED PERSONS INVOLVED:<br>
-            <div ng-repeat="person_invovled in currentItem.persons_invovled">
-                <div class="underlined" flex>{{person_invovled.name}}</div>
+            <div ng-repeat="person_invovled in currentItem.persons_involved">
+                <div class="underlined">{{person_invovled.name}}</div>
             </div>
         </li>
         <li>
             PHYSICAL DESCRIPTION OF EACH SUSPECTED PERSONS INVOLVED:<br>
             <table>
-                <tr ng-repeat="person_involved in currentItem.persons_invovled">
+                <tr ng-repeat="person_involved in currentItem.persons_involved">
                     <td class="underlined">{{person_involved.name}}</td>
                     <td>&nbsp;&nbsp;</td>
                     <td class="underlined">{{person_involved.physical_description}}</td>
@@ -85,7 +87,7 @@
         <li>
             CHARACTER DISPOSITION:<br>
             <table>
-                <tr ng-repeat="person_involved in currentItem.persons_invovled">
+                <tr ng-repeat="person_involved in currentItem.persons_involved">
                     <td class="underlined">{{person_involved.name}}</td>
                     <td>&nbsp;&nbsp;</td>
                     <td class="underlined">
@@ -97,7 +99,7 @@
         <li>
             ADDRESSES & LOCATIONS OF PERSON/S INVOLVED: <br>
             <table>
-                <tr ng-repeat="person_involved in currentItem.persons_invovled">
+                <tr ng-repeat="person_involved in currentItem.persons_involved">
                     <td class="underlined">{{person_involved.name}}</td>
                     <td>&nbsp;&nbsp;</td>
                     <td class="underlined">
@@ -109,7 +111,7 @@
         <li>
             CONTACT DETAILS OF EACH SUSPECTED PERSONS INVOLVED: <br>
             <table>
-                <tr ng-repeat="person_involved in currentItem.persons_invovled">
+                <tr ng-repeat="person_involved in currentItem.persons_involved">
                     <td class="underlined">{{person_involved.name}}</td>
                     <td>&nbsp;&nbsp;</td>
                     <td class="underlined">
@@ -121,7 +123,7 @@
         <li>
             ALLEGED ACTIVITIES & PARTICIPATION OF EACH SUSPECTED PERSONS INVOLVED: <br>
             <table>
-                <tr ng-repeat="person_involved in currentItem.persons_invovled">
+                <tr ng-repeat="person_involved in currentItem.persons_involved">
                     <td class="underlined">{{person_involved.name}}</td>
                     <td>&nbsp;&nbsp;</td>
                     <td class="underlined">
@@ -139,7 +141,7 @@
         <li>
             RELATIONSHIPS AND CONNECTIONS OF EACH SUSPECTED PERSONS INVOLVED:<br>
             <div class="underlined" flex>
-                {{currentItem.relationships}}
+                {{currentItem.relationship}}
             </div>
         </li>
         <li>
@@ -175,8 +177,8 @@
         <li>
             RISK & THREAT ASSESSMENTS:<br>
             <div class="underlined" flex>
-                    {{currentItem.risk_assessment}}
-                </div>
+                {{currentItem.risk_assessment}}
+            </div>
         </li>
         <li>
             SUGGESTED DISTRIBUTION:<br>
