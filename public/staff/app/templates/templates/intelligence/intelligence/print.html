@@ -5,217 +5,212 @@
 </style>
 <div ng-include="'./app/templates/application/style.html'"></div>
 
-<div
-    ng-init="currentItem = $localStorage.params; printView(3000);" class="roman"
-    style="margin:0.5in">
+<div ng-init="currentItem = $localStorage.params; printView(3000)" class="roman" style="margin:0.5in">
     <!-- <div  ng-controller="GratuitousPermitController"  ng-init="currentItem=n"> -->
     <!-- header -->
     <div ng-include="'./app/templates/templates/header.html'"></div>
     <hr>
     <p>
-            <div class="align-center">
-                <h3>{{currentItem.subject}}</h3>
-            </div>
-        </p>
-        <br>
-        <div layout>
-            <div>SUBJECT:</div>
-            <div class="underlined" flex></div>
+        <div class="align-center">
+            <h3>{{currentItem.subject}}</h3>
         </div>
-        <table>
-            <tr>
-                <td>
-                    <b>DATE OF REPORT:</b>
-                </td>
-                <td>
-                    {{currentItem.report_date}}
-                </td>
-                <td>
-                    <b>CONTROL NO:</b>
-                </td>
-                <td>
-                    {{currentItem.control_number}}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>DATE RECEIVED:</b>
-                </td>
-                <td>
-                    {{currentItem.date_received}}
-                </td>
-                <td>
-                    <b>REFERENCE NO:</b>
-                </td>
-                <td>
-                    {{currentItem.reference_number}}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>REFERENCES:</b>
-                </td>
-                <td>
-                    {{currentItem.references}}
-                </td>
-                <td>
-                    <b>EVALUATION:</b>
-                </td>
-                <td>
-                    {{currentItem.evaluation}}
-                </td>
-            </tr>
-        </table>
+    </p>
     <br>
-    fuck
-        <ol>
-            <li>
-                NAMES OF SUSPECTED PERSONS INVOLVED:<br>
-                <div ng-repeat="person_involved in currentItem.persons_involved track by $index">
-                    <div class="underlined" flex>{{currentItem.persons_involved[$index].name}</div>
-                </div>
-            </li>
-            <li>
-                PHYSICAL DESCRIPTION OF EACH SUSPECTED PERSONS INVOLVED:<br>
-                <table>
-                    <tr ng-repeat="person_involved in currentItem.persons_involved">
-                        <td class="underlined">{{person_involved.name}}</td>
-                        <td>&nbsp;&nbsp;</td>
-                        <td class="underlined">{{person_involved.physical_description}}</td>
-                    </tr>
-                </table>
-            </li>
-            <li>
-                CHARACTER DISPOSITION:<br>
-                <table>
-                    <tr ng-repeat="person_involved in currentItem.persons_involved">
-                        <td class="underlined">{{person_involved.name}}</td>
-                        <td>&nbsp;&nbsp;</td>
-                        <td class="underlined">
-                            {{person_involved.character_disposition}}
-                        </td>
-                    </tr>
-                </table>
-            </li>
-            <li>
-                ADDRESSES & LOCATIONS OF PERSON/S INVOLVED: <br>
-                <table>
-                    <tr ng-repeat="person_involved in currentItem.persons_involved">
-                        <td class="underlined">{{person_involved.name}}</td>
-                        <td>&nbsp;&nbsp;</td>
-                        <td class="underlined">
-                            {{person_involved.address}}
-                        </td>
-                    </tr>
-                </table>
-            </li>
-            <li>
-                CONTACT DETAILS OF EACH SUSPECTED PERSONS INVOLVED: <br>
-                <table>
-                    <tr ng-repeat="person_involved in currentItem.persons_involved">
-                        <td class="underlined">{{person_involved.name}}</td>
-                        <td>&nbsp;&nbsp;</td>
-                        <td class="underlined">
-                            {{person_involved.contact_information}}
-                        </td>
-                    </tr>
-                </table>
-            </li>
-            <li>
-                ALLEGED ACTIVITIES & PARTICIPATION OF EACH SUSPECTED PERSONS INVOLVED: <br>
-                <table>
-                    <tr ng-repeat="person_involved in currentItem.persons_involved">
-                        <td class="underlined">{{person_involved.name}}</td>
-                        <td>&nbsp;&nbsp;</td>
-                        <td class="underlined">
-                            {{person_involved.alleged_activities}}
-                        </td>
-                    </tr>
-                </table>
-            </li>
-            <li>
-                DESCRIPTION OF TARGET ITEMS:<br>
-                <div class="underlined" flex>
-                    {{currentItem.target_items_description}}
-                </div>
-            </li>
-            <li>
-                RELATIONSHIPS AND CONNECTIONS OF EACH SUSPECTED PERSONS INVOLVED:<br>
-                <div class="underlined" flex>
-                    {{currentItem.relationship}}
-                </div>
-            </li>
-            <li>
-                SUPPORT GROUP/SYSTEM:<br>
-                <div class="underlined" flex>
-                    {{currentItem.support_system}}
-                </div>
-            </li>
-            <li>
-                LAST KNOWN AREA OF OPERATION:<br>
-                <div class="underlined" flex>
-                    {{currentItem.last_known_operation_area}}
-                </div>
-            </li>
-            <li>
-                LAST KNOWN MODES OF TRAFFICKING:<br>
-                <div class="underlined" flex>
-                    {{currentItem.last_trafficking_modes}}
-                </div>
-            </li>
-            <li>
-                FINANCIAL TRANSACTION:<br>
-                <div class="underlined" flex>
-                    {{currentItem.last_known_operation_area}}
-                </div>
-            </li>
-            <li>
-                INFORMATION AVAILABLE FROM OTHER ENFORCEMENT AGENCIES:<br>
-                <div class="underlined" flex>
-                    {{currentItem.info_from_other_agencies}}
-                </div>
-            </li>
-            <li>
-                RISK & THREAT ASSESSMENTS:<br>
-                <div class="underlined" flex>
-                        {{currentItem.risk_assessment}}
-                    </div>
-            </li>
-            <li>
-                SUGGESTED DISTRIBUTION:<br>
-                <div class="underlined" flex>
-                    {{currentItem.suggested_distribution}}
-                </div>
-            </li>
-        </ol>
+    <div layout>
+        <div>SUBJECT:</div>
+        <div class="underlined" flex>{{currentItem.report_subject}}</div>
+    </div>
+    <table>
+        <tr>
+            <td>
+                <b>DATE OF REPORT:</b>
+            </td>
+            <td>
+                {{currentItem.report_date}}
+            </td>
+            <td>
+                <b>CONTROL NO:</b>
+            </td>
+            <td>
+                {{currentItem.control_number}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>DATE RECEIVED:</b>
+            </td>
+            <td>
+                {{currentItem.date_received}}
+            </td>
+            <td>
+                <b>REFERENCE NO:</b>
+            </td>
+            <td>
+                {{currentItem.reference_number}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>REFERENCES:</b>
+            </td>
+            <td>
+                {{currentItem.references}}
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </tr>
+    </table>
+    <div><b>EVALUATION:</b></div>
+    <div class="underlined">
+        {{currentItem.evaluation}}
+    </div>
+    <br>
+    <ol>
+        <li>
+            NAMES OF SUSPECTED PERSONS INVOLVED:<br>
+            <div ng-repeat="person_involved in currentItem.persons_involved track by $index">
+                <div class="underlined" flex>{{person_involved.name}}</div>
+            </div>
+        </li>
+        <li>
+            PHYSICAL DESCRIPTION OF EACH SUSPECTED PERSONS INVOLVED:<br>
+            <table>
+                <tr ng-repeat="person_involved in currentItem.persons_involved">
+                    <td class="underlined">{{person_involved.name}}</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td class="underlined">{{person_involved.physical_description}}</td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            CHARACTER DISPOSITION:<br>
+            <table>
+                <tr ng-repeat="person_involved in currentItem.persons_involved">
+                    <td class="underlined">{{person_involved.name}}</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td class="underlined">
+                        {{person_involved.character_disposition}}
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            ADDRESSES & LOCATIONS OF PERSON/S INVOLVED: <br>
+            <table>
+                <tr ng-repeat="person_involved in currentItem.persons_involved">
+                    <td class="underlined">{{person_involved.name}}</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td class="underlined">
+                        {{person_involved.address}}
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            CONTACT DETAILS OF EACH SUSPECTED PERSONS INVOLVED: <br>
+            <table>
+                <tr ng-repeat="person_involved in currentItem.persons_involved">
+                    <td class="underlined">{{person_involved.name}}</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td class="underlined">
+                        {{person_involved.contact_information}}
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            ALLEGED ACTIVITIES & PARTICIPATION OF EACH SUSPECTED PERSONS INVOLVED: <br>
+            <table>
+                <tr ng-repeat="person_involved in currentItem.persons_involved">
+                    <td class="underlined">{{person_involved.name}}</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td class="underlined">
+                        {{person_involved.alleged_activities}}
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            DESCRIPTION OF TARGET ITEMS:<br>
+            <div class="underlined" flex>
+                {{currentItem.target_items_description}}
+            </div>
+        </li>
+        <li>
+            RELATIONSHIPS AND CONNECTIONS OF EACH SUSPECTED PERSONS INVOLVED:<br>
+            <div class="underlined" flex>
+                {{currentItem.relationship}}
+            </div>
+        </li>
+        <li>
+            SUPPORT GROUP/SYSTEM:<br>
+            <div class="underlined" flex>
+                {{currentItem.support_system}}
+            </div>
+        </li>
+        <li>
+            LAST KNOWN AREA OF OPERATION:<br>
+            <div class="underlined" flex>
+                {{currentItem.last_known_operation_area}}
+            </div>
+        </li>
+        <li>
+            LAST KNOWN MODES OF TRAFFICKING:<br>
+            <div class="underlined" flex>
+                {{currentItem.last_trafficking_modes}}
+            </div>
+        </li>
+        <li>
+            FINANCIAL TRANSACTION:<br>
+            <div class="underlined" flex>
+                {{currentItem.last_known_operation_area}}
+            </div>
+        </li>
+        <li>
+            INFORMATION AVAILABLE FROM OTHER ENFORCEMENT AGENCIES:<br>
+            <div class="underlined" flex>
+                {{currentItem.info_from_other_agencies}}
+            </div>
+        </li>
+        <li>
+            RISK & THREAT ASSESSMENTS:<br>
+            <div class="underlined" flex>
+                {{currentItem.risk_assessment}}
+            </div>
+        </li>
+        <li>
+            SUGGESTED DISTRIBUTION:<br>
+            <div class="underlined" flex>
+                {{currentItem.suggested_distribution}}
+            </div>
+        </li>
+    </ol>
     <!-- Signature -->
     <div layout>
         <div style="width:50%">Recommended by:</div>
         <div>Noted by:</div>
     </div>
-    <div layout ng-controller="doc_ctrl_draft"  
+    <div layout ng-controller="doc_ctrl_draft"
         ng-init="currentItem.sign1 = (currentItem.sign1 == undefined) ? {} : currentItem.sign1;">
-        
-            <div ng-if="currentItem.sign1.signature != undefined;" layout="column"
-                layout-align="center center"
-                style="width:50%">
-                <img ng-if="currentItem.sign1.signature != undefined"
-                    src="{{currentItem.sign1.signature}}" alt="Signature2" width="auto"
-                    style="margin-bottom: -35px;">
-                <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong>
-                </div>
-                <div class="align-center"> {{currentItem.sign1.designation}} </div>
-            </div>
 
-            <div ng-if="currentItem.sign2.signature != undefined;" layout="column"
-                layout-align="center center">
-                <img ng-if="currentItem.sign2.signature != undefined"
-                    src="{{currentItem.sign2.signature}}" alt="Signature2" width="auto"
-                    style="margin-bottom: -35px;">
-                <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong>
-                </div>
-                <div class="align-center"> {{currentItem.sign2.designation}} </div>
+        <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center"
+            style="width:50%">
+            <img ng-if="currentItem.sign1.signature != undefined" src="{{currentItem.sign1.signature}}" alt="Signature2"
+                width="auto" style="margin-bottom: -35px;">
+            <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong>
             </div>
+            <div class="align-center"> {{currentItem.sign1.designation}} </div>
+        </div>
+
+        <div ng-if="currentItem.sign2.signature != undefined;" layout="column" layout-align="center center">
+            <img ng-if="currentItem.sign2.signature != undefined" src="{{currentItem.sign2.signature}}" alt="Signature2"
+                width="auto" style="margin-bottom: -35px;">
+            <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong>
+            </div>
+            <div class="align-center"> {{currentItem.sign2.designation}} </div>
+        </div>
     </div>
     <!-- footer -->
     <div ng-include="'https://document-network.web.app/pcsd/templates/footer3.html'"></div>
