@@ -1,0 +1,19 @@
+<div layout ng-controller="summary_of_information_create_controller" ng-init="set_page_title('Summary of Information - Create');load_last_number();">
+    <form ng-cloak name="form_add_draft" flex>
+            <cite class="col-red">
+                Last control no: <strong> {{last_control_number}} </strong>
+            </cite>
+            <hr>
+            <div ng-include="n.template.create" ></div>
+            
+            <md-button class="md-primary md-raised" 
+                ng-disabled="form_add_draft.$invalid" 
+                ng-controller="doc_controller"
+                ng-init="doc_init()"
+                ng-click="create(doc_user.id);"
+                >
+                Create Draft
+            </md-button>
+    </form>
+   
+</div>
