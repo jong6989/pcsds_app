@@ -335,7 +335,6 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
         
     }
     $scope.createDraft = async (x) => {
-        console.log(x);
         if($scope.doc_user.id !== undefined) {
             x.publisher = $scope.doc_user.id;
             x.created_time = Date.now();

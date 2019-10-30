@@ -1,4 +1,4 @@
-myAppModule.requires.push('thatisuday.ng-image-gallery');
+// myAppModule.requires.push('thatisuday.ng-image-gallery');
 myAppModule.
     controller('profile_links_controller', [
         '$scope',
