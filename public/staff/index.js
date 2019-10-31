@@ -36,7 +36,8 @@ var script_ng_plugins = {
 //angularjs controllers 
 var scripts_controllers = {
     main : `<script src="app/app.js"></script>`,
-    login : `<script src="app/login/controller.js"></script>`
+    login : `<script src="app/login/controller.js"></script>`,
+    chainsaw_monitoring: '<script src="app/templates/templates/monitoring/chainsaw/controller.js"></script>'
 };
 var scripts_js_plugins = {
     particles : `<script src="/plugins/particlesjs/js/particles.min.js"></script>
@@ -95,6 +96,7 @@ async function authenticateStaff(){
                     script_ng_plugins.dashboard + 
                     script_angular  + 
                     scripts_controllers.main + 
+                    scripts_controllers.chainsaw_monitoring +
                     controllers;
                 document.write(dashboardPage);
             } catch (error) {

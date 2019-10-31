@@ -178,6 +178,15 @@
 			"edit" : 	"./app/templates/templates/intelligence/intelligence/edit.html",
 			"print" : 	"./app/templates/templates/intelligence/intelligence/print.html",
 			"view" : 	"./app/templates/templates/intelligence/intelligence/view.html"
+		},
+		{
+			"name" : "Monitoring Report - Chainsaw",
+			"type" : "report",
+			"permit" : false,
+			"create" : 	"./app/templates/templates/monitoring/chainsaw/create.html",
+			"edit" : 	"./app/templates/templates/monitoring/chainsaw/edit.html",
+			"print" : 	"./app/templates/templates/monitoring/chainsaw/print.html",
+			"view" : 	"./app/templates/templates/monitoring/chainsaw/view.html"
 		}
 	]
 }
