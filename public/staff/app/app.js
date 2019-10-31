@@ -144,6 +144,20 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     );
   };
 
+  $scope.toast_s = (text)=>{
+    Toast.fire({
+        type: 'success',
+        title: text
+    });
+  };
+
+  $scope.toast_e = (text)=>{
+    Toast.fire({
+        type: 'error',
+        title: text
+    });
+  };
+
   $scope.logout = function(){
     firebase.auth().signOut().catch(function(error) {
           console.log(error)

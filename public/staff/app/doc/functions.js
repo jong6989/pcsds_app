@@ -8,13 +8,17 @@ myAppModule.service('func', function($localStorage) {
 
     //Drafts
     func.getMyDrafts = async () => {
-        let res = await doc.db.collection(documents).
+        if(func.$scope.userId){
+            let res = await doc.db.collection(documents).
             where("status","==","draft").
             where("publisher","==",func.$scope.userId).
             get();
-        let r = res.docs.map( doc => { let o = doc.data(); o.id = doc.id; return o; });
-        return r;
-    }
+            let r = res.docs.map( doc => { let o = doc.data(); o.id = doc.id; return o; });
+            return r;
+        }else {
+            return [];
+        }
+    };
 
     func.getFilesTobeUploaded = async () => {
         let res =   await doc.db.collection(acc).doc(func.$scope.userId).collection(offlineFiles).where("uploaded","==",false).get();

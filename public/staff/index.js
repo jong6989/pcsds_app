@@ -165,6 +165,28 @@ localData.set('STAFF_ACCOUNT',`
                 "title":"Document Network"
             },
             {
+                "controller":"<script src='app/operations/summary_of_information/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Summary of Information",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/summary_of_information/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/summary_of_information/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/summary_of_information/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
                 "controller":"<script src='app/applications/controller.js'></script>",
                 "icon":"files-o",
                 "path":"/applications",

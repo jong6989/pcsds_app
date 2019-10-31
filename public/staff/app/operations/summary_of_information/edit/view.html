@@ -1,0 +1,3 @@
+<div ng-controller="summary_of_information_controller" ng-init="load_data();set_page_title('Edit draft');">
+    <div ng-if="currentItem.template != undefined" ng-include="currentItem.template.edit"></div>
+</div>

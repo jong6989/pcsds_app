@@ -46,84 +46,89 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
     $scope.dateB = '';
     func.$scope = $scope;
 
-    // draft 
-    doc.db.collection(documents).where("status","==","draft").where("publisher","==",userId).onSnapshot(qs => {
-        if(!qs.empty) {
-            let r = qs.docs.map(d => {
-                let o = d.data();
-                o.id = d.id;
-                return o;
-            });
-            $scope.myDrafts = $localStorage.myDrafts = r;
-        }else {
-            $localStorage.currentItem = undefined;
-            $localStorage.myDrafts = [];
-            $scope.myDrafts = [];
-            if($scope.currentClicked == 'draft')
-                $scope.currentItem = null;
-        }
-    });
+    function snapShots(){
+        // draft 
+        doc.db.collection(documents).where("status","==","draft").where("publisher","==",userId).onSnapshot(qs => {
+            if(!qs.empty) {
+                let r = qs.docs.map(d => {
+                    let o = d.data();
+                    o.id = d.id;
+                    return o;
+                });
+                $scope.myDrafts = $localStorage.myDrafts = r;
+            }else {
+                $localStorage.currentItem = undefined;
+                $localStorage.myDrafts = [];
+                $scope.myDrafts = [];
+                if($scope.currentClicked == 'draft')
+                    $scope.currentItem = null;
+            }
+        });
 
-    //Published 
-    doc.db.collection(documents).where("status","==","published").where("publisher","==",userId).orderBy('meta.published_time','desc')
-    .onSnapshot(qs => {
-        if(!qs.empty) {
-            let r = qs.docs.map(d => {
-                let o = d.data();
-                o.id = d.id;
-                return o;
-            });
-            $scope.myPublished = r;
-        }
-    });
+        //Published 
+        doc.db.collection(documents).where("status","==","published").where("publisher","==",userId).orderBy('meta.published_time','desc')
+        .onSnapshot(qs => {
+            if(!qs.empty) {
+                let r = qs.docs.map(d => {
+                    let o = d.data();
+                    o.id = d.id;
+                    return o;
+                });
+                $scope.myPublished = r;
+            }
+        });
 
-    //pending
-    doc.db.collection(doc_transactions).where('receiver','==',$scope.userId).orderBy('time','desc').where('status','==','pending')
-    .onSnapshot( qs => {
-        if(!qs.empty) {
-            let a = qs.docs.map(
-                dx => {
-                    let b = dx.data();
-                    b.id = dx.id;
-                    return b;
-                }
-            );
-            $scope.myPending = a;
-        }
-    });
+        //pending
+        doc.db.collection(doc_transactions).where('receiver','==',$scope.userId).orderBy('time','desc').where('status','==','pending')
+        .onSnapshot( qs => {
+            if(!qs.empty) {
+                let a = qs.docs.map(
+                    dx => {
+                        let b = dx.data();
+                        b.id = dx.id;
+                        return b;
+                    }
+                );
+                $scope.myPending = a;
+            }
+        });
+
+        //received
+        doc.db.collection(doc_transactions).where('receiver','==',$scope.userId).orderBy('received.time','desc').where('status','==','received')
+        .onSnapshot( qs => {
+            if(!qs.empty) {
+                let a = qs.docs.map(
+                    dx => {
+                        let b = dx.data();
+                        b.id = dx.id;
+                        return b;
+                    }
+                );
+                $scope.myReceived = a;
+            }
+        });
+
+        //sent
+        doc.db.collection(doc_transactions).where('sender.id','==',$scope.userId).orderBy('time','desc')
+        .onSnapshot( qs => {
+            if(!qs.empty) {
+                let a = qs.docs.map(
+                    dx => {
+                        let b = dx.data();
+                        b.id = dx.id;
+                        return b;
+                    }
+                );
+                $scope.mySent = a;
+            }
+        });
+    }
+    
     $scope.removeFromPending = (id) => {
         $scope.myPending = $scope.myPending.filter( i => (i.id != id) );
     };
 
-    //received
-    doc.db.collection(doc_transactions).where('receiver','==',$scope.userId).orderBy('received.time','desc').where('status','==','received')
-    .onSnapshot( qs => {
-        if(!qs.empty) {
-            let a = qs.docs.map(
-                dx => {
-                    let b = dx.data();
-                    b.id = dx.id;
-                    return b;
-                }
-            );
-            $scope.myReceived = a;
-        }
-    });
-
-    //sent
-    doc.db.collection(doc_transactions).where('sender.id','==',$scope.userId).orderBy('time','desc')
-    .onSnapshot( qs => {
-        if(!qs.empty) {
-            let a = qs.docs.map(
-                dx => {
-                    let b = dx.data();
-                    b.id = dx.id;
-                    return b;
-                }
-            );
-            $scope.mySent = a;
-        }
-    });
+    
 
     $scope.getUserAccount = async (id,idx) => {
         let a = await doc.db.collection(acc).doc(id).get();
@@ -160,6 +165,8 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
         //checking user if account activated
         doc.db.collection(acc).where('id','==',userId).get().then( qs => {
             $scope.isLoading = false;
+            snapShots();
+
             if(qs.empty) {
                 $scope.doc_content = 'app/doc/views/register.html';
             } else {
@@ -353,7 +360,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
             $scope.myDrafts = $localStorage.myDrafts = await func.getMyDrafts();
             
         }else {
-            $scope.toast("system error, please re-boot this app.")
+            $scope.toast("system error, please re-load.")
         }
         
     };
@@ -391,7 +398,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
     };
 
     $scope.setCurrentItem = (x,t,c) => {
-        if($scope.currentNavItem == 'Documents'){
+        if($scope.currentNavItem == 'Documents' && x.id){
             setTimeout(()=>{func.refreshDocItem(x.id, (a) => {
                 $scope.currentItem = a;
                 $scope.$apply();
