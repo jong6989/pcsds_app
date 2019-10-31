@@ -187,6 +187,15 @@
 			"edit" : 	"./app/templates/templates/monitoring/chainsaw/edit.html",
 			"print" : 	"./app/templates/templates/monitoring/chainsaw/print.html",
 			"view" : 	"./app/templates/templates/monitoring/chainsaw/view.html"
+		},
+		{
+			"name" : "Monitoring Report - Special Use Permit",
+			"type" : "report",
+			"permit" : false,
+			"create" : 	"./app/templates/templates/monitoring/sup/create.html",
+			"edit" : 	"./app/templates/templates/monitoring/sup/edit.html",
+			"print" : 	"./app/templates/templates/monitoring/sup/print.html",
+			"view" : 	"./app/templates/templates/monitoring/sup/view.html"
 		}
 	]
 }

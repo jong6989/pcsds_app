@@ -14,4 +14,19 @@ controller('ChainsawMonitoringController', function($scope){
         $scope.n.compliances[2].allowed_area_to_be_use[2] + ", Palawan and his residential area located in " + 
         $scope.n.compliances[2].allowed_area_to_be_use[3] +
         "(geographical location).";
+}).
+controller('SUPMonitoringController', function($scope){
+    $scope.n.compliances = [
+        { terms: "An authenticated copy of this Certificate must accompany the chainsaw user at all times."},
+        { terms: "The Permit is issued to the holder hereof for the purpose of transporting and/or use of the subject chainsaws only in the place of destination and for the purpose stated on the face of this Permit."},
+        { allowed_area_to_be_use: ["", "",] }, 
+        { terms: "This Permit should accompany the Permit to Cut or similar permits or authorization issued by the concerned government agencies."},
+        { terms: "Allow the duly authorized PCSD Staff and/or members of Enforcement/Monitoring Team at any time within reasonable hours of the day and night, with or without notice, to conduct periodic inspection of the subject chainsaws in the exercise of the inspection and visitorial powers of the PCSD."},
+        { terms: "The Permit is valid only up to one (1) month from date of issue."},
+        { terms: "Furnish PCSDS monthly production report for monitoring purposes."}
+    ]
+
+    $scope.n.compliances[2]. terms = "The chainsaws covered by this Permit shall be used " + 
+        " only within the parcel of land covered by " + $scope.n.compliances[2].allowed_area_to_be_use[0]  +  
+        "in Bgy. " + $scope.n.compliances[2].allowed_area_to_be_use[1] + " Palawan.";
 })

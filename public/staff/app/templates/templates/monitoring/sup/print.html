@@ -5,7 +5,7 @@
 </style>
 <div ng-include="'./app/templates/application/style.html'"></div>
 
-<div ng-init="currentItem = $localStorage.params; printView(3000)" class="roman" style="margin:0.5in">
+<div ng-init="currentItem = $localStorage.params;printView(3000)" class="roman" style="margin:0.5in">
     <!-- <div  ng-controller="GratuitousPermitController"  ng-init="currentItem=n"> -->
     <!-- header -->
     <div ng-include="'./app/templates/templates/header.html'"></div>
@@ -19,22 +19,21 @@
         <div layout-align="center center">CHAINSAW REGISTRATION</div>
         <style>
             td {
-                padding-right: 15px
+                padding-right: 15px;
             }
         </style>
-        <ol start="A" type="A">
+        <ol>
             <li>Project Information:<br>
                 <table ng-init="chainsawInfoRows = [
-                    { key: 'chainsaw_owner', label: 'Name of Chainsaw Owner/Representative'},
+                    { key: 'proponent_name', label: 'Name of Proponent'},
                     { key: 'address', label: 'Address'},
                     { key: 'coordinates', label: 'Coordinates'},
                     { key: 'registration_number', label: 'Certificate of Registration Number'},
-                    { key: 'date_issued', label: 'Date Issued'},
-                    { key: 'expiry_date', label: 'Expiry Date'},
-                    { key: 'limitation_of_use', label: 'Limitation on Use of Chainsaw'},
                     { key: 'brand', label: 'Brand'},
                     { key: 'serial_number', label: 'Serial Number'},
                     { key: 'metal_seal_number', label: 'Metal Seal Number'},
+                    { key: 'date_issued', label: 'Date Issued'},
+                    { key: 'validity_period', label: 'Validity Period'},
                 ]">
                     <tr ng-repeat="row in chainsawInfoRows">
                         <td>{{row.label}}</td>
@@ -47,9 +46,9 @@
             </li>
             <li>
                 Result of Monitoring:
-                <ol type="a" start="a">
+                <ol start="a">
                     <li>Monitoring on Compliance to the Terms and Conditions
-                        <table>
+                        <table >
                             <tr style="text-align:center">
                                 <td rowspan="2">TERMS AND CONDITIONS</td>
                                 <td colspan="2">STATUS OF COMPLIANCE</td>
@@ -59,28 +58,17 @@
                             <tr style="text-align:center">
                                 <td>Complied</td>
                                 <td>Not Complied</td>
-                                <td></td>
-                                <td></td>
                             </tr>
                             <tr ng-repeat="compliance in currentItem.compliances track by $index">
                                 <td>
-                                    <div ng-if="$index != 2">
-                                        {{$index+1}}. {{compliance.terms}}
-                                    </div>
-                                    <div ng-if="$index == 2">
-                                        3. The chainsaw shall be used only for the intended purpose and shall not be utilized
-                                        and transported outside the applied area covered by {{compliance.allowed_area_to_be_use[0]}}
-                                        of {{compliance.allowed_area_to_be_use[1]}} located at Bgy.
-                                        {{compliance.allowed_area_to_be_use[2]}},
-                                        Palawan and his residential area located in
-                                        {{compliance.allowed_area_to_be_use[3]}}
-                                        (geographical location).
+                                    <div>
+                                        {{compliance.terms}}
                                     </div>
                                 </td>
-                                <td style="text-align:center">
+                                <td>
                                     <i ng-if="compliance.complied == 'true'" class="fa fa-check col-green"></i>
                                 </td>
-                                <td style="text-align:center">
+                                <td>
                                     <i ng-if="compliance.complied == 'false'" class="fa fa-check col-green"></i>
                                 </td>
                                 <td>

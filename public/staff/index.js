@@ -37,7 +37,7 @@ var script_ng_plugins = {
 var scripts_controllers = {
     main : `<script src="app/app.js"></script>`,
     login : `<script src="app/login/controller.js"></script>`,
-    chainsaw_monitoring: '<script src="app/templates/templates/monitoring/chainsaw/controller.js"></script>'
+    chainsaw_monitoring: '<script src="app/templates/templates/monitoring/controller.js"></script>'
 };
 var scripts_js_plugins = {
     particles : `<script src="/plugins/particlesjs/js/particles.min.js"></script>
