@@ -1,0 +1,197 @@
+<!-- <div ng-controller="DummyWSUPController" ng-init="currentItem=n"> -->
+<div class="roman">
+	<div ng-include="'./app/templates/application/style.html'"></div>
+	<br>
+	<div layout>
+			<div style="width:75%"></div>
+			<md-input-container flex>
+				<label>Monitoring Date:</label>
+				<md-datepicker md-hide-icons="calendar" 
+					ng-init="monitoring_date=to_date(currentItem.monitoring_date)"
+					ng-model="monitoring_date"
+					ng-change="currentItem.monitoring_date=to_date(monitoring_date)"></md-datepicker>
+			</md-input-container>
+		</div>
+		<div class="align-center">
+			<h4>WILDLIFE SPECIAL USE PERMIT (AO-12)</h4>
+		</div>
+		<style>
+			td {
+				padding-right: 5px
+			}
+		</style>
+		<ol>
+			<li>Project Information:<br>
+				<table>
+					<tr>
+						<td>Name of Permit Holder</td>
+						<td>:</td>
+						<td>
+							<md-input-container flex>
+	
+								<input ng-model="currentItem.permit_holder_name" ng-blur="currentItem.keywords[0]=currentItem.permit_holder_name">
+							</md-input-container>
+						</td>
+					</tr>
+					<tr>
+						<td>Address</td>
+						<td>:</td>
+						<td>
+							<md-input-container flex>
+	
+								<textarea ng-model="currentItem.address"></textarea>
+							</md-input-container>
+						</td>
+					</tr>
+					<tr>
+						<td>Project Location</td>
+						<td>:</td>
+						<td>
+							<md-input-container flex>
+	
+								<textarea ng-model="currentItem.project_location"></textarea>
+							</md-input-container>
+						</td>
+					</tr>
+					<tr>
+						<td>Coordinates</td>
+						<td>:</td>
+						<td>
+							<md-input-container flex>
+	
+								<input ng-model="currentItem.coordinates">
+							</md-input-container>
+						</td>
+					</tr>
+					<tr>
+						<td>WSUP Number</td>
+						<td>:</td>
+						<td>
+							<md-input-container flex>
+	
+								<input ng-model="currentItem.registration_number" ng-blur="currentItem.keywords[1]=currentItem.registration_number">
+							</md-input-container>
+						</td>
+					</tr>
+	
+					<tr>
+						<td>Date Issued</td>
+						<td>:</td>
+						<td>
+							<md-input-container flex>
+								<md-datepicker md-hide-icons="calendar" 
+									ng-init="date_issued=to_date(currentItem.date_issued)"
+									ng-model="date_issued"
+									ng-change="currentItem.date_issued=to_date(date_issued)"></md-datepicker>
+							</md-input-container>
+						</td>
+					</tr>
+				</table>
+			</li>
+			<li>
+				Result of Monitoring:
+				<ol start="a">
+					<li>Monitoring on Compliance to the Terms and Conditions
+						<table>
+							<tr>
+								<td rowspan="2">TERMS AND CONDITIONS</td>
+								<td colspan="2">STATUS OF COMPLIANCE</td>
+								<td rowspan="2">PROOF/BASIS</td>
+								<td rowspan="2">REMARKS/RECOMMENDATIONS</td>
+							</tr>
+							<tr>
+								<td>Complied</td>
+								<td>Not Complied</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr ng-repeat="compliance in currentItem.compliances track by $index">
+								<td>
+									<div>{{$index + 1}}. {{compliance.terms}}</div>
+									<div ng-if="$index == 1">
+										<table>
+											<tr>
+												<td>Kind of Species</td>
+												<td>Scientific Name</td>
+												<td>Local Name/English Name</td>
+												<td></td>
+											</tr>
+											<tr ng-repeat="specimen in compliance.species">
+												<td>
+													<md-input-container flex>
+														<input ng-model="specimen.kind">
+													</md-input-container>
+												</td>
+												<td>
+													<md-input-container flex>
+														<input ng-model="specimen.scientific_name">
+													</md-input-container>
+												</td>
+												<td>
+													<md-input-container flex>
+														<input ng-model="specimen.local_name">
+													</md-input-container>
+												</td>
+												<td>
+													<md-button class="md-fab md-mini" aria-label="Remove this row"
+														ng-click="compliance.species.splice($index, 1)" ng-if="compliance.species.length > 1">
+														<md-tooltip md-direction="left">Remove Specy</md-tooltip>
+														<i class="fa fa-remove"></i>
+													</md-button>
+												</td>
+											</tr>
+										</table>
+										<md-button ng-click="compliance.species.push({})" class="md-primary md-raised">
+											Add Row
+										</md-button>
+									</div>
+									<div ng-if="$index == 3" >
+										<md-input-container flex>
+											<textarea ng-model="compliance.authorized_collectors"></textarea>
+										</md-input-container>
+									</div>
+								</td>
+								<td>
+									<md-radio-group ng-model="compliance.complied">
+										<md-radio-button value=true class="md-primary"></md-radio-button>
+									</md-radio-group>
+								</td>
+								<td>
+									<md-radio-group ng-model="compliance.complied">
+										<md-radio-button value=false class="md-primary"></md-radio-button>
+									</md-radio-group>
+								</td>
+								<td>
+									<md-input-container>
+										<textarea ng-model="compliance.proof"></textarea>
+									</md-input-container>
+								</td>
+								<td>
+									<md-input-container>
+										<textarea ng-model="compliance.remarks"></textarea>
+									</md-input-container>
+								</td>
+							</tr>
+						</table>
+					</li>
+					<li style="width:200px">Documentation and other issues:
+						<div>
+							<md-input-container>
+								<textarea ng-model="currentItem.documentation" ></textarea>
+							</md-input-container>
+						</div>
+	
+	
+					</li>
+				</ol>
+			</li>
+			<li>Recommendations:
+				<div>
+					<md-input-container flex>
+						<textarea ng-model="currentItem.recommendations"></textarea>
+					</md-input-container>
+				</div>
+	
+			</li>
+		</ol>
+</div>
