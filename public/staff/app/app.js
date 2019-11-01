@@ -386,6 +386,4 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     }
   }
 
-})
-
-;
+});
