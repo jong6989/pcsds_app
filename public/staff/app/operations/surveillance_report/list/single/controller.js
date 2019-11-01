@@ -1,30 +1,22 @@
 'use strict';
 
-myAppModule.controller('summary_of_information_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
+myAppModule.controller('surveillance_report_mylist_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
     const time_key = 'created_time';
     const collection = 'documents';
-    const category = 'summary_of_information';
-
-    $scope.create_surveillance_report = (item)=>{
-        $localStorage.soi_data = item;
-        $scope.set_path('/operations/surveillance_report/create');
-    };
-
-    $scope.load_data = ()=>{
-        $scope.currentItem = $localStorage.data;
-        if($scope.currentItem == undefined) $scope.set_path('/operations/summary_of_information/create');
-    };
+    const category = 'surveillance_report';
+    const userId = `pcsd_${$scope.user.id}`;
 
     $scope.open_view = (item)=>{
         $localStorage.data = item;
-        $scope.set_path('/operations/summary_of_information/view');
+        $localStorage.params = item;
+        $scope.set_path('/operations/surveillance_report/view');
     };
 
     $scope.ceil = (number)=> {
         return Math.ceil(number);
     };
 
-    $scope.load_all = ()=>{
+    $scope.load_list = ()=>{
         $scope.all_items = [];
         $scope.total_query_size = 0;
         $scope.query_limit = 20;
@@ -55,6 +47,7 @@ myAppModule.controller('summary_of_information_controller', function ($scope, $t
             let query_set = db.collection(collection)
             .orderBy(time_key,"desc")
             .where('category','==',category)
+            .where('publisher','==',userId)
             .limit($scope.query_limit)
             .startAfter(last_query_doc);
             load_query(query_set);
@@ -66,32 +59,22 @@ myAppModule.controller('summary_of_information_controller', function ($scope, $t
             let query_set = db.collection(collection)
             .orderBy(time_key,"desc")
             .where('category','==',category)
+            .where('publisher','==',userId)
             .limit($scope.query_limit)
             .startAt(parseInt(previous_doc));
             load_query(query_set,true);
         };
 
-        db.collection(collection).where('category','==',category).onSnapshot( qs => {
+        db.collection(collection).where('category','==',category)
+        .where('publisher','==',userId).onSnapshot( qs => {
             $scope.total_query_size = qs.size;
             let query_set = db.collection(collection)
             .where('category','==',category)
+            .where('publisher','==',userId)
             .orderBy(time_key,"desc")
             .limit($scope.query_limit);
             load_query(query_set,false,true);
         });
     };
 
-    $scope.listen_document_change = (callBack)=>{
-        db.collection(collection).doc($localStorage.data.id).onSnapshot( (res)=>{
-            let d = res.data();
-            d.id = res.id;
-            $scope.currentItem = d;
-            if(callBack) callBack();
-            $scope.$apply();
-        } );
-    };
-
 });
-
-document.write(`<script src='app/operations/summary_of_information/create/controller.js'></script>`);
-document.write(`<script src='app/operations/summary_of_information/list/single/controller.js'></script>`);

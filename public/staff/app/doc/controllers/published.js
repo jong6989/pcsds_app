@@ -9,9 +9,34 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $mdToas
     var currentDisplayedDocument = null;
     $scope.send_as = $localStorage.doc_send_as;
     func.$scope = $scope;
-    
+
     $scope.loadReciepients = (a,b) => {
-        doc.db.collection(acc).where(`${b}.active`,"==",true).onSnapshot(qs => {
+        if(b){
+            doc.db.collection(acc).where(`${b}.active`,"==",true).onSnapshot(qs => {
+                if(!qs.empty) {
+                    let r = qs.docs.map(d => {
+                        let o = d.data();
+                        o.id = d.id;
+                        return o;
+                    });
+                    $scope.receipients = r;
+                    $localStorage.doc_receipients = r;
+                    $scope.$apply();
+                }else {
+                    $localStorage.doc_receipients = [];
+                }
+            });
+            for (const k in a) {
+                if($localStorage.doc_send_as == undefined) {
+                    $localStorage.doc_send_as = k;
+                    $scope.send_as = k;
+                }
+            }
+        }
+    };
+
+    $scope.load_operation_reciepients = (a) => {
+        db.collection('accounts').where(`${$scope.global.ops.id}.active`,"==",true).onSnapshot(qs => {
             if(!qs.empty) {
                 let r = qs.docs.map(d => {
                     let o = d.data();
@@ -21,8 +46,6 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $mdToas
                 $scope.receipients = r;
                 $localStorage.doc_receipients = r;
                 $scope.$apply();
-            }else {
-                $localStorage.doc_receipients = [];
             }
         });
         for (const k in a) {
@@ -67,6 +90,12 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $mdToas
         $scope.reciepientList = [];
         $localStorage.doc_send_as = a;
         setTimeout($scope.filterReciepient, 200);
+    };
+
+    $scope.init_send_as = (a) => {
+        $scope.reciepientList = [];
+        $scope.send_as = a;
+        $scope.filterReciepient();
     };
 
     $scope.backToDraft = (item,ev) => {
@@ -131,38 +160,44 @@ myAppModule.controller('doc_ctrl_published', function ($scope, $timeout, $mdToas
         $scope.close_dialog();
     };
 
+    var loop_limiter_receipients = false;
     $scope.load_current_receipients = (r) => {
+        if(r == undefined) r = $scope.currentItem.receipients;
         if(r != undefined) {
             currentDisplayedDocument = $scope.currentItem.id;
             delete($scope.currentReciepients);
             $scope.currentReciepients = [];
-            r.forEach(receiver_id => {
-                doc.db.collection(acc).doc(receiver_id).get().then(dx => {
-                    let a = dx.data();
-                    a.id = dx.id;
-                    a.sentItems = [];
-                    $scope.currentReciepients.push(a);
-                    doc.db.collection(doc_transactions).where('receiver','==',receiver_id)
-                        .where('document.id','==',$scope.currentItem.id)
-                        .where('sender.id','==',$scope.userId)
-                        .get()
-                        .then( qs => {
-                            qs.forEach(
-                                dy => {
-                                    let b = dy.data();
-                                    b.id = dy.id;
-                                    $scope.currentReciepients = $scope.currentReciepients.map(
-                                        c => {
-                                            if(c.id == b.receiver)
-                                                c.sentItems.push(b);
-                                            return c;
-                                        }
-                                    );
-                                }
-                            );
-                        } );
+            if(!loop_limiter_receipients){
+                loop_limiter_receipients = true;
+                setTimeout( ()=> { loop_limiter_receipients = false; }, 500 );
+                r.forEach(receiver_id => {
+                    doc.db.collection(acc).doc(receiver_id).get().then(dx => {
+                        let a = dx.data();
+                        a.id = dx.id;
+                        a.sentItems = [];
+                        $scope.currentReciepients.push(a);
+                        doc.db.collection(doc_transactions).where('receiver','==',receiver_id)
+                            .where('document.id','==',$scope.currentItem.id)
+                            .where('sender.id','==',$scope.userId)
+                            .get()
+                            .then( qs => {
+                                qs.forEach(
+                                    dy => {
+                                        let b = dy.data();
+                                        b.id = dy.id;
+                                        $scope.currentReciepients = $scope.currentReciepients.map(
+                                            c => {
+                                                if(c.id == b.receiver)
+                                                    c.sentItems.push(b);
+                                                return c;
+                                            }
+                                        );
+                                    }
+                                );
+                            } );
+                    });
                 });
-            });
+            }
         }
     };
     

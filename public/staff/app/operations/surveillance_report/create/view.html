@@ -1,10 +1,8 @@
-<div layout ng-controller="summary_of_information_create_controller" ng-init="set_page_title('Summary of Information - Create');load_last_number();">
-    
+<div layout ng-controller="surveillance_report_create_controller" ng-init="set_page_title('Surveillance Report - Create');load_last_number();">
     <div flex="100" layout-align="center center" ng-if="is_loading" layout>
         <md-progress-circular md-mode="indeterminate" md-diameter="70">
         </md-progress-circular>
     </div>
-
     <form ng-if="!is_loading" ng-cloak name="form_add_draft" flex>
             <cite class="col-red">
                 Last control no: <strong> {{last_control_number}} </strong>

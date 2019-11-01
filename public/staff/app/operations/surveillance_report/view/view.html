@@ -1,6 +1,7 @@
 
+
 <div ng-controller="doc_controller" ng-init="doc_init();">
-    <div ng-controller="summary_of_information_controller" ng-init="load_data();set_page_title(currentItem.subject);">
+    <div ng-controller="surveillance_report_controller" ng-init="load_data();set_page_title(currentItem.subject);">
         <div ng-controller="doc_ctrl_published" 
             ng-init="
             load_operation_reciepients(doc_user[currentItem.agency.id]);
@@ -12,11 +13,6 @@
             <hr>
             
             <div layout-gt-sm layout-sm="column" layout-align="center center">
-                <!-- connecting documents -->
-                <md-button class="md-button md-primary" ng-click="create_surveillance_report(currentItem)" layout-gt-sm>
-                    <i class="fa fa-chain m-r-5"></i>
-                    Create Surveillance Report
-                </md-button>
                 <!-- send and receipients -->
                 <md-button class="md-button md-primary" ng-click="openSendDocument(currentItem, $event)" layout-gt-sm>
                     <i class="fa fa-paper-plane m-r-5"></i>

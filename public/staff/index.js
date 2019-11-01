@@ -187,6 +187,28 @@ localData.set('STAFF_ACCOUNT',`
                 ]
             },
             {
+                "controller":"<script src='app/operations/surveillance_report/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Surveillance Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/surveillance_report/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/surveillance_report/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/surveillance_report/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
                 "controller":"<script src='app/applications/controller.js'></script>",
                 "icon":"files-o",
                 "path":"/applications",

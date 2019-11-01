@@ -27,6 +27,26 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   $scope.content_page = "";
   $scope.active_menu = "";
   $scope.menus = [];
+  
+  //app globals
+  $scope.global = {
+    ops : { id: 'WJ43CJV6R3uF3QMaWrvj', name : 'Operations', short_name : 'Ops'}
+  };
+
+
+  $scope.exists = function (item, list) {
+    return list.indexOf(item) > -1;
+  };
+
+  $scope.toggle_select = function (item, list) {
+      var idx = list.indexOf(item);
+      if (idx > -1) {
+          list.splice(idx, 1);
+      }
+      else {
+          list.push(item);
+      }
+  };
 
   $scope.$watch( 
       ()=> { 

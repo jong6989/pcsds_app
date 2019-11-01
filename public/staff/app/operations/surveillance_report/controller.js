@@ -1,23 +1,18 @@
 'use strict';
 
-myAppModule.controller('summary_of_information_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
+myAppModule.controller('surveillance_report_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
     const time_key = 'created_time';
     const collection = 'documents';
-    const category = 'summary_of_information';
-
-    $scope.create_surveillance_report = (item)=>{
-        $localStorage.soi_data = item;
-        $scope.set_path('/operations/surveillance_report/create');
-    };
+    const category = 'surveillance_report';
 
     $scope.load_data = ()=>{
         $scope.currentItem = $localStorage.data;
-        if($scope.currentItem == undefined) $scope.set_path('/operations/summary_of_information/create');
+        if($scope.currentItem == undefined) $scope.set_path('/operations/surveillance_report/create');
     };
 
     $scope.open_view = (item)=>{
         $localStorage.data = item;
-        $scope.set_path('/operations/summary_of_information/view');
+        $scope.set_path('/operations/surveillance_report/view');
     };
 
     $scope.ceil = (number)=> {
@@ -93,5 +88,5 @@ myAppModule.controller('summary_of_information_controller', function ($scope, $t
 
 });
 
-document.write(`<script src='app/operations/summary_of_information/create/controller.js'></script>`);
-document.write(`<script src='app/operations/summary_of_information/list/single/controller.js'></script>`);
+document.write(`<script src='app/operations/surveillance_report/create/controller.js'></script>`);
+document.write(`<script src='app/operations/surveillance_report/list/single/controller.js'></script>`);
