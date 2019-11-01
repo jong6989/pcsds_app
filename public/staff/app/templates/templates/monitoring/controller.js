@@ -107,4 +107,52 @@ controller('WSUPMonitoringController', function($scope){
             "penalty provided under the said Admin Order."}
     ];
 
+}).
+controller('RFFMonitoringController', function($scope){
+    $scope.n.compliances = [
+        { terms: "Buy and sell of RFF species must start only after submission to " + 
+        "ECAN Board Endorsement duly approved by the Municipal ECAN Board Chairman on the current year which covers RFF as part of the approved business permit." },
+        { terms: "The permittee shall only buy RFF from catchers with duly issued " + 
+        "valid PCSD Wildlife Collector’s Permit (WCP) and who are included in their list of catchers." },
+        { terms: "The permittee shall secure Local Transport Permit (LTP) from " + 
+        "PCSDS prior to the shipment date for transport of RFF from Palawan to other places within the Philippines." },
+        { terms: "The Permittee shall only deal or transact to individuals issued " + 
+        "with valid Wildlife Collector’s and/or Wildlife Special Use Permit." },
+        { terms: "The permittee shall secure from PCSDS a Non-CITES export " + 
+        "certification three (3) working days prior to the date of shipment for export of RFF coming from Palawan even if the port of exit is outside the province." },
+        { terms: "The use of RFF species for caging purposes shall be in " + 
+        "accordance with the size/weight restriction specified under PCSD Revised AO 5 as amended by PCSD Resolution No. 17-587 that the allowed wild-caught RFF species shall have a minimum weight of 250 grams and shall not exceed 1500 grams (250 grams – 1500 grams). No caging of wild-caught suno with weight below 250 grams is allowed except those sourced from accredited hatcheries." },
+        { terms: "Wild-caught suno which weigh below 250 grams and more than " + 
+        "1500 grams, is/are gravid shall be released immediately back to the capture site." },
+        { terms: "The use of Dynamite, Cyanide and Compressor for fishing " + 
+        "shall be prohibited, except when compressor is used for cleaning cages and feeding suno kept thereat. Provided, that compressors are installed and controlled at the Sitio and Barangay Sites." },
+        { terms: "No trash fish caught using illegal method such as dynamite " + 
+        "fishing is allowed as feeds for the RFF species under this permit." },
+        { terms: "The permittee shall observe cleanliness and good sanitation " + 
+        "at all times in the maintenance of the aquarium facility/ies to prevent possible contamination and/or spread of pest/diseases which may affect the survival of both live fish/es in the aquarium and wild fish populations and other species in the discharge area/s." },
+        { terms: "All prohibitions indicated under Section 16 of PCSD Revised " + 
+        "Administrative Order No. 05, series of 2014 (attached hereto as “Annex A”) which are applicable to catching, trading, transport, and export and breeding of RFF shall be an integral part of the terms and conditions herein provided." },
+        { terms: "The permittee shall submit to the PCSDS a quarterly report " + 
+        "using quarterly monitoring report for traders of RFF (attached hereto as Annex B). Failure to submit a report for the previous quarter shall be ground for non-approval of the current application for Local Transport Permit." },
+        { terms: "This Permit shall not be used to trade RFF defined in this " + 
+        "order which were caught in Core Zones or areas declared by concerned LGUs as overfished or Marine Protected Areas." },
+        { terms: "Comply with the terms of the Letter of Commitment submitted " + 
+        "to the PCSD." },
+        { terms: "Practice waste segregation by providing garbage bins in the " + 
+        "buying station and aquarium according to the general types of wastes  (Biodegradable, Recyclable, Non-Recyclable)for proper disposal of the wastes generated during project operation.  Composting shall be practiced for biodegradable wastes" },
+        { terms: "Provide a septic tank in the buying station and aquarium, " + 
+        "if necessary and/or as determined by the PCSDS." },
+        { terms: "Put a perimeter net that will serve as solid waste screener " + 
+        "underneath the buying station and aquarium." },
+        { terms: "Secure other necessary permits from concerned agencies prior " + 
+        "to the commencement of the project." },
+        { terms: "Shall not allow other entities, natural or juridical the use " + 
+        "of PCSD permit for purposes of engaging in any of the RFF operations." },
+        { terms: "Inform the concerned PCSD DMO Staff if the buying station and " + 
+        "aquarium is relocated to another place." },
+        { terms: "In case there is a need for additional condition(s) and/or " + 
+        "amendment to this permit to ensure environmental integrity or sustainability of RFF as a result of technical evaluation/assessment/scientific studies or as recommended by the technical working group created under the Joint Executive Order No. 1  (Creation of  the Technical Working Group and Resource Persons Pool For Reef-Fish-For-Food Industry in the Province of Palawan) entered into between PCSD and the office of the Provincial Government, and change or amendment in RFF policy by the PCSD the same shall be imposed by PCSDS." },
+        { terms: "Any alteration, erasure or obliteration in this permit shall " + 
+        "be sufficient ground for the cancellation/revocation of this permit without prejudice to criminal and other liabilities of the offender." }
+    ];
 })
