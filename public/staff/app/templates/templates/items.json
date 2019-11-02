@@ -214,6 +214,15 @@
 			"edit" : 	"./app/templates/templates/monitoring/rff/edit.html",
 			"print" : 	"./app/templates/templates/monitoring/rff/print.html",
 			"view" : 	"./app/templates/templates/monitoring/rff/view.html"
+		},
+		{
+			"name" : "Monitoring Report - SEP",
+			"type" : "report",
+			"permit" : false,
+			"create" : 	"./app/templates/templates/monitoring/sep/create.html",
+			"edit" : 	"./app/templates/templates/monitoring/sep/edit.html",
+			"print" : 	"./app/templates/templates/monitoring/sep/print.html",
+			"view" : 	"./app/templates/templates/monitoring/sep/view.html"
 		}
 	]
 }

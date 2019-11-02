@@ -155,4 +155,63 @@ controller('RFFMonitoringController', function($scope){
         { terms: "Any alteration, erasure or obliteration in this permit shall " + 
         "be sufficient ground for the cancellation/revocation of this permit without prejudice to criminal and other liabilities of the offender." }
     ];
+}).
+controller('SEPMonitoringController', function($scope){
+    $scope.n.compliances = [
+    { terms: "Confine project operation within the applied area of 300 square meters.", uploadedImages:[]},
+    { terms: "Any expansion of the project is subject to a separate SEP Clearance.", uploadedImages:[]},
+    { terms: "Strictly implement and comply with the mitigating measures stipulated" +
+    " in Initial    Environmental Examination (IEE) Report.", uploadedImages:[]},
+    { terms: "The herein grantee shall assume full responsibility and liability for" +
+    " damages to private/public property caused by the project."},
+    { terms: "Should the implementation of the project cause adverse environmental" +
+    " impact and pose nuisance to public health and safety as determined by PCSDS, " +
+    " these factors shall be sufficient ground for the cancellation or suspension of the SEP Clearance.", uploadedImages:[]},
+    { terms: "Institute an energy and resource efficient measures and other green" +
+    " methodologies in the operation of the following systems: lighting, transport, ", uploadedImages:[]},
+    " ventilation, refrigeration, air-conditioning, waste disposal, water supply, water heating, and supply chain. " +
+    { terms: "Register to the ZCR Project within 30 days from receipt of the SEP" +
+    " Clearance. Registration forms are available at the PCSD Main Office and at the District Management Office.", uploadedImages:[] },
+    { terms: "Institute an energy and resource efficient measures and other green" +
+    " methodologies in the operation of the following systems: lighting, transport, " +
+    " ventilation, refrigeration, air-conditioning, waste disposal, water supply, water heating, and supply chain.", uploadedImages:[]},
+    { terms: "Effect a yearly reduction in the energy bill from fossil fuel sources", uploadedImages:[] },
+    { terms: "Establish monthly self-monitoring system which would include among others" +
+    " power/energy, water and chemical consumption, effluent and ambient water " +
+    " quality and volume of solid and liquid wastes generated. Water and electricity " +
+    " bills and fuel receipts are required as supporting documents, if applicable. " +
+    " This shall be audited by the PCSD-ZCR Team. ", uploadedImages:[] },
+    { terms: "The Proponent shall pay the corresponding monitoring fee to the ECAN Board which will form part of the monitoring fund to be used by the latter in monitoring activities", uploadedImages: []},
+    { terms: "This project (its documents, structures, equipment and operation) is subject to monitoring or actual inspection by the ECAN Board (by itself or through its SMT) and PCSDS at any time of the day or night with or without prior permission", uploadedImages: []},
+    { terms: "This Clearance may be transferred to another only after the requisites stipulated in Section 15 of PCSD AO No. 6, as amended, are complied with", uploadedImages: []},
+    { terms: "The issuance of the SEP Clearance is subject to a post-condition that the corresponding LGU endorsement, ECC, FPIC, license, permit and other similar instruments must be subsequently secured, a copy of which will be furnished to the PCSD", uploadedImages: []},
+    { terms: "In case there is a need for additional condition(s) to ensure environmental integrity and public safety as a result of regular monitoring/inspection, the same shall be imposed by PCSD.", uploadedImages: []}
+    ];
+
+    $scope.addToGallery = (files, imageCollection, index) => {
+        Upload.
+            base64DataUrl(files).
+            then(urls => {
+                urls.forEach(url => {
+                    var image = {
+                        id: `${imageID}-${index}`,
+                        url: url,
+                        deletable: true
+                    }
+
+                    imageCollection.push(image);
+                    imageID++;
+                })
+            })
+    }
+
+    $scope.removeFromGallery = (imageToRemove, onDelete) => {
+        var imageIDinArray = imageToRemove.split('-');
+        var rowIndex = parseInt(imageIDinArray[imageIDinArray.length - 1], 10);
+        var index = $scope.compliances[rowIndex].uploadedImages.findIndex(image => image.id == imageToRemove.id);
+        if (index > -1) {
+            $scope.compliances[rowIndex].uploadedImages.splice(index, 0);
+            onDelete();
+        }
+    }
 })
