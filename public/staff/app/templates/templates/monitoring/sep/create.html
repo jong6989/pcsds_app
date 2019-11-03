@@ -119,7 +119,7 @@
                     <td><strong>Date Issued</strong></td>
                     <td>:</td>
                     <td>
-                        <md-datepicker ng-model="date_issued" ng-change="n.date_issued=to_date(date_issued)">
+                        <md-datepicker ng-model="clearance_date_issued" ng-change="n.clearance_date_issued=to_date(clearance_date_issued)">
                         </md-datepicker>
                     </td>
                 </tr>
@@ -154,7 +154,7 @@
                                 <md-input-container flex>
                                     <textarea ng-model="compliance.remarks"></textarea>
                                 </md-input-container>
-                                <ng-image-gallery images="compliance.images" thumbnails=true
+                                <ng-image-gallery images="compliance.uploadedImages" thumbnails=true
                                     on-delete="removeFromGallery(img, cb)"></ng-image-gallery>
                                 <md-button ngf-capture="'camera'" ngf-select
                                     ngf-change="addToGallery($files, compliance.uploadedImages, $index)"

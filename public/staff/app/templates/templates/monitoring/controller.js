@@ -156,7 +156,7 @@ controller('RFFMonitoringController', function($scope){
         "be sufficient ground for the cancellation/revocation of this permit without prejudice to criminal and other liabilities of the offender." }
     ];
 }).
-controller('SEPMonitoringController', function($scope){
+controller('SEPMonitoringController', function($scope, Upload){
     $scope.n.compliances = [
     { terms: "Confine project operation within the applied area of 300 square meters.", uploadedImages:[]},
     { terms: "Any expansion of the project is subject to a separate SEP Clearance.", uploadedImages:[]},
@@ -167,9 +167,10 @@ controller('SEPMonitoringController', function($scope){
     { terms: "Should the implementation of the project cause adverse environmental" +
     " impact and pose nuisance to public health and safety as determined by PCSDS, " +
     " these factors shall be sufficient ground for the cancellation or suspension of the SEP Clearance.", uploadedImages:[]},
-    { terms: "Institute an energy and resource efficient measures and other green" +
-    " methodologies in the operation of the following systems: lighting, transport, ", uploadedImages:[]},
-    " ventilation, refrigeration, air-conditioning, waste disposal, water supply, water heating, and supply chain. " +
+    { 
+        terms: "Institute an energy and resource efficient measures and other green" +
+        " methodologies in the operation of the following systems: lighting, transport, " +
+        " ventilation, refrigeration, air-conditioning, waste disposal, water supply, water heating, and supply chain. " , uploadedImages:[]},
     { terms: "Register to the ZCR Project within 30 days from receipt of the SEP" +
     " Clearance. Registration forms are available at the PCSD Main Office and at the District Management Office.", uploadedImages:[] },
     { terms: "Institute an energy and resource efficient measures and other green" +
@@ -188,6 +189,7 @@ controller('SEPMonitoringController', function($scope){
     { terms: "In case there is a need for additional condition(s) to ensure environmental integrity and public safety as a result of regular monitoring/inspection, the same shall be imposed by PCSD.", uploadedImages: []}
     ];
 
+    var imageID = 1;
     $scope.addToGallery = (files, imageCollection, index) => {
         Upload.
             base64DataUrl(files).
@@ -206,11 +208,11 @@ controller('SEPMonitoringController', function($scope){
     }
 
     $scope.removeFromGallery = (imageToRemove, onDelete) => {
-        var imageIDinArray = imageToRemove.split('-');
+        var imageIDinArray = imageToRemove.id.split('-');
         var rowIndex = parseInt(imageIDinArray[imageIDinArray.length - 1], 10);
-        var index = $scope.compliances[rowIndex].uploadedImages.findIndex(image => image.id == imageToRemove.id);
+        var index = $scope.n.compliances[rowIndex].uploadedImages.findIndex(image => image.id == imageToRemove.id);
         if (index > -1) {
-            $scope.compliances[rowIndex].uploadedImages.splice(index, 0);
+            $scope.n.compliances[rowIndex].uploadedImages.splice(index, 0);
             onDelete();
         }
     }
