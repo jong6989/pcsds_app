@@ -364,6 +364,10 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   }
 
   // $scope.set_path('/profile_management/print');
+  $scope.generate_qr_code = (id,text)=>{
+    return new QRCode(document.getElementById(id), text);
+  };
+
   var signaturePad = [];
   $scope.generate_signature_field = (id,idx) => {
     let wrapper = document.getElementById(id);

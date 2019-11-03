@@ -82,13 +82,16 @@ myAppModule.controller('summary_of_information_controller', function ($scope, $t
     };
 
     $scope.listen_document_change = (callBack)=>{
-        db.collection(collection).doc($localStorage.data.id).onSnapshot( (res)=>{
-            let d = res.data();
-            d.id = res.id;
-            $scope.currentItem = d;
-            if(callBack) callBack();
-            $scope.$apply();
-        } );
+        if($scope.currentItem){
+            db.collection(collection).doc($scope.currentItem.id).onSnapshot( (res)=>{
+                let d = res.data();
+                d.id = res.id;
+                $scope.currentItem = d;
+                if(callBack) callBack();
+                $scope.$apply();
+            } );
+        }
+        
     };
 
 });
