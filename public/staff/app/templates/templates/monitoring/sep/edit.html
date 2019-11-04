@@ -79,7 +79,7 @@
                         <md-input-container flex>
 
 							<textarea ng-model="currentItem.contact_information"
-								ng-blur="updateDocument(currentItem.id {contact_information: currentItem.contact_information})"></textarea>
+								ng-blur="updateDocument(currentItem.id, {contact_information: currentItem.contact_information})"></textarea>
                         </md-input-container>
                     </td>
                 </tr>
@@ -89,7 +89,7 @@
                     <td>
                         <md-input-container flex>
 							<textarea ng-model="currentItem.project_location"
-							ng-blur="updateDocument(currentItem.id {project_location: currentItem.project_location})"></textarea>
+							ng-blur="updateDocument(currentItem.id, {project_location: currentItem.project_location})"></textarea>
                         </md-input-container>
                     </td>
                 </tr>
@@ -99,7 +99,7 @@
                     <td>
                         <md-input-container flex>
 							<textarea ng-model="currentItem.project_coordinates"
-							ng-blur="updateDocument(currentItem.id {project_coordinates: currentItem.project_coordinates})"></textarea>
+							ng-blur="updateDocument(currentItem.id, {project_coordinates: currentItem.project_coordinates})"></textarea>
                         </md-input-container>
                     </td>
                 </tr>
@@ -110,7 +110,7 @@
                         <md-input-container flex>
                             <md-datepicker md-hide-icons="calendar" ng-model="date_issued"
 								ng-change="currentItem.date_issued=to_date(date_issued);
-								updateDocument(currentItem.id {date_issued: currentItem.date_issued})"></md-datepicker>
+								updateDocument(currentItem.id, {date_issued: currentItem.date_issued})"></md-datepicker>
                         </md-input-container>
                     </td>
                 </tr>
@@ -125,7 +125,7 @@
                     <td>
                         <md-input-container flex>
 							<textarea ng-model="currentItem.clearance_number"
-							ng-blur="updateDocument(currentItem.id {clearance_number: currentItem.clearance_number})"></textarea>
+							ng-blur="updateDocument(currentItem.id, {clearance_number: currentItem.clearance_number})"></textarea>
                         </md-input-container>
                     </td>
                 </tr>
@@ -201,11 +201,5 @@
                 </md-input-container>
             </div>
         </li>
-        <md-input-container>
-            <label>Date Monitored:</label>
-            <md-datepicker md-hide-icons="calendar" ng-model="date_monitored"
-				ng-change="currentItem.date_monitored=to_date(date_monitored);
-					updateDocument(currentItem.id, {date_monitored: currentItem.date_monitored})"></md-datepicker>
-        </md-input-container>
     </ol>
 </div>
