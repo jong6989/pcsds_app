@@ -1,16 +1,16 @@
 'use strict';
 
-myAppModule.controller('summary_of_information_mylist_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
+myAppModule.controller('intel_report_mylist_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
     const time_key = 'created_time';
     const collection = 'documents';
-    const category = 'summary_of_information';
+    const category = 'intel_report';
     const userId = `pcsd_${$scope.user.id}`;
 
-    // $scope.open_view = (item)=>{
-    //     $localStorage.data = item;
-    //     $localStorage.params = item;
-    //     $scope.set_path('/operations/summary_of_information/view');
-    // };
+    $scope.open_view = (item)=>{
+        $localStorage.data = item;
+        $localStorage.params = item;
+        $scope.set_path('/operations/intel_report/view');
+    };
 
     $scope.ceil = (number)=> {
         return Math.ceil(number);

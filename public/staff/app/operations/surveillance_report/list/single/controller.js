@@ -6,12 +6,6 @@ myAppModule.controller('surveillance_report_mylist_controller', function ($scope
     const category = 'surveillance_report';
     const userId = `pcsd_${$scope.user.id}`;
 
-    $scope.open_view = (item)=>{
-        $localStorage.data = item;
-        $localStorage.params = item;
-        $scope.set_path('/operations/surveillance_report/view');
-    };
-
     $scope.ceil = (number)=> {
         return Math.ceil(number);
     };

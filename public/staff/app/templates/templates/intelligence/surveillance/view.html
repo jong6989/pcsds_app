@@ -78,7 +78,7 @@
         <div style="width:50%">Recommended by:</div>
         <div>Noted by:</div>
     </div>
-    <div layout ng-controller="doc_ctrl_draft">
+    <div layout-gt-xs layout-xs="column" ng-controller="doc_ctrl_draft">
         <!-- sign 1 -->
         <div flex style="padding: 10px"
             ng-init="currentItem.sign1 = (currentItem.sign1 == undefined)? { name:'',designation:''}:currentItem.sign1;">

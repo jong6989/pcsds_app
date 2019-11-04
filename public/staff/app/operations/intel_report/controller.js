@@ -1,28 +1,23 @@
 'use strict';
 
-myAppModule.controller('summary_of_information_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
+myAppModule.controller('intel_report_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
     const time_key = 'created_time';
     const collection = 'documents';
-    const category = 'summary_of_information';
-
-    $scope.create_other_document = (item,path)=>{
-        $localStorage.soi_data = item;
-        $scope.set_path(path);
-    };
+    const category = 'intel_report';
 
     $scope.load_data = ()=>{
         if($scope.url.has('ID')){
             $scope.currentItem = { id : $scope.url.get('ID') };
         }else {
             $scope.currentItem = $localStorage.data;
-            if($scope.currentItem == undefined) $scope.set_path('/operations/summary_of_information/create');
+            if($scope.currentItem == undefined) $scope.set_path('/operations/intel_report/create');  
         }
     };
 
-    // $scope.open_view = (item)=>{
-    //     $localStorage.data = item;
-    //     $scope.set_path('/operations/summary_of_information/view');
-    // };
+    $scope.open_view = (item)=>{
+        $localStorage.data = item;
+        $scope.set_path('/operations/intel_report/view');
+    };
 
     $scope.ceil = (number)=> {
         return Math.ceil(number);
@@ -90,8 +85,8 @@ myAppModule.controller('summary_of_information_controller', function ($scope, $t
             db.collection(collection).doc($scope.currentItem.id).onSnapshot( (res)=>{
                 let d = res.data();
                 d.id = res.id;
-                $scope.currentItem = d;
                 triger_linked(d);
+                $scope.currentItem = d;
                 if(callBack) callBack();
                 $scope.$apply();
             } );
@@ -99,8 +94,7 @@ myAppModule.controller('summary_of_information_controller', function ($scope, $t
     };
 
     function triger_linked(x){
-        $scope.load_linked('surveillance_report','soi_number', x.control_number);
-        $scope.load_linked('intel_report','reference_number', x.control_number);
+        // $scope.load_linked('surveillance_report','soi_number', x.control_number);
     }
     $scope.linked = { show : false };
     $scope.load_linked = (category, ref_key, ref_value) => {
@@ -123,5 +117,5 @@ myAppModule.controller('summary_of_information_controller', function ($scope, $t
 
 });
 
-document.write(`<script src='app/operations/summary_of_information/create/controller.js'></script>`);
-document.write(`<script src='app/operations/summary_of_information/list/single/controller.js'></script>`);
+document.write(`<script src='app/operations/intel_report/create/controller.js'></script>`);
+document.write(`<script src='app/operations/intel_report/list/single/controller.js'></script>`);

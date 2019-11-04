@@ -2,7 +2,7 @@
 <div layout ng-controller="surveillance_report_mylist_controller" ng-init="set_page_title('My Surveillance Reports'); load_list(); ">
     <md-list class="md-dense" flex>
         <md-content style="height : {{iframeHeight - 175}}px;">
-            <md-list-item class="md-3-line" ng-repeat="x in all_items track by x.id " ng-click="open_view(x)">
+            <md-list-item class="md-3-line" ng-repeat="x in all_items track by x.id " ng-click="set_url_param('ID='+ x.id, '/operations/surveillance_report/view')">
                 
                 <div class="md-list-item-text" layout="column">
                     <h3>
