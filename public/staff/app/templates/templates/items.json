@@ -189,13 +189,40 @@
 			"view" : 	"./app/templates/templates/monitoring/chainsaw/view.html"
 		},
 		{
-			"name" : "Monitoring Report - Special Use Permit",
+			"name" : "Monitoring Report - Chainsaw Special Use Permit",
 			"type" : "report",
 			"permit" : false,
 			"create" : 	"./app/templates/templates/monitoring/sup/create.html",
 			"edit" : 	"./app/templates/templates/monitoring/sup/edit.html",
 			"print" : 	"./app/templates/templates/monitoring/sup/print.html",
 			"view" : 	"./app/templates/templates/monitoring/sup/view.html"
+		},
+		{
+			"name" : "Monitoring Report - Wildlife Special Use Permit",
+			"type" : "report",
+			"permit" : false,
+			"create" : 	"./app/templates/templates/monitoring/wsup_ao_12/create.html",
+			"edit" : 	"./app/templates/templates/monitoring/wsup_ao_12/edit.html",
+			"print" : 	"./app/templates/templates/monitoring/wsup_ao_12/print.html",
+			"view" : 	"./app/templates/templates/monitoring/wsup_ao_12/view.html"
+		},
+		{
+			"name" : "Monitoring Report - RFF",
+			"type" : "report",
+			"permit" : false,
+			"create" : 	"./app/templates/templates/monitoring/rff/create.html",
+			"edit" : 	"./app/templates/templates/monitoring/rff/edit.html",
+			"print" : 	"./app/templates/templates/monitoring/rff/print.html",
+			"view" : 	"./app/templates/templates/monitoring/rff/view.html"
+		},
+		{
+			"name" : "Monitoring Report - SEP",
+			"type" : "report",
+			"permit" : false,
+			"create" : 	"./app/templates/templates/monitoring/sep/create.html",
+			"edit" : 	"./app/templates/templates/monitoring/sep/edit.html",
+			"print" : 	"./app/templates/templates/monitoring/sep/print.html",
+			"view" : 	"./app/templates/templates/monitoring/sep/view.html"
 		}
 	]
 }

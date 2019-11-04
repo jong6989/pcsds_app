@@ -1,4 +1,4 @@
-<div ng-controller="SUPMonitoringController" ng-init="n.subject = 'MONITORING REPORT'; 
+<div ng-controller="WSUPMonitoringController" ng-init="n.subject = 'MONITORING REPORT'; 
     n.keywords = [];" class="roman">
     <h3 class="align-center">{{n.subject}}</h3>
     <hr>
@@ -10,7 +10,9 @@
                 ng-change="n.monitoring_date=to_date(monitoring_date)"></md-datepicker>
         </md-input-container>
     </div>
-    <div class="align-center"><h4>SPECIAL USE PERMIT</h4></div>
+    <div class="align-center">
+        <h4>WILDLIFE SPECIAL USE PERMIT (AO-12)</h4>
+    </div>
     <style>
         td {
             padding-right: 5px
@@ -20,12 +22,12 @@
         <li>Project Information:<br>
             <table>
                 <tr>
-                    <td>Name of Proponent</td>
+                    <td>Name of Permit Holder</td>
                     <td>:</td>
                     <td>
                         <md-input-container flex>
 
-                            <input ng-model="n.proponent_name" ng-blur="n.keywords[0]=n.proponent_name">
+                            <input ng-model="n.permit_holder_name" ng-blur="n.keywords[0]=n.permit_holder_name">
                         </md-input-container>
                     </td>
                 </tr>
@@ -40,6 +42,16 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>Project Location</td>
+                    <td>:</td>
+                    <td>
+                        <md-input-container flex>
+
+                            <textarea ng-model="n.project_location"></textarea>
+                        </md-input-container>
+                    </td>
+                </tr>
+                <tr>
                     <td>Coordinates</td>
                     <td>:</td>
                     <td>
@@ -50,7 +62,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Certificate of Registration Number</td>
+                    <td>WSUP Number</td>
                     <td>:</td>
                     <td>
                         <md-input-container flex>
@@ -59,54 +71,7 @@
                         </md-input-container>
                     </td>
                 </tr>
-                <tr>
-                    <td>Brand</td>
-                    <td>:</td>
-                    <td>
-                        <md-input-container flex>
 
-                            <input ng-model="n.brand">
-                        </md-input-container>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Serial Number</td>
-                    <td>:</td>
-                    <td>
-                        <md-input-container flex>
-
-                            <input ng-model="n.serial_number">
-                        </md-input-container>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Metal Seal Number</td>
-                    <td>:</td>
-                    <td>
-                        <md-input-container flex>
-
-                            <input ng-model="n.metal_seal_number">
-                        </md-input-container>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Place of Origin</td>
-                    <td>:</td>
-                    <td>
-                        <md-input-container flex>
-                            <input ng-model="n.place_of_origin">
-                        </md-input-container>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Place of Destination</td>
-                    <td>:</td>
-                    <td>
-                        <md-input-container flex>
-                            <input ng-model="n.place_of_destination">
-                        </md-input-container>
-                    </td>
-                </tr>
                 <tr>
                     <td>Date Issued</td>
                     <td>:</td>
@@ -117,16 +82,6 @@
                         </md-input-container>
                     </td>
                 </tr>
-                <tr>
-                        <td>Validity Period</td>
-                        <td>:</td>
-                        <td>
-                            <md-input-container flex>
-                                <md-datepicker md-hide-icons="calendar" ng-model="valid_until"
-                                    ng-change="n.valid_until=to_date(valid_until)"></md-datepicker>
-                            </md-input-container>
-                        </td>
-                    </tr>
             </table>
         </li>
         <li>
@@ -148,21 +103,49 @@
                         </tr>
                         <tr ng-repeat="compliance in n.compliances track by $index">
                             <td>
-                                <div ng-if="$index != 2">
-                                    {{compliance.terms}}
+                                <div>{{$index + 1}}. {{compliance.terms}}</div>
+                                <div ng-if="$index == 1">
+                                    <table ng-init="compliance.species=[{}]">
+                                        <tr>
+                                            <td>Kind of Species</td>
+                                            <td>Scientific Name</td>
+                                            <td>Local Name/English Name</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr ng-repeat="specimen in compliance.species">
+                                            <td>
+                                                <md-input-container flex>
+                                                    <input ng-model="specimen.kind">
+                                                </md-input-container>
+                                            </td>
+                                            <td>
+                                                <md-input-container flex>
+                                                    <input ng-model="specimen.scientific_name">
+                                                </md-input-container>
+                                            </td>
+                                            <td>
+                                                <md-input-container flex>
+                                                    <input ng-model="specimen.local_name">
+                                                </md-input-container>
+                                            </td>
+                                            <td>
+                                                <md-button class="md-fab md-mini" aria-label="Remove this row"
+                                                    ng-click="compliance.species.splice($index, 1)" ng-if="compliance.species.length > 1">
+                                                    <md-tooltip md-direction="left">Remove Specy</md-tooltip>
+                                                    <i class="fa fa-remove"></i>
+                                                </md-button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <md-button ng-click="compliance.species.push({})" class="md-primary md-raised">
+                                        Add Row
+                                    </md-button>
                                 </div>
-                                <div ng-if="$index == 2"
-                                    ng-init="compliance.terms = 'The chainsaws covered by this Permit shall be used 
-                                        only within the parcel of land covered by ' + 
-                                        compliance.allowed_area_to_be_use[0] + 
-                                        'in Brgy. ' + compliance.allowed_area_to_be_use[1] + ', Palawan'">
-                                    The chainsaws covered by this Permit shall be used only within the parcel of land covered by
-                                    <md-input-container>
-                                        <input ng-model="compliance.allowed_area_to_be_use[0]">
+                                <div ng-if="$index == 3" 
+                                    ng-init="compliance.authorized_collectors=''">
+                                    <md-input-container flex>
+                                        <textarea ng-model="compliance.authorized_collectors"></textarea>
                                     </md-input-container>
-                                    in Brgy. <md-input-container>
-                                        <input ng-model="compliance.allowed_area_to_be_use[1]">
-                                    </md-input-container>, Palawan
                                 </div>
                             </td>
                             <td>
@@ -191,7 +174,7 @@
                 <li style="width:200px">Documentation and other issues:
                     <div>
                         <md-input-container>
-                            <textarea ng-model="n.documentation"></textarea>
+                            <textarea ng-model="n.documentation" ></textarea>
                         </md-input-container>
                     </div>
 

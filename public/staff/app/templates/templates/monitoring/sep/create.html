@@ -1,0 +1,187 @@
+<div ng-controller="SEPMonitoringController" ng-init="n.subject = 'MONITORING REPORT'; 
+    n.keywords = [];" class="roman">
+    <div ng-show="false" ng-repeat="svg in [
+        'close-inline.svg',
+        'close.svg',
+        'delete-inline.svg',
+        'edit-inline.svg',
+        'edit.svg',
+        'external-link-inline.svg',
+        'external-link.svg',
+        'next-inline.svg',
+        'next.svg',
+        'prev-inline.svg', 
+        'prev.svg'
+    ]" ng-include="'/plugins/ng-image-gallery/res/icons/'+svg"></div>
+    <h3 class="align-center">{{n.subject}}</h3>
+    <hr>
+    <div layout>
+        <div style="width:75%"></div>
+        <md-input-container flex>
+            <label>Monitoring Date:</label>
+            <md-datepicker md-hide-icons="calendar" ng-model="monitoring_date"
+                ng-change="n.monitoring_date=to_date(monitoring_date)"></md-datepicker>
+        </md-input-container>
+    </div>
+    <div class="align-center">
+        <h4>SEP (PCSD) MONITORING REPORT</h4>
+    </div>
+    <style>
+        td {
+            padding-right: 5px
+        }
+    </style>
+    <ol>
+        <li>Project Information:<br>
+            <table>
+                <tr>
+                    <td>Name of Project</td>
+                    <td>:</td>
+                    <td>
+                        <md-input-container flex>
+                            <textarea ng-model="n.project_name" ng-blur="n.keywords[0]=n.project_name"></textarea>
+                        </md-input-container>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Type of Project</td>
+                    <td>:</td>
+                    <td>
+                        <md-input-container flex>
+
+                            <textarea ng-model="n.project_type"></textarea>
+                        </md-input-container>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name of Proponent/Authorized Representative</td>
+                    <td>:</td>
+                    <td>
+                        <md-input-container flex>
+
+                            <textarea ng-model="n.proponent"></textarea>
+                        </md-input-container>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Mailing Address/Contact Nummber</td>
+                    <td>:</td>
+                    <td>
+                        <md-input-container flex>
+
+                            <textarea ng-model="n.contact_information"></textarea>
+                        </md-input-container>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Project Location</td>
+                    <td>:</td>
+                    <td>
+                        <md-input-container flex>
+                            <textarea ng-model="n.project_location"></textarea>
+                        </md-input-container>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Project Geographic Coordinates</td>
+                    <td>:</td>
+                    <td>
+                        <md-input-container flex>
+                            <textarea ng-model="n.project_coordinates"></textarea>
+                        </md-input-container>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Date Issued</td>
+                    <td>:</td>
+                    <td>
+                        <md-input-container flex>
+                            <md-datepicker md-hide-icons="calendar" ng-model="date_issued"
+                                ng-change="n.date_issued=to_date(date_issued)"></md-datepicker>
+                        </md-input-container>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>SEP Clearance or Certificate of PCSD Accredition</strong></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Clearance/Accreditation Number</strong></td>
+                    <td>:</td>
+                    <td>
+                        <md-input-container flex>
+                            <textarea ng-model="n.clearance_number"></textarea>
+                        </md-input-container>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Date Issued</strong></td>
+                    <td>:</td>
+                    <td>
+                        <md-datepicker ng-model="clearance_date_issued" ng-change="n.clearance_date_issued=to_date(clearance_date_issued)">
+                        </md-datepicker>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Validity (if applicable)</td>
+                    <td>:</td>
+                    <td>
+                        <md-datepicker ng-model="validity" ng-change="n.validity=to_date(validity)">
+                        </md-datepicker>
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            Result of Monitoring:
+            <ol start="a">
+                <li>Monitoring on Compliance to the Terms and Conditions
+                    <table>
+                        <tr class="align-center">
+                            <td><strong>SEP Clearance Terms and Conditions</strong></td>
+                            <td><strong>Status of Compliance/Accomplishments</strong></td>
+                            <td><strong>Remarks (Upload Photos)</strong></td>
+                        </tr>
+                        <tr ng-repeat="compliance in n.compliances track by $index">
+                            <td>{{compliance.terms}}</td>
+                            <td>
+                                <md-input-container flex>
+                                    <textarea ng-model="compliance.compliance_status"></textarea>
+                                </md-input-container>
+                            </td>
+                            <td>
+                                <md-input-container flex>
+                                    <textarea ng-model="compliance.remarks"></textarea>
+                                </md-input-container>
+                                <ng-image-gallery images="compliance.uploadedImages" thumbnails=true
+                                    on-delete="removeFromGallery(img, cb)"></ng-image-gallery>
+                                <md-button ngf-capture="'camera'" ngf-select
+                                    ngf-change="addToGallery($files, compliance.uploadedImages, $index)"
+                                    ngf-multiple=true accept="image/*">
+                                    Upload Picture
+                                </md-button>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                <li style="width:200px">Documentation and other issues:
+                    <div>
+                        <md-input-container>
+                            <textarea ng-model="n.documentation"></textarea>
+                        </md-input-container>
+                    </div>
+
+
+                </li>
+            </ol>
+        </li>
+        <li>Recommendations:
+            <div>
+                <md-input-container flex>
+                    <textarea ng-model="n.recommendations"></textarea>
+                </md-input-container>
+            </div>
+        </li>
+    </ol>
+</div>
