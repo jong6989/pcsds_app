@@ -1,5 +1,5 @@
 <!-- <div ng-controller="DummyWSUPController" ng-init="currentItem=n"> -->
-<div class="roman">
+<div ng-init="currentItem = $localStorage.params;printView(3000)" class="roman" style="margin:0.5in" class="roman">
     <div ng-include="'./app/templates/application/style.html'"></div>
     <br>
     <div ng-show="false" ng-repeat="svg in [
@@ -119,16 +119,17 @@
                             <td><strong>Remarks (Upload Photos)</strong></td>
                         </tr>
                         <tr ng-repeat="compliance in currentItem.compliances track by $index">
-                            <td>
+                            <td style="text-align:justify">
                                 {{compliance.terms}}
                             </td>
                             <td>
                                 {{compliance_status}}
                             </td>
-                            <td>
+                            <td style="text-align:justify">
                                 {{compliance.remarks}}
                                 <ng-image-gallery images="compliance.uploadedImages" thumbnails=true on-delete="">
                                 </ng-image-gallery>
+                                <br><br>
                             </td>
                         </tr>
                     </table>

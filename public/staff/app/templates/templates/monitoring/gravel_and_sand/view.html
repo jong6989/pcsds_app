@@ -118,7 +118,7 @@
                             <td><strong>Status of Compliance/Accomplishments</strong></td>
                             <td><strong>Remarks (Upload Photos)</strong></td>
                         </tr>
-                        <tr ng-repeat="compliance in currentItem.compliances track by $index">
+                        <tr  style="text-align:justify" ng-repeat="compliance in currentItem.compliances track by $index">
                             <td>
                                 {{compliance.terms}}
                             </td>
@@ -128,7 +128,7 @@
                             <td>
                                 {{compliance.remarks}}
                                 <ng-image-gallery images="compliance.uploadedImages" thumbnails=true on-delete="">
-                                </ng-image-gallery>
+                                </ng-image-gallery><br><br>
                             </td>
                         </tr>
                     </table>
