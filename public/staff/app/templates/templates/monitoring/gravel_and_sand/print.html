@@ -1,0 +1,179 @@
+<!-- <div ng-controller="DummyWSUPController" ng-init="currentItem=n"> -->
+<div class="roman">
+    <div ng-include="'./app/templates/application/style.html'"></div>
+    <br>
+    <div ng-show="false" ng-repeat="svg in [
+                    'close-inline.svg',
+                    'close.svg',
+                    'delete-inline.svg',
+                    'edit-inline.svg',
+                    'edit.svg',
+                    'external-link-inline.svg',
+                    'external-link.svg',
+                    'next-inline.svg',
+                    'next.svg',
+                    'prev-inline.svg', 
+                    'prev.svg'
+                ]" ng-include="'/plugins/ng-image-gallery/res/icons/'+svg"></div>
+    <h3 class="align-center">{{currentItem.subject}}</h3>
+    <hr>
+    <div class="align-center">
+        <div>
+            <h4>SEP (PCSD) MONITORING REPORT</h4>
+        </div>
+        Date Monitored:<strong>{{currentItem.monitoring_date}}</strong>
+    </div>
+    <style>
+        td {
+            padding-right: 5px
+        }
+    </style>
+    <ol>
+        <li>Project Information:<br>
+            <table>
+                <tr>
+                    <td>Name of Project</td>
+                    <td>:</td>
+                    <td>
+                        {{currentItem.project_name}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Type of Project</td>
+                    <td>:</td>
+                    <td>
+                        {{currentItem.project_type}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name of Proponent/Authorized Representative</td>
+                    <td>:</td>
+                    <td>
+                        {{currentItem.proponent}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Mailing Address/Contact Nummber</td>
+                    <td>:</td>
+                    <td>
+                        {{currentItem.contact_information}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Project Location</td>
+                    <td>:</td>
+                    <td>
+                        {{currentItem.project_location}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Project Geographic Coordinates</td>
+                    <td>:</td>
+                    <td>
+                        {{currentItem.project_coordinates}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Date Issued</td>
+                    <td>:</td>
+                    <td>
+                        {{currentItem.date_issued}}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>SEP Clearance or Certificate of PCSD Accredition</strong></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Clearance/Accreditation Number</strong></td>
+                    <td>:</td>
+                    <td>
+                        {{currentItem.clearance_number}}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Date Issued</strong></td>
+                    <td>:</td>
+                    <td>
+                        {{currentItem.clearance_date_issued}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Validity (if applicable)</td>
+                    <td>:</td>
+                    <td>
+                        {{currentItem.validity}}
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            Result of Monitoring:
+            <ol start="a">
+                <li>Monitoring on Compliance to the Terms and Conditions
+                    <table>
+                        <tr class="align-center">
+                            <td><strong>SEP Clearance Terms and Conditions</strong></td>
+                            <td><strong>Status of Compliance/Accomplishments</strong></td>
+                            <td><strong>Remarks (Upload Photos)</strong></td>
+                        </tr>
+                        <tr ng-repeat="compliance in currentItem.compliances track by $index">
+                            <td>
+                                {{compliance.terms}}
+                            </td>
+                            <td>
+                                {{compliance_status}}
+                            </td>
+                            <td>
+                                {{compliance.remarks}}
+                                <ng-image-gallery images="compliance.uploadedImages" thumbnails=true on-delete="">
+                                </ng-image-gallery>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                <li style="width:200px">Documentation and other issues:
+                    <div>
+                        {{currentItem.documentation}}
+                    </div>
+
+
+                </li>
+            </ol>
+        </li>
+        <li>Recommendations:
+            <div>
+                {{currentItem.recommendations}}
+            </div>
+        </li>
+    </ol>
+
+    <!-- Signature -->
+    <div layout>
+            <div style="width:50%">Prepared by:</div>
+            <div>Noted by:</div>
+        </div>
+        <div layout ng-controller="doc_ctrl_draft"
+            ng-init="currentItem.sign1 = (currentItem.sign1 == undefined) ? {} : currentItem.sign1;">
+    
+            <div ng-if="currentItem.sign1.signature != undefined;" layout="column" layout-align="center center"
+                style="width:50%">
+                <img ng-if="currentItem.sign1.signature != undefined" src="{{currentItem.sign1.signature}}" alt="Signature2"
+                    width="auto" style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.sign1.name}}</ins> </strong>
+                </div>
+                <div class="align-center"> {{currentItem.sign1.designation}} </div>
+            </div>
+    
+            <div ng-if="currentItem.sign2.signature != undefined;" layout="column" layout-align="center center">
+                <img ng-if="currentItem.sign2.signature != undefined" src="{{currentItem.sign2.signature}}" alt="Signature2"
+                    width="auto" style="margin-bottom: -35px;">
+                <div class="align-center"> <strong> <ins>{{currentItem.sign2.name}}</ins> </strong>
+                </div>
+                <div class="align-center"> {{currentItem.sign2.designation}} </div>
+            </div>
+        </div>
+        <!-- footer -->
+        <div ng-include="'https://document-network.web.app/pcsd/templates/footer3.html'"></div>
+</div>

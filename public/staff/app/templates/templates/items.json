@@ -224,5 +224,15 @@
 			"print" : 	"./app/templates/templates/monitoring/sep/print.html",
 			"view" : 	"./app/templates/templates/monitoring/sep/view.html"
 		}
+		,
+		{
+			"name" : "Monitoring Report - Gravel and Sand Quarry",
+			"type" : "report",
+			"permit" : false,
+			"create" : 	"./app/templates/templates/monitoring/gravel_and_sand/create.html",
+			"edit" : 	"./app/templates/templates/monitoring/gravel_and_sand/edit.html",
+			"print" : 	"./app/templates/templates/monitoring/gravel_and_sand/print.html",
+			"view" : 	"./app/templates/templates/monitoring/gravel_and_sand/view.html"
+		}
 	]
 }

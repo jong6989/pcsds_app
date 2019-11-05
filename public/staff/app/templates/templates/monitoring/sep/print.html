@@ -134,8 +134,8 @@
                                 </td>
                                 <td>
                                     <div>{{compliance.remarks}}</div>
-                                    <ng-image-gallery images="compliance.uploadedImages" thumbnails=true
-                                        on-delete=""></ng-image-gallery>
+                                    <ng-image-gallery images="compliance.uploadedImages" thumbnails=true on-delete=""></ng-image-gallery>
+                                    </ng-image-gallery>
                                 </td>
                             </tr>
                         </table>
@@ -144,8 +144,8 @@
                         <div>
                             {{currentItem.documentation}}
                         </div>
-    
-    
+
+
                     </li>
                 </ol>
             </li>
@@ -156,11 +156,11 @@
             </li>
         </ol>
     </div>
-        <!-- Signature -->
-        <div layout>
-            <div style="width:50%">Prepared by:</div>
-            <div>Noted by:</div>
-        </div>
+    <!-- Signature -->
+    <div layout>
+        <div style="width:50%">Prepared by:</div>
+        <div>Noted by:</div>
+    </div>
     <div layout ng-controller="doc_ctrl_draft"
         ng-init="currentItem.sign1 = (currentItem.sign1 == undefined) ? {} : currentItem.sign1;">
 
