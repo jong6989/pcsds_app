@@ -33,6 +33,15 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     ops : { id: 'WJ43CJV6R3uF3QMaWrvj', name : 'Operations', short_name : 'Ops'}
   };
 
+  $scope.url = new URLSearchParams(window.location.search);
+  //url.get('key')
+  //url.has('key')
+  //url.set('key')
+  $scope.set_url_param = (param,hash)=>{
+    let new_hash = (hash)? "#!" + hash : location.hash;
+    let new_url = location.origin + location.pathname + "?" + param + new_hash;
+    location.assign(new_url);
+  };
 
   $scope.exists = function (item, list) {
     return list.indexOf(item) > -1;
@@ -364,6 +373,10 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   }
 
   // $scope.set_path('/profile_management/print');
+  $scope.generate_qr_code = (id,text)=>{
+    return new QRCode(document.getElementById(id), text);
+  };
+
   var signaturePad = [];
   $scope.generate_signature_field = (id,idx) => {
     let wrapper = document.getElementById(id);

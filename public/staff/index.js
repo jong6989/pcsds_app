@@ -209,6 +209,28 @@ localData.set('STAFF_ACCOUNT',`
                 ]
             },
             {
+                "controller":"<script src='app/operations/intel_report/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Intelligence Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/intel_report/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/intel_report/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/intel_report/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
                 "controller":"<script src='app/applications/controller.js'></script>",
                 "icon":"files-o",
                 "path":"/applications",

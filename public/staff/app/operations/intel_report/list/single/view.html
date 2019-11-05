@@ -1,16 +1,18 @@
 
-<div layout ng-controller="summary_of_information_mylist_controller" ng-init="set_page_title('My summary of information'); load_list(); ">
+<div layout ng-controller="intel_report_mylist_controller" ng-init="set_page_title('My Intelligence Reports'); load_list(); ">
     <md-list class="md-dense" flex>
         <md-content style="height : {{iframeHeight - 175}}px;">
-            <md-list-item class="md-3-line" ng-repeat="x in all_items track by x.id " ng-click="set_url_param('ID='+ x.id, '/operations/summary_of_information/view')">
+            <md-list-item class="md-3-line" ng-repeat="x in all_items track by x.id " ng-click="set_url_param('ID='+ x.id, '/operations/intel_report/view')">
                 
                 <div class="md-list-item-text" layout="column">
                     <h3>
-                        Subject : {{x.summary_subject}}, Control No. : {{x.control_number}}
+                        Subject : {{x.report_subject}}, Control No. : {{x.control_number}}, Reference : {{x.references}}, Reference No. : {{x.reference_number}}
                     </h3>
-                    <h4>Acquired : {{ x.date_acquired }}</h4>
+                    <h4>
+                        Report Date : {{ x.report_date }}, Date Received : {{x.date_received}}, Recommendations : {{x.recommendations}}
+                    </h4>
                     <p>
-                        Alleged violations : {{x.alleged_violations }}
+                        Evaluation : {{x.evaluation }}
                     </p>
                     <md-divider></md-divider>
                 </div>

@@ -13,9 +13,13 @@
             
             <div layout-gt-sm layout-sm="column" layout-align="center center">
                 <!-- connecting documents -->
-                <md-button class="md-button md-primary" ng-click="create_surveillance_report(currentItem)" layout-gt-sm>
+                <md-button class="md-button md-primary" ng-click="create_other_document(currentItem,'/operations/surveillance_report/create')" layout-gt-sm>
                     <i class="fa fa-chain m-r-5"></i>
                     Create Surveillance Report
+                </md-button>
+                <md-button class="md-button md-primary" ng-click="create_other_document(currentItem,'/operations/intel_report/create')" layout-gt-sm>
+                    <i class="fa fa-chain m-r-5"></i>
+                    Create Intelligence Report
                 </md-button>
                 <!-- send and receipients -->
                 <md-button class="md-button md-primary" ng-click="openSendDocument(currentItem, $event)" layout-gt-sm>
@@ -33,10 +37,30 @@
                 </md-button> 
                 
             </div>
+
+            <!-- Linked documents -->
+            <div ng-show="linked.show">
+                <hr>
+                <h4 class="col-grey">Linked Documents</h4>
+                <div>
+                    <ul>
+                        <li ng-if="linked['surveillance_report'].length > 0" class="pointer col-blue" 
+                            ng-repeat="x in linked['surveillance_report']" ng-init="linked.show = true"
+                            ng-click="set_url_param('ID='+ x.id, '/operations/surveillance_report/view')">
+                            <strong>Surveillance Report</strong> - {{x.report_subject}}, {{x.report_date}}
+                        </li>
+                        <li ng-if="linked['intel_report'].length > 0" class="pointer col-blue" 
+                            ng-repeat="x in linked['intel_report']" ng-init="linked.show = true"
+                            ng-click="set_url_param('ID='+ x.id, '/operations/intel_report/view')">
+                            <strong>Intelligence Report</strong> - {{x.report_subject}}, {{x.report_date}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
         
             <div ng-if="currentReciepients.length > 0">
                 <hr>
-                <h4>Receipients</h4>
+                <h4 class="col-grey">Receipients</h4>
                 <ol>
                     <li ng-repeat="x in currentReciepients">
                         <strong class="col-grey">{{x.name}}</strong>

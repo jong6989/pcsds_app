@@ -63,18 +63,27 @@ myAppModule.controller('surveillance_report_create_controller', function ($scope
             x.meta = {'published_date': $scope.date_now('YYYY-MM-DD'), 'published_time': Date.now() };
             x.agency = $scope.global.ops;
 
+            x.keywords = x.keywords.filter( (value) => { return (value == undefined || value == '' || value == ' ')? false : true; } );
+
             try {
-                db.collection('documents').add(x).then( () => {
+                db.collection('documents').add(x).then( (ref) => {
                     if($scope.last_control_number_id !== ''){
                         db.collection('meta').doc($scope.last_control_number_id).update({"value": x.control_number});
                         $scope.last_control_number = x.control_number;
                     }
-                    $scope.toast_s("document created!");
-                    $localStorage.data = x;
-                    $scope.set_path('/operations/surveillance_report/view');
+                    if(ref.id){
+                        $scope.toast_s("document created!");
+                        x.id = ref.id;
+                        $localStorage.data = x;
+                        $scope.set_path('/operations/surveillance_report/view');
+                    }else {
+                        $scope.set_path('/operations/surveillance_report/list/single');
+                    }
                 });
             } catch (error) {
                 console.log(error);
+                $scope.toast_e("Sorry, System Error! Reloading...");
+                $timeout(()=>{location.reload();},3000);
             }
             
         }else {

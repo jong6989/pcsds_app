@@ -5,14 +5,18 @@ myAppModule.controller('surveillance_report_controller', function ($scope, $time
     const collection = 'documents';
     const category = 'surveillance_report';
 
-    $scope.load_data = ()=>{
-        $scope.currentItem = $localStorage.data;
-        if($scope.currentItem == undefined) $scope.set_path('/operations/surveillance_report/create');
+    $scope.create_other_document = (item,path)=>{
+        $localStorage.survrep_data = item;
+        $scope.set_path(path);
     };
 
-    $scope.open_view = (item)=>{
-        $localStorage.data = item;
-        $scope.set_path('/operations/surveillance_report/view');
+    $scope.load_data = ()=>{
+        if($scope.url.has('ID')){
+            $scope.currentItem = { id : $scope.url.get('ID') };
+        }else {
+            $scope.currentItem = $localStorage.data;
+            if($scope.currentItem == undefined) $scope.set_path('/operations/surveillance_report/create');  
+        }
     };
 
     $scope.ceil = (number)=> {
@@ -77,12 +81,38 @@ myAppModule.controller('surveillance_report_controller', function ($scope, $time
     };
 
     $scope.listen_document_change = (callBack)=>{
-        db.collection(collection).doc($localStorage.data.id).onSnapshot( (res)=>{
-            let d = res.data();
-            d.id = res.id;
-            $scope.currentItem = d;
-            if(callBack) callBack();
-            $scope.$apply();
+        if($scope.currentItem){
+            db.collection(collection).doc($scope.currentItem.id).onSnapshot( (res)=>{
+                let d = res.data();
+                d.id = res.id;
+                $scope.currentItem = d;
+                triger_linked(d);
+                if(callBack) callBack();
+                $scope.$apply();
+            } );
+        }
+    };
+
+    function triger_linked(x){
+        $scope.load_linked('intel_report','reference_number', x.control_number);
+        $scope.load_linked('summary_of_information','control_number', x.soi_number);
+    }
+    $scope.linked = { show : false };
+    $scope.load_linked = (category, ref_key, ref_value) => {
+        $scope.linked[category] = [];
+        db.collection(collection)
+        .where('category','==',category)
+        .where(ref_key,'==',ref_value)
+        .onSnapshot( (qs)=>{
+            if(!qs.empty){
+                let results = qs.docs.map( d => {
+                    let item = d.data();
+                    item.id = d.id;
+                    return item;
+                } );
+                $scope.linked[category] = results;
+                $scope.$apply();
+            }
         } );
     };
 

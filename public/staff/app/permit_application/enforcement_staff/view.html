@@ -27,7 +27,7 @@
                 <div ng-if="application.status < 2" class="m-t-10 p-l-10 p-b-10" md-whiteframe="2" ng-controller="doc_controller" ng-init="
                         doc_init();
                         doc_network_user = getLocal('doc_user'); application_documents = [];
-                        getApplicationDocuments();
+                        getApplicationDocuments(); load_data_requirements();
                         ">
                         
                         <!-- all documents added -->
