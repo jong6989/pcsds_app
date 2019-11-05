@@ -6,12 +6,6 @@ myAppModule.controller('intel_report_mylist_controller', function ($scope, $time
     const category = 'intel_report';
     const userId = `pcsd_${$scope.user.id}`;
 
-    $scope.open_view = (item)=>{
-        $localStorage.data = item;
-        $localStorage.params = item;
-        $scope.set_path('/operations/intel_report/view');
-    };
-
     $scope.ceil = (number)=> {
         return Math.ceil(number);
     };

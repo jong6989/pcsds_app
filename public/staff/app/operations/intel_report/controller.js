@@ -14,11 +14,6 @@ myAppModule.controller('intel_report_controller', function ($scope, $timeout, $m
         }
     };
 
-    $scope.open_view = (item)=>{
-        $localStorage.data = item;
-        $scope.set_path('/operations/intel_report/view');
-    };
-
     $scope.ceil = (number)=> {
         return Math.ceil(number);
     };
@@ -94,7 +89,8 @@ myAppModule.controller('intel_report_controller', function ($scope, $timeout, $m
     };
 
     function triger_linked(x){
-        // $scope.load_linked('surveillance_report','soi_number', x.control_number);
+        $scope.load_linked('summary_of_information','control_number', x.reference_number);
+        $scope.load_linked('surveillance_report','control_number', x.reference_number);
     }
     $scope.linked = { show : false };
     $scope.load_linked = (category, ref_key, ref_value) => {

@@ -41,6 +41,11 @@
                             ng-click="set_url_param('ID='+ x.id, '/operations/surveillance_report/view')">
                             <strong>Surveillance Report</strong> - {{x.report_subject}}, {{x.report_date}}
                         </li>
+                        <li ng-if="linked['summary_of_information'].length > 0" class="pointer col-blue" 
+                            ng-repeat="x in linked['summary_of_information']" ng-init="linked.show = true"
+                            ng-click="set_url_param('ID='+ x.id, '/operations/summary_of_information/view')">
+                            <strong>Summary of Information</strong> - {{x.summary_subject}}, {{x.date}}
+                        </li>
                     </ul>
                 </div>
             </div>
