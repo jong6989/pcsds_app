@@ -42,6 +42,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-alignment": "^11.2.0",
     "@ckeditor/ckeditor5-build-classic": "^12.4.0",
+    "angular-uuid": "0.0.4",
     "bootstrap": "^4.2.1",
     "ckeditor": "^4.12.1",
     "froala-editor": "^3.0.5-rc.1",

@@ -1,0 +1,36 @@
+
+<div layout ng-controller="monitoring_controller" 
+    ng-init="set_page_title('Wildlife Special Use Permit (RFF) Monitoring Report'); 
+        load_all('wsup_rff_monitoring_report', 'pcsd_' + user.id); ">
+    <md-list class="md-dense" flex>
+        <md-content style="height : {{iframeHeight - 175}}px;">
+            <md-list-item class="md-3-line" ng-repeat="x in all_items track by x.id " ng-click="set_url_param('ID='+ x.id, '/operations/intel_report/view')">
+                
+                <div class="md-list-item-text" layout="column">
+                    <h3>
+                        Subject : {{x.report_subject}}, Control No. : {{x.control_number}}, Reference : {{x.references}}, Reference No. : {{x.reference_number}}
+                    </h3>
+                    <h4>
+                        Report Date : {{ x.report_date }}, Date Received : {{x.date_received}}, Recommendations : {{x.recommendations}}
+                    </h4>
+                    <p>
+                        Evaluation : {{x.evaluation }}
+                    </p>
+                    <md-divider></md-divider>
+                </div>
+            </md-list-item>
+        </md-content>
+        <md-subheader class="col-white bg-grey">
+            <div layout >
+                <div flex></div>
+                <div ng-click="previus_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length > 1">
+                    <i class="fa fa-chevron-left"></i>
+                </div>
+                <div class="font-10">{{pointer_query_array.length}}/{{ ceil(total_query_size / query_limit) }}</div>
+                <div ng-click="next_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length < (total_query_size / query_limit) ">
+                    <i class="fa fa-chevron-right"></i>
+                </div>
+            </div>
+        </md-subheader>
+    </md-list>
+</div>

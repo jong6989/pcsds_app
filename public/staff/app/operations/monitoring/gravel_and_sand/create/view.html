@@ -1,0 +1,39 @@
+<div layout ng-controller="monitoring_controller" 
+    ng-init="set_page_title('SEP Gravel and Sand Monitoring Report - Create');
+    load_last_number('last_no_for_chainsaw_monitoring');
+    setSubject('SEP Gravel and Sand Monitoring Report');
+    setCategory('sep_gravel_and_sand_monitoring_report');
+    setTemplate({
+        'name' : 'SEP Gravel and Sand Monitoring Report',
+        'type' : 'report',
+        'permit' : 'false',
+        'create' : 	'./app/templates/templates/monitoring/gravel_and_sand/create.html',
+        'edit' : 	'./app/templates/templates/monitoring/gravel_and_sand/edit.html',
+        'print' : 	'./app/templates/templates/monitoring/gravel_and_sand/print.html',
+        'view' : 	'./app/templates/templates/monitoring/gravel_and_sand/view.html'
+    });
+    setViewPath('/operations/monitoring/gravel_and_sand/view');
+    setListPath('/operations/monitoring/gravel_and_sand/list/all');
+    setCreatePath('/operations/monitoring/gravel_and_sand/create')">
+    <div flex="100" layout-align="center center" ng-if="is_loading" layout>
+        <md-progress-circular md-mode="indeterminate" md-diameter="70">
+        </md-progress-circular>
+    </div>
+    <form ng-if="!is_loading" ng-cloak name="form_add_draft" flex>
+            <cite class="col-red">
+                Last control no: <strong> {{last_control_number}} </strong>
+            </cite>
+            <hr>
+            <div ng-include="n.template.create" ></div>
+            
+            <md-button class="md-primary md-raised" 
+                ng-disabled="form_add_draft.$invalid" 
+                ng-controller="doc_controller"
+                ng-init="doc_init()"
+                ng-click="create(doc_user.id);"
+                >
+                Create Document
+            </md-button>
+    </form>
+   
+</div>

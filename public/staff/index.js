@@ -18,6 +18,7 @@ var script_angular = `
         <script src="/js/ng-image-crop/ng-img-crop.js"></script>
         <script src="/js/html2canvas/html2canvas.min.js"></script>
         <script src="/plugins/ng-image-gallery/dist/ng-image-gallery.min.js"></script>
+        <script src="/plugins/angular-uuid/angular-uuid.js"></script>
         <link href="/plugins/ng-image-gallery/dist/ng-image-gallery.min.css" rel="stylesheet"/>
     `;
 //angularjs plugins
@@ -226,6 +227,94 @@ localData.set('STAFF_ACCOUNT',`
                     {
                         "title": "My List",
                         "path": "/operations/intel_report/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Chainsaw Monitoring Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/monitoring/chainsaw/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/monitoring/chainsaw/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/monitoring/chainsaw/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
+                "icon":"align-right",
+                "title":"SEP Gravel and Sand Monitoring Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/monitoring/gravel_and_sand/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/monitoring/gravel_and_sand/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/monitoring/gravel_and_sand/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Wildlife Special Use Permit (RFF) Monitoring Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/monitoring/rff/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/monitoring/rff/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/monitoring/rff/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
+                "icon":"align-right",
+                "title":"SEP (PCSD) Monitoring Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/monitoring/sep/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/monitoring/sep/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/monitoring/sep/list/single",
                         "icon": "align-justify"
                     }
                 ]

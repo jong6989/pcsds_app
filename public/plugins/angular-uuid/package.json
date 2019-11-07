@@ -1,0 +1,62 @@
+{
+  "_from": "angular-uuid",
+  "_id": "angular-uuid@0.0.4",
+  "_inBundle": false,
+  "_integrity": "sha1-h6hgyh02rjiffsYP0ENm7cDjWE0=",
+  "_location": "/angular-uuid",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "angular-uuid",
+    "name": "angular-uuid",
+    "escapedName": "angular-uuid",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular-uuid/-/angular-uuid-0.0.4.tgz",
+  "_shasum": "87a860ca1d36ae389f7ec60fd04366edc0e3584d",
+  "_spec": "angular-uuid",
+  "_where": "/home/saintpaper/Desktop/pcsds_app",
+  "author": {
+    "name": "Ivan Hayes",
+    "url": "http://www.ivanhayes.com"
+  },
+  "bugs": {
+    "url": "https://github.com/munkychop/angular-uuid/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "An AngularJS wrapper for a rigorous implementation of RFC4122 (v1 and v4) UUIDs.",
+  "homepage": "https://github.com/munkychop/angular-uuid",
+  "keywords": [
+    "angular",
+    "angularjs",
+    "angular-uuid",
+    "uuid",
+    "guid",
+    "rfc4122",
+    "javascript",
+    "library"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/munkychop/angular-uuid/blob/master/LICENSE"
+    }
+  ],
+  "main": "angular-uuid.js",
+  "name": "angular-uuid",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/munkychop/angular-uuid.git"
+  },
+  "title": "angular-uuid",
+  "version": "0.0.4"
+}

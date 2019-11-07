@@ -2,7 +2,8 @@
 var myAppModule = {};
 myAppModule = angular.module('brain_app', [
   'ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute',
-  'ngFileUpload','ngTable', 'camera', 'ngImgCrop', 'thatisuday.ng-image-gallery']);
+  'ngFileUpload','ngTable', 'camera', 'ngImgCrop', 'thatisuday.ng-image-gallery',
+'angular-uuid']);
 
 myAppModule
 .config(function($routeProvider, $locationProvider) {
@@ -38,7 +39,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   //url.has('key')
   //url.set('key')
   $scope.set_url_param = (param,hash)=>{
-    let new_hash = (hash)? "#!" + hash : location.hash;
+    let new_hash = (hash) ? "#!" + hash : location.hash;
     let new_url = location.origin + location.pathname + "?" + param + new_hash;
     location.assign(new_url);
   };
