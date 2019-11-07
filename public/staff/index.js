@@ -320,6 +320,50 @@ localData.set('STAFF_ACCOUNT',`
                 ]
             },
             {
+                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Wildlife Special Use Permit (AO12) Monitoring Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/monitoring/wsup_ao_12/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/monitoring/wsup_ao_12/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/monitoring/wsup_ao_12/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Chainsaw Special Use Permit Monitoring Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/monitoring/sup/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/monitoring/sup/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/monitoring/sup/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
                 "controller":"<script src='app/applications/controller.js'></script>",
                 "icon":"files-o",
                 "path":"/applications",

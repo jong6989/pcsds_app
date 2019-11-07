@@ -1,20 +1,20 @@
 <div layout ng-controller="monitoring_controller" 
-    ng-init="set_page_title('SEP (PCSD) Monitoring Report - Create');
-    load_last_number('last_no_for_sep_monitoring');
-    setSubject('SEP (PCSD) Monitoring Report');
-    setCategory('sep_monitoring_report');
+    ng-init="set_page_title('Wildlife Special Use Permit Monitoring Report - Create');
+    load_last_number('last_no_for_wsup_monitoring');
+    setSubject('Wildlife Special Use Permit Monitoring Report');
+    setCategory('wsup_monitoring');
     setTemplate({
-        'name' : 'SEP (PCSD) Monitoring Report',
+        'name' : 'Wildlife Special Use Permit Monitoring Report',
         'type' : 'report',
         'permit' : 'false',
-        'create' : 	'./app/templates/templates/monitoring/sep/create.html',
-        'edit' : 	'./app/templates/templates/monitoring/sep/edit.html',
-        'print' : 	'./app/templates/templates/monitoring/sep/print.html',
-        'view' : 	'./app/templates/templates/monitoring/sep/view.html'
+        'create' : 	'./app/templates/templates/monitoring/wsup_ao_12/create.html',
+        'edit' : 	'./app/templates/templates/monitoring/wsup_ao_12/edit.html',
+        'print' : 	'./app/templates/templates/monitoring/wsup_ao_12/print.html',
+        'view' : 	'./app/templates/templates/monitoring/wsup_ao_12/view.html'
     });
-    setViewPath('/operations/monitoring/sep/view');
-    setListPath('/operations/monitoring/sep/list/all');
-    setCreatePath('/operations/monitoring/sep/create')">
+    setViewPath('/operations/monitoring/wsup_ao_12/view');
+    setListPath('/operations/monitoring/wsup_ao_12/list/all');
+    setCreatePath('/operations/monitoring/wsup_ao_12/create')">
     <div flex="100" layout-align="center center" ng-if="is_loading" layout>
         <md-progress-circular md-mode="indeterminate" md-diameter="70">
         </md-progress-circular>

@@ -1,5 +1,6 @@
 
-<div layout ng-controller="intel_report_mylist_controller" ng-init="set_page_title('My Intelligence Reports'); load_list(); ">
+<div layout ng-controller="intel_report_mylist_controller" 
+    ng-init="set_page_title('My Chainsaw Monitoring Reports'); load_list('chainsaw_monitoring', 'pcsd_'+user.id); ">
     <md-list class="md-dense" flex>
         <md-content style="height : {{iframeHeight - 175}}px;">
             <md-list-item class="md-3-line" ng-repeat="x in all_items track by x.id " ng-click="set_url_param('ID='+ x.id, '/operations/intel_report/view')">
