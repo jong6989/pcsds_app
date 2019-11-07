@@ -118,7 +118,12 @@ myAppModule.
             // const category = 'chainsaw_monitoring';
 
             $scope.load_data = () => {
-                $scope.currentItem = $localStorage.data;
+                if($scope.url.has('ID')){
+                    $scope.currentItem = { id : $scope.url.get('ID') };
+                }else {
+                    $scope.currentItem = $localStorage.data;
+                    if($scope.currentItem == undefined) $scope.set_path('/operations/intel_report/create');  
+                }
             };
 
             $scope.ceil = (number) => {
