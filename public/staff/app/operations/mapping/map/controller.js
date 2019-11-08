@@ -22,9 +22,10 @@ myAppModule.controller('opsMap_controller', function ($scope, $filter, $timeout,
 
     trigerMapFunctions = ()=>{
         $scope.isLoading = false;
-        query.where("time",">=",1573109962615).orderBy("time").onSnapshot( qs => {
+        query.where("time",">=",1573109962615).onSnapshot( qs => {
             if(!qs.empty){
                 let linePoints = [];
+                $scope.points_count = qs.size;
                 qs.docs.map( d => {
                     let document = d.data();
                     linePoints.push({lat: document.latitude, lng: document.longitude});
