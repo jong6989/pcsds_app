@@ -119,7 +119,6 @@ myAppModule.
             // const category = 'chainsaw_monitoring';
 
             $scope.load_data = () => {
-                var url = $scope.url.get('ID');
                 if($scope.url.has('ID')){
                     $scope.currentItem = { id : $scope.url.get('ID') };
                 }else {
