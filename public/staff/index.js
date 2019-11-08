@@ -364,6 +364,28 @@ localData.set('STAFF_ACCOUNT',`
                 ]
             },
             {
+                "controller":"<script src='app/evaluation/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Evaluation",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/evaluation/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/evaluation/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/evaluation/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
                 "controller":"<script src='app/applications/controller.js'></script>",
                 "icon":"files-o",
                 "path":"/applications",
