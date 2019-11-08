@@ -99,6 +99,7 @@ myAppModule.
                             $scope.toast_s("document created!");
                             $scope.n.id = ref.id;
                             $localStorage.data = $scope.n;
+                            $scope.url.set('ID', ref.id)
                             $scope.set_path(viewPath);
                         } else {
                             $scope.set_path(listPath);
@@ -118,7 +119,12 @@ myAppModule.
             // const category = 'chainsaw_monitoring';
 
             $scope.load_data = () => {
-                $scope.currentItem = $localStorage.data;
+                if($scope.url.has('ID')){
+                    $scope.currentItem = { id : $scope.url.get('ID') };
+                }else {
+                    $scope.currentItem = $localStorage.data;
+                    if($scope.currentItem == undefined) $scope.set_path('/operations/intel_report/create');  
+                }
             };
 
             $scope.ceil = (number) => {
