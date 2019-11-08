@@ -88,6 +88,7 @@ myAppModule.controller('surveillance_report_controller', function ($scope, $time
                 $scope.currentItem = d;
                 triger_linked(d);
                 if(callBack) callBack();
+                $scope.set_page_title($scope.currentItem.subject);
                 $scope.$apply();
             } );
         }

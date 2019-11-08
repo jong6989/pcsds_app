@@ -215,6 +215,7 @@ myAppModule.
                         triger_linked(d);
                         $scope.currentItem = d;
                         if (callBack) callBack();
+                        $scope.set_page_title($scope.currentItem.subject);
                         $scope.$apply();
                     });
                 }

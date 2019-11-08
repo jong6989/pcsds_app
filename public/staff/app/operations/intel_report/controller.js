@@ -83,6 +83,7 @@ myAppModule.controller('intel_report_controller', function ($scope, $timeout, $m
                 triger_linked(d);
                 $scope.currentItem = d;
                 if(callBack) callBack();
+                $scope.set_page_title($scope.currentItem.subject);
                 $scope.$apply();
             } );
         }
