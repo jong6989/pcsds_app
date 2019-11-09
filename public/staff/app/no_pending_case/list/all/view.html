@@ -1,17 +1,19 @@
 
-<div layout ng-controller="monitoring_controller" 
-    ng-init="set_page_title('Chainsaw Monitoring Report'); load_all('chainsaw_monitoring'); ">
+<div layout ng-controller="NoPendingCaseController" 
+    ng-init="set_page_title('No Pending Case Certification'); loadItems('no_pending_case_certification'); ">
     <md-list class="md-dense" flex>
         <md-content style="height : {{iframeHeight - 175}}px;">
-            <md-list-item class="md-3-line" ng-repeat="x in all_items track by x.id " 
+            <md-list-item class="md-3-line" ng-repeat="x in items track by x.id " 
                 ng-click="set_url_param('ID='+ x.id, '/operations/monitoring/chainsaw/view')">
                 
                 <div class="md-list-item-text" layout="column">
                     <h3>
-                        Subject : {{x.subject}}, Registration Number {{x.registration_number}}
+                        Subject : {{x.subject}},  Certificate Type: {{x.c_type}}<br>
+                        Applicant Name: {{x.applicant_f_name}} {{x.applicant_m_name}} {{x.applicant_l_name}}<br>
+                        Address: {{x.address}}
                     </h3>
                     <h4>
-                        Monitoring Date : {{ x.monitoring_date }}, Date Received : {{x.date_received}}, Recommendations : {{x.recommendations}}
+                        Date Received : {{x.date_received}}
                     </h4>
                     <md-divider></md-divider>
                 </div>

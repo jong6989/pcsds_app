@@ -1,19 +1,19 @@
-<div layout ng-controller="monitoring_controller" 
-    ng-init="set_page_title('Chainsaw Monitoring - Create');
-        setSubject('Chainsaw Monitoring Report');
-        setCategory('chainsaw_monitoring');
+<div layout ng-controller="NoPendingCaseController" 
+    ng-init="set_page_title('No Pending Case Certification- Create');
+        setSubject('No Pending Case Certification');
+        setCategory('no_pending_case_certification');
         setTemplate({
-			'name' : 'Intelligence Report',
-			'type' : 'report',
+			'name' : 'No Pending Case Certification',
+			'type' : 'certification',
 			'permit' : 'false',
-			'create' : 	'./app/templates/templates/monitoring/chainsaw/create.html',
-			'edit' : 	'./app/templates/templates/monitoring/chainsaw/edit.html',
-			'print' : 	'./app/templates/templates/monitoring/chainsaw/print.html',
-			'view' : 	'./app/templates/templates/monitoring/chainsaw/view.html'
+			'create' : 	'./app/templates/templates/certificate_npc/create.html',
+			'edit' : 	'./app/templates/templates/certificate_npc/edit.html',
+			'print' : 	'./app/templates/templates/certificate_npc/print.html',
+			'view' : 	'./app/templates/templates/certificate_npc/view.html'
         });
-        setViewPath('/operations/monitoring/chainsaw/view');
-        setListPath('/operations/monitoring/chainsaw/list/all');
-        setCreatePath('/operations/monitoring/chainsaw/create')">
+        setViewPath('/no_pending_case/view');
+        setListPath('/no_pending_case/list/all');
+        setCreatePath('/no_pending_case/create')">
     <div flex="100" layout-align="center center" ng-if="is_loading" layout>
         <md-progress-circular md-mode="indeterminate" md-diameter="70">
         </md-progress-circular>

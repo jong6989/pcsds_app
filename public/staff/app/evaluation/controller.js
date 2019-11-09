@@ -71,7 +71,7 @@ controller('EvaluationController', function($scope){
             $scope.currentItem = { id : $scope.url.get('ID') };
         }else {
             $scope.currentItem = $localStorage.data;
-            if($scope.currentItem == undefined) $scope.set_path('/operations/intel_report/create');  
+            if($scope.currentItem == undefined) $scope.set_path('/evaluation/create');  
         }
     };
 
