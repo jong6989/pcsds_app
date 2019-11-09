@@ -403,23 +403,23 @@ localData.set('STAFF_ACCOUNT',`
                 ]
             },
             {
-                "controller":"<script src='app/no_pending_case/controller.js'></script>",
+                "controller":"<script src='app/certification/controller.js'></script>",
                 "icon":"align-right",
-                "title":"No Pending Case Certification",
+                "title":"Certification",
                 "menu": [
                     {
                         "title": "Create",
-                        "path": "/no_pending_case/create",
+                        "path": "/certification/create",
                         "icon": "magic"
                     },
                     {
                         "title": "All",
-                        "path": "/no_pending_case/list/all",
+                        "path": "/certification/list/all",
                         "icon": "align-justify"
                     },
                     {
                         "title": "My List",
-                        "path": "/no_pending_case/list/single",
+                        "path": "/certification/list/single",
                         "icon": "align-justify"
                     }
                 ]
