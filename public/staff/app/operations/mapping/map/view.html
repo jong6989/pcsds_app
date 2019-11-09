@@ -1,0 +1,13 @@
+<div ng-controller="operations_map_controller" ng-init="set_page_title('Map');">
+
+    <div ng-controller="opsMap_controller" ng-init="set_query(get_gps_query());">
+            <div flex="100" layout-align="center center" ng-if="isLoading" layout>
+                <md-progress-circular md-mode="indeterminate" md-diameter="70">
+                    
+                </md-progress-circular>
+            </div>
+    </div>
+    <div ng-hide="isLoading" id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNSrmrgFvnWc8YGVbYVDW5Sz7nwxx6ec8&callback=initOpsMap" async defer></script>
+</div>

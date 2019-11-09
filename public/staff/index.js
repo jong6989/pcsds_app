@@ -166,6 +166,23 @@ localData.set('STAFF_ACCOUNT',`
                 "title":"Document Network"
             },
             {
+                "controller":"<script src='app/operations/mapping/controller.js'></script>",
+                "icon":"map",
+                "title":"Mapping",
+                "menu": [
+                    {
+                        "title": "Enforcer",
+                        "path": "/operations/mapping/enforcer",
+                        "icon": "street-view"
+                    },
+                    {
+                        "title": "Map",
+                        "path": "/operations/mapping/map",
+                        "icon": "map-marker"
+                    }
+                ]
+            },
+            {
                 "controller":"<script src='app/operations/summary_of_information/controller.js'></script>",
                 "icon":"align-right",
                 "title":"Summary of Information",

@@ -93,6 +93,7 @@ myAppModule.controller('summary_of_information_controller', function ($scope, $t
                 $scope.currentItem = d;
                 triger_linked(d);
                 if(callBack) callBack();
+                $scope.set_page_title($scope.currentItem.subject);
                 $scope.$apply();
             } );
         }

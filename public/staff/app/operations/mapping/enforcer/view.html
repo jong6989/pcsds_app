@@ -1,0 +1,29 @@
+<div ng-controller="operations_map_controller" ng-init="set_page_title('Enforcer Mapping'); init_enforcer_map();">
+    <h5> Points : {{gpsItems.length}} </h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th> Accuracy </th>
+                <th> Speed </th>
+                <th> Altitude </th>
+                <th> Bearing </th>
+                <th> Latitude </th>
+                <th> Longitude </th>
+                <th> Date </th>
+                <th> Mills </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="x in gpsItems">
+                <td> {{x.accuracy}} </td>
+                <td> {{x.speed * 3.6 | number : 2}} km/h </td>
+                <td> {{x.altitude}} </td>
+                <td> {{x.bearing | number : 2}} </td>
+                <td> {{x.latitude}} </td>
+                <td> {{x.longitude}} </td>
+                <td> {{x.time | date : 'short'}} </td>
+                <td> {{x.time}} </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
