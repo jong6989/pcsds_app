@@ -1,5 +1,7 @@
 myAppModule.
 controller('EvaluationController', function($scope){
+    const time_key = 'created_time';
+    const collection = 'documents';
     $scope.evaluation_forms = [
         { 
             subject: 'Chainsaw Application Evaluation',
@@ -8,7 +10,8 @@ controller('EvaluationController', function($scope){
                 'create' : 	'./app/templates/templates/chainsaw/evaluation/create.html',
 			    'edit' : 	'./app/templates/templates/chainsaw/evaluation/edit.html',
 			    'print' : 	'./app/templates/templates/chainsaw/evaluation/print.html',
-			    'view' : 	'./app/templates/templates/chainsaw/evaluation/view.html'
+                'view' : 	'./app/templates/templates/chainsaw/evaluation/view.html',
+                'list_view_template': './app/templates/templates/chainsaw/evaluation/listview.html'
             }
         },
         {
@@ -18,7 +21,9 @@ controller('EvaluationController', function($scope){
                 'create' : 	'./app/templates/templates/wsup/evaluation/create.html',
 			    'edit' : 	'./app/templates/templates/wsup/evaluation/edit.html',
 			    'print' : 	'./app/templates/templates/wsup/evaluation/print.html',
-			    'view' : 	'./app/templates/templates/wsup/evaluation/view.html'
+                'view' : 	'./app/templates/templates/wsup/evaluation/view.html',
+                'list_view_template': './app/templates/templates/wsup/evaluation/listview.html'
+                
             }
         }
     ];
@@ -74,12 +79,31 @@ controller('EvaluationController', function($scope){
         return Math.ceil(number);
     };
 
-    $scope.load_all = (category, publisher) => {
-        $scope.all_items = [];
+    $scope.items = [];
+
+    $scope.getSelectedEvaluation = (category) => {
+        var index = $scope.evaluation_forms.findIndex(item => item.category == category);
+        return $scope.evaluation_forms[index];
+    }
+
+    $scope.listen_document_change = (callBack) => {
+        if ($scope.currentItem) {
+            db.collection(collection).doc($scope.currentItem.id).onSnapshot((res) => {
+                let d = res.data();
+                d.id = res.id;
+                $scope.currentItem = d;
+                if (callBack) callBack();
+                $scope.$apply();
+            });
+        }
+    };
+
+    $scope.loadItems = (category, publisher) => {
         $scope.total_query_size = 0;
         $scope.query_limit = 20;
         $scope.pointer_query_array = [];
         let last_query_doc;
+        
 
         let load_query = (query, decrement, is_initial) => {
             query.get().then(async (qs) => {
@@ -91,7 +115,7 @@ controller('EvaluationController', function($scope){
                     });
 
                     last_query_doc = qs.docs[qs.docs.length - 1];
-                    $scope.all_items = results;
+                    $scope.items = results;
 
                     if (is_initial || !decrement)
                         $scope.pointer_query_array.push(qs.docs[0].data()[time_key]);
