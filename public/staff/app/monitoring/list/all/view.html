@@ -1,0 +1,41 @@
+
+<div ng-controller="MonitoringController" 
+    ng-init="set_page_title('Monitoring'); 
+        loadItems('chainsaw_monitoring'); 
+        selectedMonitoring=getSelectedMonitoring('chainsaw_monitoring')">
+
+    <md-input-container class="md-block" flex-gt-sm>
+        <label></label>
+        <md-select md-selected-text="selectedMonitoring.subject"
+            ng-change="loadItems(selectedCategory);selectedMonitoring=getSelectedMonitoring(selectedCategory)" 
+            ng-model="selectedCategory">
+            <md-option 
+                ng-repeat="monitoring_form in monitoring_forms track by $index" 
+                value="{{monitoring_form.category}}">
+                {{monitoring_form.subject}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+
+    <md-list class="md-dense" flex>
+        <md-content style="height : {{iframeHeight - 175}}px;">
+            <md-list-item class="md-3-line" ng-repeat="item in items track by item.id " 
+                ng-click="set_url_param('ID='+ item.id, '/monitoring/view')">
+                <div ng-include="selectedMonitoring.template.list_view_template"></div>
+
+            </md-list-item>
+        </md-content>
+        <md-subheader class="col-white bg-grey">
+            <div layout >
+                <div flex></div>
+                <div ng-click="previus_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length > 1">
+                    <i class="fa fa-chevron-left"></i>
+                </div>
+                <div class="font-10">{{pointer_query_array.length}}/{{ ceil(total_query_size / query_limit) }}</div>
+                <div ng-click="next_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length < (total_query_size / query_limit) ">
+                    <i class="fa fa-chevron-right"></i>
+                </div>
+            </div>
+        </md-subheader>
+    </md-list>
+</div>
