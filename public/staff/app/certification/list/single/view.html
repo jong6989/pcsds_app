@@ -1,0 +1,44 @@
+
+<div ng-controller="CertificationController" 
+ng-init="set_page_title('Certification'); 
+    loadItems('no_pending_case_certification', 'pcsd_'+user.id); 
+    selectedCertification=getSelectedCertification('no_pending_case_certification')">
+
+<md-input-container class="md-block" flex-gt-sm>
+    <label></label>
+    <md-select md-selected-text="selectedCertification.subject"
+        ng-change="loadItems(selectedCategory, 'pcsd_'+user.id);
+            selectedCertification=getSelectedCertification(selectedCategory)" 
+        ng-model="selectedCategory">
+        <md-option 
+            ng-repeat="certification_form in certification_forms track by $index" 
+            value="{{certification_form.category}}">
+            {{certification_form.subject}}
+        </md-option>
+    </md-select>
+</md-input-container>
+
+<md-list class="md-dense" flex>
+    <md-content style="height : {{iframeHeight - 175}}px;">
+        <md-list-item class="md-3-line" ng-repeat="item in items track by item.id " 
+            ng-click="set_url_param('ID='+ item.id, '/certificate/view')">
+            
+            <div class="md-list-item-text" layout="column">
+                <div ng-include="selectedCertification.template.list_view_template"></div>
+            </div>
+        </md-list-item>
+    </md-content>
+    <md-subheader class="col-white bg-grey">
+        <div layout >
+            <div flex></div>
+            <div ng-click="previus_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length > 1">
+                <i class="fa fa-chevron-left"></i>
+            </div>
+            <div class="font-10">{{pointer_query_array.length}}/{{ ceil(total_query_size / query_limit) }}</div>
+            <div ng-click="next_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length < (total_query_size / query_limit) ">
+                <i class="fa fa-chevron-right"></i>
+            </div>
+        </div>
+    </md-subheader>
+</md-list>
+</div>

@@ -3,41 +3,10 @@ myAppModule.
     controller('monitoring_controller',
         function ($scope, $localStorage, uuid) {
             $scope.is_loading = false;
-            $scope.last_control_number = '';
-            $scope.last_control_number_id = '';
             $scope.monitoring_date = $scope.date_now('YYYY-MM-DD');
 
             $scope.load_last_number = (meta_key) => {
-                db.collection('meta').where('key', '==', meta_key).onSnapshot(qs => {
-                    let results = qs.docs.map(d => {
-                        let item = d.data();
-                        item.id = d.id;
-                        return item;
-                    });
-                    if (results.length > 0) {
-                        $scope.last_control_number = results[0].value;
-                        $scope.last_control_number_id = results[0].id;
-                    } else {
-                        db.collection('meta').add({ key: meta_key, value: '' }).then(ref => {
-                            $scope.last_control_number_id = ref.id;
-                        });
-                    }
-                    $scope.$apply();
-                });
-
-                //initialize data from other document
-                if ($localStorage.soi_data) {
-                    let soi = $localStorage.soi_data;
-                    $scope.n.references = "Summary of Information";
-                    $scope.n.reference_number = soi.control_number;
-                    delete ($localStorage.soi_data);
-                }
-                if ($localStorage.survrep_data) {
-                    let survrep = $localStorage.survrep_data;
-                    $scope.n.references = "Surveillance Report";
-                    $scope.n.reference_number = survrep.control_number;
-                    delete ($localStorage.survrep_data);
-                }
+               
             };
 
             $scope.n = {
@@ -80,21 +49,11 @@ myAppModule.
                     $scope.n.status = 'published';
                     $scope.n.meta = { 'published_date': $scope.date_now('YYYY-MM-DD'), 'published_time': Date.now() };
                     $scope.n.agency = $scope.global.ops;
-                    $scope.n.control_number = uuid.v4();
 
                     $scope.n.keywords = $scope.n.keywords.filter((value) => {
                         return value != undefined && value.trim() != '';
                     });
                     db.collection('documents').add($scope.n).then((ref) => {
-                        if ($scope.last_control_number_id !== '') {
-
-                            db.
-                                collection('meta').
-                                doc($scope.last_control_number_id).
-                                update({ "value": $scope.n.control_number });
-
-                            $scope.last_control_number = $scope.n.control_number;
-                        }
                         if (ref.id) {
                             $scope.toast_s("document created!");
                             $scope.n.id = ref.id;
@@ -212,7 +171,7 @@ myAppModule.
                     db.collection(collection).doc($scope.currentItem.id).onSnapshot((res) => {
                         let d = res.data();
                         d.id = res.id;
-                        triger_linked(d);
+                        // triger_linked(d);
                         $scope.currentItem = d;
                         if (callBack) callBack();
                         $scope.set_page_title($scope.currentItem.subject);

@@ -1,6 +1,5 @@
 <div layout ng-controller="monitoring_controller" 
     ng-init="set_page_title('Chainsaw Monitoring - Create');
-        load_last_number('last_no_for_chainsaw_monitoring');
         setSubject('Chainsaw Monitoring Report');
         setCategory('chainsaw_monitoring');
         setTemplate({
@@ -20,9 +19,6 @@
         </md-progress-circular>
     </div>
     <form ng-if="!is_loading" ng-cloak name="form_add_draft" flex>
-            <cite class="col-red">
-                Last control no: <strong> {{last_control_number}} </strong>
-            </cite>
             <hr>
             <div ng-include="n.template.create" ></div>
             

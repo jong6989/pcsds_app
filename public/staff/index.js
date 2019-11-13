@@ -249,133 +249,67 @@ localData.set('STAFF_ACCOUNT',`
                 ]
             },
             {
-                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
+                "controller":"<script src='app/monitoring/controller.js'></script>",
                 "icon":"align-right",
-                "title":"Chainsaw Monitoring Report",
+                "title":"Monitoring Report",
                 "menu": [
                     {
                         "title": "Create",
-                        "path": "/operations/monitoring/chainsaw/create",
+                        "path": "/monitoring/create",
                         "icon": "magic"
                     },
                     {
                         "title": "All",
-                        "path": "/operations/monitoring/chainsaw/list/all",
+                        "path": "/monitoring/list/all",
                         "icon": "align-justify"
                     },
                     {
                         "title": "My List",
-                        "path": "/operations/monitoring/chainsaw/list/single",
+                        "path": "/monitoring/list/single",
                         "icon": "align-justify"
                     }
                 ]
             },
             {
-                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
+                "controller":"<script src='app/evaluation/controller.js'></script>",
                 "icon":"align-right",
-                "title":"SEP Gravel and Sand Monitoring Report",
+                "title":"Evaluation",
                 "menu": [
                     {
                         "title": "Create",
-                        "path": "/operations/monitoring/gravel_and_sand/create",
+                        "path": "/evaluation/create",
                         "icon": "magic"
                     },
                     {
                         "title": "All",
-                        "path": "/operations/monitoring/gravel_and_sand/list/all",
+                        "path": "/evaluation/list/all",
                         "icon": "align-justify"
                     },
                     {
                         "title": "My List",
-                        "path": "/operations/monitoring/gravel_and_sand/list/single",
+                        "path": "/evaluation/list/single",
                         "icon": "align-justify"
                     }
                 ]
             },
             {
-                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
+                "controller":"<script src='app/certification/controller.js'></script>",
                 "icon":"align-right",
-                "title":"Wildlife Special Use Permit (RFF) Monitoring Report",
+                "title":"Certification",
                 "menu": [
                     {
                         "title": "Create",
-                        "path": "/operations/monitoring/rff/create",
+                        "path": "/certification/create",
                         "icon": "magic"
                     },
                     {
                         "title": "All",
-                        "path": "/operations/monitoring/rff/list/all",
+                        "path": "/certification/list/all",
                         "icon": "align-justify"
                     },
                     {
                         "title": "My List",
-                        "path": "/operations/monitoring/rff/list/single",
-                        "icon": "align-justify"
-                    }
-                ]
-            },
-            {
-                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
-                "icon":"align-right",
-                "title":"SEP (PCSD) Monitoring Report",
-                "menu": [
-                    {
-                        "title": "Create",
-                        "path": "/operations/monitoring/sep/create",
-                        "icon": "magic"
-                    },
-                    {
-                        "title": "All",
-                        "path": "/operations/monitoring/sep/list/all",
-                        "icon": "align-justify"
-                    },
-                    {
-                        "title": "My List",
-                        "path": "/operations/monitoring/sep/list/single",
-                        "icon": "align-justify"
-                    }
-                ]
-            },
-            {
-                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
-                "icon":"align-right",
-                "title":"Wildlife Special Use Permit (AO12) Monitoring Report",
-                "menu": [
-                    {
-                        "title": "Create",
-                        "path": "/operations/monitoring/wsup_ao_12/create",
-                        "icon": "magic"
-                    },
-                    {
-                        "title": "All",
-                        "path": "/operations/monitoring/wsup_ao_12/list/all",
-                        "icon": "align-justify"
-                    },
-                    {
-                        "title": "My List",
-                        "path": "/operations/monitoring/wsup_ao_12/list/single",
-                        "icon": "align-justify"
-                    }
-                ]
-            },
-            {
-                "controller":"<script src='app/operations/monitoring/controller.js'></script>",
-                "icon":"align-right",
-                "title":"Chainsaw Special Use Permit Monitoring Report",
-                "menu": [
-                    {
-                        "title": "Create",
-                        "path": "/operations/monitoring/sup/create",
-                        "icon": "magic"
-                    },
-                    {
-                        "title": "All",
-                        "path": "/operations/monitoring/sup/list/all",
-                        "icon": "align-justify"
-                    },
-                    {
-                        "title": "My List",
-                        "path": "/operations/monitoring/sup/list/single",
+                        "path": "/certification/list/single",
                         "icon": "align-justify"
                     }
                 ]
