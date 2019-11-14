@@ -295,21 +295,43 @@ localData.set('STAFF_ACCOUNT',`
             {
                 "controller":"<script src='app/certification/controller.js'></script>",
                 "icon":"align-right",
-                "title":"Certification",
+                "title":"No-Pending-Case",
                 "menu": [
                     {
                         "title": "Create",
-                        "path": "/certification/create",
+                        "path": "/certification/npc/create",
                         "icon": "magic"
                     },
                     {
                         "title": "All",
-                        "path": "/certification/list/all",
+                        "path": "/certification/npc/list/all",
                         "icon": "align-justify"
                     },
                     {
                         "title": "My List",
-                        "path": "/certification/list/single",
+                        "path": "/certification/npc/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/certification/controller.js'></script>",
+                "icon":"align-right",
+                "title":"LTP Inspection'",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/certification/ltp/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/certification/ltp/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/certification/ltp/list/single",
                         "icon": "align-justify"
                     }
                 ]

@@ -151,7 +151,7 @@ controller('EvaluationController', function($scope){
                 .where('category', '==', category)
 
             if(publisher){
-                query = query_set.where('publisher', '==', publisher)
+                query = query.where('publisher', '==', publisher)
             }
             return query;
         }
