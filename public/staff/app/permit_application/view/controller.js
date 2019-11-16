@@ -121,5 +121,8 @@ myAppModule.controller('permit_application_transaction_controller', function ($s
         $scope.is_transaction_selected = false;
     };
 
-
+    $scope.hasCompleteRequirements = (attached_documents) => {
+        return attached_documents.findIndex(document => document.category == 'certificate_of_no_pending_case' ) > -1&& 
+            attached_documents.findIndex(document => document.category == 'evaluation') > -1;
+    }
 });

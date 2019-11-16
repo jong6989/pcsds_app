@@ -14,7 +14,8 @@
                 </div>
             </md-subheader>
             <md-content style="height : {{iframeHeight - 225}}px;">
-                <md-list-item class="md-3-line" ng-repeat="x in permit_application_list track by x.id " ng-click="select_transaction(x)">
+                <md-list-item class="md-3-line" ng-repeat="x in permit_application_list track by x.id " 
+                    ng-click="select_transaction(x)">
                     
                     <div class="md-list-item-text" layout="column">
                         <h3>
