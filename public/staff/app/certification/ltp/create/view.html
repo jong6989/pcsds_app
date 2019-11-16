@@ -1,0 +1,21 @@
+<div ng-controller="CertificationController" ng-init="set_page_title('No-Pending-Case Certification - Create');
+    setSelectedIndex(1)">
+    <div flex="100" layout-align="center center" ng-if="is_loading" layout>
+        <md-progress-circular md-mode="indeterminate" md-diameter="70">
+        </md-progress-circular>
+    </div>
+
+    <form ng-if="!is_loading" ng-cloak name="form_add_draft" flex>
+        <hr>
+        <div ng-include="n.template.create"></div>
+        <md-button class="md-primary md-raised" 
+                ng-disabled="form_add_draft.$invalid" 
+                ng-controller="doc_controller"
+                ng-init="doc_init()"
+                ng-click="create(doc_user.id);"
+                >
+                Create Document
+            </md-button>
+    </form>
+
+</div>

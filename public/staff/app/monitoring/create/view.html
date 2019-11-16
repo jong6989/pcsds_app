@@ -5,11 +5,13 @@
     </div>
 
     <form ng-if="!is_loading" ng-cloak name="form_add_draft" flex>
-        <hr>
         <md-input-container class="md-block" flex-gt-sm>
-            <label></label>
+            <label>Monitoring Report:</label>
             <md-select md-selected-text='n.subject' ng-change="setSelectedIndex(selectedIndex)" ng-model="selectedIndex">
-                <md-option ng-repeat="monitoring_form in monitoring_forms track by $index" value="{{$index}}">
+                <md-option 
+                    ng-repeat="monitoring_form in monitoring_forms track by $index" 
+                    value="{{$index}}"
+                    ng-selected="$index==0">
                     {{monitoring_form.subject}}
                 </md-option>
             </md-select>

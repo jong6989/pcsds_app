@@ -45,6 +45,7 @@
     "angular-uuid": "0.0.4",
     "bootstrap": "^4.2.1",
     "ckeditor": "^4.12.1",
+    "firebase-tools": "^7.7.0",
     "froala-editor": "^3.0.5-rc.1",
     "geolocation": "^0.2.0",
     "gulp-cli": "^2.2.0",

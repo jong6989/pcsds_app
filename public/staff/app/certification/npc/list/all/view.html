@@ -1,0 +1,30 @@
+
+<div ng-controller="CertificationController" 
+    ng-init="set_page_title('No-Pending-Case Certification'); 
+        loadItems('no_pending_case_certification'); 
+        selectedCertification=getSelectedCertification('no_pending_case_certification')">
+
+    <md-list class="md-dense" flex>
+        <md-content style="height : {{iframeHeight - 175}}px;">
+            <md-list-item class="md-3-line" ng-repeat="item in items track by item.id " 
+                ng-click="set_url_param('ID='+ item.id, '/evaluation/view')">
+                
+                <div class="md-list-item-text" layout="column">
+                    <div ng-include="selectedCertification.template.list_view_template"></div>
+                </div>
+            </md-list-item>
+        </md-content>
+        <md-subheader class="col-white bg-grey">
+            <div layout >
+                <div flex></div>
+                <div ng-click="previus_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length > 1">
+                    <i class="fa fa-chevron-left"></i>
+                </div>
+                <div class="font-10">{{pointer_query_array.length}}/{{ ceil(total_query_size / query_limit) }}</div>
+                <div ng-click="next_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length < (total_query_size / query_limit) ">
+                    <i class="fa fa-chevron-right"></i>
+                </div>
+            </div>
+        </md-subheader>
+    </md-list>
+</div>
