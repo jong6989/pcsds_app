@@ -1,5 +1,5 @@
 <div ng-controller="doc_controller" ng-init="doc_init();">
-    <div ng-controller="EvaluationController" ng-init="load_data();set_page_title(currentItem.subject);">
+    <div ng-controller="EvaluationController" ng-init="load_data();">
         <div ng-controller="doc_ctrl_published" 
             ng-init="
             load_operation_reciepients(doc_user[currentItem.agency.id]);

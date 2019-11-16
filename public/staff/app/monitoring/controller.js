@@ -140,6 +140,7 @@ controller('MonitoringController', function($scope){
                 let d = res.data();
                 d.id = res.id;
                 $scope.currentItem = d;
+                $scope.set_page_title(d.subject);
                 if (callBack) callBack();
                 $scope.$apply();
             });
