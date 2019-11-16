@@ -4,7 +4,7 @@ controller('MonitoringController', function($scope){
     const collection = 'documents';
     $scope.monitoring_forms = [
         { 
-            subject: 'Chainsaw Monitoring',
+            subject: 'CHAINSAW MONITORING REPORT',
             category: 'chainsaw_monitoring',
             template: {
                 'create' : 	'./app/templates/templates/monitoring/chainsaw/create.html',
@@ -15,7 +15,7 @@ controller('MonitoringController', function($scope){
             }
         },
         {
-            subject: 'SEP Gravel and Sand',
+            subject: 'SEP GRAVEL AND SAND MONITORING REPORT',
             category: 'sep_gravel_and_sand_monitoring_report',
             template: {
                 'create' : 	'./app/templates/templates/monitoring/gravel_and_sand/create.html',
@@ -27,7 +27,7 @@ controller('MonitoringController', function($scope){
             }
         },
         {
-            subject: 'Wildlife Special Use Permit (RFF)',
+            subject: 'RFF MONITORING REPORT',
             category: 'wsup_rff_monitoring_report',
             template: {
                 'create' : 	'./app/templates/templates/monitoring/rff/create.html',
@@ -38,20 +38,9 @@ controller('MonitoringController', function($scope){
                 
             }
         },
+        
         {
-            subject: 'SEP Gravel and Sand',
-            category: 'sep_monitoring_report',
-            template: {
-                'create' : 	'./app/templates/templates/monitoring/sep/create.html',
-			    'edit' : 	'./app/templates/templates/monitoring/sep/edit.html',
-			    'print' : 	'./app/templates/templates/monitoring/sep/print.html',
-                'view' : 	'./app/templates/templates/monitoring/sep/view.html',
-                'list_view_template': './app/templates/templates/monitoring/sep/listview.html'
-                
-            }
-        },
-        {
-            subject: 'Chainsaw Special Use Permit Monitoring Report',
+            subject: 'CHAINSAW SPECIAL USE PERMIT MONITORING REPORT',
             category: 'chainsaw_sup_monitoring_report',
             template: {
                 'create' : 	'./app/templates/templates/monitoring/sup/create.html',
@@ -63,7 +52,7 @@ controller('MonitoringController', function($scope){
             }
         },
         {
-            subject: 'Wildlife Special Use Permit Monitoring Report',
+            subject: 'WILDLIFE SPECIAL USE PERMIT (AO12) MONITORING REPORT',
             category: 'wsup_monitoring',
             template: {
                 'create' : 	'./app/templates/templates/monitoring/wsup_ao_12/create.html',
@@ -75,7 +64,7 @@ controller('MonitoringController', function($scope){
         }
         
     ];
-    $scope.n = $scope.monitoring_forms[0];
+    // $scope.n = $scope.monitoring_forms[0];
 
     var viewPath = "/monitoring/view";
     var listPath = "/monitoring/list/all";
@@ -83,6 +72,9 @@ controller('MonitoringController', function($scope){
     $scope.setSelectedIndex = (index) =>{
         $scope.n = $scope.monitoring_forms[index];
     }
+
+    $scope.setSelectedIndex(0);
+
     $scope.create = (user_id) => {
         if (user_id !== undefined) {
             $scope.is_loading = true;

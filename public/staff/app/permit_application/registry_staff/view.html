@@ -1,4 +1,5 @@
-<div ng-controller="permit_application_transaction_controller" ng-init="set_page_title('Permit Application - Permitting Staff Access')">
+<div ng-controller="permit_application_transaction_controller" 
+    ng-init="set_page_title('Permit Application - Registry Staff Access')">
 
         <div layout>
             <div ng-hide=" (is_xs || is_sm) && is_transaction_selected " flex-gt-sm="30" flex-sm ng-include="'./app/permit_application/list_view.html'"></div>
@@ -17,16 +18,13 @@
                             <div ng-include="x.url"></div>
                             <md-divider class="m-t-20 m-b-10"></md-divider>
                             <!-- <div ng-include="'./app/templates/actions/documents.html'" ></div> -->
-
-                            
                         </div>
                         
                     </div>
                     
                 </md-content>
 
-                <div ng-if="application.status < 2" class="m-t-10 p-l-10 p-b-10" mg-whiteframe="2" 
-                    ng-controller="doc_controller" ng-init="
+                <div ng-if="application.status < 2" class="m-t-10 p-l-10 p-b-10" mg-whiteframe="2" ng-controller="doc_controller" ng-init="
                         doc_init();
                         doc_network_user = getLocal('doc_user'); application_documents = [];
                         getApplicationDocuments(); load_data_requirements();
@@ -45,13 +43,13 @@
                                     </li>
                                 </ol>
                             </div>
+                            <md-button ng-if="hasCompleteRequirements(application_documents)">
+                                Create Permit
+                            </md-button>
                         </div>
                         <div ng-include="application_view_modal"></div>
                         <div  ng-controller="doc_ctrl_draft">
                                 <!-- ng-if="doc_network_user != undefined"  -->
-                            
-                                
-
                             <div ng-include="application_draft_modal"></div>
                         </div>
                 </div>
