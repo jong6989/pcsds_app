@@ -1,6 +1,8 @@
 'use strict';
 
-myAppModule.controller('permit_application_transaction_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
+myAppModule.controller('permit_application_transaction_controller', function (
+    $scope, $http, $mdDialog, $localStorage) {
+
     $scope.is_loading = false;
     $scope.is_transaction_selected = false;
     $scope.application = undefined;
@@ -109,6 +111,7 @@ myAppModule.controller('permit_application_transaction_controller', function ($s
 
     $scope.select_transaction = (transaction)=> {
         $scope.application = transaction;
+        // $scope.application.status = 3;
         $scope.is_transaction_selected = true;
     };
 
@@ -118,7 +121,78 @@ myAppModule.controller('permit_application_transaction_controller', function ($s
     };
 
     $scope.hasCompleteRequirements = (attached_documents) => {
-        return attached_documents.findIndex(document => document.category == 'certificate_of_no_pending_case' ) > -1&& 
-            attached_documents.findIndex(document => document.category == 'evaluation') > -1;
+        return true;
+        // return attached_documents.findIndex(document => document.category == 'certificate_of_no_pending_case' ) > -1 && 
+        //     attached_documents.findIndex(document => document.category == 'evaluation') > -1;
+    }
+
+    $scope.application_draft_modal = '';
+    $scope.n = {};
+    $scope.createPermit = (application, event) => {
+        $scope.permitTemplate = getTemplate(application.name);
+        $scope.n = $scope.permitTemplate.convert(application.data.application);
+        $scope.n.id = application.id;
+        $scope.showPrerenderedDialog(event, $scope.permitTemplate.selectorID);
+    }
+
+    function getPermit(){
+        var permit  = { 
+            selectorID: 'wildlifeImportCertWindow', 
+            path: '/permit_application/permit/wildlife_import/view.html',
+            convert: function(data){
+                var wildlifeImportCert = {
+                    applicant: {
+                        name: data.applicant,
+                        address: data.applicant_address
+                    },
+                    transportation:{},
+                    import: {},
+                    species: [],
+                    attachments: data.attachments
+                }
+
+                if(data.plane){
+                    wildlifeImportCert.transportation.type = 'Air';
+                    wildlifeImportCert.import.date = data.date_air;
+                    wildlifeImportCert.destination_port = data.port_air;
+                }else if(data.carrier){
+                    wildlifeImportCert.transportation.type = 'Courrier';
+                    wildlifeImportCert.import.date = data.date_postal;
+                    wildlifeImportCert.destination_port = data.port_postal;
+                }else if(data.sea){
+                    wildlifeImportCert.transportation.type = 'Sea';
+                    wildlifeImportCert.import.date = data.date_sea;
+                    wildlifeImportCert.destination_port = data.port_sea;
+                }
+
+                data.species.forEach(function(value, index, species){
+                    var specimen = {
+                        name: value.scientific_name,
+                        quantity: value.species_qty,
+                    }
+                    wildlifeImportCert.species.push(specimen);
+                })
+                return wildlifeImportCert;
+            }
+            
+        };
+        return permit;
+    }
+
+    function getTemplate(evaluationTemplateName){
+        var permitTemplate = null;
+        switch(evaluationTemplateName){
+            case 'Application for Wildlife Import Certification':
+                permitTemplate = getPermit();
+                break;
+            case 'Application for Wildlife Export/Re Export Certification':
+                permitTemplate = getPermit();
+                permitTemplate.selectorID = 'wildlifeExportCertWindow';
+                permitTemplate.path = '/permit_application/permit/wildlife_export/view.html';
+                break;
+        }
+        return permitTemplate;
     }
 });
+
+

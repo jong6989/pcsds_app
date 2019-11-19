@@ -26,7 +26,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
     $scope.myPending = [];
     $scope.doc_user_agencies = [];
     $scope.docTabsSelected = 0;
-    $scope.n = {};
+    // $scope.n = {};
     const userId = `pcsd_${$scope.user.id}`; //id from pcsd web api , (php), that will be saved to accounts collection
     $scope.userId = userId;
     $scope.doc_user = ($localStorage.doc_user == undefined)? { id: userId } : $localStorage.doc_user; //save data to local storage to remember last user

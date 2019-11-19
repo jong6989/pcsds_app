@@ -203,7 +203,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     return ($location.path().substr(0, path.length) === path) ? true : false;
   }
 
-  $scope.showPrerenderedDialog = function(event,ID) {
+  $scope.showPrerenderedDialog = function(event, ID) {
     $mdDialog.show({
       contentElement: '#' + ID,
       parent: angular.element(document.body),

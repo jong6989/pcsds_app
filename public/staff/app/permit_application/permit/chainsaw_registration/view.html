@@ -1,0 +1,11 @@
+<div ng-controller="permit_application_transaction_controller">
+    <div ng-init="initializeForm()" 
+        ng-include="'./app/templates/templates/chainsaw/certificate_of_registration/create.html'"></div>
+    <md-button class="md-primary md-raised"
+                ng-controller="doc_controller"
+                ng-init="doc_init()"
+                ng-click="create(doc_user.id);"
+                >
+                Create Document
+            </md-button>
+</div>

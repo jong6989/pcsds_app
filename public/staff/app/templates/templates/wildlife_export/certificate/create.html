@@ -16,7 +16,7 @@
 
 	<strong>Applicant Information</strong>
 	<div layout>
-		<md-input-container flex>
+		<!-- <md-input-container flex>
 			<label>Last Name</label>
 			<input ng-model="n.applicant.last_name"  ng-blur="n.keywords[2]=n.applicant.last_name" required>
 		</md-input-container>
@@ -27,13 +27,17 @@
 		<md-input-container class="md-block"  flex>
 			<label>Middle Name</label>
 			<input ng-model="n.applicant.middle_name">
+		</md-input-container> -->
+		<md-input-container flex>
+			<label>Name</label>
+			<input ng-model="n.applicant.name">
 		</md-input-container>
 		<md-input-container class="md-block"  flex>
 			<label>Agency</label>
 			<input ng-model="n.applicant.agency"  ng-blur="n.keywords[4]=n.applicant.agency || ''">
 		</md-input-container>
-		<input type="hidden"
-			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
+		<!-- <input type="hidden"
+			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name"> -->
 	</div>
 
 	<div>
@@ -143,7 +147,7 @@
 	<p> 
 		<span class="m-l-50"></span>
 		{{ n.line1 = 
-			'This is to certify that ' + n.applicant.full_name + ' of ' + n.applicant.agency + ', is authorized to export ' +
+			'This is to certify that ' + n.applicant.name + ' of ' + n.applicant.agency + ', is authorized to export ' +
 			' sample specimen for research purposes only by virtue of Gratuitous Permit No. ' + n.gratuitous_permit_number +
 			' to wit:'
 		}}
