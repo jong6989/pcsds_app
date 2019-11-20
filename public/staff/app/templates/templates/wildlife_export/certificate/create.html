@@ -104,7 +104,7 @@
 		</md-input-container>
 		<md-input-container flex> 
 			<label>Transportation Vehicle/Vessel</label>
-			<md-select ng-model="n.transportaion.type">
+			<md-select ng-model="n.transportation.type">
 				<md-option ng-repeat="vessel in ['Aircraft', 'Seacraft', 'Courrier']" value="{{vessel}}">
 				  {{vessel}}
 				</md-option>
@@ -178,7 +178,7 @@
 			n.line3 = 
 			'The above specimens shall be transported on ' + get_full_date(n.transportation.date) + 
 			' and valid until ' +  get_full_date(n.certificate_expiration_date) +
-			' via ' + n.transportaion.type + ' and have been verified as not included in Appendices I, 
+			' via ' + n.transportation.type + ' and have been verified as not included in Appendices I, 
 			II and III of the Convention ' +
 			'on International Trade in Endangered Species of Wild Fauna and Flora (CITES).'
 		}}

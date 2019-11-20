@@ -168,7 +168,7 @@ myAppModule.controller('permit_application_transaction_controller', function (
                 data.species.forEach(function(value, index, species){
                     var specimen = {
                         name: value.scientific_name,
-                        quantity: value.species_qty,
+                        quantity: `${value.species_qty} ${value.species}`,
                     }
                     wildlifeImportCert.species.push(specimen);
                 })
@@ -183,12 +183,89 @@ myAppModule.controller('permit_application_transaction_controller', function (
         var permitTemplate = null;
         switch(evaluationTemplateName){
             case 'Application for Wildlife Import Certification':
-                permitTemplate = getPermit();
+                permitTemplate = { 
+                    selectorID: 'wildlifeImportCertWindow', 
+                    path: '/permit_application/permit/wildlife_import/view.html',
+                    convert: function(data){
+                        var wildlifeImportCert = {
+                            applicant: {
+                                name: data.applicant,
+                                address: data.applicant_address
+                            },
+                            transportation:{},
+                            import: {},
+                            species: [],
+                            attachments: data.attachments
+                        }
+        
+                        if(data.plane){
+                            wildlifeImportCert.transportation.type = 'Air';
+                            wildlifeImportCert.import.date = data.date_air;
+                            wildlifeImportCert.destination_port = data.port_air;
+                        }else if(data.carrier){
+                            wildlifeImportCert.transportation.type = 'Courrier';
+                            wildlifeImportCert.import.date = data.date_postal;
+                            wildlifeImportCert.destination_port = data.port_postal;
+                        }else if(data.sea){
+                            wildlifeImportCert.transportation.type = 'Sea';
+                            wildlifeImportCert.import.date = data.date_sea;
+                            wildlifeImportCert.destination_port = data.port_sea;
+                        }
+        
+                        data.species.forEach(function(value, index, species){
+                            var specimen = {
+                                name: value.scientific_name,
+                                quantity: `${value.species_qty} ${value.species}`,
+                            }
+                            wildlifeImportCert.species.push(specimen);
+                        })
+                        return wildlifeImportCert;
+                    }
+                    
+                };
                 break;
             case 'Application for Wildlife Export/Re Export Certification':
-                permitTemplate = getPermit();
-                permitTemplate.selectorID = 'wildlifeExportCertWindow';
-                permitTemplate.path = '/permit_application/permit/wildlife_export/view.html';
+                permitTemplate = { 
+                    selectorID: 'wildlifeExportCertWindow', 
+                    path: '/permit_application/permit/wildlife_export/view.html',
+                    convert: function(data){
+                        var wildlifeExportCert = {
+                            applicant: {
+                                name: data.applicant,
+                                address: data.applicant_address
+                            },
+                            transportation:{},
+                            export: {},
+                            species: [],
+                            transportation: { },
+                            attachments: data.attachments
+                        }
+        
+                        if(data.plane){
+                            wildlifeExportCert.transportation.type = 'Air';
+                            wildlifeExportCert.transportation.date = data.date_air;
+                            wildlifeExportCert.destination_port = data.port_air;
+                        }else if(data.carrier){
+                            wildlifeExportCert.transportation.type = 'Courrier';
+                            wildlifeExportCert.transportation.date = data.date_postal;
+                            wildlifeExportCert.destination_port = data.port_postal;
+                        }else if(data.sea){
+                            wildlifeExportCert.transportation.type = 'Sea';
+                            wildlifeExportCert.transportation.date = data.date_sea;
+                            wildlifeExportCert.destination_port = data.port_sea;
+                        }
+        
+                        data.species.forEach(function(value, index, species){
+                            var specimen = {
+                                name: value.scientific_name,
+                                quantity: `${value.species_qty} ${value.species}`,
+                            }
+                            wildlifeExportCert.species.push(specimen);
+                        })
+                        return wildlifeExportCert;
+                    }
+                    
+                };
                 break;
         }
         return permitTemplate;
