@@ -1,11 +1,28 @@
-<div ng-controller="permit_application_transaction_controller">
-    <div ng-init="initializeForm()" 
-        ng-include="'./app/templates/templates/chainsaw/certificate_of_registration/create.html'"></div>
-    <md-button class="md-primary md-raised"
-                ng-controller="doc_controller"
-                ng-init="doc_init()"
-                ng-click="create(doc_user.id);"
-                >
-                Create Document
-            </md-button>
+
+<div style="visibility: hidden;">
+    <div class="md-dialog-container" id="chainsawRegistrationCertWindow">
+        <md-dialog layout="column" layout-align="center center">
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>Create a draft document</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div>
+                    <div
+                        ng-include="'./app/templates/templates/chainsaw/certificate_of_registration/create.html'"></div>
+                    <md-button class="md-primary md-raised" ng-controller="doc_controller" ng-init="doc_init()"
+                        ng-click="create(doc_user.id);">
+                        Create Document
+                    </md-button>
+                </div>
+            </md-dialog-content>
+
+        </md-dialog>
+
+    </div>
 </div>

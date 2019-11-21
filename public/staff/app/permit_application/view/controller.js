@@ -135,50 +135,6 @@ myAppModule.controller('permit_application_transaction_controller', function (
         $scope.showPrerenderedDialog(event, $scope.permitTemplate.selectorID);
     }
 
-    function getPermit(){
-        var permit  = { 
-            selectorID: 'wildlifeImportCertWindow', 
-            path: '/permit_application/permit/wildlife_import/view.html',
-            convert: function(data){
-                var wildlifeImportCert = {
-                    applicant: {
-                        name: data.applicant,
-                        address: data.applicant_address
-                    },
-                    transportation:{},
-                    import: {},
-                    species: [],
-                    attachments: data.attachments
-                }
-
-                if(data.plane){
-                    wildlifeImportCert.transportation.type = 'Air';
-                    wildlifeImportCert.import.date = data.date_air;
-                    wildlifeImportCert.destination_port = data.port_air;
-                }else if(data.carrier){
-                    wildlifeImportCert.transportation.type = 'Courrier';
-                    wildlifeImportCert.import.date = data.date_postal;
-                    wildlifeImportCert.destination_port = data.port_postal;
-                }else if(data.sea){
-                    wildlifeImportCert.transportation.type = 'Sea';
-                    wildlifeImportCert.import.date = data.date_sea;
-                    wildlifeImportCert.destination_port = data.port_sea;
-                }
-
-                data.species.forEach(function(value, index, species){
-                    var specimen = {
-                        name: value.scientific_name,
-                        quantity: `${value.species_qty} ${value.species}`,
-                    }
-                    wildlifeImportCert.species.push(specimen);
-                })
-                return wildlifeImportCert;
-            }
-            
-        };
-        return permit;
-    }
-
     function getTemplate(evaluationTemplateName){
         var permitTemplate = null;
         switch(evaluationTemplateName){
@@ -237,7 +193,6 @@ myAppModule.controller('permit_application_transaction_controller', function (
                             transportation:{},
                             export: {},
                             species: [],
-                            transportation: { },
                             attachments: data.attachments
                         }
         
@@ -267,6 +222,36 @@ myAppModule.controller('permit_application_transaction_controller', function (
                     
                 };
                 break;
+
+                case 'Application for Chainsaw Registration':
+                        permitTemplate = { 
+                            selectorID: 'chainsawRegistrationCertWindow', 
+                            path: '/permit_application/permit/chainsaw_registration/view.html',
+                            convert: function(data){
+                                var chainsawCertificate = {
+                                    applicant: {
+                                        name: data.applicant,
+                                        address: data.applicant_address
+                                    },
+                                    attachments: data.attachments,
+                                    intended_use: data.purpose,
+                                    chainsaw: {}
+                                }
+                                
+                                if(data.chainsaw){
+                                    permitTemplate.chainsaw = {
+                                        brand: data.chainsaw.brand,
+                                        model: data.chainsaw.model,
+                                        serial_number: data.chainsaw.serial,
+                                        horsepower: data.chainsaw.horsepower,
+                                        metal_seal_number: data.chainsaw.metal_seal_number
+                                    }
+                                }
+                                return chainsawCertificate;
+                            }
+                            
+                        };
+                    break;
         }
         return permitTemplate;
     }
