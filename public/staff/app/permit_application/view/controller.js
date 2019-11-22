@@ -121,9 +121,9 @@ myAppModule.controller('permit_application_transaction_controller', function (
     };
 
     $scope.hasCompleteRequirements = (attached_documents) => {
-        return true;
-        // return attached_documents.findIndex(document => document.category == 'certificate_of_no_pending_case' ) > -1 && 
-        //     attached_documents.findIndex(document => document.category == 'evaluation') > -1;
+        // return true;
+        return attached_documents.findIndex(document => document.category == 'certificate_of_no_pending_case' ) > -1 && 
+            attached_documents.findIndex(document => document.category == 'evaluation') > -1;
     }
 
     $scope.application_draft_modal = '';
@@ -223,7 +223,7 @@ myAppModule.controller('permit_application_transaction_controller', function (
                 };
                 break;
 
-                case 'Application for Chainsaw Registration':
+            case 'Application for Chainsaw Registration':
                         permitTemplate = { 
                             selectorID: 'chainsawRegistrationCertWindow', 
                             path: '/permit_application/permit/chainsaw_registration/view.html',
@@ -235,7 +235,7 @@ myAppModule.controller('permit_application_transaction_controller', function (
                                     },
                                     attachments: data.attachments,
                                     intended_use: data.purpose,
-                                    chainsaw: {}
+                                    chainsaw: {} 
                                 }
                                 
                                 if(data.chainsaw){
@@ -251,7 +251,29 @@ myAppModule.controller('permit_application_transaction_controller', function (
                             }
                             
                         };
-                    break;
+                break;
+            case 'Application for Special Use Permit':
+                permitTemplate ={
+                    selectorID: 'chainsawSUPCertWindow',
+                    path: '/permit_application/permit/chainsaw_sup/view.html',
+                    convert: function(data){
+                        var chainsaw_sup_certificate = {
+                            owner_name: data.scientific_name,
+                            owner_of_planted_trees: data.owner_of_planted_trees,
+                            chainsaw: {
+                                registration_number: data.registration_number,
+                                serial_number:data.serial_number,
+                                metal_seal_number: data.metal_seal_number,
+                                place_of_origin: data.place_of_origin,
+                                place_of_destination: data.place_of_destination
+                            },
+                            purpose: data.purpose
+                        }
+
+                        return chainsaw_sup_certificate;
+                    }
+                }
+                break;
         }
         return permitTemplate;
     }
