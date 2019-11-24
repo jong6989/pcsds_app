@@ -1,17 +1,16 @@
-<div
-ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
-	
+<div ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.','Mr.']; n.keywords = []; ">
+
 	<h3 class="align-center">CERTIFICATION FOR WILDLIFE IMPORT</h3>
 	<hr>
 	<md-input-container class="md-block m-t-40">
-	    <label>Certification No.</label>
-	    <input ng-model="n.application_no"  ng-blur="n.keywords[0]=n.application_no" required>
-	</md-input-container> 
+		<label>Certification No.</label>
+		<input ng-model="n.application_no" ng-blur="n.keywords[0]=n.application_no" required>
+	</md-input-container>
 	<br>
 
 	<strong>Applicant Information</strong>
 	<div layout>
-		<md-input-container flex>
+		<!-- <md-input-container flex>
 			<label>Last Name</label>
 			<input ng-model="n.applicant.last_name"  ng-blur="n.keywords[1]=n.applicant.last_name" required>
 		</md-input-container>
@@ -22,48 +21,52 @@ ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.'
 		<md-input-container class="md-block"  flex>
 			<label>Middle Name</label>
 			<input ng-model="n.applicant.middle_name">
+		</md-input-container>-->
+		<md-input-container class="md-block" flex>
+			<label>Name</label>
+			<input ng-model="n.applicant.name">
 		</md-input-container>
-		<md-input-container class="md-block"  flex>
+		<md-input-container class="md-block" flex>
 			<label>Address</label>
 			<input ng-model="n.applicant.address">
 		</md-input-container>
-		<input type="hidden"
-			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name">
+		<!-- <input type="hidden"
+			ng-value="n.applicant.full_name=n.applicant.first_name + ' ' + n.applicant.middle_name + ' ' + n.applicant.last_name"> -->
 	</div>
 
 	<div>
 		<!-- <md-input-container > -->
-			<strong>Wildlife/Wildlife Derivatives to be Imported</strong>
-			<table ng-init="n.species=n.species || [{}]">
-				<tr ng-repeat="specy in n.species">
-					<td>
-						<md-input-container flex>
-							<label>Species (Scientific Name/Common Name)</label>
-							<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>														
-							<input ng-model="n.species[$index].name"  required>
-						</md-input-container>
-					</td>
-					<td>
-						<md-input-container flex>
-							<label>Quantity</label>
-							<input ng-model="n.species[$index].quantity" required>
-						</md-input-container>
-					</td>
-					<td>
-						<md-button class="md-fab md-mini" aria-label="Remove this row" 
-							ng-click="n.species.splice($index, 1)" ng-if="n.species.length > 1">
-							<md-tooltip md-direction="left">Remove Specy</md-tooltip>
-							<i class="fa fa-remove" ></i>
-						</md-button> 
-					</td>
-				</tr>
-			</table>
-			<md-button ng-click="n.species.push({})" class="md-primary md-raised">
-				Add Row
-			</md-button>
+		<strong>Wildlife/Wildlife Derivatives to be Imported</strong>
+		<table ng-init="n.species=n.species || [{}]">
+			<tr ng-repeat="specy in n.species">
+				<td>
+					<md-input-container flex>
+						<label>Species (Scientific Name/Common Name)</label>
+						<md-tooltip direction="left">Species (Scientific Name/Common Name)</md-tooltip>
+						<input ng-model="n.species[$index].name" required>
+					</md-input-container>
+				</td>
+				<td>
+					<md-input-container flex>
+						<label>Quantity</label>
+						<input ng-model="n.species[$index].quantity" required>
+					</md-input-container>
+				</td>
+				<td>
+					<md-button class="md-fab md-mini" aria-label="Remove this row"
+						ng-click="n.species.splice($index, 1)" ng-if="n.species.length > 1">
+						<md-tooltip md-direction="left">Remove Specy</md-tooltip>
+						<i class="fa fa-remove"></i>
+					</md-button>
+				</td>
+			</tr>
+		</table>
+		<md-button ng-click="n.species.push({})" class="md-primary md-raised">
+			Add Row
+		</md-button>
 		<!-- </md-input-container> -->
 	</div>
-	<strong>Place of Origin</strong>	
+	<strong>Place of Origin</strong>
 	<div layout>
 		<md-input-container flex>
 			<label>Country</label>
@@ -74,25 +77,22 @@ ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.'
 			<input ng-model="n.origin.address"></input>
 		</md-input-container>
 	</div>
-		
+
 	<div>
-		<md-input-container flex> 
-		<label>Transportation Vehicle/Vessel</label>
-		<md-select ng-model="n.transportation.type">
-			<md-option ng-repeat="vessel in ['Aircraft', 'Seacraft', 'Courrier']" value="{{vessel}}">
-				{{vessel}}
-			</md-option>
+		<md-input-container flex>
+			<label>Transportation Vehicle/Vessel</label>
+			<md-select ng-model="n.transportation.type">
+				<md-option ng-repeat="vessel in ['Aircraft', 'Seacraft', 'Courrier']" value="{{vessel}}">
+					{{vessel}}
+				</md-option>
 			</md-select>
 		</md-input-container>
 		<md-input-container flex>
 			<label>Date of Import</label>
-			<md-tooltip direction="left">Date of Import</md-tooltip>														
-			
-			<md-datepicker 
-			ng-change="n.import.date=to_date(import.date)"
-			ng-model="import.date"
-			md-tooltip="Date of Import"
-			required></md-datepicker>
+			<md-tooltip direction="left">Date of Import</md-tooltip>
+
+			<md-datepicker ng-change="n.import.date=to_date(import.date)" ng-model="import.date"
+				md-tooltip="Date of Import" required></md-datepicker>
 		</md-input-container>
 		<md-input-container>
 			<label>Port of Destination</label>
@@ -100,10 +100,8 @@ ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.'
 		</md-input-container>
 		<md-input-container>
 			<label>Date of Issuance of Certificate</label>
-			<md-tooltip direction="left">Date of Issuance of Certificate</md-tooltip>														
-			<md-datepicker 
-				ng-model="issuance_date"
-				ng-change="n.issuance_date=to_date(issuance_date)">
+			<md-tooltip direction="left">Date of Issuance of Certificate</md-tooltip>
+			<md-datepicker ng-model="issuance_date" ng-change="n.issuance_date=to_date(issuance_date)">
 
 			</md-datepicker>
 		</md-input-container>
@@ -114,18 +112,16 @@ ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.'
 	<strong>Payment</strong>
 	<div layout>
 		<md-input-container flex>
-		    <label>Paid amount</label>
-		    <input ng-model="n.paid_amount" >
+			<label>Paid amount</label>
+			<input ng-model="n.paid_amount">
 		</md-input-container>
 		<md-input-container flex>
-		    <label>OR Number</label>
-		    <input ng-model="n.paid_or_number" >
+			<label>OR Number</label>
+			<input ng-model="n.paid_or_number">
 		</md-input-container>
 		<md-input-container flex>
 			<label>Date of Payment</label>
-			<md-datepicker ng-model="paid_date"
-				md-change="n.paid_date=to_date(paid_date)"
-				md-open-on-focus>
+			<md-datepicker ng-model="paid_date" md-change="n.paid_date=to_date(paid_date)" md-open-on-focus>
 			</md-datepicker>
 		</md-input-container>
 	</div>
@@ -134,25 +130,29 @@ ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.'
 	<br>
 	<strong>PREVIEW</strong>
 	<br>
-	<p> 
+	<p>
 		<span class="m-l-50"></span>
 		{{ n.line1 = 
-			'This is to certify that ' + n.applicant.full_name + ' of ' + n.applicant.address + 
+			'This is to certify that ' + n.applicant.name + ' of ' + n.applicant.address + 
 			', is authorized to import from ' + n.origin.address + ', ' + n.origin.country +
 			', the following for commercial purposes only, provided, that a Non-CITES Export Certification ' + 
 			'or equivalent permit has been secured from CITES Management Authority/' + n.origin.country + '.'
 		}}
 	</p>
-	<style>.borderedTable tr td { border: 1px solid }</style>
+	<style>
+		.borderedTable tr td {
+			border: 1px solid
+		}
+	</style>
 	<table class="borderedTable" style="width: 100%">
-			<tr style="text-align: center">
-				<td>Species</td>
-				<td>Quantity</td>
-			</tr>
-			<tr ng-repeat="specimen in n.species">
-				<td>{{specimen.name}}</td>
-				<td>{{specimen.quantity}}</td>
-			</tr>
+		<tr style="text-align: center">
+			<td>Species</td>
+			<td>Quantity</td>
+		</tr>
+		<tr ng-repeat="specimen in n.species">
+			<td>{{specimen.name}}</td>
+			<td>{{specimen.quantity}}</td>
+		</tr>
 	</table>
 	<br>
 	<p>
@@ -184,7 +184,7 @@ ng-init="n.subject = 'CERTIFICATION FOR WILDLIFE IMPORT'; titles = ['Ms.','Mrs.'
 			'contains erasures or altercation.'
 		}}
 	</p>
-	
+
 	<p>
 		<span class="m-l-50"></span>
 		{{

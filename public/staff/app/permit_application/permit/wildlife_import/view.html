@@ -1,0 +1,28 @@
+<div style="visibility: hidden;">
+    <div class="md-dialog-container" id="wildlifeImportCertWindow">
+        <md-dialog layout="column" layout-align="center center">
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>Create a draft document</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div ng-controller="doc_controller">
+                    <div
+                        ng-include="'./app/templates/templates/wildlife_import/certificate/create.html'">
+                    </div>
+                    <md-button class="md-primary md-raised" ng-init="doc_init()"
+                        ng-click="create(doc_user.id);">
+                        Create Document
+                    </md-button>
+                </div>
+            </md-dialog-content>
+
+        </md-dialog>
+
+    </div>
+</div>

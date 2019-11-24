@@ -1,6 +1,8 @@
 'use strict';
 
-myAppModule.controller('permit_application_transaction_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
+myAppModule.controller('permit_application_transaction_controller', function (
+    $scope, $http, $mdDialog, $localStorage) {
+
     $scope.is_loading = false;
     $scope.is_transaction_selected = false;
     $scope.application = undefined;
@@ -113,6 +115,7 @@ myAppModule.controller('permit_application_transaction_controller', function ($s
 
     $scope.select_transaction = (transaction)=> {
         $scope.application = transaction;
+        // $scope.application.status = 3;
         $scope.is_transaction_selected = true;
     };
 
@@ -122,7 +125,162 @@ myAppModule.controller('permit_application_transaction_controller', function ($s
     };
 
     $scope.hasCompleteRequirements = (attached_documents) => {
-        return attached_documents.findIndex(document => document.category == 'certificate_of_no_pending_case' ) > -1&& 
+        // return true;
+        return attached_documents.findIndex(document => document.category == 'certificate_of_no_pending_case' ) > -1 && 
             attached_documents.findIndex(document => document.category == 'evaluation') > -1;
     }
+
+    $scope.application_draft_modal = '';
+    $scope.n = {};
+    $scope.createPermit = (application, event) => {
+        $scope.permitTemplate = getTemplate(application.name);
+        $scope.n = $scope.permitTemplate.convert(application.data.application);
+        $scope.n.id = application.id;
+        $scope.showPrerenderedDialog(event, $scope.permitTemplate.selectorID);
+    }
+
+    function getTemplate(evaluationTemplateName){
+        var permitTemplate = null;
+        switch(evaluationTemplateName){
+            case 'Application for Wildlife Import Certification':
+                permitTemplate = { 
+                    selectorID: 'wildlifeImportCertWindow', 
+                    path: '/permit_application/permit/wildlife_import/view.html',
+                    convert: function(data){
+                        var wildlifeImportCert = {
+                            applicant: {
+                                name: data.applicant,
+                                address: data.applicant_address
+                            },
+                            transportation:{},
+                            import: {},
+                            species: [],
+                            attachments: data.attachments
+                        }
+        
+                        if(data.plane){
+                            wildlifeImportCert.transportation.type = 'Air';
+                            wildlifeImportCert.import.date = data.date_air;
+                            wildlifeImportCert.destination_port = data.port_air;
+                        }else if(data.carrier){
+                            wildlifeImportCert.transportation.type = 'Courrier';
+                            wildlifeImportCert.import.date = data.date_postal;
+                            wildlifeImportCert.destination_port = data.port_postal;
+                        }else if(data.sea){
+                            wildlifeImportCert.transportation.type = 'Sea';
+                            wildlifeImportCert.import.date = data.date_sea;
+                            wildlifeImportCert.destination_port = data.port_sea;
+                        }
+        
+                        data.species.forEach(function(value, index, species){
+                            var specimen = {
+                                name: value.scientific_name,
+                                quantity: `${value.species_qty} ${value.species}`,
+                            }
+                            wildlifeImportCert.species.push(specimen);
+                        })
+                        return wildlifeImportCert;
+                    }
+                    
+                };
+                break;
+            case 'Application for Wildlife Export/Re Export Certification':
+                permitTemplate = { 
+                    selectorID: 'wildlifeExportCertWindow', 
+                    path: '/permit_application/permit/wildlife_export/view.html',
+                    convert: function(data){
+                        var wildlifeExportCert = {
+                            applicant: {
+                                name: data.applicant,
+                                address: data.applicant_address
+                            },
+                            transportation:{},
+                            export: {},
+                            species: [],
+                            attachments: data.attachments
+                        }
+        
+                        if(data.plane){
+                            wildlifeExportCert.transportation.type = 'Air';
+                            wildlifeExportCert.transportation.date = data.date_air;
+                            wildlifeExportCert.destination_port = data.port_air;
+                        }else if(data.carrier){
+                            wildlifeExportCert.transportation.type = 'Courrier';
+                            wildlifeExportCert.transportation.date = data.date_postal;
+                            wildlifeExportCert.destination_port = data.port_postal;
+                        }else if(data.sea){
+                            wildlifeExportCert.transportation.type = 'Sea';
+                            wildlifeExportCert.transportation.date = data.date_sea;
+                            wildlifeExportCert.destination_port = data.port_sea;
+                        }
+        
+                        data.species.forEach(function(value, index, species){
+                            var specimen = {
+                                name: value.scientific_name,
+                                quantity: `${value.species_qty} ${value.species}`,
+                            }
+                            wildlifeExportCert.species.push(specimen);
+                        })
+                        return wildlifeExportCert;
+                    }
+                    
+                };
+                break;
+
+            case 'Application for Chainsaw Registration':
+                        permitTemplate = { 
+                            selectorID: 'chainsawRegistrationCertWindow', 
+                            path: '/permit_application/permit/chainsaw_registration/view.html',
+                            convert: function(data){
+                                var chainsawCertificate = {
+                                    applicant: {
+                                        name: data.applicant,
+                                        address: data.applicant_address
+                                    },
+                                    attachments: data.attachments,
+                                    intended_use: data.purpose,
+                                    chainsaw: {} 
+                                }
+                                
+                                if(data.chainsaw){
+                                    permitTemplate.chainsaw = {
+                                        brand: data.chainsaw.brand,
+                                        model: data.chainsaw.model,
+                                        serial_number: data.chainsaw.serial,
+                                        horsepower: data.chainsaw.horsepower,
+                                        metal_seal_number: data.chainsaw.metal_seal_number
+                                    }
+                                }
+                                return chainsawCertificate;
+                            }
+                            
+                        };
+                break;
+            case 'Application for Special Use Permit':
+                permitTemplate ={
+                    selectorID: 'chainsawSUPCertWindow',
+                    path: '/permit_application/permit/chainsaw_sup/view.html',
+                    convert: function(data){
+                        var chainsaw_sup_certificate = {
+                            owner_name: data.scientific_name,
+                            owner_of_planted_trees: data.owner_of_planted_trees,
+                            chainsaw: {
+                                registration_number: data.registration_number,
+                                serial_number:data.serial_number,
+                                metal_seal_number: data.metal_seal_number,
+                                place_of_origin: data.place_of_origin,
+                                place_of_destination: data.place_of_destination
+                            },
+                            purpose: data.purpose
+                        }
+
+                        return chainsaw_sup_certificate;
+                    }
+                }
+                break;
+        }
+        return permitTemplate;
+    }
 });
+
+
