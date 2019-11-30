@@ -5,8 +5,10 @@ myAppModule.controller('opsMap_controller', function ($scope, $filter, $timeout,
     $scope.map = undefined
     $scope.recordingList = [];
     var recordingsRef = db.collection("ecan_app_recordings");
+    var lastRecordLayerAdded = "";
+    var lineSnapshot;
 
-    recordingsRef.onSnapshot(qs => {
+    var recordSnapshot = recordingsRef.onSnapshot(qs => {
         //listen to created recordings
         if(!qs.empty){
             let results = qs.docs.map( d => {
@@ -21,7 +23,7 @@ myAppModule.controller('opsMap_controller', function ($scope, $filter, $timeout,
 
     $scope.showLine = (id)=>{
         $scope.isLoading = true
-        recordingsRef.doc(id).collection("gps").onSnapshot(qs => {
+        lineSnapshot = recordingsRef.doc(id).collection("gps").onSnapshot(qs => {
             if(!qs.empty){
                 let results = qs.docs.map( d => {
                     var item = d.data();
@@ -29,7 +31,10 @@ myAppModule.controller('opsMap_controller', function ($scope, $filter, $timeout,
                 } );
                 //add layer if not yet drawn on map
                 if($scope.map.getLayer(id) == undefined){
+                    //remove last layer if existing
+                    if ($scope.map.getLayer(lastRecordLayerAdded)) $scope.map.removeLayer(lastRecordLayerAdded);
                     $scope.addLineLayer(id,results,"#f00",8);
+                    lastRecordLayerAdded = id;
                 }
                 $scope.map.flyTo({center: results[0], zoom: 15});
             }
