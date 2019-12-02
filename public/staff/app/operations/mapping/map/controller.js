@@ -53,10 +53,13 @@ myAppModule.controller('opsMap_controller', function ($scope, $filter, $timeout,
                 center: [118.74432172, 9.81847614],
                 zoom: 10,
             });
+
             $scope.map.on('styledata', function(e) {
-                console.log('hello');
+                if($scope.map.getLayoutProperty('public-land', 'visibility') != 'none'){
+                    $scope.hideLayer('public-land');
+                }
             })
-            initLayers()
+            // initLayers()
         },200);
     };
 
