@@ -20,6 +20,9 @@ var script_angular = `
         <script src="/plugins/ng-image-gallery/dist/ng-image-gallery.min.js"></script>
         <script src="/plugins/angular-uuid/angular-uuid.js"></script>
         <link href="/plugins/ng-image-gallery/dist/ng-image-gallery.min.css" rel="stylesheet"/>
+        <link href="/css/mapbox-gl.css" rel="stylesheet"/>
+        <script src="/js/mapbox-gl.js"></script>
+
     `;
 //angularjs plugins
 var script_ng_plugins = {
