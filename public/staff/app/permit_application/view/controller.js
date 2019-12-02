@@ -13,6 +13,11 @@ myAppModule.controller('permit_application_transaction_controller', function (
     $scope.pointer_query_array = [];
     var last_query_doc;
 
+
+    $scope.ceil = (number)=> {
+        return Math.ceil(number);
+    };
+
     $scope.load_permit_applications = (query,decrement,is_initial)=>{
         query.get().then( async (qs) => {
             if(!qs.empty){
@@ -121,9 +126,9 @@ myAppModule.controller('permit_application_transaction_controller', function (
     };
 
     $scope.hasCompleteRequirements = (attached_documents) => {
-        // return true;
-        return attached_documents.findIndex(document => document.category == 'certificate_of_no_pending_case' ) > -1 && 
-            attached_documents.findIndex(document => document.category == 'evaluation') > -1;
+        return true;
+        // return attached_documents.findIndex(document => document.category == 'certificate_of_no_pending_case' ) > -1 && 
+        //     attached_documents.findIndex(document => document.category == 'evaluation') > -1;
     }
 
     $scope.application_draft_modal = '';

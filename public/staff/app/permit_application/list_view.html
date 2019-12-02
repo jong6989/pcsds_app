@@ -43,7 +43,7 @@
                     <div ng-click="previus_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length > 1">
                         <i class="fa fa-chevron-left"></i>
                     </div>
-                    <div class="font-10">{{pointer_query_array.length}}/{{total_query_size / query_limit}}</div>
+                    <div class="font-10">{{pointer_query_array.length}}/{{ceil(total_query_size / query_limit)}}</div>
                     <div ng-click="next_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length < (total_query_size / query_limit) ">
                         <i class="fa fa-chevron-right"></i>
                     </div>
