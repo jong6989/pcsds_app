@@ -24,11 +24,13 @@
           </table>
         </div>
       </md-content> -->
-
+<md-input-container>
+  <md-button ng-click="export(incomingQueries)">Export</md-button>
+</md-input-container>
 <md-card ng-repeat="query in incomingQueries track by $index">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <md-button ng-init="contentShouldExpand[$index]=false; incomingQueries[$index]=query;"
+      <md-button ng-init="contentShouldExpand[$index]=false; incomingQueryModel[$index]=query;"
         ng-click="contentShouldExpand[$index]=!contentShouldExpand[$index];" class="md-icon-button" aria-label="View">
         <md-tooltip>View</md-tooltip>
         <i ng-if="!contentShouldExpand[$index]" class="fa fa-angle-down"></i>

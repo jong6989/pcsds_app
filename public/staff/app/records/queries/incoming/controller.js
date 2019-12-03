@@ -102,6 +102,13 @@ myAppModule.
         $scope.loadQuery = () => {
             $scope.query = JSON.parse(localData.get('incomingQuery'));
         }
+
+        $scope.export = (incomingQueries) => {
+              var ws = XLSX.utils.json_to_sheet(incomingQueries);
+              var wb = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+              XLSX.writeFile(wb, "communications.xlsx");
+        }
     }).
     service('$incoming_query_service', function ($crudService) {
         var collection = db.collection('communications');
