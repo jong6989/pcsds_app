@@ -1,0 +1,64 @@
+<div>
+        <md-card>
+            <md-card-content>
+                <table>
+                    <tr>
+                        <td>Control Number:</td>
+                        <td>{{incomingQueries[$index].control_number}}</td>
+                    </tr>
+                    <tr>
+                        <td>Source of Origin:</td>
+                        <td>{{incomingQueries[$index].source_of_origin}}</td>
+                    </tr>
+                    <tr>
+                        <td>Contents:</td>
+                        <td>{{incomingQueries[$index].contents}}</td>
+                    </tr>
+                    <tr>
+                        <td>Date of Correspondence:</td>
+                        <td>
+                            {{to_date(incomingQueries[$index].date_of_correspondence)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>OED Actions</td>
+                        <td>
+                            {{incomingQueries[$index].oed_actions}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Referral Date</td>
+                        <td>
+                            {{to_date(incomingQueries[$index].referral_date)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Status of Action Taken by Concerned Department</td>
+                        <td>
+                            {{incomingQueries[$index].status_of_action}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Communication Status</td>
+                        <td>
+                            {{incomingQueries[$index].communication_status}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Outgoing Date
+                        </td>
+                        <td>
+                            {{to_date(incomingQueries[$index].outgoing_date)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Correspondence Description</td>
+                        <td>
+                            {{incomingQueries[$index].correspondence_description}}
+                        </td>
+                    </tr>
+                </table>
+            </md-card-content>
+        </md-card>
+    </div>

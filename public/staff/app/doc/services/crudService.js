@@ -21,6 +21,26 @@ service('$crudService', function(){
         return promise;
     }
 
+    this.getItemsEnteredBy = (staffID, collection, objectConverter) => {
+        // var items = []
+        if(!objectConverter)
+            objectConverter = defaultObjectConverter;
+        
+        let promise = new Promise((resolve, reject) => {
+            collection.where('entered_by', '==', staffID).onSnapshot(snapShot => {
+                let items = snapShot.docs.map(documentSnapshot =>{
+                    let item = objectConverter(documentSnapshot);
+
+                    return item;
+                });
+
+                resolve(items);
+            });
+        });
+
+        return promise;
+    }
+
     this.getItem = (id, collection, objectConverter) => {
         if(!objectConverter)
             objectConverter = defaultObjectConverter;
