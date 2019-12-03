@@ -13,6 +13,11 @@ myAppModule.controller('permit_application_transaction_controller', function (
     $scope.pointer_query_array = [];
     var last_query_doc;
 
+
+    $scope.ceil = (number)=> {
+        return Math.ceil(number);
+    };
+
     $scope.load_permit_applications = (query,decrement,is_initial)=>{
         query.get().then( async (qs) => {
             if(!qs.empty){

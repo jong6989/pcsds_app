@@ -73,6 +73,7 @@ orig.git/
 build/
 # css/
 DB/
+test/
 # functions/
 # images/
 # js/

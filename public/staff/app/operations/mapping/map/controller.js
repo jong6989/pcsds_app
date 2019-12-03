@@ -51,16 +51,22 @@ myAppModule.controller('opsMap_controller', function ($scope, $filter, $timeout,
                 container: 'opsMap',
                 style: 'mapbox://styles/jong6989/ck2u5e37k1phh1cs0nhhctx9c', 
                 center: [118.74432172, 9.81847614],
-                zoom: 10
+                zoom: 10,
             });
-            initLayers()
+
+            $scope.map.on('styledata', function(e) {
+                if($scope.map.getLayoutProperty('public-land', 'visibility') != 'none'){
+                    $scope.hideLayer('public-land');
+                }
+            })
+            // initLayers()
         },200);
     };
 
     function initLayers(){
         setTimeout(()=>{
             $scope.hideLayer("public-land")
-        },500);
+        },1500);
     };
 
     $scope.hideLayer = (id)=>{

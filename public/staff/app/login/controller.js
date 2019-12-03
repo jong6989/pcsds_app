@@ -38,6 +38,7 @@ myAppModule.controller('login_controller', function ($scope, $timeout, $mdDialog
                         window.confirmationResult.confirm(code).then(function (result) {
                             // User signed in successfully.
                             localData.set('BRAIN_STAFF_ID',account_id);
+                            localData.set('STAFF_ACCOUNT', setJson(d.docs[0].data()))
                             location.reload();
                         }).catch(function (error) {
                             Swal.fire({
