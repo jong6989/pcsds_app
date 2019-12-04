@@ -25,7 +25,7 @@
         </div>
       </md-content> -->
 <md-input-container>
-  <md-button ng-click="export(incomingQueries)">Export</md-button>
+  <md-button class="md-primary md-raised md-block" type="submit" ng-click="export(incomingQueries)">Export</md-button>
 </md-input-container>
 <md-card ng-repeat="query in incomingQueries track by $index">
   <md-toolbar>

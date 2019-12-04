@@ -104,11 +104,48 @@ myAppModule.
         }
 
         $scope.export = (incomingQueries) => {
-              var ws = XLSX.utils.json_to_sheet(incomingQueries);
-              var wb = XLSX.utils.book_new();
-              XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-              XLSX.writeFile(wb, "communications.xlsx");
+            remove(['id', 'entered_by'], incomingQueries);
+            var ws = XLSX.utils.json_to_sheet(incomingQueries);
+            fixedHeader(ws);
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+            XLSX.writeFile(wb, "communications.xlsx");
         }
+
+        function fixedHeader(workSheet) {
+            var columnTexts = [
+                'Communication Status',
+                'Contents',
+                "Control Number",
+                "Correspondence Description",
+                "Date Entered",
+                "Date of Correspondence",
+                "Date Received",
+                "OED Actions",
+                "Referral Date",
+                "Source of Origin",
+                "Outgoing Date",
+                "Status of Action"
+            ]
+
+            var currentColumn = 'A';
+            columnTexts.forEach((value) => {
+                var currentCell = `${currentColumn}1`; 
+                if(workSheet[currentCell] == undefined)
+                    workSheet[currentCell] = { t: "s" };
+                workSheet[currentCell].v = value;
+                currentColumn = String.fromCharCode(currentColumn.charCodeAt(0) + 1);
+            })
+        }
+
+        function remove(keysToRemove, arrayOfObjects){
+            arrayOfObjects.forEach((arrayItem) => {
+                keysToRemove.forEach((key) => {
+                    delete arrayItem[key];
+                })
+            });
+        }
+
     }).
     service('$incoming_query_service', function ($crudService) {
         var collection = db.collection('communications');
