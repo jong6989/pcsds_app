@@ -19,4 +19,7 @@
       <div ng-controller="incoming_query_controller" 
         ng-init="set_page_title('Communication - List');loadIncomingQueries()">
         <div ng-include="'app/records/queries/incoming/list/template/queryTable.html'"></div>
+        <md-button class="md-primary md-raised md-block" type="submit" ng-click="getNextItems()" ng-disabled='isLastPage'>Next</md-button>
+        <md-button class="md-primary md-raised md-block" type="submit" ng-click="getPreviousItems()" ng-disabled='isFirstPage'>Previous</md-button>
       </div>
+      

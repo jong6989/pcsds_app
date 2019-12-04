@@ -46,6 +46,8 @@
     <h3>{{query.control_number}}</h3>
     <small>{{query.communication_status}}</small>
   </md-card-content>
+  
+
   <md-card-content ng-show="contentShouldExpand[$index]">
     <div ng-include="'/staff/app/records/queries/incoming/list/template/viewquery.html'"></div>
   </md-card-content>

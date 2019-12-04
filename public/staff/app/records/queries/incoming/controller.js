@@ -61,6 +61,8 @@ myAppModule.
                 getIncomingQueries().
                 then(items => {
                     $scope.incomingQueries = items;
+                    disableNextButton();
+
                     $scope.queriesTable = $scope.ngTable($scope.incomingQueries);
                     $scope.$apply();
                 }).
@@ -112,6 +114,47 @@ myAppModule.
             XLSX.writeFile(wb, "communications.xlsx");
         }
 
+        var limit = 1;
+        var currenPage = 1;
+        $scope.isFirstPage = true;
+
+        $scope.getNextItems = () => {
+            $scope.isLastPage = true;
+            $incoming_query_service.getNextItems($scope.incomingQueries[$scope.incomingQueries.length - 1].control_number).
+            then(result =>{
+                $scope.incomingQueries = result;
+                currenPage = currenPage + 1;
+                disableNextButton();
+                $scope.isFirstPage = false;
+
+                $scope.$apply();
+            });
+        }
+
+
+        $scope.getPreviousItems = () => {
+            $incoming_query_service.getPreviousItems($scope.incomingQueries[0].control_number).
+            then(result =>{
+                $scope.incomingQueries = result;
+                currenPage = currenPage - 1;
+                $scope.isLastPage = false;
+
+                if(currenPage == 1){
+                    $scope.isFirstPage = true;
+                }
+                $scope.$apply();
+            });
+        }
+
+        function disableNextButton(){
+            $incoming_query_service.
+            getNextItems($scope.incomingQueries[$scope.incomingQueries.length - 1].control_number).
+            then(secondResult => {
+                $scope.isLastPage = secondResult.length < limit;
+                $scope.$apply();
+            });
+        }
+
         function fixedHeader(workSheet) {
             var columnTexts = [
                 'Communication Status',
@@ -149,12 +192,13 @@ myAppModule.
     }).
     service('$incoming_query_service', function ($crudService) {
         var collection = db.collection('communications');
+        var countLimit = 10;
         this.addIncomingQuery = (incomingQuery) => {
             return $crudService.addItem(incomingQuery, collection);
         }
 
         this.getIncomingQueries = () => {
-            return $crudService.getItems(collection);
+            return $crudService.getItemsLimitBy(collection, countLimit);
         }
 
         this.getIncomingQueriesEnteredBy = (staffID) => {
@@ -163,5 +207,13 @@ myAppModule.
 
         this.updateIncomingQuery = (incomingQuery) => {
             return $crudService.updateItem(incomingQuery, collection);
+        }
+
+        this.getNextItems = (startAt) => {
+            return $crudService.getItemsLimitBy(collection, countLimit, startAt);
+        }
+
+        this.getPreviousItems = (endAt) => {
+            return $crudService.getPreviousItems(collection, endAt, countLimit);
         }
     })
