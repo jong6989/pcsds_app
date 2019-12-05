@@ -1,12 +1,16 @@
 <div ng-controller="doc_controller" ng-init="doc_init();">
-        <div ng-controller="EvaluationController" ng-init="loadQuery();setCurrentItem(query);set_page_title(currentItem.subject);">
+        <div ng-controller="EvaluationController" ng-init="set_page_title('Communications - Incoming Query');">
             <div ng-controller="doc_ctrl_published" 
                 ng-init="
                 load_operation_reciepients(doc_user[currentItem.agency.id]);
                 listen_document_change(load_current_receipients );
                 ">
-                
-                <div ng-include="currentItem.template.view"></div>
+                <div ng-controller="incoming_query_controller" ng-init="loadQuery();
+                    setCurrentItem(query);
+                    saveButtonShouldHide=true;
+                    uploadButtonShouldHide=true">
+                    <div ng-include="'app/records/queries/incoming/template/form.html'"></div>
+                </div>
                 
                 <hr>
                 
@@ -19,11 +23,11 @@
     
                     <!-- modal -->
                     <div ng-include="'./app/templates/modal/ops_send.html'" ></div>
-    
-                    <md-button ng-if="currentItem.template != undefined" class="md-fab md-mini" aria-label="Print Document" 
-                        ng-click="open_print_view(currentItem.template.print, currentItem);">
-                        <md-tooltip md-direction="left">Print this document</md-tooltip>
+                    
+                    <md-button class="md-button md-primary" aria-label="Print Document" 
+                        ng-click="open_print_view(currentItem.template.print, currentItem);" layout-gt-sm>
                         <i class="fa fa-print" ></i>
+                        Print this document
                     </md-button> 
                     
                 </div>

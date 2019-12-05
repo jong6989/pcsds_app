@@ -28,8 +28,18 @@ myAppModule.
             var account_id = localData.get('BRAIN_STAFF_ID');
             var now = new Date();
 
+            $scope.is_loading = true;
             incomingQuery.entered_by = account_id;
             incomingQuery.date_entered = $scope.to_date(now);
+            incomingQuery.publisher = user_id;
+            incomingQuery.status = 'published';
+            incomingQuery.meta = { 'published_date': $scope.date_now('YYYY-MM-DD'), 'published_time': Date.now() };
+            incomingQuery.agency = $scope.global.ops;
+
+            incomingQuery.keywords = $scope.n.keywords.filter((value) => {
+                return value != undefined && value.trim() != '';
+            });
+
             $incoming_query_service.
                 addIncomingQuery(incomingQuery).
                 then(addedItem => {
@@ -40,6 +50,7 @@ myAppModule.
                     ).then((result) => {
                         localData.set('incomingQuery', setJson(addedItem));
                         $location.path('/records/queries/incoming/view');
+                        $scope.$apply();
                     });
                 }).
                 catch(error => {
@@ -99,21 +110,26 @@ myAppModule.
 
         $scope.update = (query) => {
             localData.set('incomingQuery', setJson(query));
-            $location.path('/records/queries/incoming/update');
+            $location.path('/records/queries/incoming/view');
         }
 
         $scope.loadQuery = () => {
             $scope.query = JSON.parse(localData.get('incomingQuery'));
             if(!$scope.query.images)
                 $scope.query.images = [];
+            
             imageID = $scope.query.images.length;
         }
 
         $scope.setCurrentItem = (query) => {
             $scope.currentItem = query;
             $scope.currentItem.template = {
-                view: '/records/queries/incoming/update/view.html'
+                'view':     './app/records/queries/incoming/view/view.html',
+                'create' : 	'./app/records/queries/incoming/create/view.html',
+			    'edit' : 	'./app/records/queries/incoming/update/view.html',
+			    'print' : 	'./app/records/queries/incoming/print/view.html'
             }
+            $scope.$apply();
         }
 
         $scope.export = (incomingQueries) => {

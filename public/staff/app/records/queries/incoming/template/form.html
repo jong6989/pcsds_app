@@ -58,10 +58,11 @@
 
     <ng-image-gallery images="query.images" thumbnails=true on-delete="removeFromGallery(img, cb)">
     </ng-image-gallery>
-    <md-button ngf-capture="'camera'" ngf-select ngf-change="addToGallery($files)" ngf-multiple=true accept="image/*">
+    <md-button ngf-capture="'camera'" ngf-select ngf-change="addToGallery($files)" ngf-multiple=true accept="image/*"
+    ng-hide='uploadButtonShouldHide'>
         Upload Picture
     </md-button>
-    <md-input-container class="md-block" flex-gt-sm>
+    <md-input-container class="md-block" flex-gt-sm ng-hide='saveButtonShouldHide'>
         <md-button ng-click='saveIncomingQuery(query)' ng-disabled="incomingQueryForm.$invalid"
             class="md-raised md-block md-primary">
             Save
