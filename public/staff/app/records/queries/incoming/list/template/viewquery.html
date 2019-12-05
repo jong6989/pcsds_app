@@ -58,7 +58,18 @@
                             {{incomingQueryModel[$index].correspondence_description}}
                         </td>
                     </tr>
+                    <tr>
+                        <td>Gallery</td>
+                        <td>
+                            <ng-image-gallery 
+                            images="query.images" 
+                            thumbnails=true 
+                            on-delete=""></ng-image-gallery>
+
+                        </td>
+                    </tr>
                 </table>
+
             </md-card-content>
         </md-card>
     </div>

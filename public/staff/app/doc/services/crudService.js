@@ -117,8 +117,11 @@ myAppModule.
 
         this.addItem = (itemToAdd, collection) => {
             let promise = new Promise((resolve, reject) => {
-                collection.add(itemToAdd).then(result => {
-                    resolve();
+                collection.
+                add(itemToAdd).
+                then(result => {
+                    itemToAdd.id = result.id;
+                    resolve(itemToAdd);
                 },
                     error => {
                         reject(error);

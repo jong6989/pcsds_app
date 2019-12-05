@@ -1,0 +1,53 @@
+<div ng-controller="doc_controller" ng-init="doc_init();">
+        <div ng-controller="EvaluationController" ng-init="loadQuery();setCurrentItem(query);set_page_title(currentItem.subject);">
+            <div ng-controller="doc_ctrl_published" 
+                ng-init="
+                load_operation_reciepients(doc_user[currentItem.agency.id]);
+                listen_document_change(load_current_receipients );
+                ">
+                
+                <div ng-include="currentItem.template.view"></div>
+                
+                <hr>
+                
+                <div layout-gt-sm layout-sm="column" layout-align="center center">
+                    <!-- send and receipients -->
+                    <md-button class="md-button md-primary" ng-click="openSendDocument(currentItem, $event)" layout-gt-sm>
+                        <i class="fa fa-paper-plane m-r-5"></i>
+                        Send
+                    </md-button>
+    
+                    <!-- modal -->
+                    <div ng-include="'./app/templates/modal/ops_send.html'" ></div>
+    
+                    <md-button ng-if="currentItem.template != undefined" class="md-fab md-mini" aria-label="Print Document" 
+                        ng-click="open_print_view(currentItem.template.print, currentItem);">
+                        <md-tooltip md-direction="left">Print this document</md-tooltip>
+                        <i class="fa fa-print" ></i>
+                    </md-button> 
+                    
+                </div>
+            
+                <div ng-if="currentReciepients.length > 0">
+                    <hr>
+                    <h4 class="col-grey">Receipients</h4>
+                    <ol>
+                        <li ng-repeat="x in currentReciepients">
+                            <strong class="col-grey">{{x.name}}</strong>
+                            <br>
+                            <ul>
+                                <li ng-repeat="x in x.sentItems">
+                                    {{x.date}} : 
+                                    <strong ng-class="{ 'col-green' : (x.status == 'received'), 'col-orange' : (x.status == 'declined'), 'col-red' : (x.status == 'pending') }">
+                                            {{x.status}}
+                                    </strong> ,
+                                    <cite>{{x.remarks}}</cite>
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+    
+            </div>
+        </div>
+    </div>
