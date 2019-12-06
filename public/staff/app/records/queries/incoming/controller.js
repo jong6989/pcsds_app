@@ -34,14 +34,14 @@ myAppModule.
             var now = new Date();
 
             $scope.is_loading = true;
-            incomingQuery.entered_by = account_id;
             incomingQuery.date_entered = $scope.to_date(now);
-            incomingQuery.publisher = user_id;
+            incomingQuery.timestamp = now.getTime();
+            incomingQuery.publisher = account_id;
             incomingQuery.status = 'published';
             incomingQuery.meta = { 'published_date': $scope.date_now('YYYY-MM-DD'), 'published_time': Date.now() };
             incomingQuery.agency = $scope.global.ops;
 
-            incomingQuery.keywords = $scope.n.keywords.filter((value) => {
+            incomingQuery.keywords = incomingQuery.keywords.filter((value) => {
                 return value != undefined && value.trim() != '';
             });
 
@@ -299,7 +299,7 @@ myAppModule.
         this.getLastQuery = () => {
             return new Promise((resolve, reject) => {
                 collection.
-                orderBy('control_number', 'desc').
+                orderBy('timestamp', 'desc').
                 limit(1).
                 onSnapshot(snapShot => {
                     let query = snapShot.docs.length > 0 ? snapShot.docs[0].data() : {};

@@ -26,7 +26,7 @@ myAppModule.
 
             let promise = new Promise((resolve, reject) => {
                 var query = collection.
-                    orderBy('control_number').
+                    orderBy('timestamp').
                     limit(countLimit);
 
                 if (startAt)
@@ -52,7 +52,7 @@ myAppModule.
 
             let promise = new Promise((resolve, reject) => {
                 var query = collection.
-                    orderBy('control_number').
+                    orderBy('timestamp').
                     limit(countLimit);
 
                 if (endAt)
