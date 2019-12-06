@@ -1,7 +1,12 @@
 // import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from "constants";
 
 myAppModule.
-    controller('incoming_query_controller', function ($scope, $incoming_query_service, $location, Upload) {
+    controller('incoming_query_controller', 
+    function ($scope, 
+        $incoming_query_service, 
+        $location, 
+        $timeout, 
+        Upload) {
         $scope.query = {};
         $scope.updateIncomingQuery = (incomingQuery) => {
             $incoming_query_service.updateIncomingQuery(incomingQuery).
@@ -129,7 +134,7 @@ myAppModule.
 			    'edit' : 	'./app/records/queries/incoming/update/view.html',
 			    'print' : 	'./app/records/queries/incoming/print/view.html'
             }
-            $scope.$apply();
+            // $scope.$apply();
         }
 
         $scope.export = (incomingQueries) => {
@@ -208,6 +213,17 @@ myAppModule.
             $scope.lastControlNumber = lastQuery.control_number;
             $scope.$apply();
         }
+
+        $scope.print = () => {
+            $timeout(()=>{
+                window.print();
+                window.close();
+              }, 2000);
+        }
+        
+        // $scope.goToPrintPage = () => {
+        //     $location.path('/records/queries/incoming/print');
+        // }
 
         function disableNextButton() {
             $incoming_query_service.
