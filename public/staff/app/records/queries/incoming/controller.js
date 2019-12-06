@@ -124,6 +124,12 @@ myAppModule.
                 $scope.query.images = [];
             
             imageID = $scope.query.images.length;
+            loadRelatedDocuments();
+        }
+
+        async function loadRelatedDocuments() {
+            $scope.relatedDocuments = await $incoming_query_service.getRelatedDocuments($scope.query.id);
+            console.log();
         }
 
         $scope.setCurrentItem = (query) => {
@@ -221,9 +227,16 @@ myAppModule.
               }, 2000);
         }
         
-        // $scope.goToPrintPage = () => {
-        //     $location.path('/records/queries/incoming/print');
-        // }
+        $scope.createReceipt = () =>{
+            localData.set('reference_id',  $scope.query.id);
+            localData.set('previous_view', '/records/queries/incoming/view');
+            $location.path('/receipt/create');
+        }
+
+        $scope.loadDocument = (document) => {
+            localData.set(document.type, JSON.stringify(document));
+            $location.path(document.template.view);
+        }
 
         function disableNextButton() {
             $incoming_query_service.
@@ -268,6 +281,7 @@ myAppModule.
             });
         }
 
+
     }).
     service('$incoming_query_service', function ($crudService) {
         var collection = db.collection('communications');
@@ -308,4 +322,34 @@ myAppModule.
                 })
             })
         }
+
+        this.getRelatedDocuments = (queryID) => {
+            var relatedCollections = ['receipt'];
+            var relatedDocuments = [];
+
+            relatedCollections.forEach((value, index) => {
+                var promise = new Promise((resolve, reject) => {
+                    db.collection(value).
+                    where('reference_id', '==', queryID).
+                    onSnapshot(snapShot => {
+                        resolve(snapShot.docs);
+                    })
+                })
+                relatedDocuments.push(promise);
+            });
+
+
+            return new Promise((resolve, reject) => {
+                Promise.all(relatedDocuments).
+                then(result => {
+                    var documents = result.flat().map(value => {
+                        var document = value.data();
+                        document.id = value.id;
+                        return document;
+                    });
+                    resolve(documents);
+                })
+            });
+        }
+
     })

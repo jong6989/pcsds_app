@@ -1,36 +1,45 @@
 <div ng-controller="doc_controller" ng-init="doc_init();">
-        <div ng-controller="EvaluationController" ng-init="set_page_title('Communications - Incoming Query');">
-            <div ng-controller="doc_ctrl_published" 
-                ng-init="
+    <div ng-controller="EvaluationController" ng-init="set_page_title('Communications - Incoming Query');">
+        <div ng-controller="doc_ctrl_published" ng-init="
                 load_operation_reciepients(doc_user[currentItem.agency.id]);
                 listen_document_change(load_current_receipients );
                 ">
-                <div ng-controller="incoming_query_controller" ng-init="loadQuery();
+            <div ng-controller="incoming_query_controller" ng-init="loadQuery();
                     setCurrentItem(query);
                     saveButtonShouldHide=true;
                     uploadButtonShouldHide=true">
-                    <div ng-include="'app/records/queries/incoming/template/form.html'"></div>
-                
+                <div ng-include="'app/records/queries/incoming/template/form.html'"></div>
+
                 <hr>
-                
+                Related Documents
+                <ol>
+                    <li ng-repeat='relatedDocument in relatedDocuments'>
+                        <a href="" ng-click="loadDocument(relatedDocument)">{{relatedDocument.subject}}</a>
+                    </li>
+                </ol>
                 <div layout-gt-sm layout-sm="column" layout-align="center center">
+                    <md-button class="md-button md-primary" ng-click="createReceipt()" layout-gt-sm>
+                        <i class="fa fa-plus m-r-5"></i>
+                        Create Receipt
+                    </md-button>
                     <!-- send and receipients -->
-                    <md-button class="md-button md-primary" ng-click="openSendDocument(currentItem, $event)" layout-gt-sm>
+                    <md-button class="md-button md-primary" ng-click="openSendDocument(currentItem, $event)"
+                        layout-gt-sm>
                         <i class="fa fa-paper-plane m-r-5"></i>
                         Send
                     </md-button>
-    
+
                     <!-- modal -->
-                    <div ng-include="'./app/templates/modal/ops_send.html'" ></div>
-                    
-                    <md-button class="md-button md-primary" aria-label="Print Document" 
+                    <div ng-include="'./app/templates/modal/ops_send.html'"></div>
+
+                    <md-button class="md-button md-primary" aria-label="Print Document"
                         ng-click="open_print_view(currentItem.template.print, currentItem);" layout-gt-sm>
-                        <i class="fa fa-print" ></i>
+                        <i class="fa fa-print"></i>
                         Print this document
-                    </md-button> 
-                    
+                    </md-button>
+
                 </div>
-            
+
                 <div ng-if="currentReciepients.length > 0">
                     <hr>
                     <h4 class="col-grey">Receipients</h4>
@@ -40,9 +49,10 @@
                             <br>
                             <ul>
                                 <li ng-repeat="x in x.sentItems">
-                                    {{x.date}} : 
-                                    <strong ng-class="{ 'col-green' : (x.status == 'received'), 'col-orange' : (x.status == 'declined'), 'col-red' : (x.status == 'pending') }">
-                                            {{x.status}}
+                                    {{x.date}} :
+                                    <strong
+                                        ng-class="{ 'col-green' : (x.status == 'received'), 'col-orange' : (x.status == 'declined'), 'col-red' : (x.status == 'pending') }">
+                                        {{x.status}}
                                     </strong> ,
                                     <cite>{{x.remarks}}</cite>
                                 </li>
@@ -51,7 +61,7 @@
                     </ol>
                 </div>
             </div>
-    
-            </div>
+
         </div>
     </div>
+</div>

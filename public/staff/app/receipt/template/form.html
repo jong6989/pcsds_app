@@ -1,0 +1,21 @@
+<form name="receiptForm" ng-init="receipt.keywords=receipt.keywords||[]">
+    <div>
+        Last Receipt Number: {{lastReceiptNumber}}
+    </div>
+    <md-input-container>
+        <label>Receipt Number:</label>
+        <input ng-model='receipt.number' ng-change='receipt.keywords[0]=receipt.number' required>
+    </md-input-container>
+    <md-input-container>
+        <label>Paid Amount</label>
+        <input type="number" ng-model='receipt.paid_amount'>
+    </md-input-container>
+    <md-input-container>
+        <label>Details</label>
+        <textarea ng-model='receipt.details'></textarea>
+    </md-input-container>
+    <md-input-container>
+        <md-button ng-click='saveReceipt(receipt)' ng-disabled="receiptForm.$invalid"
+            class="md-raised md-block md-primary" ng-hide="saveButtonShouldHide">Save</md-button>
+    </md-input-container>
+</form>
