@@ -1,4 +1,4 @@
-<div ng-controller='receipt_controller' ng-init='receipt=$localStorage.params; currentItem=receipt;' 
+<div ng-controller='receipt_controller' ng-init='receipt=$localStorage.params; currentItem=receipt;printView(3000)' 
     style="margin:0.5in">
     <div ng-include="'../../../../header.html'" style="width:70%"></div>
     <div style="margin-top:30px; margin-bottom:30px; text-align: center;">
@@ -18,5 +18,5 @@
             <td>{{receipt.details}}</td>
         </tr>
     </table>
+    <div ng-include="'app/templates/templates/footer.html'"></div>
 </div>
-<div ng-include="'app/templates/templates/footer.html'"></div>

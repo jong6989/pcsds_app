@@ -5,7 +5,7 @@
     currentItem=receipt'>
     <div ng-include="'app/receipt/template/form.html'"></div><br>
     <md-button class="md-button md-primary" aria-label="Print Document"
-        ng-click="open_print_view('.app/' + currentItem.template.print + '/view.html', currentItem);" layout-gt-sm>
+        ng-click="open_print_view('./app' + currentItem.template.print + '/view.html', currentItem);" layout-gt-sm>
         <i class="fa fa-print"></i>
         Print this document
     </md-button>

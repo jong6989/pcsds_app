@@ -1,13 +1,15 @@
 <div layout>
     <div flex></div>
     <div layout layout-align="center start">
-        <div>
-            <canvas id="qr_canvas" ng-init="generate_qr_code('qr_canvas',document_network_url + currentItem.id)"></canvas>
+        <div style="margin-right:10px;">
+            <div id="qr_canvas" ng-init="generate_qr_code('qr_canvas',document_network_url + currentItem.id)"></div>
         </div>
         <div class="m-t-30">
             <cite>{{document_network_url + currentItem.id}}</cite>
-            <br>
-            <strong class="font-11">This is a system generated document. With a document ID : {{currentItem.id}}, publisher ID : {{currentItem.publisher}}, and published date : {{currentItem.meta.published_date}}. </strong>
+            <strong class="font-11">
+                This is a system generated document. <br>With a document ID : {{currentItem.id}}, <br>
+                publisher ID : {{currentItem.publisher}}, <br>and published date : {{currentItem.meta.published_date}}. 
+            </strong>
             <cite class="font-11" ng-if="is_printing">
                 <br>
                 Date Printed : {{date_now()}}

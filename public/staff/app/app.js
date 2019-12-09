@@ -375,7 +375,8 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
 
   // $scope.set_path('/profile_management/print');
   $scope.generate_qr_code = (id,text)=>{
-    return new QRCode(document.getElementById(id), text);
+    var qr = new QRCode(document.getElementById(id), { text: text, width: 128, height: 128});
+    return qr;
   };
 
   var signaturePad = [];
