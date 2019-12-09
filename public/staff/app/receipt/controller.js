@@ -10,13 +10,13 @@ myAppModule.
             receipt.publisher = account_id;
             receipt.status = 'published';
             receipt.meta = { 'published_date': $scope.date_now('YYYY-MM-DD'), 'published_time': Date.now() };
-            receipt.reference_id = $scope.reference_id;
+            receipt.reference = $scope.reference;
             receipt.subject = 'Offical Receipt';
             receipt.template = {
-                'view':     '/receipt/view/',
-                'create' : 	'/receipt/create/',
-			    'edit' : 	'/receipt/update/',
-			    'print' : 	'/receipt/print/'
+                'view':     '/receipt/view',
+                'create' : 	'/receipt/create',
+			    'edit' : 	'/receipt/update',
+			    'print' : 	'/receipt/print'
             }
             receipt.type = 'receipt';
             $receipt_service.keywords = receipt.keywords.filter((value) => {
@@ -75,10 +75,14 @@ myAppModule.
             $scope.receipt = receipt ? JSON.parse(receipt) : {};
         }
 
+        $scope.backToPreviousPage = () => {
+            $location.path(localData.get('previous_view'));
+        }
+
         $scope.saveReceipt = addReceipt;
         async function  main(){
-            $scope.reference_id = localData.get('reference_id');
-            if(!$scope.reference_id){
+            $scope.reference = JSON.parse(localData.get('reference'));
+            if(!$scope.reference){
                 $location.path('staff/');
                 return;
             }

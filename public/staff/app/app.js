@@ -28,7 +28,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   $scope.content_page = "";
   $scope.active_menu = "";
   $scope.menus = [];
-  
+  $scope.document_network_url = 'http://localhost/pcsd/qr/';
   //app globals
   $scope.global = {
     ops : { id: 'WJ43CJV6R3uF3QMaWrvj', name : 'Operations', short_name : 'Ops'}

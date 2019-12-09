@@ -40,7 +40,7 @@ myAppModule.
             incomingQuery.status = 'published';
             incomingQuery.meta = { 'published_date': $scope.date_now('YYYY-MM-DD'), 'published_time': Date.now() };
             incomingQuery.agency = $scope.global.ops;
-
+            incomingQuery.document_type = 'communications';
             incomingQuery.keywords = incomingQuery.keywords.filter((value) => {
                 return value != undefined && value.trim() != '';
             });
@@ -129,7 +129,6 @@ myAppModule.
 
         async function loadRelatedDocuments() {
             $scope.relatedDocuments = await $incoming_query_service.getRelatedDocuments($scope.query.id);
-            console.log();
         }
 
         $scope.setCurrentItem = (query) => {
@@ -228,7 +227,7 @@ myAppModule.
         }
         
         $scope.createReceipt = () =>{
-            localData.set('reference_id',  $scope.query.id);
+            localData.set('reference',  JSON.stringify($scope.query));
             localData.set('previous_view', '/records/queries/incoming/view');
             $location.path('/receipt/create');
         }
@@ -330,7 +329,7 @@ myAppModule.
             relatedCollections.forEach((value, index) => {
                 var promise = new Promise((resolve, reject) => {
                     db.collection(value).
-                    where('reference_id', '==', queryID).
+                    where('reference.id', '==', queryID).
                     onSnapshot(snapShot => {
                         resolve(snapShot.docs);
                     })
