@@ -141,17 +141,26 @@ myAppModule.
                 loadReceipients($scope.query, 'pcsd_' + currentUser.id);
             }
 
+            $scope.sendDocument = (item, receipients, remarks) => {
+                $incoming_query_service.sendDocument(item, receipients, remarks, $scope.doc_user).
+                    then(result => {
+                        $scope.toast(`Sent to ${receipients.length} receipient${(receipients.length > 1) ? 's' : ''}.`);
+                        loadReceipients($scope.query, $scope.doc_user.id);
+                        $scope.close_dialog();
+                    })
+            }
+
             async function loadRelatedDocuments() {
                 $scope.relatedDocuments = await $incoming_query_service.getRelatedDocuments($scope.query.id);
             }
 
-            function loadReceipients(query, currentUserID){
+            function loadReceipients(query, currentUserID) {
                 $incoming_query_service.
-                getReceipients(query.id, currentUserID).
-                then(receipients => {
-                    $scope.currentReceipients = receipients;
-                    $scope.$apply();
-                })
+                    getReceipients(query.id, currentUserID).
+                    then(receipients => {
+                        $scope.currentReceipients = receipients;
+                        $scope.$apply();
+                    })
             }
 
             $scope.setCurrentItem = (query) => {
@@ -291,23 +300,23 @@ myAppModule.
 
             }
 
-            
+
             $scope.accounts = [];
             $scope.loadAccounts = () => {
                 $incoming_query_service.getAccounts($scope.global.ops.id).
-                then(accounts => {
-                    $scope.accounts = accounts;
-                    $scope.$apply();
-                });
+                    then(accounts => {
+                        $scope.accounts = accounts;
+                        $scope.$apply();
+                    });
             }
 
             $scope.loadCurrentUser = () => {
                 let currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
                 $incoming_query_service.
-                getCurrentUser('pcsd_' + currentUser.id).
-                then(user => {
-                    $scope.doc_user = user;
-                })
+                    getCurrentUser('pcsd_' + currentUser.id).
+                    then(user => {
+                        $scope.doc_user = user;
+                    })
             }
             function disableNextButton() {
                 $incoming_query_service.
@@ -522,28 +531,82 @@ myAppModule.
         this.getCurrentUser = (userID) => {
             return new Promise((resolve, reject) => {
                 db.collection('accounts').
-                doc(userID).
-                onSnapshot(snapshot => {
-                    var user = snapshot.data();
-                    user.id = snapshot.id;
-                    resolve(user);
-                })
+                    doc(userID).
+                    onSnapshot(snapshot => {
+                        var user = snapshot.data();
+                        user.id = snapshot.id;
+                        resolve(user);
+                    })
             })
         }
 
         this.getReceipients = (documentID, senderID) => {
             return new Promise((resolve, reject) => {
                 db.collection('doc_transactions').
-                where('document.id', '==', documentID).
-                where('sender.id', '==', senderID).
-                onSnapshot(snapshot => {
-                    var receipients = snapshot.docs.map(document => {
-                        let receipient = document.data();
-                        receipient.id = document.id;
-                        return receipient;
+                    where('document.id', '==', documentID).
+                    where('sender.id', '==', senderID).
+                    onSnapshot(snapshot => {
+                        var receipients = snapshot.docs.map(document => {
+                            let receipient = document.data();
+                            receipient.id = document.id;
+                            return receipient;
+                        });
+                        resolve(receipients);
+                    })
+            })
+        }
+
+        this.sendDocument = (item, receipients, remarks, currentUser) => {
+            var promises = [];
+
+            receipients.forEach((receipient) => {
+                let accessTypes = [];
+                for (const k in currentUser[item.agency.id]) {
+                    accessTypes.push(k);
+                }
+
+                var promise = new Promise((resolve, reject) => {
+                    var transaction = {
+                        document: item,
+                        status: 'pending',
+                        sender: {
+                            id: currentUser.id,
+                            contact: (currentUser.contact == undefined) ? '' : currentUser.contact,
+                            email: (currentUser.email == undefined) ? '' : currentUser.email,
+                            info: (currentUser.info == undefined) ? '' : currentUser.info,
+                            access: accessTypes,
+                            name: currentUser.name
+                        },
+                        receiver: receipient,
+                        remarks: remarks,
+                        time: Date.now(),
+                        date: moment().format("YYYY-MM-DD HH:mm:ss")
+                    };
+
+                    doc.db.collection(doc_transactions).add(transaction).
+                        then(addResult => {
+                            doc.db.collection(documents).
+                                doc(item.id).
+                                update({
+                                    last_sent_time: Date.now(),
+                                    receipients: firebase.firestore.FieldValue.arrayUnion(receipient)
+                                }).then(updateResult => {
+                                    transaction.id = addResult.id;
+                                    resolve(transaction)
+                                });
+                        });
+
+                });
+                promises.push(promise);
+            });
+
+
+            return new Promise((resolve, reject) => {
+                Promise.
+                    all(promises).
+                    then(result => {
+                        resolve(result);
                     });
-                    resolve(receipients);
-                })
             })
         }
     })
