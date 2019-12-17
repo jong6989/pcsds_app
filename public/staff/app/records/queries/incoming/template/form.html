@@ -12,7 +12,7 @@
     </md-input-container>
     <md-input-container class="md-block" flex-gt-sm>
         <label>Control Number</label>
-        <input ng-model="query.control_number" ng-change="query.keywords[0]=query.control_number" required>
+        <input ng-model="query.control_number" ng-change="query.keywords[0]=query.control_number">
     </md-input-container>
     <md-input-container class='md-block' flex-go-sm>
         <label>Source of Origin</label>
@@ -62,11 +62,23 @@
         ng-hide='uploadButtonShouldHide'>
         Upload Picture
     </md-button>
+    <ol>
+        <li ng-repeat='uploadedFile in query.uploadedFiles'>
+            <a ng-href='{{uploadedFile.url}}' download='{{uploadedFile.name}}'>{{uploadedFile.name}}</a>
+            <md-button class="md-fab md-mini" aria-label="Remove" ng-click="removeFile(uploadedFile)">
+                <md-tooltip md-direction="left">Remove</md-tooltip>
+                <i class="fa fa-remove"></i>
+            </md-button>
+        </li>
+    </ol>
+    <md-button ngf-select ngf-change="addFiles($files)" ngf-multiple=true ng-hide='uploadButtonShouldHide'>
+        Upload Files
+    </md-button>
     <md-input-container class="md-block" flex-gt-sm>
         <md-button ng-click='saveIncomingQuery(query)' ng-disabled="incomingQueryForm.$invalid"
             class="md-raised md-block md-primary" ng-hide="saveButtonShouldHide">
             Save
         </md-button>
     </md-input-container>
-    
+
 </form>

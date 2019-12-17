@@ -8,7 +8,12 @@ myAppModule.
             $timeout,
             Upload) {
             $scope.query = {};
+            $scope.currentController = {
+                receipients: []
+            }
             $scope.updateIncomingQuery = (incomingQuery) => {
+                incomingQuery.agency = $scope.global.ops;
+
                 $incoming_query_service.updateIncomingQuery(incomingQuery).
                     then(success => {
                         Swal.fire(
@@ -51,6 +56,7 @@ myAppModule.
                     return value != undefined && value.trim() != '';
                 });
 
+                incomingQuery.agency = $scope.global.ops;
                 $incoming_query_service.
                     addIncomingQuery(incomingQuery).
                     then(addedItem => {
@@ -60,7 +66,7 @@ myAppModule.
                             'success'
                         ).then((result) => {
                             localData.set('incomingQuery', setJson(addedItem));
-                            $location.path('/records/queries/incoming/view');
+                            $location.path('/records/queries/incoming/update');
                             $scope.$apply();
                         });
                     }).
@@ -87,7 +93,7 @@ myAppModule.
                         disableNextButton();
 
                         $scope.queriesTable = $scope.ngTable($scope.incomingQueries);
-                        $scope.$apply();
+                        // $scope.$apply();
                     }).
                     catch(error => {
                         Swal.fire({
@@ -106,7 +112,7 @@ myAppModule.
                     then(items => {
                         $scope.incomingQueries = items;
                         $scope.queriesTable = $scope.ngTable($scope.incomingQueries);
-                        $scope.$apply();
+                        // $scope.$apply();
                     }).
                     catch(error => {
                         Swal.fire({
@@ -121,7 +127,7 @@ myAppModule.
 
             $scope.update = (query) => {
                 localData.set('incomingQuery', setJson(query));
-                $location.path('/records/queries/incoming/view');
+                $location.path('/records/queries/incoming/update');
             }
 
             $scope.loadQuery = () => {
@@ -131,10 +137,21 @@ myAppModule.
 
                 imageID = $scope.query.images.length;
                 loadRelatedDocuments();
+                let currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
+                loadReceipients($scope.query, 'pcsd_' + currentUser.id);
             }
 
             async function loadRelatedDocuments() {
                 $scope.relatedDocuments = await $incoming_query_service.getRelatedDocuments($scope.query.id);
+            }
+
+            function loadReceipients(query, currentUserID){
+                $incoming_query_service.
+                getReceipients(query.id, currentUserID).
+                then(receipients => {
+                    $scope.currentReceipients = receipients;
+                    $scope.$apply();
+                })
             }
 
             $scope.setCurrentItem = (query) => {
@@ -187,9 +204,6 @@ myAppModule.
             var imageID = 0;
             $scope.query.images = [];
             $scope.addToGallery = (files) => {
-                // files.forEach(file => {
-                //     
-                // });
                 Upload.
                     base64DataUrl(files).
                     then(urls => {
@@ -229,7 +243,7 @@ myAppModule.
 
             $scope.createReceipt = () => {
                 localData.set('reference', JSON.stringify($scope.query));
-                localData.set('previous_view', '/records/queries/incoming/view');
+                localData.set('previous_view', '/records/queries/incoming/update');
                 $location.path('/receipt/create');
             }
 
@@ -238,6 +252,63 @@ myAppModule.
                 $location.path(document.template.view);
             }
 
+            $scope.query.uploadedFiles = [];
+            var fileID = 0;
+            $scope.addFiles = (files) => {
+                files.forEach((value) => {
+                    Upload.
+                        dataUrl(value, true).
+                        then(url => {
+                            var file = {
+                                id: fileID,
+                                url: url,
+                                deletable: true,
+                                name: value.name
+                            }
+
+                            $scope.query.uploadedFiles.push(file);
+                            fileID++;
+                        })
+                })
+            }
+
+            $scope.removeFile = (file) => {
+                Swal.fire({
+                    title: 'Are you sure you want to delete this item?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((response) => {
+                    if (response.value) {
+                        var index = $scope.query.uploadedFiles.findIndex(uploadedFile => uploadedFile.id == file.id);
+                        $scope.query.uploadedFiles.splice(index, 1);
+                        $scope.$apply();
+                    }
+                })
+
+            }
+
+            
+            $scope.accounts = [];
+            $scope.loadAccounts = () => {
+                $incoming_query_service.getAccounts($scope.global.ops.id).
+                then(accounts => {
+                    $scope.accounts = accounts;
+                    $scope.$apply();
+                });
+            }
+
+            $scope.loadCurrentUser = () => {
+                let currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
+                $incoming_query_service.
+                getCurrentUser('pcsd_' + currentUser.id).
+                then(user => {
+                    $scope.doc_user = user;
+                })
+            }
             function disableNextButton() {
                 $incoming_query_service.
                     getNextItems($scope.incomingQueries[$scope.incomingQueries.length - 1].control_number,
@@ -366,12 +437,12 @@ myAppModule.
 
                 if (staffID)
                     query = query.where('publisher', '==', staffID);
-                
+
                 query = query.
                     where('template.type', '==', 'communication').
                     orderBy('created_time').
                     limit(countLimit);
-                
+
                 if (endAt)
                     query = query.endBefore(endAt);
 
@@ -433,4 +504,46 @@ myAppModule.
             });
         }
 
+        this.getAccounts = (agencyID) => {
+            return new Promise((resolve, reject) => {
+                db.collection('accounts').
+                    where(`${agencyID}.active`, '==', true).
+                    onSnapshot(snapshot => {
+                        var accounts = snapshot.docs.map(item => {
+                            let account = item.data();
+                            account.id = item.id;
+                            return account;
+                        });
+                        resolve(accounts);
+                    })
+            });
+        }
+
+        this.getCurrentUser = (userID) => {
+            return new Promise((resolve, reject) => {
+                db.collection('accounts').
+                doc(userID).
+                onSnapshot(snapshot => {
+                    var user = snapshot.data();
+                    user.id = snapshot.id;
+                    resolve(user);
+                })
+            })
+        }
+
+        this.getReceipients = (documentID, senderID) => {
+            return new Promise((resolve, reject) => {
+                db.collection('doc_transactions').
+                where('document.id', '==', documentID).
+                where('sender.id', '==', senderID).
+                onSnapshot(snapshot => {
+                    var receipients = snapshot.docs.map(document => {
+                        let receipient = document.data();
+                        receipient.id = document.id;
+                        return receipient;
+                    });
+                    resolve(receipients);
+                })
+            })
+        }
     })

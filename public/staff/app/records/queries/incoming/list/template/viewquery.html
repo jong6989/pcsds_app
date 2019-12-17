@@ -1,75 +1,84 @@
 <div>
-        <md-card>
-            <md-card-content>
-                <table>
-                    <tr>
-                        <td>Control Number:</td>
-                        <td>{{incomingQueryModel[$index].control_number}}</td>
-                    </tr>
-                    <tr>
-                        <td>Source of Origin:</td>
-                        <td>{{incomingQueryModel[$index].source_of_origin}}</td>
-                    </tr>
-                    <tr>
-                        <td>Contents:</td>
-                        <td>{{incomingQueryModel[$index].contents}}</td>
-                    </tr>
-                    <tr>
-                        <td>Date of Correspondence:</td>
-                        <td>
-                            {{to_date(incomingQueryModel[$index].date_of_correspondence)}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>OED Actions</td>
-                        <td>
-                            {{incomingQueryModel[$index].oed_actions}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Referral Date</td>
-                        <td>
-                            {{to_date(incomingQueryModel[$index].referral_date)}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Status of Action Taken by Concerned Department</td>
-                        <td>
-                            {{incomingQueryModel[$index].status_of_action}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Communication Status</td>
-                        <td>
-                            {{incomingQueryModel[$index].communication_status}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Outgoing Date
-                        </td>
-                        <td>
-                            {{to_date(incomingQueryModel[$index].outgoing_date)}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Correspondence Description</td>
-                        <td>
-                            {{incomingQueryModel[$index].correspondence_description}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Gallery</td>
-                        <td>
-                            <ng-image-gallery 
-                            images="query.images" 
-                            thumbnails=true 
-                            on-delete=""></ng-image-gallery>
+    <md-card>
+        <md-card-content>
+            <table>
+                <tr>
+                    <td>Control Number:</td>
+                    <td>{{incomingQueryModel[$index].control_number}}</td>
+                </tr>
+                <tr>
+                    <td>Source of Origin:</td>
+                    <td>{{incomingQueryModel[$index].source_of_origin}}</td>
+                </tr>
+                <tr>
+                    <td>Contents:</td>
+                    <td>{{incomingQueryModel[$index].contents}}</td>
+                </tr>
+                <tr>
+                    <td>Date of Correspondence:</td>
+                    <td>
+                        {{to_date(incomingQueryModel[$index].date_of_correspondence)}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>OED Actions</td>
+                    <td>
+                        {{incomingQueryModel[$index].oed_actions}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Referral Date</td>
+                    <td>
+                        {{to_date(incomingQueryModel[$index].referral_date)}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Status of Action Taken by Concerned Department</td>
+                    <td>
+                        {{incomingQueryModel[$index].status_of_action}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Communication Status</td>
+                    <td>
+                        {{incomingQueryModel[$index].communication_status}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Outgoing Date
+                    </td>
+                    <td>
+                        {{to_date(incomingQueryModel[$index].outgoing_date)}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Correspondence Description</td>
+                    <td>
+                        {{incomingQueryModel[$index].correspondence_description}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Gallery</td>
+                    <td>
+                        <ng-image-gallery images="query.images" thumbnails=true on-delete=""></ng-image-gallery>
 
-                        </td>
-                    </tr>
-                </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Uploaded Files</td>
+                    <td>
+                        <ol>
+                            <li ng-repeat='uploadedFile in query.uploadedFiles'>
+                                <a ng-href='{{uploadedFile.url}}'
+                                    download='{{uploadedFile.name}}'>{{uploadedFile.name}}</a>
 
-            </md-card-content>
-        </md-card>
-    </div>
+                            </li>
+                        </ol>
+                    </td>
+                </tr>
+            </table>
+
+        </md-card-content>
+    </md-card>
+</div>

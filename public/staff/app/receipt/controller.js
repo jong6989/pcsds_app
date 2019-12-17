@@ -1,10 +1,11 @@
 myAppModule.
     controller('receipt_controller', function ($scope, $receipt_service, $location) {
+        $scope.isSaving = false;
+
         var addReceipt = (receipt) => {
             var account_id = localData.get('BRAIN_STAFF_ID');
             var now = new Date();
 
-            $scope.is_loading = true;
             receipt.date_entered = $scope.to_date(now);
             receipt.timestamp = now.getTime();
             receipt.publisher = account_id;
@@ -22,7 +23,7 @@ myAppModule.
             $receipt_service.keywords = receipt.keywords.filter((value) => {
                 return value != undefined && value.trim() != '';
             });
-
+            $scope.isSaving = true;
             $receipt_service.
                 addReceipt(receipt).
                 then(addedItem => {
@@ -36,6 +37,7 @@ myAppModule.
                     });
                 }).
                 catch(error => {
+                    $scope.isSaving = false;
                     Swal.fire({
                         type: 'error',
                         title: 'Oops...',
