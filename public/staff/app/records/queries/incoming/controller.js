@@ -13,7 +13,7 @@ myAppModule.
             }
             $scope.updateIncomingQuery = (incomingQuery) => {
                 incomingQuery.agency = $scope.global.ops;
-
+                delete (incomingQuery.files);
                 $incoming_query_service.updateIncomingQuery(incomingQuery).
                     then(success => {
                         Swal.fire(
@@ -60,16 +60,21 @@ myAppModule.
                 $incoming_query_service.
                     addIncomingQuery(incomingQuery).
                     then(addedItem => {
-                        Swal.fire(
-                            'Success!',
-                            '',
-                            'success'
-                        ).then((result) => {
-                            localData.set('incomingQuery', setJson(addedItem));
-                            $location.path('/records/queries/incoming/update');
-                            $scope.$apply();
-                        });
-                    }).
+                        $incoming_query_service.
+                        saveToFirebaseStorage($scope.uploadedFiles, addedItem).
+                        then(query => {
+                            Swal.fire(
+                                'Success!',
+                                '',
+                                'success'
+                            ).then((result) => {
+                                
+                                localData.set('incomingQuery', setJson(addedItem));
+                                $location.path('/records/queries/incoming/update');
+                                $scope.$apply();
+                            });    
+                        })
+                                            }).
                     catch(error => {
                         Swal.fire({
                             type: 'error',
@@ -142,11 +147,14 @@ myAppModule.
             }
 
             $scope.sendDocument = (item, receipients, remarks) => {
+                $scope.isSending = true;
+                $scope.close_dialog();
+
                 $incoming_query_service.sendDocument(item, receipients, remarks, $scope.doc_user).
                     then(result => {
                         $scope.toast(`Sent to ${receipients.length} receipient${(receipients.length > 1) ? 's' : ''}.`);
                         loadReceipients($scope.query, $scope.doc_user.id);
-                        $scope.close_dialog();
+                        $scope.isSending = false;
                     })
             }
 
@@ -154,6 +162,13 @@ myAppModule.
                 $scope.relatedDocuments = await $incoming_query_service.getRelatedDocuments($scope.query.id);
             }
 
+            async function loadAttachedFiles(query){
+                for(let i = 0; i < query.uploadFiles.length; i++){
+                    let uploadedFile = query.uploadFiles[i];
+                    uploadedFile.url = await $incoming_query_service.getFile(query.uploadFiles[i].path);
+                    $scope.uploadedFiles.push(uploadedFile);
+                }
+            }
             function loadReceipients(query, currentUserID) {
                 $incoming_query_service.
                     getReceipients(query.id, currentUserID).
@@ -165,6 +180,8 @@ myAppModule.
 
             $scope.setCurrentItem = (query) => {
                 $scope.currentItem = query;
+                if (query.uploadedFiles)
+                    $scope.currentItem.files = query.uploadedFiles;
                 // $scope.$apply();
             }
 
@@ -261,9 +278,11 @@ myAppModule.
                 $location.path(document.template.view);
             }
 
-            $scope.query.uploadedFiles = [];
             var fileID = 0;
             $scope.addFiles = (files) => {
+                if (!$scope.uploadedFiles)
+                    $scope.uploadedFiles = [];
+
                 files.forEach((value) => {
                     Upload.
                         dataUrl(value, true).
@@ -275,7 +294,7 @@ myAppModule.
                                 name: value.name
                             }
 
-                            $scope.query.uploadedFiles.push(file);
+                            $scope.uploadedFiles.push(file);
                             fileID++;
                         })
                 })
@@ -292,8 +311,8 @@ myAppModule.
                     confirmButtonText: 'Yes, delete it!'
                 }).then((response) => {
                     if (response.value) {
-                        var index = $scope.query.uploadedFiles.findIndex(uploadedFile => uploadedFile.id == file.id);
-                        $scope.query.uploadedFiles.splice(index, 1);
+                        var index = $scope.uploadFiles.findIndex(uploadedFile => uploadedFile.id == file.id);
+                        $scope.uploadFiles.splice(index, 1);
                         $scope.$apply();
                     }
                 })
@@ -407,6 +426,7 @@ myAppModule.
         }
 
         this.updateIncomingQuery = (incomingQuery) => {
+
             return $crudService.updateItem(incomingQuery, collection);
         }
 
@@ -600,13 +620,32 @@ myAppModule.
                 promises.push(promise);
             });
 
+            return Promise.all(promises);
+            // return new Promise((resolve, reject) => {
+            //     Promise.
+            //         all(promises).
+            //         then(result => {
+            //             resolve(result);
+            //         });
+            // })
+        }
 
-            return new Promise((resolve, reject) => {
-                Promise.
-                    all(promises).
-                    then(result => {
-                        resolve(result);
-                    });
+        this.saveToFirebaseStorage = async (files, query) => {
+            return new Promise(async(resolve, reject) => {
+                let docs = storageRef.child(`docs/${query.id}/`);
+
+                for(var i = 0; i < files.length; i++){
+                    let docsChild = docs.child(`${files[0].id}`)
+                    let snapshot = await docsChild.putString(files[i].url, 'data_url');
+                    files[i].url = await snapshot.ref.getDownloadURL();
+                }
+
+                collection.
+                doc(query.id).
+                update({ 'files': files }).
+                then(result => {
+                    resolve(query);
+                });
             })
         }
     })

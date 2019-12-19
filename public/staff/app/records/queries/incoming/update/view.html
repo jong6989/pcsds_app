@@ -1,4 +1,5 @@
-<div ng-controller="incoming_query_controller" ng-init="loadQuery();setCurrentItem(query);saveIncomingQuery=updateIncomingQuery">
+<div ng-controller="incoming_query_controller" ng-init="loadQuery();setCurrentItem(query);
+    saveIncomingQuery=updateIncomingQuery">
     <div ng-include="'app/records/queries/incoming/template/form.html'"></div>
     <hr>
     Related Documents
@@ -18,13 +19,6 @@
             Send
         </md-button>
 
-        <!-- <div ng-controller='doc_controller' ng-init='doc_init();currentItem=query;
-            doc_user[currentItem.agency.id]="Receiving Staff"'>
-            <div ng-controller='doc_ctrl_published' ng-init='load_operation_reciepients(doc_user[currentItem.agency.id]);
-            listen_document_change(load_current_receipients );'>
-                <div ng-include="'./app/templates/modal/ops_send.html'"></div>
-            </div>
-        </div> -->
         <div ng-include="'./app/records/queries/incoming/template/sendForm.html'"></div>
 
         <md-button class="md-button md-primary" aria-label="Print Document"

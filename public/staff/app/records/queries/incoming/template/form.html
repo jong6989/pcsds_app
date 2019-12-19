@@ -1,4 +1,4 @@
-<div ng-init='loadLastControlNumber()'>
+<div ng-init='loadLastControlNumber()' ng-hide='lastControlNumberHidden'>
     Last Control Number: {{lastControlNumber}}
 </div>
 <br>
@@ -63,7 +63,7 @@
         Upload Picture
     </md-button>
     <ol>
-        <li ng-repeat='uploadedFile in query.uploadedFiles'>
+        <li ng-repeat='uploadedFile in uploadedFiles'>
             <a ng-href='{{uploadedFile.url}}' download='{{uploadedFile.name}}'>{{uploadedFile.name}}</a>
             <md-button class="md-fab md-mini" aria-label="Remove" ng-click="removeFile(uploadedFile)">
                 <md-tooltip md-direction="left">Remove</md-tooltip>

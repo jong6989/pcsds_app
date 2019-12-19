@@ -16,7 +16,7 @@ myAppModule.
             receipt.template = {
                 'view':     '/receipt/view',
                 'create' : 	'/receipt/create',
-			    'edit' : 	'/receipt/update',
+			    'update' : 	'/receipt/update',
 			    'print' : 	'/receipt/print'
             }
             receipt.type = 'receipt';
@@ -32,7 +32,10 @@ myAppModule.
                         '',
                         'success'
                     ).then((result) => {
-                        $location.path(localData.get('previous_view'));
+                        // $location.path(localData.get('previous_view'));
+                        localData.set('receipt', JSON.stringify(receipt))
+                        $location.path(receipt.template.update);
+
                         $scope.$apply();
                     });
                 }).
@@ -56,7 +59,7 @@ myAppModule.
                         '',
                         'success'
                     ).then(() => {
-                        $location.path(localData.get('previous_view'));
+                        // $location.path(localData.get('previous_view'));
                         $scope.$apply();
                     });
                 }).
