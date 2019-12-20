@@ -69,7 +69,7 @@
                     <td>Uploaded Files</td>
                     <td>
                         <ol>
-                            <li ng-repeat='uploadedFile in query.uploadedFiles'>
+                            <li ng-repeat='uploadedFile in incomingQueryModel[$index].files'>
                                 <a ng-href='{{uploadedFile.url}}'
                                     download='{{uploadedFile.name}}'>{{uploadedFile.name}}</a>
 

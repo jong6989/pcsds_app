@@ -13,16 +13,24 @@ myAppModule.
             }
             $scope.updateIncomingQuery = (incomingQuery) => {
                 incomingQuery.agency = $scope.global.ops;
-                delete (incomingQuery.files);
-                $incoming_query_service.updateIncomingQuery(incomingQuery).
-                    then(success => {
-                        Swal.fire(
-                            'Success!',
-                            '',
-                            'success'
-                        ).then(() => {
-
-                        });
+                incomingQuery.files = [];
+                // delete (incomingQuery.files);
+                $incoming_query_service.
+                updateIncomingQuery(incomingQuery).
+                    then(updatedItem => {
+                        $incoming_query_service.
+                        saveToFirebaseStorage($scope.uploadedFiles, updatedItem).
+                        then(files => {
+                            Swal.fire(
+                                'Success!',
+                                '',
+                                'success'
+                            ).then((result) => {
+                                updatedItem.files = files;
+                                localData.set('incomingQuery', setJson(updatedItem));
+                                $scope.$apply();
+                            });    
+                        })
                     }).
                     catch(error => {
                         Swal.fire({
@@ -62,19 +70,19 @@ myAppModule.
                     then(addedItem => {
                         $incoming_query_service.
                         saveToFirebaseStorage($scope.uploadedFiles, addedItem).
-                        then(query => {
+                        then(files => {
                             Swal.fire(
                                 'Success!',
                                 '',
                                 'success'
                             ).then((result) => {
-                                
+                                addedItem.files = files;
                                 localData.set('incomingQuery', setJson(addedItem));
                                 $location.path('/records/queries/incoming/update');
                                 $scope.$apply();
                             });    
                         })
-                                            }).
+                    }).
                     catch(error => {
                         Swal.fire({
                             type: 'error',
@@ -140,6 +148,7 @@ myAppModule.
                 if (!$scope.query.images)
                     $scope.query.images = [];
 
+                $scope.uploadedFiles = $scope.query.files;
                 imageID = $scope.query.images.length;
                 loadRelatedDocuments();
                 let currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
@@ -286,10 +295,10 @@ myAppModule.
                 files.forEach((value) => {
                     Upload.
                         dataUrl(value, true).
-                        then(url => {
+                        then(stream => {
                             var file = {
                                 id: fileID,
-                                url: url,
+                                stream: stream,
                                 deletable: true,
                                 name: value.name
                             }
@@ -311,8 +320,8 @@ myAppModule.
                     confirmButtonText: 'Yes, delete it!'
                 }).then((response) => {
                     if (response.value) {
-                        var index = $scope.uploadFiles.findIndex(uploadedFile => uploadedFile.id == file.id);
-                        $scope.uploadFiles.splice(index, 1);
+                        var index = $scope.uploadedFiles.findIndex(uploadedFile => uploadedFile.id == file.id);
+                        $scope.uploadedFiles.splice(index, 1);
                         $scope.$apply();
                     }
                 })
@@ -336,6 +345,31 @@ myAppModule.
                     then(user => {
                         $scope.doc_user = user;
                     })
+            }
+
+            $scope.filterByDatesBetween = async (start, end) =>{
+                try{
+                    $scope.is_loading = true;
+                    $scope.incomingQueries = await $incoming_query_service.
+                    filterByDatesBetween(start.getTime(), end.getTime());
+                    $scope.$apply();
+                }catch(ex){
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'Operation failed, please try again.',
+                        footer: ''
+                    }).then(() => {
+                    });
+                }finally{
+                    $scope.is_loading = false;
+                }
+            }
+
+            $scope.clearFilter = () => {
+                $scope.start = null;
+                $scope.end = null;
+                $scope.loadIncomingQueries();
             }
             function disableNextButton() {
                 $incoming_query_service.
@@ -426,7 +460,6 @@ myAppModule.
         }
 
         this.updateIncomingQuery = (incomingQuery) => {
-
             return $crudService.updateItem(incomingQuery, collection);
         }
 
@@ -516,7 +549,7 @@ myAppModule.
                             resolve(snapShot.docs);
                         })
                 })
-                relatedDocuments.push(promise);
+                relatedDocuments.push17(promise);
             });
 
 
@@ -635,17 +668,37 @@ myAppModule.
                 let docs = storageRef.child(`docs/${query.id}/`);
 
                 for(var i = 0; i < files.length; i++){
-                    let docsChild = docs.child(`${files[0].id}`)
-                    let snapshot = await docsChild.putString(files[i].url, 'data_url');
-                    files[i].url = await snapshot.ref.getDownloadURL();
+                    if(files[i].stream){
+                        let docsChild = docs.child(`${files[0].id}`)
+                        let snapshot = await docsChild.putString(files[i].stream, 'data_url');
+                        files[i].url = await snapshot.ref.getDownloadURL();
+                        delete(files[i].stream);
+                    }
                 }
 
                 collection.
                 doc(query.id).
                 update({ 'files': files }).
                 then(result => {
-                    resolve(query);
+                    resolve(files);
                 });
+            })
+        }
+
+        this.filterByDatesBetween = (start, end) =>{
+            return new Promise((resolve, reject) =>{
+                collection.
+                where('created_time', '<=', end).
+                where('created_time', '>=', start).
+                where('template.type', '==', 'communication').
+                onSnapshot(snapshot => {
+                    let queries = snapshot.docs.map(document => {
+                        let query = document.data();
+                        query.id = document.id;
+                        return query;
+                    });
+                    resolve(queries);
+                })
             })
         }
     })

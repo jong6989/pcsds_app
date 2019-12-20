@@ -133,7 +133,7 @@ myAppModule.
         this.updateItem = (item, collection) => {
             let promise = new Promise((resolve, reject) => {
                 collection.doc(item.id).update(item).then(result => {
-                    resolve();
+                    resolve(item);
                 },
                     error => { reject(error); });
             })

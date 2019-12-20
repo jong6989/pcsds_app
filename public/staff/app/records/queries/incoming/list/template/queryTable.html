@@ -24,6 +24,20 @@
           </table>
         </div>
       </md-content> -->
+<form name="filterByDateForm">
+  Filter inquiries between
+  <md-datepicker ng-model='start' required></md-datepicker>
+  and
+  <md-datepicker ng-model='end' required></md-datepicker>
+  <md-button 
+    class="md-primary md-raised md-block" 
+    type="submit" 
+    ng-click='filterByDatesBetween(start, end)'
+    ng-disabled='filterByDateForm.$invalid'>Filter</md-button>
+    <md-button 
+    class="md-primary md-raised md-block" 
+    ng-click='clearFilter()'>Clear</md-button>
+</form>
 <md-input-container>
   <md-button class="md-primary md-raised md-block" type="submit" ng-click="export(incomingQueries)">Export</md-button>
 </md-input-container>
