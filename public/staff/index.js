@@ -140,6 +140,7 @@ localData.set('STAFF_ACCOUNT',`
         "designation":"admin",
         "id":"+639486601717",
         "last_seen":1570521763344,
+        "uid": "BI4OjCp0BDQQl8CYhVtsVtNKmG03",
         "menu":[
             {
                 "controller":"<script src='app/account_management/controller.js'></script><script src='app/account_management/menus/controller.js'></script><script src='app/account_management/document_network/controller.js'></script>",

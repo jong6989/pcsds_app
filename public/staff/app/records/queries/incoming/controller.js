@@ -46,7 +46,7 @@ myAppModule.
                 var account_id = localData.get('BRAIN_STAFF_ID');
                 var now = new Date();
 
-                $scope.is_loading = true;
+                $scope.isLoading = true;
                 incomingQuery.date_entered = $scope.to_date(now);
                 incomingQuery.created_time = now.getTime();
                 incomingQuery.publisher = account_id;
@@ -99,6 +99,7 @@ myAppModule.
             $scope.queriesTable = $scope.ngTable([]);
 
             $scope.loadIncomingQueries = () => {
+                $scope.isLoading = true;
                 $incoming_query_service.
                     getIncomingQueries().
                     then(items => {
@@ -116,6 +117,8 @@ myAppModule.
                             footer: ''
                         }).then(() => {
                         });
+                    }).finally(() => {
+                        $scope.isLoading = false;
                     })
             }
 
@@ -349,7 +352,7 @@ myAppModule.
 
             $scope.filterByDatesBetween = async (start, end) =>{
                 try{
-                    $scope.is_loading = true;
+                    $scope.isLoading = true;
                     $scope.incomingQueries = await $incoming_query_service.
                     filterByDatesBetween(start.getTime(), end.getTime());
                     $scope.$apply();
@@ -362,7 +365,7 @@ myAppModule.
                     }).then(() => {
                     });
                 }finally{
-                    $scope.is_loading = false;
+                    $scope.isLoading = false;
                 }
             }
 

@@ -1,31 +1,48 @@
 <div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap()" style="position: relative">
+    <div ng-controller="operations_map_controller" ng-init="loadUsers()">
+        <md-menu-bar>
 
-    <!-- Menu -->
-    <md-menu-bar style="position: absolute">
-
-        <md-menu>
-            <button ng-click="$mdMenu.open()">
-            Recordings
-            </button>
-            <md-menu-content>
-            <md-menu-item ng-repeat="x in recordingList">
-                <md-button  ng-click="showLine(x.id)">
-                {{x.name}} - {{x.time}}
-                </md-button>
-            </md-menu-item>
-            </md-menu-content>
-        </md-menu>
-
-    </md-menu-bar>
-
-
-    <!-- MAP -->
-    <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
-
-
-    <!-- Loading view -->
-    <div  style="position: absolute; top:45%; left:45%;" ng-show="isLoading" layout="row" layout-sm="column" layout-align="space-around">
-        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            <md-menu>
+                <button ng-click="$mdMenu.open()" ng-disabled="isLoading">
+                    Recordings: {{currentUser.name}}
+                </button>
+                <md-menu-content>
+                    <!-- <md-menu-item ng-repeat="x in recordingList">
+                        <md-button ng-click="showLine(x.id)">
+                            {{x.name}} - {{x.time}}
+                        </md-button> -->
+                        <md-menu-item ng-repeat="user in users track by $index" ng-if="user.name != undefined">
+                            <md-button ng-click="setCurrentUser(user);
+                                loadRecordingsByUserAndDate(currentUser.uid, currentDate)" 
+                                style="text-align: left;">
+                                {{user.name}}
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+    
+        </md-menu-bar>
+    
+        <div>
+            <md-datepicker 
+            ng-disabled="isLoading"
+            ng-init="date=currentDate" 
+            ng-model="date" 
+            ng-change="currentDate=to_date(date); 
+            loadRecordingsByUserAndDate(currentUser.uid, currentDate)"></md-datepicker>
+        </div>
+        <!-- MAP -->
+        <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
+        <md-button ng-click="createRoutePlan()">Create Route Plan</md-button>
+    
+        <!-- Loading view -->
+        <div style="position: absolute; top:45%; left:45%;" ng-show="isLoading" layout="row" layout-sm="column"
+            layout-align="space-around">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
     </div>
+</div>
+<div id="windowOperationPlan" style="visibility: hidden;">
 
 </div>
