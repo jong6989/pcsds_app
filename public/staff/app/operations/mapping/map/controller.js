@@ -60,12 +60,7 @@ myAppModule.controller('opsMap_controller',
                     if ($scope.map.getLayoutProperty('public-land', 'visibility') != 'none') {
                         $scope.hideLayer('public-land');
                     }
-                });
-
-                $scope.map.on('click', function (e) {
-                    
-                })
-                
+                });                
                 // initLayers()
 
             }, 200);
