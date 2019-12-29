@@ -1,0 +1,26 @@
+<md-menu-bar>
+    <md-menu>
+        <button ng-click="$mdMenu.open()" ng-disabled="isLoading">
+            Recordings: {{currentUser.name}}
+        </button>
+        <md-menu-content>
+            <!-- <md-menu-item ng-repeat="x in recordingList">
+                <md-button ng-click="showLine(x.id)">
+                    {{x.name}} - {{x.time}}
+                </md-button> -->
+            <md-menu-item ng-repeat="user in users track by $index" ng-if="user.name != undefined">
+                <md-button ng-click="setCurrentUser(user);
+                        loadRecordingsByUserAndDate(currentUser.uid, currentDate)" style="text-align: left;">
+                    {{user.name}}
+                </md-button>
+            </md-menu-item>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+
+</md-menu-bar>
+
+<div>
+    <md-datepicker ng-disabled="isLoading" ng-init="date=currentDate" ng-model="date" ng-change="currentDate=to_date(date); 
+    loadRecordingsByUserAndDate(currentUser.uid, currentDate)"></md-datepicker>
+</div>

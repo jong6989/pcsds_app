@@ -22,8 +22,9 @@ var script_angular = `
         <link href="/plugins/ng-image-gallery/dist/ng-image-gallery.min.css" rel="stylesheet"/>
         <link href="/css/mapbox-gl.css" rel="stylesheet"/>
         <script src="/js/mapbox-gl.js"></script>
-        <script src="/js/mapbox-gl-draw.js"></script>
-
+        <script src="/js/tinycolor.min.js"></script>
+        <script src="/js/md-color-picker/src/js/mdColorPicker.js"></script>
+        <link href="/js/md-color-picker/dist/mdColorPicker.min.css" rel="stylesheet"/>
     `;
 //angularjs plugins
 var script_ng_plugins = {

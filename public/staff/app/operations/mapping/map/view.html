@@ -1,17 +1,36 @@
 <div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap()" style="position: relative">
     <div ng-controller="operations_map_controller" ng-init="loadUsers()">
         
-        <div></div >
-        <md-menu-bar>
+        <div>
+            <md-menu-bar ng-init="menuItems = ['Track Records','Operation Plans']; setSelectedMenuItem(menuItems[0])">
+                <md-menu>
+                    <md-button ng-click="$mdMenu.open()"
+                        ng-disabled="isLoading">
+                        {{selectedMenuItem}}
+                    </md-button>
+                    <md-menu-content>
+                        <!-- <md-menu-item ng-repeat="x in recordingList">
+                            <md-button ng-click="showLine(x.id)">
+                                {{x.name}} - {{x.time}}
+                            </md-button> -->
+                        <md-menu-item ng-repeat="item in menuItems track by $index">
+                            <md-button ng-click="setSelectedMenuItem(item);" style="text-align: left;">
+                                {{item}}
+                            </md-button>
+                        </md-menu-item>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+    
+            </md-menu-bar>
+        </div >
+        <div ng-include="'/staff/app/operations/mapping/map/templates/' + template"></div>
+        <!-- <md-menu-bar>
             <md-menu>
                 <button ng-click="$mdMenu.open()" ng-disabled="isLoading">
                     Recordings: {{currentUser.name}}
                 </button>
                 <md-menu-content>
-                    <!-- <md-menu-item ng-repeat="x in recordingList">
-                        <md-button ng-click="showLine(x.id)">
-                            {{x.name}} - {{x.time}}
-                        </md-button> -->
                     <md-menu-item ng-repeat="user in users track by $index" ng-if="user.name != undefined">
                         <md-button ng-click="setCurrentUser(user);
                                 loadRecordingsByUserAndDate(currentUser.uid, currentDate)" style="text-align: left;">
@@ -44,7 +63,7 @@
                 </md-menu-content>
             </md-menu>
 
-        </md-menu-bar>
+        </md-menu-bar> -->
         <!-- MAP -->
         <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
 
@@ -61,7 +80,7 @@
         <md-button ng-click="drawRoute()" ng-show='buttonCreateRouteHidden'>Plot Route</md-button>
         <md-button ng-click="drawArea()" ng-show='buttonCreateRouteHidden'>Plot Area</md-button>
 
-        <md-button ng-click="showPrerenderedDialog($event, 'windowRoutesPlan')" 
+        <md-button ng-click="showPrerenderedDialog($event, 'windowRoute')" 
             ng-show='buttonCreateRouteHidden'>Save</md-button>
         <md-button ng-click="discardRoute()" ng-show='buttonCreateRouteHidden'>Discard</md-button>
         <!-- Loading view -->
@@ -141,7 +160,19 @@
         </div>
         <div style="visibility: hidden;">
             <div id='windowRoute'>
-                
+                <md-input-container>
+                    <label>Title</label>
+                    <input ng-model='route.name'>
+                </md-input-container>
+                <md-input-container>
+                    <label>Description</label>
+                    <input ng-model='route.description'>
+                </md-input-container>
+                <md-input-container>
+                    <label>Color</label>
+                    <div md-color-picker ng-model="route.color"></div>
+                </md-input-container>
+                <md-button ng-click='saveRoute()'>Save</md-button>
             </div>
         </div>
     </div>

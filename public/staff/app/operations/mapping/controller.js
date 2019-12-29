@@ -80,7 +80,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         mappingService.
             addRoutes(routePlan, route).
             then(result => {
-
+                initRouteDrawing();
             }).
             catch(error => {
                 Swal.fire({
@@ -117,6 +117,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         return db.collection("staffs").doc("+639123456789").collection("gps").orderBy("time");
     };
 
+    // setTimeout(() => {
+    //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', '2019-12-26')
+
+    // }, 3000);
     $scope.loadRecordingsByUserAndDate = async (userID, dateOfRecord) => {
         removeLayers();
         try {
@@ -130,19 +134,26 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 promises.push(promise);
             }
 
-            Promise.all(promises).then(coordinates => {
-                coordinates.forEach(coordinate => {
-                    var id = new Date().getTime();
-                    $scope.addLineLayer(id.toString(), coordinate, "#f00", 8);
-                    mapLayers.push(id);
-                });
-                $scope.map.flyTo({ center: coordinates[0][0], zoom: 15 });
-            }).finally(() => {
-                $scope.isLoading = false
-                $scope.$apply();
-            })
+            if ($scope.recordings.length) {
+                $scope.setCurrentOperation({
+                    name: $scope.recordings[0].name,
+                    description: $scope.recordings[0].description,
+                    operation_no: $scope.recordings[0].operation_id
+                })
+            }
 
+            Promise.all(promises).
+                then(coordinates => {
+                    coordinates.forEach(coordinate => {
+                        var id = new Date().getTime();
+                        $scope.addLineLayer(id.toString(), coordinate, "#f00", 8);
+                    });
+                    if (coordinates.length)
+                        $scope.map.flyTo({ center: coordinates[0][0], zoom: 15 });
 
+                }).finally(() => {
+
+                })
         } catch (error) {
             Swal.fire({
                 type: 'error',
@@ -152,17 +163,19 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             }).then(() => {
             });
         } finally {
+            $scope.isLoading = false
+            $scope.$apply();
         }
     }
 
-    var mapLayers = [];
-    function removeLayers() {
-        mapLayers.forEach(layer => {
-            $scope.map.removeLayer(layer);
-        });
-        mapLayers = [];
-    
+    function addLayer(layer) {
+        $scope.addLayer(layer);
     }
+
+    function removeLayers() {
+        $scope.removeLayers();
+    }
+
     $scope.users = [];
     $scope.loadUsers = async () => {
         $scope.users = await userAccountsService.getUsers();
@@ -172,9 +185,9 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.loadOperation = (operationID) => {
         removeLayers();
         loadRoutes(operationID).
-        then(result => {
-            loadAreas(operationID);
-        })
+            then(result => {
+                loadAreas(operationID);
+            })
     }
 
     $scope.setCurrentOperation = (operation) => {
@@ -183,91 +196,41 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     $scope.loadOperations = () => {
         mappingService.getOperations().
-        then(operations => {
-            $scope.operations = operations;
-            $scope.$apply();
-        })
+            then(operations => {
+                $scope.operations = operations;
+                $scope.$apply();
+            })
     }
 
 
+    $scope.setSelectedMenuItem = (menuItem) => {
+        var templates = {
+            'Track Records': 'trackrecords.html',
+            'Operation Plans': 'operations.html'
+        };
+        $scope.template = templates[menuItem];
+        $scope.selectedMenuItem = menuItem;
+    }
 
-    function loadRoutes(operationID){
+    function loadRoutes(operationID) {
         return new Promise((resolve, reject) => {
             mappingService.getRoutes(operationID).
-            then(routes => {
-                routes.forEach(route => {
-                    var geojson = {
-                        'type': 'FeatureCollection',
-                        'features': []
-                    }
+                then(routes => {
+                    routes.forEach(route => {
+                        var points = route.points.map(point => {
+                            return [point.longitude, point.latitude];
+                        })
+                        $scope.addLineLayer(route.id, points, route.color, 4);
+                        $scope.map.on('click', 'lines-' + route.id, (e) => {
+                            new mapboxgl.Popup()
+                                .setLngLat(points[0])
+                                .setHTML(`<strong>${route.name}</strong><div>${route.description}</div>`)
+                                .addTo($scope.map);
+                        })
 
-                    route.points.forEach(point => {
-                        var coordinate = {
-                            'type': 'Feature',
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [point.longitude, point.latitude]
-                            },
-                            'properties': {
-                                'id': String(new Date().getTime())
-                            }
-                        }
-                        geojson.features.push(coordinate);
+                        resolve(true);
                     });
-
-                    $scope.map.addSource(route.id, {
-                        'type': 'geojson',
-                        'data': geojson
-                    });
-
-                    $scope.map.addLayer({
-                        id: `points-${route.id}`,
-                        type: 'circle',
-                        source: route.id,
-                        paint: {
-                            'circle-radius': 5,
-                            'circle-color': route.color
-                        },
-                        filter: ['in', '$type', 'Point']
-                    });
-
-                    $scope.map.addLayer({
-                        id: `lines-${route.id}`,
-                        type: 'line',
-                        source: route.id,
-                        layout: {
-                            'line-cap': 'round',
-                            'line-join': 'round'
-                        },
-                        paint: {
-                            'line-color': route.color,
-                            'line-width': 2.5
-                        },
-                        filter: ['in', '$type', 'LineString']
-                    });
-                    mapLayers.push(`points-${route.id}`);
-                    mapLayers.push(`lines-${route.id}`);
-
-                    var linestring = {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates': []
-                        }
-                    }
-
-                    if (geojson.features.length > 1) {
-                        linestring.geometry.coordinates = geojson.features.map(function (point) {
-                            return point.geometry.coordinates;
-                        });
-
-                        geojson.features.push(linestring);
-                    }
-                    var source = $scope.map.getSource(route.id);
-                    source.setData(geojson);
-                    resolve(true)
                 })
-            })
         })
     }
     function loadAreas(operationID) {
@@ -290,19 +253,26 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                             source.data.geometry.coordinates[index].push([point.longitude, point.latitude]);
                         })
 
-                        $scope.map.addLayer({
-                            id: area.id.toString(),
+                        addLayer({
+                            id: 'area-' + area.id.toString(),
                             type: 'fill',
                             source: source,
-                            paint:{
+                            paint: {
                                 'fill-color': area.color,
                                 'fill-opacity': 0.8
                             }
+                        });
+
+                        $scope.map.on('click', 'area-' + area.id.toString(), (e) => {
+                            new mapboxgl.Popup()
+                                .setLngLat([area.points[0].longitude, area.points[0].latitude])
+                                .setHTML(`<strong>${area.name}</strong><div>${area.description}</div>`)
+                                .addTo($scope.map);
                         })
                     });
                     resolve(true);
                 });
-                
+
         })
     }
     // setTimeout(() => {
@@ -400,7 +370,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             'data': geojson
         });
 
-        $scope.map.addLayer({
+        addLayer({
             id: `points-${currentPointAndLineLayerID}`,
             type: 'circle',
             source: currentPointAndLineLayerID,
@@ -409,9 +379,9 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 'circle-color': '#000'
             },
             filter: ['in', '$type', 'Point']
-        });
+        })
 
-        $scope.map.addLayer({
+        addLayer({
             id: `lines-${currentPointAndLineLayerID}`,
             type: 'line',
             source: currentPointAndLineLayerID,
@@ -424,8 +394,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 'line-width': 2.5
             },
             filter: ['in', '$type', 'LineString']
-        });
-
+        })
         $scope.map.on('click', onMouseClickWhileDrawingRoute);
 
         // $scope.map.on('mousemove', function (e) {
@@ -464,7 +433,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             'data': geojson
         });
 
-        $scope.map.addLayer({
+        addLayer({
             id: `area-${currentPolygonLayerID}`,
             type: 'fill',
             source: currentPolygonLayerID,
@@ -473,8 +442,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 'fill-opacity': 0.8
             },
             'filter': ['==', '$type', 'Polygon']
-        });
-
+        })
         $scope.map.off('click', onMouseClickWhileDrawingRoute);
         $scope.map.on('click', onMouseClickWhileDrawingArea);
         $scope.drawArea = drawArea;
@@ -642,7 +610,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         })
     };
 
-    this.getOperations = () =>{
+    this.getOperations = () => {
         return new Promise((resolve, reject) => {
             db.collection('ecan_app_operation_plans').
                 onSnapshot(snapshot => {

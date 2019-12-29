@@ -1,0 +1,17 @@
+<md-menu-bar ng-init='loadOperations()'>
+    <md-menu>
+        <button ng-click="$mdMenu.open()" ng-disabled="isLoading">
+            Operations: {{currentOperation.name}}
+        </button>
+        <md-menu-content>
+            <md-menu-item ng-repeat="operation in operations track by $index">
+                <md-button ng-click="setCurrentOperation(operation);
+                        loadOperation(operation.id)" style="text-align: left;">
+                    {{operation.name}}
+                </md-button>
+            </md-menu-item>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+
+</md-menu-bar>
