@@ -121,52 +121,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', '2019-12-26')
 
     // }, 3000);
-    $scope.loadRecordingsByUserAndDate = async (userID, dateOfRecord) => {
-        removeLayers();
-        try {
-            $scope.isLoading = true
-            $scope.recordings = await mappingService.getRecordingByUserAndDate(userID, new Date(dateOfRecord));
-            var promises = [];
 
-            for (var i = 0; i < $scope.recordings.length; i++) {
-                var recording = $scope.recordings[i];
-                var promise = mappingService.getCoordinates(recording);
-                promises.push(promise);
-            }
-
-            if ($scope.recordings.length) {
-                $scope.setCurrentOperation({
-                    name: $scope.recordings[0].name,
-                    description: $scope.recordings[0].description,
-                    operation_no: $scope.recordings[0].operation_id
-                })
-            }
-
-            Promise.all(promises).
-                then(coordinates => {
-                    coordinates.forEach(coordinate => {
-                        var id = new Date().getTime();
-                        $scope.addLineLayer(id.toString(), coordinate, "#f00", 8);
-                    });
-                    if (coordinates.length)
-                        $scope.map.flyTo({ center: coordinates[0][0], zoom: 15 });
-
-                }).finally(() => {
-
-                })
-        } catch (error) {
-            Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: 'Operation failed, please try again.',
-                footer: ''
-            }).then(() => {
-            });
-        } finally {
-            $scope.isLoading = false
-            $scope.$apply();
-        }
-    }
 
     function addLayer(layer) {
         $scope.addLayer(layer);
@@ -177,10 +132,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     }
 
     $scope.users = [];
-    $scope.loadUsers = async () => {
-        $scope.users = await userAccountsService.getUsers();
-        $scope.$apply();
-    }
+
 
     $scope.loadOperation = (operationID) => {
         removeLayers();
@@ -493,151 +445,299 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.drawRoute = initRouteDrawing;
     $scope.drawArea = initAreaDrawing;
 
-}).service('mappingService', function () {
-    var collection = db.collection("ecan_app_recordings");
+}).
+    controller('track_recording_controller', function ($scope, $mdSidenav, track_recording_service, userAccountsService) {
+        $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
+        $scope.dateNow = new Date();
 
-    this.getRecordingByUserAndDate = (userID, dateOfRecord) => {
-        var year = dateOfRecord.getFullYear();
-        var monthIndex = dateOfRecord.getMonth();
-        var day = dateOfRecord.getDate();
-        var from = new Date(year, monthIndex, day, 0, 0, 0);
-        var to = new Date(year, monthIndex, day, 23, 59, 59);
+        // setTimeout(() => {
+        //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2',new Date('2019-12-23'), new Date('2019-12-30'))
+        // })
+        $scope.loadRecordingsByUserAndDate = async (userID, from, to) => {
+            try {
+                $scope.isLoading = true
+                $scope.recordings = await track_recording_service.getRecordingByUserAndDate(userID, new Date(from), new Date(to));
+                $scope.toggleSidenav();
+                $scope.$apply();
+                // var promises = [];
 
-        return new Promise((resolve, reject) => {
-            var query = collection.
-                where('uid', '==', userID).
-                where('time', '>=', from.getTime()).
-                where('time', '<=', to.getTime());
+                // for (var i = 0; i < $scope.recordings.length; i++) {
+                //     var recording = $scope.recordings[i];
+                //     var promise = track_recording_service.getCoordinates(recording);
+                //     promises.push(promise);
+                // }
 
-            query.onSnapshot(snapshot => {
-                var recordings = snapshot.docs.map(document => {
-                    var recording = document.data();
-                    recording.id = document.id;
-                    return recording;
+                // Promise.all(promises).
+                //     then(coordinates => {
+                //         coordinates.forEach(coordinate => {
+                //             var id = new Date().getTime();
+                //             $scope.addLineLayer(id.toString(), coordinate, "#f00", 8);
+                //         });
+                //         if (coordinates.length)
+                //             $scope.map.flyTo({ center: coordinates[0][0], zoom: 15 });
+
+                //     }).finally(() => {
+
+                //     })
+            } catch (error) {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Operation failed, please try again.',
+                    footer: ''
+                }).then(() => {
                 });
-                resolve(recordings);
-            });
-        })
-    }
+            } finally {
+                $scope.isLoading = false
+                $scope.$apply();
+            }
+        }
 
-    this.addRoutePlan = (routePlan) => {
-        return new Promise((resolve, reject) => {
-            db.
-                collection('ecan_app_operation_plans').
-                doc(routePlan.time.toString()).
-                set(routePlan).
-                then(result => {
-                    resolve(routePlan);
-                });
-        })
-    }
+        $scope.loadRecordToMap = (record) => {
+            $scope.isLoading = true;
+            $scope.removeLayers();
 
-    this.getCoordinates = (recording) => {
-        return new Promise((resolve, reject) => {
-            collection.doc(recording.id).collection('Points').onSnapshot(snapshot => {
-                var coordinates = [];
-                snapshot.docs.forEach(document => {
-                    var points = document.data();
-                    if (points) {
-                        points.points.forEach(point => {
-                            coordinates.push([point.longitude, point.latitude]);
-                        })
-                    }
-                })
+            track_recording_service.
+                getCoordinates(record).
+                then(coordinates => {
+                    var id = new Date().getTime().toString();
+                    $scope.addLineLayer(id, coordinates, "#f00", 8);
 
-                resolve(coordinates);
-            })
-        })
-    }
+                    if (coordinates.length)
+                        $scope.map.flyTo({ center: coordinates[0], zoom: 15 });
 
-    this.addRoutes = (routePlan, route) => {
-        return new Promise((resolve, reject) => {
-            db.
-                collection('ecan_app_operation_plans').
-                doc(routePlan.id).
-                collection('routes').
-                doc(route.id).
-                set(route).
-                then(result => {
-                    resolve(route);
-                })
-        })
-    }
-
-    this.addAreas = (routePlan, points) => {
-        return new Promise((resolve, reject) => {
-            db.
-                collection('ecan_app_operation_plans').
-                doc(routePlan.id).
-                collection('areas').
-                doc(route.id).
-                set(points).
-                then(result => {
-                    resolve(points);
-                })
-        })
-    }
-
-    this.getRoutes = (operationID) => {
-        return new Promise((resolve, reject) => {
-            db.collection('ecan_app_operation_plans').
-                doc(operationID).
-                collection('routes').
-                onSnapshot(snapshot => {
-                    var routes = snapshot.docs.map(document => {
-                        var route = document.data();
-                        route.id = document.id;
-                        return route;
+                    $scope.map.on('click', 'lines-' + id, (e) => {
+                        new mapboxgl.Popup()
+                            .setLngLat(coordinates[0])
+                            .setHTML(`<strong>${record.name}</strong><div>${record.description}</div>`)
+                            .addTo($scope.map);
                     })
-                    resolve(routes);
-                })
-        })
-    }
-
-    this.getAreas = (operationID) => {
-        return new Promise((resolve, reject) => {
-            db.collection('ecan_app_operation_plans').
-                doc(operationID).
-                collection('areas').
-                onSnapshot(snapshot => {
-                    var areas = snapshot.docs.map(document => {
-                        var area = document.data();
-                        area.id = document.id;
-                        return area;
-                    })
-                    resolve(areas);
-                })
-        })
-    };
-
-    this.getOperations = () => {
-        return new Promise((resolve, reject) => {
-            db.collection('ecan_app_operation_plans').
-                onSnapshot(snapshot => {
-                    var operations = snapshot.docs.map(document => {
-                        var operation = document.data();
-                        return operation;
-                    })
-                    resolve(operations);
-                })
-        })
-    }
-}).service('userAccountsService', function () {
-    var collection = db.collection("staffs");
-
-    this.getUsers = async () => {
-        return new Promise((resolve, reject) => {
-            collection.
-                onSnapshot(snapshot => {
-                    var users = snapshot.docs.map(doc => {
-                        var user = doc.data();
-                        user.id = doc.id;
-                        return user;
+                    $scope.isLoading = false;
+                }).catch(error => {
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'Operation failed, please try again.',
+                        footer: ''
+                    }).then(() => {
                     });
-                    resolve(users);
-                })
+                });
+
+        }
+        $scope.setCurrentUser = (user) => {
+            $scope.currentUser = user;
+        }
+        $scope.loadUsers = async () => {
+            $scope.users = await userAccountsService.getUsers();
+            $scope.$apply();
+        }
+
+        $scope.toggleSidenav = buildToggler('closeEventsDisabled');
+
+        function buildToggler(componentId) {
+            return function () {
+                $mdSidenav(componentId).toggle();
+            };
+        }
+
+        $('#searchResultsShower').on('mouseover', () => {
+            $scope.toggleSidenav();
         })
-    }
-});
+    }).
+    service('track_recording_service', function () {
+        var collection = db.collection("ecan_app_recordings");
+        this.getRecordingByUserAndDate = (userID, from, to) => {
+            var fromYear = from.getFullYear();
+            var fromMonth = from.getMonth();
+            var fromDay = from.getDate();
+            var toYear = to.getFullYear();
+            var toMonth = to.getMonth();
+            var toDay = to.getDate();
+            var dateStart = new Date(fromYear, fromMonth, fromDay, 0, 0, 0);
+            var dateEnd = new Date(toYear, toMonth, toDay, 23, 59, 59);
+
+            return new Promise((resolve, reject) => {
+                var query = collection.
+                    where('uid', '==', userID).
+                    where('time', '>=', dateStart.getTime()).
+                    where('time', '<=', dateEnd.getTime());
+
+                query.onSnapshot(snapshot => {
+                    var recordings = snapshot.docs.map(document => {
+                        var recording = document.data();
+                        recording.id = document.id;
+                        return recording;
+                    });
+                    resolve(recordings);
+                });
+            })
+        }
+
+        this.getCoordinates = (recording) => {
+            return new Promise((resolve, reject) => {
+                collection.doc(recording.id).collection('Points').onSnapshot(snapshot => {
+                    var coordinates = [];
+                    snapshot.docs.forEach(document => {
+                        var points = document.data();
+                        if (points) {
+                            points.points.forEach(point => {
+                                coordinates.push([point.longitude, point.latitude]);
+                            })
+                        }
+                    })
+
+                    resolve(coordinates);
+                })
+            })
+        }
+
+    }).
+    service('mappingService', function () {
+        var collection = db.collection("ecan_app_recordings");
+
+        this.getRecordingByUserAndDate = (userID, dateOfRecord) => {
+            var year = dateOfRecord.getFullYear();
+            var monthIndex = dateOfRecord.getMonth();
+            var day = dateOfRecord.getDate();
+            var from = new Date(year, monthIndex, day, 0, 0, 0);
+            var to = new Date(year, monthIndex, day, 23, 59, 59);
+
+            return new Promise((resolve, reject) => {
+                var query = collection.
+                    where('uid', '==', userID).
+                    where('time', '>=', from.getTime()).
+                    where('time', '<=', to.getTime());
+
+                query.onSnapshot(snapshot => {
+                    var recordings = snapshot.docs.map(document => {
+                        var recording = document.data();
+                        recording.id = document.id;
+                        return recording;
+                    });
+                    resolve(recordings);
+                });
+            })
+        }
+
+        this.addRoutePlan = (routePlan) => {
+            return new Promise((resolve, reject) => {
+                db.
+                    collection('ecan_app_operation_plans').
+                    doc(routePlan.time.toString()).
+                    set(routePlan).
+                    then(result => {
+                        resolve(routePlan);
+                    });
+            })
+        }
+
+        this.getCoordinates = (recording) => {
+            return new Promise((resolve, reject) => {
+                collection.doc(recording.id).collection('Points').onSnapshot(snapshot => {
+                    var coordinates = [];
+                    snapshot.docs.forEach(document => {
+                        var points = document.data();
+                        if (points) {
+                            points.points.forEach(point => {
+                                coordinates.push([point.longitude, point.latitude]);
+                            })
+                        }
+                    })
+
+                    resolve(coordinates);
+                })
+            })
+        }
+
+        this.addRoutes = (routePlan, route) => {
+            return new Promise((resolve, reject) => {
+                db.
+                    collection('ecan_app_operation_plans').
+                    doc(routePlan.id).
+                    collection('routes').
+                    doc(route.id).
+                    set(route).
+                    then(result => {
+                        resolve(route);
+                    })
+            })
+        }
+
+        this.addAreas = (routePlan, points) => {
+            return new Promise((resolve, reject) => {
+                db.
+                    collection('ecan_app_operation_plans').
+                    doc(routePlan.id).
+                    collection('areas').
+                    doc(route.id).
+                    set(points).
+                    then(result => {
+                        resolve(points);
+                    })
+            })
+        }
+
+        this.getRoutes = (operationID) => {
+            return new Promise((resolve, reject) => {
+                db.collection('ecan_app_operation_plans').
+                    doc(operationID).
+                    collection('routes').
+                    onSnapshot(snapshot => {
+                        var routes = snapshot.docs.map(document => {
+                            var route = document.data();
+                            route.id = document.id;
+                            return route;
+                        })
+                        resolve(routes);
+                    })
+            })
+        }
+
+        this.getAreas = (operationID) => {
+            return new Promise((resolve, reject) => {
+                db.collection('ecan_app_operation_plans').
+                    doc(operationID).
+                    collection('areas').
+                    onSnapshot(snapshot => {
+                        var areas = snapshot.docs.map(document => {
+                            var area = document.data();
+                            area.id = document.id;
+                            return area;
+                        })
+                        resolve(areas);
+                    })
+            })
+        };
+
+        this.getOperations = () => {
+            return new Promise((resolve, reject) => {
+                db.collection('ecan_app_operation_plans').
+                    onSnapshot(snapshot => {
+                        var operations = snapshot.docs.map(document => {
+                            var operation = document.data();
+                            return operation;
+                        })
+                        resolve(operations);
+                    })
+            })
+        }
+    }).
+    service('userAccountsService', function () {
+        var collection = db.collection("staffs");
+
+        this.getUsers = async () => {
+            return new Promise((resolve, reject) => {
+                collection.
+                    onSnapshot(snapshot => {
+                        var users = snapshot.docs.map(doc => {
+                            var user = doc.data();
+                            user.id = doc.id;
+                            return user;
+                        });
+                        resolve(users);
+                    })
+            })
+        }
+    });
 
 document.write(`<script src='app/operations/mapping/map/controller.js'></script>`);
