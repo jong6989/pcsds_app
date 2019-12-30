@@ -150,6 +150,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         mappingService.getOperations().
             then(operations => {
                 $scope.operations = operations;
+                $scope.toggleSidenav();
                 $scope.$apply();
             })
     }
@@ -536,18 +537,6 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             $scope.users = await userAccountsService.getUsers();
             $scope.$apply();
         }
-
-        $scope.toggleSidenav = buildToggler('closeEventsDisabled');
-
-        function buildToggler(componentId) {
-            return function () {
-                $mdSidenav(componentId).toggle();
-            };
-        }
-
-        $('#searchResultsShower').on('mouseover', () => {
-            $scope.toggleSidenav();
-        })
     }).
     service('track_recording_service', function () {
         var collection = db.collection("ecan_app_recordings");

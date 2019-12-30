@@ -1,7 +1,7 @@
 'use strict';
 
 myAppModule.controller('opsMap_controller',
-    function ($scope) {
+    function ($scope, $mdSidenav) {
         $scope.isLoading = false;
         $scope.map = undefined
         $scope.recordingList = [];
@@ -211,6 +211,18 @@ myAppModule.controller('opsMap_controller',
             $scope.addMarker(lineCoordinates[0], 'START', 'monument');
             $scope.addMarker(lineCoordinates[lineCoordinates.length - 1], 'END' ,'monument');
         };
+
+        $scope.toggleSidenav = buildToggler('closeEventsDisabled');
+
+        function buildToggler(componentId) {
+            return function () {
+                $mdSidenav(componentId).toggle();
+            };
+        }
+
+        $('#searchResultsShower').on('mouseover', () => {
+            $scope.toggleSidenav();
+        })
     });
 
 

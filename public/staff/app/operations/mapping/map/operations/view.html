@@ -1,0 +1,58 @@
+<div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap()" style="position: relative">
+    <div ng-controller="operations_map_controller" ng-init="loadOperations()">
+        <!-- <md-menu-bar>
+            <md-menu>
+                <button ng-click="$mdMenu.open()" ng-disabled="isLoading">
+                    Operations: {{currentOperation.name}}
+                </button>
+                <md-menu-content>
+                    <md-menu-item ng-repeat="operation in operations track by $index">
+                        <md-button ng-click="setCurrentOperation(operation);
+                                loadOperation(operation.id)" style="text-align: left;">
+                            {{operation.name}}
+                        </md-button>
+                    </md-menu-item>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        
+        </md-menu-bar> -->
+        <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
+
+        <md-sidenav class="md-sidenav-left" md-component-id="closeEventsDisabled" md-whiteframe="4"
+            md-disable-close-events>
+            <md-toolbar layout="row" class="md-hue-3">
+                <div class="md-toolbar-tools">
+                    <span>Operations</span>
+                </div>
+            </md-toolbar>
+            <md-content layout-margin="">
+                <md-list flex>
+                    <md-list-item class="md-3-line" ng-repeat='operation in operations track by $index'
+                        ng-click="setCurrentOperation(operation);
+                        loadOperation(operation.id)">
+                        <div class="md-list-item-text" layout="column">
+                            <div  layout>
+                                <div style='width: 75%;'>
+                                    <div>
+                                        <strong>{{operation.name}}</strong>
+                                    </div>
+                                    <div>{{operation.description}}</div>
+                                </div>
+                                <md-button class="md-fab md-mini" 
+                                    ng-click="showPrerenderedDialog($event, 'windowOperationDetails')">
+                                    <md-tooltip md-direction="left">View Details</md-tooltip>
+                                    <i class="fa fa-eye"></i>
+                                </md-button>
+                            </div>
+                        </div>
+
+                    </md-list-item>
+                </md-list>
+            </md-content>
+        </md-sidenav>
+        <div id='searchResultsShower' style='z-index: 59; position: absolute;height: 542px; bottom:15px'>
+            &nbsp;
+        </div>
+    </div>
+</div>
