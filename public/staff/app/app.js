@@ -32,7 +32,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   $scope.content_page = "";
   $scope.active_menu = "";
   $scope.menus = [];
-  
+  $scope.document_network_url = 'http://localhost/pcsd/qr/';
   //app globals
   $scope.global = {
     ops : { id: 'WJ43CJV6R3uF3QMaWrvj', name : 'Operations', short_name : 'Ops'}
@@ -385,7 +385,8 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
 
   // $scope.set_path('/profile_management/print');
   $scope.generate_qr_code = (id,text)=>{
-    return new QRCode(document.getElementById(id), text);
+    var qr = new QRCode(document.getElementById(id), { text: text, width: 128, height: 128});
+    return qr;
   };
 
   var signaturePad = [];

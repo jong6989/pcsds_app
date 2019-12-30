@@ -1,6 +1,6 @@
 <div ng-init="n.subject = 'Certificate of no-pending case'; 
 	n.keywords = ((n.keywords)? n.keywords : []); titles = ['Ms.','Mrs.','Mr.']; n.c_type = 'empty'; 
-	c_types = ['empty','wsup_ao5','wsup_ao12','wcp_ao5','sep','sup','sup+']; ">
+	c_types = ['empty','wsup_ao5','wsup_ao12', 'sep','sup','sup+']; ">
 	
 	<h3 class="align-center">CERTIFICATION</h3>
 	<hr>
@@ -238,7 +238,7 @@
 	
 	<!-- empty template -->
 	<div ng-if="n.c_type == 'empty'" ng-init="n.lines = ['']; meta_lines = [];" layout="column">
-		<div ng-repeat="x in n.lines" layout="column">
+		<div ng-repeat="x in n.lines track by $index" layout="column">
 			<strong>Paragraph line {{$index + 1}} </strong>
 			<textarea name="line_{{$index}}" ng-blur="n.lines[$index] = meta_lines[$index]" ng-model="meta_lines[$index]" rows="10"></textarea>
 			<md-button class="md-button md-warn" ng-click="n.lines.splice($index,1)" ng-if="n.lines.length > 1">remove paragraph</md-button>

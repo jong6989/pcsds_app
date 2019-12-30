@@ -1,0 +1,27 @@
+<div ng-controller="doc_controller" ng-init="doc_init();">
+    
+    <div ng-controller="EvaluationController" ng-init="set_page_title('Communications - Incoming Query');">
+        <div ng-controller="doc_ctrl_published" ng-init="
+                load_operation_reciepients(doc_user[currentItem.agency.id]);
+                listen_document_change(load_current_receipients );
+                ">
+            <div ng-controller="incoming_query_controller" ng-init="loadQuery();
+                    setCurrentItem(query);">
+                    <table>
+                        <tr><td>Date Received</td><td>{{query.date_received}}</td></tr>
+                        <tr><td>Control Number</td><td>{{query.control_number}}</td></tr>
+                        <tr><td>Source of Origin</td><td>{{query.source_of_origin}}</td></tr>
+                        <tr><td>Contents</td><td>{{query.contents}}</td></tr>
+                        <tr><td>Date of Correspondence</td><td>{{query.date_of_correspondence}}</td></tr>
+                        <tr><td>OED Actions</td><td>{{query.oed_actions}}</td></tr>
+                        <tr><td>Referral Date</td><td>{{query.referral_date}}</td></tr>
+                        <tr><td>Status of Action Taken by Concerned Department</td><td>{{query.status_of_action}}</td></tr>
+                        <tr><td>Communication Status</td><td>{{query.communication_status}}</td></tr>
+                        <tr><td>Outgoing Date</td><td>{{query.outgoing_date}}</td></tr>
+                        <tr><td>Correspondence Description</td><td>{{query.correspondence_description}}</td></tr>
+                    </table>
+                    
+            </div>
+        </div>
+    </div>
+</div>

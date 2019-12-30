@@ -13,6 +13,12 @@
     
     <hr>
 </div>
+<h4 class="col-grey">
+    Images
+</h4>
+<ng-image-gallery images="currentItem.images" thumbnails=true on-delete="removeFromGallery(img, cb)">
+</ng-image-gallery>
+<hr>
 
 <md-card  ng-init="init_doc()" 
     ng-change="uploadFiles(file_drop)"

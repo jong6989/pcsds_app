@@ -178,6 +178,7 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
                         $scope.doc_user_agencies = b;
                         if($scope.currentClicked == 'draft' && $scope.currentItem != undefined)
                             $scope.currentItem.agency = b[0];
+                        $scope.$apply();
                     });
                     return null;
                 });
