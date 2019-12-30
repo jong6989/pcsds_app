@@ -1,0 +1,41 @@
+<md-card>
+    <md-card-content>
+            <div ng-show="isSaving" layout="row" layout-sm="column" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+        <form name="receiptForm" ng-init="receipt.keywords=receipt.keywords||[]" ng-show="!isSaving">
+            <div>
+                Last Receipt Number: {{lastReceiptNumber}}
+            </div>
+            <br>
+            <div>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Receipt Number:</label>
+                    <input ng-model='receipt.number' ng-change='receipt.keywords[0]=receipt.number' required>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Paid Amount</label>
+                    <input type="number" ng-model='receipt.paid_amount'>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Details</label>
+                    <textarea ng-model='receipt.details'></textarea>
+                </md-input-container>
+                <br>
+                
+                <md-input-container>
+                    <md-button ng-click='saveReceipt(receipt)' ng-disabled="receiptForm.$invalid"
+                        class="md-raised md-block md-primary" ng-hide="saveButtonShouldHide">Save</md-button>
+                </md-input-container>
+                <!-- <md-input-container>
+                    <md-button ng-click='backToPreviousPage()' ng-disabled="incomingQueryForm.$invalid"
+                        class="md-raised md-block md-primary" ng-hide="backButtonShouldHide">
+                        Back
+                    </md-button>
+                </md-input-container> -->
+            </div>
+            
+        </form>
+    </md-card-content>
+</md-card>
+

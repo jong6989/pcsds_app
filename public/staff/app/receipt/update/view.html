@@ -1,0 +1,10 @@
+<div ng-controller='receipt_controller'  ng-init='loadReceipt();currentItem=receipt'>
+    <div ng-include="'app/receipt/template/form.html'"></div>
+    <div ng-init='saveReceipt=updateReceipt'></div>
+    <md-button class="md-button md-primary" aria-label="Print Document"
+        ng-click="open_print_view('./app' + currentItem.template.print + '/view.html', currentItem);" layout-gt-sm>
+        <i class="fa fa-print"></i>
+        Print this document
+    </md-button>
+    <div ng-include="'app/templates/templates/footer.html'"></div>
+</div>

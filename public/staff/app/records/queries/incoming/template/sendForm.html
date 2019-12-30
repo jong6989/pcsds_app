@@ -1,0 +1,57 @@
+<div style="visibility: hidden" ng-init='loadAccounts(); loadCurrentUser()'>
+    <div class="md-dialog-container" id="sendDocument" >
+        <md-dialog layout="column" layout-align="center center">
+            <md-toolbar>
+                <div class="md-toolbar-tools bg-teal">
+                    Send
+                    </div>
+            </md-toolbar>
+            <form ng-cloak name="form_send_document">            
+                <md-dialog-content layout-padding class="p-b-20">
+                    <div>
+                        <h6>Select Receipient</h6>
+                        <ol >
+                            <li ng-repeat="account in accounts">
+                                <md-checkbox ng-click="toggle_select(account.id, currentController.receipients)" 
+                                    ng-hide="userId == account.id">
+                                    {{account.name}} 
+                                </md-checkbox>
+                                - 
+                                <cite class="font-11 col-grey" 
+                                    ng-repeat="(position, isActive) in  account[currentItem.agency.id]" 
+                                    ng-if="position != 'active' && isActive">
+                                    {{position}}
+                                </cite>
+                            </li>
+                        </ol>
+                    </div>
+                </md-dialog-content>
+            
+                <md-dialog-actions >
+                    <div flex layout="column">
+                        <div layout>
+                            <md-input-container md-no-float class="md-block" flex layout>
+                                <input ng-model="sendingRemarks" placeholder="Remarks" flex>
+                            </md-input-container>
+                        </div>
+                        <div ng-controller='doc_ctrl_published' layout>
+                            <span flex></span>
+                            <md-button ng-click="close_dialog()">
+                                Close
+                            </md-button>
+                            <md-button type="submit" class="md-primary md-raised" 
+                                ng-disabled="!currentController.receipients || currentController.receipients.length == 0" 
+                                ng-click="sendDocument(currentItem, currentController.receipients, sendingRemarks)">
+                                Send
+                            </md-button>
+                        </div>
+                        <div>&nbsp;</div>
+                    </div>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
+    </div>
+</div>
+<div flex="100" layout-align="center center" ng-if="isSending" layout>
+    <md-progress-circular md-mode="indeterminate" md-diameter="70"></md-progress-circular>
+</div>

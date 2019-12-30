@@ -1,6 +1,6 @@
 'use strict';
 
-myAppModule.controller('surveillance_report_controller', function ($scope, $timeout, $mdDialog, $interval, $http, $localStorage) {
+myAppModule.controller('surveillance_report_controller', function ($scope, $localStorage) {
     const time_key = 'created_time';
     const collection = 'documents';
     const category = 'surveillance_report';

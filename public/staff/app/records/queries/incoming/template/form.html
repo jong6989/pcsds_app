@@ -1,0 +1,84 @@
+<div ng-init='loadLastControlNumber()' ng-hide='lastControlNumberHidden'>
+    Last Control Number: {{lastControlNumber}}
+</div>
+<br>
+<form name="incomingQueryForm" ng-init="query.keywords=[]">
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Date Received</label>
+        <md-datepicker ng-model='date_received' ng-change='query.date_received=to_date(date_received)'
+            ng-init="date_received=to_date(query.date_received)">
+
+        </md-datepicker>
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Control Number</label>
+        <input ng-model="query.control_number" ng-change="query.keywords[0]=query.control_number">
+    </md-input-container>
+    <md-input-container class='md-block' flex-go-sm>
+        <label>Source of Origin</label>
+        <input ng-model="query.source_of_origin" />
+    </md-input-container>
+    <md-input-container class='md-block' flex-go-sm>
+        <label>Contents</label>
+        <textarea ng-model="query.contents"></textarea>
+    </md-input-container>
+    <md-input-container class='md-block' flex-go-sm>
+        <label>Date of Correspondence</label>
+        <md-datepicker ng-model="date_of_correspondence"
+            ng-change="query.date_of_correspondence=to_date(date_of_correspondence)"
+            ng-init="date_of_correspondence=to_date(query.date_of_correspondence)"></md-datepicker>
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>OED Actions</label>
+        <input ng-model="query.oed_actions">
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Referral Date</label>
+        <md-datepicker ng-model="referral_date" ng-change="query.referral_date=to_date(referral_date)"
+            ng-init="referral_date=to_date(query.referral_date)"></md-datepicker>
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Status of Action Taken by Concerned Department</label>
+        <textarea ng-model="query.status_of_action"></textarea>
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Communication Status</label>
+        <textarea ng-model="query.communication_status"></textarea>
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Outgoing Date</label>
+        <md-datepicker ng-model="outgoing_date" ng-change="query.outgoing_date=to_date(outgoing_date)"
+            ng-init="outgoing_date=to_date(query.outgoing_date)">
+        </md-datepicker>
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Correspondence Description</label>
+        <textarea ng-model="query.correspondence_description"></textarea>
+    </md-input-container>
+
+    <ng-image-gallery images="query.images" thumbnails=true on-delete="removeFromGallery(img, cb)">
+    </ng-image-gallery>
+    <md-button ngf-capture="'camera'" ngf-select ngf-change="addToGallery($files)" ngf-multiple=true accept="image/*"
+        ng-hide='uploadButtonShouldHide'>
+        Upload Picture
+    </md-button>
+    <ol>
+        <li ng-repeat='uploadedFile in uploadedFiles'>
+            <a ng-href='{{uploadedFile.url}}' download='{{uploadedFile.name}}'>{{uploadedFile.name}}</a>
+            <md-button class="md-fab md-mini" aria-label="Remove" ng-click="removeFile(uploadedFile)">
+                <md-tooltip md-direction="left">Remove</md-tooltip>
+                <i class="fa fa-remove"></i>
+            </md-button>
+        </li>
+    </ol>
+    <md-button ngf-select ngf-change="addFiles($files)" ngf-multiple=true ng-hide='uploadButtonShouldHide'>
+        Upload Files
+    </md-button>
+    <md-input-container class="md-block" flex-gt-sm>
+        <md-button ng-click='saveIncomingQuery(query)' ng-disabled="incomingQueryForm.$invalid"
+            class="md-raised md-block md-primary" ng-hide="saveButtonShouldHide">
+            Save
+        </md-button>
+    </md-input-container>
+
+</form>

@@ -22,7 +22,9 @@ var script_angular = `
         <link href="/plugins/ng-image-gallery/dist/ng-image-gallery.min.css" rel="stylesheet"/>
         <link href="/css/mapbox-gl.css" rel="stylesheet"/>
         <script src="/js/mapbox-gl.js"></script>
-
+        <script src="/js/tinycolor.min.js"></script>
+        <script src="/js/md-color-picker/src/js/mdColorPicker.js"></script>
+        <link href="/js/md-color-picker/dist/mdColorPicker.min.css" rel="stylesheet"/>
     `;
 //angularjs plugins
 var script_ng_plugins = {
@@ -31,7 +33,7 @@ var script_ng_plugins = {
         <script src="/js/signature_pad.min.js"></script>
         <script src="/js/quill.js"></script>
         <script src="/js/tinymce.min.js"></script>
-        <script src="/js/xlsx/xlsx.min.js"></script>
+        <script src="/js/xlsx/xlsx.full.min.js"></script>
         <script src="/js/qrcode.min.js"></script>
         <script src="/plugins/dot-object.min.js"></script>
         <script src="/plugins/hammer.min.js"></script>
@@ -41,7 +43,8 @@ var script_ng_plugins = {
 var scripts_controllers = {
     main : `<script src="app/app.js"></script>`,
     login : `<script src="app/login/controller.js"></script>`,
-    chainsaw_monitoring: '<script src="app/templates/templates/monitoring/controller.js"></script>'
+    chainsaw_monitoring: '<script src="app/templates/templates/monitoring/controller.js"></script>',
+    receipt: '<script src="app/receipt/controller.js"></script>'
 };
 var scripts_js_plugins = {
     particles : `<script src="/plugins/particlesjs/js/particles.min.js"></script>
@@ -101,6 +104,7 @@ async function authenticateStaff(){
                     script_angular  + 
                     scripts_controllers.main + 
                     scripts_controllers.chainsaw_monitoring +
+                    scripts_controllers.receipt +
                     controllers;
                 document.write(dashboardPage);
             } catch (error) {
@@ -132,308 +136,331 @@ async function authenticateStaff(){
 }
 
 //debug user
-// localData.set('BRAIN_STAFF_ID','+639486601717');
-// localData.set('STAFF_ACCOUNT',`
-//     {
-//         "designation":"admin",
-//         "id":"+639486601717",
-//         "last_seen":1570521763344,
-//         "menu":[
-//             {
-//                 "controller":"<script src='app/account_management/controller.js'></script><script src='app/account_management/menus/controller.js'></script><script src='app/account_management/document_network/controller.js'></script>",
-//                 "functions":["create","update","assign_module","disable"],
-//                 "icon":"user-md",
-//                 "title":"Account Management",
-//                 "menu" : [
-//                     {
-//                         "title" : "Accounts",
-//                         "path" : "/account_management",
-//                         "icon" : "users"
-//                     },
-//                     {
-//                         "title" : "Menu Modules",
-//                         "path" : "/account_management/menus",
-//                         "icon" : "bars"
-//                     },
-//                     {
-//                         "title" : "DocNet Offices",
-//                         "path" : "/account_management/document_network/create_office",
-//                         "icon" : "users"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/doc/controller.js'></script>",
-//                 "icon":"file-text",
-//                 "path":"/doc",
-//                 "title":"Document Network"
-//             },
-//             {
-//                 "controller":"<script src='app/operations/mapping/controller.js'></script>",
-//                 "icon":"map",
-//                 "title":"Mapping",
-//                 "menu": [
-//                     {
-//                         "title": "Enforcer",
-//                         "path": "/operations/mapping/enforcer",
-//                         "icon": "street-view"
-//                     },
-//                     {
-//                         "title": "Map",
-//                         "path": "/operations/mapping/map",
-//                         "icon": "map-marker"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/operations/summary_of_information/controller.js'></script>",
-//                 "icon":"align-right",
-//                 "title":"Summary of Information",
-//                 "menu": [
-//                     {
-//                         "title": "Create",
-//                         "path": "/operations/summary_of_information/create",
-//                         "icon": "magic"
-//                     },
-//                     {
-//                         "title": "All",
-//                         "path": "/operations/summary_of_information/list/all",
-//                         "icon": "align-justify"
-//                     },
-//                     {
-//                         "title": "My List",
-//                         "path": "/operations/summary_of_information/list/single",
-//                         "icon": "align-justify"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/operations/surveillance_report/controller.js'></script>",
-//                 "icon":"align-right",
-//                 "title":"Surveillance Report",
-//                 "menu": [
-//                     {
-//                         "title": "Create",
-//                         "path": "/operations/surveillance_report/create",
-//                         "icon": "magic"
-//                     },
-//                     {
-//                         "title": "All",
-//                         "path": "/operations/surveillance_report/list/all",
-//                         "icon": "align-justify"
-//                     },
-//                     {
-//                         "title": "My List",
-//                         "path": "/operations/surveillance_report/list/single",
-//                         "icon": "align-justify"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/operations/intel_report/controller.js'></script>",
-//                 "icon":"align-right",
-//                 "title":"Intelligence Report",
-//                 "menu": [
-//                     {
-//                         "title": "Create",
-//                         "path": "/operations/intel_report/create",
-//                         "icon": "magic"
-//                     },
-//                     {
-//                         "title": "All",
-//                         "path": "/operations/intel_report/list/all",
-//                         "icon": "align-justify"
-//                     },
-//                     {
-//                         "title": "My List",
-//                         "path": "/operations/intel_report/list/single",
-//                         "icon": "align-justify"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/monitoring/controller.js'></script>",
-//                 "icon":"align-right",
-//                 "title":"Monitoring Report",
-//                 "menu": [
-//                     {
-//                         "title": "Create",
-//                         "path": "/monitoring/create",
-//                         "icon": "magic"
-//                     },
-//                     {
-//                         "title": "All",
-//                         "path": "/monitoring/list/all",
-//                         "icon": "align-justify"
-//                     },
-//                     {
-//                         "title": "My List",
-//                         "path": "/monitoring/list/single",
-//                         "icon": "align-justify"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/evaluation/controller.js'></script>",
-//                 "icon":"align-right",
-//                 "title":"Evaluation",
-//                 "menu": [
-//                     {
-//                         "title": "Create",
-//                         "path": "/evaluation/create",
-//                         "icon": "magic"
-//                     },
-//                     {
-//                         "title": "All",
-//                         "path": "/evaluation/list/all",
-//                         "icon": "align-justify"
-//                     },
-//                     {
-//                         "title": "My List",
-//                         "path": "/evaluation/list/single",
-//                         "icon": "align-justify"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/certification/controller.js'></script>",
-//                 "icon":"align-right",
-//                 "title":"No-Pending-Case",
-//                 "menu": [
-//                     {
-//                         "title": "Create",
-//                         "path": "/certification/npc/create",
-//                         "icon": "magic"
-//                     },
-//                     {
-//                         "title": "All",
-//                         "path": "/certification/npc/list/all",
-//                         "icon": "align-justify"
-//                     },
-//                     {
-//                         "title": "My List",
-//                         "path": "/certification/npc/list/single",
-//                         "icon": "align-justify"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/certification/controller.js'></script>",
-//                 "icon":"align-right",
-//                 "title":"LTP Inspection'",
-//                 "menu": [
-//                     {
-//                         "title": "Create",
-//                         "path": "/certification/ltp/create",
-//                         "icon": "magic"
-//                     },
-//                     {
-//                         "title": "All",
-//                         "path": "/certification/ltp/list/all",
-//                         "icon": "align-justify"
-//                     },
-//                     {
-//                         "title": "My List",
-//                         "path": "/certification/ltp/list/single",
-//                         "icon": "align-justify"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/applications/controller.js'></script>",
-//                 "icon":"files-o",
-//                 "path":"/applications",
-//                 "title":"Online Application"
-//             },
-//             {
-//                 "controller":"<script src='app/permit_application/view/controller.js'></script>",
-//                 "icon":"files-o",
-//                 "title":"Permit Applications",
-//                 "menu" : [
-//                     {
-//                         "title" : "View",
-//                         "path" : "/permit_application/view",
-//                         "icon" : "files-o"
-//                     },
-//                     {
-//                         "title" : "Legal Staff",
-//                         "path" : "/permit_application/legal_staff",
-//                         "icon" : "legal"
-//                     },
-//                     {
-//                         "title" : "Enforcement Staff",
-//                         "path" : "/permit_application/enforcement_staff",
-//                         "icon" : "files-o"
-//                     },
-//                     {
-//                         "title" : "Permitting Staff",
-//                         "path" : "/permit_application/permitting_staff",
-//                         "icon" : "files-o"
-//                     },
-//                     {
-//                         "title" : "Registry Staff",
-//                         "path" : "/permit_application/registry_staff",
-//                         "icon" : "files-o"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/database/controller.js'></script>",
-//                 "icon":"database",
-//                 "title":"Data Sets",
-//                 "menu": [
-//                     {
-//                         "title": "Statistics",
-//                         "path": "/database/views/statistics",
-//                         "icon": "line-chart"
-//                     },
-//                     {
-//                         "title": "Apprehensions",
-//                         "path": "/database/views/apprehension",
-//                         "icon": "legal"
-//                     },
-//                     {
-//                         "title": "Chainsaw Permit To Purchase",
-//                         "path": "/database/views/chainsaw_purchase_permit",
-//                         "icon": "file"
-//                     },
-//                     {
-//                         "title": "Chainsaw Registration",
-//                         "path": "/database/views/chainsaw_registration",
-//                         "icon": "registered"
-//                     },
-//                     {
-//                         "title": "Chainsaw Permit To Sell",
-//                         "path": "/database/views/chainsaw_sell_permit",
-//                         "icon": "file"
-//                     },
-//                     {
-//                         "title": "Wildlife Special Use Permit",
-//                         "path": "/database/views/wsup",
-//                         "icon": "leaf"
-//                     }
-//                 ]
-//             },
-//             {
-//                 "controller":"<script src='app/profile_management/controller.js'></script>",
-//                 "icon":"files-o",
-//                 "title":"Profile Management",
-//                 "menu" : [
-//                     {
-//                         "title": "Profiles",
-//                         "path": "/profile_management/list",
-//                         "icon": "list"
-//                     },
-//                     {
-//                         "title": "Links",
-//                         "path": "/profile_management/links",
-//                         "icon": "group"
-//                     }
-//                 ]
-//             }
-//         ],
-//             "name":"Admin",
-//             "phone":"+639486601717"
-//         }
-// `);
+localData.set('BRAIN_STAFF_ID','+639123456789');
+localData.set('STAFF_ACCOUNT',`
+    {
+        "designation":"admin",
+        "id":"+639486601717",
+        "last_seen":1570521763344,
+        "uid": "BI4OjCp0BDQQl8CYhVtsVtNKmG03",
+        "menu":[
+            {
+                "controller":"<script src='app/account_management/controller.js'></script><script src='app/account_management/menus/controller.js'></script><script src='app/account_management/document_network/controller.js'></script>",
+                "functions":["create","update","assign_module","disable"],
+                "icon":"user-md",
+                "title":"Account Management",
+                "menu" : [
+                    {
+                        "title" : "Accounts",
+                        "path" : "/account_management",
+                        "icon" : "users"
+                    },
+                    {
+                        "title" : "Menu Modules",
+                        "path" : "/account_management/menus",
+                        "icon" : "bars"
+                    },
+                    {
+                        "title" : "DocNet Offices",
+                        "path" : "/account_management/document_network/create_office",
+                        "icon" : "users"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/doc/controller.js'></script>",
+                "icon":"file-text",
+                "path":"/doc",
+                "title":"Document Network"
+            },
+            {
+                "controller":"<script src='app/operations/mapping/controller.js'></script>",
+                "icon":"map",
+                "title":"Mapping",
+                "menu": [
+                    {
+                        "title": "Enforcer",
+                        "path": "/operations/mapping/enforcer",
+                        "icon": "street-view"
+                    },
+                    {
+                        "title": "Map",
+                        "path": "/operations/mapping/map",
+                        "icon": "map-marker"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/summary_of_information/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Summary of Information",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/summary_of_information/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/summary_of_information/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/summary_of_information/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/surveillance_report/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Surveillance Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/surveillance_report/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/surveillance_report/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/surveillance_report/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/intel_report/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Intelligence Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/operations/intel_report/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/operations/intel_report/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/operations/intel_report/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/monitoring/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Monitoring Report",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/monitoring/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/monitoring/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/monitoring/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/evaluation/controller.js'></script>",
+                "icon":"align-right",
+                "title":"Evaluation",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/evaluation/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/evaluation/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/evaluation/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/certification/controller.js'></script>",
+                "icon":"align-right",
+                "title":"No-Pending-Case",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/certification/npc/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/certification/npc/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/certification/npc/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/certification/controller.js'></script>",
+                "icon":"align-right",
+                "title":"LTP Inspection'",
+                "menu": [
+                    {
+                        "title": "Create",
+                        "path": "/certification/ltp/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/certification/ltp/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/certification/ltp/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/applications/controller.js'></script>",
+                "icon":"files-o",
+                "path":"/applications",
+                "title":"Online Application"
+            },
+            {
+                "controller":"<script src='app/permit_application/view/controller.js'></script>",
+                "icon":"files-o",
+                "title":"Permit Applications",
+                "menu" : [
+                    {
+                        "title" : "View",
+                        "path" : "/permit_application/view",
+                        "icon" : "files-o"
+                    },
+                    {
+                        "title" : "Legal Staff",
+                        "path" : "/permit_application/legal_staff",
+                        "icon" : "legal"
+                    },
+                    {
+                        "title" : "Enforcement Staff",
+                        "path" : "/permit_application/enforcement_staff",
+                        "icon" : "files-o"
+                    },
+                    {
+                        "title" : "Permitting Staff",
+                        "path" : "/permit_application/permitting_staff",
+                        "icon" : "files-o"
+                    },
+                    {
+                        "title" : "Registry Staff",
+                        "path" : "/permit_application/registry_staff",
+                        "icon" : "files-o"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/database/controller.js'></script>",
+                "icon":"database",
+                "title":"Data Sets",
+                "menu": [
+                    {
+                        "title": "Statistics",
+                        "path": "/database/views/statistics",
+                        "icon": "line-chart"
+                    },
+                    {
+                        "title": "Apprehensions",
+                        "path": "/database/views/apprehension",
+                        "icon": "legal"
+                    },
+                    {
+                        "title": "Chainsaw Permit To Purchase",
+                        "path": "/database/views/chainsaw_purchase_permit",
+                        "icon": "file"
+                    },
+                    {
+                        "title": "Chainsaw Registration",
+                        "path": "/database/views/chainsaw_registration",
+                        "icon": "registered"
+                    },
+                    {
+                        "title": "Chainsaw Permit To Sell",
+                        "path": "/database/views/chainsaw_sell_permit",
+                        "icon": "file"
+                    },
+                    {
+                        "title": "Wildlife Special Use Permit",
+                        "path": "/database/views/wsup",
+                        "icon": "leaf"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/profile_management/controller.js'></script>",
+                "icon":"files-o",
+                "title":"Profile Management",
+                "menu" : [
+                    {
+                        "title": "Profiles",
+                        "path": "/profile_management/list",
+                        "icon": "list"
+                    },
+                    {
+                        "title": "Links",
+                        "path": "/profile_management/links",
+                        "icon": "group"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/records/queries/incoming/controller.js'></script>",
+                "icon":"files-o",
+                "title":"Communications",
+                "menu" : [
+                    {
+                        "title": "Create",
+                        "path": "/records/queries/incoming/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/records/queries/incoming/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/records/queries/incoming/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            }
+        ],
+            "name":"Admin",
+            "phone":"+639486601717"
+        }
+`);
 authenticateStaff();

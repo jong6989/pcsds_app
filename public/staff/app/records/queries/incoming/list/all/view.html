@@ -1,0 +1,29 @@
+<style>
+        #searchBox {
+          padding: 7px;
+          font-size: 18px;
+          border: none;
+        }
+      
+        #searchButton {
+          float: right;
+          padding: 7px 10px;
+          margin-right: 16px;
+          background: #d7d7d7;
+          font-size: 18px;
+          border: none;
+          cursor: pointer;
+          border-radius: 1px;
+        }
+      </style>
+      <div ng-controller="incoming_query_controller" 
+        ng-init="set_page_title('Communication - List');loadIncomingQueries()"
+        ng-hide='isLoading'>
+        <div ng-include="'app/records/queries/incoming/list/template/queryTable.html'"></div>
+        <md-button class="md-primary md-raised md-block" type="submit" ng-click="getNextItems()" ng-disabled='isLastPage'>Next</md-button>
+        <md-button class="md-primary md-raised md-block" type="submit" ng-click="getPreviousItems()" ng-disabled='isFirstPage'>Previous</md-button>
+      </div>
+      <div flex="100" layout-align="center center" ng-if="isLoading" layout>
+        <md-progress-circular md-mode="indeterminate" md-diameter="70"></md-progress-circular>
+    </div>
+      

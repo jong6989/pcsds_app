@@ -1,0 +1,48 @@
+<div ng-controller='incoming_query_controller' ng-init='currentItem = $localStorage.params; print()' style="margin:0.5in">
+    <div ng-include="'../../../../header.html'" style="width:70%"></div>
+    <div style="margin-top:30px; margin-bottom:30px; text-align: center;">
+        <h3>Incoming Query</h3>
+    </div>
+    <table>
+        <tr>
+            <td>Date Received:</td>
+            <td>{{to_date(currentItem.date_received)}}</td>
+        </tr>
+        <tr>
+            <td>Control Number</td>
+            <td>{{currentItem.control_number}}</td>
+        </tr>
+        <tr>
+            <td>Source of Origin</td>
+            <td>{{currentItem.source_of_origin}}</td>
+        </tr>
+        <tr>
+            <td>Contents</td>
+            <td>{{currentItem.contents}}</td>
+        </tr>
+        <tr>
+            <td>Date of Correspondence</td>
+            <td>{{to_date(currentItem.date_of_correspondence)}}</td>
+        </tr>
+        <tr>
+            <td>OED Actions</td>
+            <td>{{currentItem.oed_actions}}</td>
+        </tr>
+        <tr>
+            <td>Referral Date</td>
+            <td>{{to_date(currentItem.referral_date)}}</td>
+        </tr>
+        <tr>
+            <td>Status of Action Taken by Concerned Department</td>
+            <td>{{currentItem.status_of_action}}</td>
+        </tr>
+        <tr>
+            <td>Communication Status</td>
+            <td>{{currentItem.communication_status}}</td>
+        </tr>
+        <tr>
+            <td>Correspondence Description</td>
+            <Td>{{currentItem.correspondence_description}}</Td>
+        </tr>
+    </table>
+</div>
