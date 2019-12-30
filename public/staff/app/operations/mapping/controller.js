@@ -450,9 +450,9 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
         $scope.dateNow = new Date();
 
-        // setTimeout(() => {
-        //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2',new Date('2019-12-23'), new Date('2019-12-30'))
-        // })
+        setTimeout(() => {
+            $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2',new Date('2019-12-23'), new Date('2019-12-30'))
+        })
         $scope.loadRecordingsByUserAndDate = async (userID, from, to) => {
             try {
                 $scope.isLoading = true
@@ -527,6 +527,11 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.setCurrentUser = (user) => {
             $scope.currentUser = user;
         }
+
+        $scope.currentTrackRecord = {};
+        $scope.setCurrentTrackRecord = (record) => {
+            $scope.currentTrackRecord = record;
+        }
         $scope.loadUsers = async () => {
             $scope.users = await userAccountsService.getUsers();
             $scope.$apply();
@@ -590,7 +595,6 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 })
             })
         }
-
     }).
     service('mappingService', function () {
         var collection = db.collection("ecan_app_recordings");

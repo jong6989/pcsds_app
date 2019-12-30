@@ -74,6 +74,10 @@ myAppModule.controller('opsMap_controller',
             }, 200);
         };
 
+        $scope.getTime = (dateInMilliseconds) => {
+            var date = new Date(dateInMilliseconds);
+            return moment(date).format('hh:mm:ss a')
+        }
         // $scope.filterByUserAndDates 
 
         function initLayers() {
