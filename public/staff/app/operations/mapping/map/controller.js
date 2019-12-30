@@ -33,7 +33,7 @@ myAppModule.controller('opsMap_controller', function ($scope, $filter, $timeout,
                 if($scope.map.getLayer(id) == undefined){
                     //remove last layer if existing
                     if ($scope.map.getLayer(lastRecordLayerAdded)) $scope.map.removeLayer(lastRecordLayerAdded);
-                    $scope.addLineLayer(id,results,"#f00",8);
+                    $scope.addLineLayer(id,results,"#f00",2);
                     lastRecordLayerAdded = id;
                 }
                 $scope.map.flyTo({center: results[0], zoom: 15});
