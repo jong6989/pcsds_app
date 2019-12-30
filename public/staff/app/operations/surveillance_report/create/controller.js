@@ -65,6 +65,19 @@ myAppModule.controller('surveillance_report_create_controller', function ($scope
 
             x.keywords = x.keywords.filter( (value) => { return (value == undefined || value == '' || value == ' ')? false : true; } );
 
+            //from Patrol APP
+            if($scope.url.has(static_ops_id)){
+                $scope.n.ops_id = $scope.url.get(static_ops_id)
+            }
+            if($scope.url.has(static_latitude)){
+                $scope.n.latitude = $scope.url.get(static_latitude)
+            }
+            if($scope.url.has(static_longitude)){
+                $scope.n.longitude = $scope.url.get(static_longitude)
+            }
+            // end from PAtrol app
+
+            
             try {
                 db.collection('documents').add(x).then( (ref) => {
                     if($scope.last_control_number_id !== ''){

@@ -48,6 +48,19 @@ controller('EvaluationController', function($scope){
                 return value != undefined && value.trim() != '';
             });
 
+            //from Patrol APP
+            if($scope.url.has(static_ops_id)){
+                $scope.n.ops_id = $scope.url.get(static_ops_id)
+            }
+            if($scope.url.has(static_latitude)){
+                $scope.n.latitude = $scope.url.get(static_latitude)
+            }
+            if($scope.url.has(static_longitude)){
+                $scope.n.longitude = $scope.url.get(static_longitude)
+            }
+            // end from PAtrol app
+
+            
             db.collection('documents').add($scope.n).then((ref) => {
                 if (ref.id) {
                     $scope.toast_s("document created!");

@@ -308,6 +308,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $http,$timeo
     firebase.auth().signOut().catch(function(error) {
           console.log(error)
     });
+    
   };
 
   $scope.set_page_title = function(t){
