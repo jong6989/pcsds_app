@@ -1,58 +1,86 @@
-<div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap()" style="position: relative">
+<div ng-controller="opsMap_controller" ng-init="set_page_title('Map');initMapBoxMap()" style="position: relative">
     <div ng-controller="operations_map_controller" ng-init="loadOperations()">
-        <!-- <md-menu-bar>
-            <md-menu>
-                <button ng-click="$mdMenu.open()" ng-disabled="isLoading">
-                    Operations: {{currentOperation.name}}
-                </button>
-                <md-menu-content>
-                    <md-menu-item ng-repeat="operation in operations track by $index">
-                        <md-button ng-click="setCurrentOperation(operation);
-                                loadOperation(operation.id)" style="text-align: left;">
-                            {{operation.name}}
-                        </md-button>
-                    </md-menu-item>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-        
-        </md-menu-bar> -->
         <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
-
         <md-sidenav class="md-sidenav-left" md-component-id="closeEventsDisabled" md-whiteframe="4"
             md-disable-close-events>
+            <div></div>
             <md-toolbar layout="row" class="md-hue-3">
                 <div class="md-toolbar-tools">
                     <span>Operations</span>
                 </div>
             </md-toolbar>
-            <md-content layout-margin="">
-                <md-list flex>
-                    <md-list-item class="md-3-line" ng-repeat='operation in operations track by $index'
-                        ng-click="setCurrentOperation(operation);
-                        loadOperation(operation.id)">
+            <md-content layout-margin="" flex>
+                <!-- <md-virtual-repeat-container id="vertical-container" style="height:100px;width: 100%;max-width: 400px;">
+                    <div md-virtual-repeat="item in infiniteItems" md-on-demand class="repeated-item" flex>
+                        {{item}}
+                    </div>
+                </md-virtual-repeat-container> -->
+                <md-list>
+                    <md-list-item class="md-3-line" ng-repeat='operation in operations track by $index' 
+                        ng-click="loadOperation(operation.id)">
                         <div class="md-list-item-text" layout="column">
-                            <div  layout>
+                            <div layout>
                                 <div style='width: 75%;'>
                                     <div>
                                         <strong>{{operation.name}}</strong>
                                     </div>
                                     <div>{{operation.description}}</div>
                                 </div>
-                                <md-button class="md-fab md-mini" 
-                                    ng-click="showPrerenderedDialog($event, 'windowOperationDetails')">
+                                <md-button class="md-fab md-mini"
+                                    ng-click="setCurrentOperation(operation);showPrerenderedDialog($event, 'windowOperationDetails')">
                                     <md-tooltip md-direction="left">View Details</md-tooltip>
                                     <i class="fa fa-eye"></i>
                                 </md-button>
                             </div>
                         </div>
-
                     </md-list-item>
                 </md-list>
             </md-content>
         </md-sidenav>
         <div id='searchResultsShower' style='z-index: 59; position: absolute;height: 542px; bottom:15px'>
             &nbsp;
+        </div>
+
+        <div style="visibility: hidden;">
+            <div id='windowOperationDetails' class="md-dialog-container">
+                <md-dialog layout="column" layout-align="center center">
+                    <md-toolbar class="bg-teal">
+                        <div class="md-toolbar-tools">
+                            <h2>Track Record</h2>
+                            <span flex></span>
+                            <md-button class="md-icon-button" ng-click="close_dialog()">
+                                <i class="fa fa-times col-white"></i>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
+                    <md-dialog-content>
+                        <br>
+                        <div>
+                            <md-input-container class="md-block">
+                                <label>Title</label>
+                                <input ng-model='currentOperation.name' readonly>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Operation No.</label>
+                                <input ng-model='currentOperation.operation_id' readonly>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Description</label>
+                                <textarea ng-model='currentOperation.description' readonly></textarea>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Date Created</label>
+                                <input ng-model='time' readonly>
+                                </md-datepicker>
+                            </md-input-container>
+                            <md-button class="md-primary md-raised" ng-click="close_dialog();">
+                                OK
+                            </md-button>
+                        </div>
+                        
+                    </md-dialog-content>
+                </md-dialog>
+            </div>
         </div>
     </div>
 </div>

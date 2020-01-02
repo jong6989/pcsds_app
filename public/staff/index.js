@@ -25,6 +25,8 @@ var script_angular = `
         <script src="/js/tinycolor.min.js"></script>
         <script src="/js/md-color-picker/src/js/mdColorPicker.js"></script>
         <link href="/js/md-color-picker/dist/mdColorPicker.min.css" rel="stylesheet"/>
+        <script src="/js/ng-infinite-scroll/build/ng-infinite-scroll.min.js"></script>
+
     `;
 //angularjs plugins
 var script_ng_plugins = {

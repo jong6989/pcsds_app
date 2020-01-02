@@ -94,11 +94,10 @@ myAppModule.controller('opsMap_controller',
             $scope.map.setLayoutProperty(id, 'visibility', 'visible');
         };
 
-        $scope.addMarker = (coordinate, title, symbol, description) => {
-            // var marker = new mapboxgl.Marker({});
-            // marker.setLngLat(coordinate).addTo($scope.map);
+        $scope.getPointLayer = (coordinate, title, symbol, description) => {
             var id = new Date().getTime().toString();
-            $scope.addLayer({
+
+            var layer = {
                 'id': 'points' + id,
                 'type': 'symbol',
                 'source': {
@@ -123,16 +122,24 @@ myAppModule.controller('opsMap_controller',
                     }
                 },
                 'layout': {
-                    // get the icon name from the source's "icon" property
-                    // concatenate the name to get an icon from the style's sprite sheet
                     'icon-image': ['concat', ['get', 'icon'], '-15'],
-                    // get the title name from the source's "title" property
                     'text-field': ['get', 'title'],
+                    'text-size': 20,
                     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
                     'text-offset': [0, 0.6],
                     'text-anchor': 'top'
                 }
-            })
+            }
+            return layer;
+        }
+
+        $scope.addMarker = (coordinate, title, symbol, description) => {
+            // var marker = new mapboxgl.Marker({});
+            // marker.setLngLat(coordinate).addTo($scope.map);
+
+            var layer = $scope.getLayer(coordinate, title, symbol, description);
+            $scope.addLayer(layer);
+            return layer;
         }
         let mapLayers = [];
         $scope.addLayer = (layer) => {

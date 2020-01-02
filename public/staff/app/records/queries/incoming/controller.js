@@ -212,7 +212,8 @@ myAppModule.
 
             $scope.getNextItems = () => {
                 $scope.isLastPage = true;
-                $incoming_query_service.getNextItems($scope.incomingQueries[$scope.incomingQueries.length - 1].control_number,
+                $incoming_query_service.
+                getNextItems($scope.incomingQueries[$scope.incomingQueries.length - 1].control_number,
                     localData.get('BRAIN_STAFF_ID')).
                     then(result => {
                         $scope.incomingQueries = result;
