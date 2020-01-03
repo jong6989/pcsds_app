@@ -1,18 +1,20 @@
-<div ng-controller="opsMap_controller" ng-init="set_page_title('Map');initMapBoxMap()" style="position: relative">
+<div ng-controller="opsMap_controller" ng-init="set_page_title('Map');" style="position: relative">
     <div ng-controller="operations_map_controller" ng-init="loadOperations()">
         <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
         <md-sidenav class="md-sidenav-left" md-component-id="closeEventsDisabled" md-whiteframe="4"
             md-disable-close-events>
             <div></div>
-            <md-toolbar layout="row" class="md-hue-3">
+            <md-toolbar class="md-hue-3">
                 <div class="md-toolbar-tools" layout='row'>
                     Operations
-                    <md-button ng-click='showPrerenderedDialog($event, "formSearchOperations")'>
-                        <i class="fa fa-search m-r-5"></i>
-                    </md-button>
-                    <md-button ng-click='loadOperations()'>
-                        <i class="fa fa-refresh m-r-5"></i>
-                    </md-button>
+                    <div style="width: 177px;padding-left:100px">
+                        <a href="" ng-click='showPrerenderedDialog($event, "formSearchOperations")'>
+                            <i class="fa fa-search m-r-5"></i>
+                        </a>
+                        <a href="" ng-click='loadOperations()'>                        
+                            <i class="fa fa-refresh m-r-5"></i>
+                        </a>
+                    </div>
                 </div>
             </md-toolbar>
             <md-content layout-margin="" flex>
