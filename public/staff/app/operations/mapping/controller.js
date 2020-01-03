@@ -1,5 +1,5 @@
 'use strict';
-myAppModule.controller('operations_map_controller', function ($scope, mappingService, userAccountsService, $timeout) {
+myAppModule.controller('operations_map_controller', function ($scope, mappingService, $timeout) {
     $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
     $scope.currentDate = new Date();
     $scope.init_enforcer_map = () => {
@@ -23,6 +23,9 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     };
 
+    $scope.refreshOperations = () => {
+        mappingService.getOperations().then(operations => { $scope.operations = operations; $scope.$apply(); })
+    }
     $scope.searchOperations = (operationName) => {
         $scope.isLoading = true;
         mappingService.searchOperation(operationName).
@@ -720,9 +723,17 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             $scope.currentUser = user;
         }
 
-        $scope.currentTrackRecord = {};
+        // $scope.currentTrackRecord = {};
         $scope.setCurrentTrackRecord = (record) => {
             $scope.currentTrackRecord = record;
+            $scope.time = $scope.format(new Date(record.time), 'MM/DD/YYYY');
+            $scope.start_time = $scope.format(new Date(record.start_time), 'MM/DD/YYYY');
+            $scope.end_time = $scope.format(new Date(record.end_time), 'MM/DD/YYYY')
+            $scope.distance_in_km = record.distance ? record.distance / 1000 :  'unknown';
+        }
+
+        $scope.format = (date, formatString) => {
+            return moment(date).format(formatString);
         }
         $scope.loadUsers = async () => {
             $scope.users = await userAccountsService.getUsers();

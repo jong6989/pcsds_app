@@ -1,4 +1,4 @@
-<div ng-controller="opsMap_controller" ng-init="set_page_title('Map');" style="position: relative">
+<div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap()" style="position: relative">
     <div ng-controller="operations_map_controller" ng-init="loadOperations()">
         <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
         <md-sidenav class="md-sidenav-left" md-component-id="closeEventsDisabled" md-whiteframe="4"
@@ -11,7 +11,7 @@
                         <a href="" ng-click='showPrerenderedDialog($event, "formSearchOperations")'>
                             <i class="fa fa-search m-r-5"></i>
                         </a>
-                        <a href="" ng-click='loadOperations()'>                        
+                        <a href="" ng-click='refreshOperations()'>                        
                             <i class="fa fa-refresh m-r-5"></i>
                         </a>
                     </div>
