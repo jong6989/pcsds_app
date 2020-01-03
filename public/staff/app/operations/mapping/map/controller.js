@@ -45,9 +45,9 @@ myAppModule.controller('opsMap_controller',
             });
         };
 
-        $scope.getMapInstance = (onLoadCallback) =>{
+        $scope.getMapInstance = (onLoadCallback) => {
             mapboxgl.accessToken = "pk.eyJ1Ijoiam9uZzY5ODkiLCJhIjoiY2p5NjBkdnA5MDNneDNmcGt0eHVva2ZvZyJ9.jZwx_NUnKowJ4faIafJTew";
-             let map = new mapboxgl.Map({
+            let map = new mapboxgl.Map({
                 container: 'opsMap',
                 style: 'mapbox://styles/jong6989/ck2u5e37k1phh1cs0nhhctx9c',
                 center: [118.74432172, 9.81847614],
@@ -60,7 +60,7 @@ myAppModule.controller('opsMap_controller',
                 }
             });
 
-            if(onLoadCallback){
+            if (onLoadCallback) {
                 map.on('load', onLoadCallback);
             }
 
@@ -70,7 +70,7 @@ myAppModule.controller('opsMap_controller',
         $scope.initMapBoxMap = () => {
             //timer for letting angularjs load first before the map
             setTimeout(() => {
-               $scope.map = $scope.getMapInstance();
+                $scope.map = $scope.getMapInstance();
             }, 200);
         };
 
@@ -114,7 +114,7 @@ myAppModule.controller('opsMap_controller',
                                 },
                                 'properties': {
                                     'title': title,
-                                    'icon': symbol, 
+                                    'icon': symbol,
                                     'description': description
                                 }
                             }
@@ -133,11 +133,26 @@ myAppModule.controller('opsMap_controller',
             return layer;
         }
 
+        $scope.addIcon = (coordinate, iconName, iconPath, iconDescription) => {
+            $scope.map.loadImage(iconPath, (error, image) => {
+                var dateNow = new Date().getTime().toString();
+                var iconName_ = `${iconName}-${dateNow}`;
+                $scope.map.addImage( iconName_, image);
+                var layer = $scope.getPointLayer(
+                    coordinate,
+                    iconName,
+                    '',
+                    iconDescription);
+                layer.layout['icon-image'] = iconName_;
+                layer['icon-size'] = 1;
+                $scope.addLayer(layer);
+            });
+        }
         $scope.addMarker = (coordinate, title, symbol, description) => {
             // var marker = new mapboxgl.Marker({});
             // marker.setLngLat(coordinate).addTo($scope.map);
 
-            var layer = $scope.getLayer(coordinate, title, symbol, description);
+            var layer = $scope.getPointLayer(coordinate, title, symbol, description);
             $scope.addLayer(layer);
             return layer;
         }
@@ -215,8 +230,8 @@ myAppModule.controller('opsMap_controller',
 
                 }
             })
-            $scope.addMarker(lineCoordinates[0], 'START', 'monument');
-            $scope.addMarker(lineCoordinates[lineCoordinates.length - 1], 'END' ,'monument');
+            $scope.addIcon(lineCoordinates[0], 'START', '/images/icons/jogging.png', '')
+            $scope.addIcon(lineCoordinates[lineCoordinates.length - 1], 'END', '/images/icons/target.png', '')
         };
 
         $scope.toggleSidenav = buildToggler('closeEventsDisabled');

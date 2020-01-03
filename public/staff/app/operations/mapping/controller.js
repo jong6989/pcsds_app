@@ -23,6 +23,18 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     };
 
+    $scope.searchOperations = (operationName) => {
+        $scope.isLoading = true;
+        mappingService.searchOperation(operationName).
+        then(operations => {
+            $scope.operations = operations;
+            $scope.$apply();
+        })
+    }
+
+    $scope.loadPage = (url) => {
+        window.location.href = url;
+    }
     $scope.setCurrentUser = (user) => {
         $scope.currentUser = user;
     }
@@ -137,10 +149,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.loadOperation = async(operationID) => {
         removeLayers();
         await loadTexts(operationID);
+        await loadAreas(operationID);
         // await loadImages(operationID);
         await loadFlags(operationID);
         await loadRoutes(operationID)
-        await loadAreas(operationID);
     }
 
     $scope.setCurrentOperation = (operation) => {
@@ -252,6 +264,11 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
                         resolve(true);
                     });
+
+                    if(routes.length){
+                        
+                    }
+                    
                 })
         })
     }
@@ -883,8 +900,8 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         this.getOperations = () => {
             return new Promise((resolve, reject) => {
                 db.collection('ecan_app_operation_plans').
-                    orderBy('name').
-                    limit(20).
+                    orderBy('time', 'desc').
+                    limit(100).
                     onSnapshot(snapshot => {
                         var operations = snapshot.docs.map(document => {
                             var operation = document.data();
@@ -921,6 +938,26 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                         resolve(url)
                     })
             });
+        }
+
+        this.searchOperation = (operationName) => {
+            return new Promise((resolve, reject) => {
+                db.collection('ecan_app_operation_plans').
+                orderBy('name').
+                onSnapshot(snapshot => {
+                    var documents = snapshot.docs.filter(document => {
+                        var data = document.data();
+                        return data.name.includes(operationName);
+                    })
+
+                    var operations = documents.map(document => {
+                        var operation = document.data();
+                        operation.id = document.id;
+                        return operation;
+                    })
+                    resolve(operations);
+                })
+            })
         }
     }).
     service('userAccountsService', function () {
