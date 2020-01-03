@@ -1,0 +1,129 @@
+<div ng-controller="opsMap_controller" ng-init="set_page_title('Map');initMapBoxMap()" style="position: relative">
+    <div ng-controller="track_recording_controller" ng-init="loadUsers()">
+        <md-menu-bar>
+            <md-menu>
+                <button ng-click="$mdMenu.open()" ng-disabled="isLoading">
+                    Recordings: {{currentUser.name}}
+                </button>
+                <md-menu-content>
+                    <!-- <md-menu-item ng-repeat="x in recordingList">
+                        <md-button ng-click="showLine(x.id)">
+                            {{x.name}} - {{x.time}}
+                        </md-button> -->
+                    <md-menu-item ng-repeat="user in users track by $index" ng-if="user.name != undefined">
+                        <md-button ng-click="setCurrentUser(user);" style="text-align: left;">
+                            {{user.name}}
+                        </md-button>
+                    </md-menu-item>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+
+        </md-menu-bar>
+
+        <div>
+            <form name='formSearch'>
+                <label>From:</label>
+                <md-datepicker ng-disabled="isLoading" ng-init='from=dateNow' ng-model="from"
+                    ng-change="date.From=to_date(from);" required>
+                </md-datepicker>
+                <label>To:</label>
+                <md-datepicker ng-disabled='isLoading' ng-init='to=dateNow' ng-model='to'
+                    ng-change='date.To=to_date(to)' required>
+                </md-datepicker>
+                <md-button type="submit" ng-disabled='isLoading || formSearch.$invalid'
+                    ng-click='loadRecordingsByUserAndDate(currentUser.uid, from, to)'>Go
+                </md-button>
+            </form>
+        </div>
+        <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
+
+        <md-sidenav class="md-sidenav-left" md-component-id="closeEventsDisabled" md-whiteframe="4"
+            md-disable-close-events>
+            <md-toolbar layout="row" class="md-hue-3">
+                <div class="md-toolbar-tools">
+                    <span>Search Results</span>
+                </div>
+            </md-toolbar>
+            <md-content layout-margin="">
+                <md-list flex>
+                    <md-list-item class="md-3-line" ng-repeat='record in recordings'
+                        ng-click="loadRecordToMap(record);">
+                        <div class="md-list-item-text" layout="column">
+                            <div layout>
+                                <div style='width: 75%;'>
+                                    <div>
+                                        <strong>{{record.name}}</strong>
+                                    </div>
+                                    <div>{{record.description}}</div>
+                                </div>
+                                <md-button class="md-fab md-mini" ng-click="setCurrentTrackRecord(record);
+                                showPrerenderedDialog($event, 'windowTrackRecordDetails')">
+                                    <md-tooltip md-direction="left">View Details</md-tooltip>
+                                    <i class="fa fa-eye"></i>
+                                </md-button>
+                            </div>
+
+
+                        </div>
+
+                    </md-list-item>
+                </md-list>
+            </md-content>
+        </md-sidenav>
+        <div id='searchResultsShower' style='z-index: 59; position: absolute;height: 542px; bottom:15px'>
+            &nbsp;
+        </div>
+    </div>
+
+    <div style="visibility: hidden;">
+        <div id='windowTrackRecordDetails' class="md-dialog-container">
+            <md-dialog layout="column" layout-align="center center">
+                <md-toolbar class="bg-teal">
+                    <div class="md-toolbar-tools">
+                        <h2>Track Record</h2>
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-click="close_dialog()">
+                            <i class="fa fa-times col-white"></i>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-dialog-content>
+                    <div>
+                        <md-input-container class="md-block">
+                            <label>Title</label>
+                            <input ng-model='currentTrackRecord.name' readonly>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Operation No.</label>
+                            <input ng-model='currentTrackRecord.operation_id' readonly>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Description</label>
+                            <textarea ng-model='currentTrackRecord.description' readonly></textarea>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Date Created</label>
+                            <md-datepicker ng-init='time=to_date(currentTrackRecord.time)' ng-model='time' readonly>
+
+                            </md-datepicker>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Start Time</label>
+                            <input ng-model='start_time' readonly>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>End Time</label>
+                            <input ng-model='end_time' readonly>
+                        </md-input-container>
+                        <md-button class="md-primary md-raised" ng-click="close_dialog();">
+                            OK
+                        </md-button>
+                    </div>
+                </md-dialog-content>
+            </md-dialog>
+        </div>
+    </div>
+
+</div>
+</div>

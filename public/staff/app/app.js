@@ -3,7 +3,7 @@ var myAppModule = {};
 myAppModule = angular.module('brain_app', [
   'ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute',
   'ngFileUpload','ngTable', 'camera', 'ngImgCrop', 'thatisuday.ng-image-gallery',
-'angular-uuid']);
+'angular-uuid', 'infinite-scroll']);
 
 myAppModule
 .config(function($routeProvider, $locationProvider) {
@@ -82,6 +82,10 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
 
   $scope.to_date = function(d){
     return $filter('date')(d, "yyyy-MM-dd");
+  };
+
+  $scope.millisecondsToDate = (ms) => { 
+    return new Date(ms)
   };
 
   $scope.ngTable = function(d,c){
