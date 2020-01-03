@@ -65,12 +65,12 @@ DB/
 uploads/
 
 package-lock.json
-dist/
+# dist/
 downloads/
 functions/node_modules/
 orig.git/
 # plugins/
-build/
+# build/
 # css/
 DB/
 test/
