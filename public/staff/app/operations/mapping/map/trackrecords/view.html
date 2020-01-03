@@ -47,7 +47,7 @@
             </md-toolbar>
             <md-content layout-margin="">
                 <md-list flex>
-                    <md-list-item class="md-3-line" ng-repeat='record in recordings'
+                    <md-list-item class="md-3-line" ng-repeat='record in recordings track by $index'
                         ng-click="loadRecordToMap(record);">
                         <div class="md-list-item-text" layout="column">
                             <div layout>
@@ -63,10 +63,7 @@
                                     <i class="fa fa-eye"></i>
                                 </md-button>
                             </div>
-
-
                         </div>
-
                     </md-list-item>
                 </md-list>
             </md-content>
@@ -74,58 +71,56 @@
         <div id='searchResultsShower' style='z-index: 59; position: absolute;height: 542px; bottom:15px'>
             &nbsp;
         </div>
-    </div>
-
-    <div style="visibility: hidden;">
-        <div id='windowTrackRecordDetails' class="md-dialog-container">
-            <md-dialog layout="column" layout-align="center center">
-                <md-toolbar class="bg-teal">
-                    <div class="md-toolbar-tools">
-                        <h2>Track Record</h2>
-                        <span flex></span>
-                        <md-button class="md-icon-button" ng-click="close_dialog()">
-                            <i class="fa fa-times col-white"></i>
-                        </md-button>
-                    </div>
-                </md-toolbar>
-                <md-dialog-content>
-                    <div>
-                        <md-input-container class="md-block">
-                            <label>Title</label>
-                            <input ng-model='currentTrackRecord.name' readonly>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Operation No.</label>
-                            <input ng-model='currentTrackRecord.operation_id' readonly>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Description</label>
-                            <textarea ng-model='currentTrackRecord.description' readonly></textarea>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Date Created</label>
-                            <input ng-model='time' readonly>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Distance Traveled</label>
-                            <input ng-model='distance_in_km' readonly>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Start Time</label>
-                            <input ng-model='start_time' readonly>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>End Time</label>
-                            <input ng-model='end_time' readonly>
-                        </md-input-container>
-                        <md-button class="md-primary md-raised" ng-click="close_dialog();">
-                            OK
-                        </md-button>
-                    </div>
-                </md-dialog-content>
-            </md-dialog>
+        <div style="visibility: hidden;">
+            <div id='windowTrackRecordDetails' class="md-dialog-container">
+                <md-dialog layout="column" layout-align="center center">
+                    <md-toolbar class="bg-teal">
+                        <div class="md-toolbar-tools">
+                            <h2>Track Record</h2>
+                            <span flex></span>
+                            <md-button class="md-icon-button" ng-click="close_dialog()">
+                                <i class="fa fa-times col-white"></i>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
+                    <md-dialog-content>
+                        {{currentTrackRecord.name}}
+                        <div>
+                            <md-input-container class="md-block">
+                                <label>Title</label>
+                                <input ng-model='currentTrackRecord.name' readonly>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Operation No.</label>
+                                <input ng-model='currentTrackRecord.operation_id' readonly>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Description</label>
+                                <textarea ng-model='currentTrackRecord.description' readonly></textarea>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Date Created</label>
+                                <input ng-model='time' readonly>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Distance Traveled (in km)</label>
+                                <input ng-model='distance_in_km' readonly>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Start Time</label>
+                                <input ng-model='start_time' readonly>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>End Time</label>
+                                <input ng-model='end_time' readonly>
+                            </md-input-container>
+                            <md-button class="md-primary md-raised" ng-click="close_dialog();">
+                                OK
+                            </md-button>
+                        </div>
+                    </md-dialog-content>
+                </md-dialog>
+            </div>
         </div>
     </div>
-
-</div>
 </div>
