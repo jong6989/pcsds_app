@@ -188,14 +188,14 @@ localData.set('STAFF_ACCOUNT',`
                 "title":"Mapping",
                 "menu": [
                     {
-                        "title": "Enforcer",
-                        "path": "/operations/mapping/enforcer",
-                        "icon": "street-view"
+                        "title": "Map Plan",
+                        "path": "/operations/mapping/map/operations",
+                        "icon": "map"
                     },
                     {
-                        "title": "Map",
-                        "path": "/operations/mapping/map",
-                        "icon": "map-marker"
+                        "title": "Track Recordings",
+                        "path": "/operations/mapping/map/trackrecords",
+                        "icon": "street-view"
                     }
                 ]
             },
