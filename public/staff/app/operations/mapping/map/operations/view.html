@@ -11,7 +11,7 @@
                         <a href="" ng-click='showPrerenderedDialog($event, "formSearchOperations")'>
                             <i class="fa fa-search m-r-5"></i>
                         </a>
-                        <a href="" ng-click='refreshOperations()'>                        
+                        <a href="" ng-click='refreshOperations()'>
                             <i class="fa fa-refresh m-r-5"></i>
                         </a>
                     </div>
@@ -24,7 +24,7 @@
                     </div>
                 </md-virtual-repeat-container> -->
                 <md-list>
-                    <md-list-item class="md-3-line" ng-repeat='operation in operations track by $index' 
+                    <md-list-item class="md-3-line" ng-repeat='operation in operations track by $index'
                         ng-click="loadOperation(operation.id)">
                         <div class="md-list-item-text" layout="column">
                             <div layout>
@@ -49,6 +49,16 @@
             &nbsp;
         </div>
 
+        <div ng-init='isInCRUDMode=true'>
+            <md-button ng-click="isInCRUDMode=true;removeLayers()" ng-show='!isInCRUDMode'>Add Operation</md-button>
+            <div ng-show='isInCRUDMode'>
+                <md-button ng-click='drawRoute()'>Add Route</md-button>
+                <md-button ng-click='drawArea()'>Add Area</md-button>
+                <md-button ng-click='drawImage()'>Add Image</md-button>
+                <md-button ng-click='drawFlag()'>Add Flag</md-button>
+                <md-button ng-click='drawText()'>Add Text</md-button>
+            </div>
+        </div>
         <div style="visibility: hidden;">
             <div id='windowOperationDetails' class="md-dialog-container">
                 <md-dialog layout="column" layout-align="center center">
@@ -85,7 +95,7 @@
                                 OK
                             </md-button>
                         </div>
-                        
+
                     </md-dialog-content>
                 </md-dialog>
             </div>
@@ -110,17 +120,57 @@
                                 <label>Search:</label>
                                 <input ng-model='operationName' placeholder="Enter the name of operation" required>
                             </md-input-container>
-                            <md-button class="md-primary md-raised" 
-                                ng-click="searchOperations(operationName)"
+                            <md-button class="md-primary md-raised" ng-click="searchOperations(operationName)"
                                 ng-disabled='formSearchOperation.$invalid'>
                                 OK
                             </md-button>
                         </form>
                     </md-dialog-content>
                 </md-dialog>
-                
+
             </div>
-            
+
         </div>
+
+        <div style="visibility: hidden;">
+            <div id='windowAddText' class="md-dialog-container">
+                <md-dialog layout="column" layout-align="center center">
+                    <md-toolbar class="bg-teal">
+                        <div class="md-toolbar-tools">
+                            <h2>{{windowAnnotationTitle}}</h2>
+                            <span flex></span>
+                            <md-button class="md-icon-button" ng-click="close_dialog()">
+                                <i class="fa fa-times col-white"></i>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
+                    <md-dialog-content>
+                        <div></div>
+                        <form name='formAnnotation'>
+                            <br>
+                            <md-input-container>
+                                <label>Title:</label>
+                                <input ng-model='annotation.title' placeholder="" required>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Description:</label>
+                                <input ng-model='annotation.description' placeholder="">
+                            </md-input-container>
+                            <md-button class="md-primary md-raised" ng-click="saveAnnotation(annotation)"
+                                ng-disabled='formAnnotation.$invalid'>
+                                OK
+                            </md-button>
+                        </form>
+                    </md-dialog-content>
+                </md-dialog>
+
+            </div>
+
+        </div>
+
+        <button ngf-capture="'camera'" ngf-select="addToImageArea($file)"
+            ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'"
+            accept="image/*" ng-show=false id='imageUploader'>Tara na
+        </button>
     </div>
 </div>

@@ -1,5 +1,5 @@
 'use strict';
-myAppModule.controller('operations_map_controller', function ($scope, mappingService, $timeout) {
+myAppModule.controller('operations_map_controller', function ($scope, mappingService, $timeout, Upload) {
     $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
     $scope.currentDate = new Date();
     $scope.init_enforcer_map = () => {
@@ -29,10 +29,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.searchOperations = (operationName) => {
         $scope.isLoading = true;
         mappingService.searchOperation(operationName).
-        then(operations => {
-            $scope.operations = operations;
-            $scope.$apply();
-        })
+            then(operations => {
+                $scope.operations = operations;
+                $scope.$apply();
+            })
     }
 
     $scope.loadPage = (url) => {
@@ -149,7 +149,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.users = [];
 
 
-    $scope.loadOperation = async(operationID) => {
+    $scope.loadOperation = async (operationID) => {
         removeLayers();
         await loadTexts(operationID);
         await loadAreas(operationID);
@@ -268,10 +268,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                         resolve(true);
                     });
 
-                    if(routes.length){
-                        
+                    if (routes.length) {
+
                     }
-                    
+
                 })
         })
     }
@@ -501,6 +501,83 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         source.setData(geojson);
     }
 
+    function onMouseClickWhileDrawingImage(e) {
+        var features = $scope.map.queryRenderedFeatures(e.point, {
+            layers: [`image-${currentImageLayerID}`]
+        });
+
+        var geojson = $scope.map.getSource(currentImageLayerID)._data;
+
+        if (features.length) {
+            // var id = features[0].properties.id;
+            // geojson.features = geojson.features[0].coordinates.filter(function (point) {
+            //     return point.properties.id !== id;
+            // });
+        } else {
+            geojson.features[0].geometry.coordinates[0].push([e.lngLat.lng, e.lngLat.lat]);
+        }
+
+        var source = $scope.map.getSource(currentImageLayerID);
+        source.setData(geojson);
+        if (geojson.features[0].geometry.coordinates[0].length == 4) {
+            uploadImage(geojson.features[0].geometry.coordinates);
+        }
+    }
+
+    function onMouseClickWhileDrawingFlag(e) {
+        $scope.showPrerenderedDialog(e, 'windowAddText');
+        $scope.saveAnnotation = (annotation) => {
+            var layer = $scope.getPointLayer(
+                [e.lngLat.lng, e.lngLat.lat],
+                annotation.title,
+                annotation.symbol,
+                annotation.description);
+            $scope.addLayer(layer);
+            $scope.addIcon([e.lngLat.lng, e.lngLat.lat],
+                annotation.title,
+                '/images/icons/flag.png',
+                annotation.description
+            );
+            $scope.close_dialog();
+        }
+    }
+
+    function onMouseClickWhileDrawingText(e) {
+        $scope.showPrerenderedDialog(e, 'windowAddText');
+        $scope.saveAnnotation = (annotation) => {
+            var layer = $scope.getPointLayer(
+                [e.lngLat.lng, e.lngLat.lat],
+                annotation.title,
+                annotation.symbol,
+                annotation.description);
+            $scope.addLayer(layer);
+            $scope.close_dialog();
+        }
+    }
+
+    function uploadImage(coordinates) {
+        $scope.addToImageArea = (file) => {
+            Upload.
+                base64DataUrl(file).
+                then(url => {
+                    $scope.map.loadImage(url, function (error, image) {
+                        var dateNow = new Date().getTime().toString();
+                        $scope.map.addImage(dateNow, image);
+                        $scope.addLayer({
+                            'id': dateNow,
+                            'type': 'fill',
+                            'source': currentImageLayerID,
+                            'paint': {
+                                'fill-pattern': dateNow
+                            }
+                        })
+                    })
+                })
+        }
+        document.getElementById('imageUploader').click();
+    }
+
+
     var currentPointAndLineLayerID = 0;
     function initRouteDrawing() {
         currentPointAndLineLayerID = new Date().getTime().toString();
@@ -542,6 +619,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             },
             filter: ['in', '$type', 'LineString']
         })
+        removeClickListeners();
         $scope.map.on('click', onMouseClickWhileDrawingRoute);
 
         // $scope.map.on('mousemove', function (e) {
@@ -560,20 +638,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     var currentPolygonLayerID = 0;
     function initAreaDrawing() {
         currentPolygonLayerID = new Date().getTime().toString();
-        var geojson = {
-            'type': 'FeatureCollection',
-            'features': [
-                {
-                    'type': 'Feature',
-                    'geometry': {
-                        'type': 'Polygon',
-                        'coordinates': [
-                            []
-                        ]
-                    }
-                }
-            ]
-        }
+        var geojson = getFeatureCollection('Polygon')
 
         $scope.map.addSource(currentPolygonLayerID, {
             'type': 'geojson',
@@ -590,23 +655,79 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             },
             'filter': ['==', '$type', 'Polygon']
         })
-        $scope.map.off('click', onMouseClickWhileDrawingRoute);
+        // $scope.map.off('click', onMouseClickWhileDrawingRoute);
+        removeClickListeners();
         $scope.map.on('click', onMouseClickWhileDrawingArea);
         $scope.drawArea = drawArea;
         setMouseCursorStyle('crosshair');
-
-        // var draw = new MapboxDraw({
-        //     displayControlsDefault: false,
-        //     controls: {
-        //         polygon: true,
-        //         trash: true
-        //     }
-        // });
-
-        // $scope.map.addControl(draw);
-        // $scope.drawArea = () => { }
     }
 
+    var currentImageLayerID = 0;
+    function initImageDrawing() {
+        currentImageLayerID = new Date().getTime().toString();
+        var geojson = getFeatureCollection('Polygon')
+        $scope.map.addSource(currentImageLayerID, {
+            'type': 'geojson',
+            'data': geojson
+        });
+
+        addLayer({
+            id: `image-${currentImageLayerID}`,
+            type: 'fill',
+            source: currentImageLayerID,
+            paint: {
+                'fill-color': '#088',
+                'fill-opacity': 0.8
+            },
+            'filter': ['==', '$type', 'Polygon']
+        });
+        removeClickListeners();
+        $scope.map.on('click', onMouseClickWhileDrawingImage);
+        $scope.drawImage = drawImage;
+        setMouseCursorStyle('crosshair');
+    }
+
+    function initTextDrawing() {
+        setMouseCursorStyle('crosshair');
+        removeClickListeners();
+        $scope.map.on('click', onMouseClickWhileDrawingText);
+        $scope.windowAnnotationTitle = 'Annotation';
+        $scope.drawText = () => {
+            setMouseCursorStyle('default');
+            removeClickListeners();
+            $scope.drawText = initTextDrawing;
+        }
+    }
+
+    function initFlagDrawing() {
+        setMouseCursorStyle('crosshair');
+        removeClickListeners();
+        $scope.windowAnnotationTitle = 'Flag';
+
+        $scope.map.on('click', onMouseClickWhileDrawingFlag);
+        $scope.drawFlag = () => {
+            setMouseCursorStyle('default');
+            removeClickListeners();
+            $scope.drawFlag = initFlagDrawing;
+        }
+    }
+
+    function getFeatureCollection(geometryType) {
+        return {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': geometryType,
+                        'coordinates': [
+                            []
+                        ]
+                    }
+                }
+            ]
+        }
+    }
     function setMouseCursorStyle(cursor) {
         $scope.map.getCanvas().style.cursor = cursor;
     }
@@ -637,9 +758,33 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         }
     }
 
+    function drawImage() {
+        setMouseCursorStyle('default');
+        removeClickListeners();
+        $scope.drawImage = () => {
+            removeClickListeners();
+            $scope.map.on('click', onMouseClickWhileDrawingImage);
+            setMouseCursorStyle('pointer');
+            currentLayerID = currentPolygonLayerID;
+        }
+
+    }
+    function removeClickListeners() {
+        $scope.map.off('click', onMouseClickWhileDrawingRoute);
+        $scope.map.off('click', onMouseClickWhileDrawingArea);
+        $scope.map.off('click', onMouseClickWhileDrawingImage);
+        $scope.map.off('click', onMouseClickWhileDrawingText);
+        $scope.map.off('click', onMouseClickWhileDrawingFlag);
+    }
+
     $scope.drawRoute = initRouteDrawing;
     $scope.drawArea = initAreaDrawing;
+    $scope.drawImage = initImageDrawing;
+    $scope.drawText = initTextDrawing;
+    $scope.drawFlag = initFlagDrawing;
+    $scope.addNewOperation = () => {
 
+    }
 }).
     controller('track_recording_controller', function ($scope, $mdSidenav, track_recording_service, userAccountsService) {
         $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
@@ -729,7 +874,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             $scope.time = $scope.format(new Date(record.time), 'MM/DD/YYYY');
             $scope.start_time = $scope.format(new Date(record.start_time), 'MM/DD/YYYY hh:mm:ss a');
             $scope.end_time = $scope.format(new Date(record.end_time), 'MM/DD/YYYY  hh:mm:ss a')
-            $scope.distance_in_km = record.distance ? (record.distance / 1000).toFixed(2) :  'unknown';
+            $scope.distance_in_km = record.distance ? (record.distance / 1000).toFixed(2) : 'unknown';
         }
 
         $scope.format = (date, formatString) => {
@@ -954,20 +1099,20 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         this.searchOperation = (operationName) => {
             return new Promise((resolve, reject) => {
                 db.collection('ecan_app_operation_plans').
-                orderBy('name').
-                onSnapshot(snapshot => {
-                    var documents = snapshot.docs.filter(document => {
-                        var data = document.data();
-                        return data.name.includes(operationName);
-                    })
+                    orderBy('name').
+                    onSnapshot(snapshot => {
+                        var documents = snapshot.docs.filter(document => {
+                            var data = document.data();
+                            return data.name.includes(operationName);
+                        })
 
-                    var operations = documents.map(document => {
-                        var operation = document.data();
-                        operation.id = document.id;
-                        return operation;
+                        var operations = documents.map(document => {
+                            var operation = document.data();
+                            operation.id = document.id;
+                            return operation;
+                        })
+                        resolve(operations);
                     })
-                    resolve(operations);
-                })
             })
         }
     }).
