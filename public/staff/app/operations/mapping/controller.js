@@ -1,5 +1,5 @@
 'use strict';
-myAppModule.controller('operations_map_controller', function ($scope, mappingService, userAccountsService) {
+myAppModule.controller('operations_map_controller', function ($scope, mappingService, $timeout) {
     $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
     $scope.currentDate = new Date();
     $scope.init_enforcer_map = () => {
@@ -23,6 +23,21 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     };
 
+    $scope.refreshOperations = () => {
+        mappingService.getOperations().then(operations => { $scope.operations = operations; $scope.$apply(); })
+    }
+    $scope.searchOperations = (operationName) => {
+        $scope.isLoading = true;
+        mappingService.searchOperation(operationName).
+        then(operations => {
+            $scope.operations = operations;
+            $scope.$apply();
+        })
+    }
+
+    $scope.loadPage = (url) => {
+        window.location.href = url;
+    }
     $scope.setCurrentUser = (user) => {
         $scope.currentUser = user;
     }
@@ -134,27 +149,97 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.users = [];
 
 
-    $scope.loadOperation = (operationID) => {
+    $scope.loadOperation = async(operationID) => {
         removeLayers();
-        loadRoutes(operationID).
-            then(result => {
-                loadAreas(operationID);
-            })
+        await loadTexts(operationID);
+        await loadAreas(operationID);
+        // await loadImages(operationID);
+        await loadFlags(operationID);
+        await loadRoutes(operationID)
     }
 
     $scope.setCurrentOperation = (operation) => {
         $scope.currentOperation = operation;
+        $scope.time = moment($scope.millisecondsToDate(operation.time)).format('MM/DD/YYYY');
     }
+
+    $scope.infiniteItems = {
+        numLoaded_: 0,
+        toLoad_: 0,
+
+        // Required.
+        getItemAtIndex: function (index) {
+            if (index > this.numLoaded_) {
+                this.fetchMoreItems_(index);
+                return null;
+            }
+
+            return index;
+        },
+
+        // Required.
+        // For infinite scroll behavior, we always return a slightly higher
+        // number than the previously loaded items.
+        getLength: function () {
+            return this.numLoaded_ + 5;
+        },
+
+        fetchMoreItems_: function (index) {
+            // For demo purposes, we simulate loading more items with a timed
+            // promise. In real code, this function would likely contain an
+            // $http request.
+
+            if (this.toLoad_ < index) {
+                this.toLoad_ += 20;
+                $timeout(angular.noop, 300).then(angular.bind(this, function () {
+                    this.numLoaded_ = this.toLoad_;
+                }));
+            }
+        }
+    };
+
+    // $scope.operation = {
+    //     itemsCount: 0,
+    //     itemsToLoadNext: 0,
+    //     getItemAtIndex: function (index) {
+    //         if (index > this.itemsCount) {
+    //             return null;
+    //         }
+    //         return index;
+    //     },
+    //     getLength: function () {
+    //         return this.itemsCount + 5;
+    //     },
+    //     getNextItems: function () {
+
+    //     }
+    // }
 
     $scope.loadOperations = () => {
         mappingService.getOperations().
             then(operations => {
                 $scope.operations = operations;
+                $scope.toggleSidenav();
                 $scope.$apply();
             })
     }
 
+    $scope.getNextItems = () => {
+        if ($scope.operations.length) {
+            var lastItemIndex = $scope.operations.length - 1;
+            var lastItem = $scope.operations[lastItemIndex];
+            mappingService.getNextItems(lastItem.name).
+                then(operations => {
+                    if (operations.length) {
+                        operations.forEach(operation => {
+                            $scope.operations.push(operation);
+                        })
+                    }
 
+                    $scope.$apply();
+                });
+        }
+    }
     $scope.setSelectedMenuItem = (menuItem) => {
         var templates = {
             'Track Records': 'trackrecords.html',
@@ -164,7 +249,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.selectedMenuItem = menuItem;
     }
 
-    function loadRoutes(operationID) {
+    async function loadRoutes(operationID) {
         return new Promise((resolve, reject) => {
             mappingService.getRoutes(operationID).
                 then(routes => {
@@ -182,10 +267,15 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
                         resolve(true);
                     });
+
+                    if(routes.length){
+                        
+                    }
+                    
                 })
         })
     }
-    function loadAreas(operationID) {
+    async function loadAreas(operationID) {
         return new Promise((resolve, reject) => {
             mappingService.getAreas(operationID).
                 then(areas => {
@@ -222,9 +312,114 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                                 .addTo($scope.map);
                         })
                     });
-                    resolve(true);
+                    resolve(areas);
                 });
 
+        })
+    }
+
+    async function loadFlags(operationID) {
+        return new Promise((resolve, reject) => {
+            mappingService.getFlags(operationID).
+                then(flags => {
+                    flags.forEach(flag => {
+                        $scope.map.loadImage('/images/icons/flag.png', (error, image) => {
+                            var name = `${flag.id}`;
+                            $scope.map.addImage(name, image);
+                            var layer = $scope.getPointLayer(
+                                [flag.coordinate.longitude, flag.coordinate.latitude],
+                                flag.name,
+                                '',
+                                flag.description);
+                            layer.layout['icon-image'] = name;
+                            layer['icon-size'] = 1;
+                            $scope.addLayer(layer);
+                        });
+                    })
+                    resolve(flags);
+                })
+        });
+    }
+
+    async function loadImages(operationID) {
+        return new Promise((resolve, reject) => {
+            mappingService.getImages(operationID).
+                then(images => {
+                    images.forEach(image => {
+                        var sourceID = new Date().getTime().toString();
+                        $scope.map.addSource(`${new Date().getTime()}`, {
+                            'type': 'geojson',
+                            'data': {
+                                'type': 'Feature',
+                                'properties': {},
+                                'geometry': {
+                                    'type': 'Polygon',
+                                    'coordinates': [
+                                        [
+                                            [image.points[0].longitude, image.points[0].latitude],
+                                            [image.points[1].longitude, image.points[1].latitude],
+                                            [image.points[2].longitude, image.points[2].latitude],
+                                            [image.points[3].longitude, image.points[3].latitude],
+                                        ]
+                                    ]
+                                }
+                            }
+                        });
+                        var splitPath = image.path.split('/');
+                        var imageName = splitPath[splitPath.length - 1];
+                        mappingService.getImage(operationID, imageName).
+                            then(url => {
+                                $scope.map.loadImage(url, (error, image_) => {
+                                    if (error) {
+                                        Swal.fire({
+                                            type: 'error',
+                                            title: 'Oops...',
+                                            text: 'Operation failed, please try again.',
+                                            footer: ''
+                                        }).then(() => {
+                                        });
+
+                                        return;
+                                    };
+                                    $scope.map.addImage(`${image.id}`, image_);
+                                    $scope.addLayer({
+                                        'id': `${image.id}`,
+                                        'type': 'fill',
+                                        'source': `${image.id}`,
+                                        'paint': {
+                                            'fill-pattern': `${image.id}`
+                                        }
+                                    })
+                                })
+                            }).catch(error => {
+                                Swal.fire({
+                                    type: 'error',
+                                    title: 'Oops...',
+                                    text: 'Operation failed, please try again.',
+                                    footer: ''
+                                }).then(() => {
+                                });
+                            });
+                    })
+                })
+        })
+    }
+
+    async function loadTexts(operationID) {
+        return new Promise((resolve, reject) => {
+            mappingService.getTexts(operationID).
+                then(texts => {
+                    texts.forEach(text => {
+                        var layer = $scope.getPointLayer(
+                            [text.coordinate.longitude, text.coordinate.latitude],
+                            text.name,
+                            '',
+                            text.description
+                        );
+                        $scope.addLayer(layer);
+                        resolve(text);
+                    })
+                })
         })
     }
     // setTimeout(() => {
@@ -451,7 +646,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.dateNow = new Date();
 
         // setTimeout(() => {
-        //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2',new Date('2019-12-23'), new Date('2019-12-30'))
+        //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2019-12-23'), new Date('2019-12-30'))
         // })
         $scope.loadRecordingsByUserAndDate = async (userID, from, to) => {
             try {
@@ -527,22 +722,23 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.setCurrentUser = (user) => {
             $scope.currentUser = user;
         }
+
+        // $scope.currentTrackRecord = {};
+        $scope.setCurrentTrackRecord = (record) => {
+            $scope.currentTrackRecord = record;
+            $scope.time = $scope.format(new Date(record.time), 'MM/DD/YYYY');
+            $scope.start_time = $scope.format(new Date(record.start_time), 'MM/DD/YYYY hh:mm:ss a');
+            $scope.end_time = $scope.format(new Date(record.end_time), 'MM/DD/YYYY  hh:mm:ss a')
+            $scope.distance_in_km = record.distance ? (record.distance / 1000).toFixed(2) :  'unknown';
+        }
+
+        $scope.format = (date, formatString) => {
+            return moment(date).format(formatString);
+        }
         $scope.loadUsers = async () => {
             $scope.users = await userAccountsService.getUsers();
             $scope.$apply();
         }
-
-        $scope.toggleSidenav = buildToggler('closeEventsDisabled');
-
-        function buildToggler(componentId) {
-            return function () {
-                $mdSidenav(componentId).toggle();
-            };
-        }
-
-        $('#searchResultsShower').on('mouseover', () => {
-            $scope.toggleSidenav();
-        })
     }).
     service('track_recording_service', function () {
         var collection = db.collection("ecan_app_recordings");
@@ -590,7 +786,6 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 })
             })
         }
-
     }).
     service('mappingService', function () {
         var collection = db.collection("ecan_app_recordings");
@@ -678,40 +873,46 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         }
 
         this.getRoutes = (operationID) => {
+            return getDocument(operationID, 'routes');
+        }
+
+        this.getAreas = (operationID) => {
+            return getDocument(operationID, 'areas');
+        };
+
+        this.getFlags = (operationID) => {
+            return getDocument(operationID, 'flags');
+        }
+
+        this.getImages = (operationID) => {
+            return getDocument(operationID, 'images')
+        }
+
+        this.getTexts = (operationID) => {
+            return getDocument(operationID, 'texts');
+        }
+
+        var getDocument = (operationID, documentName) => {
             return new Promise((resolve, reject) => {
                 db.collection('ecan_app_operation_plans').
                     doc(operationID).
-                    collection('routes').
+                    collection(documentName).
                     onSnapshot(snapshot => {
-                        var routes = snapshot.docs.map(document => {
-                            var route = document.data();
-                            route.id = document.id;
-                            return route;
+                        var documents = snapshot.docs.map(document => {
+                            var item = document.data();
+                            item.id = document.id;
+                            return item;
                         })
-                        resolve(routes);
+                        resolve(documents);
                     })
             })
         }
 
-        this.getAreas = (operationID) => {
-            return new Promise((resolve, reject) => {
-                db.collection('ecan_app_operation_plans').
-                    doc(operationID).
-                    collection('areas').
-                    onSnapshot(snapshot => {
-                        var areas = snapshot.docs.map(document => {
-                            var area = document.data();
-                            area.id = document.id;
-                            return area;
-                        })
-                        resolve(areas);
-                    })
-            })
-        };
-
         this.getOperations = () => {
             return new Promise((resolve, reject) => {
                 db.collection('ecan_app_operation_plans').
+                    orderBy('time', 'desc').
+                    limit(100).
                     onSnapshot(snapshot => {
                         var operations = snapshot.docs.map(document => {
                             var operation = document.data();
@@ -719,6 +920,54 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                         })
                         resolve(operations);
                     })
+            })
+        }
+
+        this.getNextItems = (startAt) => {
+            return new Promise((resolve, reject) => {
+                db.collection('ecan_app_operation_plans').
+                    orderBy('name').
+                    limit(10).
+                    startAfter(startAt).
+                    onSnapshot(snapshot => {
+                        var operations = snapshot.docs.map(document => {
+                            var operation = document.data();
+                            return operation;
+                        })
+                        resolve(operations);
+                    })
+            })
+        }
+
+        this.getImage = (operationID, imageName) => {
+            return new Promise((resolve, reject) => {
+                storageRef.child('map_plan_images').
+                    child(operationID).
+                    child(imageName).
+                    getDownloadURL().
+                    then(url => {
+                        resolve(url)
+                    })
+            });
+        }
+
+        this.searchOperation = (operationName) => {
+            return new Promise((resolve, reject) => {
+                db.collection('ecan_app_operation_plans').
+                orderBy('name').
+                onSnapshot(snapshot => {
+                    var documents = snapshot.docs.filter(document => {
+                        var data = document.data();
+                        return data.name.includes(operationName);
+                    })
+
+                    var operations = documents.map(document => {
+                        var operation = document.data();
+                        operation.id = document.id;
+                        return operation;
+                    })
+                    resolve(operations);
+                })
             })
         }
     }).

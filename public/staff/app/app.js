@@ -3,18 +3,22 @@ var myAppModule = {};
 myAppModule = angular.module('brain_app', [
   'ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute',
   'ngFileUpload','ngTable', 'camera', 'ngImgCrop', 'thatisuday.ng-image-gallery',
-'angular-uuid']);
+'angular-uuid', 'infinite-scroll']);
 
 myAppModule
 .config(function($routeProvider, $locationProvider) {
-  $routeProvider.when('/:name*', {
+  $routeProvider.when(':name*', {
             templateUrl: function(urlattr){
                 return 'app/' + urlattr.name + '/view.html';
             }
         })
-  .otherwise({ redirectTo: '/' });
+  .otherwise({ redirectTo: '' });
 
 })
+
+const static_ops_id = "ops_id";
+const static_latitude = "ops_id";
+const static_longitude = "ops_id";
 
 myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, 
   $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, 
@@ -78,6 +82,10 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
 
   $scope.to_date = function(d){
     return $filter('date')(d, "yyyy-MM-dd");
+  };
+
+  $scope.millisecondsToDate = (ms) => { 
+    return new Date(ms)
   };
 
   $scope.ngTable = function(d,c){
@@ -189,9 +197,15 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   };
 
   $scope.logout = function(){
-    firebase.auth().signOut().catch(function(error) {
-          console.log(error)
-    });
+    // firebase.auth().signOut().catch(function(error) {
+    //       console.log(error)
+    // });
+
+    localData.remove('BRAIN_STAFF_ID');
+    localData.remove('STAFF_ACCOUNT');
+    localData.remove('staff_current_view');
+    location.href = "index.html";
+
   };
 
   $scope.set_page_title = function(t){
@@ -308,7 +322,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   };
 
   //switch from dashboard to print view
-  if($location.path() == '/print'){
+  if($location.path() == 'print'){
     $scope.current_view = $localStorage.print_view;
     $timeout( ()=>{
       if($scope.current_view == undefined) location.reload();
@@ -323,18 +337,18 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     if(storedAccount){
       //staff account
       $scope.user = JSON.parse(storedAccount);
-      if($location.path() == '/'){
+
+      if(location.hash == ''){
         if($scope.user.menu[0].path){
           $location.path($scope.user.menu[0].path);
         }else {
           $location.path($scope.user.menu[0].menu[0].path);
         }
-        
       }
     }
   }
   load_dashboard_page();
-  $timeout( load_dashboard_page ,500);
+  // $timeout( load_dashboard_page ,500);
 
   $scope.set_path = (path)=>{
     $location.path(path);

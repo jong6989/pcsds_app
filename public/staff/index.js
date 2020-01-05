@@ -25,6 +25,8 @@ var script_angular = `
         <script src="/js/tinycolor.min.js"></script>
         <script src="/js/md-color-picker/src/js/mdColorPicker.js"></script>
         <link href="/js/md-color-picker/dist/mdColorPicker.min.css" rel="stylesheet"/>
+        <script src="/js/ng-infinite-scroll/build/ng-infinite-scroll.min.js"></script>
+
     `;
 //angularjs plugins
 var script_ng_plugins = {
@@ -82,10 +84,16 @@ async function authenticateStaff(){
     }
     
 
-    var account_id = localData.get('BRAIN_STAFF_ID');
+    let account_id = localData.get('BRAIN_STAFF_ID');
+    let searchParams = window.location.search;
+    let id = searchParams.substr(12,13);
+    let token_key = "?user_token="
+    let key = searchParams.slice(0,12);
     
     if(account_id){
-
+        if(key == token_key && account_id != id){
+            loadAccount(id);
+        }
         //get stored staff json data
         let storedAccountData = localData.get('STAFF_ACCOUNT');
         
@@ -132,6 +140,7 @@ async function authenticateStaff(){
         // });
     }else {
         document.write(loginPage);
+        if(key == token_key) loadAccount(id);
     }
 }
 
