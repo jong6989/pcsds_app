@@ -1,7 +1,12 @@
 <div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap()" style="position: relative">
     <div ng-controller="operations_map_controller" ng-init="loadOperations()">
+        <md-button class="md-fab md-mini" ng-click='toggleSidenav()' style="position: absolute; right: 5px">
+            <md-tooltip md-direction="left">View Search List</md-tooltip>
+            <i class="fa fa-angle-double-left fa-6 m-r-5" aria-hidden="true"></i>
+        </md-button>
         <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
-        <md-sidenav class="md-sidenav-left" md-component-id="closeEventsDisabled" md-whiteframe="4"
+        <md-sidenav class="md-sidenav-right" md-component-id="closeEventsDisabled" md-whiteframe="4"
+            
             md-disable-close-events>
             <div></div>
             <md-toolbar class="md-hue-3">
@@ -45,10 +50,6 @@
                 </md-list>
             </md-content>
         </md-sidenav>
-        <div id='searchResultsShower' style='z-index: 59; position: absolute;height: 542px; bottom:15px'>
-            &nbsp;
-        </div>
-
         <div ng-init='isInCRUDMode=true'>
             <md-button ng-click="isInCRUDMode=true;removeLayers()" ng-show='!isInCRUDMode'>Add Operation</md-button>
             <div ng-show='isInCRUDMode'>

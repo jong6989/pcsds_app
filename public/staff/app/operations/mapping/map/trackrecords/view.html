@@ -1,5 +1,6 @@
 <div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap();" style="position: relative">
     <div ng-controller="track_recording_controller" ng-init="loadUsers()">
+        
         <md-menu-bar>
             <md-menu>
                 <button ng-click="$mdMenu.open()" ng-disabled="isLoading">
@@ -36,9 +37,13 @@
                 </md-button>
             </form>
         </div>
+        <md-button class="md-fab md-mini" ng-click='toggleSidenav()' style="position: absolute; right: 5px">
+            <md-tooltip md-direction="left">View Search List</md-tooltip>
+            <i class="fa fa-angle-double-left fa-6 m-r-5" aria-hidden="true"></i>
+        </md-button>
         <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
-
-        <md-sidenav class="md-sidenav-left" md-component-id="closeEventsDisabled" md-whiteframe="4"
+        
+        <md-sidenav class="md-sidenav-right" md-component-id="closeEventsDisabled" md-whiteframe="4"
             md-disable-close-events>
             <md-toolbar layout="row" class="md-hue-3">
                 <div class="md-toolbar-tools">
@@ -68,9 +73,6 @@
                 </md-list>
             </md-content>
         </md-sidenav>
-        <div id='searchResultsShower' style='z-index: 59; position: absolute;height: 542px; bottom:15px'>
-            &nbsp;
-        </div>
         <div style="visibility: hidden;">
             <div id='windowTrackRecordDetails' class="md-dialog-container">
                 <md-dialog layout="column" layout-align="center center">
