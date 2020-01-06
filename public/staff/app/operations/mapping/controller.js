@@ -153,9 +153,9 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         removeLayers();
         await loadTexts(operationID);
         await loadAreas(operationID);
-        // await loadImages(operationID);
         await loadFlags(operationID);
-        await loadRoutes(operationID)
+        await loadRoutes(operationID);
+        await loadImages(operationID);
     }
 
     $scope.setCurrentOperation = (operation) => {
@@ -257,7 +257,8 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                         var points = route.points.map(point => {
                             return [point.longitude, point.latitude];
                         })
-                        $scope.addLineLayer(route.id, points, route.color, 4);
+                        var lineID = `${route.id}-${new Date().getTime()}`
+                        $scope.addLineLayer(lineID, points, route.color, 4);
                         $scope.map.on('click', 'lines-' + route.id, (e) => {
                             new mapboxgl.Popup()
                                 .setLngLat(points[0])
@@ -267,11 +268,6 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
                         resolve(true);
                     });
-
-                    if (routes.length) {
-
-                    }
-
                 })
         })
     }
@@ -279,39 +275,52 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         return new Promise((resolve, reject) => {
             mappingService.getAreas(operationID).
                 then(areas => {
-                    var source = {
-                        'type': 'geojson',
-                        'data': {
-                            'type': 'Feature',
-                            'geometry': {
-                                'type': 'Polygon',
-                                'coordinates': []
+                    try{
+                        areas.forEach((area, index) => {
+                            var source = {
+                                'type': 'geojson',
+                                'data': {
+                                    'type': 'Feature',
+                                    'geometry': {
+                                        'type': 'Polygon',
+                                        'coordinates': []
+                                    }
+                                }
                             }
-                        }
-                    }
-                    areas.forEach((area, index) => {
-                        source.data.geometry.coordinates.push([]);
-                        area.points.forEach((point) => {
-                            source.data.geometry.coordinates[index].push([point.longitude, point.latitude]);
-                        })
-
-                        addLayer({
-                            id: 'area-' + area.id.toString(),
-                            type: 'fill',
-                            source: source,
-                            paint: {
-                                'fill-color': area.color,
-                                'fill-opacity': 0.8
-                            }
+                            
+                            source.data.geometry.coordinates.push([]);
+                            area.points.forEach((point) => {
+                                source.data.geometry.coordinates[0].push([point.longitude, point.latitude]);
+                            })
+                            var sourceID = `${area.id}-${new Date().getTime()}`;
+                            $scope.map.addSource(sourceID, source);
+                            addLayer({
+                                id: 'area-' + area.id.toString(),
+                                type: 'fill',
+                                source: sourceID,
+                                paint: {
+                                    'fill-color': area.color,
+                                    'fill-opacity': 0.8
+                                }
+                            });
+    
+                            $scope.map.on('click', 'area-' + area.id.toString(), (e) => {
+                                new mapboxgl.Popup()
+                                    .setLngLat([area.points[0].longitude, area.points[0].latitude])
+                                    .setHTML(`<strong>${area.name}</strong><div>${area.description}</div>`)
+                                    .addTo($scope.map);
+                            })
                         });
-
-                        $scope.map.on('click', 'area-' + area.id.toString(), (e) => {
-                            new mapboxgl.Popup()
-                                .setLngLat([area.points[0].longitude, area.points[0].latitude])
-                                .setHTML(`<strong>${area.name}</strong><div>${area.description}</div>`)
-                                .addTo($scope.map);
-                        })
-                    });
+                    }catch(error){
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'Failed to load areas, please try again.',
+                            footer: ''
+                        }).then(() => {
+                        });
+                    }
+                    
                     resolve(areas);
                 });
 
@@ -324,7 +333,8 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 then(flags => {
                     flags.forEach(flag => {
                         $scope.map.loadImage('/images/icons/flag.png', (error, image) => {
-                            var name = `${flag.id}`;
+                            var dateNow = new Date().getTime().toString();
+                            var name = `${flag.id}-${dateNow}`;
                             $scope.map.addImage(name, image);
                             var layer = $scope.getPointLayer(
                                 [flag.coordinate.longitude, flag.coordinate.latitude],
@@ -346,8 +356,8 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             mappingService.getImages(operationID).
                 then(images => {
                     images.forEach(image => {
-                        var sourceID = new Date().getTime().toString();
-                        $scope.map.addSource(`${new Date().getTime()}`, {
+                        var sourceID = `${image.id}-${new Date().getTime()}`;
+                        $scope.map.addSource(`${sourceID}`, {
                             'type': 'geojson',
                             'data': {
                                 'type': 'Feature',
@@ -367,27 +377,28 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                         });
                         var splitPath = image.path.split('/');
                         var imageName = splitPath[splitPath.length - 1];
-                        mappingService.getImage(operationID, imageName).
+                        mappingService.
+                        getImage(operationID, imageName).
                             then(url => {
                                 $scope.map.loadImage(url, (error, image_) => {
                                     if (error) {
                                         Swal.fire({
                                             type: 'error',
                                             title: 'Oops...',
-                                            text: 'Operation failed, please try again.',
+                                            text: 'Failed to load images, please try again.',
                                             footer: ''
                                         }).then(() => {
                                         });
 
                                         return;
                                     };
-                                    $scope.map.addImage(`${image.id}`, image_);
+                                    $scope.map.addImage(`${sourceID}`, image_);
                                     $scope.addLayer({
-                                        'id': `${image.id}`,
+                                        'id': `${sourceID}`,
                                         'type': 'fill',
-                                        'source': `${image.id}`,
+                                        'source': `${sourceID}`,
                                         'paint': {
-                                            'fill-pattern': `${image.id}`
+                                            'fill-pattern': `${sourceID}`
                                         }
                                     })
                                 })
@@ -401,6 +412,15 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                                 });
                             });
                     })
+                }).
+                catch(error => {
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'Operation failed, please try again.',
+                        footer: ''
+                    }).then(() => {
+                    });
                 })
         })
     }
@@ -899,6 +919,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
             return new Promise((resolve, reject) => {
                 var query = collection.
+                    orderBy('time', 'desc').
                     where('uid', '==', userID).
                     where('time', '>=', dateStart.getTime()).
                     where('time', '<=', dateEnd.getTime());
@@ -1092,6 +1113,9 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                     getDownloadURL().
                     then(url => {
                         resolve(url)
+                    }).
+                    catch(error => {
+                        throw error;
                     })
             });
         }

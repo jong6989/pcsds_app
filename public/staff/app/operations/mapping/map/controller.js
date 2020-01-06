@@ -127,7 +127,8 @@ myAppModule.controller('opsMap_controller',
                     'text-size': 20,
                     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
                     'text-offset': [0, 0.6],
-                    'text-anchor': 'top'
+                    'text-anchor': 'top',
+                    'icon-allow-overlap': true
                 }
             }
             return layer;
@@ -164,7 +165,11 @@ myAppModule.controller('opsMap_controller',
 
         $scope.removeLayers = () => {
             mapLayers.forEach(layer => {
-                $scope.map.removeLayer(layer);
+                try{
+                    $scope.map.removeLayer(layer);
+                }catch(error){
+                    
+                }
             });
             mapLayers = [];
         }
