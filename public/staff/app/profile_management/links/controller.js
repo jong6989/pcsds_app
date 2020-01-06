@@ -19,7 +19,7 @@ myAppModule.
                 $location.path('/profile_management/view');
                 $scope.$apply();
             }
-
+            
             $scope.profileLinkViewModel = []
 
             $scope.viewProfileLink = (profileLink, profileLinkIndex) => {
