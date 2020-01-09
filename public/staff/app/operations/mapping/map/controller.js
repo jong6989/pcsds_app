@@ -22,6 +22,10 @@ myAppModule.controller('opsMap_controller',
             }
         });
 
+        $scope.flyTo = (coordinate) => {
+            $scope.map.flyTo(coordinate);
+        }
+        
         $scope.showLine = async (id) => {
             $scope.isLoading = true
             recordingsRef.doc(id).collection("gps").onSnapshot(qs => {

@@ -1,4 +1,4 @@
-<div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap();" style="position: relative">
+<div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap()" style="position: relative">
     <div ng-controller="track_recording_controller" ng-init="loadUsers()">
         
         <md-menu-bar>
@@ -38,10 +38,30 @@
                 </md-button>
             </form>
         </div>
-        <md-button class="md-fab md-mini" ng-click='toggleSidenav()' style="position: absolute; right: 5px">
-            <md-tooltip md-direction="left">View Search List</md-tooltip>
-            <i class="fa fa-angle-double-left fa-6 m-r-5" aria-hidden="true"></i>
-        </md-button>
+        <div style='position:absolute; right: 5px;' layout='column'>
+            <md-button class="md-fab md-mini" ng-click='toggleSidenav()'>
+                <md-tooltip md-direction="left">View Search List</md-tooltip>
+                <i class="fa fa-angle-double-left fa-6 m-r-5" aria-hidden="true"></i>
+            </md-button>
+            <md-button class="md-fab md-mini" ng-click='goToStartOfTrack()' 
+                style="background-image: url('/images/icons/jogging_2.png'); 
+                background-repeat: no-repeat;
+                background-position-x: 10px;
+                background-position-y: 10px;" 
+                ng-disabled='!hasTrackRecord'>
+                <md-tooltip md-direction="left">Go to Start of Track</md-tooltip>                
+            </md-button>
+            <md-button class="md-fab md-mini" ng-click='goToEndOfTrack()' 
+                style="background-image: url('/images/icons/target_2.png');
+                background-repeat: no-repeat;
+                background-position-x: 10px;
+                background-position-y: 10px;" 
+                ng-disabled='!hasTrackRecord'>
+                <md-tooltip md-direction="left">Go to End of Track</md-tooltip>
+            </md-button>
+        </div>
+        
+
         <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
         
         <md-sidenav class="md-sidenav-right" md-component-id="closeEventsDisabled" md-whiteframe="4"

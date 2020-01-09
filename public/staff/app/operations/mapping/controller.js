@@ -789,6 +789,9 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         // setTimeout(() => {
         //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2019-12-23'), new Date('2019-12-30'))
         // })
+
+        $scope.goToStartofTrack = () => {}
+        $scope.goToEndofTrack = () => {}
         $scope.loadRecordingsByUserAndDate = async (userID, from, to) => {
             try {
                 $scope.isLoading = true
@@ -839,8 +842,17 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                     var id = new Date().getTime().toString();
                     $scope.addLineLayer(id, coordinates, "#f00", 8);
 
-                    if (coordinates.length)
+                    if (coordinates.length){
                         $scope.map.flyTo({ center: coordinates[0], zoom: 15 });
+                        $scope.goToStartOfTrack = () => {
+                            $scope.map.flyTo({ center: coordinates[0], zoom: 15 });
+                        }
+                        $scope.goToEndOfTrack = () => {
+                            $scope.map.flyTo({ center: coordinates[coordinates.length - 1], zoom: 15 });
+                        }
+                    }
+
+                    $scope.hasTrackRecord = coordinates.length > 0;
 
                     $scope.map.on('click', 'lines-' + id, (e) => {
                         new mapboxgl.Popup()
