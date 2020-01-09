@@ -275,7 +275,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         return new Promise((resolve, reject) => {
             mappingService.getAreas(operationID).
                 then(areas => {
-                    try{
+                    try {
                         areas.forEach((area, index) => {
                             var source = {
                                 'type': 'geojson',
@@ -287,7 +287,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                                     }
                                 }
                             }
-                            
+
                             source.data.geometry.coordinates.push([]);
                             area.points.forEach((point) => {
                                 source.data.geometry.coordinates[0].push([point.longitude, point.latitude]);
@@ -303,7 +303,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                                     'fill-opacity': 0.8
                                 }
                             });
-    
+
                             $scope.map.on('click', 'area-' + area.id.toString(), (e) => {
                                 new mapboxgl.Popup()
                                     .setLngLat([area.points[0].longitude, area.points[0].latitude])
@@ -311,7 +311,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                                     .addTo($scope.map);
                             })
                         });
-                    }catch(error){
+                    } catch (error) {
                         Swal.fire({
                             type: 'error',
                             title: 'Oops...',
@@ -320,7 +320,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                         }).then(() => {
                         });
                     }
-                    
+
                     resolve(areas);
                 });
 
@@ -356,51 +356,27 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             mappingService.getImages(operationID).
                 then(images => {
                     images.forEach(image => {
-                        var sourceID = `${image.id}-${new Date().getTime()}`;
-                        $scope.map.addSource(`${sourceID}`, {
-                            'type': 'geojson',
-                            'data': {
-                                'type': 'Feature',
-                                'properties': {},
-                                'geometry': {
-                                    'type': 'Polygon',
-                                    'coordinates': [
-                                        [
-                                            [image.points[0].longitude, image.points[0].latitude],
-                                            [image.points[1].longitude, image.points[1].latitude],
-                                            [image.points[2].longitude, image.points[2].latitude],
-                                            [image.points[3].longitude, image.points[3].latitude],
-                                        ]
-                                    ]
-                                }
-                            }
-                        });
+
                         var splitPath = image.path.split('/');
                         var imageName = splitPath[splitPath.length - 1];
                         mappingService.
-                        getImage(operationID, imageName).
+                            getImage(operationID, imageName).
                             then(url => {
-                                $scope.map.loadImage(url, (error, image_) => {
-                                    if (error) {
-                                        Swal.fire({
-                                            type: 'error',
-                                            title: 'Oops...',
-                                            text: 'Failed to load images, please try again.',
-                                            footer: ''
-                                        }).then(() => {
-                                        });
-
-                                        return;
-                                    };
-                                    $scope.map.addImage(`${sourceID}`, image_);
-                                    $scope.addLayer({
-                                        'id': `${sourceID}`,
-                                        'type': 'fill',
-                                        'source': `${sourceID}`,
-                                        'paint': {
-                                            'fill-pattern': `${sourceID}`
-                                        }
-                                    })
+                                var sourceID = `${image.id}-${new Date().getTime()}`;
+                                $scope.map.addSource(`${sourceID}`, {
+                                    'type': 'image',
+                                    'url': url,
+                                    'coordinates': [
+                                        [image.points[0].longitude, image.points[0].latitude],
+                                        [image.points[1].longitude, image.points[1].latitude],
+                                        [image.points[2].longitude, image.points[2].latitude],
+                                        [image.points[3].longitude, image.points[3].latitude],
+                                    ]
+                                });
+                                $scope.addLayer({
+                                    'id': `${sourceID}`,
+                                    'type': 'raster',
+                                    'source': `${sourceID}`
                                 })
                             }).catch(error => {
                                 Swal.fire({
