@@ -39,6 +39,7 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
 
 
     $scope.add = (operation) => {
+        $scope.isBusy = true;
         var currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
         operation.publisher = currentUser;
         operation.created = new Date().getTime();
@@ -57,6 +58,9 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
                 send(operation).
                     then(result => {
                         operation_service.updateMapOperation(operation.map_reference, { 'operation_no': operation.id })
+                        // localData.set('operation', JSON.stringify(operation.id));
+                        $location.path('/operations/map/operations/?mapID=' + operation.map_reference);
+                        $scope.$apply();
                     })
             })
     }

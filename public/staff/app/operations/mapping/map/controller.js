@@ -71,13 +71,14 @@ myAppModule.controller('opsMap_controller',
             return map;
         }
 
-        $scope.initMapBoxMap = () => {
+        $scope.initMapBoxMap = (onLoadCallback) => {
             //timer for letting angularjs load first before the map
+            
             setTimeout(() => {
-                $scope.map = $scope.getMapInstance();
+                $scope.map = $scope.getMapInstance(onLoadCallback);
             }, 200);
         };
-
+        
         $scope.getTime = (dateInMilliseconds) => {
             var date = new Date(dateInMilliseconds);
             return moment(date).format('hh:mm:ss a')
@@ -166,6 +167,8 @@ myAppModule.controller('opsMap_controller',
             mapLayers.push(layer.id);
             $scope.map.addLayer(layer);
         }
+
+        $scope.getMapLayers = () => mapLayers;
 
         $scope.removeLayers = () => {
             mapLayers.forEach(layer => {

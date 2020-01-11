@@ -38,8 +38,28 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.loadPage = (url) => {
         window.location.href = url;
     }
+
+    $scope.loadMapBox = () => {
+        angular.element(document).ready(() => {
+            $scope.initMapBoxMap($scope.onMapBoxLoad);
+        })
+    }
+
+    $scope.onMapBoxLoad = () => {
+        var currentLocation = location.href.replace('/#!', '');
+        var url = new URL(currentLocation);
+        if(url.searchParams.get('mapID')){
+            $scope.loadOperation(url.searchParams.get('mapID'));
+        }
+        $scope.loadOperations();
+    }
+
     $scope.setCurrentUser = (user) => {
         $scope.currentUser = user;
+    }
+
+    $scope.saveOperation = () => {
+        // $location.path('/operations/operation/create');
     }
 
     function addRoutePlan() {
@@ -78,6 +98,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             });
     }
 
+    
     function addRoutes(routePlan, route) {
         var source = $scope.map.getSource('geojson' + sourceID);
         var data = source._data;
@@ -117,7 +138,12 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     $scope.saveRoutePlan = addRoutePlan;
     function getRoutes() {
-
+        var mapLayers = $scope.getMapLayers();
+        var routeLayers = mapLayers.filter(layer => layer.id.startsWith('routes'));
+        routeLayers.forEach(routeLayer => {
+            var layer = $scope.map.getLayer(routeLayer.id);
+            
+        })
     }
 
     $scope.createRoutePlan = (event) => {
@@ -591,7 +617,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         });
 
         addLayer({
-            id: `points-${currentPointAndLineLayerID}`,
+            id: `route-${currentPointAndLineLayerID}`,
             type: 'circle',
             source: currentPointAndLineLayerID,
             paint: {
@@ -730,12 +756,11 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     function drawRoute() {
         setMouseCursorStyle('hand');
-        $scope.map.off('click', onMouseClickWhileDrawingRoute);
-        $scope.map.off('click', onMouseClickWhileDrawingArea);
+        removeClickListeners();
 
         $scope.drawRoute = () => {
+            removeClickListeners();
             $scope.map.on('click', onMouseClickWhileDrawingRoute);
-            $scope.map.off('click', onMouseClickWhileDrawingArea);
             setMouseCursorStyle('crosshair');
             currentLayerID = currentPointAndLineLayerID;
             $scope.drawRoute = drawRoute;
@@ -744,11 +769,11 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     function drawArea() {
         setMouseCursorStyle('hand');
-        $scope.map.off('click', onMouseClickWhileDrawingRoute);
-        $scope.map.off('click', onMouseClickWhileDrawingArea);
+        removeClickListeners();
+
         $scope.drawRoute = () => {
+            removeClickListeners();
             $scope.map.on('click', onMouseClickWhileDrawingArea)
-            $scope.map.off('click', onMouseClickWhileDrawingRoute);
             setMouseCursorStyle('pointer');
             currentLayerID = currentPolygonLayerID;
         }
