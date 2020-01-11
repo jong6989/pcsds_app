@@ -26,7 +26,10 @@ var script_angular = `
         <script src="/js/md-color-picker/src/js/mdColorPicker.js"></script>
         <link href="/js/md-color-picker/dist/mdColorPicker.min.css" rel="stylesheet"/>
         <script src="/js/ng-infinite-scroll/build/ng-infinite-scroll.min.js"></script>
-
+        <link rel="stylesheet" href="/js/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="/js/angularjs-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
+        <script type="text/javascript" src="/js/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+        <script type="text/javascript" src="/js/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
     `;
 //angularjs plugins
 var script_ng_plugins = {
@@ -453,6 +456,28 @@ localData.set('STAFF_ACCOUNT',`
                     {
                         "title": "Create",
                         "path": "/records/queries/incoming/create",
+                        "icon": "magic"
+                    },
+                    {
+                        "title": "All",
+                        "path": "/records/queries/incoming/list/all",
+                        "icon": "align-justify"
+                    },
+                    {
+                        "title": "My List",
+                        "path": "/records/queries/incoming/list/single",
+                        "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/operation/controller.js'></script>",
+                "icon":"files-o",
+                "title":"Operation",
+                "menu" : [
+                    {
+                        "title": "Create",
+                        "path": "/operations/operation/create",
                         "icon": "magic"
                     },
                     {

@@ -1,27 +1,27 @@
 'use strict';
 var myAppModule = {};
 myAppModule = angular.module('brain_app', [
-  'ngMaterial','ngAnimate', 'ngMessages','ngStorage','ngRoute',
-  'ngFileUpload','ngTable', 'camera', 'ngImgCrop', 'thatisuday.ng-image-gallery',
-'angular-uuid', 'infinite-scroll']);
+  'ngMaterial', 'ngAnimate', 'ngMessages', 'ngStorage', 'ngRoute',
+  'ngFileUpload', 'ngTable', 'camera', 'ngImgCrop', 'thatisuday.ng-image-gallery',
+  'angular-uuid', 'infinite-scroll', 'ui.bootstrap.datetimepicker']);
 
 myAppModule
-.config(function($routeProvider, $locationProvider) {
-  $routeProvider.when(':name*', {
-            templateUrl: function(urlattr){
-                return 'app/' + urlattr.name + '/view.html';
-            }
-        })
-  .otherwise({ redirectTo: '' });
+  .config(function ($routeProvider, $locationProvider) {
+    $routeProvider.when(':name*', {
+      templateUrl: function (urlattr) {
+        return 'app/' + urlattr.name + '/view.html';
+      }
+    })
+      .otherwise({ redirectTo: '' });
 
-})
+  })
 
 const static_ops_id = "ops_id";
 const static_latitude = "ops_id";
 const static_longitude = "ops_id";
 
-myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia, 
-  $http,$timeout, $interval, $mdSidenav, $log, $mdToast,$localStorage , $sessionStorage, 
+myAppModule.controller('AppCtrl', function ($scope, $window, $filter, $mdMedia,
+  $http, $timeout, $interval, $mdSidenav, $log, $mdToast, $localStorage, $sessionStorage,
   $mdDialog, $route, $routeParams, $location, NgTableParams) {
   $scope.$route = $route;
   $scope.$routeParams = $routeParams;
@@ -35,14 +35,14 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   $scope.document_network_url = 'http://localhost/pcsd/qr/';
   //app globals
   $scope.global = {
-    ops : { id: 'WJ43CJV6R3uF3QMaWrvj', name : 'Operations', short_name : 'Ops'}
+    ops: { id: 'WJ43CJV6R3uF3QMaWrvj', name: 'Operations', short_name: 'Ops' }
   };
 
   $scope.url = new URLSearchParams(window.location.search);
   //url.get('key')
   //url.has('key')
   //url.set('key')
-  $scope.set_url_param = (param,hash)=>{
+  $scope.set_url_param = (param, hash) => {
     let new_hash = (hash) ? "#!" + hash : location.hash;
     let new_url = location.origin + location.pathname + "?" + param + new_hash;
     location.assign(new_url);
@@ -53,63 +53,63 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   };
 
   $scope.toggle_select = function (item, list) {
-      var idx = list.indexOf(item);
-      if (idx > -1) {
-          list.splice(idx, 1);
-      }
-      else {
-          list.push(item);
-      }
+    var idx = list.indexOf(item);
+    if (idx > -1) {
+      list.splice(idx, 1);
+    }
+    else {
+      list.push(item);
+    }
   };
 
-  $scope.$watch( 
-      ()=> { 
-          return $mdMedia('xs'); 
-      }, 
-      (xs)=> {
+  $scope.$watch(
+    () => {
+      return $mdMedia('xs');
+    },
+    (xs) => {
       $scope.is_xs = xs;
-  });
-  $scope.$watch( 
-      ()=> { 
-          return $mdMedia('sm'); 
-      }, 
-      (sm)=> {
+    });
+  $scope.$watch(
+    () => {
+      return $mdMedia('sm');
+    },
+    (sm) => {
       $scope.is_sm = sm;
-  });
+    });
 
   $scope.toggleLeft = buildDelayedToggler('left');
   $scope.toggleRight = buildToggler('right');
 
-  $scope.to_date = function(d){
+  $scope.to_date = function (d) {
     return $filter('date')(d, "yyyy-MM-dd");
   };
 
-  $scope.millisecondsToDate = (ms) => { 
+  $scope.millisecondsToDate = (ms) => {
     return new Date(ms)
   };
 
-  $scope.ngTable = function(d,c){
-    if(c == undefined) c=100;
-    return new NgTableParams({count:c}, { dataset: d});
+  $scope.ngTable = function (d, c) {
+    if (c == undefined) c = 100;
+    return new NgTableParams({ count: c }, { dataset: d });
   };
 
-  $scope.to_int = (n)=>{
+  $scope.to_int = (n) => {
     return parseInt(n);
   };
 
-  $scope.isOpenRight = function(){
+  $scope.isOpenRight = function () {
     return $mdSidenav('right').isOpen();
   };
 
-  $scope.date_gap = function(a,b,f){
-    let df = (f == undefined)? "YYYY-MM-DD h:mm:ss" :f;
+  $scope.date_gap = function (a, b, f) {
+    let df = (f == undefined) ? "YYYY-MM-DD h:mm:ss" : f;
     moment().format(df);
     let x = moment(b);
     return x.from(a);
   };
 
-  $scope.within_dates = function(date,from,to){
-    var d = $scope.to_date(date);var a = $scope.to_date(from);var b = $scope.to_date(to);
+  $scope.within_dates = function (date, from, to) {
+    var d = $scope.to_date(date); var a = $scope.to_date(from); var b = $scope.to_date(to);
     var aa = a.split("-");
     var ya = parseInt(aa[0]);
     var ma = parseInt(aa[1]);
@@ -122,59 +122,59 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     var yx = parseInt(xx[0]);
     var mx = parseInt(xx[1]);
     var dx = parseInt(xx[2]);
-    var dir = (ya < yb)?1:( (ya > yb)? -1: ( ma < mb )?1: ( (ma > mb)?-1: ( (da < db)?1: ( (da > db)? -1:1 ) ) ) );
-    if( ya > yx && yb > yx ) return false;
-    if( ya < yx && yb < yx ) return false;
+    var dir = (ya < yb) ? 1 : ((ya > yb) ? -1 : (ma < mb) ? 1 : ((ma > mb) ? -1 : ((da < db) ? 1 : ((da > db) ? -1 : 1))));
+    if (ya > yx && yb > yx) return false;
+    if (ya < yx && yb < yx) return false;
 
-    if( ya === yx || yb === yx){
-      if(dir === 1 && ya === yx){
-        if( mx < ma ) return false;
+    if (ya === yx || yb === yx) {
+      if (dir === 1 && ya === yx) {
+        if (mx < ma) return false;
       }
-      if(dir === 1 && yb === yx){
-        if( mx > mb ) return false;
+      if (dir === 1 && yb === yx) {
+        if (mx > mb) return false;
       }
-      if(dir === -1 && yb === yx){
-        if( mx < mb ) return false;
+      if (dir === -1 && yb === yx) {
+        if (mx < mb) return false;
       }
-      if(dir === -1 && ya === yx){
-        if( mx > ma ) return false;
+      if (dir === -1 && ya === yx) {
+        if (mx > ma) return false;
       }
-      if( ma === mx || mb === mx){
-        if(dir === 1 && ma === mx){
-          if( dx < da ) return false;
+      if (ma === mx || mb === mx) {
+        if (dir === 1 && ma === mx) {
+          if (dx < da) return false;
         }
-        if(dir === -1 && mb === mx){
-          if( dx < db ) return false;
+        if (dir === -1 && mb === mx) {
+          if (dx < db) return false;
         }
-        if(dir === -1 && ma === mx){
-          if( dx > da ) return false;
+        if (dir === -1 && ma === mx) {
+          if (dx > da) return false;
         }
-        if(dir === 1 && mb === mx){
-          if( dx > db ) return false;
+        if (dir === 1 && mb === mx) {
+          if (dx > db) return false;
         }
         return true;
-      }else {
+      } else {
         return true;
       }
-    }else {
+    } else {
       return true;
     }
   };
 
-  $scope.get_window_height = function(){
+  $scope.get_window_height = function () {
     return $(window).height();
   };
 
-  $scope.date_from_now = function(a){
+  $scope.date_from_now = function (a) {
     var a = moment(a);
     return a.fromNow();
   };
 
-  $scope.date_now = function(format){
-    return moment().format( (format)?format :  "YYYY-MM-DD" );
+  $scope.date_now = function (format) {
+    return moment().format((format) ? format : "YYYY-MM-DD");
   };
 
-  $scope.toast = function(t){
+  $scope.toast = function (t) {
     $mdToast.show(
       $mdToast.simple()
         .textContent(t)
@@ -182,21 +182,21 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     );
   };
 
-  $scope.toast_s = (text)=>{
+  $scope.toast_s = (text) => {
     Toast.fire({
-        type: 'success',
-        title: text
+      type: 'success',
+      title: text
     });
   };
 
-  $scope.toast_e = (text)=>{
+  $scope.toast_e = (text) => {
     Toast.fire({
-        type: 'error',
-        title: text
+      type: 'error',
+      title: text
     });
   };
 
-  $scope.logout = function(){
+  $scope.logout = function () {
     // firebase.auth().signOut().catch(function(error) {
     //       console.log(error)
     // });
@@ -208,7 +208,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
 
   };
 
-  $scope.set_page_title = function(t){
+  $scope.set_page_title = function (t) {
     $scope.page_title = t;
     document.getElementById("site_title").innerHTML = "BRAIN-" + t;
   };
@@ -217,17 +217,18 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     return ($location.path().substr(0, path.length) === path) ? true : false;
   }
 
-  $scope.showPrerenderedDialog = function(event, ID) {
+  $scope.showPrerenderedDialog = function (event, ID) {
     $mdDialog.show({
       contentElement: '#' + ID,
       parent: angular.element(document.body),
       targetEvent: event,
-      fullscreen : true,
-      clickOutsideToClose: true
+      fullscreen: true,
+      clickOutsideToClose: true,
+      multiple: true
     });
   };
 
-  $scope.close_dialog = function(){
+  $scope.close_dialog = function () {
     $mdDialog.cancel();
   };
 
@@ -236,9 +237,9 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
 
     return function debounced() {
       var context = $scope,
-          args = Array.prototype.slice.call(arguments);
+        args = Array.prototype.slice.call(arguments);
       $timeout.cancel(timer);
-      timer = $timeout(function() {
+      timer = $timeout(function () {
         timer = undefined;
         func.apply(context, args);
       }, wait || 10);
@@ -247,7 +248,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
 
 
   function buildDelayedToggler(navID) {
-    return debounce(function() {
+    return debounce(function () {
       $mdSidenav(navID)
         .toggle()
         .then(function () {
@@ -257,7 +258,7 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   }
 
   function buildToggler(navID) {
-    return function() {
+    return function () {
       $mdSidenav(navID)
         .toggle()
         .then(function () {
@@ -281,11 +282,11 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   };
 
   $scope.iframeHeight = $scope.get_window_height();
-  angular.element($window).bind('resize',function(){
+  angular.element($window).bind('resize', function () {
     $scope.iframeHeight = $window.innerHeight;
   });
 
-  $scope.alert = (title,text,event)=>{
+  $scope.alert = (title, text, event) => {
     $mdDialog.show(
       $mdDialog.alert()
         .title(title)
@@ -296,52 +297,52 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     );
   }
 
-  function gotoBottom(id){
-    setTimeout(()=>{
-        var element = document.getElementById(id);
-        element.scrollTop = element.scrollHeight - 200;
-    },1500);
+  function gotoBottom(id) {
+    setTimeout(() => {
+      var element = document.getElementById(id);
+      element.scrollTop = element.scrollHeight - 200;
+    }, 1500);
   }
 
   //setting data for application
-  $scope.set_application = (application)=>{
+  $scope.set_application = (application) => {
     $scope.application = application;
   };
 
-  $scope.printView = (timer)=>{
-    $timeout(()=>{
+  $scope.printView = (timer) => {
+    $timeout(() => {
       window.print();
       window.close();
-    },(timer)?timer:2000);
+    }, (timer) ? timer : 2000);
   };
 
-  $scope.open_print_view = function(view,data){
+  $scope.open_print_view = function (view, data) {
     $localStorage.params = data;
     $localStorage.print_view = view;
     window.open('#!/print', 'modal');
   };
 
   //switch from dashboard to print view
-  if($location.path() == 'print'){
+  if ($location.path() == 'print') {
     $scope.current_view = $localStorage.print_view;
-    $timeout( ()=>{
-      if($scope.current_view == undefined) location.reload();
-    },300 );
-  }else {
+    $timeout(() => {
+      if ($scope.current_view == undefined) location.reload();
+    }, 300);
+  } else {
     $scope.current_view = localData.get('staff_current_view');
   }
-  
+
   let storedAccount = localData.get('STAFF_ACCOUNT');
 
-  function load_dashboard_page(){
-    if(storedAccount){
+  function load_dashboard_page() {
+    if (storedAccount) {
       //staff account
       $scope.user = JSON.parse(storedAccount);
 
-      if(location.hash == ''){
-        if($scope.user.menu[0].path){
+      if (location.hash == '') {
+        if ($scope.user.menu[0].path) {
           $location.path($scope.user.menu[0].path);
-        }else {
+        } else {
           $location.path($scope.user.menu[0].menu[0].path);
         }
       }
@@ -350,19 +351,19 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
   load_dashboard_page();
   // $timeout( load_dashboard_page ,500);
 
-  $scope.set_path = (path)=>{
+  $scope.set_path = (path) => {
     $location.path(path);
-    
+
     $scope.close_left_side();
   };
 
-  
-  $scope.is_path = (path)=>{
+
+  $scope.is_path = (path) => {
     return ($location.path() == path);
   };
 
   $scope.toString = (collection, key) => {
-    if(collection == null) return;
+    if (collection == null) return;
     var values = key ? collection.map(item => item[key]) : collection;
     var slicedElements = values.slice(0, values.length - 1);
     var joined = slicedElements.join(', ') + ' and ' + values[values.length - 1];
@@ -370,35 +371,35 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     return joined;
   }
 
-  $scope.get_full_date = function(date){
+  $scope.get_full_date = function (date) {
     return $filter('date')(date, "MMMM dd, yyyy");
   }
-  $scope.get_full_month_name = function(date){
+  $scope.get_full_month_name = function (date) {
     return $filter('date')(date, "MMMM");
   }
-  $scope.to_day = function(d){
+  $scope.to_day = function (d) {
     return $filter('date')(d, "dd");
   }
 
   $scope.pcsd = {
     head: {
-        full_name: "Nelson P. Devandera",
-        position: "PCSDS Executive Director"
+      full_name: "Nelson P. Devandera",
+      position: "PCSDS Executive Director"
     }
   }
 
   // $scope.set_path('/profile_management/print');
-  $scope.generate_qr_code = (id,text)=>{
-    var qr = new QRCode(document.getElementById(id), { text: text, width: 128, height: 128});
+  $scope.generate_qr_code = (id, text) => {
+    var qr = new QRCode(document.getElementById(id), { text: text, width: 128, height: 128 });
     return qr;
   };
 
   var signaturePad = [];
-  $scope.generate_signature_field = (id,idx) => {
+  $scope.generate_signature_field = (id, idx) => {
     let wrapper = document.getElementById(id);
     let canvas = wrapper.querySelector('canvas');
     signaturePad[idx] = new SignaturePad(canvas);
-    $scope.signed = (i)=> {
+    $scope.signed = (i) => {
       return signaturePad[i].toDataURL();
     }
     $scope.signisEmpty = (i) => {
@@ -415,4 +416,20 @@ myAppModule.controller('AppCtrl', function ($scope,$window,$filter, $mdMedia,
     }
   }
 
+}).service('account_service', function () {
+  this.getAccounts = () => {
+    return new Promise((resolve, reject) => {
+      db.
+        collection('accounts').
+        orderBy('name').
+        onSnapshot(snapshot => {
+          var accounts = snapshot.docs.map(item => {
+            let account = item.data();
+            account.id = item.id;
+            return account;
+          });
+          resolve(accounts);
+        })
+    });
+  }
 });

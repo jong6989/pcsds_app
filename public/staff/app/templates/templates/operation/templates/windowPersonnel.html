@@ -1,0 +1,84 @@
+<div ng-init='load_registered_users()' style="visibility: hidden">
+    <div class="md-dialog-container" id='windowPersonnel'>
+        <md-dialog layout="column" layout-align="center center">
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>Select Personnel</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <md-list>
+                    <md-list-item class="md-3-line" ng-repeat='registered_user in registered_users track by $index'>
+                        <div class="md-list-item-text" layout="column">
+                            <div layout>
+                                <div>
+                                    <div>{{registered_user.name}}</div>
+                                </div>
+                                <md-button class="md-fab md-mini" ng-click="addRemarksFor(registered_user);
+                                    showPrerenderedDialog($event, 'windowRemarks')">
+                                    <i class="fa fa-plus col-black"></i>
+                                </md-button>
+                                
+                            </div>
+                        </div>
+                    </md-list-item>
+                    <md-button class="md-button md-primary" ng-click="showPrerenderedDialog($event, 'windowPersonnel')">
+                        Not on the list?
+                    </md-button>
+                </md-list>
+            </md-dialog-content>
+        </md-dialog>
+    </div>
+</div>
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id='windowRemarks'>
+        <md-dialog layout="column" layout-align="center center">
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>Remarks to {{personnel.name}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <md-input-container>
+                    <label>Remarks</label>
+                    <textarea ng-model='personnel.operation_remarks'></textarea>
+                </md-input-container>
+                <md-button ng-click='addToPersonnel(personnel)'>OK</md-button>
+            </md-dialog-content>
+        </md-dialog>
+    </div>
+</div>
+<div style="visibility: hidden;">
+    <div class="md-dialog-container" id='windowPersonnel'>
+        <md-dialog layout="column" layout-align="center center">
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>&nbsp;</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <md-input-container>
+                    <label>Personnel Name</label>
+                    <input ng-model='xPersonnel.name'>
+                </md-input-container>
+                <md-input-container>
+                    <label>Remarks</label>
+                    <textarea ng-model='xPersonnel.operation_remarks'></textarea>
+                </md-input-container>
+                <md-button ng-click='addToPersonnel(xPersonnel)'>OK</md-button>
+            </md-dialog-content>
+        </md-dialog>
+    </div>
+</div>
