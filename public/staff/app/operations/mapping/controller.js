@@ -1,7 +1,10 @@
 'use strict';
-myAppModule.controller('operations_map_controller', function ($scope, mappingService, $timeout, Upload) {
+myAppModule.controller('operations_map_controller', function ($scope, mappingService, $timeout, Upload, $location) {
     $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
     $scope.currentDate = new Date();
+    $scope.routePlan = {};
+    $scope.buttonAddRoute = { text: 'Add Route', isEnabled: true };
+    $scope.buttonAddArea = { text: 'Add Area', isEnabled: true };
     $scope.init_enforcer_map = () => {
         $scope.gpsItems = [];
         $scope.get_gps_query().onSnapshot(qs => {
@@ -45,13 +48,19 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         })
     }
 
+    $scope.goToCreateOperationPage = () => {
+        $location.path('/operations/operation/create');
+    }
     $scope.onMapBoxLoad = () => {
-        var currentLocation = location.href.replace('/#!', '');
-        var url = new URL(currentLocation);
-        if(url.searchParams.get('mapID')){
-            $scope.loadOperation(url.searchParams.get('mapID'));
+        // localData.set('operation', JSON.stringify({ id: '1578816597213' }));
+        if (localData.get('operation')) {
+            $scope.operation = JSON.parse(localData.get('operation'));
+            $scope.isInCRUDMode = true;
+            localData.remove('operation');
+            $scope.$apply();
+        } else {
+            $scope.loadOperations();
         }
-        $scope.loadOperations();
     }
 
     $scope.setCurrentUser = (user) => {
@@ -60,11 +69,46 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     $scope.saveOperation = () => {
         // $location.path('/operations/operation/create');
+        getRoutes();
+    }
+
+    $scope.showRoutePlanWindow = () => {
+        $scope.showPrerenderedDialog(null, 'windowRoute');
+    }
+
+    $scope.saveRoute = (route) => {
+        route.id = new Date().getTime().toString();
+        route.points = getRouteCoordinates(`route-${currentPointAndLineLayerID}`);
+        mappingService.addRoutes($scope.operation, route).
+            then(route => {
+                updateRoute(route);
+                $scope.drawRoute = initRouteDrawing;
+                $scope.buttonAddRoute.text = 'Add Route';
+                removeClickListeners();
+                setMouseCursorStyle('default');
+                $scope.close_dialog();
+            });
+    }
+
+    function updateRoute(route){
+        var layer = $scope.map.getLayer(`route-${currentPointAndLineLayerID}`);
+        var source = $scope.map.getSource(layer.source);
+        var features = source._data.features;
+        var coordinates = [];
+        
+        for(var i = 0; i < features.length - 1; i+=1){
+            coordinates.push(features[i].geometry.coordinates);
+        }
+        $scope.map.removeLayer(layer.id);
+        $scope.map.removeLayer(`lines-${currentPointAndLineLayerID}`);
+        $scope.map.removeSource(currentPointAndLineLayerID);
+        $scope.addLineLayer(currentPointAndLineLayerID, coordinates, route.color, 4)
     }
 
     function addRoutePlan() {
         var currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
         var timeNow = new Date().getTime();
+        // $scope.routePlan.routes = getRouteCoordinates(`route-${currentPointAndLineLayerID}`);
         $scope.routePlan.created_by = {
             email: currentUser.email || '',
             name: currentUser.name,
@@ -75,14 +119,22 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.routePlan.id = timeNow.toString();
         $scope.routePlan.last_edited_time = 0;
         $scope.routePlan.time = timeNow;
-        $scope.routePlan.viewers = [currentUser.phone || '']
+        $scope.routePlan.viewers = [currentUser.phone || ''];
+        $scope.routePlan.operation_no = $scope.operation.id;
+        // $scope.routePlan.
         $scope.isLoading = true;
         mappingService.
             addRoutePlan($scope.routePlan).
             then(result => {
-                $scope.close_dialog();
-                removeLayers();
-                initAreaDrawing();
+                var route
+                var coordinate = getRouteCoordinates(`route-${currentPointAndLineLayerID}`);
+                // route.id = new Date().getTime().toString();
+
+                // $scope.close_dialog();
+                // $scope.drawRoute = initRouteDrawing;
+                // setMouseCursorStyle('hand');
+                // removeClickListeners();
+                // initAreaDrawing();
             }).
             catch(error => {
                 Swal.fire({
@@ -98,7 +150,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             });
     }
 
-    
+
     function addRoutes(routePlan, route) {
         var source = $scope.map.getSource('geojson' + sourceID);
         var data = source._data;
@@ -129,7 +181,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             })
     }
 
-    $scope.saveRoute = addRoutes;
+    // $scope.saveRoute = addRoutes;
 
     function updateLayerColor(layerID, propertyName, color) {
         var layer = $scope.map.getLayer(layerID);
@@ -137,13 +189,28 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     }
 
     $scope.saveRoutePlan = addRoutePlan;
+
     function getRoutes() {
         var mapLayers = $scope.getMapLayers();
-        var routeLayers = mapLayers.filter(layer => layer.id.startsWith('routes'));
-        routeLayers.forEach(routeLayer => {
-            var layer = $scope.map.getLayer(routeLayer.id);
-            
+        var routeLayers = mapLayers.filter(layer => layer.startsWith('route-points'));
+        var points = [];
+        routeLayers.forEach(routeLayerID => {
+
+        });
+        return points;
+    }
+
+    function getRouteCoordinates(routeLayerID) {
+        var layer = $scope.map.getLayer(routeLayerID);
+        var source = $scope.map.getSource(layer.source);
+        var features = source._data.features;
+        var coordinates = [];
+        features.forEach(feature => {
+            var coordinate = feature.geometry.coordinates;
+            coordinates.push({ longitude: coordinate[0], latitude: coordinate[1] });
         })
+
+        return coordinates;
     }
 
     $scope.createRoutePlan = (event) => {
@@ -455,7 +522,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     function onMouseClickWhileDrawingRoute(e) {
         var features = $scope.map.queryRenderedFeatures(e.point, {
-            layers: [`points-${currentPointAndLineLayerID}`]
+            layers: [`route-${currentPointAndLineLayerID}`]
         });
 
         var geojson = $scope.map.getSource(currentPointAndLineLayerID)._data;
@@ -644,17 +711,9 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         removeClickListeners();
         $scope.map.on('click', onMouseClickWhileDrawingRoute);
 
-        // $scope.map.on('mousemove', function (e) {
-        //     var features = $scope.map.queryRenderedFeatures(e.point, {
-        //         layers: [`points-${currentLayerID}`]
-        //     });
-
-        //     // $scope.map.getCanvas().style.cursor = features.length
-        //     //     ? 'pointer'
-        //     //     : 'crosshair';
-        // });
         setMouseCursorStyle('crosshair');
-        $scope.drawRoute = drawRoute;
+        $scope.drawRoute = $scope.showRoutePlanWindow;
+        $scope.buttonAddRoute.text = 'Save Route';
     }
 
     var currentPolygonLayerID = 0;
@@ -754,19 +813,6 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.map.getCanvas().style.cursor = cursor;
     }
 
-    function drawRoute() {
-        setMouseCursorStyle('hand');
-        removeClickListeners();
-
-        $scope.drawRoute = () => {
-            removeClickListeners();
-            $scope.map.on('click', onMouseClickWhileDrawingRoute);
-            setMouseCursorStyle('crosshair');
-            currentLayerID = currentPointAndLineLayerID;
-            $scope.drawRoute = drawRoute;
-        }
-    }
-
     function drawArea() {
         setMouseCursorStyle('hand');
         removeClickListeners();
@@ -815,8 +861,8 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2019-12-23'), new Date('2019-12-30'))
         // })
 
-        $scope.goToStartofTrack = () => {}
-        $scope.goToEndofTrack = () => {}
+        $scope.goToStartofTrack = () => { }
+        $scope.goToEndofTrack = () => { }
         $scope.loadRecordingsByUserAndDate = async (userID, from, to) => {
             try {
                 $scope.isLoading = true
@@ -867,7 +913,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                     var id = new Date().getTime().toString();
                     $scope.addLineLayer(id, coordinates, "#f00", 8);
 
-                    if (coordinates.length){
+                    if (coordinates.length) {
                         $scope.map.flyTo({ center: coordinates[0], zoom: 15 });
                         $scope.goToStartOfTrack = () => {
                             $scope.map.flyTo({ center: coordinates[0], zoom: 15 });

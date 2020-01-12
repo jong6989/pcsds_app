@@ -22,9 +22,10 @@ var script_angular = `
         <link href="/plugins/ng-image-gallery/dist/ng-image-gallery.min.css" rel="stylesheet"/>
         <link href="/css/mapbox-gl.css" rel="stylesheet"/>
         <script src="/js/mapbox-gl.js"></script>
-        <script src="/js/tinycolor.min.js"></script>
-        <script src="/js/md-color-picker/src/js/mdColorPicker.js"></script>
-        <link href="/js/md-color-picker/dist/mdColorPicker.min.css" rel="stylesheet"/>
+        <script src="/js/tinycolor2/dist/tinycolor-min.js"></script>
+        <script src="/js/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js"></script>
+        <link rel="stylesheet" href="/js/angular-bootstrap-colorpicker/css/colorpicker.css"/>
+
         <script src="/js/ng-infinite-scroll/build/ng-infinite-scroll.min.js"></script>
         <link rel="stylesheet" href="/js/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href="/js/angularjs-bootstrap-datetimepicker/src/css/datetimepicker.css"/>

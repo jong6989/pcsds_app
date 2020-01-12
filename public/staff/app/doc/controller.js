@@ -398,17 +398,17 @@ myAppModule.controller('doc_controller', function ($scope, $timeout, $interval, 
         
     };
 
-    $scope.setCurrentItem = (x,t,c) => {
-        if($scope.currentNavItem == 'Documents' && x.id){
-            setTimeout(()=>{func.refreshDocItem(x.id, (a) => {
+    $scope.setCurrentItem = (document,t,c) => {
+        if($scope.currentNavItem == 'Documents' && document.id){
+            setTimeout(()=>{func.refreshDocItem(document.id, (a) => {
                 $scope.currentItem = a;
                 $scope.$apply();
             });},300);
         }
-        $scope.currentItem = x;
+        $scope.currentItem = document;
         $scope.currentClicked = t;
         $scope.currentTransaction = c;
-        $localStorage.currentItem = x;
+        $localStorage.currentItem = document;
     }
 
     $scope.print_document = (id)=>{

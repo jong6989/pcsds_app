@@ -1,0 +1,27 @@
+<div>
+    <h3 class="align-center">OPERATION</h3>
+    <hr>
+        <div layout='column'>
+            <md-input-container>
+                <label>Title</label>
+                <input ng-model='operation.title' readonly>
+            </md-input-container>
+            <md-input-container>
+                <label>Description</label>
+                <textarea ng-model='operation.description' readonly></textarea>
+            </md-input-container>
+            <md-input-container>
+                <label>Location/Address</label>
+                <input ng-model='operation.location' readonly>
+            </md-input-container>
+            <md-input-container>
+                <label>Remarks</label>
+                <textarea readonly ng-model='operation.remarks'></textarea>
+            </md-input-container>
+            <md-input-container>
+                <label>Target Date and Time</label>
+                <datetimepicker data-ng-model='date_time' data-on-set-time="toMilliseconds(date_time)" readonly></datetimepicker>
+            </md-input-container>
+        </div>
+        <a href='' ng-click='gotoOperationMap(operation)' ng-hide='currentTransaction.status=="pending"'>Operation Map</a>
+</div>

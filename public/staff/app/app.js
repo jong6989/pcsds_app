@@ -3,7 +3,7 @@ var myAppModule = {};
 myAppModule = angular.module('brain_app', [
   'ngMaterial', 'ngAnimate', 'ngMessages', 'ngStorage', 'ngRoute',
   'ngFileUpload', 'ngTable', 'camera', 'ngImgCrop', 'thatisuday.ng-image-gallery',
-  'angular-uuid', 'infinite-scroll', 'ui.bootstrap.datetimepicker']);
+  'angular-uuid', 'infinite-scroll', 'ui.bootstrap.datetimepicker', 'colorpicker.module']);
 
 myAppModule
   .config(function ($routeProvider, $locationProvider) {

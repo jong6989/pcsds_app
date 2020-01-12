@@ -207,7 +207,7 @@ myAppModule.controller('opsMap_controller',
             });
 
             $scope.addLayer({
-                'id': `points-${id}`,
+                'id': `route-points-${id}`,
                 'type': 'circle',
                 'source': id,
                 'paint': {
@@ -217,7 +217,7 @@ myAppModule.controller('opsMap_controller',
             });
 
             $scope.addLayer({
-                "id": `lines-${id}`,
+                "id": `route-lines-${id}`,
                 "type": "line",
                 "source": {
                     "type": "geojson",

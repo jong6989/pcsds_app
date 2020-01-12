@@ -1,6 +1,6 @@
 'use strict';
 
-myAppModule.controller('operation_controller', function ($scope, operation_service, account_service, $mdDialog) {
+myAppModule.controller('operation_controller', function ($scope, operation_service, account_service, $location) {
     $scope.isBusy = false;
     $scope.operation = {
         template: {
@@ -12,7 +12,7 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
             "print": "./app/templates/templates/operation/print.html",
             "view": "./app/templates/templates/operation/view.html"
         },
-        map_reference: "1577252888390",
+        // map_reference: "1577252888390",
         keywords: []
     }
 
@@ -32,7 +32,7 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
             getNextSequence().
             then(nextSequence => {
                 var dateNow = new Date();
-                $scope.operation.id = moment(dateNow).format('YYYYMMDD') + nextSequence;
+                $scope.operation.operation_no = moment(dateNow).format('YYYYMMDD') + '-' + nextSequence;
                 $scope.$apply();
             })
     }
@@ -57,12 +57,28 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
             then(operation => {
                 send(operation).
                     then(result => {
-                        operation_service.updateMapOperation(operation.map_reference, { 'operation_no': operation.id })
-                        // localData.set('operation', JSON.stringify(operation.id));
-                        $location.path('/operations/map/operations/?mapID=' + operation.map_reference);
+                        // operation_service.updateMapOperation(operation.map_reference, { 'operation_no': operation.id })
+                        localData.set('operation', JSON.stringify(operation));
+                        $location.path('/operations/mapping/map/operations');
                         $scope.$apply();
                     })
             })
+    }
+
+    $scope.loadOperation = (operation) => {
+        $scope.operation = operation;
+        $scope.remarks = getRemarksforCurrentUser(operation);
+    }
+
+    function getRemarksforCurrentUser(operation) {
+        var currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
+        var index = operation.personnels.findIndex(personnel => personnel.id == currentUser.id);
+        return index > -1 ? operation.personnels[index].operation_remarks : "";
+    }
+
+    $scope.gotoOperationMap = (operation) => {
+        localData.set('operation', JSON.stringify(operation));
+        $location.path('operations/operation/map')
     }
 
     var send = (operation) => {
@@ -116,10 +132,11 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
     }
 }).
     service('operation_service', function () {
-        var operationCollection = db.collection('operation');
+        var operationCollection = db.collection('ecan_app_operation_plans');
 
         this.addOperation = (operation) => {
             return new Promise((resolve, reject) => {
+                operation.id = new Date().getTime().toString();
                 operationCollection.
                     doc(operation.id).
                     set(operation).
@@ -165,6 +182,17 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
                     doc(operationMapID).
                     update(updatedData).
                     then(result => { resolve(result) })
+            })
+        }
+
+        this.getOperation = (operationID) => {
+            return new Promise((resolve, reject) => {
+                operationCollection.
+                    doc(operationID).
+                    onSnapshot(snapshot => {
+                        var operation = snapshot.data();
+                        resolve(operation);
+                    })
             })
         }
     });
