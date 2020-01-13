@@ -55,8 +55,8 @@
                 <md-button ng-click='drawRoute()' ng-enabled='buttonAddRoute.isEnabled'>{{buttonAddRoute.text}}
                 </md-button>
                 <md-button ng-click='drawArea()' ng-enabled='buttonAddArea.isEnabled'>{{buttonAddArea.text}}</md-button>
-                <md-button ng-click='drawImage()'>Add Image</md-button>
-                <md-button ng-click='drawFlag()'>Add Flag</md-button>
+                <md-button ng-click='drawImage()'>{{buttonAddImage.text}}</md-button>
+                <md-button ng-click='drawFlag()'>{{buttonAddFlag.text}}</md-button>
                 <md-button ng-click='drawText()'>Add Text</md-button>
             </div>
         </div>
@@ -187,18 +187,18 @@
                                     <br>
                                     <md-input-container>
                                         <label>Title:</label>
-                                        <input ng-model='route.name' placeholder="" required>
+                                        <input ng-model='mapObject.name' placeholder="" required>
                                     </md-input-container>
                                     <md-input-container>
                                         <label>Description:</label>
-                                        <input ng-model='route.description' placeholder="">
+                                        <input ng-model='mapObject.description' placeholder="">
                                     </md-input-container>
-                                    <md-input-container>
+                                    <md-input-container ng-hide='colorPickerIsHidden'>
                                         <label>Color:</label>
-                                        <input colorpicker='hex' ng-model='route.color'>
+                                        <input colorpicker='hex' ng-model='mapObject.color'>
                                         </color-picker>
                                     </md-input-container>
-                                    <md-button class="md-primary md-raised" ng-click="saveRoute(route)"
+                                    <md-button class="md-primary md-raised" ng-click="saveRoute(mapObject)"
                                         ng-disabled='formRoute.$invalid'>
                                         OK
                                     </md-button>
@@ -212,7 +212,7 @@
 
         </div>
         <button ngf-capture="'camera'" ngf-select="addToImageArea($file)" ng-model="file" name="file"
-            ngf-pattern="'image/*'" ngf-accept="'image/*'" accept="image/*" ng-show=false id='imageUploader'>Tara na
+            ngf-pattern="'image/*'" ngf-accept="'image/*'" accept="image/*" ng-show=false id='imageUploader'>
         </button>
     </div>
 </div>
