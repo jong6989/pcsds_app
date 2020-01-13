@@ -54,7 +54,7 @@
             <div ng-show='isInCRUDMode'>
                 <md-button ng-click='drawRoute()' ng-enabled='buttonAddRoute.isEnabled'>{{buttonAddRoute.text}}
                 </md-button>
-                <md-button ng-click='drawArea()' ng-enabled='buttonAddArea.isEnabled'>Add Area</md-button>
+                <md-button ng-click='drawArea()' ng-enabled='buttonAddArea.isEnabled'>{{buttonAddArea.text}}</md-button>
                 <md-button ng-click='drawImage()'>Add Image</md-button>
                 <md-button ng-click='drawFlag()'>Add Flag</md-button>
                 <md-button ng-click='drawText()'>Add Text</md-button>
@@ -194,7 +194,7 @@
                                         <input ng-model='route.description' placeholder="">
                                     </md-input-container>
                                     <md-input-container>
-                                        <label>Path Color:</label>
+                                        <label>Color:</label>
                                         <input colorpicker='hex' ng-model='route.color'>
                                         </color-picker>
                                     </md-input-container>

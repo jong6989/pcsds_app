@@ -52,7 +52,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $location.path('/operations/operation/create');
     }
     $scope.onMapBoxLoad = () => {
-        // localData.set('operation', JSON.stringify({ id: '1578816597213' }));
+        localData.set('operation', JSON.stringify({ id: '1578816597213' }));
         if (localData.get('operation')) {
             $scope.operation = JSON.parse(localData.get('operation'));
             $scope.isInCRUDMode = true;
@@ -90,13 +90,13 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             });
     }
 
-    function updateRoute(route){
+    function updateRoute(route) {
         var layer = $scope.map.getLayer(`route-${currentPointAndLineLayerID}`);
         var source = $scope.map.getSource(layer.source);
         var features = source._data.features;
         var coordinates = [];
-        
-        for(var i = 0; i < features.length - 1; i+=1){
+
+        for (var i = 0; i < features.length - 1; i += 1) {
             coordinates.push(features[i].geometry.coordinates);
         }
         $scope.map.removeLayer(layer.id);
@@ -244,10 +244,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     $scope.loadOperation = async (operationID) => {
         removeLayers();
+        await loadRoutes(operationID);
         await loadTexts(operationID);
         await loadAreas(operationID);
         await loadFlags(operationID);
-        await loadRoutes(operationID);
         await loadImages(operationID);
     }
 
@@ -364,45 +364,50 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 })
         })
     }
+
+    function loadArea(area) {
+        var source = {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Polygon',
+                    'coordinates': []
+                }
+            }
+        }
+
+        source.data.geometry.coordinates.push([]);
+        area.points.forEach((point) => {
+            source.data.geometry.coordinates[0].push([point.longitude, point.latitude]);
+        })
+        var sourceID = `${area.id}-${new Date().getTime()}`;
+        $scope.map.addSource(sourceID, source);
+        addLayer({
+            id: 'area-' + area.id.toString(),
+            type: 'fill',
+            source: sourceID,
+            paint: {
+                'fill-color': area.color,
+                'fill-opacity': 0.8
+            }
+        });
+
+        $scope.map.on('click', 'area-' + area.id.toString(), (e) => {
+            new mapboxgl.Popup()
+                .setLngLat([area.points[0].longitude, area.points[0].latitude])
+                .setHTML(`<strong>${area.name}</strong><div>${area.description}</div>`)
+                .addTo($scope.map);
+        })
+    }
+
     async function loadAreas(operationID) {
         return new Promise((resolve, reject) => {
             mappingService.getAreas(operationID).
                 then(areas => {
                     try {
                         areas.forEach((area, index) => {
-                            var source = {
-                                'type': 'geojson',
-                                'data': {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'Polygon',
-                                        'coordinates': []
-                                    }
-                                }
-                            }
-
-                            source.data.geometry.coordinates.push([]);
-                            area.points.forEach((point) => {
-                                source.data.geometry.coordinates[0].push([point.longitude, point.latitude]);
-                            })
-                            var sourceID = `${area.id}-${new Date().getTime()}`;
-                            $scope.map.addSource(sourceID, source);
-                            addLayer({
-                                id: 'area-' + area.id.toString(),
-                                type: 'fill',
-                                source: sourceID,
-                                paint: {
-                                    'fill-color': area.color,
-                                    'fill-opacity': 0.8
-                                }
-                            });
-
-                            $scope.map.on('click', 'area-' + area.id.toString(), (e) => {
-                                new mapboxgl.Popup()
-                                    .setLngLat([area.points[0].longitude, area.points[0].latitude])
-                                    .setHTML(`<strong>${area.name}</strong><div>${area.description}</div>`)
-                                    .addTo($scope.map);
-                            })
+                            loadAreas(area);
                         });
                     } catch (error) {
                         Swal.fire({
@@ -739,8 +744,55 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         // $scope.map.off('click', onMouseClickWhileDrawingRoute);
         removeClickListeners();
         $scope.map.on('click', onMouseClickWhileDrawingArea);
-        $scope.drawArea = drawArea;
+        $scope.drawArea = $scope.showRoutePlanWindow;
+        $scope.saveRoute = saveArea;
         setMouseCursorStyle('crosshair');
+        $scope.buttonAddArea.text = 'Save Area';
+    }
+
+    function saveArea(area) {
+        area.id = new Date().getTime().toString();
+        area.points = getAreaCoordinates(`area-${currentPolygonLayerID}`)
+        mappingService.addAreas($scope.operation, area).
+            then(result => {
+                updateArea(area);
+                $scope.drawArea = initAreaDrawing;
+                $scope.buttonAddArea.text = 'Add Area';
+                removeClickListeners();
+                setMouseCursorStyle('default');
+                $scope.close_dialog();
+            });
+    }
+
+    function getAreaCoordinates(layer) {
+        var layer = $scope.map.getLayer(layer);
+        var source = $scope.map.getSource(layer.source);
+        var features = source._data.features;
+        var coordinates = [];
+        if (features.length > 0) {
+            var coordinates_ = features[0].geometry.coordinates[0];
+            if (coordinates_)
+                coordinates_.forEach(coordinate => {
+                    coordinates.push({ longitude: coordinate[0], latitude: coordinate[1] });
+                })
+        }
+
+        return coordinates;
+    }
+
+    function updateArea(area) {
+        // var layer = $scope.map.getLayer(`area-${currentPolygonLayerID}`);
+        // var source = $scope.map.getSource(layer.source);
+        // var features = source._data.features;
+        // var coordinates = [];
+
+        // for (var i = 0; i < features.length - 1; i += 1) {
+        //     coordinates.push(features[i].geometry.coordinates);
+        // }
+        $scope.map.removeLayer(`area-${currentPolygonLayerID}`);
+        $scope.map.removeSource(currentPolygonLayerID);
+        loadArea(area);
+        // $scope.addLineLayer(currentPolygonLayerID, coordinates, route.color, 4)
     }
 
     var currentImageLayerID = 0;
@@ -814,6 +866,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     }
 
     function drawArea() {
+        $scope.saveRoute = saveArea;
         setMouseCursorStyle('hand');
         removeClickListeners();
 
@@ -1083,16 +1136,16 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             })
         }
 
-        this.addAreas = (routePlan, points) => {
+        this.addAreas = (routePlan, area) => {
             return new Promise((resolve, reject) => {
                 db.
                     collection('ecan_app_operation_plans').
                     doc(routePlan.id).
                     collection('areas').
-                    doc(route.id).
-                    set(points).
+                    doc(area.id).
+                    set(area).
                     then(result => {
-                        resolve(points);
+                        resolve(area);
                     })
             })
         }
