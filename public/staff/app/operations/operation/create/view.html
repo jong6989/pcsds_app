@@ -1,0 +1,14 @@
+<div ng-controller='operation_controller' layout ng-init="set_page_title('Operation'); load_operation_number();">
+    <div flex="100" layout-align="center center" ng-if="is_loading" layout>
+        <md-progress-circular md-mode="indeterminate" md-diameter="70">
+        </md-progress-circular>
+    </div>
+    <form ng-if="!is_loading" ng-cloak name="form_add_draft" flex>
+            <cite class="col-red">
+                Operation Number: <strong> {{operation.id}} </strong>
+            </cite>
+            <hr>
+            <div ng-include="operation.template.create" ></div>
+    </form>
+   
+</div>

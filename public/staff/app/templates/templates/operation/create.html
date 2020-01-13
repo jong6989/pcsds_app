@@ -1,0 +1,45 @@
+<div>
+    <h3 class="align-center">OPERATION</h3>
+    <hr>
+    <form id='formOperation'>
+        <div layout='column'>
+            <md-input-container>
+                <label>Title</label>
+                <input ng-model='operation.title' required>
+            </md-input-container>
+            <md-input-container>
+                <label>Description</label>
+                <textarea ng-model='operation.description'></textarea>
+            </md-input-container>
+            <md-input-container>
+                <label>Location/Address</label>
+                <input ng-model='operation.location'>
+            </md-input-container>
+            Personnel
+            <md-list>
+                <md-list-item ng-repeat='personnel in operation.personnels track by $index'>
+                    {{personnel.name}}
+                    <md-button class="md-fab md-mini" aria-label="Remove from group"
+                        ng-click="removeFromOperation(personnel)">
+                        <md-tooltip md-direction="left">Remove from group</md-tooltip>
+                        <i class="fa fa-remove"></i>
+                    </md-button>
+                </md-list-item>
+                <md-button class="md-fab md-mini" ng-click="showPrerenderedDialog($event, 'windowPersonnel')">
+                    <i class="fa fa-plus col-black"></i>
+                </md-button>
+            </md-list>
+            <md-input-container>
+                <label>Target Date and Time</label>
+                <datetimepicker data-ng-model='date_time' data-on-set-time="toMilliseconds(date_time)"></datetimepicker>
+            </md-input-container>
+            <md-button class="md-button md-primary" ng-click='add(operation)' 
+                ng-disabled='formOperation.$invalid ||  operation.personnels.length == 0 || isBusy'>
+                <i class="fa fa-paper-plane m-r-5"></i>
+                Save
+            </md-button>
+        </div>
+    </form>
+
+    <div ng-include="'./app/templates/templates/operation/templates/windowPersonnel.html'"></div>
+</div>

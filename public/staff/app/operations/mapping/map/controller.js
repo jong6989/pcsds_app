@@ -22,6 +22,10 @@ myAppModule.controller('opsMap_controller',
             }
         });
 
+        $scope.flyTo = (coordinate) => {
+            $scope.map.flyTo(coordinate);
+        }
+        
         $scope.showLine = async (id) => {
             $scope.isLoading = true
             recordingsRef.doc(id).collection("gps").onSnapshot(qs => {
@@ -67,13 +71,14 @@ myAppModule.controller('opsMap_controller',
             return map;
         }
 
-        $scope.initMapBoxMap = () => {
+        $scope.initMapBoxMap = (onLoadCallback) => {
             //timer for letting angularjs load first before the map
+            
             setTimeout(() => {
-                $scope.map = $scope.getMapInstance();
+                $scope.map = $scope.getMapInstance(onLoadCallback);
             }, 200);
         };
-
+        
         $scope.getTime = (dateInMilliseconds) => {
             var date = new Date(dateInMilliseconds);
             return moment(date).format('hh:mm:ss a')
@@ -163,6 +168,8 @@ myAppModule.controller('opsMap_controller',
             $scope.map.addLayer(layer);
         }
 
+        $scope.getMapLayers = () => mapLayers;
+
         $scope.removeLayers = () => {
             mapLayers.forEach(layer => {
                 try{
@@ -200,7 +207,7 @@ myAppModule.controller('opsMap_controller',
             });
 
             $scope.addLayer({
-                'id': `points-${id}`,
+                'id': `route-points-${id}`,
                 'type': 'circle',
                 'source': id,
                 'paint': {
@@ -210,7 +217,7 @@ myAppModule.controller('opsMap_controller',
             });
 
             $scope.addLayer({
-                "id": `lines-${id}`,
+                "id": `route-lines-${id}`,
                 "type": "line",
                 "source": {
                     "type": "geojson",

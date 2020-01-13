@@ -1,12 +1,11 @@
-<div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap()" style="position: relative">
-    <div ng-controller="operations_map_controller" ng-init="loadOperations()">
+<div ng-controller="opsMap_controller" ng-init="set_page_title('Map')" style="position: relative">
+    <div ng-controller="operations_map_controller" ng-init="loadMapBox();">
         <md-button class="md-fab md-mini" ng-click='toggleSidenav()' style="position: absolute; right: 5px">
             <md-tooltip md-direction="left">View Search List</md-tooltip>
             <i class="fa fa-angle-double-left fa-6 m-r-5" aria-hidden="true"></i>
         </md-button>
         <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
         <md-sidenav class="md-sidenav-right" md-component-id="closeEventsDisabled" md-whiteframe="4"
-            
             md-disable-close-events>
             <div></div>
             <md-toolbar class="md-hue-3">
@@ -50,11 +49,12 @@
                 </md-list>
             </md-content>
         </md-sidenav>
-        <div ng-init='isInCRUDMode=true'>
-            <md-button ng-click="isInCRUDMode=true;removeLayers()" ng-show='!isInCRUDMode'>Add Operation</md-button>
+        <div ng-init='isInCRUDMode=false'>
+            <md-button ng-click="goToCreateOperationPage()" ng-show='!isInCRUDMode'>Add Operation</md-button>
             <div ng-show='isInCRUDMode'>
-                <md-button ng-click='drawRoute()'>Add Route</md-button>
-                <md-button ng-click='drawArea()'>Add Area</md-button>
+                <md-button ng-click='drawRoute()' ng-enabled='buttonAddRoute.isEnabled'>{{buttonAddRoute.text}}
+                </md-button>
+                <md-button ng-click='drawArea()' ng-enabled='buttonAddArea.isEnabled'>{{buttonAddArea.text}}</md-button>
                 <md-button ng-click='drawImage()'>Add Image</md-button>
                 <md-button ng-click='drawFlag()'>Add Flag</md-button>
                 <md-button ng-click='drawText()'>Add Text</md-button>
@@ -168,10 +168,51 @@
             </div>
 
         </div>
+        <div style="visibility: hidden;">
+            <div id='windowRoute' class="md-dialog-container">
+                <md-dialog layout="column" layout-align="center center">
+                    <md-toolbar class="bg-teal">
+                        <div class="md-toolbar-tools">
+                            <h2>Route</h2>
+                            <span flex></span>
+                            <md-button class="md-icon-button" ng-click="close_dialog()">
+                                <i class="fa fa-times col-white"></i>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
+                    <md-dialog-content>
+                        <!-- <div > -->
+                            <form name='formRoute'>
+                                <div layout='column'>
+                                    <br>
+                                    <md-input-container>
+                                        <label>Title:</label>
+                                        <input ng-model='route.name' placeholder="" required>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Description:</label>
+                                        <input ng-model='route.description' placeholder="">
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Color:</label>
+                                        <input colorpicker='hex' ng-model='route.color'>
+                                        </color-picker>
+                                    </md-input-container>
+                                    <md-button class="md-primary md-raised" ng-click="saveRoute(route)"
+                                        ng-disabled='formRoute.$invalid'>
+                                        OK
+                                    </md-button>
+                                </div>
+                            </form>
+                        <!-- </div> -->
+                    </md-dialog-content>
+                </md-dialog>
 
-        <button ngf-capture="'camera'" ngf-select="addToImageArea($file)"
-            ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'"
-            accept="image/*" ng-show=false id='imageUploader'>Tara na
+            </div>
+
+        </div>
+        <button ngf-capture="'camera'" ngf-select="addToImageArea($file)" ng-model="file" name="file"
+            ngf-pattern="'image/*'" ngf-accept="'image/*'" accept="image/*" ng-show=false id='imageUploader'>Tara na
         </button>
     </div>
 </div>

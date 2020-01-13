@@ -4,7 +4,6 @@ controller('PrintController', function($scope) {
     var url = new URL(location.href);
     var templateToPrint = url.searchParams.get('view');
     if(templateToPrint){
-        console.log(templateToPrint)
         $scope.templateToPrint = templateToPrint.replace('./', '');
     }
 })

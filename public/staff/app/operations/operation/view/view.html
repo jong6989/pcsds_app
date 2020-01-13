@@ -1,0 +1,5 @@
+<div ng-controller="doc_controller" ng-init="set_page_title('Operation');">
+    <div ng-controller='operation_controller' ng-init='loadOperation(currentItem)'>
+        <div ng-include='operation.template.view'></div>
+    </div>
+</div>
