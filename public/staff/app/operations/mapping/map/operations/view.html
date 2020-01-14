@@ -57,7 +57,7 @@
                 <md-button ng-click='drawArea()' ng-enabled='buttonAddArea.isEnabled'>{{buttonAddArea.text}}</md-button>
                 <md-button ng-click='drawImage()'>{{buttonAddImage.text}}</md-button>
                 <md-button ng-click='drawFlag()'>{{buttonAddFlag.text}}</md-button>
-                <md-button ng-click='drawText()'>Add Text</md-button>
+                <md-button ng-click='drawText()'>{{buttonAddText.text}}</md-button>
             </div>
         </div>
         <div style="visibility: hidden;">
@@ -156,6 +156,11 @@
                             <md-input-container>
                                 <label>Description:</label>
                                 <input ng-model='annotation.description' placeholder="">
+                            </md-input-container>
+                            <md-input-container ng-hide='colorPickerIsHidden'>
+                                <label>Color:</label>
+                                <input colorpicker='hex' ng-model='annotation.color'>
+                                </color-picker>
                             </md-input-container>
                             <md-button class="md-primary md-raised" ng-click="saveAnnotation(annotation)"
                                 ng-disabled='formAnnotation.$invalid'>

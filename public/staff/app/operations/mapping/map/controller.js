@@ -134,7 +134,8 @@ myAppModule.controller('opsMap_controller',
                     'text-offset': [0, 0.6],
                     'text-anchor': 'top',
                     'icon-allow-overlap': true
-                }
+                },
+                'paint': {}
             }
             return layer;
         }

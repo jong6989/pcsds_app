@@ -7,6 +7,8 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.buttonAddArea = { text: 'Add Area', isEnabled: true };
     $scope.buttonAddImage = { text: 'Add Image', isEnabled: true }
     $scope.buttonAddFlag = { text: 'Add Flags', isEnabled: true }
+    $scope.buttonAddText ={ text: 'Add Texts', isEnabled:true};
+
     $scope.mapObject = {};
     $scope.init_enforcer_map = () => {
         $scope.gpsItems = [];
@@ -644,11 +646,14 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     function onMouseClickWhileDrawingText(e) {
         $scope.showPrerenderedDialog(e, 'windowAddText');
         $scope.saveAnnotation = (annotation) => {
+            var now = new Date().getTime().toString();
             var layer = $scope.getPointLayer(
                 [e.lngLat.lng, e.lngLat.lat],
                 annotation.title,
                 annotation.symbol,
                 annotation.description);
+            layer.paint['text-color'] = annotation.color || '#000000';
+            layer.id = `text-${currentTextLayerGroup}-${now}`;
             $scope.addLayer(layer);
             $scope.close_dialog();
         }
@@ -863,16 +868,59 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         return coordinates;
     }
 
+    var currentTextLayerGroup = 0;
     function initTextDrawing() {
         setMouseCursorStyle('crosshair');
         removeClickListeners();
         $scope.map.on('click', onMouseClickWhileDrawingText);
         $scope.windowAnnotationTitle = 'Annotation';
-        $scope.drawText = () => {
-            setMouseCursorStyle('default');
-            removeClickListeners();
+        $scope.buttonAddText.text = 'save texts';
+        $scope.drawText = saveText;
+        currentTextLayerGroup += 1;
+    }
+
+    function saveText(){
+        var mapLayers = $scope.getMapLayers();
+        var textLayers = mapLayers.filter(layer => layer.startsWith(`text-${currentTextLayerGroup}`));
+        var texts = [];
+        textLayers.forEach(textLayer => {
+            var layer = $scope.map.getLayer(textLayer);
+            var color = layer.paint.get('text-color');
+            var source = $scope.map.getSource(layer.source);
+            var features = source._data.features;
+            // var flag = {};
+            var coordinate = {};
+            
+            if (features.length > 0) {
+                coordinate = {
+                    longitude: features[0].geometry.coordinates[0],
+                    latitude: features[0].geometry.coordinates[1]
+                }
+                var text = {};
+                text.coordinate = coordinate;
+                text.description = features[0].properties.description || '';
+                text.name = features[0].properties.title;
+                text.color = rgb2hex(color.value.value.toString());
+                texts.push(text);
+            }
+        });
+
+        mappingService.addTexts($scope.operation, texts).
+        then(result => {
             $scope.drawText = initTextDrawing;
-        }
+            $scope.buttonAddText.text = 'add texts';
+            $scope.$apply();
+        })
+
+    }
+    
+
+    function rgb2hex(rgb){
+        rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+        return (rgb && rgb.length === 4) ? "#" +
+         ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+         ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+         ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
     }
 
     var currentFlagLayerBatch = 0;
@@ -1264,6 +1312,24 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 });
                 promises.push(promise);
             })
+            return Promise.all(promises);
+        }
+
+        this.addTexts = (operation, texts) => {
+            var promises = [];
+            texts.forEach(text => {
+                var promise = new Promise((resolve, reject) => {
+                    db.
+                        collection('ecan_app_operation_plans').
+                        doc(operation.id).
+                        collection('texts').
+                        add(text).
+                        then(result => {
+                            resolve(text);
+                        })
+                });
+                promises.push(promise);
+            });
             return Promise.all(promises);
         }
         this.getRoutes = (operationID) => {
