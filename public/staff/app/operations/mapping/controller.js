@@ -92,6 +92,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 removeClickListeners();
                 setMouseCursorStyle('default');
                 $scope.close_dialog();
+                $scope.$apply();
             });
     }
 
@@ -733,7 +734,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.map.on('click', onMouseClickWhileDrawingRoute);
 
         setMouseCursorStyle('crosshair');
-        $scope.drawRoute = $scope.showRoutePlanWindow;
+        $scope.drawRoute = () => {
+            $scope.colorPickerIsHidden = false;
+            $scope.showRoutePlanWindow();
+        };
         $scope.buttonAddRoute.text = 'Save Route';
     }
 
@@ -760,7 +764,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         // $scope.map.off('click', onMouseClickWhileDrawingRoute);
         removeClickListeners();
         $scope.map.on('click', onMouseClickWhileDrawingArea);
-        $scope.drawArea = $scope.showRoutePlanWindow;
+        $scope.drawArea = () => {
+            $scope.colorPickerIsHidden = false;
+            $scope.showRoutePlanWindow();
+        };
         $scope.saveRoute = saveArea;
         setMouseCursorStyle('crosshair');
         $scope.buttonAddArea.text = 'Save Area';
@@ -776,6 +783,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 $scope.buttonAddArea.text = 'Add Area';
                 removeClickListeners();
                 setMouseCursorStyle('default');
+                $scope.$apply();
                 $scope.close_dialog();
             });
     }
@@ -833,7 +841,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         removeClickListeners();
         $scope.map.on('click', onMouseClickWhileDrawingImage);
         $scope.colorPickerIsHidden = true;
-        $scope.drawImage = $scope.showRoutePlanWindow;
+        $scope.drawImage = () => {
+            $scope.colorPickerIsHidden = true;
+            $scope.showRoutePlanWindow();
+        };
         $scope.saveRoute = saveImage;
         $scope.buttonAddImage.text = 'Save Image';
         setMouseCursorStyle('crosshair');
@@ -849,6 +860,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 $scope.buttonAddImage.text = "Add image";
                 setMouseCursorStyle('default');
                 $scope.colorPickerIsHidden = false;
+                $scope.$apply();
                 $scope.close_dialog();
             });
     }
@@ -962,6 +974,8 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             then(flags => {
                 $scope.drawFlag = initFlagDrawing;
                 $scope.buttonAddFlag.text = 'add flags';
+                $scope.$apply();
+
             })
     }
 
