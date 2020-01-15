@@ -187,28 +187,28 @@
                     </md-toolbar>
                     <md-dialog-content>
                         <!-- <div > -->
-                            <form name='formRoute'>
-                                <div layout='column'>
-                                    <br>
-                                    <md-input-container>
-                                        <label>Title:</label>
-                                        <input ng-model='mapObject.name' placeholder="" required>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Description:</label>
-                                        <input ng-model='mapObject.description' placeholder="">
-                                    </md-input-container>
-                                    <md-input-container ng-hide='colorPickerIsHidden'>
-                                        <label>Color:</label>
-                                        <input colorpicker='hex' ng-model='mapObject.color'>
-                                        </color-picker>
-                                    </md-input-container>
-                                    <md-button class="md-primary md-raised" ng-click="saveRoute(mapObject)"
-                                        ng-disabled='formRoute.$invalid'>
-                                        OK
-                                    </md-button>
-                                </div>
-                            </form>
+                        <form name='formRoute'>
+                            <div layout='column'>
+                                <br>
+                                <md-input-container>
+                                    <label>Title:</label>
+                                    <input ng-model='mapObject.name' placeholder="" required>
+                                </md-input-container>
+                                <md-input-container>
+                                    <label>Description:</label>
+                                    <input ng-model='mapObject.description' placeholder="">
+                                </md-input-container>
+                                <md-input-container ng-hide='colorPickerIsHidden'>
+                                    <label>Color:</label>
+                                    <input colorpicker='hex' ng-model='mapObject.color'>
+                                    </color-picker>
+                                </md-input-container>
+                                <md-button class="md-primary md-raised" ng-click="saveRoute(mapObject)"
+                                    ng-disabled='formRoute.$invalid'>
+                                    OK
+                                </md-button>
+                            </div>
+                        </form>
                         <!-- </div> -->
                     </md-dialog-content>
                 </md-dialog>
@@ -216,8 +216,11 @@
             </div>
 
         </div>
-        <button ngf-capture="'camera'" ngf-select="addToImageArea($file)" ng-model="file" name="file"
-            ngf-pattern="'image/*'" ngf-accept="'image/*'" accept="image/*" ng-show=false id='imageUploader'>
-        </button>
+        <div id='fileUploaderContainer'>
+            <button ngf-capture="'camera'" ngf-select="addToImageArea(file)" ng-model="file" name="file"
+                ngf-pattern="'image/*'" ngf-accept="'image/*'" accept="image/*" ng-show=false id='imageUploader'>
+            </button>
+        </div>
+
     </div>
 </div>

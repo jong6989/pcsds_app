@@ -7,7 +7,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.buttonAddArea = { text: 'Add Area', isEnabled: true };
     $scope.buttonAddImage = { text: 'Add Image', isEnabled: true }
     $scope.buttonAddFlag = { text: 'Add Flags', isEnabled: true }
-    $scope.buttonAddText ={ text: 'Add Texts', isEnabled:true};
+    $scope.buttonAddText = { text: 'Add Texts', isEnabled: true };
 
     $scope.mapObject = {};
     $scope.init_enforcer_map = () => {
@@ -660,34 +660,52 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         }
     }
 
+    var images = [];
     function uploadImage(coordinates) {
-        $scope.mapObject.file = {};
         $scope.addToImageArea = (file) => {
-            $scope.mapObject.file.fileName = file.name;
-            Upload.
-                base64DataUrl(file).
-                then(url => {
-                    $scope.mapObject.file.stream = url;
-                    $scope.map.loadImage(url, function (error, image) {
-                        $scope.map.addSource(`image-source-${currentImageLayerID}`, {
-                            'type': 'image',
-                            'url': image.src,
-                            'coordinates': coordinates[0]
-                        });
+            if (file == null) return;
+            // $scope.colorPickerIsHidden = true;
+            $scope.showRoutePlanWindow();
 
-                        $scope.addLayer({
-                            'id': `${currentImageLayerID}`,
-                            'type': 'raster',
-                            'source': `image-source-${currentImageLayerID}`
+            $scope.saveRoute = (mapObject) => {
+                $scope.close_dialog();
+                var image = {
+                    name: mapObject.name,
+                    description: mapObject.description
+                };
+
+                image.layerID = currentImageLayerID;
+                image.file = {
+                    fileName: file.name
+                }
+
+                Upload.
+                    base64DataUrl(file).
+                    then(url => {
+                        image.file.stream = url;
+                        images.push(image);
+                        $scope.map.loadImage(url, function (error, image) {
+                            $scope.map.addSource(`image-source-${currentImageLayerID}`, {
+                                'type': 'image',
+                                'url': image.src,
+                                'coordinates': coordinates[0]
+                            });
+
+                            $scope.addLayer({
+                                'id': `${currentImageLayerID}`,
+                                'type': 'raster',
+                                'source': `image-source-${currentImageLayerID}`
+                            });
+                            // removeFileUploader();
+                            // addFileUploader();
+                            initImageDrawing();
                         })
                     })
-
-
-                })
+            }
         }
+
         document.getElementById('imageUploader').click();
     }
-
 
     var currentPointAndLineLayerID = 0;
     function initRouteDrawing() {
@@ -842,27 +860,44 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.map.on('click', onMouseClickWhileDrawingImage);
         $scope.colorPickerIsHidden = true;
         $scope.drawImage = () => {
-            $scope.colorPickerIsHidden = true;
-            $scope.showRoutePlanWindow();
+            saveImages(images);
         };
-        $scope.saveRoute = saveImage;
-        $scope.buttonAddImage.text = 'Save Image';
+        // $scope.saveRoute = saveImage;
+        $scope.buttonAddImage.text = 'Save Images';
         setMouseCursorStyle('crosshair');
     }
 
+    function saveImages(images){
+        var promises = [];
+        images.forEach(image => {
+            promises.push(saveImage(image));
+        });
+
+        Promise.all(promises).then(images => {
+            $scope.drawImage = initImageDrawing;
+            $scope.buttonAddImage.text = "Add images";
+            setMouseCursorStyle('default');
+            $scope.colorPickerIsHidden = false;
+            images = [];
+            $scope.$apply();
+            $scope.close_dialog();
+        })
+    }
+
     function saveImage(image) {
-        image.id = new Date().getTime().toString();
-        image.points = getImageCoordinates(`image-${currentImageLayerID}`);
-        mappingService.
+        return new Promise((resolve, reject) => {
+            var layerID = image.layerID;
+            image.id = new Date().getTime().toString();
+            image.points = getImageCoordinates(`image-${layerID}`);
+            delete image.layerID;
+            mappingService.
             addImage($scope.operation, image).
             then(result => {
-                $scope.drawImage = initImageDrawing;
-                $scope.buttonAddImage.text = "Add image";
-                setMouseCursorStyle('default');
-                $scope.colorPickerIsHidden = false;
-                $scope.$apply();
-                $scope.close_dialog();
+                resolve(image);
             });
+        })
+        
+        
     }
 
     function getImageCoordinates(layerID) {
@@ -891,7 +926,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         currentTextLayerGroup += 1;
     }
 
-    function saveText(){
+    function saveText() {
         var mapLayers = $scope.getMapLayers();
         var textLayers = mapLayers.filter(layer => layer.startsWith(`text-${currentTextLayerGroup}`));
         var texts = [];
@@ -902,7 +937,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             var features = source._data.features;
             // var flag = {};
             var coordinate = {};
-            
+
             if (features.length > 0) {
                 coordinate = {
                     longitude: features[0].geometry.coordinates[0],
@@ -918,21 +953,21 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         });
 
         mappingService.addTexts($scope.operation, texts).
-        then(result => {
-            $scope.drawText = initTextDrawing;
-            $scope.buttonAddText.text = 'add texts';
-            $scope.$apply();
-        })
+            then(result => {
+                $scope.drawText = initTextDrawing;
+                $scope.buttonAddText.text = 'add texts';
+                $scope.$apply();
+            })
 
     }
-    
 
-    function rgb2hex(rgb){
+
+    function rgb2hex(rgb) {
         rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
         return (rgb && rgb.length === 4) ? "#" +
-         ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
-         ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
-         ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+            ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
     }
 
     var currentFlagLayerBatch = 0;
