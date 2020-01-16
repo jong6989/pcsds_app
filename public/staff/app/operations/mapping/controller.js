@@ -1078,7 +1078,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.dateNow = new Date();
 
         setTimeout(() => {
-            $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2020-01-01'), new Date('2020-01-30'))
+            $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2019-12-25'), new Date('2019-12-25'))
         })
 
         $scope.goToStartofTrack = () => { }
@@ -1173,22 +1173,34 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         function loadAttachedImages(trackRecord) {
             var promises = [];
             $scope.gallery = [];
-            trackRecord.images.forEach(image => {
-                var promise = track_recording_service.
-                    getImageFromStorage(image.path);
-                    promises.push(promise);
+            trackRecord.
+            images.
+            forEach(image => {
+                var promise = new Promise((resolve, reject) => {
+                    track_recording_service.
+                    getImageUrl(image.path).
+                    then(url => {
+                        image.url = url;
+                        resolve(image);
+                    });
+                })
+                promises.push(promise);
             })
 
             Promise.
             all(promises).
-            then(urls => {
-                urls.forEach(url => {
+            then(images => {
+                var id = 1;
+                images.forEach(image => {
                     var img = {
-                        id: new Date().getTime(),
-                        url: url,
+                        id: id,
+                        url: image.url,
+                        // alt: `longitude: ${image.longitude} latitude: ${image.latitude}`,
+                        title: image.description,
                         deletable: false
                     }
                     $scope.gallery.push(img);
+                    id += 1;
                 })
                 $scope.$apply();
             });
@@ -1264,7 +1276,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             })
         }
 
-        this.getImageFromStorage = (path) => {
+        this.getImageUrl = (path) => {
             return new Promise((resolve, reject) => {
                 storageRef.
                     child(path).
