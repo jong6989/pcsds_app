@@ -57,7 +57,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $location.path('/operations/operation/create');
     }
     $scope.onMapBoxLoad = () => {
-        localData.set('operation', JSON.stringify({ id: '1578816597213' }));
+        // localData.set('operation', JSON.stringify({ id: '1578816597213' }));
         if (localData.get('operation')) {
             $scope.operation = JSON.parse(localData.get('operation'));
             $scope.isInCRUDMode = true;
@@ -696,8 +696,6 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                                 'type': 'raster',
                                 'source': `image-source-${currentImageLayerID}`
                             });
-                            // removeFileUploader();
-                            // addFileUploader();
                             initImageDrawing();
                         })
                     })
@@ -867,7 +865,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         setMouseCursorStyle('crosshair');
     }
 
-    function saveImages(images){
+    function saveImages(images) {
         var promises = [];
         images.forEach(image => {
             promises.push(saveImage(image));
@@ -891,13 +889,13 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             image.points = getImageCoordinates(`image-${layerID}`);
             delete image.layerID;
             mappingService.
-            addImage($scope.operation, image).
-            then(result => {
-                resolve(image);
-            });
+                addImage($scope.operation, image).
+                then(result => {
+                    resolve(image);
+                });
         })
-        
-        
+
+
     }
 
     function getImageCoordinates(layerID) {
@@ -1079,9 +1077,9 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
         $scope.dateNow = new Date();
 
-        // setTimeout(() => {
-        //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2019-12-23'), new Date('2019-12-30'))
-        // })
+        setTimeout(() => {
+            $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2020-01-01'), new Date('2020-01-30'))
+        })
 
         $scope.goToStartofTrack = () => { }
         $scope.goToEndofTrack = () => { }
@@ -1125,6 +1123,11 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             }
         }
 
+
+        // setTimeout(() => {
+        //     $scope.loadRecordToMap({});
+        // }, 2000)
+
         $scope.loadRecordToMap = (record) => {
             $scope.isLoading = true;
             $scope.removeLayers();
@@ -1147,7 +1150,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
                     $scope.hasTrackRecord = coordinates.length > 0;
 
-                    $scope.map.on('click', 'lines-' + id, (e) => {
+                    $scope.map.on('click', 'route-lines-' + id, (e) => {
                         new mapboxgl.Popup()
                             .setLngLat(coordinates[0])
                             .setHTML(`<strong>${record.name}</strong><div>${record.description}</div>`)
@@ -1165,6 +1168,32 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 });
 
         }
+
+        $scope.gallery = [];
+        function loadAttachedImages(trackRecord) {
+            var promises = [];
+            $scope.gallery = [];
+            trackRecord.images.forEach(image => {
+                var promise = track_recording_service.
+                    getImageFromStorage(image.path);
+                    promises.push(promise);
+            })
+
+            Promise.
+            all(promises).
+            then(urls => {
+                urls.forEach(url => {
+                    var img = {
+                        id: new Date().getTime(),
+                        url: url,
+                        deletable: false
+                    }
+                    $scope.gallery.push(img);
+                })
+                $scope.$apply();
+            });
+        }
+
         $scope.setCurrentUser = (user) => {
             $scope.currentUser = user;
         }
@@ -1176,6 +1205,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             $scope.start_time = $scope.format(new Date(record.start_time), 'MM/DD/YYYY hh:mm:ss a');
             $scope.end_time = $scope.format(new Date(record.end_time), 'MM/DD/YYYY  hh:mm:ss a')
             $scope.distance_in_km = record.distance ? (record.distance / 1000).toFixed(2) : 'unknown';
+            loadAttachedImages(record);
         }
 
         $scope.format = (date, formatString) => {
@@ -1231,6 +1261,20 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
                     resolve(coordinates);
                 })
+            })
+        }
+
+        this.getImageFromStorage = (path) => {
+            return new Promise((resolve, reject) => {
+                storageRef.
+                    child(path).
+                    getDownloadURL().
+                    then(url => {
+                        resolve(url)
+                    }).
+                    catch(error => {
+                        throw error;
+                    })
             })
         }
     }).
