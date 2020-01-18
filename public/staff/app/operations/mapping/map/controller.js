@@ -74,7 +74,7 @@ myAppModule.controller('opsMap_controller',
                 container: 'opsMap',
                 style: 'mapbox://styles/jong6989/ck2u5e37k1phh1cs0nhhctx9c',
                 center: [118.74432172, 9.81847614],
-                zoom: 10,
+                zoom: 10
             });
 
             map.on('styledata', function (e) {
@@ -277,7 +277,6 @@ myAppModule.controller('opsMap_controller',
         $('#searchResultsShower').on('mouseover', () => {
             $scope.toggleSidenav();
         })
-
 
     }).service('map_layer_service', function(){
         var layerCollection = db.collection('ecan_app_layers');
