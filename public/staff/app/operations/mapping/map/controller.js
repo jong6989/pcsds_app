@@ -1,7 +1,7 @@
 'use strict';
 
 myAppModule.controller('opsMap_controller',
-    function ($scope, $mdSidenav) {
+    function ($scope, $mdSidenav, map_layer_service) {
         $scope.isLoading = false;
         $scope.map = undefined
         $scope.recordingList = [];
@@ -48,6 +48,25 @@ myAppModule.controller('opsMap_controller',
                 $scope.$apply();
             });
         };
+
+        $scope.menuLayers = [];
+        $scope.loadLayerMenuItems = () => {
+            map_layer_service.
+            getLayers().
+            then(layers => {
+                Promise.all(layers).
+                then(layers => {
+                    $scope.menuLayers = layers;
+                    $scope.$apply();
+                })
+            })
+        }
+
+        $scope.toggleLayer = (layer) => {
+            var toggle = layer.isVisible ? $scope.hideLayer : $scope.showLayer;
+            layer.isVisible = !layer.isVisible;
+            toggle(layer.id);
+        }
 
         $scope.getMapInstance = (onLoadCallback) => {
             mapboxgl.accessToken = "pk.eyJ1Ijoiam9uZzY5ODkiLCJhIjoiY2p5NjBkdnA5MDNneDNmcGt0eHVva2ZvZyJ9.jZwx_NUnKowJ4faIafJTew";
@@ -258,6 +277,41 @@ myAppModule.controller('opsMap_controller',
         $('#searchResultsShower').on('mouseover', () => {
             $scope.toggleSidenav();
         })
+
+
+    }).service('map_layer_service', function(){
+        var layerCollection = db.collection('ecan_app_layers');
+        this.getLayers = async() => {
+            return new Promise((resolve, reject) => {
+                layerCollection.
+                onSnapshot(snapshot => {
+                    var layers = snapshot.docs.map(async(document) => {
+                        var layer = document.data();
+                        layer.id = document.id;
+                        layer.subLayers = await this.getSublayers(layer);
+                        return layer;
+                    });
+                    resolve(layers);
+                });
+            })
+            
+        }
+
+        this.getSublayers = async(layer) =>{
+            return new Promise((resolve, reject) =>{
+                layerCollection.
+                doc(layer.id).
+                collection('layers').
+                onSnapshot(snapshot => {
+                    var sublayers = snapshot.docs.map(document => {
+                        var sublayer = document.data();
+                        sublayer.id = document.id;
+                        return sublayer;
+                    });
+                    resolve(sublayers);
+                }) 
+            })
+        }
     });
 
 

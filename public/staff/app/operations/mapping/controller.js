@@ -10,6 +10,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.buttonAddText = { text: 'Add Texts', isEnabled: true };
 
     $scope.mapObject = {};
+
     $scope.init_enforcer_map = () => {
         $scope.gpsItems = [];
         $scope.get_gps_query().onSnapshot(qs => {

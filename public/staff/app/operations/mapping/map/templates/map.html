@@ -1,0 +1,35 @@
+<div style='position:absolute; right: 5px;' layout='column' id='sidePanel'>
+    <md-button class="md-fab md-mini" ng-click='toggleSidenav()'>
+        <md-tooltip md-direction="left">View Search List</md-tooltip>
+        <i class="fa fa-angle-double-left fa-6 m-r-5" aria-hidden="true"></i>
+    </md-button>
+    <!-- <md-menu-bar> -->
+        <md-menu md-position-mode="target-right target" ng-init='loadLayerMenuItems()'>
+            <md-button class="md-fab md-mini" ng-click="$mdMenu.open($event)">
+                <i class="fa fa-layer-group fa-6 m-r-5" aria-hidden="true"></i>
+            </md-button>
+            <md-menu-content width='4'>
+                <md-menu-item ng-repeat='layer in menuLayers'>
+                    <md-menu>
+                        <md-button class="" ng-click="">
+                            {{layer.description}}
+                        </md-button>
+                        <md-menu-content width='4'>
+                            <md-menu-item ng-repeat='sublayer in layer.subLayers'>
+                                <!-- <md-menu> -->
+                                    <md-button ng-init='sublayer.isVisible=true' ng-click="toggleLayer(sublayer)">
+                                        {{sublayer.description}}
+                                        <i class="fa fa-check fa-6 m-r-5" aria-hidden="true" ng-show='sublayer.isVisible'></i>
+                                    </md-button>
+                                <!-- </md-menu> -->
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    <!-- </md-menu-bar> -->
+    
+</div>
+<div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
+

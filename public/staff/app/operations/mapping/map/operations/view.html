@@ -1,10 +1,9 @@
 <div ng-controller="opsMap_controller" ng-init="set_page_title('Map')" style="position: relative">
-    <div ng-controller="operations_map_controller" ng-init="loadMapBox();">
-        <md-button class="md-fab md-mini" ng-click='toggleSidenav()' style="position: absolute; right: 5px">
-            <md-tooltip md-direction="left">View Search List</md-tooltip>
-            <i class="fa fa-angle-double-left fa-6 m-r-5" aria-hidden="true"></i>
-        </md-button>
-        <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
+    <div ng-controller="operations_map_controller" ng-init="initMapBoxMap()">
+        
+        <div ng-include="'./app/operations/mapping/map/templates/map.html'"></div>
+        <!-- <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div> -->
+
         <md-sidenav class="md-sidenav-right" md-component-id="closeEventsDisabled" md-whiteframe="4"
             md-disable-close-events>
             <div></div>
