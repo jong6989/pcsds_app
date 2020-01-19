@@ -8,9 +8,8 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.buttonAddImage = { text: 'Add Image', isEnabled: true }
     $scope.buttonAddFlag = { text: 'Add Flags', isEnabled: true }
     $scope.buttonAddText = { text: 'Add Texts', isEnabled: true };
-
     $scope.mapObject = {};
-
+    
     $scope.init_enforcer_map = () => {
         $scope.gpsItems = [];
         $scope.get_gps_query().onSnapshot(qs => {
@@ -1078,9 +1077,9 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
         $scope.dateNow = new Date();
 
-        setTimeout(() => {
-            $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2019-12-25'), new Date('2019-12-25'))
-        })
+        // setTimeout(() => {
+        //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2019-12-25'), new Date('2019-12-25'))
+        // })
 
         $scope.goToStartofTrack = () => { }
         $scope.goToEndofTrack = () => { }
@@ -1123,11 +1122,6 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 $scope.$apply();
             }
         }
-
-
-        // setTimeout(() => {
-        //     $scope.loadRecordToMap({});
-        // }, 2000)
 
         $scope.loadRecordToMap = (record) => {
             $scope.isLoading = true;
@@ -1175,36 +1169,36 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             var promises = [];
             $scope.gallery = [];
             trackRecord.
-            images.
-            forEach(image => {
-                var promise = new Promise((resolve, reject) => {
-                    track_recording_service.
-                    getImageUrl(image.path).
-                    then(url => {
-                        image.url = url;
-                        resolve(image);
-                    });
+                images.
+                forEach(image => {
+                    var promise = new Promise((resolve, reject) => {
+                        track_recording_service.
+                            getImageUrl(image.path).
+                            then(url => {
+                                image.url = url;
+                                resolve(image);
+                            });
+                    })
+                    promises.push(promise);
                 })
-                promises.push(promise);
-            })
 
             Promise.
-            all(promises).
-            then(images => {
-                var id = 1;
-                images.forEach(image => {
-                    var img = {
-                        id: id,
-                        url: image.url,
-                        // alt: `longitude: ${image.longitude} latitude: ${image.latitude}`,
-                        title: image.description,
-                        deletable: false
-                    }
-                    $scope.gallery.push(img);
-                    id += 1;
-                })
-                $scope.$apply();
-            });
+                all(promises).
+                then(images => {
+                    var id = 1;
+                    images.forEach(image => {
+                        var img = {
+                            id: id,
+                            url: image.url,
+                            // alt: `longitude: ${image.longitude} latitude: ${image.latitude}`,
+                            title: image.description,
+                            deletable: false
+                        }
+                        $scope.gallery.push(img);
+                        id += 1;
+                    })
+                    $scope.$apply();
+                });
         }
 
         $scope.setCurrentUser = (user) => {
@@ -1228,6 +1222,12 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             $scope.users = await userAccountsService.getUsers();
             $scope.$apply();
         }
+
+        setTimeout(() => {
+            $('#buttonGoToStart').appendTo($('#sidePanel'))
+            $('#buttonGoToEnd').appendTo($('#sidePanel'))
+        }, 3000);
+        
     }).
     service('track_recording_service', function () {
         var collection = db.collection("ecan_app_recordings");

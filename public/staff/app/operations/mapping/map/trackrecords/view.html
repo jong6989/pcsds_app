@@ -1,5 +1,5 @@
-<div ng-controller="opsMap_controller" ng-init="set_page_title('Map'); initMapBoxMap()" style="position: relative">
-    <div ng-controller="track_recording_controller" ng-init="loadUsers()">
+<div ng-controller="opsMap_controller" ng-init="set_page_title('Map');" style="position: relative">
+    <div ng-controller="track_recording_controller" ng-init="loadUsers();">
 
         <md-menu-bar>
             <md-menu>
@@ -38,27 +38,19 @@
                 </md-button>
             </form>
         </div>
-        <div style='position:absolute; right: 5px;' layout='column'>
-            <md-button class="md-fab md-mini" ng-click='toggleSidenav()'>
-                <md-tooltip md-direction="left">View Search List</md-tooltip>
-                <i class="fa fa-angle-double-left fa-6 m-r-5" aria-hidden="true"></i>
-            </md-button>
-            <md-button class="md-fab md-mini" ng-click='goToStartOfTrack()' style="background-image: url('/images/icons/jogging_2.png'); 
-                background-repeat: no-repeat;
-                background-position-x: 10px;
-                background-position-y: 10px;" ng-disabled='!hasTrackRecord'>
+        <div ng-include="'./app/operations/mapping/map/templates/map.html'"></div>
+        <div ng-hide=true>
+            <md-button id="buttonGoToStart" class="md-fab md-mini" ng-click="goToStartOfTrack()"
+                style="background-image: url('/images/icons/jogging_2.png'); background-repeat: no-repeat;background-position-x: 10px;background-position-y: 10px;"
+                ng-disabled="!hasTrackRecord">
                 <md-tooltip md-direction="left">Go to Start of Track</md-tooltip>
             </md-button>
-            <md-button class="md-fab md-mini" ng-click='goToEndOfTrack()' style="background-image: url('/images/icons/target_2.png');
-                background-repeat: no-repeat;
-                background-position-x: 10px;
-                background-position-y: 10px;" ng-disabled='!hasTrackRecord'>
+            <md-button id="buttonGoToEnd" class="md-fab md-mini" ng-click="goToEndOfTrack()"
+                style="background-image: url('/images/icons/target_2.png'); background-repeat: no-repeat;background-position-x: 10px;background-position-y: 10px;"
+                ng-disabled="!hasTrackRecord">
                 <md-tooltip md-direction="left">Go to End of Track</md-tooltip>
             </md-button>
         </div>
-
-
-        <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
 
         <md-sidenav class="md-sidenav-right" md-component-id="closeEventsDisabled" md-whiteframe="4"
             md-disable-close-events>
@@ -90,7 +82,7 @@
                 </md-list>
             </md-content>
         </md-sidenav>
-        <div style="visibility: hidden;" >
+        <div style="visibility: hidden;">
             <div id='windowTrackRecordDetails' class="md-dialog-container">
                 <md-dialog layout="column" layout-align="center center">
                     <md-toolbar class="bg-teal">
@@ -132,7 +124,7 @@
                                 <label>End Time</label>
                                 <input ng-model='end_time' readonly>
                             </md-input-container>
-                                <div ng-show="false" ng-repeat="svg in [
+                            <div ng-show="false" ng-repeat="svg in [
                                     'close-inline.svg',
                                     'close.svg',
                                     'delete-inline.svg',
@@ -145,9 +137,8 @@
                                     'prev-inline.svg', 
                                     'prev.svg'
                                 ]" ng-include="'/plugins/ng-image-gallery/res/icons/'+svg"></div>
-                                <ng-image-gallery images="gallery" thumbnails=true
-                                    on-delete="">
-                                </ng-image-gallery>
+                            <ng-image-gallery images="gallery" thumbnails=true on-delete="">
+                            </ng-image-gallery>
                             <md-button class="md-primary md-raised" ng-click="close_dialog();">
                                 OK
                             </md-button>
