@@ -4,21 +4,26 @@
         <i class="fa fa-angle-double-left fa-6 m-r-5" aria-hidden="true"></i>
     </md-button>
     <!-- <md-menu-bar> -->
-    <md-menu md-position-mode="target-right target" ng-init='loadLayerMenuItems()'>
+    <md-menu md-position-mode="target-right target" ng-init='loadLayerMenuItems();'>
         <md-button class="md-fab md-mini" ng-click="$mdMenu.open($event)">
             <md-tooltip md-direction="left">Map Layers</md-tooltip>
             <i class="fa fa-bars fa-6 m-r-5" aria-hidden="true"></i>
         </md-button>
         <md-menu-content width='4'>
-            <md-menu-item ng-repeat='layer in menuLayers'>
+            <md-menu-item ng-repeat='layer in menuLayers' 
+                ng-mouseenter="noop($event)" 
+                >
                 <md-menu>
-                    <md-button class="" ng-click="">
+                    <md-button class="" ng-click="closeOtherSubMenu($event);$mdOpenMenu($event);">
                         {{layer.description}}
                     </md-button>
                     <md-menu-content width='4'>
-                        <md-menu-item ng-repeat='sublayer in layer.subLayers'>
+                        <md-menu-item ng-repeat='sublayer in layer.subLayers' 
+                            style="background-color: {{sublayer.color || ''}};">
                             <!-- <md-menu> -->
-                            <md-button ng-init='sublayer.isVisible=true' ng-click="toggleLayer(sublayer)">
+                            <md-button ng-init='sublayer.isVisible=true' 
+                            md-prevent-menu-close="md-prevent-menu-close" 
+                            ng-click="toggleLayer(sublayer)">
                                 {{sublayer.description}}
                                 <i class="fa fa-check fa-6 m-r-5" aria-hidden="true" ng-show='sublayer.isVisible'></i>
                             </md-button>
@@ -38,4 +43,5 @@
         <i class="fa fa-sun-o fa-6 m-r-5" aria-hidden="true"></i>
     </md-button>
 </div>
-<div id="opsMap" style="height: {{iframeHeight - 115}}px" ng-init='initMapBoxMap()'></div>
+<div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
+<!-- <div id="opsMap" style="height: {{iframeHeight - 115}}px" ng-init='initMapBoxMap()'></div> -->

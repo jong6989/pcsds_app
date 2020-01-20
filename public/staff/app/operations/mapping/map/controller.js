@@ -1,7 +1,7 @@
 'use strict';
 
 myAppModule.controller('opsMap_controller',
-    function ($scope, $mdSidenav, map_layer_service) {
+    function ($scope, $mdSidenav, $mdMenu, map_layer_service) {
         $scope.isLoading = false;
         $scope.map = undefined
         $scope.recordingList = [];
@@ -21,6 +21,24 @@ myAppModule.controller('opsMap_controller',
                 $scope.$apply();
             }
         });
+
+        $scope.noop = function(event){
+            event.stopImmediatePropagation();
+        };
+    
+        $scope.closeSubMenu = function(event){
+            $mdMenu.hide();
+        }
+
+        $scope.otherSubMenuIsOpen = false;
+
+        $scope.closeOtherSubMenu = ($event) => {
+            if($scope.otherSubMenuIsOpen){
+                $scope.closeSubMenu($event);
+            }else{
+                $scope.otherSubMenuIsOpen = true;
+            }
+        }
 
         $scope.flyTo = (coordinate) => {
             $scope.map.flyTo(coordinate);

@@ -1073,7 +1073,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     }
 }).
-    controller('track_recording_controller', function ($scope, $mdSidenav, track_recording_service, userAccountsService) {
+    controller('track_recording_controller', function ($scope, $mdSidenav, track_recording_service, userAccountsService, $mdBottomSheet) {
         $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
         $scope.dateNow = new Date();
 
@@ -1150,7 +1150,14 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                             .setLngLat(coordinates[0])
                             .setHTML(`<strong>${record.name}</strong><div>${record.description}</div>`)
                             .addTo($scope.map);
-                    })
+                    });
+
+                    // $mdBottomSheet.show({
+                    //     templateUrl: './app/operations/mapping/map/trackrecords/bottomSheet.html',
+                    //     controller: 'track_recording_controller',
+                    //     disableBackdrop: true
+                    // });
+
                     $scope.isLoading = false;
                 }).catch(error => {
                     Swal.fire({
@@ -1224,9 +1231,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         }
 
         setTimeout(() => {
-            $('#buttonGoToStart').appendTo($('#sidePanel'))
-            $('#buttonGoToEnd').appendTo($('#sidePanel'))
+            $('#buttonGoToStart').appendTo($('#sidePanel'));
+            $('#buttonGoToEnd').appendTo($('#sidePanel'));
         }, 3000);
+        
         
     }).
     service('track_recording_service', function () {
