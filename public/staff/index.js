@@ -483,12 +483,12 @@ localData.set('STAFF_ACCOUNT',`
                     },
                     {
                         "title": "All",
-                        "path": "/records/queries/incoming/list/all",
+                        "path": "/operations/operation/list/all",
                         "icon": "align-justify"
                     },
                     {
                         "title": "My List",
-                        "path": "/records/queries/incoming/list/single",
+                        "path": "/operations/operation/list/single",
                         "icon": "align-justify"
                     }
                 ]
