@@ -11,21 +11,27 @@
         </md-button>
         <md-menu-content width='4'>
             <md-menu-item ng-repeat='layer in menuLayers' 
-                ng-mouseenter="noop($event)" 
+                ng-mouseover="noop($event)"
                 >
+                <!-- <md-menu-item ng-repeat='layer in menuLayers' 
+                ng-mouseenter="noop($event)" 
+                > -->
                 <md-menu>
-                    <md-button class="" ng-click="closeOtherSubMenu($event);$mdOpenMenu($event);">
+                    <md-button class="" ng-click="closeOtherSubMenu($event);$mdMenu.open($event);">
                         {{layer.description}}
                     </md-button>
-                    <md-menu-content width='4'>
+                    <!-- <md-button class="" ng-click="$mdOpenMenu($event);">
+                        {{layer.description}}
+                    </md-button> -->
+                    <md-menu-content width='4' ng-mouseleave="">
                         <md-menu-item ng-repeat='sublayer in layer.subLayers' 
                             style="background-color: {{sublayer.color || ''}};">
                             <!-- <md-menu> -->
-                            <md-button ng-init='sublayer.isVisible=true' 
+                            <md-button ng-init='layerViewModel=getLayerViewModel(sublayer)' 
                             md-prevent-menu-close="md-prevent-menu-close" 
-                            ng-click="toggleLayer(sublayer)">
+                            ng-click="layerViewModel.toggle()">
                                 {{sublayer.description}}
-                                <i class="fa fa-check fa-6 m-r-5" aria-hidden="true" ng-show='sublayer.isVisible'></i>
+                                <i class="fa fa-check fa-6 m-r-5" aria-hidden="true" ng-show='layerViewModel.isVisible'></i>
                             </md-button>
                             <!-- </md-menu> -->
                         </md-menu-item>
@@ -43,5 +49,5 @@
         <i class="fa fa-sun-o fa-6 m-r-5" aria-hidden="true"></i>
     </md-button>
 </div>
-<div id="opsMap" style="height: {{iframeHeight - 115}}px"></div>
-<!-- <div id="opsMap" style="height: {{iframeHeight - 115}}px" ng-init='initMapBoxMap()'></div> -->
+<!-- <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div> -->
+<div id="opsMap" style="height: {{iframeHeight - 115}}px" ng-init='initMapBoxMap()'></div>

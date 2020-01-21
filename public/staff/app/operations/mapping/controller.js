@@ -21,14 +21,6 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 $scope.$apply();
             }
         });
-        // if($scope.url.has('ID')){
-        //     //$scope.url.get('ID')
-
-        // }else {
-        //     $scope.set_path('/');
-        // }
-
-
     };
 
     $scope.refreshOperations = () => {
@@ -413,7 +405,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 then(areas => {
                     try {
                         areas.forEach((area, index) => {
-                            loadAreas(area);
+                            loadArea(area);
                         });
                     } catch (error) {
                         Swal.fire({
@@ -1073,7 +1065,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     }
 }).
-    controller('track_recording_controller', function ($scope, $mdSidenav, track_recording_service, userAccountsService, $mdBottomSheet) {
+controller('track_recording_controller', function ($scope, $mdSidenav, track_recording_service, userAccountsService, $mdBottomSheet) {
         $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
         $scope.dateNow = new Date();
 
