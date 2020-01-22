@@ -311,7 +311,19 @@ myAppModule.controller('opsMap_controller',
             this.toggle = () => {
                 map_layer_service.getProtectedAreaCoordinates(layerModel)
                     .then(coordinates => {
-                        $scope.flyTo(coordinates[0][0]);
+                        $scope.flyTo({ center: coordinates[0][0], zoome: 15});
+                        $scope.$apply();
+                    });
+            }
+        }
+
+        function ProtectedLayerWithMultiPolygon(layerModel){
+            this.layerModel = layerModel;
+            this.isVisible = false;
+            this.toggle = () => {
+                map_layer_service.getProtectedAreaCoordinates(layerModel)
+                    .then(coordinates => {
+                        $scope.flyTo({ center: coordinates[0][0][0], zoome: 15});
                         $scope.$apply();
                     });
             }
@@ -319,8 +331,10 @@ myAppModule.controller('opsMap_controller',
 
         $scope.getLayerViewModel = (layer) => {
             var viewModel = null;
-            if (layer.type == 'Polygon' || layer.type == 'MultiPolygon') {
+            if (layer.type == 'Polygon') {
                 viewModel = new ProtectedLayer(layer);
+            }else if(layer.type == 'MultiPolygon'){
+                viewModel = new ProtectedLayerWithMultiPolygon(layer);
             } else {
                 viewModel = new CommonLayer(layer);
                 if(layer.id == 'mapbox-satellite')
