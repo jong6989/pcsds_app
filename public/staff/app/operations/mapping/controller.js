@@ -453,6 +453,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 then(images => {
                     images.forEach(image => {
 
+                        if(image.path == null) return;
                         var splitPath = image.path.split('/');
                         var imageName = splitPath[splitPath.length - 1];
                         mappingService.
@@ -1229,7 +1230,7 @@ controller('track_recording_controller', function ($scope, $mdSidenav, track_rec
         
         
     }).
-    service('track_recording_service', function () {
+service('track_recording_service', function () {
         var collection = db.collection("ecan_app_recordings");
         this.getRecordingByUserAndDate = (userID, from, to) => {
             var fromYear = from.getFullYear();

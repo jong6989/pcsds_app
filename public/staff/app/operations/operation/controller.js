@@ -166,6 +166,15 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
         localData.remove('operation');
     }
 }).
+controller('map_view_controller', function($scope){
+    var object = localData.get('operation');
+    var operation = JSON.parse(object);
+    $scope.currentItem = operation;
+
+    $scope.onMapBoxLoad = () => {
+        $scope.loadOperation(operation.id);
+    }
+}).
     service('operation_service', function () {
         var operationCollection = db.collection('ecan_app_operation_plans');
 

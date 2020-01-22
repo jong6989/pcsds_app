@@ -313,19 +313,18 @@ myAppModule.controller('opsMap_controller',
                     .then(coordinates => {
                         $scope.flyTo(coordinates[0][0]);
                         $scope.$apply();
-                    })
+                    });
             }
         }
 
         $scope.getLayerViewModel = (layer) => {
             var viewModel = null;
-            if (layer.id == 'mapbox-satellite') {
-                viewModel = new CommonLayer(layer);
-                viewModel.isVisible = false;
-            } else if (layer.type == 'Polygon' || layer.type == 'MultiPolygon') {
+            if (layer.type == 'Polygon' || layer.type == 'MultiPolygon') {
                 viewModel = new ProtectedLayer(layer);
             } else {
                 viewModel = new CommonLayer(layer);
+                if(layer.id == 'mapbox-satellite')
+                    viewModel.isVisible = false;
             }
 
             return viewModel;
