@@ -170,7 +170,7 @@ controller('map_view_controller', function($scope){
     var object = localData.get('operation');
     var operation = JSON.parse(object);
     $scope.currentItem = operation;
-
+    localData.remove('operation');
     $scope.onMapBoxLoad = () => {
         $scope.loadOperation(operation.id);
     }
