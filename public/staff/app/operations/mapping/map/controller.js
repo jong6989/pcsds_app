@@ -21,6 +21,9 @@ myAppModule.controller('opsMap_controller',
                 $scope.$apply();
             }
         });
+        $scope.$on('$mdMenuClose', function(event, menu) { 
+            $scope.otherSubMenuIsOpen = false;
+        });
 
         $scope.noop = function (event) {
             event.stopImmediatePropagation();
