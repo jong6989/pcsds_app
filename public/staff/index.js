@@ -17,9 +17,9 @@ var script_angular = `
         <script src="/js/ng-camera.js"></script>
         <script src="/js/ng-image-crop/ng-img-crop.js"></script>
         <script src="/js/html2canvas/html2canvas.min.js"></script>
-        <script src="/plugins/ng-image-gallery/dist/ng-image-gallery.min.js"></script>
+        <script src="/plugins/ng-image-gallery/dist/ng-image-gallery.js"></script>
         <script src="/plugins/angular-uuid/angular-uuid.js"></script>
-        <link href="/plugins/ng-image-gallery/dist/ng-image-gallery.min.css" rel="stylesheet"/>
+        <link href="/plugins/ng-image-gallery/dist/ng-image-gallery.css" rel="stylesheet"/>
         <link href="/css/mapbox-gl.css" rel="stylesheet"/>
         <script src="/js/mapbox-gl.js"></script>
         <script src="/js/tinycolor2/dist/tinycolor-min.js"></script>
@@ -490,6 +490,18 @@ localData.set('STAFF_ACCOUNT',`
                         "title": "My List",
                         "path": "/operations/operation/list/single",
                         "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/images/controller.js'></script><script src='app/operations/images/captured_from_tracking/controller.js'></script>",
+                "icon":"files-o",
+                "title":"Image Gallery",
+                "menu" : [
+                    {
+                        "title": "Captured Images from Tracking",
+                        "path": "/operations/images/captured_from_tracking",
+                        "icon": "magic"
                     }
                 ]
             }
