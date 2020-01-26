@@ -1,20 +1,23 @@
 <div ng-init='loadMonths()'>
-    <!-- <md-card ng-repeat="month in months track by $index">
+    <div ng-show='staff == null'>
+        <md-card ng-repeat="month in months track by $index">
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h3>{{month.MMMMYYYY}}</h3>
+                </div>
+            </md-toolbar>
+            <md-card-content layout='row'>
+                <div ng-repeat='_staff in capturedImages[month.MMMMYYYY].staff'>
+                    <md-button ng-click='loadImages(_staff, month.month, month.year)'>{{_staff.name}}</md-button>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <md-card ng-show='staff != null'>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h3>{{month.MMMMYYYY}}</h3>
-            </div>
-        </md-toolbar>
-        <md-card-content layout='row'>
-            <div ng-repeat='staff in capturedImages[month.MMMMYYYY].staff'>
-                <md-button>{{staff.name}}</md-button>
-            </div>
-        </md-card-content>
-    </md-card> -->
-    <md-card>
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <h3>{{month.MMMMYYYY}}</h3>
+                <h3>{{month.MMMMYYYY}} by {{staff.name}}</h3>
             </div>
         </md-toolbar>
         <md-card-content>
@@ -33,6 +36,7 @@
         ]" ng-include="'/plugins/ng-image-gallery/res/icons/'+svg"></div>
             <ng-image-gallery-extended images="images" thumbnails=true on-delete="" on-open='openImage(index)'>
             </ng-image-gallery-extended>
+            <md-button ng-click='back()'>Back</md-button>
         </md-card-content>
     </md-card>
     <div style="visibility: hidden;">
@@ -58,8 +62,8 @@
                                 <textarea ng-model='imageDescription'></textarea>
                             </md-input-container>
                             <md-input-container ng-init='loadClassifications()'>
-                                <md-autocomplete class="md-block" md-selected-item="_class=imageClass"
-                                    md-search-text="class" md-search-text-change="imageClass = class"
+                                <md-autocomplete class="md-block" md-selected-item="imageClass" md-search-text="class"
+                                    md-search-text-change="imageClass = class"
                                     md-items="classification in classifications" md-item-text="classification.name"
                                     md-min-length="0" placeholder="Classification">
                                     <md-item-template>
@@ -73,11 +77,18 @@
                             </md-input-container>
                             <div>
                                 <md-button ng-click='delete(imageToUpdate)'>Delete</md-button>
-                                <md-button ng-click='save({ description: imageDescription, classification: imageClass})'>
+                                <md-button
+                                    ng-click='save({ description: imageDescription, classification: imageClass})'>
                                     Save
                                 </md-button>
+                                <md-button ng-click='nextImage()'>
+                                    Next
+                                </md-button>
+                                <md-button ng-click='previousImage()'>
+                                    Previous
+                                </md-button>
                             </div>
-                            
+
                         </div>
                     </div>
                 </md-dialog-content>

@@ -2,6 +2,7 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
     $scope,
     captured_images_services,
     tracking_images_service) {
+
     $scope.loadMonths = () => {
         var dateNow = new Date();
         var end = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate());
@@ -11,14 +12,18 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
         var months = [];
         for (var i = end.getTime(); i >= start.getTime(); i -= millisecondsPerMonth) {
             var date = new Date(i);
-            months.push({
-                month: date.getMonth() + 1,
-                year: date.getFullYear(),
-                MMMMYYYY: `${moment(date).format('MMMM')} ${date.getFullYear()}`
-            });
+            months.push(getMonth(date));
         }
         $scope.months = months;
         loadStaffWithCapturedImages(months);
+    }
+
+    function getMonth(date){
+        return {
+            month: date.getMonth() + 1,
+            year: date.getFullYear(),
+            MMMMYYYY: `${moment(date).format('MMMM')} ${date.getFullYear()}`
+        }
     }
 
     $scope.capturedImages = {};
@@ -38,15 +43,20 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
 
     $scope.loadImages = (staff, month, year) => {
         $scope.images = [];
-        var id = 0;
+        setMonth(month, year);
         tracking_images_service.
             getCapturedImages(staff, month, year).
             then(images => {
-                images.forEach(image => {
-                    // image.url ='/images/brain_logo.png';
-                    $scope.images.push(image);
-                });
+                $scope.images = images;
+                $scope.staff = staff;
+                $scope.$apply();
             })
+    }
+
+    $scope.month = {};
+    function setMonth(month, year) {
+        var date = new Date(year, month - 1, 1);
+        $scope.month = getMonth(date);
     }
 
     $scope.updateImage = (imageIndex) => {
@@ -54,15 +64,36 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
         $scope.showPrerenderedDialog(null, 'windowImage');
     }
 
+    $scope.currentImageIndex = -1;
     $scope.openImage = function (index) {
+        setCurrentImage(index);
+        $scope.showPrerenderedDialog(null, 'windowImage');
+    }
+
+    function setCurrentImage(index){
         $scope.imageToUpdate = $scope.images[index];
         $scope.imageUrl = $scope.imageToUpdate.url;
         $scope.imageDescription = $scope.imageToUpdate.description;
         $scope.imageClass = $scope.imageToUpdate.classification || '';
         $scope.dateAndTimeTaken = $scope.to_date($scope.imageToUpdate.time);
-        $scope.showPrerenderedDialog(null, 'windowImage');
+        $scope.currentImageIndex = index;
     }
 
+    $scope.nextImage = () => {
+        setCurrentImage(($scope.currentImageIndex + 1) % $scope.images.length)
+    }
+
+    $scope.previousImage = () => {
+        var previousIndex = $scope.currentImageIndex == 0 ? 
+            $scope.images.length - 1 :  
+            $scope.currentImageIndex - 1; 
+        setCurrentImage(previousIndex);
+    }
+
+    $scope.back = () => {
+        $scope.staff = null;
+    }
+    
     $scope.save = (imageToUpdate) => {
         $scope.isBusy = true;
 
@@ -111,7 +142,11 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
             $scope.$apply();
         })
     }
-    $scope.loadImages({ uid: '12Ut9pTSZcgXOQPc2dkRYXYQv6t1' }, 1, 2020);
+    // $scope.staff =  { uid: '12Ut9pTSZcgXOQPc2dkRYXYQv6t1', name: 'Juan dela Cruz' };
+    // $scope.loadImages($scope.staff, 1, 2020);
+    $scope.images = [
+        { id: 0, url: '/images/brain_log.png'}
+    ]
 }).
     service('tracking_images_service', function () {
         var collection = db.collection('ecan_app_images');
@@ -178,6 +213,8 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
                 collection.
                     where('time', '>=', start.getTime()).
                     where('time', '<=', end.getTime()).
+                    where('uploaded', '==', true).
+                    where('is_deleted', '==', false).
                     onSnapshot(snapshot => {
                         var uids = snapshot.docs.map(document => {
                             var image = document.data();
@@ -232,6 +269,7 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
                         var images = snapshot.docs.map(document => {
                             var image = document.data();
                             image.id = document.id;
+                            // image.url = '/images/brain_logo.png';
                             return image;
                         });
                         resolve(images);
