@@ -495,7 +495,7 @@ localData.set('STAFF_ACCOUNT',`
             },
             {
                 "controller":"<script src='app/operations/images/controller.js'></script><script src='app/operations/images/captured_from_tracking/controller.js'></script>",
-                "icon":"files-o",
+                "icon":"file-photo-o",
                 "title":"Image Gallery",
                 "menu" : [
                     {

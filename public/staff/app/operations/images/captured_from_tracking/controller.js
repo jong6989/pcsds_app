@@ -6,7 +6,7 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
     $scope.loadMonths = () => {
         var dateNow = new Date();
         var end = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate());
-        var timeSixMonthsAgo = end.getTime() - 1.577e+10;
+        var timeSixMonthsAgo = end.getTime() - 1.314e+10;
         var start = new Date(timeSixMonthsAgo);
         var millisecondsPerMonth = 2.628e+9;
         var months = [];
