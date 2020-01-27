@@ -75,6 +75,14 @@
                                 <label>Date and Time Taken</label>
                                 <input ng-model='dateAndTimeTaken' readonly>
                             </md-input-container>
+                            <md-input-container>
+                                <label>Coordinate (click to view on map)</label>
+                                <br>
+                                <md-button ng-click='viewOnMap(imageToUpdate)'>
+                                    Longitude:{{longitude}}, Latitude: {{latitude}}
+                                </md-button>
+
+                            </md-input-container>
                             <div>
                                 <md-button ng-click='delete(imageToUpdate)'>Delete</md-button>
                                 <md-button

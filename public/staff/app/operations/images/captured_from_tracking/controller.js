@@ -1,6 +1,6 @@
 myAppModule.controller('captured_images_from_tracking_controller', function (
     $scope,
-    captured_images_services,
+    $window,
     tracking_images_service) {
 
     $scope.loadMonths = () => {
@@ -18,7 +18,7 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
         loadStaffWithCapturedImages(months);
     }
 
-    function getMonth(date){
+    function getMonth(date) {
         return {
             month: date.getMonth() + 1,
             year: date.getFullYear(),
@@ -70,11 +70,13 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
         $scope.showPrerenderedDialog(null, 'windowImage');
     }
 
-    function setCurrentImage(index){
+    function setCurrentImage(index) {
         $scope.imageToUpdate = $scope.images[index];
         $scope.imageUrl = $scope.imageToUpdate.url;
         $scope.imageDescription = $scope.imageToUpdate.description;
         $scope.imageClass = $scope.imageToUpdate.classification || '';
+        $scope.longitude = $scope.imageToUpdate.longitude;
+        $scope.latitude = $scope.imageToUpdate.latitude;
         $scope.dateAndTimeTaken = $scope.to_date($scope.imageToUpdate.time);
         $scope.currentImageIndex = index;
     }
@@ -84,16 +86,16 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
     }
 
     $scope.previousImage = () => {
-        var previousIndex = $scope.currentImageIndex == 0 ? 
-            $scope.images.length - 1 :  
-            $scope.currentImageIndex - 1; 
+        var previousIndex = $scope.currentImageIndex == 0 ?
+            $scope.images.length - 1 :
+            $scope.currentImageIndex - 1;
         setCurrentImage(previousIndex);
     }
 
     $scope.back = () => {
         $scope.staff = null;
     }
-    
+
     $scope.save = (imageToUpdate) => {
         $scope.isBusy = true;
 
@@ -103,10 +105,10 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
             then(result => {
                 $scope.isBusy = false;
                 tracking_images_service.
-                addClassification(imageToUpdate.classification).
-                then(classification => {
+                    addClassification(imageToUpdate.classification).
+                    then(classification => {
 
-                })
+                    })
             })
     }
 
@@ -134,19 +136,40 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
     }
 
     $scope.classifications = [];
-    $scope.loadClassifications = () =>{
+    $scope.loadClassifications = () => {
         tracking_images_service.
-        getClassifications().
-        then(classifications => {
-            $scope.classifications = classifications;
-            $scope.$apply();
-        })
+            getClassifications().
+            then(classifications => {
+                $scope.classifications = classifications;
+                $scope.$apply();
+            })
     }
     // $scope.staff =  { uid: '12Ut9pTSZcgXOQPc2dkRYXYQv6t1', name: 'Juan dela Cruz' };
     // $scope.loadImages($scope.staff, 1, 2020);
     $scope.images = [
-        { id: 0, url: '/images/brain_log.png'}
+        { id: 0, url: '/images/brain_logo.png' }
     ]
+
+    $scope.loadMap = () => {
+        var image = JSON.parse(localData.get('image'));
+        new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        })
+            .setLngLat([image.longitude, image.latitude])
+            .setHTML(`<img src=${image.url} style='width: 100px; height:150px;object-fit:contain'>`)
+            .addTo($scope.map);
+        $scope.map.flyTo({ center: [image.longitude, image.latitude], zoom: 15});
+        // localData.remove('image');
+    }
+
+    $scope.viewOnMap = (image) => {
+        localData.set('image', JSON.stringify(image));
+        $window.open('#!/operations/images/captured_from_tracking/map', '_blank');
+        $scope.$apply();
+    }
+
+    // localData.set('image', JSON.stringify($scope.images[0]));
 }).
     service('tracking_images_service', function () {
         var collection = db.collection('ecan_app_images');
@@ -280,19 +303,19 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
         this.addClassification = (classification) => {
             return new Promise((resolve, reject) => {
                 db.
-                collection('ecan_app_image_classifications').
-                where('name', '==', classification).
-                onSnapshot(snapshot => {
-                    if(snapshot.docs.length == 0){
-                        db.
-                        collection('ecan_app_image_classifications').
-                        add({ name: classification}).
-                        then(result => {
-                            resolve(classification);
-                        });
-                    }else
-                        resolve(classification)
-                })
+                    collection('ecan_app_image_classifications').
+                    where('name', '==', classification).
+                    onSnapshot(snapshot => {
+                        if (snapshot.docs.length == 0) {
+                            db.
+                                collection('ecan_app_image_classifications').
+                                add({ name: classification }).
+                                then(result => {
+                                    resolve(classification);
+                                });
+                        } else
+                            resolve(classification)
+                    })
 
             })
         }
@@ -300,14 +323,14 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
         this.getClassifications = () => {
             return new Promise((resolve, reject) => {
                 db.
-                collection('ecan_app_image_classifications').
-                onSnapshot(snapshot => {
-                    var classifications = snapshot.docs.map(document => {
-                        return document.data();
-                    });
+                    collection('ecan_app_image_classifications').
+                    onSnapshot(snapshot => {
+                        var classifications = snapshot.docs.map(document => {
+                            return document.data();
+                        });
 
-                    resolve(classifications);
-                })
+                        resolve(classifications);
+                    })
             })
         }
     }).directive('ngImageGalleryExtended', ['$rootScope', '$timeout', '$q', 'ngImageGalleryOpts',
