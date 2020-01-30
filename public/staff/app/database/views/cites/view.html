@@ -1,0 +1,121 @@
+<div ng-controller="cites_controller"  ng-init="set_page_title('Datasets - Apprehension');loadCites()">
+    <md-toolbar class="bg-teal">
+      <h1 class="md-toolbar-tools">
+        <md-button class="md-raised" ng-click="openApprehensionForm($event)">
+          <i class="fa fa-plus col-green"></i>
+          add new apprehension
+        </md-button>
+        <md-button class="md-raised" ng-click="refreshList()">
+          <i class="fa fa-refresh col-green"></i>
+            clear filter
+        </md-button>
+      </h1>
+    </md-toolbar>
+  
+    <md-content
+      style="height: {{ iframeHeight - 150 }}px;"
+      layout-sm="coulumn"
+      layout-gt-sm
+      ng-init=""
+    >
+      <div flex>
+        <table ng-table="citesTable" class="table" show-filter="true">
+          <tr ng-repeat="cites in $data">
+            <td
+              title="'Permit Number'"
+              sortable="'permit_number'"
+              filter="{CONTROL_NO: 'text'}"
+            >
+              {{ cites.permit_number }}
+            </td>
+            <td
+              title="'Date Issued'"
+              sortable="'date_issued'"
+              filter="{date_issued: 'text'}"
+            >
+              {{ to_date(cites.date_issued) }}
+            </td>
+            <td
+              title="'Stamp Number'"
+              sortable="'stamp_number'"
+              filter="{stamp_number: 'text'}"
+            >
+              {{ cites.stamp_number }}
+            </td>
+            <td
+              title="'Exporter\'s Last Name'"
+              sortable="'last_name'"
+              filter="{ last_name:'text' }"
+            >
+              {{ cites.exporter.last_name }}
+            </td>
+            <td title="'Exporter\'s First Name'" sortable="'first_name'" filter="{first_name:'text'}">
+              {{ cites.exporter.first_name }}
+            </td>
+            <td title="'Exporter\'s Middle Name'" sortable="'middle_name'" filter="{middle_name:'text'}">
+              {{ cites.exporter.middle_name }}           </td>
+            <td
+              title="'Exporter\'s Municipality'"
+              sortable="'municipality'"
+              filter="{municipality:'text'}"
+            >
+              {{ cites.exporter.municipality }}
+            </td>
+            <td
+              title="'Importer\'s Last Name'"
+              sortable="'last_name'"
+              filter="{last_name:'text'}"
+            >
+              {{ cites.importer.last_name }}
+            </td>          
+            <td
+              title="'Importer\'s First Name'"
+              sortable="'first_name'"
+              filter="{first_name:'text'}"
+            >
+              {{ cites.importer.first_name }}
+            </td>
+            <td
+              title="'Importer\'s Middle Name'"
+              sortable="'middle_name'"
+              filter="{middle_name:'text'}"
+            >
+              {{ cites.importer.middle_name }}
+            </td>
+            <td
+              title="'Importer\'s Country'"
+              sortable="'country'"
+              filter="{country:'text'}"
+            >
+              {{ cites.importer.country }}
+            </td>
+            <td
+              title="'Species To Export'"
+            >
+              <md-button ng-click='viewSpecies(cites)'>View</md-button>
+            </td>
+            <td title="'Amount Paid'" sortable="'amount_paid'" filter="{amount_paid:'text'}">
+              {{ cites.amount_paid }}
+            </td>
+            <td title="'OR Number'" sortable="'or_number'" filter="{or_number:'text'}">
+              {{ cites.or_number }}
+            </td>
+            <td title="'Purpose'" sortable="'purpose'" filter="{purpose:'text'}">
+              {{ cites.purpose}}
+            </td>
+            <td title="''">
+              <md-button
+                class="md-raised"
+                ng-click="openApprehensionFormForUpdating($event, apprehension.id)"
+              >
+                <i class="fa fa-edit col-green"></i>
+                EDIT
+              </md-button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </md-content>
+    <div ng-include="'./app/database/modals/addApprehension.html'"></div>
+  </div>
+  

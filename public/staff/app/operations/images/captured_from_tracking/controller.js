@@ -170,8 +170,7 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
     }
 
     // localData.set('image', JSON.stringify($scope.images[0]));
-}).
-    service('tracking_images_service', function () {
+}).service('tracking_images_service', function () {
         var collection = db.collection('ecan_app_images');
 
         this.update = (updatedImage) => {
