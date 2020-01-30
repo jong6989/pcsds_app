@@ -1,0 +1,83 @@
+<div style='visibility: hidden;'>
+    <div class='md-dialog-container' id='citesFormWindow'>
+        <md-dialog layout='column' layout-align='center'>
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>{{title}} CITES</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="closeForm()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <form ng-cloak id='citesForm'>
+                <div layout-gt-sm layout-sm="column">
+                    <div layout-gt-sm layout-sm="column">
+                        <md-input-container class="md-block">
+                            <label>Permit No.</label>
+                            <input ng-model="cites.permit_number" required>
+                        </md-input-container>
+                    </div>
+                    <md-input-container class="md-block" flex>
+                        <label>Date Issued</label>
+                        <md-datepicker ng-model="date_issued" ng-change='cites.date_issued=toMilliseconds(date_issued)'
+                            required>
+                        </md-datepicker>
+                    </md-input-container>
+
+                    <md-input-container class="md-block">
+                        <label>Stamp Number</label>
+                        <input ng-model="cites.stam_number" required>
+                    </md-input-container>
+
+                </div>
+                <div>Exporter's Information</div>
+                    <hr>
+                <div layout-gt-sm layout-sm="column">
+                    <div layout-gt-sm layout-sm="column">
+                        <md-input-container class="md-block">
+                            <label>Last Name</label>
+                            <input ng-model="cites.exporter.last_name" required>
+                        </md-input-container>
+                    </div>
+
+                    <div layout-gt-sm layout-sm="column">
+                        <md-input-container class="md-block" flex>
+                            <label>Middle Name</label>
+                            <input ng-model="cites.exporter.middle_name">
+                        </md-input-container>
+                    </div>
+
+                    <div layout-gt-sm layout-sm="column">
+                        <md-input-container class="md-block">
+                            <label>First Name</label>
+                            <input ng-model="cites.exporter.first_name" required>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout-gt-sm layout-sm="column">
+                    <div layout-gt-sm layout-sm="column">
+                        <md-input-container class="md-block">
+                            <label>Municipality</label>
+                            <input ng-model="cites.exporter.municipality">
+                        </md-input-container>
+                    </div>
+
+                    <div layout-gt-sm layout-sm="column">
+                        <md-input-container class="md-block" flex>
+                            <label>Province</label>
+                            <input ng-model="cites.exporter.province">
+                        </md-input-container>
+                    </div>
+
+                    <div layout-gt-sm layout-sm="column">
+                        <md-input-container class="md-block">
+                            <label>Country</label>
+                            <input ng-model="cites.exporter.country" required>
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </md-dialog>
+    </div>
+</div>
