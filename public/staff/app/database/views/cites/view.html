@@ -24,7 +24,7 @@
             <td
               title="'Permit Number'"
               sortable="'permit_number'"
-              filter="{CONTROL_NO: 'text'}"
+              filter="{permit_number: 'text'}"
             >
               {{ cites.permit_number }}
             </td>
@@ -45,54 +45,54 @@
             <td
               title="'Exporter\'s Last Name'"
               sortable="'last_name'"
-              filter="{ last_name:'text' }"
+              filter="{ 'exporter.last_name':'text' }"
             >
               {{ cites.exporter.last_name }}
             </td>
-            <td title="'Exporter\'s First Name'" sortable="'first_name'" filter="{first_name:'text'}">
+            <td title="'Exporter\'s First Name'" sortable="'first_name'" filter="{'exporter.first_name':'text'}">
               {{ cites.exporter.first_name }}
             </td>
-            <td title="'Exporter\'s Middle Name'" sortable="'middle_name'" filter="{middle_name:'text'}">
+            <td title="'Exporter\'s Middle Name'" sortable="'middle_name'" filter="{'exporter.middle_name':'text'}">
               {{ cites.exporter.middle_name }}           </td>
             <td
               title="'Exporter\'s Municipality'"
               sortable="'municipality'"
-              filter="{municipality:'text'}"
+              filter="{'exporter.municipality':'text'}"
             >
               {{ cites.exporter.municipality }}
             </td>
             <td
               title="'Exporter\'s Province'"
               sortable="'province'"
-              filter="{province:'text'}"
+              filter="{'exporter.province':'text'}"
             >
               {{ cites.exporter.province }}
             </td>
             <td
               title="'Importer\'s Last Name'"
-              sortable="'last_name'"
-              filter="{last_name:'text'}"
+              sortable="'importer_last_name'"
+              filter="{'importer.last_name':'text'}"
             >
               {{ cites.importer.last_name }}
             </td>          
             <td
               title="'Importer\'s First Name'"
               sortable="'first_name'"
-              filter="{first_name:'text'}"
+              filter="{'importer.first_name':'text'}"
             >
               {{ cites.importer.first_name }}
             </td>
             <td
               title="'Importer\'s Middle Name'"
               sortable="'middle_name'"
-              filter="{middle_name:'text'}"
+              filter="{'importer.middle_name':'text'}"
             >
               {{ cites.importer.middle_name }}
             </td>
             <td
               title="'Importer\'s Country'"
               sortable="'country'"
-              filter="{country:'text'}"
+              filter="{'importer.country':'text'}"
             >
               {{ cites.importer.country }}
             </td>
@@ -101,8 +101,8 @@
             >
               <md-button ng-click='viewSpecies(cites)'>View</md-button>
             </td>
-            <td title="'Amount Paid'" sortable="'amount_paid'" filter="{amount_paid:'text'}">
-              {{ cites.amount_paid }}
+            <td title="'Amount Paid'" sortable="'amount_paid'" filter="{amount_paid:'text'}" style="text-align: right;">
+              {{ cites.amount_paid | number:2}}
             </td>
             <td title="'OR Number'" sortable="'or_number'" filter="{or_number:'text'}">
               {{ cites.or_number }}

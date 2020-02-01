@@ -19,18 +19,16 @@ myAppModule.
             $scope.showPrerenderedDialog(event, 'citesFormWindow');
         }
 
+        $scope.refreshList = () => {
+            $scope.citesTable = $scope.ngTable($scope.citesCollection);
+        }
+
         $scope.openCITESFormForUpdating = (event, cites) => {
             $scope.action = 'Update CITES';
             $scope.date_issued = $scope.to_date(cites.date_issued);
             $scope.cites = cites;
             $scope.saveCITES = updateCITES;
             $scope.showPrerenderedDialog(event, 'citesFormWindow');
-            // $crudService.
-            // getItem(cites.id, cites_collection).
-            // then(_cites => {
-
-            // })
-
         }
 
 
