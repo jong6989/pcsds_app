@@ -15,7 +15,8 @@ document.write(`<script src="./app/database/views/chainsaw_registration/controll
 document.write(`<script src="./app/database/views/chainsaw_purchase_permit/controller.js"></script>`);
 document.write(`<script src="./app/database/views/criminal_cases/controller.js"></script>`);
 document.write(`<script src="./app/database/views/wsup/controller.js"></script>`);
-document.write(`<script src="./app/database/views/cites/controller.js"></script>`);
+document.write(`<script src="./app/database/views/cites/export/controller.js"></script>`);
+document.write(`<script src="./app/database/views/cites/import/controller.js"></script>`);
 
 // document.write(`<script src="./app/doc/services/dummyCrudService.js"></script>`);
 // document.write(`<script src="./app/doc/controllers/dummyControllers.js"></script>`);

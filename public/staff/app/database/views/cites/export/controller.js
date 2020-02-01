@@ -13,6 +13,11 @@ myAppModule.
         }
 
         $scope.openCITESForm = (event) => {
+            $scope.cites = {
+                species: [],
+                type: 'cites'
+            }
+            $scope.typeShouldHide = false;
             $scope.action = 'Add CITES';
             $scope.saveCITES = addCITES;
 
@@ -43,7 +48,6 @@ myAppModule.
                     ).then((result) => {
                         $scope.citesCollection.push(cites);
                         $scope.citesTable = $scope.ngTable($scope.citesCollection);
-
                         $scope.close_dialog();
                         $scope.$apply();
                     });
@@ -74,5 +78,19 @@ myAppModule.
         $scope.viewSpecies = (cites) => {
             $scope.speciesToExport = $scope.ngTable(cites.species);
             $scope.showPrerenderedDialog(null, 'speciesWindow');
+        }
+
+        $scope.loadMunicipalities = (province) => {
+            if($scope.Province)
+                $addressService.
+                getMunicipalities('Philippines', province).
+                then(municipalities => {
+                    $scope.municipalities = municipalities;
+                });
+            else
+            {
+                $scope.municipalities = [];
+                $scope.barangays = [];
+            }
         }
     })

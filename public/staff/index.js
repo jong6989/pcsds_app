@@ -429,6 +429,16 @@ localData.set('STAFF_ACCOUNT',`
                         "title": "Wildlife Special Use Permit",
                         "path": "/database/views/wsup",
                         "icon": "leaf"
+                    },
+                    {
+                        "title": "CITES (Export)",
+                        "path": "/database/views/cites/export",
+                        "icon": "leaf"
+                    },
+                    {
+                        "title": "CITES (Import)",
+                        "path": "/database/views/cites/import",
+                        "icon": "leaf"
                     }
                 ]
             },
