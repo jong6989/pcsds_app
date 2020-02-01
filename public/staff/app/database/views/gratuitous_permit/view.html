@@ -1,0 +1,85 @@
+<div ng-controller="gratuitous_permit_controller"  ng-init="set_page_title('Datasets - Gratuitous Permits');loadGratuitousPermits()">
+    <md-toolbar class="bg-teal">
+      <h1 class="md-toolbar-tools">
+        <md-button class="md-raised" ng-click="openGratuitousPermitForm($event)">
+          <i class="fa fa-plus col-green"></i>
+          add new gratuitous permit
+        </md-button>
+        <md-button class="md-raised" ng-click="refreshList()">
+          <i class="fa fa-refresh col-green"></i>
+            clear filter
+        </md-button>
+      </h1>
+    </md-toolbar>
+  
+    <md-content
+      style="height: {{ iframeHeight - 150 }}px;"
+      layout-sm="column"
+      layout-gt-sm
+      ng-init=""
+    >
+      <div flex>
+        <table ng-table="gratuitousPermitTable" class="table" show-filter="true">
+          <tr ng-repeat="gratuitousPermit in $data track by $index">
+            <td
+              title="'Permit Number'"
+              sortable="'permit_number'"
+              filter="{permit_number: 'text'}"
+            >
+              {{ gratuitousPermit.permit_number }}
+            </td>
+            <td
+              title="'Date Issued'"
+              sortable="'date_issued'"
+              filter="{date_issued: 'text'}"
+            >
+              {{ to_date(gratuitousPermit.date_issued) }}
+            </td>
+            <td
+              title="'Grantees'"
+            >
+              <md-button ng-click='viewGrantees(gratuitousPermit)'>View</md-button>
+            </td>
+            <td
+              title="'Grantees Office'"
+              sortable="'grantees_office'"
+              filter="{ 'grantees_office':'text' }"
+            >
+              {{ gratuitousPermit.grantees_office }}
+            </td>
+            <td title="'Research Title'" sortable="'research_title'" filter="{'research_title':'text'}">
+              {{ gratuitousPermit.research_title }}
+            </td>
+            <td title="'Address'" sortable="'address'" filter="{'address':'text'}">
+              {{ gratuitousPermit.address }}           </td>
+            <td
+              title="'Remarks'"
+              sortable="'remarks'"
+              filter="{'remarks':'text'}"
+            >
+              {{ gratuitousPermit.remarks }}
+            </td>
+            <td
+              title="'Evaluation Date'"
+              sortable="'evaluation_date'"
+              filter="{'evaluation_date':'text'}"
+            >
+              {{ gratuitousPermit.evaluation_date }}
+            </td>
+            
+            <td title="''">
+              <md-button
+                class="md-raised"
+                ng-click="openGratuitousPermitFormForUpdating($event, gratuitousPermit)"
+              >
+                <i class="fa fa-edit col-green"></i>
+                EDIT
+              </md-button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </md-content>
+    <div ng-include="'./app/database/modals/gratuitousPermitForm.html'"></div>
+  </div>
+  

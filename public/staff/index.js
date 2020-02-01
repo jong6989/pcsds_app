@@ -439,6 +439,11 @@ localData.set('STAFF_ACCOUNT',`
                         "title": "CITES (Import)",
                         "path": "/database/views/cites/import",
                         "icon": "leaf"
+                    },
+                    {
+                        "title": "Gratuitous Permit",
+                        "path": "/database/views/gratuitous_permit",
+                        "icon": "leaf"
                     }
                 ]
             },

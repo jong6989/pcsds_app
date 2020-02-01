@@ -28,7 +28,7 @@
                         <md-input-container class="md-block" flex>
                             <label>Date Issued</label>
                             <md-datepicker ng-model="date_issued"
-                                ng-change='_cites.date_issued=toMilliseconds(date_issued)' required>
+                                ng-change='cites.date_issued=toMilliseconds(date_issued)' required>
                             </md-datepicker>
                         </md-input-container>
 
@@ -140,7 +140,7 @@
                                 <input ng-model='specimen.cites_appendix'>
                             </md-input-container>
                             <md-button class="md-fab md-mini" aria-label="Remove this row"
-                                ng-click="specimen.splice($index, 1)" ng-if="specimen.length > 1">
+                                ng-click="cites.species.splice($index, 1)" ng-if="cites.species.length > 1">
                                 <md-tooltip md-direction="left">Remove Specy</md-tooltip>
                                 <i class="fa fa-remove"></i>
                             </md-button>
