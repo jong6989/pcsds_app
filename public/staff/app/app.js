@@ -109,7 +109,7 @@ myAppModule.controller('AppCtrl', function ($scope, $window, $filter, $mdMedia,
   };
 
   $scope.toMilliseconds = (date) => {
-    $scope.operation.date = date.getTime();
+    return date.getTime();
   }
   
   $scope.within_dates = function (date, from, to) {

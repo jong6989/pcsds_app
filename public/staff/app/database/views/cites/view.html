@@ -1,9 +1,9 @@
-<div ng-controller="cites_controller"  ng-init="set_page_title('Datasets - Apprehension');loadCites()">
+<div ng-controller="cites_controller"  ng-init="set_page_title('Datasets - CITES Exports');loadCites()">
     <md-toolbar class="bg-teal">
       <h1 class="md-toolbar-tools">
-        <md-button class="md-raised" ng-click="openApprehensionForm($event)">
+        <md-button class="md-raised" ng-click="openCITESForm($event)">
           <i class="fa fa-plus col-green"></i>
-          add new apprehension
+          add new cites
         </md-button>
         <md-button class="md-raised" ng-click="refreshList()">
           <i class="fa fa-refresh col-green"></i>
@@ -14,7 +14,7 @@
   
     <md-content
       style="height: {{ iframeHeight - 150 }}px;"
-      layout-sm="coulumn"
+      layout-sm="column"
       layout-gt-sm
       ng-init=""
     >
@@ -113,7 +113,7 @@
             <td title="''">
               <md-button
                 class="md-raised"
-                ng-click="openApprehensionFormForUpdating($event, apprehension.id)"
+                ng-click="openCITESFormForUpdating($event, cites)"
               >
                 <i class="fa fa-edit col-green"></i>
                 EDIT
@@ -123,6 +123,6 @@
         </table>
       </div>
     </md-content>
-    <div ng-include="'./app/database/modals/addApprehension.html'"></div>
+    <div ng-include="'./app/database/modals/citesForm.html'"></div>
   </div>
   

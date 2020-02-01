@@ -10,74 +10,194 @@
                     </md-button>
                 </div>
             </md-toolbar>
-            <form ng-cloak id='citesForm'>
-                <div layout-gt-sm layout-sm="column">
-                    <div layout-gt-sm layout-sm="column">
-                        <md-input-container class="md-block">
-                            <label>Permit No.</label>
-                            <input ng-model="cites.permit_number" required>
-                        </md-input-container>
+            <form ng-cloak name='citesForm'>
+                <md-dialog-content>
+                    <div layout-gt-sm layout-sm="column" ng-init='_cites.type = _cites.type || "cites"'>
+
+                        <md-radio-group ng-model="cites.type">
+                            <md-radio-button value='cites' class="md-primary">CITES</md-radio-button>
+                            <md-radio-button value='non-cites' class="md-primary">Non-CITES</md-radio-button>
+                        </md-radio-group>
                     </div>
-                    <md-input-container class="md-block" flex>
-                        <label>Date Issued</label>
-                        <md-datepicker ng-model="date_issued" ng-change='cites.date_issued=toMilliseconds(date_issued)'
-                            required>
-                        </md-datepicker>
-                    </md-input-container>
+                    <div layout-gt-sm layout-sm="column">
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>Permit No.</label>
+                                <input ng-model="cites.permit_number" required>
+                            </md-input-container>
+                        </div>
+                        <md-input-container class="md-block" flex>
+                            <label>Date Issued</label>
+                            <md-datepicker 
+                                ng-model="date_issued"
+                                ng-change='_cites.date_issued=toMilliseconds(date_issued)' required>
+                            </md-datepicker>
+                        </md-input-container>
 
-                    <md-input-container class="md-block">
-                        <label>Stamp Number</label>
-                        <input ng-model="cites.stam_number" required>
-                    </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Stamp Number</label>
+                            <input ng-model="cites.stamp_number" required>
+                        </md-input-container>
 
-                </div>
-                <div>Exporter's Information</div>
+                    </div>
+                    <div>Exporter's Information</div>
                     <hr>
-                <div layout-gt-sm layout-sm="column">
                     <div layout-gt-sm layout-sm="column">
-                        <md-input-container class="md-block">
-                            <label>Last Name</label>
-                            <input ng-model="cites.exporter.last_name" required>
-                        </md-input-container>
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>Last Name</label>
+                                <input ng-model="cites.exporter.last_name" required>
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block" flex>
+                                <label>Middle Name</label>
+                                <input ng-model="cites.exporter.middle_name">
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>First Name</label>
+                                <input ng-model="cites.exporter.first_name" required>
+                            </md-input-container>
+                        </div>
                     </div>
+                    <div layout-gt-sm layout-sm="column">
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>Municipality</label>
+                                <input ng-model="cites.exporter.municipality">
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block" flex>
+                                <label>Province</label>
+                                <input ng-model="cites.exporter.province">
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>Country</label>
+                                <input ng-model="cites.exporter.country" required>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div>Importer's Information</div>
+                    <hr>
+                    <div layout-gt-sm layout-sm="column">
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>Last Name</label>
+                                <input ng-model="cites.importer.last_name" required>
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block" flex>
+                                <label>Middle Name</label>
+                                <input ng-model="cites.importer.middle_name">
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>First Name</label>
+                                <input ng-model="cites.importer.first_name" required>
+                            </md-input-container>
+                        </div>
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>Country</label>
+                                <input ng-model="cites.importer.country" required>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div>
+                        <div ng-repeat='specimen in cites.species track by $index'>
+                            <md-input-container class='flex'>
+                                <label>Scientific Name</label>
+                                <input ng-model='specimen.scientific_name' required>
+                            </md-input-container>
+                            <md-input-container class='flex'>
+                                <label>Quantity</label>
+                                <input type="number" value=0 ng-model='specimen.quantity' required>
+                            </md-input-container>
+                            <md-input-container class='flex'>
+                                <label>Unit</label>
+                                <input ng-model='specimen.unit'>
+                            </md-input-container>
+                            <md-input-container class='flex'>
+                                <label>CITES Appendix</label>
+                                <input ng-model='specimen.cites_appendix'>
+                            </md-input-container>
+                            <md-button class="md-fab md-mini" aria-label="Remove this row"
+                                ng-click="specimen.splice($index, 1)" ng-if="specimen.length > 1">
+                                <md-tooltip md-direction="left">Remove Specy</md-tooltip>
+                                <i class="fa fa-remove"></i>
+                            </md-button>
+                        </div>
+                    </div>
+                    <md-button ng-click="cites.species.push({})" class="md-primary md-raised">
+                        Add Row
+                    </md-button>
 
                     <div layout-gt-sm layout-sm="column">
-                        <md-input-container class="md-block" flex>
-                            <label>Middle Name</label>
-                            <input ng-model="cites.exporter.middle_name">
+                        <md-input-container class='flex'>
+                            <label>Purpose</label>
+                            <input ng-model='cites.purpose'>
+                        </md-input-container>
+                        <md-input-container class='flex'>
+                            <label>OR No.</label>
+                            <input ng-model='cites.or_number'>
+                        </md-input-container>
+                        <md-input-container class='flex'>
+                            <label>Amount Paid</label>
+                            <input ng-model='cites.amount_paid' type='number'>
                         </md-input-container>
                     </div>
-
-                    <div layout-gt-sm layout-sm="column">
-                        <md-input-container class="md-block">
-                            <label>First Name</label>
-                            <input ng-model="cites.exporter.first_name" required>
-                        </md-input-container>
-                    </div>
-                </div>
-                <div layout-gt-sm layout-sm="column">
-                    <div layout-gt-sm layout-sm="column">
-                        <md-input-container class="md-block">
-                            <label>Municipality</label>
-                            <input ng-model="cites.exporter.municipality">
-                        </md-input-container>
-                    </div>
-
-                    <div layout-gt-sm layout-sm="column">
-                        <md-input-container class="md-block" flex>
-                            <label>Province</label>
-                            <input ng-model="cites.exporter.province">
-                        </md-input-container>
-                    </div>
-
-                    <div layout-gt-sm layout-sm="column">
-                        <md-input-container class="md-block">
-                            <label>Country</label>
-                            <input ng-model="cites.exporter.country" required>
-                        </md-input-container>
-                    </div>
-                </div>
+                </md-dialog-content>
+                <md-dialog-actions layout="row">
+                    <span flex></span>
+                    <md-button ng-click="closeForm()">
+                        Close
+                    </md-button>
+                    <md-button class="md-primary md-raised" ng-click="saveCITES(cites);"
+                        ng-disabled="citesForm.$invalid">
+                        {{action}}
+                    </md-button>
+                </md-dialog-actions>
             </form>
+        </md-dialog>
+    </div>
+</div>
+
+<div style='visibility: hidden;'>
+    <div class='md-dialog-container' id='speciesWindow'>
+        <md-dialog layout='column' layout-align='center'>
+            <md-toolbar class="bg-teal" >
+                <div  class="md-toolbar-tools">
+                    Species to Export
+                    <span flex></span>
+
+                    <md-button class="md-icon-button" ng-click="closeForm()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-content>
+                <table ng-table="speciesToExport" class="table" show-filter="false">
+                    <tr ng-repeat="species in $data">
+                        <td>{{ species.scientific_name}}</td>
+                        <td>{{ species.quantity}}</td>
+                        <td>{{ species.unit}}</td>
+                        <td> {{ species.cites_appendix }}</td>
+                    </tr>
+                </table>
+            </md-content>
         </md-dialog>
     </div>
 </div>
