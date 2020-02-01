@@ -1,5 +1,5 @@
 myAppModule.
-    controller('cites_controller', function ($scope, $crudService) {
+    controller('cites_export_controller', function ($scope, $crudService) {
         var cites_collection = db.collection('database').doc('cites').collection('database');
         $scope.citesTable = $scope.ngTable([]);
         $scope.title = 'Export'

@@ -1,4 +1,4 @@
-<div ng-controller="cites_controller"  ng-init="set_page_title('Datasets - CITES Exports');loadCites()">
+<div ng-controller="cites_export_controller"  ng-init="set_page_title('Datasets - CITES Exports');loadCites()">
     <md-toolbar class="bg-teal">
       <h1 class="md-toolbar-tools">
         <md-button class="md-raised" ng-click="openCITESForm($event)">
@@ -20,7 +20,7 @@
     >
       <div flex>
         <table ng-table="citesTable" class="table" show-filter="true">
-          <tr ng-repeat="cites in $data">
+          <tr ng-repeat="cites in $data track by $index">
             <td
               title="'Permit Number'"
               sortable="'permit_number'"
