@@ -1,0 +1,108 @@
+<div ng-controller="wcp_controller"  ng-init="set_page_title('Datasets - Wildlife Collector\'s Permits');loadWCPermits()">
+    <md-toolbar class="bg-teal">
+      <h1 class="md-toolbar-tools">
+        <md-button class="md-raised" ng-click="openGratuitousPermitForm($event)">
+          <i class="fa fa-plus col-green"></i>
+          add new gratuitous permit
+        </md-button>
+        <md-button class="md-raised" ng-click="refreshList()">
+          <i class="fa fa-refresh col-green"></i>
+            clear filter
+        </md-button>
+      </h1>
+    </md-toolbar>
+  
+    <md-content
+      style="height: {{ iframeHeight - 150 }}px;"
+      layout-sm="column"
+      layout-gt-sm
+      ng-init=""
+    >
+      <div flex>
+        <table ng-table="wcpListTable" class="table" show-filter="true">
+          <tr ng-repeat="wcp in $data track by $index">
+            <td
+              title="'Permit Number'"
+              sortable="'permit_number'"
+              filter="{permit_number: 'text'}"
+            >
+              {{ wcp.permit_number }}
+            </td>
+            
+            <td
+              title="'Last Name'"
+              sortable="'last_name'"
+              filter="{ 'last_name':'text' }"
+            >
+              {{ wcp.applicant.last_name }}
+            </td>
+            <td title="'First Name'" sortable="'first_name'" filter="{'first_name':'text'}">
+              {{ wcp.applicant.first_name }}
+            </td>
+            <td title="'Middle Name'" sortable="'middle_name'" filter="{'middle_name':'text'}">
+              {{ wcp.applicant.middle_name }}           </td>
+            <td
+              title="'Barangay'"
+              sortable="'barangay'"
+              filter="{'barangay':'text'}"
+            >
+              {{ wcp.applicant.barangay }}
+            </td>
+            <td
+              title="'Municipality'"
+              sortable="'municipality'"
+              filter="{'municipality':'text'}"
+            >
+              {{ wcp.applicant.municipality }}
+            </td>
+            <td
+              title="'Date Issued'"
+              sortable="'date_issued'"
+              filter="{date_issued: 'text'}"
+            >
+              {{ to_date(wcp.date_issued) }}
+            </td>
+            <td
+              title="'Valid Until'"
+              sortable="'valid_until'"
+              filter="{'valid_until':'text'}"
+            >
+              {{ to_date(wcp.valid_until) }}
+            </td>
+            <td
+              title="'Remarks'"
+              sortable="'remarks'"
+              filter="{'remarks':'text'}"
+            >
+              {{ wcp.remarks }}
+            </td>
+            <td
+              title="'Fee'"
+              sortable="'fee'"
+              filter="{'fee':'text'}"
+            >
+              {{ wcp.fee | number:2}}
+            </td>
+            <td
+              title="'OR Number'"
+              sortable="'or_number'"
+              filter="{'or_number':'text'}"
+            >
+              {{ wcp.or_number }}
+            </td>
+            <td title="''">
+              <md-button
+                class="md-raised"
+                ng-click="openWCPFormForUpdating($event, wcp)"
+              >
+                <i class="fa fa-edit col-green"></i>
+                EDIT
+              </md-button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </md-content>
+    <div ng-include="'./app/database/modals/wcpForm.html'"></div>
+  </div>
+  

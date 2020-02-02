@@ -444,6 +444,11 @@ localData.set('STAFF_ACCOUNT',`
                         "title": "Gratuitous Permit",
                         "path": "/database/views/gratuitous_permit",
                         "icon": "leaf"
+                    },
+                    {
+                        "title": "Wildlife Collector's Permit",
+                        "path": "/database/views/wcp",
+                        "icon": "leaf"
                     }
                 ]
             },

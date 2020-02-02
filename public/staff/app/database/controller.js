@@ -18,6 +18,7 @@ document.write(`<script src="./app/database/views/wsup/controller.js"></script>`
 document.write(`<script src="./app/database/views/cites/export/controller.js"></script>`);
 document.write(`<script src="./app/database/views/cites/import/controller.js"></script>`);
 document.write(`<script src="./app/database/views/gratuitous_permit/controller.js"></script>`);
+document.write(`<script src="./app/database/views/wcp/controller.js"></script>`);
 
 // document.write(`<script src="./app/doc/services/dummyCrudService.js"></script>`);
 // document.write(`<script src="./app/doc/controllers/dummyControllers.js"></script>`);

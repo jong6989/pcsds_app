@@ -1,0 +1,86 @@
+<div style='visibility: hidden;'>
+    <div class='md-dialog-container' id='wcpForm'>
+        <md-dialog layout='column' layout-align='center'>
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>{{action}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <form ng-cloak name='wcpForm'>
+                <md-dialog-content>
+                    <div layout-gt-sm layout-sm="column">
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>Permit No.</label>
+                                <input ng-model="wcp.permit_number" required>
+                            </md-input-container>
+                        </div>
+                        <md-input-container class="md-block" flex>
+                            <label>Date Issued</label>
+                            <md-datepicker ng-model="date_issued"
+                                ng-change='wcp.date_issued=toMilliseconds(date_issued)' required>
+                            </md-datepicker>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex>
+                            <label>Valid Until</label>
+                            <md-datepicker ng-model="valid_until"
+                                ng-change='wcp.valid_until=toMilliseconds(valid_until)'>
+                            </md-datepicker>
+                        </md-input-container>
+                    </div>
+                    <div>Applicant</div>
+                    <hr>
+                    <div>
+                        <md-input-container>
+                            <label>Last Name</label>
+                            <input ng-model="wcp.applicant.last_name" required>
+                        </md-input-container>
+
+                        <md-input-container flex>
+                            <label>Middle Name</label>
+                            <input ng-model="wcp.applicant.middle_name">
+                        </md-input-container>
+                        <md-input-container>
+                            <label>First Name</label>
+                            <input ng-model="wcp.applicant.first_name" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Barangay</label>
+                            <input ng-model="wcp.applicant.barangay">
+                        </md-input-container>
+
+                        <md-input-container>
+                            <label>Municipality</label>
+                            <input ng-model="wcp.applicant.municipality">
+                        </md-input-container>
+                    </div>
+                    <md-input-container class="md-block">
+                        <label>Remarks</label>
+                        <input ng-model="wcp.remarks">
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>OR Number</label>
+                        <input ng-model="wcp.or_number">
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Fee</label>
+                        <input type="number" ng-model="wcp.fee">
+                    </md-input-container>
+                </md-dialog-content>
+                <md-dialog-actions layout="row">
+                    <span flex></span>
+                    <md-button ng-click="close_dialog()">
+                        Close
+                    </md-button>
+                    <md-button class="md-primary md-raised" ng-click="saveWCP(wcp);" ng-disabled="wcpForm.$invalid">
+                        {{action}}
+                    </md-button>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
+    </div>
+</div>
