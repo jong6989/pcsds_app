@@ -1245,7 +1245,7 @@ service('track_recording_service', function () {
             return new Promise((resolve, reject) => {
                 var query = collection.
                     orderBy('time', 'desc').
-                    where('uid', '==', userID).
+                    where('staff_id', '==', userID).
                     where('time', '>=', dateStart.getTime()).
                     where('time', '<=', dateEnd.getTime());
 
@@ -1304,7 +1304,7 @@ service('track_recording_service', function () {
 
             return new Promise((resolve, reject) => {
                 var query = collection.
-                    where('uid', '==', userID).
+                    where('staff_id', '==', userID).
                     where('time', '>=', from.getTime()).
                     where('time', '<=', to.getTime());
 

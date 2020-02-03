@@ -263,7 +263,7 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
         this.getStaff = (uid) => {
             return new Promise((resolve, reject) => {
                 db.collection('staffs').
-                    where('uid', '==', uid).
+                    where('staff_id', '==', uid).
                     onSnapshot(snapshot => {
                         var staff = null;
                         var document = snapshot.docs ? snapshot.docs[0] : null;
@@ -282,7 +282,7 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
                 var start = new Date(year, month - 1, 1);
                 var end = new Date(year, month, 0);
                 collection.
-                    where('uid', '==', staff.uid).
+                    where('staff_id', '==', staff.uid).
                     where('time', '>=', start.getTime()).
                     where('time', '<=', end.getTime()).
                     where('uploaded', '==', true).
