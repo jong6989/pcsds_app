@@ -111,7 +111,7 @@ myAppModule.controller('AppCtrl', function ($scope, $window, $filter, $mdMedia,
   $scope.toMilliseconds = (date) => {
     return date.getTime();
   }
-  
+
   $scope.within_dates = function (date, from, to) {
     var d = $scope.to_date(date); var a = $scope.to_date(from); var b = $scope.to_date(to);
     var aa = a.split("-");
@@ -418,6 +418,17 @@ myAppModule.controller('AppCtrl', function ($scope, $window, $filter, $mdMedia,
     $scope.signon = (i) => {
       signaturePad[i].on();
     }
+  }
+
+  $scope.exportToExcel = (json, fileName, fixedHeaderCallBack) => {
+    var ws = XLSX.utils.json_to_sheet(json);
+    fixedHeader(ws);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    
+    if(!fileName.endsWith('.xlsx'))
+      fileName += '.xlsx';
+    XLSX.writeFile(wb, fileName);
   }
 
 }).service('account_service', function () {

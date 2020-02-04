@@ -34,7 +34,7 @@
                     ng-change='date.To=to_date(to)' required>
                 </md-datepicker>
                 <md-button type="submit" ng-disabled='isLoading || formSearch.$invalid'
-                    ng-click='loadRecordingsByUserAndDate(currentUser.uid, from, to)'>Go
+                    ng-click='loadRecordingsByUserAndDate(currentUser.id, from, to)'>Go
                 </md-button>
             </form>
         </div>
