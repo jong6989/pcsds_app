@@ -241,7 +241,7 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
                         var uids = snapshot.docs.map(document => {
                             var image = document.data();
 
-                            return image.uid;
+                            return image.staff_id;
                         });
 
                         uids = new Set(uids);
@@ -260,20 +260,27 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
             })
         }
 
-        this.getStaff = (uid) => {
+        this.getStaff = (id) => {
             return new Promise((resolve, reject) => {
-                db.collection('staffs').
-                    where('staff_id', '==', uid).
-                    onSnapshot(snapshot => {
-                        var staff = null;
-                        var document = snapshot.docs ? snapshot.docs[0] : null;
-                        if (document) {
-                            staff = document.data();
-                            staff.id = document.id;
-                        }
+                // db.collection('staffs').
+                //     where('id', '==', uid).
+                //     onSnapshot(snapshot => {
+                //         var staff = null;
+                //         var document = snapshot.docs ? snapshot.docs[0] : null;
+                //         if (document) {
+                //             staff = document.data();
+                //             staff.id = document.id;
+                //         }
 
-                        resolve(staff);
-                    })
+                //         resolve(staff);
+                //     })
+                db.collection('staffs').
+                doc(id).
+                onSnapshot(document => {   
+                    var staff = document.data();
+                    staff.id = document.id;                 
+                    resolve(staff);
+                })
             })
         }
 
@@ -282,7 +289,7 @@ myAppModule.controller('captured_images_from_tracking_controller', function (
                 var start = new Date(year, month - 1, 1);
                 var end = new Date(year, month, 0);
                 collection.
-                    where('staff_id', '==', staff.uid).
+                    where('staff_id', '==', staff.id).
                     where('time', '>=', start.getTime()).
                     where('time', '<=', end.getTime()).
                     where('uploaded', '==', true).

@@ -31,6 +31,7 @@ var script_angular = `
         <link rel="stylesheet" href="/js/angularjs-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
         <script type="text/javascript" src="/js/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
         <script type="text/javascript" src="/js/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
+        <script src="/js/rxjs.umd.min.js"></script>
     `;
 //angularjs plugins
 var script_ng_plugins = {
@@ -199,6 +200,11 @@ localData.set('STAFF_ACCOUNT',`
                     {
                         "title": "Track Recordings",
                         "path": "/operations/mapping/map/trackrecords",
+                        "icon": "street-view"
+                    },
+                    {
+                        "title": "Live Track Recordings",
+                        "path": "/operations/live_tracking",
                         "icon": "street-view"
                     }
                 ]

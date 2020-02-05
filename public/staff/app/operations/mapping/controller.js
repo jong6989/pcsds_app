@@ -1291,6 +1291,28 @@ service('track_recording_service', function () {
                     })
             })
         }
+
+        this.getTracking = (startingTimeInMS, endingTimeInMS, staff) => {
+            return new Promise((resolve, reject) => {
+                // var dateNow = new Date();
+                // var start = new Date(dateNow.getFullYear(), dateNow.getMonth(),  dateNow.getDate());
+                collection.
+                where('time', '>=', startingTimeInMS).
+                where('time', '<=', endingTimeInMS).
+                where('staff_id', '==', staff.id).
+                orderBy('time', 'asc').
+                onSnapshot(snapshot => {
+                    var recordings = snapshot.docs.map(document => {
+                        var recording = document.data();
+                        recording.id = document.id;
+                        return recording;
+                    })
+
+                    resolve(recordings);
+                })
+                
+            })
+        }
     }).
     service('mappingService', function () {
         var collection = db.collection("ecan_app_recordings");
@@ -1560,3 +1582,4 @@ service('track_recording_service', function () {
     });
 
 document.write(`<script src='app/operations/mapping/map/controller.js'></script>`);
+document.write(`<script src='app/operations/live_tracking/controller.js'></script>`);

@@ -67,6 +67,7 @@
     "qrcode": "^1.4.1",
     "query-string": "^6.2.0",
     "request": "^2.88.0",
+    "rxjs": "^6.5.4",
     "signature_pad": "^3.0.0-beta.3",
     "twilio": "^3.31.0",
     "xlsx": "^0.14.2"

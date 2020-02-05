@@ -7,7 +7,7 @@
                 </div>
             </md-toolbar>
             <md-card-content layout='row'>
-                <div ng-repeat='_staff in capturedImages[month.MMMMYYYY].staff'>
+                <div ng-repeat='_staff in capturedImages[month.MMMMYYYY].staff track by $index' >
                     <md-button ng-click='loadImages(_staff, month.month, month.year)'>{{_staff.name}}</md-button>
                 </div>
             </md-card-content>
