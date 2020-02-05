@@ -117,7 +117,8 @@ myAppModule.
                     'coordinates': []
                 }
             }
-            console.log(geojson.features.length);
+            if (geojson.features.length > 1) geojson.features.pop();
+
             if (geojson.features.length > 1) {
                 linestring.geometry.coordinates = geojson.features.map(function (point) {
                     return point.geometry.coordinates;
