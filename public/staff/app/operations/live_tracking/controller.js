@@ -40,9 +40,6 @@ myAppModule.
                         // resolve(coordinates);
                         var source = $scope.map.getSource(recording.id);
                         if (source) {
-                            // var data = source._data;
-                            // data.features[0].geometry.coordinates[0] = coordinates;
-                            // source.setData(data);
                             var newCoordinates = coordinates.slice(currentCoordinate[recording.id].length);
                             updateRecording(recording, newCoordinates);
                         } else {
@@ -120,7 +117,7 @@ myAppModule.
                     'coordinates': []
                 }
             }
-
+            console.log(geojson.features.length);
             if (geojson.features.length > 1) {
                 linestring.geometry.coordinates = geojson.features.map(function (point) {
                     return point.geometry.coordinates;
@@ -187,7 +184,6 @@ myAppModule.
                 "LemonChiffon",
                 "LightBlue",
                 "LightCoral",
-                
                 "LightGreen",
                 "LightPink",
                 "LightSalmon",
@@ -256,26 +252,10 @@ myAppModule.
                 "WhiteSmoke",
                 "Yellow",
                 "YellowGreen"
-
             ];
             var color = colors[currentColorIndex];
             currentColorIndex += 1;
             return color;
-        }
-        function startLiveTracking() {
-            var timeInterval = 1000;
-            var start = new Date();
-            var end = new Date();
-            setInterval(() => {
-                end = new Date();
-                staffs.forEach(staff => {
-                    track_recording_service.
-                        getTracking(start, end, staff).
-                        then(recordings => {
-
-                        })
-                })
-            }, timeInterval)
         }
     }).
     service('live_tracking_service', function () {
