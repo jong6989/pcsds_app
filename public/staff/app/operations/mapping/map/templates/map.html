@@ -1,0 +1,53 @@
+<div style='position:absolute; right: 5px;' layout='column' id='sidePanel'>
+    <md-button class="md-fab md-mini" ng-click='toggleSidenav()'>
+        <md-tooltip md-direction="left">View Search List</md-tooltip>
+        <i class="fa fa-angle-double-left fa-6 m-r-5" aria-hidden="true"></i>
+    </md-button>
+    <!-- <md-menu-bar> -->
+    <md-menu md-position-mode="target-right target" ng-init='loadLayerMenuItems();'>
+        <md-button class="md-fab md-mini" ng-click="$mdMenu.open($event)">
+            <md-tooltip md-direction="left">Map Layers</md-tooltip>
+            <i class="fa fa-bars fa-6 m-r-5" aria-hidden="true"></i>
+        </md-button>
+        <md-menu-content width='4'>
+            <md-menu-item ng-repeat='layer in menuLayers' 
+                ng-mouseover="noop($event)"
+                >
+                <!-- <md-menu-item ng-repeat='layer in menuLayers' 
+                ng-mouseenter="noop($event)" 
+                > -->
+                <md-menu>
+                    <md-button class="" ng-click="closeOtherSubMenu($event);$mdMenu.open($event);">
+                        {{layer.description}}
+                    </md-button>
+                    <!-- <md-button class="" ng-click="$mdOpenMenu($event);">
+                        {{layer.description}}
+                    </md-button> -->
+                    <md-menu-content width='4' ng-mouseleave="">
+                        <md-menu-item ng-repeat='sublayer in layer.subLayers' 
+                            style="background-color: {{sublayer.color || ''}};">
+                            <!-- <md-menu> -->
+                            <md-button ng-init='layerViewModel=getLayerViewModel(sublayer)' 
+                            md-prevent-menu-close="md-prevent-menu-close" 
+                            ng-click="layerViewModel.toggle()">
+                                {{sublayer.description}}
+                                <i class="fa fa-check fa-6 m-r-5" aria-hidden="true" ng-show='layerViewModel.isVisible'></i>
+                            </md-button>
+                            <!-- </md-menu> -->
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+    <!-- </md-menu-bar> -->
+    <md-button class="md-fab md-mini" ng-init='modalLayer.id="modal";modalLayer.isVisible=false' 
+        ng-click='toggleLayer(modalLayer)'>
+        <md-tooltip md-direction="left" ng-show='!modalLayer.isVisible'>
+            {{modalLayer.isVisible ? 'Brighten' : 'Dim'}}
+        </md-tooltip>
+        <i class="fa fa-sun-o fa-6 m-r-5" aria-hidden="true"></i>
+    </md-button>
+</div>
+<!-- <div id="opsMap" style="height: {{iframeHeight - 115}}px"></div> -->
+<div id="opsMap" style="height: {{iframeHeight - 115}}px" ng-init='initMapBoxMap(onMapBoxLoad)'></div>

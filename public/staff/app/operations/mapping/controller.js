@@ -5,6 +5,11 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     $scope.routePlan = {};
     $scope.buttonAddRoute = { text: 'Add Route', isEnabled: true };
     $scope.buttonAddArea = { text: 'Add Area', isEnabled: true };
+    $scope.buttonAddImage = { text: 'Add Image', isEnabled: true }
+    $scope.buttonAddFlag = { text: 'Add Flags', isEnabled: true }
+    $scope.buttonAddText = { text: 'Add Texts', isEnabled: true };
+    $scope.mapObject = {};
+    
     $scope.init_enforcer_map = () => {
         $scope.gpsItems = [];
         $scope.get_gps_query().onSnapshot(qs => {
@@ -16,14 +21,6 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 $scope.$apply();
             }
         });
-        // if($scope.url.has('ID')){
-        //     //$scope.url.get('ID')
-
-        // }else {
-        //     $scope.set_path('/');
-        // }
-
-
     };
 
     $scope.refreshOperations = () => {
@@ -52,7 +49,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $location.path('/operations/operation/create');
     }
     $scope.onMapBoxLoad = () => {
-        localData.set('operation', JSON.stringify({ id: '1578816597213' }));
+        // localData.set('operation', JSON.stringify({ id: '1578816597213' }));
         if (localData.get('operation')) {
             $scope.operation = JSON.parse(localData.get('operation'));
             $scope.isInCRUDMode = true;
@@ -87,6 +84,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 removeClickListeners();
                 setMouseCursorStyle('default');
                 $scope.close_dialog();
+                $scope.$apply();
             });
     }
 
@@ -407,7 +405,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 then(areas => {
                     try {
                         areas.forEach((area, index) => {
-                            loadAreas(area);
+                            loadArea(area);
                         });
                     } catch (error) {
                         Swal.fire({
@@ -455,6 +453,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 then(images => {
                     images.forEach(image => {
 
+                        if(image.path == null) return;
                         var splitPath = image.path.split('/');
                         var imageName = splitPath[splitPath.length - 1];
                         mappingService.
@@ -626,6 +625,8 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 annotation.title,
                 annotation.symbol,
                 annotation.description);
+            var now = new Date().getTime().toString();
+            layer.id = `flag-${currentFlagLayerBatch}-${now}`
             $scope.addLayer(layer);
             $scope.addIcon([e.lngLat.lng, e.lngLat.lat],
                 annotation.title,
@@ -639,38 +640,63 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     function onMouseClickWhileDrawingText(e) {
         $scope.showPrerenderedDialog(e, 'windowAddText');
         $scope.saveAnnotation = (annotation) => {
+            var now = new Date().getTime().toString();
             var layer = $scope.getPointLayer(
                 [e.lngLat.lng, e.lngLat.lat],
                 annotation.title,
                 annotation.symbol,
                 annotation.description);
+            layer.paint['text-color'] = annotation.color || '#000000';
+            layer.id = `text-${currentTextLayerGroup}-${now}`;
             $scope.addLayer(layer);
             $scope.close_dialog();
         }
     }
 
+    var images = [];
     function uploadImage(coordinates) {
         $scope.addToImageArea = (file) => {
-            Upload.
-                base64DataUrl(file).
-                then(url => {
-                    $scope.map.loadImage(url, function (error, image) {
-                        var dateNow = new Date().getTime().toString();
-                        $scope.map.addImage(dateNow, image);
-                        $scope.addLayer({
-                            'id': dateNow,
-                            'type': 'fill',
-                            'source': currentImageLayerID,
-                            'paint': {
-                                'fill-pattern': dateNow
-                            }
+            if (file == null) return;
+            // $scope.colorPickerIsHidden = true;
+            $scope.showRoutePlanWindow();
+
+            $scope.saveRoute = (mapObject) => {
+                $scope.close_dialog();
+                var image = {
+                    name: mapObject.name,
+                    description: mapObject.description
+                };
+
+                image.layerID = currentImageLayerID;
+                image.file = {
+                    fileName: file.name
+                }
+
+                Upload.
+                    base64DataUrl(file).
+                    then(url => {
+                        image.file.stream = url;
+                        images.push(image);
+                        $scope.map.loadImage(url, function (error, image) {
+                            $scope.map.addSource(`image-source-${currentImageLayerID}`, {
+                                'type': 'image',
+                                'url': image.src,
+                                'coordinates': coordinates[0]
+                            });
+
+                            $scope.addLayer({
+                                'id': `${currentImageLayerID}`,
+                                'type': 'raster',
+                                'source': `image-source-${currentImageLayerID}`
+                            });
+                            initImageDrawing();
                         })
                     })
-                })
+            }
         }
+
         document.getElementById('imageUploader').click();
     }
-
 
     var currentPointAndLineLayerID = 0;
     function initRouteDrawing() {
@@ -717,7 +743,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         $scope.map.on('click', onMouseClickWhileDrawingRoute);
 
         setMouseCursorStyle('crosshair');
-        $scope.drawRoute = $scope.showRoutePlanWindow;
+        $scope.drawRoute = () => {
+            $scope.colorPickerIsHidden = false;
+            $scope.showRoutePlanWindow();
+        };
         $scope.buttonAddRoute.text = 'Save Route';
     }
 
@@ -744,7 +773,10 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         // $scope.map.off('click', onMouseClickWhileDrawingRoute);
         removeClickListeners();
         $scope.map.on('click', onMouseClickWhileDrawingArea);
-        $scope.drawArea = $scope.showRoutePlanWindow;
+        $scope.drawArea = () => {
+            $scope.colorPickerIsHidden = false;
+            $scope.showRoutePlanWindow();
+        };
         $scope.saveRoute = saveArea;
         setMouseCursorStyle('crosshair');
         $scope.buttonAddArea.text = 'Save Area';
@@ -760,6 +792,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 $scope.buttonAddArea.text = 'Add Area';
                 removeClickListeners();
                 setMouseCursorStyle('default');
+                $scope.$apply();
                 $scope.close_dialog();
             });
     }
@@ -816,33 +849,160 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
         });
         removeClickListeners();
         $scope.map.on('click', onMouseClickWhileDrawingImage);
-        $scope.drawImage = drawImage;
+        $scope.colorPickerIsHidden = true;
+        $scope.drawImage = () => {
+            saveImages(images);
+        };
+        // $scope.saveRoute = saveImage;
+        $scope.buttonAddImage.text = 'Save Images';
         setMouseCursorStyle('crosshair');
     }
 
+    function saveImages(images) {
+        var promises = [];
+        images.forEach(image => {
+            promises.push(saveImage(image));
+        });
+
+        Promise.all(promises).then(images => {
+            $scope.drawImage = initImageDrawing;
+            $scope.buttonAddImage.text = "Add images";
+            setMouseCursorStyle('default');
+            $scope.colorPickerIsHidden = false;
+            images = [];
+            $scope.$apply();
+            $scope.close_dialog();
+        })
+    }
+
+    function saveImage(image) {
+        return new Promise((resolve, reject) => {
+            var layerID = image.layerID;
+            image.id = new Date().getTime().toString();
+            image.points = getImageCoordinates(`image-${layerID}`);
+            delete image.layerID;
+            mappingService.
+                addImage($scope.operation, image).
+                then(result => {
+                    resolve(image);
+                });
+        })
+
+
+    }
+
+    function getImageCoordinates(layerID) {
+        var layer = $scope.map.getLayer(layerID);
+        var source = $scope.map.getSource(layer.source);
+        var features = source._data.features;
+        var coordinates = [];
+        if (features.length > 0) {
+            var coordinates_ = features[0].geometry.coordinates[0];
+            if (coordinates_)
+                coordinates_.forEach(coordinate => {
+                    coordinates.push({ longitude: coordinate[0], latitude: coordinate[1] });
+                })
+        }
+        return coordinates;
+    }
+
+    var currentTextLayerGroup = 0;
     function initTextDrawing() {
         setMouseCursorStyle('crosshair');
         removeClickListeners();
         $scope.map.on('click', onMouseClickWhileDrawingText);
         $scope.windowAnnotationTitle = 'Annotation';
-        $scope.drawText = () => {
-            setMouseCursorStyle('default');
-            removeClickListeners();
-            $scope.drawText = initTextDrawing;
-        }
+        $scope.buttonAddText.text = 'save texts';
+        $scope.drawText = saveText;
+        currentTextLayerGroup += 1;
     }
 
+    function saveText() {
+        var mapLayers = $scope.getMapLayers();
+        var textLayers = mapLayers.filter(layer => layer.startsWith(`text-${currentTextLayerGroup}`));
+        var texts = [];
+        textLayers.forEach(textLayer => {
+            var layer = $scope.map.getLayer(textLayer);
+            var color = layer.paint.get('text-color');
+            var source = $scope.map.getSource(layer.source);
+            var features = source._data.features;
+            // var flag = {};
+            var coordinate = {};
+
+            if (features.length > 0) {
+                coordinate = {
+                    longitude: features[0].geometry.coordinates[0],
+                    latitude: features[0].geometry.coordinates[1]
+                }
+                var text = {};
+                text.coordinate = coordinate;
+                text.description = features[0].properties.description || '';
+                text.name = features[0].properties.title;
+                text.color = rgb2hex(color.value.value.toString());
+                texts.push(text);
+            }
+        });
+
+        mappingService.addTexts($scope.operation, texts).
+            then(result => {
+                $scope.drawText = initTextDrawing;
+                $scope.buttonAddText.text = 'add texts';
+                $scope.$apply();
+            })
+
+    }
+
+
+    function rgb2hex(rgb) {
+        rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+        return (rgb && rgb.length === 4) ? "#" +
+            ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
+    }
+
+    var currentFlagLayerBatch = 0;
     function initFlagDrawing() {
         setMouseCursorStyle('crosshair');
         removeClickListeners();
         $scope.windowAnnotationTitle = 'Flag';
-
         $scope.map.on('click', onMouseClickWhileDrawingFlag);
-        $scope.drawFlag = () => {
-            setMouseCursorStyle('default');
-            removeClickListeners();
-            $scope.drawFlag = initFlagDrawing;
-        }
+        $scope.buttonAddFlag.text = 'save flags';
+        currentFlagLayerBatch += 1;
+        $scope.drawFlag = saveFlags;
+    }
+
+    function saveFlags() {
+        var mapLayers = $scope.getMapLayers();
+        var flagLayerIDs = mapLayers.filter(layerID => layerID.startsWith(`flag-${currentFlagLayerBatch}`));
+        var flags = [];
+        flagLayerIDs.forEach(flagLayerID => {
+            var layer = $scope.map.getLayer(flagLayerID);
+            var source = $scope.map.getSource(layer.source);
+            var features = source._data.features;
+            // var flag = {};
+            var coordinate = {};
+            if (features.length > 0) {
+                coordinate = {
+                    longitude: features[0].geometry.coordinates[0],
+                    latitude: features[0].geometry.coordinates[1]
+                }
+                var flag = {};
+                flag.coordinate = coordinate;
+                flag.description = features[0].properties.description || '';
+                flag.name = features[0].properties.title;
+                // flag.id = new Date().getTime().toString();
+                flags.push(flag);
+            }
+        })
+        mappingService.
+            addFlags($scope.operation, flags).
+            then(flags => {
+                $scope.drawFlag = initFlagDrawing;
+                $scope.buttonAddFlag.text = 'add flags';
+                $scope.$apply();
+
+            })
     }
 
     function getFeatureCollection(geometryType) {
@@ -906,12 +1066,12 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
     }
 }).
-    controller('track_recording_controller', function ($scope, $mdSidenav, track_recording_service, userAccountsService) {
+controller('track_recording_controller', function ($scope, $mdSidenav, track_recording_service, userAccountsService, $mdBottomSheet) {
         $scope.currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
         $scope.dateNow = new Date();
 
         // setTimeout(() => {
-        //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2019-12-23'), new Date('2019-12-30'))
+        //     $scope.loadRecordingsByUserAndDate('Nmkwr1hkEbUslFUUO11ZcNZxatN2', new Date('2019-12-25'), new Date('2019-12-25'))
         // })
 
         $scope.goToStartofTrack = () => { }
@@ -978,12 +1138,19 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
                     $scope.hasTrackRecord = coordinates.length > 0;
 
-                    $scope.map.on('click', 'lines-' + id, (e) => {
+                    $scope.map.on('click', 'route-lines-' + id, (e) => {
                         new mapboxgl.Popup()
                             .setLngLat(coordinates[0])
                             .setHTML(`<strong>${record.name}</strong><div>${record.description}</div>`)
                             .addTo($scope.map);
-                    })
+                    });
+
+                    // $mdBottomSheet.show({
+                    //     templateUrl: './app/operations/mapping/map/trackrecords/bottomSheet.html',
+                    //     controller: 'track_recording_controller',
+                    //     disableBackdrop: true
+                    // });
+
                     $scope.isLoading = false;
                 }).catch(error => {
                     Swal.fire({
@@ -996,6 +1163,44 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 });
 
         }
+
+        $scope.gallery = [];
+        function loadAttachedImages(trackRecord) {
+            var promises = [];
+            $scope.gallery = [];
+            trackRecord.
+                images.
+                forEach(image => {
+                    var promise = new Promise((resolve, reject) => {
+                        track_recording_service.
+                            getImageUrl(image.path).
+                            then(url => {
+                                image.url = url;
+                                resolve(image);
+                            });
+                    })
+                    promises.push(promise);
+                })
+
+            Promise.
+                all(promises).
+                then(images => {
+                    var id = 1;
+                    images.forEach(image => {
+                        var img = {
+                            id: id,
+                            url: image.url,
+                            // alt: `longitude: ${image.longitude} latitude: ${image.latitude}`,
+                            title: image.description,
+                            deletable: false
+                        }
+                        $scope.gallery.push(img);
+                        id += 1;
+                    })
+                    $scope.$apply();
+                });
+        }
+
         $scope.setCurrentUser = (user) => {
             $scope.currentUser = user;
         }
@@ -1007,6 +1212,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             $scope.start_time = $scope.format(new Date(record.start_time), 'MM/DD/YYYY hh:mm:ss a');
             $scope.end_time = $scope.format(new Date(record.end_time), 'MM/DD/YYYY  hh:mm:ss a')
             $scope.distance_in_km = record.distance ? (record.distance / 1000).toFixed(2) : 'unknown';
+            loadAttachedImages(record);
         }
 
         $scope.format = (date, formatString) => {
@@ -1016,8 +1222,15 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             $scope.users = await userAccountsService.getUsers();
             $scope.$apply();
         }
+
+        setTimeout(() => {
+            $('#buttonGoToStart').appendTo($('#sidePanel'));
+            $('#buttonGoToEnd').appendTo($('#sidePanel'));
+        }, 3000);
+        
+        
     }).
-    service('track_recording_service', function () {
+service('track_recording_service', function () {
         var collection = db.collection("ecan_app_recordings");
         this.getRecordingByUserAndDate = (userID, from, to) => {
             var fromYear = from.getFullYear();
@@ -1032,7 +1245,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             return new Promise((resolve, reject) => {
                 var query = collection.
                     orderBy('time', 'desc').
-                    where('uid', '==', userID).
+                    where('staff_id', '==', userID).
                     where('time', '>=', dateStart.getTime()).
                     where('time', '<=', dateEnd.getTime());
 
@@ -1064,6 +1277,42 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
                 })
             })
         }
+
+        this.getImageUrl = (path) => {
+            return new Promise((resolve, reject) => {
+                storageRef.
+                    child(path).
+                    getDownloadURL().
+                    then(url => {
+                        resolve(url)
+                    }).
+                    catch(error => {
+                        throw error;
+                    })
+            })
+        }
+
+        this.getTracking = (startingTimeInMS, endingTimeInMS, staff) => {
+            return new Promise((resolve, reject) => {
+                // var dateNow = new Date();
+                // var start = new Date(dateNow.getFullYear(), dateNow.getMonth(),  dateNow.getDate());
+                collection.
+                where('time', '>=', startingTimeInMS).
+                where('time', '<=', endingTimeInMS).
+                where('staff_id', '==', staff.id).
+                orderBy('time', 'asc').
+                onSnapshot(snapshot => {
+                    var recordings = snapshot.docs.map(document => {
+                        var recording = document.data();
+                        recording.id = document.id;
+                        return recording;
+                    })
+
+                    resolve(recordings);
+                })
+                
+            })
+        }
     }).
     service('mappingService', function () {
         var collection = db.collection("ecan_app_recordings");
@@ -1077,7 +1326,7 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
 
             return new Promise((resolve, reject) => {
                 var query = collection.
-                    where('uid', '==', userID).
+                    where('staff_id', '==', userID).
                     where('time', '>=', from.getTime()).
                     where('time', '<=', to.getTime());
 
@@ -1150,6 +1399,68 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
             })
         }
 
+        this.addImage = (operation, image) => {
+            return new Promise((resolve, reject) => {
+                var fileStream = image.file.stream;
+                var fileName = image.file.fileName;
+                delete image.file;
+                db.
+                    collection('ecan_app_operation_plans').
+                    doc(operation.id).
+                    collection('images').
+                    doc(image.id).
+                    set(image).
+                    then(result => {
+                        storageRef.child('map_plan_images').
+                            child(operation.id).
+                            child(fileName).
+                            putString(fileStream).
+                            then(uploadTaskSnapshot => {
+                                image.url = uploadTaskSnapshot.ref.getDownloadURL();
+                                resolve(image);
+                            }).
+                            catch(error => {
+                                throw error;
+                            })
+                    })
+            })
+        }
+
+        this.addFlags = (operation, flags) => {
+            var promises = [];
+            flags.forEach(flag => {
+                var promise = new Promise((resolve, reject) => {
+                    db.
+                        collection('ecan_app_operation_plans').
+                        doc(operation.id).
+                        collection('flags').
+                        add(flag).
+                        then(result => {
+                            resolve(flag);
+                        })
+                });
+                promises.push(promise);
+            })
+            return Promise.all(promises);
+        }
+
+        this.addTexts = (operation, texts) => {
+            var promises = [];
+            texts.forEach(text => {
+                var promise = new Promise((resolve, reject) => {
+                    db.
+                        collection('ecan_app_operation_plans').
+                        doc(operation.id).
+                        collection('texts').
+                        add(text).
+                        then(result => {
+                            resolve(text);
+                        })
+                });
+                promises.push(promise);
+            });
+            return Promise.all(promises);
+        }
         this.getRoutes = (operationID) => {
             return getDocument(operationID, 'routes');
         }
@@ -1271,3 +1582,4 @@ myAppModule.controller('operations_map_controller', function ($scope, mappingSer
     });
 
 document.write(`<script src='app/operations/mapping/map/controller.js'></script>`);
+document.write(`<script src='app/operations/live_tracking/controller.js'></script>`);

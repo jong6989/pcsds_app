@@ -5,12 +5,16 @@ controller('ApprehensionController', function($scope, $crudService, municipality
     var apprehensionCollection = apprehensionDocument.collection('database');    
     $scope.apprehensionsTable = $scope.ngTable([]);   
 
+    $scope.apprehensions = [];
+
     $scope.refreshList = () => {
         $crudService.getItems(apprehensionCollection).then(apprehensions => {
             apprehensions.forEach(apprehension => {
                 apprehension = convertToFormData(apprehension);
             });
-            $scope.apprehensionsTable = $scope.ngTable(apprehensions);
+
+            $scope.apprehensions = apprehensions;
+            $scope.apprehensionsTable = $scope.ngTable($scope.apprehensions);
         })
     }
     
@@ -170,4 +174,31 @@ controller('ApprehensionController', function($scope, $crudService, municipality
      }
 
     $scope.dateNow = new Date();
+
+
+    function fixedHeaders(ws){
+        var columnTexts = [
+            'Apprehending Office Sitio',
+            'Apprehending Agency',
+            "Control Number",
+            "Correspondence Description",
+            "Date Entered",
+            "Date of Correspondence",
+            "Date Received",
+            "OED Actions",
+            "Referral Date",
+            "Source of Origin",
+            "Outgoing Date",
+            "Status of Action"
+        ]
+
+        var currentColumn = 'A';
+        columnTexts.forEach((value) => {
+            var currentCell = `${currentColumn}1`;
+            if (workSheet[currentCell] == undefined)
+                workSheet[currentCell] = { t: "s" };
+            workSheet[currentCell].v = value;
+            currentColumn = String.fromCharCode(currentColumn.charCodeAt(0) + 1);
+        })
+    }
 });

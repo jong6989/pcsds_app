@@ -41,7 +41,9 @@ var scripts_js_plugins = {
                 <script src="js/export/xlsx.core.min.js"></script>
                 <script src="js/export/xls.core.min.js"></script>
                 <script src="js/export/Blob.js"></script>
-                <script src="js/export/FileSaver.js"></script>`
+                <script src="js/export/FileSaver.js"></script>
+                
+                `
 }
 //scripts for login user
 let loginPage = scripts_js_plugins.particles + script_angular + script_ng_plugins.ngTable 

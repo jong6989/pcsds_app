@@ -1,0 +1,5 @@
+<div ng-controller='opsMap_controller' ng-init="set_page_title('Map')" style="position: relative">
+    <div ng-controller='captured_images_from_tracking_controller'>
+        <div id='opsMap' style="height: {{iframeHeight - 115}}px" ng-init='initMapBoxMap(loadMap)'></div>
+    </div>
+</div>

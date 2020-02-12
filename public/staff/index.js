@@ -17,9 +17,9 @@ var script_angular = `
         <script src="/js/ng-camera.js"></script>
         <script src="/js/ng-image-crop/ng-img-crop.js"></script>
         <script src="/js/html2canvas/html2canvas.min.js"></script>
-        <script src="/plugins/ng-image-gallery/dist/ng-image-gallery.min.js"></script>
+        <script src="/plugins/ng-image-gallery/dist/ng-image-gallery.js"></script>
         <script src="/plugins/angular-uuid/angular-uuid.js"></script>
-        <link href="/plugins/ng-image-gallery/dist/ng-image-gallery.min.css" rel="stylesheet"/>
+        <link href="/plugins/ng-image-gallery/dist/ng-image-gallery.css" rel="stylesheet"/>
         <link href="/css/mapbox-gl.css" rel="stylesheet"/>
         <script src="/js/mapbox-gl.js"></script>
         <script src="/js/tinycolor2/dist/tinycolor-min.js"></script>
@@ -31,6 +31,7 @@ var script_angular = `
         <link rel="stylesheet" href="/js/angularjs-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
         <script type="text/javascript" src="/js/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
         <script type="text/javascript" src="/js/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
+        <script src="/js/rxjs.umd.min.js"></script>
     `;
 //angularjs plugins
 var script_ng_plugins = {
@@ -199,6 +200,11 @@ localData.set('STAFF_ACCOUNT',`
                     {
                         "title": "Track Recordings",
                         "path": "/operations/mapping/map/trackrecords",
+                        "icon": "street-view"
+                    },
+                    {
+                        "title": "Live Track Recordings",
+                        "path": "/operations/live_tracking",
                         "icon": "street-view"
                     }
                 ]
@@ -429,6 +435,26 @@ localData.set('STAFF_ACCOUNT',`
                         "title": "Wildlife Special Use Permit",
                         "path": "/database/views/wsup",
                         "icon": "leaf"
+                    },
+                    {
+                        "title": "CITES (Export)",
+                        "path": "/database/views/cites/export",
+                        "icon": "leaf"
+                    },
+                    {
+                        "title": "CITES (Import)",
+                        "path": "/database/views/cites/import",
+                        "icon": "leaf"
+                    },
+                    {
+                        "title": "Gratuitous Permit",
+                        "path": "/database/views/gratuitous_permit",
+                        "icon": "leaf"
+                    },
+                    {
+                        "title": "Wildlife Collector's Permit",
+                        "path": "/database/views/wcp",
+                        "icon": "leaf"
                     }
                 ]
             },
@@ -483,13 +509,25 @@ localData.set('STAFF_ACCOUNT',`
                     },
                     {
                         "title": "All",
-                        "path": "/records/queries/incoming/list/all",
+                        "path": "/operations/operation/list/all",
                         "icon": "align-justify"
                     },
                     {
                         "title": "My List",
-                        "path": "/records/queries/incoming/list/single",
+                        "path": "/operations/operation/list/single",
                         "icon": "align-justify"
+                    }
+                ]
+            },
+            {
+                "controller":"<script src='app/operations/images/controller.js'></script><script src='app/operations/images/captured_from_tracking/controller.js'></script>",
+                "icon":"file-photo-o",
+                "title":"Image Gallery",
+                "menu" : [
+                    {
+                        "title": "Captured Images from Tracking",
+                        "path": "/operations/images/captured_from_tracking",
+                        "icon": "magic"
                     }
                 ]
             }

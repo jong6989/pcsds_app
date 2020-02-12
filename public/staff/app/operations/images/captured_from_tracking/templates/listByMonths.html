@@ -1,0 +1,106 @@
+<div ng-init='loadMonths()'>
+    <div ng-show='staff == null'>
+        <md-card ng-repeat="month in months track by $index">
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h3>{{month.MMMMYYYY}}</h3>
+                </div>
+            </md-toolbar>
+            <md-card-content layout='row'>
+                <div ng-repeat='_staff in capturedImages[month.MMMMYYYY].staff track by $index' >
+                    <md-button ng-click='loadImages(_staff, month.month, month.year)'>{{_staff.name}}</md-button>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+
+    <md-card ng-show='staff != null'>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h3>{{month.MMMMYYYY}} by {{staff.name}}</h3>
+            </div>
+        </md-toolbar>
+        <md-card-content>
+            <div ng-show="false" ng-repeat="svg in [
+            'close-inline.svg',
+            'close.svg',
+            'delete-inline.svg',
+            'edit-inline.svg',
+            'edit.svg',
+            'external-link-inline.svg',
+            'external-link.svg',
+            'next-inline.svg',
+            'next.svg',
+            'prev-inline.svg', 
+            'prev.svg'
+        ]" ng-include="'/plugins/ng-image-gallery/res/icons/'+svg"></div>
+            <ng-image-gallery-extended images="images" thumbnails=true on-delete="" on-open='openImage(index)'>
+            </ng-image-gallery-extended>
+            <md-button ng-click='back()'>Back</md-button>
+        </md-card-content>
+    </md-card>
+    <div style="visibility: hidden;">
+        <div id='windowImage' class="md-dialog-container">
+            <md-dialog layout="column" layout-align="center center">
+                <md-toolbar class="bg-teal">
+                    <div class="md-toolbar-tools">
+                        <!-- <h2>Track Record</h2> -->
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-click="close_dialog()">
+                            <i class="fa fa-times col-white"></i>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-dialog-content layout-padding="40">
+                    <div layout='row'>
+                        <div layout-align='center'>
+                            <img ng-src='{{imageUrl}}' style="width: 300px; height: 450px;object-fit: contain;">
+                        </div>
+                        <div layout-align='center' style="padding: 20px;">
+                            <md-input-container class="md-block m-r-10">
+                                <label>Description</label>
+                                <textarea ng-model='imageDescription'></textarea>
+                            </md-input-container>
+                            <md-input-container ng-init='loadClassifications()'>
+                                <md-autocomplete class="md-block" md-selected-item="imageClass" md-search-text="class"
+                                    md-search-text-change="imageClass = class"
+                                    md-items="classification in classifications" md-item-text="classification.name"
+                                    md-min-length="0" placeholder="Classification">
+                                    <md-item-template>
+                                        {{classification.name}}
+                                    </md-item-template>
+                                </md-autocomplete>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Date and Time Taken</label>
+                                <input ng-model='dateAndTimeTaken' readonly>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Coordinate (click to view on map)</label>
+                                <br>
+                                <md-button ng-click='viewOnMap(imageToUpdate)'>
+                                    Longitude:{{longitude}}, Latitude: {{latitude}}
+                                </md-button>
+
+                            </md-input-container>
+                            <div>
+                                <md-button ng-click='delete(imageToUpdate)'>Delete</md-button>
+                                <md-button
+                                    ng-click='save({ description: imageDescription, classification: imageClass})'>
+                                    Save
+                                </md-button>
+                                <md-button ng-click='nextImage()'>
+                                    Next
+                                </md-button>
+                                <md-button ng-click='previousImage()'>
+                                    Previous
+                                </md-button>
+                            </div>
+
+                        </div>
+                    </div>
+                </md-dialog-content>
+            </md-dialog>
+        </div>
+    </div>
+</div>

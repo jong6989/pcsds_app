@@ -23,5 +23,5 @@
                 <datetimepicker data-ng-model='date_time' data-on-set-time="toMilliseconds(date_time)" readonly></datetimepicker>
             </md-input-container>
         </div>
-        <a href='' ng-click='gotoOperationMap(operation)' ng-hide='currentTransaction.status=="pending"'>Operation Map</a>
+        <a href='' ng-click='gotoOperationMap(currentItem)' ng-hide='currentTransaction.status=="pending"'>Operation Map</a>
 </div>

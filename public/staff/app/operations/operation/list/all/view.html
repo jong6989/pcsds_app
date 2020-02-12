@@ -1,34 +1,61 @@
-
-<div layout ng-controller="intel_report_controller" ng-init="set_page_title('All Intelligence Report'); load_all(); ">
-    <md-list class="md-dense" flex>
-        <md-content style="height : {{iframeHeight - 175}}px;">
-            <md-list-item class="md-3-line" ng-repeat="x in all_items track by x.id " ng-click="set_url_param('ID='+ x.id, '/operations/intel_report/view')">
-                
-                <div class="md-list-item-text" layout="column">
-                    <h3>
-                        Subject : {{x.report_subject}}, Control No. : {{x.control_number}}, Reference : {{x.references}}, Reference No. : {{x.reference_number}}
-                    </h3>
-                    <h4>
-                        Report Date : {{ x.report_date }}, Date Received : {{x.date_received}}, Recommendations : {{x.recommendations}}
-                    </h4>
-                    <p>
-                        Evaluation : {{x.evaluation }}
-                    </p>
-                    <md-divider></md-divider>
-                </div>
-            </md-list-item>
-        </md-content>
-        <md-subheader class="col-white bg-grey">
-            <div layout >
-                <div flex></div>
-                <div ng-click="previus_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length > 1">
-                    <i class="fa fa-chevron-left"></i>
-                </div>
-                <div class="font-10">{{pointer_query_array.length}}/{{ ceil(total_query_size / query_limit) }}</div>
-                <div ng-click="next_query_items()" class="pointer p-l-10 p-r-10" ng-if="pointer_query_array.length < (total_query_size / query_limit) ">
-                    <i class="fa fa-chevron-right"></i>
-                </div>
-            </div>
-        </md-subheader>
-    </md-list>
-</div>
+<style>
+    #searchBox {
+      padding: 7px;
+      font-size: 18px;
+      border: none;
+    }
+  
+    #searchButton {
+      float: right;
+      padding: 7px 10px;
+      margin-right: 16px;
+      background: #d7d7d7;
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+      border-radius: 1px;
+    }
+  </style>
+  <div ng-controller="operation_controller" ng-init="set_page_title('Operations List');loadOperations()">
+    <md-toolbar class="bg-darkgreen">
+      <h1 class="md-toolbar-tools">
+        <md-button class="md-raised" ng-click="refreshList()">
+          <i class="fa fa-refresh col-green"></i>
+          clear filter
+        </md-button>
+      </h1>
+    </md-toolbar>
+    <md-content style="height: {{ iframeHeight - 150 }}px;" layout-sm="column" layout-gt-sm ng-init="">
+      <div flex>
+        <table ng-table="operationsTable" class="table" show-filter="true">
+          <tr ng-repeat="operation in $data track by operation.id">
+            <td title="'Operation No.'" sortable="'operation_no'" filter="{operation_no: 'text'}">
+              {{ operation.ooeration_no }}
+            </td>
+            <td title="'Title'" sortable="'title'" filter="{title: 'text'}">
+              {{ operation.title }}
+            </td>
+            <td title="'Description'" sortable="'description'" filter="{description: 'text'}">
+              {{ operation.description }}
+            </td>
+            <td title="'Location'" sortable="'location'" filter="{location: 'text'}">
+              {{ operation.location }}
+            </td>
+            <td title="'Remarks'" sortable="'remarks'" filter="{remarks: 'text'}">
+              {{ operation.remarks }}
+            </td>
+            <td title="'Date of Operation'" sortable="'date'" filter="{date: 'text'}">
+              {{ to_date(operation.date) }}
+            </td>
+  
+            <td title="''">
+              <md-button class="md-raised" ng-click="loadViewPage(operation)">
+                <i class="fa fa-plus col-green"></i>
+                VIEW
+              </md-button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </md-content>
+  </div>

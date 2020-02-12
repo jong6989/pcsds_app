@@ -1,6 +1,6 @@
 'use strict';
 
-myAppModule.controller('operation_controller', function ($scope, operation_service, account_service, $location) {
+myAppModule.controller('operation_controller', function ($scope, operation_service, account_service, $location, NgTableParams) {
     $scope.isBusy = false;
     $scope.operation = {
         template: {
@@ -70,6 +70,34 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
         $scope.remarks = getRemarksforCurrentUser(operation);
     }
 
+    $scope.refreshList = () => {
+        $scope.loadOperations();
+    }
+
+    $scope.loadViewPage = (operation) => {
+        localData.set('operation', JSON.stringify(operation));
+        $location.path('operations/operation/view');
+    }
+
+    $scope.loadOperations = () => {
+        operation_service.getOperations(null).
+            then(operations => {
+                $scope.operations = operations;
+                $scope.operationsTable = new NgTableParams({ sorting: { first_name: 'asc' } }, { dataset: operations });
+                $scope.$apply();
+            })
+    }
+
+    $scope.loadOperationsCreatedByCurrentUser = () => {
+        let currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
+        operation_service.getOperations(currentUser).
+        then(operations => {
+            $scope.operations = operations;
+            $scope.operationsTable = new NgTableParams({ sorting: { first_name: 'asc' } }, { dataset: operations });
+            $scope.$apply();
+        })
+    }
+
     function getRemarksforCurrentUser(operation) {
         var currentUser = JSON.parse(localData.get('STAFF_ACCOUNT'));
         var index = operation.personnels.findIndex(personnel => personnel.id == currentUser.id);
@@ -78,7 +106,7 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
 
     $scope.gotoOperationMap = (operation) => {
         localData.set('operation', JSON.stringify(operation));
-        $location.path('operations/operation/map')
+        $location.path('operations/operation/map');
     }
 
     var send = (operation) => {
@@ -129,6 +157,22 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
     $scope.removeFromOperation = (personnel) => {
         var index = $scope.operation.personnels.findIndex(p => p.id == personnel.id);
         $scope.operation.personnels.splice(index, 1);
+    }
+
+    if (localData.get('operation')) {
+        var operation = JSON.parse(localData.get('operation'));
+        $scope.date_time = operation.date;
+        $scope.currentItem = operation;
+        localData.remove('operation');
+    }
+}).
+controller('map_view_controller', function($scope){
+    var object = localData.get('operation');
+    var operation = JSON.parse(object);
+    $scope.currentItem = operation;
+    localData.remove('operation');
+    $scope.onMapBoxLoad = () => {
+        $scope.loadOperation(operation.id);
     }
 }).
     service('operation_service', function () {
@@ -193,6 +237,25 @@ myAppModule.controller('operation_controller', function ($scope, operation_servi
                         var operation = snapshot.data();
                         resolve(operation);
                     })
+            })
+        }
+
+        this.getOperations = (currentUser) => {
+            return new Promise((resolve, reject) => {
+                var query =
+                    operationCollection;
+
+                if (currentUser != null)
+                    query = query.where('publisher.uid', '==', currentUser.uid);
+
+                query.onSnapshot(snapshot => {
+                    var operations = snapshot.docs.map(document => {
+                        var operation = document.data();
+                        operation.id = document.id;
+                        return operation;
+                    })
+                    resolve(operations)
+                })
             })
         }
     });

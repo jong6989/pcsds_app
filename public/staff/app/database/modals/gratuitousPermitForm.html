@@ -1,0 +1,171 @@
+<div style='visibility: hidden;'>
+    <div class='md-dialog-container' id='gratuitousPermitForm'>
+        <md-dialog layout='column' layout-align='center'>
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    <h2>{{action}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <form ng-cloak name='gratuitousPermitForm'>
+                <md-dialog-content>
+                    <div layout-gt-sm layout-sm="column">
+                        <div layout-gt-sm layout-sm="column">
+                            <md-input-container class="md-block">
+                                <label>Permit No.</label>
+                                <input ng-model="gratuitousPermit.permit_number" required>
+                            </md-input-container>
+                        </div>
+                        <md-input-container class="md-block" flex>
+                            <label>Date Issued</label>
+                            <md-datepicker ng-model="date_issued"
+                                ng-change='gratuitousPermit.date_issued=toMilliseconds(date_issued)' required>
+                            </md-datepicker>
+                        </md-input-container>
+                    </div>
+                    <div>Grantees</div>
+                    <hr>
+                    <div>
+                        <table>
+                            <tr ng-repeat='grantee in gratuitousPermit.grantees'>
+                                <td>
+                                    <md-input-container>
+                                        <label>Last Name</label>
+                                        <input ng-model="grantee.last_name" required>
+                                    </md-input-container>
+                                </td>
+
+                                <td>
+                                    <md-input-container flex>
+                                        <label>Middle Name</label>
+                                        <input ng-model="grantee.middle_name">
+                                    </md-input-container>
+                                </td>
+
+                                <td>
+                                    <md-input-container>
+                                        <label>First Name</label>
+                                        <input ng-model="grantee.first_name" required>
+                                    </md-input-container>
+                                </td>
+
+                                <td>
+                                    <md-input-container>
+                                        <label>Position</label>
+                                        <input ng-model="grantee.position">
+                                    </md-input-container>
+                                </td>
+
+                                <td>
+                                    <md-input-container>
+                                        <label>Contact Number</label>
+                                        <input ng-model="grantee.contact_number">
+                                    </md-input-container>
+                                </td>
+
+                                <td>
+                                    <md-input-container>
+                                        <label>Email Address</label>
+                                        <input ng-model="grantee.email_address">
+                                    </md-input-container>
+                                </td>
+
+                                <td>
+                                    <md-button class="md-fab md-mini" aria-label="Remove this row"
+                                        ng-click="gratuitousPermit.grantees.splice($index, 1)"
+                                        ng-if="gratuitousPermit.grantees.length > 1">
+                                        <md-tooltip md-direction="left">Remove</md-tooltip>
+                                        <i class="fa fa-remove"></i>
+                                    </md-button>
+                                </td>
+
+                            </tr>
+                        </table>
+
+                        <md-button ng-click="gratuitousPermit.grantees.push({})" class="md-primary md-raised">
+                            Add Row
+                        </md-button>
+                    </div>
+                    <div>
+                        <md-input-container class="md-block" flex>
+                            <label>Office</label>
+                            <textarea ng-model="gratuitousPermit.grantees_office"></textarea>
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container class="md-block" flex>
+                            <label>Research</label>
+                            <textarea ng-model="gratuitousPermit.research_title"></textarea>
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container class="md-block" flex>
+                            <label>Address</label>
+                            <textarea ng-model="gratuitousPermit.address"></textarea>
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container class="md-block">
+                            <label>Remarks</label>
+                            <input ng-model="gratuitousPermit.remarks">
+                        </md-input-container>
+                    </div>
+
+                    <div>
+                        <md-input-container class="md-block" flex>
+                            <label>Evaluation Date</label>
+                            <md-datepicker ng-model="evaluation_date"
+                                ng-change='gratuitousPermit.evaluation_date=toMilliseconds(evaluation_date)'>
+                            </md-datepicker>
+                        </md-input-container>
+                    </div>
+                </md-dialog-content>
+                <md-dialog-actions layout="row">
+                    <span flex></span>
+                    <md-button ng-click="close_dialog()">
+                        Close
+                    </md-button>
+                    <md-button class="md-primary md-raised" ng-click="saveGratuitousPermit(gratuitousPermit);"
+                        ng-disabled="gratuitousPermitForm.$invalid">
+                        {{action}}
+                    </md-button>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
+    </div>
+</div>
+
+<div style='visibility: hidden;'>
+    <div class='md-dialog-container' id='granteesWindow'>
+        <md-dialog layout='column' layout-align='center'>
+            <md-toolbar class="bg-teal">
+                <div class="md-toolbar-tools">
+                    Grantees
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="close_dialog()">
+                        <i class="fa fa-times col-white"></i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-content>
+                <table ng-table="granteesTable" class="table" show-filter="false">
+                    <tr ng-repeat="grantee in $data track by $index">
+                        <td title="'Last Name'">
+                            {{ grantee.last_name}}</td>
+                        <td title="'First Name'">
+                            {{ grantee.first_name}}</td>
+                        <td title="'Middle Name'">
+                            {{ grantee.middle_name}}</td>
+                        <td title="'Contact Number'">
+                            {{ grantee.contact_number }}</td>
+                        <td title="'Position'">
+                            {{ grantee.position }}</td>
+                    </tr>
+                </table>
+            </md-content>
+        </md-dialog>
+    </div>
+</div>
