@@ -37,7 +37,7 @@
     "electron-packager": "^13.1.1",
     "electron-wix-msi": "^2.1.1",
     "gulp": "^4.0.2",
-    "electron": "^6.0.10"
+    "electron": "^9.1.0"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-alignment": "^11.2.0",
